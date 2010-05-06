@@ -1,0 +1,30 @@
+/*Copyright [2010] [David Van de Ven]
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+*/
+
+This project began about a year ago as an exercise in learning java and android.
+I was having wifi problems on my T-Mobile G1, so I wrote a quick and dirty little
+no-Activity app to force a reassociation.   I stopped working on it while I taught
+myself java working on other android projects. 
+
+Somehow, even with my other projects, this one picked up the most steam on the 
+market.    Which is funny, because every hour I put into it will eventually 
+come to naught because the wifi bugs in android will get fixed..
+
+Well, not so much to naught.  I've learned a lot. 
+
+If it isn't obvious, I'm new to java.  But I've been coding since I was 6.
+
+Be forgiving.. Hope you find something useful here. 
