@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright [2010] [David Van de Ven]
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+
+-->
+
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dip"
+                >
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="This program is distributed in the hope that it will be useful, but without any warranty; without even the implied warranty of merchantability or fitness for a purpose."
+                        
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        />
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="Logging stores some personal information: timezone and SSID of configured access points.  It is not enabled by default. The log may manually be sent to the developer."
+                        
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="For problems or comments:\n email zanshin.g1@gmail.com\nwith specific details.\n\nVisit the development log\n at http://wififixer.wordpress.com"
+                        android:textSize="12sp"
+                        android:textColor="#bebebe"
+                        android:autoLink="web|email"/>
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="Notes:"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        />
+                        
+                 <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="Wifi Fixer can sometimes take a few seconds to reconnect."
+                        android:textSize="14sp"
+                        android:textColor="#bebebe"
+                        />
+                        
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="The new Send Log feature can be used to send the developer a log to help solve problems with Wifi Fixer. If you have a problem, recreate the circumstances, toggle logging on, make a note of the time, and send the log with the time noted.\nNote that the logging feature requires your SD Card to be inserted.  The log is automatically truncated at 100K"
+                        android:textSize="14sp"
+                        android:textColor="#bebebe"
+                        />      
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="There is a bug in Android 2.1 wifi which may make it impossible for Wifi Fixer to recover control of the Wifi Manager. In addition, some wireless networks may be poorly configured or interference too great for Wifi Fixer to recover your connection consistently.  Wifi Fixer is helpful in most circumstances, though."
+                        android:textSize="14sp"
+                        android:textColor="#bebebe"
+                        />               
+                 <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="Wifi Fixer is incompatible with Wifi Network Notification.  If you want to use this setting, please disable Wifi Fixer first."
+                        android:textSize="14sp"
+                        android:textColor="#bebebe"
+                        />
+                
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="Wifi Fixer uses an http head request to an internet address with icmp as a secondary method to ping your wifi access point to determine if your connection is healthy; most, but not all networks will work.\nCommercial wifi hotspots tend not to work.\n"
+                        android:textSize="14sp"
+                        android:textColor="#bebebe"
+                        />
+                        
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="Wifi Lock improves wifi connectivity, but may be expensive to battery life.  Disable Sleep may also improve connectivity, but also increases battery use."
+                        android:textSize="14sp"
+                        android:textColor="#bebebe"
+                        />        
+      
+               <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="The widget forces reassociation when the button is pressed.  If you wish to emulate the behavior of WifiFixer Classic check 'Disable Service'.\n\n\n\n "
+                        android:textSize="14sp"
+                        android:textColor="#bebebe"
+                        />           
+
+        </LinearLayout>
+
+</ScrollView>
