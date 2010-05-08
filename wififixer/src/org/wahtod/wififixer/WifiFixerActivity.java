@@ -48,9 +48,10 @@ public class WifiFixerActivity extends Activity {
 	public boolean LOGGING=false;
 
 	//constants
-	private static final int MENU_LOGGING = 0;
-	private static final int MENU_SEND = 1;
-	private static final int MENU_PREFS = 2;
+	private static final int MENU_LOGGING = 1;
+	private static final int MENU_SEND = 2;
+	private static final int MENU_PREFS = 3;
+	private static final int LOGGING_GROUP = 42;
     SharedPreferences settings;
     //New key for About nag
     //Set this when you change the About xml
@@ -194,11 +195,11 @@ public class WifiFixerActivity extends Activity {
 	}
 
    void setToggleIcon(Menu menu) {
-		
+		MenuItem logging = menu.getItem(MENU_LOGGING-1);
 		if(LOGGING)
-			menu.add(0, MENU_LOGGING, 0, "Toggle Logging").setIcon(R.drawable.logging_enabled);
+	       logging.setIcon(R.drawable.logging_enabled);
 		else
-			menu.add(0, MENU_LOGGING, 0, "Toggle Logging").setIcon(R.drawable.logging_disabled); 
+		   logging.setIcon(R.drawable.logging_disabled); 
 	   
 		
 	}	
@@ -303,20 +304,27 @@ public class WifiFixerActivity extends Activity {
 	}
 	
 	//Create menus
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    if (LOGGING_MENU){
-		setToggleIcon(menu);
-	    menu.add(0, MENU_SEND, 0, "Send Log")
-	    .setIcon(R.drawable.ic_menu_send);
-	    }
-	    menu.add(0, MENU_PREFS, 0, "Settings")
-	    .setIcon(R.drawable.ic_prefs);
+	    super.onCreateOptionsMenu(menu);
+		menu.add(LOGGING_GROUP, MENU_LOGGING, 0, "Toggle Logging");
+		
+	    
+		menu.add(LOGGING_GROUP, MENU_SEND, 1, "Send Log");
+	    
+	    
+		menu.add(Menu.NONE, MENU_PREFS, 2, "Settings");
+	  
+
 	    return true;
 	}
 
 	/* Handles item selections */
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
+		super.onOptionsItemSelected(item);
+	    
+		switch (item.getItemId()) {
 	    case MENU_LOGGING:
 	        toggleLog();
 	        return true;
@@ -338,17 +346,30 @@ public class WifiFixerActivity extends Activity {
 		
 	}
 	
+	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
          super.onPrepareOptionsMenu(menu);
-         //set instance of menu for our handler
-         menu.clear();
-         if (LOGGING_MENU){
-        	 
-     		setToggleIcon(menu);
-     	    menu.add(0, MENU_SEND, 0, "Send Log").setIcon(R.drawable.ic_menu_send);
-     	    }
+         //Menu drawing stuffs
+         MenuItem m = menu.getItem(MENU_LOGGING-1);
+ 		 m.setIcon(R.drawable.logging_enabled);
          
-         menu.add(0, MENU_PREFS, 0, "Settings").setIcon(R.drawable.ic_prefs);
+ 		 m = menu.getItem(MENU_SEND-1);
+ 		 m.setIcon(R.drawable.ic_menu_send);
+		
+ 		  m = menu.getItem(MENU_PREFS-1);
+ 		  m.setIcon(R.drawable.ic_prefs);
+ 		    
+ 		 
+         if (LOGGING_MENU){
+        	menu.setGroupVisible(LOGGING_GROUP, true);
+     		setToggleIcon(menu);
+     		
+     	    
+     	    }
+         else {
+        	menu.setGroupVisible(LOGGING_GROUP,false);
+         }
+         
 		
     return true;
 	}

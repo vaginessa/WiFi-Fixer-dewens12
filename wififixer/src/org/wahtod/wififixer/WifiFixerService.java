@@ -71,6 +71,7 @@ public class WifiFixerService extends Service {
 	private static final int WIFITASK = 3;
 	private static final int TEMPLOCK_ON = 4;
 	private static final int TEMPLOCK_OFF = 5;
+	private static final int WIFI_TOGGLE_CHECK =6;
 	
 	//For wifi state
 	public static boolean WIFI_ON=false;
@@ -148,6 +149,11 @@ public class WifiFixerService extends Service {
             TEMPLOCK=false;
             if(LOGGING)
             	wfLog(APP_NAME,"Removing Temp Lock");
+            break;
+            
+            case WIFI_TOGGLE_CHECK:
+            if (!wm.isWifiEnabled())
+            	wm.setWifiEnabled(true);
             break;
             	
             }
@@ -909,9 +915,14 @@ public class WifiFixerService extends Service {
 	}
 	
 	 void toggleWifi() {
+		if(PENDINGWIFITOGGLE)
+			return;
+		
 		PENDINGWIFITOGGLE=true;
 		tempLock(LOOPWAIT);
 		wm.setWifiEnabled(false);
+		hMain.removeMessages(WIFI_TOGGLE_CHECK);
+		hMain.sendEmptyMessageDelayed(WIFI_TOGGLE_CHECK, LOOPWAIT);
 	}
 
 	 void wifiRepair() {
