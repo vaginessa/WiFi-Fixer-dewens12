@@ -71,10 +71,11 @@ public class WifiFixerService extends Service {
 	private static final int WIFITASK = 3;
 	private static final int TEMPLOCK_ON = 4;
 	private static final int TEMPLOCK_OFF = 5;
-	private static final int WIFI_TOGGLE_CHECK =6;
+	private static final int WIFI_OFF = 6;
+	private static final int WIFI_ON = 7;
 	
 	//For wifi state
-	public static boolean WIFI_ON=false;
+	public static boolean WIFI_ENABLED=false;
 	// ms for IsReachable
 	final static int REACHABLE = 2500;
 	// ms for main loop sleep
@@ -151,9 +152,12 @@ public class WifiFixerService extends Service {
             	wfLog(APP_NAME,"Removing Temp Lock");
             break;
             
-            case WIFI_TOGGLE_CHECK:
-            if (!wm.isWifiEnabled())
-            	wm.setWifiEnabled(true);
+            case WIFI_OFF:
+            wm.setWifiEnabled(false);
+            break;
+            
+            case WIFI_ON:
+            wm.setWifiEnabled(true);
             break;
             	
             }
@@ -162,7 +166,7 @@ public class WifiFixerService extends Service {
 
 	 Runnable rRepair = new Runnable() {
 		public void run() {
-			if(!WIFI_ON){
+			if(!WIFI_ENABLED){
 				hMainWrapper(TEMPLOCK_OFF);
 				return;
 			}
@@ -188,7 +192,7 @@ public class WifiFixerService extends Service {
 	
 	 Runnable rReconnect = new Runnable() {
 		public void run() {
-			if(!WIFI_ON){
+			if(!WIFI_ENABLED){
 				hMainWrapper(TEMPLOCK_OFF);
 				return;
 			}
@@ -295,7 +299,7 @@ public class WifiFixerService extends Service {
 	
 	private  BroadcastReceiver WifiReceiver = new BroadcastReceiver() {
 		public void onReceive(Context c, Intent intent){
-			if(!WIFI_ON){
+			if(!WIFI_ENABLED){
 				hMainWrapper(TEMPLOCK_OFF);
 				return;	
 			}
@@ -431,7 +435,7 @@ public class WifiFixerService extends Service {
 	}
 	
 	 void doWifiFix() {
-		if (WIFI_ON) {
+		if (WIFI_ENABLED) {
 			Toast.makeText(WifiFixerService.this, "Reassociating",
 					Toast.LENGTH_LONG).show();
 			WIFIREPAIR = 0;
@@ -466,7 +470,7 @@ public class WifiFixerService extends Service {
 	 boolean getIsWifiEnabled() {
 		boolean enabled = false;
 
-		if (WIFI_ON) {
+		if (WIFI_ENABLED) {
 			if (LOGGING)
 				wfLog(APP_NAME, "Wifi is Enabled");
 
@@ -607,7 +611,7 @@ public class WifiFixerService extends Service {
 			if (LOGGING)
 				wfLog(APP_NAME, "WIFI_STATE_ENABLED");
 			hMainWrapper(TEMPLOCK_OFF);
-			WIFI_ON=true;
+			WIFI_ENABLED=true;
 			if(PENDINGWIFITOGGLE){
 				PENDINGWIFITOGGLE=false;
 				PENDINGSCAN=true;
@@ -624,10 +628,10 @@ public class WifiFixerService extends Service {
 			if (LOGGING)
 				wfLog(APP_NAME, "WIFI_STATE_DISABLED");
 			hMainWrapper(TEMPLOCK_ON);
-			WIFI_ON=false;
+			WIFI_ENABLED=false;
 			//Toggle handler
 			if(PENDINGWIFITOGGLE)
-				wm.setWifiEnabled(true);
+				hMainWrapper(WIFI_ON);
 			break;
 		case WifiManager.WIFI_STATE_DISABLING:
 			if (LOGGING)
@@ -814,7 +818,7 @@ public class WifiFixerService extends Service {
 	public void onCreate() {
 	 
 	    wm = getWifiManager();
-	    WIFI_ON=wm.isWifiEnabled();
+	    WIFI_ENABLED=wm.isWifiEnabled();
 	    getPackageInfo();
 	    if(LOGGING){
 	    	wfLog(APP_NAME,"WifiFixerService Build:"+VERSION);
@@ -920,9 +924,9 @@ public class WifiFixerService extends Service {
 		
 		PENDINGWIFITOGGLE=true;
 		tempLock(LOOPWAIT);
-		wm.setWifiEnabled(false);
-		hMain.removeMessages(WIFI_TOGGLE_CHECK);
-		hMain.sendEmptyMessageDelayed(WIFI_TOGGLE_CHECK, LOOPWAIT);
+		hMainWrapper(WIFI_OFF);
+		hMain.removeMessages(WIFI_ON);
+		hMain.sendEmptyMessageDelayed(WIFI_ON, LOOPWAIT);
 	}
 
 	 void wifiRepair() {
