@@ -296,8 +296,8 @@ public class WifiFixerActivity extends Activity {
 	};
 	
 	@Override
-	public void onResume(){
-		super.onResume();
+	public void onStart(){
+		super.onStart();
 		setIcon();
 		LOGGING_MENU = (settings.getBoolean("Logging", false));	
 		LOGGING = getLogging();
