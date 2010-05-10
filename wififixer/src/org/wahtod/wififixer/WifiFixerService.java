@@ -18,16 +18,11 @@ package org.wahtod.wififixer;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpHead;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -457,6 +452,27 @@ public class WifiFixerService extends Service {
 
 	}
     
+	boolean getHttpHeaders( String uri ) throws IOException {
+		
+		//dead simple, we'll see how this does
+		
+		boolean isup=false;
+		
+		try 
+		    {    
+		      URL url = new URL(uri);
+		      URLConnection conn = url.openConnection();
+		      conn.getHeaderField(1);
+		      isup=true;
+		      
+		    } 
+		    catch (Exception e) {
+		       isup=false;
+		    }
+			
+			return isup;
+    }
+	 
 	 boolean getIsOnWifi(){
 	    boolean wifi=false;
 	    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -653,27 +669,14 @@ public class WifiFixerService extends Service {
 	}
 
 	 boolean httpHostup(String host) {
-		boolean isUp = true;
+		boolean isUp = false;
 		//Oddly, we used to have our own implementation
 		//But using Google's APIs in this one over time causes less GC and 
 		//uses less memory
-	    DefaultHttpClient httpClient = new DefaultHttpClient();
-	    HttpParams my_httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(my_httpParams,REACHABLE);
-        HttpConnectionParams.setSoTimeout(my_httpParams,REACHABLE);
 		try {
-			httpClient.execute(new HttpHead("http://" + host));
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			isUp = false;
-			if (LOGGING)
-				wfLog(APP_NAME, "httpHostup:ClientProtocolException");
-
+			isUp=getHttpHeaders("http://google.com");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			isUp = false;
-			if (LOGGING)
-				wfLog(APP_NAME, "httpHostup:IOException");
+			wfLog(APP_NAME,"HTTP I/O Exception");
 		}
 		if (LOGGING)
 			wfLog(APP_NAME, "HTTP Method");
