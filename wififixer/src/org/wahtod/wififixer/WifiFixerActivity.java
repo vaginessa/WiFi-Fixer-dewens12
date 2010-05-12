@@ -51,11 +51,13 @@ public class WifiFixerActivity extends Activity {
 	private static final int MENU_LOGGING = 1;
 	private static final int MENU_SEND = 2;
 	private static final int MENU_PREFS = 3;
+	private static final int MENU_HELP = 4;
 	private static final int LOGGING_GROUP = 42;
     SharedPreferences settings;
     //New key for About nag
     //Set this when you change the About xml
     static final String sABOUT="ABOUT2";
+	
 	
 
 	OnClickListener clickR=new OnClickListener(){
@@ -137,6 +139,11 @@ public class WifiFixerActivity extends Activity {
     boolean getLogging() {
 		settings = PreferenceManager.getDefaultSharedPreferences(this);
 		return settings.getBoolean("SLOG", false);
+    }
+    
+    void launchHelp() {
+    	Intent myIntent = new Intent (this,HelpActivity.class);
+    	startActivity(myIntent);
     }
 	
 	void launchPrefs() {
@@ -307,13 +314,15 @@ public class WifiFixerActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    super.onCreateOptionsMenu(menu);
-		menu.add(LOGGING_GROUP, MENU_LOGGING, 0, "Toggle Logging");
+		menu.add(LOGGING_GROUP, MENU_LOGGING, 0, "Toggle Logging").setIcon(R.drawable.logging_enabled);
 		
 	    
-		menu.add(LOGGING_GROUP, MENU_SEND, 1, "Send Log");
+		menu.add(LOGGING_GROUP, MENU_SEND, 1, "Send Log").setIcon(R.drawable.ic_menu_send);
 	    
 	    
-		menu.add(Menu.NONE, MENU_PREFS, 2, "Settings");
+		menu.add(Menu.NONE, MENU_PREFS, 2, "Preferences").setIcon(R.drawable.ic_prefs);
+		
+		menu.add(Menu.NONE,MENU_HELP,3, "Help").setIcon(R.drawable.ic_menu_help);
 	  
 
 	    return true;
@@ -336,6 +345,10 @@ public class WifiFixerActivity extends Activity {
 	        launchPrefs();
 	        return true;
 	        
+	    case MENU_HELP:
+	    	launchHelp();
+	    	return true;
+	        
 	    }
 	    return false;
 	}
@@ -349,16 +362,7 @@ public class WifiFixerActivity extends Activity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
          super.onPrepareOptionsMenu(menu);
-         //Menu drawing stuffs
-         MenuItem m = menu.getItem(MENU_LOGGING-1);
- 		 m.setIcon(R.drawable.logging_enabled);
-         
- 		 m = menu.getItem(MENU_SEND-1);
- 		 m.setIcon(R.drawable.ic_menu_send);
-		
- 		  m = menu.getItem(MENU_PREFS-1);
- 		  m.setIcon(R.drawable.ic_prefs);
- 		    
+         //Menu drawing stuffs  
  		 
          if (LOGGING_MENU){
         	menu.setGroupVisible(LOGGING_GROUP, true);

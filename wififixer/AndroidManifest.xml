@@ -15,7 +15,7 @@
 
 
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.wahtod.wififixer" android:versionName="0.6.3.2" android:versionCode="272">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.wahtod.wififixer" android:versionCode="274" android:versionName="0.6.5p2">
 	<uses-sdk android:minSdkVersion="3" 
 	android:targetSdkVersion="7" /> 
         <application android:icon="@drawable/icon"
@@ -38,6 +38,7 @@
         </activity>
          <activity android:name=".About"></activity>
          <activity android:name=".WifiFixerPreferences"></activity>
+         <activity android:name=".HelpActivity"></activity>
             <receiver android:name=".wififixer" > 
             <intent-filter>
                  <action android:name="android.intent.action.BOOT_COMPLETED" />
