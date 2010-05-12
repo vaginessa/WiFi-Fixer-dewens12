@@ -63,6 +63,7 @@ public class HelpActivity extends Activity {
 	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
 	        if (url.contains ("mailto:zanshin.g1@gmail.com")){
 	        	Intent sendIntent = new Intent(Intent.ACTION_SEND);
+	        	sendIntent.setType("text/plain");
 	    	    sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"zanshin.g1@gmail.com"});
 	    	    startActivity(Intent.createChooser(sendIntent, "Email:"));
 	        	return true;
