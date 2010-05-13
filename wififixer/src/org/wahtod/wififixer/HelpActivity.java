@@ -37,10 +37,12 @@ public class HelpActivity extends Activity {
 		webview = (WebView) findViewById(R.id.helpwebview);
 		WebSettings websettings=webview.getSettings();
 		webview.setWebViewClient(new HelpWebViewClient());
+		webview.setBackgroundColor(255);
 		websettings.setSavePassword(false);
 		websettings.setSaveFormData(false);
 		websettings.setJavaScriptEnabled(false);
 		websettings.setSupportZoom(false);
+		websettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 		webview.loadUrl("file:///android_asset/index.html");
 		
 	}
