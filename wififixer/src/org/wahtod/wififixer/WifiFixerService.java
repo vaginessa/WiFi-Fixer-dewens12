@@ -292,6 +292,30 @@ public class WifiFixerService extends Service {
 		
 	};
 	
+	private BroadcastReceiver supplicantR = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			//supplicant fixes
+			String sState=intent.getStringExtra(WifiManager.EXTRA_NEW_STATE);
+			if(LOGGING)
+				logSupplicant(sState);
+			if(sState=="UNINITIALIZED")
+			{
+				supplicantFix(true);
+				notifyWrap(sState);
+				
+			}
+			else if(sState=="SCANNING" || sState=="COMPLETED" ||sState=="DISCONNECTED"){
+			    supplicantFix(false);
+			}
+			
+		}
+		
+		
+	};
+	
+	
 	private  BroadcastReceiver WifiReceiver = new BroadcastReceiver() {
 		public void onReceive(Context c, Intent intent){
 			if(!WIFI_ENABLED){
@@ -353,25 +377,7 @@ public class WifiFixerService extends Service {
 		}
 	}
 	
-	 boolean checkSupplicant() {
-	    boolean supplicantwedge=false;
-		String sState=getSupplicantState();
-		if(LOGGING)
-			logSupplicant(sState);
-		if(sState=="UNINITIALIZED")
-		{
-			supplicantFix(true);
-			notifyWrap(sState);
-			supplicantwedge=true;
-		}
-		else if(sState=="SCANNING" || sState=="COMPLETED" ||sState=="DISCONNECTED"){
-		    supplicantFix(false);
-		    supplicantwedge=true;
-		}
-		
-		
-		return supplicantwedge;
-	}
+	
 	
 	 void cleanup() {
 		
@@ -381,24 +387,24 @@ public class WifiFixerService extends Service {
 				lock.release();
 			unregisterReceiver(receiver);
 			unregisterReceiver(WifiReceiver);
+			unregisterReceiver(supplicantR);
 			hMain.removeMessages(MAIN);
-			hMain.removeMessages(RECONNECT);
-			hMain.removeMessages(REPAIR);
-			hMain.removeMessages(WIFITASK);
-			hMain.removeMessages(TEMPLOCK_ON);
-			hMain.removeMessages(TEMPLOCK_OFF);
+			cleanupPosts();
 			CLEANUP=true;
 		 }
 		stopSelf();
 }
 	
+	 
+	 void cleanupPosts() {
+		 	hMain.removeMessages(RECONNECT);
+			hMain.removeMessages(REPAIR);
+			hMain.removeMessages(WIFITASK);
+			hMain.removeMessages(TEMPLOCK_ON);
+			hMain.removeMessages(TEMPLOCK_OFF);
+	 }
+	 
 	 boolean checkWifi() {
-        //If we're not on wifi, don't even run this code
-		if(!getIsOnWifi()){
-			if (LOGGING)
-				wfLog(APP_NAME,"Wifi Not Current Connection");
-			return false;
-		}
 		boolean hostup = false;
 		// Check out this tricky switch
 		if (HTTPPREF) {
@@ -442,9 +448,7 @@ public class WifiFixerService extends Service {
 
 	 void fixWifi() {
 		if (getIsWifiEnabled()) {
-			if (!checkWifi()) {
-                //Adding Supplicant Checks
-				if(!checkSupplicant())
+			if (!checkWifi() && !isKnownAPinRange()) {
 					wifiRepair();
 			}
 
@@ -477,6 +481,7 @@ public class WifiFixerService extends Service {
 	    boolean wifi=false;
 	    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo ni = cm.getActiveNetworkInfo();
+	    //Null check, this can be null, so NPE
 	    if(ni != null && ni.getType()==ConnectivityManager.TYPE_WIFI)
 	    	wifi=true;
 		return wifi;
@@ -489,7 +494,6 @@ public class WifiFixerService extends Service {
 		if (WIFI_ENABLED) {
 			if (LOGGING)
 				wfLog(APP_NAME, "Wifi is Enabled");
-
 			enabled = true;
 		} else {
 			if (LOGGING)
@@ -860,14 +864,22 @@ public class WifiFixerService extends Service {
 	}
 	
 	void setup() {
-		lock = wm.createWifiLock("WFLock");
+		//Yeah, so the constant WIFI_MODE_FULL wasn't obvious
+		//It makes a huge difference, may make default
+		lock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL,"WFLock");
 		checkLock(lock);
 		IntentFilter myFilter = new IntentFilter();
 		myFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 		// Catch power events for battery savings
 		myFilter.addAction("android.intent.action.SCREEN_OFF");
 		myFilter.addAction("android.intent.action.SCREEN_ON");
+		//register generic receiver
 		registerReceiver(receiver, myFilter);
+		// intent filter to handle supplicant states
+		IntentFilter sFilter = new IntentFilter();
+		sFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+		//register Supplicant State receiver
+		registerReceiver(supplicantR,sFilter);
 		//register wifi callback 
 	    registerReceiver(WifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)); 
 		
@@ -929,6 +941,7 @@ public class WifiFixerService extends Service {
 		tempLock(LOOPWAIT);
 		hMainWrapper(WIFI_OFF);
 		hMain.removeMessages(WIFI_ON);
+		cleanupPosts();
 		hMain.sendEmptyMessageDelayed(WIFI_ON, LOOPWAIT);
 	}
 
