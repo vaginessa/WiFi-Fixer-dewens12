@@ -298,6 +298,8 @@ public class WifiFixerService extends Service {
 		public void onReceive(Context context, Intent intent) {
 			//supplicant fixes
 			String sState=intent.getStringExtra(WifiManager.EXTRA_NEW_STATE);
+			if (sState == null)
+				return;
 			if(LOGGING)
 				logSupplicant(sState);
 			if(sState=="UNINITIALIZED")
@@ -306,7 +308,7 @@ public class WifiFixerService extends Service {
 				notifyWrap(sState);
 				
 			}
-			else if(sState=="SCANNING" || sState=="COMPLETED" ||sState=="DISCONNECTED"){
+			else if( sState=="COMPLETED" ||sState=="DISCONNECTED"){
 			    supplicantFix(false);
 			}
 			
@@ -638,6 +640,7 @@ public class WifiFixerService extends Service {
 				tempLock(5000);
 				startScan();
 			}
+			
 			break;
 		case WifiManager.WIFI_STATE_ENABLING:
 			if (LOGGING)
