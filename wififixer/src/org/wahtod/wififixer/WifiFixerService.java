@@ -95,7 +95,9 @@ public class WifiFixerService extends Service {
 	public boolean HTTPPREF = true;
 	public boolean RUNPREF = false;
 	public boolean SCREENPREF= false;
+	public boolean WIDGETPREF=false;
 	public boolean PREFSCHANGED = false;
+	public boolean WIFISHOULDBEON = false;
 	//Locks and such
 	public boolean TEMPLOCK = false;
 	public static boolean SCREENISOFF = false;
@@ -162,6 +164,7 @@ public class WifiFixerService extends Service {
             case WIFI_ON:
             wm.setWifiEnabled(true);
             PENDINGWIFITOGGLE=false;
+            WIFISHOULDBEON=true;
             break;
             	
             }
@@ -309,19 +312,7 @@ public class WifiFixerService extends Service {
 			
 			String sState=intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE).toString();
 			
-			if(LOGGING)
-				logSupplicant(sState);
-			
-			if(sState=="SCANNING")
-			{
-				PENDINGSCAN=true;
-				
-				
-			}
-			else if(sState=="INACTIVE"){
-			    supplicantFix(true);
-			    //notifyWrap(sState);
-			}
+			handleSupplicantState(sState);
 			
 		}
 		
@@ -440,6 +431,12 @@ public class WifiFixerService extends Service {
 
 		return hostup;
 	}
+	 
+	void checkWifiState() {
+		if(WIFISHOULDBEON){
+			hMainWrapper(WIFI_ON);
+		}
+	}
 	
 	 boolean connectToAP(int AP, boolean disableOthers){
 		if (LOGGING)
@@ -450,10 +447,15 @@ public class WifiFixerService extends Service {
 	
 	 void doWifiFix() {
 		if (WIFI_ENABLED) {
+			if(WIDGETPREF){
+				Toast.makeText(WifiFixerService.this, "Toggling Wifi", Toast.LENGTH_LONG).show();
+				toggleWifi();
+			}else{
 			Toast.makeText(WifiFixerService.this, "Reassociating",
 					Toast.LENGTH_LONG).show();
 			WIFIREPAIR = 0;
 			wifiRepair();
+			}
 		} else
 			Toast.makeText(WifiFixerService.this, "Wifi Is Disabled",
 					Toast.LENGTH_LONG).show();
@@ -472,6 +474,8 @@ public class WifiFixerService extends Service {
 			}
 
 		}
+		else
+			checkWifiState();
 
 	}
     
@@ -633,12 +637,30 @@ public class WifiFixerService extends Service {
 						if (LOGGING)
 							wfLog(APP_NAME, "Normal Startup or reload");
 				}
-}
+				}
 			} catch (NullPointerException e) {
 			
 				wfLog(APP_NAME,"Pesky Google and their Null Intent");
 			}
 		
+	}
+	 
+	 
+	void handleSupplicantState(String sState){
+		
+		if(LOGGING)
+			logSupplicant(sState);
+		
+		if(sState=="SCANNING" || sState=="DISCONNECTED")
+		{
+			PENDINGSCAN=true;
+			
+			
+		}
+		else if(sState=="INACTIVE"){
+		    supplicantFix(true);
+		    //notifyWrap(sState);
+		}
 	}
 	
 	void handleWifiState(Intent intent) {
@@ -651,6 +673,7 @@ public class WifiFixerService extends Service {
 				wfLog(APP_NAME, "WIFI_STATE_ENABLED");
 			hMainWrapper(TEMPLOCK_OFF);
 			WIFI_ENABLED=true;
+			WIFISHOULDBEON=false;
 			break;
 		case WifiManager.WIFI_STATE_ENABLING:
 			if (LOGGING)
@@ -683,9 +706,7 @@ public class WifiFixerService extends Service {
 
 	 boolean httpHostup(String host) {
 		boolean isUp = false;
-		//Oddly, we used to have our own implementation
-		//But using Google's APIs in this one over time causes less GC and 
-		//uses less memory
+		//how's this for minimalist?
 		try {
 			isUp=getHttpHeaders("http://google.com");
 		} catch (IOException e) {
@@ -696,6 +717,9 @@ public class WifiFixerService extends Service {
 		return isUp;
 	}
 	/*
+		//Oddly, we used to have our own implementation
+		//But using Google's APIs in this one over time causes less GC and 
+		//uses less memory
 	boolean httpHostup(String host) {
 		boolean isUp = true;
 	    DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -778,6 +802,7 @@ public class WifiFixerService extends Service {
 		NOTIFPREF = settings.getBoolean("Notifications", false);
 		RUNPREF = settings.getBoolean("Disable", false);
 		SCREENPREF = settings.getBoolean("SCREEN", false);
+		WIDGETPREF = settings.getBoolean("WidgetBehavior", false);
 		String PERFORMANCE = settings.getString("Performance", "0");
 		LOGGING=settings.getBoolean("SLOG", false);
 		// Check RUNPREF and set SHOULDRUN
@@ -793,7 +818,7 @@ public class WifiFixerService extends Service {
 		//Setting defaults if performance not set
 	    if(PERFORMANCE=="0" && !LOCKPREF){
 	    	SharedPreferences.Editor edit = settings.edit();
-	    	edit.putInt("Performance",2);
+	    	edit.putString("Performance","2");
 	    	edit.putBoolean("WiFiLock", true);
 	    	edit.commit();
 	    	LOCKPREF=true;

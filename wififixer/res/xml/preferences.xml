@@ -56,6 +56,11 @@
                 android:title="Enable Log Menu"
                 android:summary="Note: Logging stores some personal information" />
                 
+                <CheckBoxPreference
+                android:key="WidgetBehavior"
+                android:title="Widget Behavior"
+                android:summary="Checked is Toggle Wifi, unchecked is Reassociate"/>
+                
 	        
 	       </PreferenceCategory>
 	        

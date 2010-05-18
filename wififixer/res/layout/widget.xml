@@ -23,5 +23,5 @@
     android:focusable="true" 
     android:layout_gravity="center" 
     android:layout_margin="4dip">
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Button" android:text="WifiFix" android:clickable="true" android:layout_gravity="center_vertical|center_horizontal"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Button" android:background="@drawable/widget_background" android:clickable="true" android:layout_gravity="center_vertical|center_horizontal"></Button>
 </FrameLayout>

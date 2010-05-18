@@ -56,9 +56,7 @@ public class WifiFixerPreferences extends PreferenceActivity implements OnShared
 	    	
 	    	SharedPreferences.Editor edit = prefs.edit();
 			String sPerf=prefs.getString("Performance","2");
-			Log.i("Preferences","Value:"+sPerf);
     		int pVal=Integer.parseInt(sPerf);
-    		Log.i("Preferences","Integer Value:"+pVal);
     		
     		
     		switch(pVal){
