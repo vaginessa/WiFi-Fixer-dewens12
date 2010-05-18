@@ -1006,10 +1006,10 @@ public class WifiFixerService extends Service {
 			return;
 		
 		PENDINGWIFITOGGLE=true;
+		cleanupPosts();
 		tempLock(CONNECTWAIT);
 		hMainWrapper(WIFI_OFF);
 		hMain.removeMessages(WIFI_ON);
-		cleanupPosts();
 		hMain.sendEmptyMessageDelayed(WIFI_ON, LOOPWAIT);
 		PENDINGSCAN=true;
 		startScan();
