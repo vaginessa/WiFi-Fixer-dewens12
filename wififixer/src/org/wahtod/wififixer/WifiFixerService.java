@@ -224,7 +224,9 @@ public class WifiFixerService extends Service {
 		public void run() {
 			//Queue next run of main runnable
 			hMain.sendEmptyMessageDelayed(MAIN, LOOPWAIT);
-			
+			//Watchdog
+		    if(!WIFI_ENABLED)
+		    	checkWifiState();
 			if (!TEMPLOCK && !SCREENISOFF)
 					fixWifi();
 			if (PREFSCHANGED)
@@ -445,7 +447,7 @@ public class WifiFixerService extends Service {
 		return wm.enableNetwork(AP, disableOthers);
 	}
 	
-	 void doWifiFix() {
+	 void doWidgetAction() {
 		if (WIFI_ENABLED) {
 			if(WIDGETPREF){
 				Toast.makeText(WifiFixerService.this, "Toggling Wifi", Toast.LENGTH_LONG).show();
@@ -474,8 +476,6 @@ public class WifiFixerService extends Service {
 			}
 
 		}
-		else
-			checkWifiState();
 
 	}
     
@@ -618,9 +618,10 @@ public class WifiFixerService extends Service {
 		// Handle NPE
 		
 			try {
-				if (intent.hasExtra(FIXWIFI)) {
-					if (intent.getBooleanExtra(FIXWIFI, false))
-						doWifiFix();
+				if (intent.hasExtra(FIXWIFI) && !TEMPLOCK) {
+					if (intent.getBooleanExtra(FIXWIFI, false)){
+						doWidgetAction();
+					}
 					if (LOGGING)
 						wfLog(APP_NAME, "Called by Widget");
 				} else {

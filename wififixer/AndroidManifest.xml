@@ -15,7 +15,7 @@
 
 
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.wahtod.wififixer" android:versionCode="301" android:versionName="0.6.6p9">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.wahtod.wififixer" android:versionCode="303" android:versionName="0.6.6p10">
 	<uses-sdk android:minSdkVersion="3" 
 	android:targetSdkVersion="7" /> 
         <application android:icon="@drawable/icon"
