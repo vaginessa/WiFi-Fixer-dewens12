@@ -24,6 +24,13 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpHead;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;*/
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -101,6 +108,7 @@ public class WifiFixerService extends Service {
 	public boolean PENDINGSCAN=false;
 	public boolean PENDINGWIFITOGGLE=false;
 	public boolean PENDINGRECONNECT=false;
+	public boolean sCONNECTED=false;
 	//misc types
 	public String LASTSSID=" ";
 	public int VERSION=0;
@@ -153,6 +161,7 @@ public class WifiFixerService extends Service {
             
             case WIFI_ON:
             wm.setWifiEnabled(true);
+            PENDINGWIFITOGGLE=false;
             break;
             	
             }
@@ -297,19 +306,21 @@ public class WifiFixerService extends Service {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			//supplicant fixes
-			String sState=intent.getStringExtra(WifiManager.EXTRA_NEW_STATE);
-			if (sState == null)
-				return;
+			
+			String sState=intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE).toString();
+			
 			if(LOGGING)
 				logSupplicant(sState);
-			if(sState=="UNINITIALIZED")
+			
+			if(sState=="SCANNING")
 			{
-				supplicantFix(true);
-				notifyWrap(sState);
+				PENDINGSCAN=true;
+				
 				
 			}
-			else if( sState=="COMPLETED" ||sState=="DISCONNECTED"){
-			    supplicantFix(false);
+			else if(sState=="INACTIVE"){
+			    supplicantFix(true);
+			    //notifyWrap(sState);
 			}
 			
 		}
@@ -450,8 +461,14 @@ public class WifiFixerService extends Service {
 
 	 void fixWifi() {
 		if (getIsWifiEnabled()) {
-			if (!checkWifi() && !isKnownAPinRange()) {
+			if (getSupplicantState()=="ASSOCIATED" || getSupplicantState()=="COMPLETED"){
+				if(!checkWifi()) {
 					wifiRepair();
+				}
+			}
+			else{
+				PENDINGSCAN=true;
+				tempLock(CONNECTWAIT);
 			}
 
 		}
@@ -634,27 +651,16 @@ public class WifiFixerService extends Service {
 				wfLog(APP_NAME, "WIFI_STATE_ENABLED");
 			hMainWrapper(TEMPLOCK_OFF);
 			WIFI_ENABLED=true;
-			if(PENDINGWIFITOGGLE){
-				PENDINGWIFITOGGLE=false;
-				PENDINGSCAN=true;
-				tempLock(5000);
-				startScan();
-			}
-			
 			break;
 		case WifiManager.WIFI_STATE_ENABLING:
 			if (LOGGING)
 				wfLog(APP_NAME, "WIFI_STATE_ENABLING");
-			hMainWrapper(TEMPLOCK_ON);
 			break;
 		case WifiManager.WIFI_STATE_DISABLED:
 			if (LOGGING)
 				wfLog(APP_NAME, "WIFI_STATE_DISABLED");
 			hMainWrapper(TEMPLOCK_ON);
 			WIFI_ENABLED=false;
-			//Toggle handler
-			if(PENDINGWIFITOGGLE)
-				hMainWrapper(WIFI_ON);
 			break;
 		case WifiManager.WIFI_STATE_DISABLING:
 			if (LOGGING)
@@ -689,6 +695,30 @@ public class WifiFixerService extends Service {
 			wfLog(APP_NAME, "HTTP Method");
 		return isUp;
 	}
+	/*
+	boolean httpHostup(String host) {
+		boolean isUp = true;
+	    DefaultHttpClient httpClient = new DefaultHttpClient();
+	    HttpParams my_httpParams = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(my_httpParams,REACHABLE);
+        HttpConnectionParams.setSoTimeout(my_httpParams,REACHABLE);
+		try {
+			httpClient.execute(new HttpHead("http://" + host));
+		} catch (ClientProtocolException e) {
+			isUp = false;
+			if (LOGGING)
+				wfLog(APP_NAME, "httpHostup:ClientProtocolException");
+
+		} catch (IOException e) {
+			isUp = false;
+			if (LOGGING)
+				wfLog(APP_NAME, "httpHostup:IOException");
+		}
+		if (LOGGING)
+			wfLog(APP_NAME, "HTTP Method");
+		return isUp;
+	}*/
+
 
 	 boolean icmpHostup(String host) {
 		boolean isUp = false;
@@ -748,6 +778,7 @@ public class WifiFixerService extends Service {
 		NOTIFPREF = settings.getBoolean("Notifications", false);
 		RUNPREF = settings.getBoolean("Disable", false);
 		SCREENPREF = settings.getBoolean("SCREEN", false);
+		String PERFORMANCE = settings.getString("Performance", "0");
 		LOGGING=settings.getBoolean("SLOG", false);
 		// Check RUNPREF and set SHOULDRUN
 		//Make sure Main loop restarts if this is a change
@@ -759,6 +790,14 @@ public class WifiFixerService extends Service {
 				SHOULDRUN=true;
 			}
 		}
+		//Setting defaults if performance not set
+	    if(PERFORMANCE=="0" && !LOCKPREF){
+	    	SharedPreferences.Editor edit = settings.edit();
+	    	edit.putInt("Performance",2);
+	    	edit.putBoolean("WiFiLock", true);
+	    	edit.commit();
+	    	LOCKPREF=true;
+	    }
 
 		if (LOGGING) {
 			wfLog(APP_NAME, "Loading Settings");
@@ -884,7 +923,7 @@ public class WifiFixerService extends Service {
 		//register Supplicant State receiver
 		registerReceiver(supplicantR,sFilter);
 		//register wifi callback 
-	    registerReceiver(WifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)); 
+	    registerReceiver(WifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 		
 	}
 	
@@ -941,11 +980,13 @@ public class WifiFixerService extends Service {
 			return;
 		
 		PENDINGWIFITOGGLE=true;
-		tempLock(LOOPWAIT);
+		tempLock(CONNECTWAIT);
 		hMainWrapper(WIFI_OFF);
 		hMain.removeMessages(WIFI_ON);
 		cleanupPosts();
 		hMain.sendEmptyMessageDelayed(WIFI_ON, LOOPWAIT);
+		PENDINGSCAN=true;
+		startScan();
 	}
 
 	 void wifiRepair() {
