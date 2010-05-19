@@ -449,6 +449,8 @@ public class WifiFixerService extends Service {
 	 void doWidgetAction() {
 		if (WIFI_ENABLED) {
 			if(WIDGETPREF){
+				if (TEMPLOCK)
+					return;
 				Toast.makeText(WifiFixerService.this, "Toggling Wifi", Toast.LENGTH_LONG).show();
 				toggleWifi();
 			}else{
