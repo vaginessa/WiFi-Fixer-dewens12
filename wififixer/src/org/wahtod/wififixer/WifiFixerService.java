@@ -223,7 +223,7 @@ public class WifiFixerService extends Service {
 	 Runnable rMain = new Runnable() {
 		public void run() {
 			//Queue next run of main runnable
-			hMain.sendEmptyMessageDelayed(MAIN, LOOPWAIT);
+			hMainWrapper(MAIN, LOOPWAIT);
 			//Watchdog
 		    if(!WIFI_ENABLED)
 		    	checkWifiState();
@@ -324,10 +324,9 @@ public class WifiFixerService extends Service {
 	
 	private  BroadcastReceiver WifiReceiver = new BroadcastReceiver() {
 		public void onReceive(Context c, Intent intent){
-			if(!WIFI_ENABLED){
-				hMainWrapper(TEMPLOCK_OFF);
+			hMainWrapper(TEMPLOCK_OFF);
+			if(!WIFI_ENABLED)
 				return;	
-			}
 					
 			if (!PENDINGSCAN){
 				if (LOGGING)
@@ -672,7 +671,7 @@ public class WifiFixerService extends Service {
 		case WifiManager.WIFI_STATE_ENABLED:
 			if (LOGGING)
 				wfLog(APP_NAME, "WIFI_STATE_ENABLED");
-			hMainWrapper(TEMPLOCK_OFF);
+			hMainWrapper(TEMPLOCK_OFF,3000);
 			WIFI_ENABLED=true;
 			WIFISHOULDBEON=false;
 			break;
@@ -689,7 +688,6 @@ public class WifiFixerService extends Service {
 		case WifiManager.WIFI_STATE_DISABLING:
 			if (LOGGING)
 				wfLog(APP_NAME, "WIFI_STATE_DISABLING");
-			hMainWrapper(TEMPLOCK_ON);
 			break;
 		case WifiManager.WIFI_STATE_UNKNOWN:
 			if (LOGGING)
@@ -702,7 +700,23 @@ public class WifiFixerService extends Service {
 	//in the queue. 
 	void hMainWrapper(int hmain){
 		hMain.removeMessages(hmain);
-		hMain.sendEmptyMessage(hmain);
+		if(hMainCheck(hmain))
+			hMain.sendEmptyMessage(hmain);
+	}
+	//whee overloading methods, <3 java
+	void hMainWrapper(int hmain,long delay){
+		hMain.removeMessages(hmain);
+		if(hMainCheck(hmain))
+				hMain.sendEmptyMessageDelayed(hmain,delay);
+	}
+	
+	boolean hMainCheck(int hmain) {
+		if (TEMPLOCK){
+			//prevent running posts during lock
+			if(hmain==RECONNECT || hmain==REPAIR || hmain==WIFITASK)
+				return false;
+		}
+		return true;
 	}
 
 	 boolean httpHostup(String host) {
@@ -997,8 +1011,7 @@ public class WifiFixerService extends Service {
 		
 		 hMainWrapper(TEMPLOCK_ON);
         //Queue for later
-		 hMain.removeMessages(TEMPLOCK_OFF);
-		hMain.sendEmptyMessageDelayed(TEMPLOCK_OFF, time);
+		hMainWrapper(TEMPLOCK_OFF, time);
 	}
 	
 	 void toggleWifi() {
@@ -1009,10 +1022,7 @@ public class WifiFixerService extends Service {
 		cleanupPosts();
 		tempLock(CONNECTWAIT);
 		hMainWrapper(WIFI_OFF);
-		hMain.removeMessages(WIFI_ON);
-		hMain.sendEmptyMessageDelayed(WIFI_ON, LOOPWAIT);
-		PENDINGSCAN=true;
-		startScan();
+		hMainWrapper(WIFI_ON, LOOPWAIT);
 	}
 
 	 void wifiRepair() {
