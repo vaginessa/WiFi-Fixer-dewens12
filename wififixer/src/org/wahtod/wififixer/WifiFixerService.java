@@ -234,7 +234,9 @@ public class WifiFixerService extends Service {
 		    	checkWifiState();
 		    
 		    //Check Supplicant
-		    if(!wm.pingSupplicant()){
+		    if(!wm.pingSupplicant() && WIFI_ENABLED){
+		    	if(LOGGING)
+		    		wfLog(APP_NAME,"Supplicant Nonresponsive, toggling wifi");
 		    	toggleWifi();
 		    }
 		    else	
@@ -446,7 +448,7 @@ public class WifiFixerService extends Service {
 	}
 	 
 	void checkWifiState() {
-		if(WIFISHOULDBEON){
+		if(!WIFI_ENABLED && WIFISHOULDBEON){
 			hMainWrapper(WIFI_ON);
 		}
 	}
@@ -665,6 +667,9 @@ public class WifiFixerService extends Service {
 		if(LOGGING)
 			logSupplicant(sState);
 		
+		if(!WIFI_ENABLED)
+			return;
+		
 		if(sState=="SCANNING" || sState=="DISCONNECTED")
 		{
 			PENDINGSCAN=true;
@@ -703,10 +708,12 @@ public class WifiFixerService extends Service {
 		case WifiManager.WIFI_STATE_DISABLING:
 			if (LOGGING)
 				wfLog(APP_NAME, "WIFI_STATE_DISABLING");
+			WIFI_ENABLED=false;
 			break;
 		case WifiManager.WIFI_STATE_UNKNOWN:
 			if (LOGGING)
 				wfLog(APP_NAME, "WIFI_STATE_UNKNOWN");
+			WIFI_ENABLED=false;
 			break;
 		}
 	}
