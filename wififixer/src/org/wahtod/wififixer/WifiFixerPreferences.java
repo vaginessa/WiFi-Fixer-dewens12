@@ -81,10 +81,7 @@ public class WifiFixerPreferences extends PreferenceActivity implements OnShared
     				Log.i("Preferences","Commit failed");
     		break;
     		}
-    		
-    		
-    		Intent myIntent = new Intent(this, WifiFixerPreferences.class);
-    		startActivity(myIntent);
+    		startActivity(getIntent());
     		WifiFixerPreferences.this.finish();
     		
 	    }

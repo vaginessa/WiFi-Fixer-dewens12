@@ -807,8 +807,10 @@ public class WifiFixerService extends Service {
 			sResult=wifiList.get(i);
 			for (int i2=0;i2 < wifiConfigs.size(); i2++){
 			if(wifiConfigs.get(i2).toString().contains(sResult.SSID)){
-				if(LOGGING)
+				if(LOGGING){
 					wfLog(APP_NAME,"Found SSID:"+sResult.SSID);
+					wfLog(APP_NAME,"Capabilities:"+sResult.capabilities);
+				}
 				  LASTNID=(i2);
 				  LASTSSID=sResult.SSID;
 				  state=true;
