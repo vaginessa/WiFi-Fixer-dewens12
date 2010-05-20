@@ -179,7 +179,10 @@ public class WifiFixerService extends Service {
 			}
 			
 	    if(isKnownAPinRange()){
-	    	if(connectToAP(LASTNID,true) && getNetworkID() != -1){
+	    	if(connectToAP(LASTNID,true) && (getNetworkID() != -1)){
+	    	 PENDINGRECONNECT=false;
+	    	 if(LOGGING)
+	    		 wfLog(APP_NAME,"Connected to Network:"+getNetworkID());
 			}
 		    else{
 		    PENDINGRECONNECT=true;
@@ -204,8 +207,10 @@ public class WifiFixerService extends Service {
 				return;
 			}
 			isKnownAPinRange();		  //Crazy but should work. 
-			if(connectToAP(LASTNID,true) && getNetworkID() != -1){
+			if(connectToAP(LASTNID,true) && (getNetworkID() != -1)){
 					  PENDINGRECONNECT=false;
+					  if(LOGGING)
+				    		 wfLog(APP_NAME,"Connected to Network:"+getNetworkID());
 					}
 					  else{
 					 WIFIREPAIR=0;
@@ -449,7 +454,7 @@ public class WifiFixerService extends Service {
 	 void doWidgetAction() {
 		if (WIFI_ENABLED) {
 			if(WIDGETPREF){
-				if (TEMPLOCK)
+				if (PENDINGWIFITOGGLE)
 					return;
 				Toast.makeText(WifiFixerService.this, "Toggling Wifi", Toast.LENGTH_LONG).show();
 				toggleWifi();
@@ -656,12 +661,13 @@ public class WifiFixerService extends Service {
 		if(sState=="SCANNING" || sState=="DISCONNECTED")
 		{
 			PENDINGSCAN=true;
+			notifyWrap(sState);
 			
 			
 		}
 		else if(sState=="INACTIVE"){
 		    supplicantFix(true);
-		    //notifyWrap(sState);
+		    notifyWrap(sState);
 		}
 	}
 	
