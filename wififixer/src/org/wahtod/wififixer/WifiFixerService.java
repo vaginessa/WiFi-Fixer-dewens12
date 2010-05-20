@@ -232,9 +232,16 @@ public class WifiFixerService extends Service {
 			//Watchdog
 		    if(!WIFI_ENABLED)
 		    	checkWifiState();
+		    
+		    //Check Supplicant
+		    if(!wm.pingSupplicant()){
+		    	toggleWifi();
+		    }
+		    else	
 			if (!TEMPLOCK && !SCREENISOFF)
 					fixWifi();
-			if (PREFSCHANGED)
+			
+		    if (PREFSCHANGED)
 					checkLock(lock);
 			
 			if(!SHOULDRUN){	
