@@ -24,6 +24,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+//For old http check method
 /*import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -53,6 +54,7 @@ import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings.SettingNotFoundException;
 import android.widget.Toast;
@@ -76,6 +78,9 @@ public class WifiFixerService extends Service {
 	private static final int WIFI_OFF = 6;
 	private static final int WIFI_ON = 7;
 	
+	//ID For notification
+	private static final int NOTIFID=31337;
+	
 	//For wifi state
 	public static boolean WIFI_ENABLED=false;
 	// ms for IsReachable
@@ -98,6 +103,7 @@ public class WifiFixerService extends Service {
 	public boolean WIDGETPREF=false;
 	public boolean PREFSCHANGED = false;
 	public boolean WIFISHOULDBEON = false;
+	public boolean HASWAKELOCK=false;
 	//Locks and such
 	public boolean TEMPLOCK = false;
 	public static boolean SCREENISOFF = false;
@@ -122,6 +128,7 @@ public class WifiFixerService extends Service {
 	 public SharedPreferences settings;
 	 public ScanResult sResult;
 	 public List<ScanResult> wifiList;
+	 PowerManager.WakeLock wakelock; 
 	
     
 	private  Handler hMain = new Handler(){
@@ -158,13 +165,11 @@ public class WifiFixerService extends Service {
             break;
             
             case WIFI_OFF:
-            wm.setWifiEnabled(false);
+            hMain.post(rWifiOff);
             break;
             
             case WIFI_ON:
-            wm.setWifiEnabled(true);
-            PENDINGWIFITOGGLE=false;
-            WIFISHOULDBEON=true;
+            hMain.post(rWifiOn);
             break;
             	
             }
@@ -299,7 +304,27 @@ public class WifiFixerService extends Service {
 			}
 		}
 	};;
+	
+	 Runnable rWifiOff = new Runnable() {
+			public void run() {
+			wm.setWifiEnabled(false);
+		}	
 
+		};
+
+	 Runnable rWifiOn = new Runnable() {
+				public void run() {
+				wm.setWifiEnabled(true);
+				PENDINGWIFITOGGLE=false;
+			    WIFISHOULDBEON=true;
+			    if(HASWAKELOCK)
+			    	wakeLock(false);
+			    deleteNotification(NOTIFID);
+			}	
+
+			};
+
+		
 	private  BroadcastReceiver receiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
 
@@ -460,11 +485,15 @@ public class WifiFixerService extends Service {
 		return wm.enableNetwork(AP, disableOthers);
 	}
 	
+	 
+	 void deleteNotification(int id) {
+		 NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		 nm.cancel(id);
+	 }
+	 
 	 void doWidgetAction() {
 		if (WIFI_ENABLED) {
 			if(WIDGETPREF){
-				if (PENDINGWIFITOGGLE)
-					return;
 				Toast.makeText(WifiFixerService.this, "Toggling Wifi", Toast.LENGTH_LONG).show();
 				toggleWifi();
 			}else{
@@ -562,8 +591,7 @@ public class WifiFixerService extends Service {
             //---display the versioncode--           
            VERSION=pi.versionCode;
         } catch (NameNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+           //hurf ding
         }
 	}
 	
@@ -621,7 +649,6 @@ public class WifiFixerService extends Service {
 		} else {
 			if (LOGGING)
 				wfLog(APP_NAME, "SCREEN_ON handler");
-			//don't want this to run if wifi isn't enabled 
 			SCREENISOFF=false;
 		}
 
@@ -667,7 +694,7 @@ public class WifiFixerService extends Service {
 		if(LOGGING)
 			logSupplicant(sState);
 		
-		if(!WIFI_ENABLED)
+		if(!WIFI_ENABLED || SCREENISOFF)
 			return;
 		
 		if(sState=="SCANNING" || sState=="DISCONNECTED")
@@ -1014,6 +1041,23 @@ public class WifiFixerService extends Service {
 		nm.notify(4144, notif);
 
 	}
+	
+	void showNotification(String message, String tickerText, int id){
+		NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+		
+		CharSequence from = "Wifi Fixer";
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+				new Intent(), 0);
+		
+		Notification notif = new Notification(R.drawable.icon, tickerText,
+				System.currentTimeMillis());
+
+		notif.setLatestEventInfo(this, from, message, contentIntent);
+		notif.flags = Notification.FLAG_AUTO_CANCEL;
+		//unique ID
+		nm.notify(id, notif);
+	}
 
 	 void startScan() {
 		 //We want a lock after a scan 
@@ -1045,10 +1089,27 @@ public class WifiFixerService extends Service {
 		PENDINGWIFITOGGLE=true;
 		cleanupPosts();
 		tempLock(CONNECTWAIT);
+		//Wake lock
+		wakeLock(true);
+		showNotification("Toggling Wifi", "Toggling Wifi", NOTIFID);
 		hMainWrapper(WIFI_OFF);
 		hMainWrapper(WIFI_ON, LOOPWAIT);
 	}
 
+	void wakeLock(boolean state){
+		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		if(state){
+			wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WFWakeLock");
+			wakelock.acquire();
+			HASWAKELOCK=true;
+		}
+		else{
+			wakelock.release();
+			HASWAKELOCK=false;
+		}
+		
+	}
+	 
 	 void wifiRepair() {
 		 hMainWrapper(WIFITASK);
 		if (LOGGING)
