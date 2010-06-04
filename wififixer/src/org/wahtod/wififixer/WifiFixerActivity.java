@@ -67,12 +67,6 @@ public class WifiFixerActivity extends Activity {
 				Intent myIntent = new Intent(target.getContext(), About.class);
 				startActivity(myIntent);
 				break;
-
-			case R.id.okButton:
-				startwfService();
-				WifiFixerActivity.this.finish();
-				break;
-
 			}
 		}};		 	
 	  
@@ -270,7 +264,7 @@ public class WifiFixerActivity extends Activity {
 		//set up all the buttons
 		//Wish we could use a clicklistener in the xml but buh duh 1.5 
 		 findViewById(R.id.aboutButton).setOnClickListener(clickR);
-	     findViewById(R.id.okButton).setOnClickListener(clickR);
+	     //findViewById(R.id.okButton).setOnClickListener(clickR);
         
 		
 		

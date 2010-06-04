@@ -644,11 +644,15 @@ public class WifiFixerService extends Service {
 		
 		if (iAction.equals(Intent.ACTION_SCREEN_OFF)) {
 			SCREENISOFF = true;
-			if (LOGGING)
+			if (LOGGING){
 				wfLog(APP_NAME, "SCREEN_OFF handler");
+				wfLog(LogService.SCREEN_OFF,null);
+			}
 		} else {
-			if (LOGGING)
+			if (LOGGING){
 				wfLog(APP_NAME, "SCREEN_ON handler");
+				wfLog(LogService.SCREEN_ON,null);
+			}
 			SCREENISOFF=false;
 		}
 
@@ -875,6 +879,9 @@ public class WifiFixerService extends Service {
 		SCREENPREF = settings.getBoolean("SCREEN", false);
 		WIDGETPREF = settings.getBoolean("WidgetBehavior", false);
 		String PERFORMANCE = settings.getString("Performance", "0");
+		//Kill the Log Service if it's up
+		if (LOGGING && !settings.getBoolean("SLOG", false))
+			wfLog(LogService.DIE,null);
 		LOGGING=settings.getBoolean("SLOG", false);
 		// Check RUNPREF and set SHOULDRUN
 		//Make sure Main loop restarts if this is a change
@@ -894,7 +901,7 @@ public class WifiFixerService extends Service {
 	    	edit.commit();
 	    	LOCKPREF=true;
 	    }
-
+	    
 		if (LOGGING) {
 			wfLog(APP_NAME, "Loading Settings");
 			if (LOCKPREF)
@@ -910,6 +917,7 @@ public class WifiFixerService extends Service {
 				wfLog(APP_NAME, "SCREENPREF");
 
 		}
+		
 		
 		// Here we go, checking for Wifi network notification
 		// Notify user if this setting is true

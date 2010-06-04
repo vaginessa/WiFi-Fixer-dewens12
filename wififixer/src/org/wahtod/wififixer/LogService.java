@@ -42,6 +42,12 @@ public class LogService extends Service {
 	private static String APP_NAME = " ";
 	private static String sMessage = " ";
 	public FileWriter fWriter;
+	private static boolean SCREENISOFF=false;
+	private static boolean LOGGING=true;
+	//constants
+	static final String DIE="DIE";
+	static final String SCREEN_ON="SCREEN_ON";
+	static final String SCREEN_OFF="SCREEN_OFF";
     
 	private Handler tsHandler = new Handler(){
 		@Override
@@ -113,8 +119,28 @@ public class LogService extends Service {
 	}
 	
 	
+public boolean processCommands(String Command) {
+	
+	if (Command.contains(DIE)){
+		LOGGING=false;
+		return true;
+	}
+	else
+	if (Command.contains(SCREEN_ON)){
+		SCREENISOFF=false;
+		return true;
+	}
+	else
+	if (Command.contains(SCREEN_OFF)){
+		SCREENISOFF=true;
+		return true;
+	}
+	
+	return false;
+}
+	
 void timeStamp() {
-	if (WifiFixerService.SCREENISOFF && WifiFixerService.LOGGING){
+	if (SCREENISOFF && LOGGING){
 			tsHandler.sendEmptyMessageDelayed(1, ALARMREPEAT);
 		return;
 	}
@@ -122,7 +148,7 @@ void timeStamp() {
 	Date time = new Date();
 	String message="Build:"+VSTRING+":"+VERSION+" " + ":" + time.toString();
 	wfLog("WifiFixerService", message);
-	if(WifiFixerService.LOGGING)
+	if(LOGGING)
 		tsHandler.sendEmptyMessageDelayed(1, ALARMREPEAT);
 	else
 		stopSelf();
@@ -130,6 +156,9 @@ void timeStamp() {
 
 
 void wfLog(String APP_NAME, String Message) {
+	if (processCommands(APP_NAME))
+		return;
+	
 	Log.i(APP_NAME,Message);
 	writeToFileLog(Message);
 }
