@@ -697,12 +697,17 @@ public class WifiFixerService extends Service {
 		if(!WIFI_ENABLED || SCREENISOFF)
 			return;
 		
-		if(sState=="SCANNING" || sState=="DISCONNECTED")
+		if(sState=="SCANNING")
 		{
 			PENDINGSCAN=true;
+			
+			
+			
+		}
+		else if(sState=="DISCONNECTED"){
+			PENDINGSCAN=true;
+			startScan();
 			notifyWrap(sState);
-			
-			
 		}
 		else if(sState=="INACTIVE"){
 		    supplicantFix(true);

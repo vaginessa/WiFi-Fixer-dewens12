@@ -76,36 +76,7 @@ public class WifiFixerActivity extends Activity {
 			}
 		}};		 	
 	  
-	  Runnable rOnCreate = new Runnable() {
-			public void run() {
-				
-		        
-				
-				ISAUTHED=(settings.getBoolean("ISAUTHED", false));
-				ABOUT=(settings.getBoolean(sABOUT, false));
-				LOGGING_MENU = (settings.getBoolean("Logging", false));
-				LOGGING = getLogging();
-				//Fire new About nag
-				if(!ABOUT)
-				{
-					showNotification();
-					
-				}
-				
-				// Here's where we fire the nag
-				if (!ISAUTHED)
-				{
-					//Handle Donate Auth
-					Intent sendIntent = new Intent("com.wahtod.wififixer.WFDonateService");
-					startService(sendIntent);
-					nagNotification();
-				}
-				
-				startwfService();
-		}	
-
-		};
-		
+	  
 
     String getPrefs() {
 		settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -153,6 +124,13 @@ public class WifiFixerActivity extends Activity {
 	
 	
 	void sendLog() {
+		
+		if(Environment.getExternalStorageState() != null && !(Environment.getExternalStorageState().contains("mounted"))){
+			Toast.makeText(WifiFixerActivity.this, "SD Card Unavailable",Toast.LENGTH_LONG).show();
+			
+			return;
+		}
+		
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
 	    sendIntent.setType("text/plain");
 	    sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"zanshin.g1@gmail.com"});
@@ -296,11 +274,35 @@ public class WifiFixerActivity extends Activity {
         
 		
 		
-		Thread thr = new Thread(null, rOnCreate, "OnCreate");
-		thr.start();
+		oncreate_setup();
 					
 
 	};
+	
+	private void oncreate_setup(){
+		ISAUTHED=(settings.getBoolean("ISAUTHED", false));
+		ABOUT=(settings.getBoolean(sABOUT, false));
+		LOGGING_MENU = (settings.getBoolean("Logging", false));
+		LOGGING = getLogging();
+		//Fire new About nag
+		if(!ABOUT)
+		{
+			showNotification();
+			
+		}
+		
+		// Here's where we fire the nag
+		if (!ISAUTHED)
+		{
+			//Handle Donate Auth
+			Intent sendIntent = new Intent("com.wahtod.wififixer.WFDonateService");
+			startService(sendIntent);
+			nagNotification();
+		}
+		
+		startwfService();
+
+}	
 	
 	@Override
 	public void onStart(){
