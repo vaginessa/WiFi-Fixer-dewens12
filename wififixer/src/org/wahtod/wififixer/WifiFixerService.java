@@ -68,6 +68,7 @@ public class WifiFixerService extends Service {
 	public static final String AUTHSTRING="31415927";
 	//http://www.jerkcity.com  
 	private static final String AUTHEXTRA ="DICKS.ETC";
+	private static final String AUTH="AUTH";
 	//Runnable Constants for handler
 	private static final int MAIN = 0;
 	private static final int REPAIR = 1;
@@ -80,6 +81,14 @@ public class WifiFixerService extends Service {
 	
 	//ID For notification
 	private static final int NOTIFID=31337;
+	
+	//Supplicant Constants
+	private static final String SCANNING="SCANNING";
+	private static final String DISCONNECTED="DISCONNECTED";
+	private static final String INACTIVE = "INACTIVE";
+	
+	//Target for header check
+	private static final String H_TARGET="http://google.com";
 	
 	//For wifi state
 	public static boolean WIFI_ENABLED=false;
@@ -664,7 +673,7 @@ public class WifiFixerService extends Service {
 		// Handle NPE
 		
 			try {
-				if (intent.hasExtra(FIXWIFI) && !TEMPLOCK) {
+				if (intent.hasExtra(FIXWIFI)) {
 					if (intent.getBooleanExtra(FIXWIFI, false)){
 						doWidgetAction();
 					}
@@ -674,7 +683,7 @@ public class WifiFixerService extends Service {
 					
 					String iAction=intent.getAction();
 					//Looking for auth intent
-					if (iAction.contains("AUTH")){
+					if (iAction.contains(AUTH)){
 						handleAuth(intent);
 						return;
 					}
@@ -701,19 +710,19 @@ public class WifiFixerService extends Service {
 		if(!WIFI_ENABLED || SCREENISOFF)
 			return;
 		
-		if(sState=="SCANNING")
+		if(sState==SCANNING)
 		{
 			PENDINGSCAN=true;
 			
 			
 			
 		}
-		else if(sState=="DISCONNECTED"){
+		else if(sState==DISCONNECTED){
 			PENDINGSCAN=true;
 			startScan();
 			notifyWrap(sState);
 		}
-		else if(sState=="INACTIVE"){
+		else if(sState==INACTIVE){
 		    supplicantFix(true);
 		    notifyWrap(sState);
 		}
@@ -781,7 +790,7 @@ public class WifiFixerService extends Service {
 		boolean isUp = false;
 		//how's this for minimalist?
 		try {
-			isUp=getHttpHeaders("http://google.com");
+			isUp=getHttpHeaders(H_TARGET);
 		} catch (IOException e) {
 			wfLog(APP_NAME,"HTTP I/O Exception");
 		}
