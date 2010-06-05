@@ -341,65 +341,23 @@ public class WifiFixerService extends Service {
             //We want this to run first
 			String iAction = intent.getAction();
 
-			if ((iAction.equals(Intent.ACTION_SCREEN_ON)) || (iAction.equals(Intent.ACTION_SCREEN_OFF))){
-
-				 handleScreenAction(iAction);
-			} else {
-			     
-				handleWifiState(intent);
-
-			}
-		}
-
-		
-	};
-	
-	private BroadcastReceiver supplicantR = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			//supplicant fixes
-			
-			String sState=intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE).toString();
-			
-			handleSupplicantState(sState);
-			
-		}
-		
-		
-	};
-	
-	
-	private  BroadcastReceiver WifiReceiver = new BroadcastReceiver() {
-		public void onReceive(Context c, Intent intent){
-			hMainWrapper(TEMPLOCK_OFF);
-			if(!WIFI_ENABLED)
-				return;	
-					
-			if (!PENDINGSCAN){
-				if (LOGGING)
-					wfLog(APP_NAME,"No Pending Scan.");
-				return;
-			}
-			
-			
-			if (!PENDINGRECONNECT){
-			
-			PENDINGSCAN=false;
-			hMainWrapper(REPAIR);
-			if (LOGGING)
-				wfLog(APP_NAME,"Scan Results Acquired:Running Repair_Handler");
-			}
+			if ((iAction.equals(Intent.ACTION_SCREEN_ON)) || (iAction.equals(Intent.ACTION_SCREEN_OFF)))
+					handleScreenAction(iAction);
 			else
-			{
-				PENDINGSCAN=false;
-				hMainWrapper(RECONNECT);
-				if (LOGGING)
-					wfLog(APP_NAME,"Scan Results Acquired:Running Reconnect_Handler");
-			}
+			if(iAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION))
+					handleWifiState(intent);
+			else
+			if(iAction.equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION))
+					handleSupplicantIntent(intent);
+			else
+			if(iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+					handleWifiResults();
 			
 		}
+
+		
 	};
+	
 	
 	 void checkLock(WifiManager.WifiLock lock) {
 		if (!PREFSCHANGED) {
@@ -439,8 +397,6 @@ public class WifiFixerService extends Service {
 			if (HASLOCK && lock.isHeld())
 				lock.release();
 			unregisterReceiver(receiver);
-			unregisterReceiver(WifiReceiver);
-			unregisterReceiver(supplicantR);
 			hMain.removeMessages(MAIN);
 			cleanupPosts();
 			CLEANUP=true;
@@ -701,6 +657,14 @@ public class WifiFixerService extends Service {
 		
 	}
 	 
+	 private void handleSupplicantIntent( Intent intent) {
+			//supplicant fixes
+			
+			String sState=intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE).toString();
+			
+			handleSupplicantState(sState);
+			
+	}
 	 
 	void handleSupplicantState(String sState){
 		
@@ -726,6 +690,35 @@ public class WifiFixerService extends Service {
 		    supplicantFix(true);
 		    notifyWrap(sState);
 		}
+	}
+	
+	private void handleWifiResults(){
+		hMainWrapper(TEMPLOCK_OFF);
+		if(!WIFI_ENABLED)
+			return;	
+				
+		if (!PENDINGSCAN){
+			if (LOGGING)
+				wfLog(APP_NAME,"No Pending Scan.");
+			return;
+		}
+		
+		
+		if (!PENDINGRECONNECT){
+		
+		PENDINGSCAN=false;
+		hMainWrapper(REPAIR);
+		if (LOGGING)
+			wfLog(APP_NAME,"Scan Results Acquired:Running Repair_Handler");
+		}
+		else
+		{
+			PENDINGSCAN=false;
+			hMainWrapper(RECONNECT);
+			if (LOGGING)
+				wfLog(APP_NAME,"Scan Results Acquired:Running Reconnect_Handler");
+		}
+		
 	}
 	
 	void handleWifiState(Intent intent) {
@@ -833,11 +826,9 @@ public class WifiFixerService extends Service {
 				isUp = true;
 			}
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//hurf
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//burf
 		}
 		if (LOGGING)
 			wfLog(APP_NAME, "ICMP Method");
@@ -1028,15 +1019,11 @@ public class WifiFixerService extends Service {
 		// Catch power events for battery savings
 		myFilter.addAction("android.intent.action.SCREEN_OFF");
 		myFilter.addAction("android.intent.action.SCREEN_ON");
-		//register generic receiver
-		registerReceiver(receiver, myFilter);
-		// intent filter to handle supplicant states
-		IntentFilter sFilter = new IntentFilter();
-		sFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
-		//register Supplicant State receiver
-		registerReceiver(supplicantR,sFilter);
-		//register wifi callback 
-	    registerReceiver(WifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+		//Supplicant State filter
+		myFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+		//wifi scan results available callback 
+	    myFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+	    registerReceiver(receiver, myFilter);
 		
 	}
 	
