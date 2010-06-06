@@ -43,7 +43,7 @@ public class LogService extends Service {
 	private static String sMessage = " ";
 	public FileWriter fWriter;
 	private static boolean SCREENISOFF=false;
-	private static boolean LOGGING=true;
+	private static boolean LOGGING=false;
 	//constants
 	static final String DIE="DIE";
 	static final String SCREEN_ON="SCREEN_ON";
@@ -158,7 +158,7 @@ void timeStamp() {
 void wfLog(String APP_NAME, String Message) {
 	if (processCommands(APP_NAME))
 		return;
-	
+	LOGGING=true;
 	Log.i(APP_NAME,Message);
 	writeToFileLog(Message);
 }

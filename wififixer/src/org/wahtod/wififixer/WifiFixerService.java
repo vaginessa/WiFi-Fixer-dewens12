@@ -651,8 +651,8 @@ public class WifiFixerService extends Service {
 				}
 				}
 			} catch (NullPointerException e) {
-			
-				wfLog(APP_NAME,"Pesky Google and their Null Intent");
+				if(LOGGING)
+					wfLog(APP_NAME,"Pesky Google and their Null Intent");
 			}
 		
 	}
@@ -729,7 +729,7 @@ public class WifiFixerService extends Service {
 		case WifiManager.WIFI_STATE_ENABLED:
 			if (LOGGING)
 				wfLog(APP_NAME, "WIFI_STATE_ENABLED");
-			hMainWrapper(TEMPLOCK_OFF,3000);
+			hMainWrapper(TEMPLOCK_OFF,LOOPWAIT);
 			WIFI_ENABLED=true;
 			WIFISHOULDBEON=false;
 			break;
@@ -933,7 +933,8 @@ public class WifiFixerService extends Service {
 
 		} catch (SettingNotFoundException e) {
 			// bweep
-			wfLog(APP_NAME,"Whoops! Obeselete!");
+			if(LOGGING)
+				wfLog(APP_NAME,"Whoops! Obeselete!");
 		}
 	}
 
@@ -1017,8 +1018,8 @@ public class WifiFixerService extends Service {
 		IntentFilter myFilter = new IntentFilter();
 		myFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 		// Catch power events for battery savings
-		myFilter.addAction("android.intent.action.SCREEN_OFF");
-		myFilter.addAction("android.intent.action.SCREEN_ON");
+		myFilter.addAction(Intent.ACTION_SCREEN_OFF);
+		myFilter.addAction(Intent.ACTION_SCREEN_ON);
 		//Supplicant State filter
 		myFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
 		//wifi scan results available callback 
@@ -1126,7 +1127,7 @@ public class WifiFixerService extends Service {
 	}
     
 	 void wfLog(String APP_NAME, String Message) {
-		Intent sendIntent = new Intent("org.wahtod.wififixer.LogService.LOG");
+		Intent sendIntent = new Intent(LogService.class.getName());
 		sendIntent.putExtra(LogService.APPNAME, APP_NAME);
 		sendIntent.putExtra(LogService.Message,Message);
 		startService(sendIntent);
