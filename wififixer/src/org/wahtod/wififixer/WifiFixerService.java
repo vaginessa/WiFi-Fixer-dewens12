@@ -90,6 +90,9 @@ public class WifiFixerService extends Service {
 	//Target for header check
 	private static final String H_TARGET="http://google.com";
 	
+	//Logging Intent
+	private static final String LOGINTENT="org.wahtod.wififixer.LogService.LOG";
+	
 	//For wifi state
 	public static boolean WIFI_ENABLED=false;
 	// ms for IsReachable
@@ -1127,7 +1130,7 @@ public class WifiFixerService extends Service {
 	}
     
 	 void wfLog(String APP_NAME, String Message) {
-		Intent sendIntent = new Intent(LogService.class.getName());
+		Intent sendIntent = new Intent(LOGINTENT);
 		sendIntent.putExtra(LogService.APPNAME, APP_NAME);
 		sendIntent.putExtra(LogService.Message,Message);
 		startService(sendIntent);

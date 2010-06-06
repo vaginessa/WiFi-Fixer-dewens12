@@ -43,11 +43,12 @@ public class LogService extends Service {
 	private static String sMessage = " ";
 	public FileWriter fWriter;
 	private static boolean SCREENISOFF=false;
-	private static boolean LOGGING=false;
+	private static boolean LOGGING=true;
 	//constants
 	static final String DIE="DIE";
 	static final String SCREEN_ON="SCREEN_ON";
 	static final String SCREEN_OFF="SCREEN_OFF";
+	static final String LOG="LOG";
     
 	private Handler tsHandler = new Handler(){
 		@Override
@@ -80,7 +81,7 @@ public class LogService extends Service {
 	
 	void handleStart(Intent intent) {
 			
-			if(!intent.getAction().contains("LOG"))
+			if(!intent.getAction().contains(LOG))
 				return;
 			try {
 				 sMessage=intent.getStringExtra(Message);
@@ -158,7 +159,6 @@ void timeStamp() {
 void wfLog(String APP_NAME, String Message) {
 	if (processCommands(APP_NAME))
 		return;
-	LOGGING=true;
 	Log.i(APP_NAME,Message);
 	writeToFileLog(Message);
 }
