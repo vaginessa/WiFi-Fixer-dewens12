@@ -49,6 +49,9 @@ public class LogService extends Service {
 	static final String SCREEN_ON="SCREEN_ON";
 	static final String SCREEN_OFF="SCREEN_OFF";
 	static final String LOG="LOG";
+	static final long MAXFILESIZE=102400;
+	static final String FILENAME="/wififixer_log.txt";
+	static final String DIRNAME="/data/org.wahtod.wififixer";
     
 	private Handler tsHandler = new Handler(){
 		@Override
@@ -164,22 +167,22 @@ void wfLog(String APP_NAME, String Message) {
 }
 
 	void writeToFileLog(String message) {
-		if(Environment.getExternalStorageState() != null && !(Environment.getExternalStorageState().contains("mounted"))){
+		if(Environment.getExternalStorageState() != null && !(Environment.getExternalStorageState().contains(Environment.MEDIA_MOUNTED))){
 			return;
 		}
 		
 		message = message+"\n";
-		File dir = new File(Environment.getExternalStorageDirectory()+"/data/org.wahtod.wififixer");
+		File dir = new File(Environment.getExternalStorageDirectory()+DIRNAME);
 		if(!dir.exists())
 		{
 			dir.mkdirs();
 		}
-		File fiyul = new File(dir.getAbsolutePath()+"/wififixer_log.txt");  
+		File fiyul = new File(dir.getAbsolutePath()+FILENAME);  
 		//Remove if over 100k
 		
 		
 		try {
-			if(fiyul.length()>102400)
+			if(fiyul.length()>MAXFILESIZE)
 				fiyul.delete();
 			if(!fiyul.exists())
 			{
