@@ -19,16 +19,25 @@ package org.wahtod.wififixer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 
 public class wififixer extends BroadcastReceiver {
+
+	private static final long PERIOD = 300000;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// Create intent which will start the Service. 
 		Intent myStarterIntent = new Intent(context, WifiFixerService.class);
 		// Set the Launch-Flag to the Intent. 
-		myStarterIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		myStarterIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 		// Send the Intent to the OS.
 		context.startService(myStarterIntent);
+		AlarmManager mgr=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+		PendingIntent pi=PendingIntent.getBroadcast(context, 0, myStarterIntent, 0);
+
+		mgr.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), PERIOD, pi);
 	}
 }
