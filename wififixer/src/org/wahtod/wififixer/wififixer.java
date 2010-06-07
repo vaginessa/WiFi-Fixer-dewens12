@@ -26,6 +26,7 @@ import android.app.PendingIntent;
 public class wififixer extends BroadcastReceiver {
 
 	private static final long PERIOD = 300000;
+	private static final long STARTDELAY = 100000;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -38,6 +39,6 @@ public class wififixer extends BroadcastReceiver {
 		AlarmManager mgr=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 		PendingIntent pi=PendingIntent.getBroadcast(context, 0, myStarterIntent, 0);
 
-		mgr.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), PERIOD, pi);
+		mgr.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime()+STARTDELAY, PERIOD, pi);
 	}
 }
