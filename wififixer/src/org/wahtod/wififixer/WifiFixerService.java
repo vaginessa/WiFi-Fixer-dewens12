@@ -658,7 +658,7 @@ public class WifiFixerService extends Service {
 				}
 			} catch (NullPointerException e) {
 				if(LOGGING)
-					wfLog(APP_NAME,"Pesky Google and their Null Intent");
+					wfLog(APP_NAME,"Null Intent");
 			}
 		
 	}
