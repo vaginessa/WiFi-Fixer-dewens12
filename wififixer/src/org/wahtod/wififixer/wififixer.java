@@ -39,6 +39,6 @@ public class wififixer extends BroadcastReceiver {
 		AlarmManager mgr=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 		PendingIntent pi=PendingIntent.getBroadcast(context, 0, myStarterIntent, 0);
 
-		mgr.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime()+STARTDELAY, PERIOD, pi);
+		mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+STARTDELAY, PERIOD, pi);
 	}
 }
