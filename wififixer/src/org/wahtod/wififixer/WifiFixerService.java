@@ -97,6 +97,7 @@ public class WifiFixerService extends Service {
 	public static boolean WIFI_ENABLED=false;
 	// ms for IsReachable
 	final static int REACHABLE = 2500;
+	final static int HTTPREACH = 1500;
 	// ms for main loop sleep
 	final static int LOOPWAIT=5000;
 	//ms to wait after trying to connect
@@ -501,6 +502,7 @@ public class WifiFixerService extends Service {
 		    {    
 		      URL url = new URL(uri);
 		      URLConnection conn = url.openConnection();
+		      conn.setConnectTimeout(HTTPREACH);
 		      conn.getHeaderField(1);
 		      isup=true;
 		      
