@@ -664,7 +664,11 @@ public class WifiFixerService extends Service {
 	}
 	 
 	 private void handleSupplicantIntent( Intent intent) {
-			//supplicant fixes
+		 //Ignore Intent if wifi or screen is off
+		 if(!WIFI_ENABLED || SCREENISOFF)
+				return;
+		 
+		 //supplicant fixes
 			
 			String sState=intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE).toString();
 			
@@ -676,9 +680,6 @@ public class WifiFixerService extends Service {
 		
 		if(LOGGING)
 			logSupplicant(sState);
-		
-		if(!WIFI_ENABLED || SCREENISOFF)
-			return;
 		
 		if(sState==SCANNING)
 		{
