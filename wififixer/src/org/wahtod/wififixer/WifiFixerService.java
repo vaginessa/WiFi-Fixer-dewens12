@@ -97,7 +97,7 @@ public class WifiFixerService extends Service {
 	public static boolean WIFI_ENABLED=false;
 	// ms for IsReachable
 	final static int REACHABLE = 2500;
-	final static int HTTPREACH = 1500;
+	final static int HTTPREACH = 2800;
 	// ms for main loop sleep
 	final static int LOOPWAIT=5000;
 	//ms to wait after trying to connect
@@ -800,32 +800,6 @@ public class WifiFixerService extends Service {
 			wfLog(APP_NAME, "HTTP Method");
 		return isUp;
 	}
-	/*
-		//Oddly, we used to have our own implementation
-		//But using Google's APIs in this one over time causes less GC and 
-		//uses less memory
-	boolean httpHostup(String host) {
-		boolean isUp = true;
-	    DefaultHttpClient httpClient = new DefaultHttpClient();
-	    HttpParams my_httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(my_httpParams,REACHABLE);
-        HttpConnectionParams.setSoTimeout(my_httpParams,REACHABLE);
-		try {
-			httpClient.execute(new HttpHead("http://" + host));
-		} catch (ClientProtocolException e) {
-			isUp = false;
-			if (LOGGING)
-				wfLog(APP_NAME, "httpHostup:ClientProtocolException");
-
-		} catch (IOException e) {
-			isUp = false;
-			if (LOGGING)
-				wfLog(APP_NAME, "httpHostup:IOException");
-		}
-		if (LOGGING)
-			wfLog(APP_NAME, "HTTP Method");
-		return isUp;
-	}*/
 
 
 	 boolean icmpHostup(String host) {
