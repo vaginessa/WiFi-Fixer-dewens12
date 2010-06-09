@@ -506,6 +506,7 @@ public class WifiFixerService extends Service {
 		      conn.setReadTimeout(HTTPREACH);
 		      conn.setDefaultUseCaches(false);
 		      conn.getHeaderField(1);
+		      conn.connect();
 		      isup=true;
 		      
 		    } 
