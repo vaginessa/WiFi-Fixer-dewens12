@@ -503,6 +503,7 @@ public class WifiFixerService extends Service {
 		      URL url = new URL(uri);
 		      URLConnection conn = url.openConnection();
 		      conn.setConnectTimeout(HTTPREACH);
+		      conn.setReadTimeout(HTTPREACH);
 		      conn.setDefaultUseCaches(false);
 		      conn.getHeaderField(1);
 		      isup=true;

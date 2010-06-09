@@ -15,7 +15,7 @@
 
 
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.wahtod.wififixer" android:versionCode="352" android:versionName="0.6.7B14">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.wahtod.wififixer" android:versionCode="357" android:versionName="0.6.7b21">
 	<uses-sdk android:minSdkVersion="3" android:maxSdkVersion="7"
 	android:targetSdkVersion="7" /> 
         <application android:icon="@drawable/icon"
@@ -52,13 +52,13 @@
             <meta-data android:name="android.appwidget.provider"
              android:resource="@xml/widget_provider"/>
         </receiver>
- <service android:persistent="true" android:exported="true" class="WifiFixerService" android:process=".WifiFixerService" android:name="WifiFixerService">
+ <service android:persistent="true" android:exported="true" class="WifiFixerService" android:process="org.wahtod.wififixer.WifiFixerService" android:name="WifiFixerService">
           <intent-filter>
                 <action android:name="org.wahtod.wififixer.WifiFixerService"/>
                 <action android:name="org.wahtod.wififixer.WifiFixerService.AUTH"/>
             </intent-filter>        
  </service>
- <service android:name=".LogService" class="LogService" android:process=".LogService" >
+ <service android:name=".LogService" class="LogService" android:process="org.wahtod.wififixer.LogService" >
           <intent-filter>
                 <action android:name="org.wahtod.wififixer.LogService.LOG"/>
             </intent-filter>
