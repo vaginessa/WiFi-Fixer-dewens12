@@ -130,7 +130,7 @@ public class WifiFixerActivity extends Activity {
 	    sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"zanshin.g1@gmail.com"});
 	    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "WifiFixer Log");
 	    sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/data/org.wahtod.wififixer/wififixer_log.txt"));
-	    sendIntent.putExtra(Intent.EXTRA_TEXT, "Please include time at which issue occurred:\n\n"+LogService.getBuildInfo()+getPrefs());
+	    sendIntent.putExtra(Intent.EXTRA_TEXT, "Please include time at which issue occurred and description of the issue:\n\n"+LogService.getBuildInfo()+getPrefs());
 
 	    startActivity(Intent.createChooser(sendIntent, "Email:"));
 	}
