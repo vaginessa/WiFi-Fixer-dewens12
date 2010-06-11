@@ -957,10 +957,6 @@ public class WifiFixerService extends Service {
 	    wm = getWifiManager();
 	    WIFI_ENABLED=wm.isWifiEnabled();
 	    getPackageInfo();
-	    //Set screen off for start
-	    PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-	    if(!pm.isScreenOn())
-	    	SCREENISOFF=true;
 	    
 	    if(LOGGING){
 	    	wfLog(APP_NAME,"WifiFixerService Build:"+VERSION);
