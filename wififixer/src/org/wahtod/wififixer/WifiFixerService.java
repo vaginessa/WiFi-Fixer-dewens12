@@ -24,6 +24,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+//For old http check method
 /*import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -53,6 +54,7 @@ import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings.SettingNotFoundException;
 import android.widget.Toast;
@@ -66,6 +68,7 @@ public class WifiFixerService extends Service {
 	public static final String AUTHSTRING="31415927";
 	//http://www.jerkcity.com  
 	private static final String AUTHEXTRA ="DICKS.ETC";
+	private static final String AUTH="AUTH";
 	//Runnable Constants for handler
 	private static final int MAIN = 0;
 	private static final int REPAIR = 1;
@@ -76,10 +79,25 @@ public class WifiFixerService extends Service {
 	private static final int WIFI_OFF = 6;
 	private static final int WIFI_ON = 7;
 	
+	//ID For notification
+	private static final int NOTIFID=31337;
+	
+	//Supplicant Constants
+	private static final String SCANNING="SCANNING";
+	private static final String DISCONNECTED="DISCONNECTED";
+	private static final String INACTIVE = "INACTIVE";
+	
+	//Target for header check
+	private static final String H_TARGET="http://google.com";
+	
+	//Logging Intent
+	private static final String LOGINTENT="org.wahtod.wififixer.LogService.LOG";
+	
 	//For wifi state
 	public static boolean WIFI_ENABLED=false;
 	// ms for IsReachable
 	final static int REACHABLE = 2500;
+	final static int HTTPREACH = 2800;
 	// ms for main loop sleep
 	final static int LOOPWAIT=5000;
 	//ms to wait after trying to connect
@@ -98,6 +116,7 @@ public class WifiFixerService extends Service {
 	public boolean WIDGETPREF=false;
 	public boolean PREFSCHANGED = false;
 	public boolean WIFISHOULDBEON = false;
+	public boolean HASWAKELOCK=false;
 	//Locks and such
 	public boolean TEMPLOCK = false;
 	public static boolean SCREENISOFF = false;
@@ -122,6 +141,7 @@ public class WifiFixerService extends Service {
 	 public SharedPreferences settings;
 	 public ScanResult sResult;
 	 public List<ScanResult> wifiList;
+	 PowerManager.WakeLock wakelock; 
 	
     
 	private  Handler hMain = new Handler(){
@@ -158,13 +178,11 @@ public class WifiFixerService extends Service {
             break;
             
             case WIFI_OFF:
-            wm.setWifiEnabled(false);
+            hMain.post(rWifiOff);
             break;
             
             case WIFI_ON:
-            wm.setWifiEnabled(true);
-            PENDINGWIFITOGGLE=false;
-            WIFISHOULDBEON=true;
+            hMain.post(rWifiOn);
             break;
             	
             }
@@ -299,7 +317,27 @@ public class WifiFixerService extends Service {
 			}
 		}
 	};;
+	
+	 Runnable rWifiOff = new Runnable() {
+			public void run() {
+			wm.setWifiEnabled(false);
+		}	
 
+		};
+
+	 Runnable rWifiOn = new Runnable() {
+				public void run() {
+				wm.setWifiEnabled(true);
+				PENDINGWIFITOGGLE=false;
+			    WIFISHOULDBEON=true;
+			    if(HASWAKELOCK)
+			    	wakeLock(false);
+			    deleteNotification(NOTIFID);
+			}	
+
+			};
+
+		
 	private  BroadcastReceiver receiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
 
@@ -307,65 +345,23 @@ public class WifiFixerService extends Service {
             //We want this to run first
 			String iAction = intent.getAction();
 
-			if ((iAction.equals(Intent.ACTION_SCREEN_ON)) || (iAction.equals(Intent.ACTION_SCREEN_OFF))){
-
-				 handleScreenAction(iAction);
-			} else {
-			     
-				handleWifiState(intent);
-
-			}
-		}
-
-		
-	};
-	
-	private BroadcastReceiver supplicantR = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			//supplicant fixes
-			
-			String sState=intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE).toString();
-			
-			handleSupplicantState(sState);
-			
-		}
-		
-		
-	};
-	
-	
-	private  BroadcastReceiver WifiReceiver = new BroadcastReceiver() {
-		public void onReceive(Context c, Intent intent){
-			hMainWrapper(TEMPLOCK_OFF);
-			if(!WIFI_ENABLED)
-				return;	
-					
-			if (!PENDINGSCAN){
-				if (LOGGING)
-					wfLog(APP_NAME,"No Pending Scan.");
-				return;
-			}
-			
-			
-			if (!PENDINGRECONNECT){
-			
-			PENDINGSCAN=false;
-			hMainWrapper(REPAIR);
-			if (LOGGING)
-				wfLog(APP_NAME,"Scan Results Acquired:Running Repair_Handler");
-			}
+			if ((iAction.equals(Intent.ACTION_SCREEN_ON)) || (iAction.equals(Intent.ACTION_SCREEN_OFF)))
+					handleScreenAction(iAction);
 			else
-			{
-				PENDINGSCAN=false;
-				hMainWrapper(RECONNECT);
-				if (LOGGING)
-					wfLog(APP_NAME,"Scan Results Acquired:Running Reconnect_Handler");
-			}
+			if(iAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION))
+					handleWifiState(intent);
+			else
+			if(iAction.equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION))
+					handleSupplicantIntent(intent);
+			else
+			if(iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+					handleWifiResults();
 			
 		}
+
+		
 	};
+	
 	
 	 void checkLock(WifiManager.WifiLock lock) {
 		if (!PREFSCHANGED) {
@@ -405,8 +401,6 @@ public class WifiFixerService extends Service {
 			if (HASLOCK && lock.isHeld())
 				lock.release();
 			unregisterReceiver(receiver);
-			unregisterReceiver(WifiReceiver);
-			unregisterReceiver(supplicantR);
 			hMain.removeMessages(MAIN);
 			cleanupPosts();
 			CLEANUP=true;
@@ -460,11 +454,15 @@ public class WifiFixerService extends Service {
 		return wm.enableNetwork(AP, disableOthers);
 	}
 	
+	 
+	 void deleteNotification(int id) {
+		 NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		 nm.cancel(id);
+	 }
+	 
 	 void doWidgetAction() {
 		if (WIFI_ENABLED) {
 			if(WIDGETPREF){
-				if (PENDINGWIFITOGGLE)
-					return;
 				Toast.makeText(WifiFixerService.this, "Toggling Wifi", Toast.LENGTH_LONG).show();
 				toggleWifi();
 			}else{
@@ -504,7 +502,11 @@ public class WifiFixerService extends Service {
 		    {    
 		      URL url = new URL(uri);
 		      URLConnection conn = url.openConnection();
+		      conn.setConnectTimeout(HTTPREACH);
+		      conn.setReadTimeout(HTTPREACH);
+		      conn.setDefaultUseCaches(false);
 		      conn.getHeaderField(1);
+		      conn.connect();
 		      isup=true;
 		      
 		    } 
@@ -562,8 +564,7 @@ public class WifiFixerService extends Service {
             //---display the versioncode--           
            VERSION=pi.versionCode;
         } catch (NameNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+           //hurf ding
         }
 	}
 	
@@ -616,12 +617,15 @@ public class WifiFixerService extends Service {
 		
 		if (iAction.equals(Intent.ACTION_SCREEN_OFF)) {
 			SCREENISOFF = true;
-			if (LOGGING)
+			if (LOGGING){
 				wfLog(APP_NAME, "SCREEN_OFF handler");
+				wfLog(LogService.SCREEN_OFF,null);
+			}
 		} else {
-			if (LOGGING)
+			if (LOGGING){
 				wfLog(APP_NAME, "SCREEN_ON handler");
-			//don't want this to run if wifi isn't enabled 
+				wfLog(LogService.SCREEN_ON,null);
+			}
 			SCREENISOFF=false;
 		}
 
@@ -633,7 +637,7 @@ public class WifiFixerService extends Service {
 		// Handle NPE
 		
 			try {
-				if (intent.hasExtra(FIXWIFI) && !TEMPLOCK) {
+				if (intent.hasExtra(FIXWIFI)) {
 					if (intent.getBooleanExtra(FIXWIFI, false)){
 						doWidgetAction();
 					}
@@ -643,7 +647,7 @@ public class WifiFixerService extends Service {
 					
 					String iAction=intent.getAction();
 					//Looking for auth intent
-					if (iAction.contains("AUTH")){
+					if (iAction.contains(AUTH)){
 						handleAuth(intent);
 						return;
 					}
@@ -655,32 +659,75 @@ public class WifiFixerService extends Service {
 				}
 				}
 			} catch (NullPointerException e) {
-			
-				wfLog(APP_NAME,"Pesky Google and their Null Intent");
+				if(LOGGING)
+					wfLog(APP_NAME,"Tickled");
 			}
 		
 	}
 	 
+	 private void handleSupplicantIntent( Intent intent) {
+		 //Ignore Intent if wifi or screen is off
+		 if(!WIFI_ENABLED || SCREENISOFF)
+				return;
+		 
+		 //supplicant fixes
+			
+			String sState=intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE).toString();
+			
+			handleSupplicantState(sState);
+			
+	}
 	 
 	void handleSupplicantState(String sState){
 		
 		if(LOGGING)
 			logSupplicant(sState);
 		
-		if(!WIFI_ENABLED)
-			return;
-		
-		if(sState=="SCANNING" || sState=="DISCONNECTED")
+		if(sState==SCANNING)
 		{
 			PENDINGSCAN=true;
-			notifyWrap(sState);
+			
 			
 			
 		}
-		else if(sState=="INACTIVE"){
+		else if(sState==DISCONNECTED){
+			PENDINGSCAN=true;
+			startScan();
+			notifyWrap(sState);
+		}
+		else if(sState==INACTIVE){
 		    supplicantFix(true);
 		    notifyWrap(sState);
 		}
+	}
+	
+	private void handleWifiResults(){
+		hMainWrapper(TEMPLOCK_OFF);
+		if(!WIFI_ENABLED)
+			return;	
+				
+		if (!PENDINGSCAN){
+			if (LOGGING)
+				wfLog(APP_NAME,"No Pending Scan.");
+			return;
+		}
+		
+		
+		if (!PENDINGRECONNECT){
+		
+		PENDINGSCAN=false;
+		hMainWrapper(REPAIR);
+		if (LOGGING)
+			wfLog(APP_NAME,"Scan Results Acquired:Running Repair_Handler");
+		}
+		else
+		{
+			PENDINGSCAN=false;
+			hMainWrapper(RECONNECT);
+			if (LOGGING)
+				wfLog(APP_NAME,"Scan Results Acquired:Running Reconnect_Handler");
+		}
+		
 	}
 	
 	void handleWifiState(Intent intent) {
@@ -691,7 +738,7 @@ public class WifiFixerService extends Service {
 		case WifiManager.WIFI_STATE_ENABLED:
 			if (LOGGING)
 				wfLog(APP_NAME, "WIFI_STATE_ENABLED");
-			hMainWrapper(TEMPLOCK_OFF,3000);
+			hMainWrapper(TEMPLOCK_OFF,LOOPWAIT);
 			WIFI_ENABLED=true;
 			WIFISHOULDBEON=false;
 			break;
@@ -745,7 +792,7 @@ public class WifiFixerService extends Service {
 		boolean isUp = false;
 		//how's this for minimalist?
 		try {
-			isUp=getHttpHeaders("http://google.com");
+			isUp=getHttpHeaders(H_TARGET);
 		} catch (IOException e) {
 			wfLog(APP_NAME,"HTTP I/O Exception");
 		}
@@ -753,32 +800,6 @@ public class WifiFixerService extends Service {
 			wfLog(APP_NAME, "HTTP Method");
 		return isUp;
 	}
-	/*
-		//Oddly, we used to have our own implementation
-		//But using Google's APIs in this one over time causes less GC and 
-		//uses less memory
-	boolean httpHostup(String host) {
-		boolean isUp = true;
-	    DefaultHttpClient httpClient = new DefaultHttpClient();
-	    HttpParams my_httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(my_httpParams,REACHABLE);
-        HttpConnectionParams.setSoTimeout(my_httpParams,REACHABLE);
-		try {
-			httpClient.execute(new HttpHead("http://" + host));
-		} catch (ClientProtocolException e) {
-			isUp = false;
-			if (LOGGING)
-				wfLog(APP_NAME, "httpHostup:ClientProtocolException");
-
-		} catch (IOException e) {
-			isUp = false;
-			if (LOGGING)
-				wfLog(APP_NAME, "httpHostup:IOException");
-		}
-		if (LOGGING)
-			wfLog(APP_NAME, "HTTP Method");
-		return isUp;
-	}*/
 
 
 	 boolean icmpHostup(String host) {
@@ -788,11 +809,9 @@ public class WifiFixerService extends Service {
 				isUp = true;
 			}
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//hurf
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//burf
 		}
 		if (LOGGING)
 			wfLog(APP_NAME, "ICMP Method");
@@ -843,6 +862,9 @@ public class WifiFixerService extends Service {
 		SCREENPREF = settings.getBoolean("SCREEN", false);
 		WIDGETPREF = settings.getBoolean("WidgetBehavior", false);
 		String PERFORMANCE = settings.getString("Performance", "0");
+		//Kill the Log Service if it's up
+		if (LOGGING && !settings.getBoolean("SLOG", false))
+			wfLog(LogService.DIE,null);
 		LOGGING=settings.getBoolean("SLOG", false);
 		// Check RUNPREF and set SHOULDRUN
 		//Make sure Main loop restarts if this is a change
@@ -862,7 +884,7 @@ public class WifiFixerService extends Service {
 	    	edit.commit();
 	    	LOCKPREF=true;
 	    }
-
+	    
 		if (LOGGING) {
 			wfLog(APP_NAME, "Loading Settings");
 			if (LOCKPREF)
@@ -879,6 +901,7 @@ public class WifiFixerService extends Service {
 
 		}
 		
+		
 		// Here we go, checking for Wifi network notification
 		// Notify user if this setting is true
 		try {
@@ -893,7 +916,8 @@ public class WifiFixerService extends Service {
 
 		} catch (SettingNotFoundException e) {
 			// bweep
-			wfLog(APP_NAME,"Whoops! Obeselete!");
+			if(LOGGING)
+				wfLog(APP_NAME,"Whoops! Obeselete!");
 		}
 	}
 
@@ -933,6 +957,11 @@ public class WifiFixerService extends Service {
 	    wm = getWifiManager();
 	    WIFI_ENABLED=wm.isWifiEnabled();
 	    getPackageInfo();
+	    //Set screen off for start
+	    PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+	    if(!pm.isScreenOn())
+	    	SCREENISOFF=true;
+	    
 	    if(LOGGING){
 	    	wfLog(APP_NAME,"WifiFixerService Build:"+VERSION);
 	    }
@@ -977,17 +1006,13 @@ public class WifiFixerService extends Service {
 		IntentFilter myFilter = new IntentFilter();
 		myFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 		// Catch power events for battery savings
-		myFilter.addAction("android.intent.action.SCREEN_OFF");
-		myFilter.addAction("android.intent.action.SCREEN_ON");
-		//register generic receiver
-		registerReceiver(receiver, myFilter);
-		// intent filter to handle supplicant states
-		IntentFilter sFilter = new IntentFilter();
-		sFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
-		//register Supplicant State receiver
-		registerReceiver(supplicantR,sFilter);
-		//register wifi callback 
-	    registerReceiver(WifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+		myFilter.addAction(Intent.ACTION_SCREEN_OFF);
+		myFilter.addAction(Intent.ACTION_SCREEN_ON);
+		//Supplicant State filter
+		myFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+		//wifi scan results available callback 
+	    myFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+	    registerReceiver(receiver, myFilter);
 		
 	}
 	
@@ -1013,6 +1038,23 @@ public class WifiFixerService extends Service {
 		//unique ID
 		nm.notify(4144, notif);
 
+	}
+	
+	void showNotification(String message, String tickerText, int id){
+		NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+		
+		CharSequence from = "Wifi Fixer";
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+				new Intent(), 0);
+		
+		Notification notif = new Notification(R.drawable.icon, tickerText,
+				System.currentTimeMillis());
+
+		notif.setLatestEventInfo(this, from, message, contentIntent);
+		notif.flags = Notification.FLAG_AUTO_CANCEL;
+		//unique ID
+		nm.notify(id, notif);
 	}
 
 	 void startScan() {
@@ -1045,10 +1087,27 @@ public class WifiFixerService extends Service {
 		PENDINGWIFITOGGLE=true;
 		cleanupPosts();
 		tempLock(CONNECTWAIT);
+		//Wake lock
+		wakeLock(true);
+		showNotification("Toggling Wifi", "Toggling Wifi", NOTIFID);
 		hMainWrapper(WIFI_OFF);
 		hMainWrapper(WIFI_ON, LOOPWAIT);
 	}
 
+	void wakeLock(boolean state){
+		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		if(state){
+			wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WFWakeLock");
+			wakelock.acquire();
+			HASWAKELOCK=true;
+		}
+		else{
+			wakelock.release();
+			HASWAKELOCK=false;
+		}
+		
+	}
+	 
 	 void wifiRepair() {
 		 hMainWrapper(WIFITASK);
 		if (LOGGING)
@@ -1056,7 +1115,7 @@ public class WifiFixerService extends Service {
 	}
     
 	 void wfLog(String APP_NAME, String Message) {
-		Intent sendIntent = new Intent("org.wahtod.wififixer.LogService.LOG");
+		Intent sendIntent = new Intent(LOGINTENT);
 		sendIntent.putExtra(LogService.APPNAME, APP_NAME);
 		sendIntent.putExtra(LogService.Message,Message);
 		startService(sendIntent);

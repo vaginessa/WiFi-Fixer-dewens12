@@ -14,7 +14,7 @@
 
 */
 
-This project began about a year ago as an exercise in learning java and android.
+This project began in early 2009 as an exercise in learning java and android.
 I was having wifi problems on my T-Mobile G1, so I wrote a quick and dirty little
 no-Activity app to force a reassociation.   I stopped working on it while I taught
 myself java working on other android projects. 
@@ -26,5 +26,5 @@ come to naught because the wifi bugs in android will get fixed..
 Well, not so much to naught,  I've learned a lot. 
 
 
-Release: 0.6.6  Yiffy Yam
+Release: 0.6.7  Jaundiced Juggalo
 

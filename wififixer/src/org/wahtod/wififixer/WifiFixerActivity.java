@@ -67,45 +67,10 @@ public class WifiFixerActivity extends Activity {
 				Intent myIntent = new Intent(target.getContext(), About.class);
 				startActivity(myIntent);
 				break;
-
-			case R.id.okButton:
-				startwfService();
-				WifiFixerActivity.this.finish();
-				break;
-
 			}
 		}};		 	
 	  
-	  Runnable rOnCreate = new Runnable() {
-			public void run() {
-				
-		        
-				
-				ISAUTHED=(settings.getBoolean("ISAUTHED", false));
-				ABOUT=(settings.getBoolean(sABOUT, false));
-				LOGGING_MENU = (settings.getBoolean("Logging", false));
-				LOGGING = getLogging();
-				//Fire new About nag
-				if(!ABOUT)
-				{
-					showNotification();
-					
-				}
-				
-				// Here's where we fire the nag
-				if (!ISAUTHED)
-				{
-					//Handle Donate Auth
-					Intent sendIntent = new Intent("com.wahtod.wififixer.WFDonateService");
-					startService(sendIntent);
-					nagNotification();
-				}
-				
-				startwfService();
-		}	
-
-		};
-		
+	  
 
     String getPrefs() {
 		settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -153,12 +118,19 @@ public class WifiFixerActivity extends Activity {
 	
 	
 	void sendLog() {
+		
+		if(Environment.getExternalStorageState() != null && !(Environment.getExternalStorageState().contains("mounted"))){
+			Toast.makeText(WifiFixerActivity.this, "SD Card Unavailable",Toast.LENGTH_LONG).show();
+			
+			return;
+		}
+		
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
 	    sendIntent.setType("text/plain");
 	    sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"zanshin.g1@gmail.com"});
 	    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "WifiFixer Log");
 	    sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/data/org.wahtod.wififixer/wififixer_log.txt"));
-	    sendIntent.putExtra(Intent.EXTRA_TEXT, "Please include time at which issue occurred:\n\n"+LogService.getBuildInfo()+getPrefs());
+	    sendIntent.putExtra(Intent.EXTRA_TEXT, "Please include time at which issue occurred and description of the issue:\n\n"+LogService.getBuildInfo()+getPrefs());
 
 	    startActivity(Intent.createChooser(sendIntent, "Email:"));
 	}
@@ -292,15 +264,39 @@ public class WifiFixerActivity extends Activity {
 		//set up all the buttons
 		//Wish we could use a clicklistener in the xml but buh duh 1.5 
 		 findViewById(R.id.aboutButton).setOnClickListener(clickR);
-	     findViewById(R.id.okButton).setOnClickListener(clickR);
+	     //findViewById(R.id.okButton).setOnClickListener(clickR);
         
 		
 		
-		Thread thr = new Thread(null, rOnCreate, "OnCreate");
-		thr.start();
+		oncreate_setup();
 					
 
 	};
+	
+	private void oncreate_setup(){
+		ISAUTHED=(settings.getBoolean("ISAUTHED", false));
+		ABOUT=(settings.getBoolean(sABOUT, false));
+		LOGGING_MENU = (settings.getBoolean("Logging", false));
+		LOGGING = getLogging();
+		//Fire new About nag
+		if(!ABOUT)
+		{
+			showNotification();
+			
+		}
+		
+		// Here's where we fire the nag
+		if (!ISAUTHED)
+		{
+			//Handle Donate Auth
+			Intent sendIntent = new Intent("com.wahtod.wififixer.WFDonateService");
+			startService(sendIntent);
+			nagNotification();
+		}
+		
+		startwfService();
+
+}	
 	
 	@Override
 	public void onStart(){
