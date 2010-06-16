@@ -409,26 +409,30 @@ public class WifiFixerService extends Service {
 			hMain.removeMessages(TEMPLOCK_OFF);
 	 }
 	 
-	 boolean checkWifi() {
+	 boolean checkNetwork() {
 		boolean hostup = false;
-		// Check out this tricky switch
-		if (HTTPPREF) {
-			hostup = httpHostup(H_TARGET);
-			if (!hostup)
-				HTTPPREF = false;
-			else
-				WIFIREPAIR = 0;
-		} else {
-			//grab dhcp gateway addy
-			DhcpInfo info = wm.getDhcpInfo();
-			if (icmpHostup(intToIp(info.gateway))) {
+		// switch to handle failover
+		if (!HTTPPREF) {
+			
+			if (icmpHostup()) {
 				hostup = true;
 				WIFIREPAIR = 0;
-				if(httpHostup(H_TARGET))
-					HTTPPREF=true;
 			} else
 				HTTPPREF = true;
+			
+		} else {
+			
+			hostup = httpHostup(H_TARGET);
+			
+			if (!hostup)
+			{
+				HTTPPREF = false;
+			}
+			else
+				WIFIREPAIR = 0;
 		}
+		
+		
 
 		return hostup;
 	}
@@ -471,7 +475,7 @@ public class WifiFixerService extends Service {
 	 void fixWifi() {
 		if (getIsWifiEnabled()) {
 			if (getSupplicantState()=="ASSOCIATED" || getSupplicantState()=="COMPLETED"){
-				if(!checkWifi()) {
+				if(!checkNetwork()) {
 					wifiRepair();
 				}
 			}
@@ -796,10 +800,12 @@ public class WifiFixerService extends Service {
 	}
 
 
-	 boolean icmpHostup(String host) {
+	 boolean icmpHostup() {
 		boolean isUp = false;
+		//grab dhcp gateway addy
+		DhcpInfo info = wm.getDhcpInfo();
 		try {
-			if (InetAddress.getByName(host).isReachable(REACHABLE)) {
+			if (InetAddress.getByName(intToIp(info.gateway)).isReachable(REACHABLE)) {
 				isUp = true;
 			}
 		} catch (UnknownHostException e) {
