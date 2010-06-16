@@ -88,8 +88,8 @@ public class WifiFixerService extends Service {
 	private static final String INACTIVE = "INACTIVE";
 	
 	//Target for header check
-	//private static final String H_TARGET="http://www.google.com";
-	private static final String H_TARGET="http://10.0.1.37";
+	private static final String H_TARGET="http://www.google.com";
+	
 	
 	//Logging Intent
 	private static final String LOGINTENT="org.wahtod.wififixer.LogService.LOG";
