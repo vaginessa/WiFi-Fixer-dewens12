@@ -16,6 +16,7 @@
 
 package org.wahtod.wififixer;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -40,6 +41,7 @@ import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -102,7 +104,7 @@ public class WifiFixerService extends Service {
 	public boolean HASLOCK = false;
 	public boolean LOCKPREF = false;
 	public boolean NOTIFPREF = false;
-	public boolean HTTPPREF = false;
+	public boolean HTTPPREF = true;
 	public boolean RUNPREF = false;
 	public boolean SCREENPREF= false;
 	public boolean WIDGETPREF=false;
@@ -474,7 +476,7 @@ public class WifiFixerService extends Service {
 
 	 void fixWifi() {
 		if (getIsWifiEnabled()) {
-			if (getSupplicantState()=="ASSOCIATED" || getSupplicantState()=="COMPLETED"){
+			if (getSupplicantState()==SupplicantState.ASSOCIATED || getSupplicantState()==SupplicantState.COMPLETED){
 				if(!checkNetwork()) {
 					wifiRepair();
 				}
@@ -504,10 +506,10 @@ public class WifiFixerService extends Service {
 		      conn.setRequestMethod("HEAD");
 		      conn.connect();
 		      InputStream is=conn.getInputStream();
-		      if(LOGGING)
-		    	  wfLog(APP_NAME,is.toString());
 		      is.close();
+		      conn.disconnect();
 		      isup=true;
+		      
 		      
 		    } 
 		    catch (Exception e) {
@@ -568,9 +570,9 @@ public class WifiFixerService extends Service {
         }
 	}
 	
-	 String getSupplicantState() {
+	 SupplicantState getSupplicantState() {
 		    myWifi = wm.getConnectionInfo();
-		 	return myWifi.getSupplicantState().toString();
+		 	return myWifi.getSupplicantState();
 	}
 	
 		ArrayList<String> getWifiConfigurations() {
@@ -995,6 +997,24 @@ public class WifiFixerService extends Service {
 			
 		return START_STICKY;
 	}
+	
+	public byte[] readBytes(InputStream inputStream) throws IOException {
+		  // this dynamically extends to take the bytes you read
+		  ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+
+		  // this is storage overwritten on each iteration with bytes
+		  int bufferSize = 1024;
+		  byte[] buffer = new byte[bufferSize];
+
+		  // we need to know how may bytes were read to write them to the byteBuffer
+		  int len = 0;
+		  while ((len = inputStream.read(buffer)) != -1) {
+		    byteBuffer.write(buffer, 0, len);
+		  }
+
+		  // and then we can return your byte array.
+		  return byteBuffer.toByteArray();
+		}
 	
 	void setup() {
 		//Yeah, so the constant WIFI_MODE_FULL wasn't obvious
