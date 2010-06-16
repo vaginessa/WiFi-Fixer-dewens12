@@ -17,21 +17,13 @@
 package org.wahtod.wififixer;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-
-//For old http check method
-/*import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpHead;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;*/
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -88,7 +80,7 @@ public class WifiFixerService extends Service {
 	private static final String INACTIVE = "INACTIVE";
 	
 	//Target for header check
-	private static final String H_TARGET="http://google.com";
+	private static final String H_TARGET="http://www.google.com";
 	
 	//Logging Intent
 	private static final String LOGINTENT="org.wahtod.wififixer.LogService.LOG";
@@ -110,7 +102,7 @@ public class WifiFixerService extends Service {
 	public boolean HASLOCK = false;
 	public boolean LOCKPREF = false;
 	public boolean NOTIFPREF = false;
-	public boolean HTTPPREF = true;
+	public boolean HTTPPREF = false;
 	public boolean RUNPREF = false;
 	public boolean SCREENPREF= false;
 	public boolean WIDGETPREF=false;
@@ -421,7 +413,7 @@ public class WifiFixerService extends Service {
 		boolean hostup = false;
 		// Check out this tricky switch
 		if (HTTPPREF) {
-			hostup = httpHostup("google.com");
+			hostup = httpHostup(H_TARGET);
 			if (!hostup)
 				HTTPPREF = false;
 			else
@@ -432,7 +424,7 @@ public class WifiFixerService extends Service {
 			if (icmpHostup(intToIp(info.gateway))) {
 				hostup = true;
 				WIFIREPAIR = 0;
-				if(httpHostup("google.com"))
+				if(httpHostup(H_TARGET))
 					HTTPPREF=true;
 			} else
 				HTTPPREF = true;
@@ -501,12 +493,14 @@ public class WifiFixerService extends Service {
 		try 
 		    {    
 		      URL url = new URL(uri);
-		      URLConnection conn = url.openConnection();
+		      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		      conn.setConnectTimeout(HTTPREACH);
 		      conn.setReadTimeout(HTTPREACH);
 		      conn.setDefaultUseCaches(false);
-		      conn.getHeaderField(1);
+		      conn.setRequestMethod("HEAD");
 		      conn.connect();
+		      InputStream is=conn.getInputStream();
+		      is.close();
 		      isup=true;
 		      
 		    } 
@@ -792,7 +786,7 @@ public class WifiFixerService extends Service {
 		boolean isUp = false;
 		//how's this for minimalist?
 		try {
-			isUp=getHttpHeaders(H_TARGET);
+			isUp=getHttpHeaders(host);
 		} catch (IOException e) {
 			wfLog(APP_NAME,"HTTP I/O Exception");
 		}
