@@ -16,7 +16,6 @@
 
 package org.wahtod.wififixer;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -25,8 +24,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.http.util.ByteArrayBuffer;
+import java.util.Scanner;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -127,7 +125,7 @@ public class WifiFixerService extends Service {
 	public boolean PENDINGRECONNECT=false;
 	public boolean sCONNECTED=false;
 	//Switch for network check type
-	public boolean HTTPPREF = false;
+	public boolean HTTPPREF = true;
 	
 	//misc types
 	public String LASTSSID=" ";
@@ -516,19 +514,17 @@ public class WifiFixerService extends Service {
 		      conn.setReadTimeout(HTTPREACH);
 		      conn.setDefaultUseCaches(false);
 		      conn.setRequestMethod("HEAD");
+		      conn.setDoInput(true);
+		      conn.setDoOutput(true);
 		      conn.connect();
 		      InputStream is=conn.getInputStream();
 		      if (LOGGING){
-		    	  	BufferedInputStream bis = new BufferedInputStream(is);  
-	                ByteArrayBuffer baf = new ByteArrayBuffer(50);  
-	  
-	                int current = 0;  
-	                while((current = bis.read()) != -1){  
-	                    baf.append((byte)current);  
-	                }  
+		    	  
+	                Scanner sc = new Scanner(is);  
 	                
-	                String out = new String(baf.toByteArray());
-	                wfLog(APP_NAME,out);
+	                while (sc.hasNextLine())
+						wfLog(APP_NAME,sc.nextLine()); 
+	           
 		      }
 		      is.close();
 		      conn.disconnect();
