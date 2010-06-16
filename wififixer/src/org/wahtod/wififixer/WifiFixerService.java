@@ -504,6 +504,8 @@ public class WifiFixerService extends Service {
 		      conn.setRequestMethod("HEAD");
 		      conn.connect();
 		      InputStream is=conn.getInputStream();
+		      if(LOGGING)
+		    	  wfLog(APP_NAME,is.toString());
 		      is.close();
 		      isup=true;
 		      
