@@ -17,14 +17,19 @@
 package org.wahtod.wififixer;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.InetAddress;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpHead;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -83,7 +88,8 @@ public class WifiFixerService extends Service {
 	private static final String INACTIVE = "INACTIVE";
 	
 	//Target for header check
-	private static final String H_TARGET="http://www.google.com";
+	//private static final String H_TARGET="http://www.google.com";
+	private static final String H_TARGET="http://10.0.1.37";
 	
 	//Logging Intent
 	private static final String LOGINTENT="org.wahtod.wififixer.LogService.LOG";
@@ -92,7 +98,7 @@ public class WifiFixerService extends Service {
 	public static boolean WIFI_ENABLED=false;
 	// ms for IsReachable
 	final static int REACHABLE = 2500;
-	final static int HTTPREACH = 2800;
+	final static int HTTPREACH = 3000;
 	// ms for main loop sleep
 	final static int LOOPWAIT=5000;
 	//ms to wait after trying to connect
@@ -461,7 +467,7 @@ public class WifiFixerService extends Service {
 		tempLock(CONNECTWAIT);
 		return wm.enableNetwork(AP, disableOthers);
 	}
-	
+
 	 
 	 void deleteNotification(int id) {
 		 NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -502,40 +508,34 @@ public class WifiFixerService extends Service {
     
 	boolean getHttpHeaders( String uri ) throws IOException {
 		
-		//dead simple, we'll see how this does
+		//Turns out the old way was better
+		//I just wasn't doing it right. 
 		
 		boolean isup=false;
-		
-		try 
-		    {    
-		      URL url = new URL(uri);
-		      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		      conn.setConnectTimeout(HTTPREACH);
-		      conn.setReadTimeout(HTTPREACH);
-		      conn.setDefaultUseCaches(false);
-		      conn.setRequestMethod("HEAD");
-		      conn.setDoInput(true);
-		      conn.setDoOutput(true);
-		      conn.connect();
-		      InputStream is=conn.getInputStream();
-		      if (LOGGING){
-		    	  
-	                Scanner sc = new Scanner(is);  
-	                
-	                while (sc.hasNextLine())
-						wfLog(APP_NAME,sc.nextLine()); 
-	           
-		      }
-		      is.close();
-		      conn.disconnect();
-		      isup=true;
-		      
-		      
-		    } 
-		    catch (Exception e) {
-		       isup=false;
-		    }
-			
+		int status=-1;
+		   
+		      	URI url;
+				try {
+					url = new URI(uri);
+					HttpHead head = new HttpHead(url);
+					DefaultHttpClient httpClient = new DefaultHttpClient();
+				    HttpParams my_httpParams = new BasicHttpParams();
+			        HttpConnectionParams.setConnectionTimeout(my_httpParams,HTTPREACH);
+			        HttpConnectionParams.setSoTimeout(my_httpParams,HTTPREACH);
+			        HttpConnectionParams.setLinger(my_httpParams, 1);
+			        HttpConnectionParams.setStaleCheckingEnabled(my_httpParams, false);
+			        HttpResponse response=httpClient.execute(head);
+			        status = response.getStatusLine (). getStatusCode ();
+			        if(status != -1)
+			        	isup=true;
+					if(LOGGING){
+							 wfLog(APP_NAME,"HTTP STATUS:"+status);
+					}
+				} catch (URISyntaxException e) {
+					wfLog(APP_NAME,"URL SyntaxException");
+				}
+		      	
+				
 			return isup;
     }
 	 
