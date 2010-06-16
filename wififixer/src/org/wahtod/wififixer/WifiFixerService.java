@@ -16,6 +16,7 @@
 
 package org.wahtod.wififixer;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -24,6 +25,9 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.http.util.ByteArrayBuffer;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -103,7 +107,6 @@ public class WifiFixerService extends Service {
 	public boolean HASLOCK = false;
 	public boolean LOCKPREF = false;
 	public boolean NOTIFPREF = false;
-	public boolean HTTPPREF = true;
 	public boolean RUNPREF = false;
 	public boolean SCREENPREF= false;
 	public boolean WIDGETPREF=false;
@@ -123,11 +126,13 @@ public class WifiFixerService extends Service {
 	public boolean PENDINGWIFITOGGLE=false;
 	public boolean PENDINGRECONNECT=false;
 	public boolean sCONNECTED=false;
+	//Switch for network check type
+	public boolean HTTPPREF = false;
+	
 	//misc types
 	public String LASTSSID=" ";
 	public int VERSION=0;
-	 //Public Utilities!
-	//We do this to avoid GC thrash
+	 //Public Utilities
 	 public  WifiManager wm;
 	 public  WifiInfo myWifi;
 	 public WifiManager.WifiLock lock;
@@ -418,8 +423,13 @@ public class WifiFixerService extends Service {
 			if (icmpHostup()) {
 				hostup = true;
 				WIFIREPAIR = 0;
-			} else
-				HTTPPREF = true;
+			} 
+			else
+			if(httpHostup(H_TARGET))
+			{
+					HTTPPREF = true;
+					hostup=true;
+			}
 			
 		} else {
 			
@@ -427,7 +437,10 @@ public class WifiFixerService extends Service {
 			
 			if (!hostup)
 			{
-				HTTPPREF = false;
+				if(icmpHostup()){
+					HTTPPREF = false;
+					hostup=true;
+				}
 			}
 			else
 				WIFIREPAIR = 0;
@@ -505,6 +518,18 @@ public class WifiFixerService extends Service {
 		      conn.setRequestMethod("HEAD");
 		      conn.connect();
 		      InputStream is=conn.getInputStream();
+		      if (LOGGING){
+		    	  	BufferedInputStream bis = new BufferedInputStream(is);  
+	                ByteArrayBuffer baf = new ByteArrayBuffer(50);  
+	  
+	                int current = 0;  
+	                while((current = bis.read()) != -1){  
+	                    baf.append((byte)current);  
+	                }  
+	                
+	                String out = new String(baf.toByteArray());
+	                wfLog(APP_NAME,out);
+		      }
 		      is.close();
 		      conn.disconnect();
 		      isup=true;
