@@ -508,11 +508,13 @@ public class WifiFixerService extends Service {
 					url = new URI(uri);
 					HttpHead head = new HttpHead(url);
 					DefaultHttpClient httpClient = new DefaultHttpClient();
+					
 				    HttpParams my_httpParams = new BasicHttpParams();
 			        HttpConnectionParams.setConnectionTimeout(my_httpParams,HTTPREACH);
 			        HttpConnectionParams.setSoTimeout(my_httpParams,HTTPREACH);
 			        HttpConnectionParams.setLinger(my_httpParams, 1);
 			        HttpConnectionParams.setStaleCheckingEnabled(my_httpParams, false);
+			        httpClient.setParams(my_httpParams);
 			        HttpResponse response=httpClient.execute(head);
 			        status = response.getStatusLine (). getStatusCode ();
 			        if(status != -1)
@@ -1028,7 +1030,7 @@ public class WifiFixerService extends Service {
 		myFilter.addAction(Intent.ACTION_SCREEN_OFF);
 		myFilter.addAction(Intent.ACTION_SCREEN_ON);
 		/*
-		 * 	Only want to register this if we need supplicant fixes, >2.0
+		 * 	Only want to register this if we need supplicant fixes, >2.
 		 */
 		//Supplicant State filter
 		if(ANDROID>=Build.VERSION_CODES.ECLAIR)
