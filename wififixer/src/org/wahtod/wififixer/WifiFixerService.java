@@ -131,7 +131,7 @@ public class WifiFixerService extends Service {
 	public boolean PENDINGRECONNECT=false;
 	public boolean sCONNECTED=false;
 	//Switch for network check type
-	public boolean HTTPPREF = true;
+	public boolean HTTPPREF = false;
 	
 	//misc types
 	public String LASTSSID=" ";
@@ -420,40 +420,24 @@ public class WifiFixerService extends Service {
 	 }
 	 
 	 boolean checkNetwork() {
-		boolean hostup = false;
-		// switch to handle failover
-		if (!HTTPPREF) {
-			
-			if (icmpHostup()) {
-				hostup = true;
-				WIFIREPAIR = 0;
-			} 
-			else
-			if(httpHostup(H_TARGET))
-			{
-					HTTPPREF = true;
-					hostup=true;
-			}
-			
-		} else {
-			
-			hostup = httpHostup(H_TARGET);
-			
-			if (!hostup)
-			{
-				if(icmpHostup()){
-					HTTPPREF = false;
-					hostup=true;
-				}
-			}
-			else
-				WIFIREPAIR = 0;
+		boolean isup = false;
+		/*
+		 * Failover switch
+		 */
+		isup=hostup();
+		if(!isup){
+			switchHostMethod();
+			isup=hostup();
+			if(!isup)
+				switchHostMethod();
 		}
-		
-		
+		else
+			WIFIREPAIR=0;
 
-		return hostup;
+		return isup;
 	}
+	 
+	 
 	 
 	void checkWifiState() {
 		if(!WIFI_ENABLED && WIFISHOULDBEON){
@@ -823,7 +807,18 @@ public class WifiFixerService extends Service {
 		return isUp;
 	}
 
-
+	
+	 boolean hostup() {
+		
+		 
+		 if(HTTPPREF)
+			return httpHostup(H_TARGET);
+		 else
+			return icmpHostup();
+		 
+		
+	 }
+	 
 	 boolean icmpHostup() {
 		boolean isUp = false;
 		//grab dhcp gateway addy
@@ -1083,6 +1078,13 @@ public class WifiFixerService extends Service {
 		tempLock(LOOPWAIT);
 	}
     
+	void switchHostMethod(){
+		if(HTTPPREF)
+			HTTPPREF=false;
+		else
+			HTTPPREF=true;
+	}
+	 
 	 void supplicantFix(boolean wftoggle){
 	 //Toggling wifi fixes the supplicant	
 			PENDINGSCAN=true;
