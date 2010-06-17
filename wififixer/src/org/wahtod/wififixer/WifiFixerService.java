@@ -93,6 +93,7 @@ public class WifiFixerService extends Service {
 	
 	//Target for header check
 	private static final String H_TARGET="http://www.google.com";
+	private static URI HEAD_URI;
 	
 	
 	//Logging Intent
@@ -139,6 +140,7 @@ public class WifiFixerService extends Service {
 	public boolean sCONNECTED=false;
 	//Switch for network check type
 	public boolean HTTPPREF = false;
+	//http://bash.org/?924453
 	
 	//misc types
 	public String LASTSSID=" ";
@@ -150,7 +152,14 @@ public class WifiFixerService extends Service {
 	 public SharedPreferences settings;
 	 public ScanResult sResult;
 	 public List<ScanResult> wifiList;
-	 PowerManager.WakeLock wakelock; 
+	 private PowerManager.WakeLock wakelock;
+	 private DefaultHttpClient httpclient;
+	 private HttpParams httpparams;
+	 private HttpHead head;
+	
+	 
+	 
+	 
 	
     
 	private  Handler hMain = new Handler(){
@@ -497,7 +506,7 @@ public class WifiFixerService extends Service {
 
 	}
     
-	boolean getHttpHeaders( String uri ) throws IOException {
+	boolean getHttpHeaders() throws IOException, URISyntaxException {
 		
 		//Turns out the old way was better
 		//I just wasn't doing it right. 
@@ -505,27 +514,28 @@ public class WifiFixerService extends Service {
 		boolean isup=false;
 		int status=HTTP_NULL;
 		   
-		      	URI url;
-				try {
-					url = new URI(uri);
-					HttpHead head = new HttpHead(url);
-					DefaultHttpClient httpClient = new DefaultHttpClient();
-					
-				    HttpParams my_httpParams = new BasicHttpParams();
-			        HttpConnectionParams.setConnectionTimeout(my_httpParams,HTTPREACH);
-			        HttpConnectionParams.setSoTimeout(my_httpParams,HTTPREACH);
-			        HttpConnectionParams.setLinger(my_httpParams, 1);
-			        HttpConnectionParams.setStaleCheckingEnabled(my_httpParams, false);
-			        httpClient.setParams(my_httpParams);
-			        HttpResponse response=httpClient.execute(head);
-			        status = response.getStatusLine (). getStatusCode ();
-			        if(status != HTTP_NULL)
-			        	isup=true;
-					if(LOGGING){
-							 wfLog(APP_NAME,"HTTP STATUS:"+status);
-					}
-				} catch (URISyntaxException e) {
-					wfLog(APP_NAME,"URL SyntaxException");
+				/*
+				 * Reusing our Httpclient, only initializing first time
+				 */
+				
+				if(httpclient==null){
+					httpclient = new DefaultHttpClient();
+					HEAD_URI= new URI(H_TARGET);
+				    head = new HttpHead(HEAD_URI);
+					httpparams = new BasicHttpParams();
+					HttpConnectionParams.setConnectionTimeout(httpparams,HTTPREACH);
+					HttpConnectionParams.setSoTimeout(httpparams,HTTPREACH);
+					HttpConnectionParams.setLinger(httpparams, 1);
+					HttpConnectionParams.setStaleCheckingEnabled(httpparams, false);
+					httpclient.setParams(httpparams);
+				}
+				
+				HttpResponse response=httpclient.execute(head);
+				status = response.getStatusLine (). getStatusCode ();
+				if(status != HTTP_NULL)
+					isup=true;
+				if(LOGGING){
+						 wfLog(APP_NAME,"HTTP STATUS:"+status);
 				}
 		      	
 				
@@ -807,9 +817,11 @@ public class WifiFixerService extends Service {
 		boolean isUp = false;
 		//how's this for minimalist?
 		try {
-			isUp=getHttpHeaders(host);
+			isUp=getHttpHeaders();
 		} catch (IOException e) {
 			wfLog(APP_NAME,"HTTP I/O Exception");
+		} catch (URISyntaxException e) {
+			wfLog(APP_NAME,"URL Syntax Exception");
 		}
 		if (LOGGING)
 			wfLog(APP_NAME, "HTTP Method");
