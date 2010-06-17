@@ -51,6 +51,7 @@ import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -79,6 +80,9 @@ public class WifiFixerService extends Service {
 	private static final int WIFI_OFF = 6;
 	private static final int WIFI_ON = 7;
 	
+	//Android revision id
+	private static final int ANDROID = Build.VERSION.SDK_INT;
+	
 	//ID For notification
 	private static final int NOTIFID=31337;
 	
@@ -103,6 +107,7 @@ public class WifiFixerService extends Service {
 	final static int LOOPWAIT=5000;
 	//ms to wait after trying to connect
 	private static final int CONNECTWAIT = 10000;
+	
 	// Enable logging
 	public static boolean LOGGING = false;
 	// *****************************
@@ -1014,8 +1019,7 @@ public class WifiFixerService extends Service {
 	}
 	
 	void setup() {
-		//Yeah, so the constant WIFI_MODE_FULL wasn't obvious
-		//It makes a huge difference, may make default
+		//WIFI_MODE_FULL should p. much always be used
 		lock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL,"WFLock");
 		checkLock(lock);
 		IntentFilter myFilter = new IntentFilter();
@@ -1023,8 +1027,13 @@ public class WifiFixerService extends Service {
 		// Catch power events for battery savings
 		myFilter.addAction(Intent.ACTION_SCREEN_OFF);
 		myFilter.addAction(Intent.ACTION_SCREEN_ON);
+		/*
+		 * 	Only want to register this if we need supplicant fixes, >2.0
+		 */
 		//Supplicant State filter
-		myFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+		if(ANDROID>=Build.VERSION_CODES.ECLAIR)
+			myFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+		
 		//wifi scan results available callback 
 	    myFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 	    registerReceiver(receiver, myFilter);
