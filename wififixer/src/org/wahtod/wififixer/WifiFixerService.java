@@ -156,6 +156,7 @@ public class WifiFixerService extends Service {
 	 private DefaultHttpClient httpclient;
 	 private HttpParams httpparams;
 	 private HttpHead head;
+	 private HttpResponse response;
 	
 	 
 	 
@@ -359,8 +360,10 @@ public class WifiFixerService extends Service {
 	private  BroadcastReceiver receiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
 
-			
-            //We want this to run first
+			/*
+			 * Dispatches the broadcast intent to the appropriate handler method
+			 */
+            
 			String iAction = intent.getAction();
 
 			if ((iAction.equals(Intent.ACTION_SCREEN_ON)) || (iAction.equals(Intent.ACTION_SCREEN_OFF)))
@@ -530,7 +533,7 @@ public class WifiFixerService extends Service {
 					httpclient.setParams(httpparams);
 				}
 				
-				HttpResponse response=httpclient.execute(head);
+				response=httpclient.execute(head);
 				status = response.getStatusLine (). getStatusCode ();
 				if(status != HTTP_NULL)
 					isup=true;
@@ -813,9 +816,11 @@ public class WifiFixerService extends Service {
 		return true;
 	}
 
-	 boolean httpHostup(String host) {
+	 boolean httpHostup() {
 		boolean isUp = false;
-		//how's this for minimalist?
+		/*
+		 * getHttpHeaders() does all the heavy lifting
+		 */
 		try {
 			isUp=getHttpHeaders();
 		} catch (IOException e) {
@@ -833,7 +838,7 @@ public class WifiFixerService extends Service {
 		
 		 
 		 if(HTTPPREF)
-			return httpHostup(H_TARGET);
+			return httpHostup();
 		 else
 			return icmpHostup();
 		 
