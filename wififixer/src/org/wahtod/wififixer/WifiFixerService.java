@@ -128,7 +128,9 @@ public class WifiFixerService extends Service {
 	public boolean SHOULDRUN = true;
 	//various
 	public int WIFIREPAIR = 0;
-	public int LASTNID = -1;
+	private static final int HTTP_NULL=-1;
+	public int LASTNID = HTTP_NULL;
+	
 
 	//flags
 	public boolean PENDINGSCAN=false;
@@ -204,7 +206,7 @@ public class WifiFixerService extends Service {
 			}
 			
 	    if(isKnownAPinRange()){
-	    	if(connectToAP(LASTNID,true) && (getNetworkID() != -1)){
+	    	if(connectToAP(LASTNID,true) && (getNetworkID() != HTTP_NULL)){
 	    	 PENDINGRECONNECT=false;
 	    	 if(LOGGING)
 	    		 wfLog(APP_NAME,"Connected to Network:"+getNetworkID());
@@ -232,7 +234,7 @@ public class WifiFixerService extends Service {
 				return;
 			}
 			isKnownAPinRange();		  //Crazy but should work. 
-			if(connectToAP(LASTNID,true) && (getNetworkID() != -1)){
+			if(connectToAP(LASTNID,true) && (getNetworkID() != HTTP_NULL)){
 					  PENDINGRECONNECT=false;
 					  if(LOGGING)
 				    		 wfLog(APP_NAME,"Connected to Network:"+getNetworkID());
@@ -501,7 +503,7 @@ public class WifiFixerService extends Service {
 		//I just wasn't doing it right. 
 		
 		boolean isup=false;
-		int status=-1;
+		int status=HTTP_NULL;
 		   
 		      	URI url;
 				try {
@@ -517,7 +519,7 @@ public class WifiFixerService extends Service {
 			        httpClient.setParams(my_httpParams);
 			        HttpResponse response=httpClient.execute(head);
 			        status = response.getStatusLine (). getStatusCode ();
-			        if(status != -1)
+			        if(status != HTTP_NULL)
 			        	isup=true;
 					if(LOGGING){
 							 wfLog(APP_NAME,"HTTP STATUS:"+status);
@@ -561,7 +563,7 @@ public class WifiFixerService extends Service {
 	 int getNetworkID() {
 		myWifi = wm.getConnectionInfo();
 		int id = myWifi.getNetworkId();
-		if (!(id == -1)) {
+		if (!(id == HTTP_NULL)) {
 			LASTNID = id;
 			LASTSSID = myWifi.getSSID();
 		}
