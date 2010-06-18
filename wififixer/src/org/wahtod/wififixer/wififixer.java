@@ -21,20 +21,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 
 public class wififixer extends BroadcastReceiver {
 
-	private static final long PERIOD = 300000;
-	private static final long STARTDELAY = 60000;
-	private Context c;
+	private Context ctxt;
 	
 	private Handler tHandler = new Handler(){
 		@Override
         public void handleMessage(Message message) {
-            setAlarm();
+            ServiceAlarm.setAlarm(ctxt);
         }
 
 	  };
@@ -42,19 +37,11 @@ public class wififixer extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// Create intent which will start the Service. 
-		c=context;
-		tHandler.sendEmptyMessageDelayed(0, STARTDELAY);
+		ctxt=context;
+		tHandler.sendEmptyMessageDelayed(0, ServiceAlarm.STARTDELAY);
+		
 	}
 	
-	private void setAlarm () {
-		Intent myStarterIntent = new Intent(c, WifiFixerService.class);
-		// Set the Launch-Flag to the Intent. 
-		myStarterIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
-		AlarmManager mgr=(AlarmManager)c.getSystemService(Context.ALARM_SERVICE);
-		PendingIntent pendingintent=PendingIntent.getService(c, 0, myStarterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-		mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, (SystemClock.elapsedRealtime()), PERIOD, pendingintent);
-	}
 	
 	
 }

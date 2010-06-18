@@ -99,7 +99,6 @@ public class LogService extends Service {
 	
 	@Override
 	public IBinder onBind(Intent arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -154,15 +153,17 @@ void timeStamp() {
 	wfLog("WifiFixerService", message);
 	if(LOGGING)
 		tsHandler.sendEmptyMessageDelayed(1, ALARMREPEAT);
-	else
+	else{
+		tsHandler.removeMessages(1);
 		stopSelf();
+	}
 }		
 
 
 void wfLog(String APP_NAME, String Message) {
 	if (processCommands(APP_NAME))
 		return;
-		
+	
 	Log.i(APP_NAME,Message);
 	writeToFileLog(Message);
 }

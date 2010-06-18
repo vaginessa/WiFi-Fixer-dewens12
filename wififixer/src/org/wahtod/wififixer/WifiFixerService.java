@@ -31,7 +31,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -57,7 +56,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.Settings.SettingNotFoundException;
 import android.widget.Toast;
@@ -119,8 +117,6 @@ public class WifiFixerService extends Service {
 	final static int LOOPWAIT=5000;
 	//ms to wait after trying to connect
 	private static final int CONNECTWAIT = 10000;
-	//Alarm period
-	private static final long PERIOD = 300000;
 	
 	// Enable logging
 	public static boolean LOGGING = false;
@@ -299,7 +295,6 @@ public class WifiFixerService extends Service {
 			if(!SHOULDRUN){	
 			if (LOGGING){
 				wfLog(APP_NAME, "SHOULDRUN false, dying.");
-				wfLog(LogService.DIE,null);
 			}
 			// Cleanup
 			cleanup();
@@ -932,14 +927,14 @@ public class WifiFixerService extends Service {
 		// Check RUNPREF and set SHOULDRUN
 		//Make sure Main loop restarts if this is a change
 		if (RUNPREF){
-			unsetAlarm();
+			ServiceAlarm.unsetAlarm(this);
 			SHOULDRUN = false;
 		}
 		else {
 			if (!SHOULDRUN){
 				SHOULDRUN=true;
 			}
-			setAlarm();
+			ServiceAlarm.setAlarm(this);
 		}
 		//Setting defaults if performance not set
 	    if(PERFORMANCE=="0" && !LOCKPREF){
@@ -1059,23 +1054,7 @@ public class WifiFixerService extends Service {
 		return START_STICKY;
 	}
 	
-	public void setAlarm () {
-		Intent myStarterIntent = new Intent(this, WifiFixerService.class);
-		myStarterIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
-		AlarmManager mgr=(AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-		PendingIntent pendingintent=PendingIntent.getService(this, 0, myStarterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-		mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+PERIOD, PERIOD, pendingintent);
-	}
 	
-	public void unsetAlarm() {
-		Intent myStarterIntent = new Intent(this, WifiFixerService.class);
-		myStarterIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
-		AlarmManager mgr=(AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-		PendingIntent pendingintent=PendingIntent.getService(this, 0, myStarterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-		mgr.cancel(pendingintent);
-	}
 	
 	void setup() {
 		//WIFI_MODE_FULL should p. much always be used
