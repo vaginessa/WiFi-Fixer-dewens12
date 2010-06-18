@@ -56,4 +56,5 @@ public class wififixer extends BroadcastReceiver {
 		mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, (SystemClock.elapsedRealtime()), PERIOD, pendingintent);
 	}
 	
+	
 }
