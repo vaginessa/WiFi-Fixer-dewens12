@@ -82,6 +82,15 @@ public class WifiFixerService extends Service {
 	private static final int WIFI_OFF = 6;
 	private static final int WIFI_ON = 7;
 	
+	//Preference key constants
+	private static final String WIFILOCK_KEY="WiFiLock";
+	private static final String NOTIF_KEY="Notifications";
+	private static final String SCREEN_KEY="SCREEN";
+	private static final String DISABLE_KEY="Disable";
+	private static final String WIDGET_KEY="WidgetBehavior";
+	private static final String PERFORMANCE_KEY="Performance";
+	private static final String LOG_KEY="SLOG";
+	
 	//Android revision id
 	private static final int ANDROID = Build.VERSION.SDK_INT;
 	
@@ -910,16 +919,16 @@ public class WifiFixerService extends Service {
 	
 	 void loadPrefs() {
 		settings = PreferenceManager.getDefaultSharedPreferences(this);
-		LOCKPREF = settings.getBoolean("WiFiLock", false);
-		NOTIFPREF = settings.getBoolean("Notifications", false);
-		RUNPREF = settings.getBoolean("Disable", false);
-		SCREENPREF = settings.getBoolean("SCREEN", false);
-		WIDGETPREF = settings.getBoolean("WidgetBehavior", false);
-		String PERFORMANCE = settings.getString("Performance", "0");
+		LOCKPREF = settings.getBoolean(WIFILOCK_KEY, false);
+		NOTIFPREF = settings.getBoolean(NOTIF_KEY, false);
+		RUNPREF = settings.getBoolean(DISABLE_KEY, false);
+		SCREENPREF = settings.getBoolean(SCREEN_KEY, false);
+		WIDGETPREF = settings.getBoolean(WIDGET_KEY, false);
+		String PERFORMANCE = settings.getString(PERFORMANCE_KEY, "0");
 		//Kill the Log Service if it's up
-		if (LOGGING && !settings.getBoolean("SLOG", false))
+		if (LOGGING && !settings.getBoolean(LOG_KEY, false))
 			wfLog(LogService.DIE,null);
-		LOGGING=settings.getBoolean("SLOG", false);
+		LOGGING=settings.getBoolean(LOG_KEY, false);
 		// Check RUNPREF and set SHOULDRUN
 		//Make sure Main loop restarts if this is a change
 		if (RUNPREF){
@@ -927,16 +936,16 @@ public class WifiFixerService extends Service {
 			SHOULDRUN = false;
 		}
 		else {
-			setAlarm();
 			if (!SHOULDRUN){
 				SHOULDRUN=true;
 			}
+			setAlarm();
 		}
 		//Setting defaults if performance not set
 	    if(PERFORMANCE=="0" && !LOCKPREF){
 	    	SharedPreferences.Editor edit = settings.edit();
-	    	edit.putString("Performance","2");
-	    	edit.putBoolean("WiFiLock", true);
+	    	edit.putString(PERFORMANCE_KEY,"2");
+	    	edit.putBoolean(WIFILOCK_KEY, true);
 	    	edit.commit();
 	    	LOCKPREF=true;
 	    }
@@ -1056,7 +1065,7 @@ public class WifiFixerService extends Service {
 		AlarmManager mgr=(AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
 		PendingIntent pendingintent=PendingIntent.getService(this, 0, myStarterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-		mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, (SystemClock.elapsedRealtime()), PERIOD, pendingintent);
+		mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+PERIOD, PERIOD, pendingintent);
 	}
 	
 	public void unsetAlarm() {

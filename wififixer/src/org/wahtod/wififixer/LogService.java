@@ -162,6 +162,7 @@ void timeStamp() {
 void wfLog(String APP_NAME, String Message) {
 	if (processCommands(APP_NAME))
 		return;
+		
 	Log.i(APP_NAME,Message);
 	writeToFileLog(Message);
 }

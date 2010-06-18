@@ -52,9 +52,11 @@ public class WifiFixerPreferences extends PreferenceActivity implements OnShared
 	    
 	    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 	        
+	    	SharedPreferences.Editor edit = prefs.edit();
+	    	
 	    	if(key.contains("Performance")){
 	    	
-	    	SharedPreferences.Editor edit = prefs.edit();
+	    	
 			String sPerf=prefs.getString("Performance","2");
     		int pVal=Integer.parseInt(sPerf);
     		
@@ -87,10 +89,11 @@ public class WifiFixerPreferences extends PreferenceActivity implements OnShared
 	    else
     			if(key.contains("Disable")){
     				stopService(new Intent(this,WifiFixerService.class));
+    				edit.putBoolean("SLOG",false);
+    				edit.commit();
     			}
 	    
-	    	// Let's do something a preference value changes
-	    	Log.i("WiFiFixerPreferences","OnSharedPreferenceChanged ran");
+	    	// Send reload intent to WifiFixerService when a preference value changes
 	    	Intent sendIntent = new Intent(WifiFixerService.class.getName());
 			startService(sendIntent);
 	    }
