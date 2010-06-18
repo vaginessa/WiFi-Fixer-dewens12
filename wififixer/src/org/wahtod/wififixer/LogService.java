@@ -106,6 +106,7 @@ public class LogService extends Service {
 	public void onCreate() {
 		
 		getPackageInfo();
+		LOGGING=true;
 		wfLog(WifiFixerService.APP_NAME,getBuildInfo());
 		timeStamp();
 		
@@ -126,6 +127,7 @@ public boolean processCommands(String Command) {
 	
 	if (Command.contains(DIE)){
 		LOGGING=false;
+		Log.v(this.getClass().getName(),"Dying");
 		return true;
 	}
 	else
@@ -163,7 +165,6 @@ void timeStamp() {
 void wfLog(String APP_NAME, String Message) {
 	if (processCommands(APP_NAME))
 		return;
-	
 	Log.i(APP_NAME,Message);
 	writeToFileLog(Message);
 }

@@ -934,7 +934,7 @@ public class WifiFixerService extends Service {
 			if (!SHOULDRUN){
 				SHOULDRUN=true;
 			}
-			ServiceAlarm.setAlarm(this);
+			ServiceAlarm.setAlarm(this,true);
 		}
 		//Setting defaults if performance not set
 	    if(PERFORMANCE=="0" && !LOCKPREF){

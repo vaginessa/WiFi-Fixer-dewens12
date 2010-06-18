@@ -29,7 +29,7 @@ public class wififixer extends BroadcastReceiver {
 	private Handler tHandler = new Handler(){
 		@Override
         public void handleMessage(Message message) {
-            ServiceAlarm.setAlarm(ctxt);
+            ServiceAlarm.setAlarm(ctxt,false);
         }
 
 	  };
