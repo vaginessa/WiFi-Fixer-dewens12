@@ -57,7 +57,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import android.provider.Settings.SettingNotFoundException;
 import android.widget.Toast;
 
 public class WifiFixerService extends Service {
@@ -962,7 +961,7 @@ public class WifiFixerService extends Service {
 		}
 		
 		
-		// Here we go, checking for Wifi network notification
+		/*// Here we go, checking for Wifi network notification
 		// Notify user if this setting is true
 		try {
 			int iNotif = android.provider.Settings.Secure
@@ -978,7 +977,7 @@ public class WifiFixerService extends Service {
 			// bweep
 			if(LOGGING)
 				wfLog(APP_NAME,"Whoops! Obeselete!");
-		}
+		}*/
 	}
 
      void logSupplicant(String state){
