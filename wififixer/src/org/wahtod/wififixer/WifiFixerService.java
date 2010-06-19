@@ -57,6 +57,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.text.format.Formatter;
 import android.widget.Toast;
 
 public class WifiFixerService extends Service {
@@ -604,7 +605,9 @@ public class WifiFixerService extends Service {
             //---display the versioncode--           
            VERSION=pi.versionCode;
         } catch (NameNotFoundException e) {
-           //hurf ding
+           /*
+            * If own package isn't found, something is horribly wrong.
+            */
         }
 	}
 	
@@ -876,8 +879,7 @@ public class WifiFixerService extends Service {
 	}
 
 	 String intToIp(int i) {
-		return (i & 0xFF) + "." + ((i >> 8) & 0xFF) + "." + ((i >> 16) & 0xFF)
-				+ "." + ((i >> 24) & 0xFF);
+		return Formatter.formatIpAddress(i);
 	}
 	
 	 boolean isKnownAPinRange() {
