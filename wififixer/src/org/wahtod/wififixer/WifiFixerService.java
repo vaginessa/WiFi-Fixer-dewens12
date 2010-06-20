@@ -844,9 +844,11 @@ public class WifiFixerService extends Service {
 		try {
 			isUp=getHttpHeaders();
 		} catch (IOException e) {
-			wfLog(APP_NAME,"HTTP I/O Exception");
+			if(LOGGING)
+				wfLog(APP_NAME,"HTTP I/O Exception");
 		} catch (URISyntaxException e) {
-			wfLog(APP_NAME,"URL Syntax Exception");
+			if(LOGGING)
+				wfLog(APP_NAME,"URL Syntax Exception");
 		}
 		if (LOGGING)
 			wfLog(APP_NAME, "HTTP Method");
@@ -968,7 +970,7 @@ public class WifiFixerService extends Service {
 	    }
 	    
 		if (LOGGING) {
-			wfLog(APP_NAME, "Loading Settings");
+				wfLog(APP_NAME, "Loading Settings");
 			if (LOCKPREF)
 				wfLog(APP_NAME, "LOCKPREF");
 
