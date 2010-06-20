@@ -99,6 +99,7 @@ public class WifiFixerService extends Service {
 	private static final String SCANNING="SCANNING";
 	private static final String DISCONNECTED="DISCONNECTED";
 	private static final String INACTIVE = "INACTIVE";
+	private static final String CONNECTED = "CONNECTED";
 	
 	//Target for header check
 	private static final String H_TARGET="http://www.google.com";
@@ -140,6 +141,7 @@ public class WifiFixerService extends Service {
 	public int WIFIREPAIR = 0;
 	private static final int HTTP_NULL=-1;
 	public int LASTNID = HTTP_NULL;
+	private String cachedIP;
 	
 
 	//flags
@@ -726,7 +728,10 @@ public class WifiFixerService extends Service {
 		if(LOGGING)
 			logSupplicant(sState);
 		
-		if(sState==SCANNING)
+		if(sState==CONNECTED){
+			icmpCache();
+		}
+		else if(sState==SCANNING)
 		{
 			PENDINGSCAN=true;
 			
@@ -862,10 +867,15 @@ public class WifiFixerService extends Service {
 	 
 	 boolean icmpHostup() {
 		boolean isUp = false;
-		//grab dhcp gateway addy
-		DhcpInfo info = wm.getDhcpInfo();
+		/*
+		 * If IP hasn't been cached yet
+		 * cache it
+		 */
+		if(cachedIP==null)
+			icmpCache();
+		
 		try {
-			if (InetAddress.getByName(intToIp(info.gateway)).isReachable(REACHABLE)) {
+			if (InetAddress.getByName(cachedIP).isReachable(REACHABLE)) {
 				isUp = true;
 			}
 		} catch (UnknownHostException e) {
@@ -876,6 +886,17 @@ public class WifiFixerService extends Service {
 		if (LOGGING)
 			wfLog(APP_NAME, "ICMP Method");
 		return isUp;
+	}
+	 
+	private void icmpCache(){
+		/*
+		 * Caches DHCP gateway IP
+		 * for ICMP check
+		 */
+		DhcpInfo info = wm.getDhcpInfo();
+		cachedIP=intToIp(info.gateway);
+		if(LOGGING)
+			wfLog(APP_NAME,"Cached IP:"+cachedIP);
 	}
 
 	 String intToIp(int i) {
