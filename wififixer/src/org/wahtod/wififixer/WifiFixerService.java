@@ -632,12 +632,12 @@ public class WifiFixerService extends Service {
 
     private void handleNetworkAction(Intent intent) {
 	/*
-	 * This action means network connectivty has changed
-	 * but, we only want to run this code for wifi
+	 * This action means network connectivty has changed but, we only want
+	 * to run this code for wifi
 	 */
-	if(!WIFI_ENABLED || !getIsOnWifi())
+	if (!WIFI_ENABLED || !getIsOnWifi())
 	    return;
-	
+
 	icmpCache();
     }
 
@@ -707,15 +707,12 @@ public class WifiFixerService extends Service {
 
     void handleSupplicantState(String sState) {
 
-	if (LOGGING && !SCREENISOFF)
-	    logSupplicant(sState);
+	
 	/*
-	 * Moved the version check here so that the ip cache code runs in all
-	 * cases
+	 * Dispatches appropriate supplicant fix
 	 */
 
-	if (!WIFI_ENABLED || SCREENISOFF
-		|| ANDROID >= Build.VERSION_CODES.ECLAIR)
+	if (!WIFI_ENABLED || SCREENISOFF)
 	    return;
 	else if (sState == SCANNING) {
 	    PENDINGSCAN = true;
@@ -728,6 +725,9 @@ public class WifiFixerService extends Service {
 	    supplicantFix(true);
 	    notifyWrap(sState);
 	}
+	
+	if (LOGGING && !SCREENISOFF)
+	    logSupplicant(sState);
     }
 
     private void handleWifiResults() {
@@ -1059,7 +1059,11 @@ public class WifiFixerService extends Service {
 	myFilter.addAction(Intent.ACTION_SCREEN_ON);
 
 	// Supplicant State filter
-	myFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+	/*
+	 * For testing: disable supplicant fixes pre-2.0
+	 */
+	if (ANDROID >= Build.VERSION_CODES.ECLAIR)
+	    myFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
 
 	// Network State filter
 	myFilter.addAction(android.net.ConnectivityManager.CONNECTIVITY_ACTION);
