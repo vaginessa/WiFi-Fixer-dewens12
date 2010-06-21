@@ -100,7 +100,7 @@ public class WifiFixerService extends Service {
     private static final String SCANNING = "SCANNING";
     private static final String DISCONNECTED = "DISCONNECTED";
     private static final String INACTIVE = "INACTIVE";
-    private static final String CONNECTED = "CONNECTED";
+    private static final String ASSOCIATED = "ASSOCIATED";
 
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
@@ -696,9 +696,15 @@ public class WifiFixerService extends Service {
 	if (LOGGING && !SCREENISOFF)
 	    logSupplicant(sState);
 
-	if (sState == CONNECTED) {
+	if (sState == ASSOCIATED) {
 	    icmpCache();
-	} else if (!WIFI_ENABLED || SCREENISOFF
+	}
+	/*
+	 * Moved the version check here 
+	 * so that the supplicant CONNECT
+	 * code runs in all cases
+	 */
+	else if (!WIFI_ENABLED || SCREENISOFF
 		|| ANDROID >= Build.VERSION_CODES.ECLAIR)
 	    return;
 	else if (sState == SCANNING) {
