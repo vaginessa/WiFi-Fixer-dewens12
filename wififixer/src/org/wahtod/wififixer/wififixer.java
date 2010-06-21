@@ -12,7 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-*/
+ */
 
 package org.wahtod.wififixer;
 
@@ -24,24 +24,22 @@ import android.os.Message;
 
 public class wififixer extends BroadcastReceiver {
 
-	private Context ctxt;
-	
-	private Handler tHandler = new Handler(){
-		@Override
-        public void handleMessage(Message message) {
-            ServiceAlarm.setAlarm(ctxt,false);
-        }
+    private Context ctxt;
 
-	  };
-
+    private Handler tHandler = new Handler() {
 	@Override
-	public void onReceive(Context context, Intent intent) {
-		// Create intent which will start the Service. 
-		ctxt=context;
-		tHandler.sendEmptyMessageDelayed(0, ServiceAlarm.STARTDELAY);
-		
+	public void handleMessage(Message message) {
+	    ServiceAlarm.setAlarm(ctxt, false);
 	}
-	
-	
-	
+
+    };
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+	// Create intent which will start the Service.
+	ctxt = context;
+	tHandler.sendEmptyMessageDelayed(0, ServiceAlarm.STARTDELAY);
+
+    }
+
 }

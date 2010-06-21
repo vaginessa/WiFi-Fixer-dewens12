@@ -12,8 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-*/
-
+ */
 
 package org.wahtod.wififixer;
 
@@ -23,18 +22,19 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 public class About extends Activity {
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.about);
-		//Disable the nag if it's been read
-		//we use the constant from WifiFixerActivty because
-		//we want to change the value when we update the contents
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		if(!settings.getBoolean(WifiFixerActivity.sABOUT, false)){
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putBoolean(WifiFixerActivity.sABOUT, true);
-		editor.commit();
-		}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.about);
+	// Disable the nag if it's been read
+	// we use the constant from WifiFixerActivty because
+	// we want to change the value when we update the contents
+	SharedPreferences settings = PreferenceManager
+		.getDefaultSharedPreferences(this);
+	if (!settings.getBoolean(WifiFixerActivity.sABOUT, false)) {
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putBoolean(WifiFixerActivity.sABOUT, true);
+	    editor.commit();
 	}
+    }
 }

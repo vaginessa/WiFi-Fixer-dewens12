@@ -12,7 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-*/
+ */
 
 package org.wahtod.wififixer;
 
@@ -25,33 +25,33 @@ import android.widget.RemoteViews;
 
 public class WifiFixerAppWidgetProvider extends AppWidgetProvider {
 
-	@Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
-			int[] appWidgetIds) {
-		final int N = appWidgetIds.length;
-		final int FLAG_CANCEL_CURRENT = 268435456;
+    @Override
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager,
+	    int[] appWidgetIds) {
+	final int N = appWidgetIds.length;
+	final int FLAG_CANCEL_CURRENT = 268435456;
 
-		// Perform this loop procedure for each App Widget that belongs to this
-		// provider
-		for (int i = 0; i < N; i++) {
-			int appWidgetId = appWidgetIds[i];
+	// Perform this loop procedure for each App Widget that belongs to this
+	// provider
+	for (int i = 0; i < N; i++) {
+	    int appWidgetId = appWidgetIds[i];
 
-			// Create an Intent to launch the service
-			Intent intent = new Intent(context, WifiFixerService.class);
-			intent.putExtra(WifiFixerService.FIXWIFI, true);
-			PendingIntent pendingIntent = PendingIntent.getService(context
-					.getApplicationContext(), 0, intent, FLAG_CANCEL_CURRENT);
+	    // Create an Intent to launch the service
+	    Intent intent = new Intent(context, WifiFixerService.class);
+	    intent.putExtra(WifiFixerService.FIXWIFI, true);
+	    PendingIntent pendingIntent = PendingIntent.getService(context
+		    .getApplicationContext(), 0, intent, FLAG_CANCEL_CURRENT);
 
-			// Get the layout for the App Widget and attach an on-click listener
-			// to the button
-			RemoteViews views = new RemoteViews(context.getPackageName(),
-					R.layout.widget);
-			views.setOnClickPendingIntent(R.id.Button, pendingIntent);
+	    // Get the layout for the App Widget and attach an on-click listener
+	    // to the button
+	    RemoteViews views = new RemoteViews(context.getPackageName(),
+		    R.layout.widget);
+	    views.setOnClickPendingIntent(R.id.Button, pendingIntent);
 
-			// Tell the AppWidgetManager to perform an update on the current App
-			// Widget
-			appWidgetManager.updateAppWidget(appWidgetId, views);
-		}
-
+	    // Tell the AppWidgetManager to perform an update on the current App
+	    // Widget
+	    appWidgetManager.updateAppWidget(appWidgetId, views);
 	}
+
+    }
 }
