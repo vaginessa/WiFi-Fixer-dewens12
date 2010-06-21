@@ -100,7 +100,6 @@ public class WifiFixerService extends Service {
     private static final String SCANNING = "SCANNING";
     private static final String DISCONNECTED = "DISCONNECTED";
     private static final String INACTIVE = "INACTIVE";
-    private static final String COMPLETED = "COMPLETED";
 
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
@@ -110,7 +109,7 @@ public class WifiFixerService extends Service {
     private static final String LOGINTENT = "org.wahtod.wififixer.LogService.LOG";
 
     // For wifi state
-    public static boolean WIFI_ENABLED = false;
+    public static boolean wifiEnabled = false;
     // ms for IsReachable
     final static int REACHABLE = 2500;
     final static int HTTPREACH = 3000;
@@ -123,38 +122,38 @@ public class WifiFixerService extends Service {
     public static boolean LOGGING = false;
     // *****************************
     public final static String APP_NAME = "WifiFixerService";
-    public boolean CLEANUP = false;
-    public boolean HASLOCK = false;
-    public boolean LOCKPREF = false;
-    public boolean NOTIFPREF = false;
-    public boolean RUNPREF = false;
-    public boolean SCREENPREF = false;
-    public boolean WIDGETPREF = false;
-    public boolean PREFSCHANGED = false;
-    public boolean WIFISHOULDBEON = false;
-    public boolean HASWAKELOCK = false;
+    public boolean cleanup = false;
+    public boolean haslock = false;
+    public boolean lockpref = false;
+    public boolean notifpref = false;
+    public boolean runpref = false;
+    public boolean screenpref = false;
+    public boolean widgetpref = false;
+    public boolean prefschanged = false;
+    public boolean wifishouldbeon = false;
+    public boolean haswakelock = false;
     // Locks and such
-    public boolean TEMPLOCK = false;
-    public static boolean SCREENISOFF = false;
-    public boolean SHOULDRUN = true;
+    public boolean templock = false;
+    public static boolean screenisoff = false;
+    public boolean shouldrun = true;
     // various
-    public int WIFIREPAIR = 0;
+    public int wifirepair = 0;
     private static final int HTTP_NULL = -1;
-    public int LASTNID = HTTP_NULL;
+    public int lastnid = HTTP_NULL;
     private String cachedIP;
 
     // flags
-    public boolean PENDINGSCAN = false;
-    public boolean PENDINGWIFITOGGLE = false;
-    public boolean PENDINGRECONNECT = false;
-    public boolean sCONNECTED = false;
+    public boolean pendingscan = false;
+    public boolean pendingwifitoggle = false;
+    public boolean pendingreconnect = false;
+    public boolean sconnected = false;
     // Switch for network check type
-    public boolean HTTPPREF = false;
+    public boolean httppref = false;
     // http://bash.org/?924453
 
     // misc types
-    public String LASTSSID = " ";
-    public int VERSION = 0;
+    public String lastssid = " ";
+    public int version = 0;
     // Public Utilities
     public WifiManager wm;
     public WifiInfo myWifi;
@@ -190,13 +189,13 @@ public class WifiFixerService extends Service {
 		break;
 
 	    case TEMPLOCK_ON:
-		TEMPLOCK = true;
+		templock = true;
 		if (LOGGING)
 		    wfLog(APP_NAME, "Setting Temp Lock");
 		break;
 
 	    case TEMPLOCK_OFF:
-		TEMPLOCK = false;
+		templock = false;
 		if (LOGGING)
 		    wfLog(APP_NAME, "Removing Temp Lock");
 		break;
@@ -215,19 +214,19 @@ public class WifiFixerService extends Service {
 
     Runnable rRepair = new Runnable() {
 	public void run() {
-	    if (!WIFI_ENABLED) {
+	    if (!wifiEnabled) {
 		hMainWrapper(TEMPLOCK_OFF);
 		return;
 	    }
 
 	    if (isKnownAPinRange()) {
-		if (connectToAP(LASTNID, true) && (getNetworkID() != HTTP_NULL)) {
-		    PENDINGRECONNECT = false;
+		if (connectToAP(lastnid, true) && (getNetworkID() != HTTP_NULL)) {
+		    pendingreconnect = false;
 		    if (LOGGING)
 			wfLog(APP_NAME, "Connected to Network:"
 				+ getNetworkID());
 		} else {
-		    PENDINGRECONNECT = true;
+		    pendingreconnect = true;
 		    toggleWifi();
 		    if (LOGGING)
 			wfLog(APP_NAME, "Toggling Wifi.");
@@ -242,18 +241,18 @@ public class WifiFixerService extends Service {
 
     Runnable rReconnect = new Runnable() {
 	public void run() {
-	    if (!WIFI_ENABLED) {
+	    if (!wifiEnabled) {
 		hMainWrapper(TEMPLOCK_OFF);
 		return;
 	    }
 	    isKnownAPinRange(); // Crazy but should work.
-	    if (connectToAP(LASTNID, true) && (getNetworkID() != HTTP_NULL)) {
-		PENDINGRECONNECT = false;
+	    if (connectToAP(lastnid, true) && (getNetworkID() != HTTP_NULL)) {
+		pendingreconnect = false;
 		if (LOGGING)
 		    wfLog(APP_NAME, "Connected to Network:" + getNetworkID());
 	    } else {
-		WIFIREPAIR = 0;
-		PENDINGSCAN = false;
+		wifirepair = 0;
+		pendingscan = false;
 		hMainWrapper(TEMPLOCK_OFF);
 		if (LOGGING)
 		    wfLog(APP_NAME, "Exiting N1 Fix thread.");
@@ -268,21 +267,21 @@ public class WifiFixerService extends Service {
 	    // Queue next run of main runnable
 	    hMainWrapper(MAIN, LOOPWAIT);
 	    // Watchdog
-	    if (!WIFI_ENABLED)
+	    if (!wifiEnabled)
 		checkWifiState();
 
 	    // Check Supplicant
-	    if (!wm.pingSupplicant() && WIFI_ENABLED) {
+	    if (!wm.pingSupplicant() && wifiEnabled) {
 		if (LOGGING)
 		    wfLog(APP_NAME, "Supplicant Nonresponsive, toggling wifi");
 		toggleWifi();
-	    } else if (!TEMPLOCK && !SCREENISOFF)
+	    } else if (!templock && !screenisoff)
 		fixWifi();
 
-	    if (PREFSCHANGED)
+	    if (prefschanged)
 		checkLock(lock);
 
-	    if (!SHOULDRUN) {
+	    if (!shouldrun) {
 		if (LOGGING) {
 		    wfLog(APP_NAME, "SHOULDRUN false, dying.");
 		}
@@ -296,7 +295,7 @@ public class WifiFixerService extends Service {
     Runnable rWifiTask = new Runnable() {
 	public void run() {
 	    // dispatch appropriate level
-	    switch (WIFIREPAIR) {
+	    switch (wifirepair) {
 
 	    case 0:
 		// Let's try to reassociate first..
@@ -304,7 +303,7 @@ public class WifiFixerService extends Service {
 		if (LOGGING)
 		    wfLog(APP_NAME, "Reassociating");
 		tempLock(REACHABLE);
-		WIFIREPAIR++;
+		wifirepair++;
 		notifyWrap("Reassociating");
 		break;
 
@@ -314,15 +313,15 @@ public class WifiFixerService extends Service {
 		if (LOGGING)
 		    wfLog(APP_NAME, "Reconnecting");
 		tempLock(REACHABLE);
-		WIFIREPAIR++;
+		wifirepair++;
 		notifyWrap("Reconnecting");
 		break;
 
 	    case 2:
 		// Start Scan
-		PENDINGSCAN = true;
+		pendingscan = true;
 		startScan();
-		WIFIREPAIR = 0;
+		wifirepair = 0;
 		if (LOGGING)
 		    wfLog(APP_NAME, "Repairing");
 		notifyWrap("Repairing");
@@ -331,8 +330,8 @@ public class WifiFixerService extends Service {
 
 	    if (LOGGING) {
 		wfLog(APP_NAME, "Reconnecting: Algorithm "
-			+ Integer.toString(WIFIREPAIR) + ":Last NID:"
-			+ Integer.toString(LASTNID));
+			+ Integer.toString(wifirepair) + ":Last NID:"
+			+ Integer.toString(lastnid));
 	    }
 	}
     };;
@@ -347,9 +346,9 @@ public class WifiFixerService extends Service {
     Runnable rWifiOn = new Runnable() {
 	public void run() {
 	    wm.setWifiEnabled(true);
-	    PENDINGWIFITOGGLE = false;
-	    WIFISHOULDBEON = true;
-	    if (HASWAKELOCK)
+	    pendingwifitoggle = false;
+	    wifishouldbeon = true;
+	    if (haswakelock)
 		wakeLock(false);
 	    deleteNotification(NOTIFID);
 	}
@@ -384,27 +383,27 @@ public class WifiFixerService extends Service {
     };
 
     void checkLock(WifiManager.WifiLock lock) {
-	if (!PREFSCHANGED) {
+	if (!prefschanged) {
 	    // Yeah, first run. Ok, if LOCKPREF true, acquire lock.
-	    if (LOCKPREF) {
+	    if (lockpref) {
 		lock.acquire();
-		HASLOCK = true;
+		haslock = true;
 		if (LOGGING)
 		    wfLog(APP_NAME, "Acquiring Wifi Lock");
 	    }
 	} else {
 	    // ok, this is when prefs have changed, soo..
-	    PREFSCHANGED = false;
-	    if (LOCKPREF && !HASLOCK) {
+	    prefschanged = false;
+	    if (lockpref && !haslock) {
 		// generate new lock
 		lock.acquire();
-		HASLOCK = true;
+		haslock = true;
 		if (LOGGING)
 		    wfLog(APP_NAME, "Acquiring Wifi Lock");
 	    } else {
-		if (HASLOCK && !LOCKPREF) {
+		if (haslock && !lockpref) {
 		    lock.release();
-		    HASLOCK = false;
+		    haslock = false;
 		    if (LOGGING)
 			wfLog(APP_NAME, "Releasing Wifi Lock");
 		}
@@ -414,14 +413,14 @@ public class WifiFixerService extends Service {
 
     void cleanup() {
 
-	if (!CLEANUP) {
+	if (!cleanup) {
 
-	    if (HASLOCK && lock.isHeld())
+	    if (haslock && lock.isHeld())
 		lock.release();
 	    unregisterReceiver(receiver);
 	    hMain.removeMessages(MAIN);
 	    cleanupPosts();
-	    CLEANUP = true;
+	    cleanup = true;
 	}
 	stopSelf();
     }
@@ -446,13 +445,13 @@ public class WifiFixerService extends Service {
 	    if (!isup)
 		switchHostMethod();
 	} else
-	    WIFIREPAIR = 0;
+	    wifirepair = 0;
 
 	return isup;
     }
 
     void checkWifiState() {
-	if (!WIFI_ENABLED && WIFISHOULDBEON) {
+	if (!wifiEnabled && wifishouldbeon) {
 	    hMainWrapper(WIFI_ON);
 	}
     }
@@ -470,15 +469,15 @@ public class WifiFixerService extends Service {
     }
 
     void doWidgetAction() {
-	if (WIFI_ENABLED) {
-	    if (WIDGETPREF) {
+	if (wifiEnabled) {
+	    if (widgetpref) {
 		Toast.makeText(WifiFixerService.this, "Toggling Wifi",
 			Toast.LENGTH_LONG).show();
 		toggleWifi();
 	    } else {
 		Toast.makeText(WifiFixerService.this, "Reassociating",
 			Toast.LENGTH_LONG).show();
-		WIFIREPAIR = 0;
+		wifirepair = 0;
 		wifiRepair();
 	    }
 	} else
@@ -494,7 +493,7 @@ public class WifiFixerService extends Service {
 		    wifiRepair();
 		}
 	    } else {
-		PENDINGSCAN = true;
+		pendingscan = true;
 		tempLock(CONNECTWAIT);
 	    }
 
@@ -553,7 +552,7 @@ public class WifiFixerService extends Service {
     boolean getIsWifiEnabled() {
 	boolean enabled = false;
 
-	if (WIFI_ENABLED) {
+	if (wifiEnabled) {
 	    if (LOGGING)
 		wfLog(APP_NAME, "Wifi is Enabled");
 	    enabled = true;
@@ -569,8 +568,8 @@ public class WifiFixerService extends Service {
 	myWifi = wm.getConnectionInfo();
 	int id = myWifi.getNetworkId();
 	if (!(id == HTTP_NULL)) {
-	    LASTNID = id;
-	    LASTSSID = myWifi.getSSID();
+	    lastnid = id;
+	    lastssid = myWifi.getSSID();
 	}
 	return id;
     }
@@ -581,7 +580,7 @@ public class WifiFixerService extends Service {
 	    // ---get the package info---
 	    PackageInfo pi = pm.getPackageInfo("org.wahtod.wififixer", 0);
 	    // ---display the versioncode--
-	    VERSION = pi.versionCode;
+	    version = pi.versionCode;
 	} catch (NameNotFoundException e) {
 	    /*
 	     * If own package isn't found, something is horribly wrong.
@@ -635,7 +634,7 @@ public class WifiFixerService extends Service {
 	 * This action means network connectivty has changed but, we only want
 	 * to run this code for wifi
 	 */
-	if (!WIFI_ENABLED || !getIsOnWifi())
+	if (!wifiEnabled || !getIsOnWifi())
 	    return;
 
 	icmpCache();
@@ -643,11 +642,11 @@ public class WifiFixerService extends Service {
 
     void handleScreenAction(String iAction) {
 
-	if (SCREENPREF)
+	if (screenpref)
 	    return;
 
 	if (iAction.equals(Intent.ACTION_SCREEN_OFF)) {
-	    SCREENISOFF = true;
+	    screenisoff = true;
 	    if (LOGGING) {
 		wfLog(APP_NAME, "SCREEN_OFF handler");
 		wfLog(LogService.SCREEN_OFF, null);
@@ -657,7 +656,7 @@ public class WifiFixerService extends Service {
 		wfLog(APP_NAME, "SCREEN_ON handler");
 		wfLog(LogService.SCREEN_ON, null);
 	    }
-	    SCREENISOFF = false;
+	    screenisoff = false;
 	}
 
     }
@@ -682,7 +681,7 @@ public class WifiFixerService extends Service {
 		    return;
 		} else {
 		    loadPrefs();
-		    PREFSCHANGED = true;
+		    prefschanged = true;
 		    if (LOGGING)
 			wfLog(APP_NAME, "Normal Startup or reload");
 		}
@@ -712,13 +711,13 @@ public class WifiFixerService extends Service {
 	 * Dispatches appropriate supplicant fix
 	 */
 
-	if (!WIFI_ENABLED || SCREENISOFF)
+	if (!wifiEnabled || screenisoff)
 	    return;
 	else if (sState == SCANNING) {
-	    PENDINGSCAN = true;
+	    pendingscan = true;
 
 	} else if (sState == DISCONNECTED) {
-	    PENDINGSCAN = true;
+	    pendingscan = true;
 	    startScan();
 	    notifyWrap(sState);
 	} else if (sState == INACTIVE) {
@@ -726,29 +725,29 @@ public class WifiFixerService extends Service {
 	    notifyWrap(sState);
 	}
 	
-	if (LOGGING && !SCREENISOFF)
+	if (LOGGING && !screenisoff)
 	    logSupplicant(sState);
     }
 
     private void handleWifiResults() {
 	hMainWrapper(TEMPLOCK_OFF);
-	if (!WIFI_ENABLED)
+	if (!wifiEnabled)
 	    return;
 
-	if (!PENDINGSCAN) {
+	if (!pendingscan) {
 	    if (LOGGING)
 		wfLog(APP_NAME, "No Pending Scan.");
 	    return;
 	}
 
-	if (!PENDINGRECONNECT) {
+	if (!pendingreconnect) {
 
-	    PENDINGSCAN = false;
+	    pendingscan = false;
 	    hMainWrapper(REPAIR);
 	    if (LOGGING)
 		wfLog(APP_NAME, "Scan Results Acquired:Running Repair_Handler");
 	} else {
-	    PENDINGSCAN = false;
+	    pendingscan = false;
 	    hMainWrapper(RECONNECT);
 	    if (LOGGING)
 		wfLog(APP_NAME,
@@ -766,8 +765,8 @@ public class WifiFixerService extends Service {
 	    if (LOGGING)
 		wfLog(APP_NAME, "WIFI_STATE_ENABLED");
 	    hMainWrapper(TEMPLOCK_OFF, LOOPWAIT);
-	    WIFI_ENABLED = true;
-	    WIFISHOULDBEON = false;
+	    wifiEnabled = true;
+	    wifishouldbeon = false;
 	    break;
 	case WifiManager.WIFI_STATE_ENABLING:
 	    if (LOGGING)
@@ -777,17 +776,17 @@ public class WifiFixerService extends Service {
 	    if (LOGGING)
 		wfLog(APP_NAME, "WIFI_STATE_DISABLED");
 	    hMainWrapper(TEMPLOCK_ON);
-	    WIFI_ENABLED = false;
+	    wifiEnabled = false;
 	    break;
 	case WifiManager.WIFI_STATE_DISABLING:
 	    if (LOGGING)
 		wfLog(APP_NAME, "WIFI_STATE_DISABLING");
-	    WIFI_ENABLED = false;
+	    wifiEnabled = false;
 	    break;
 	case WifiManager.WIFI_STATE_UNKNOWN:
 	    if (LOGGING)
 		wfLog(APP_NAME, "WIFI_STATE_UNKNOWN");
-	    WIFI_ENABLED = false;
+	    wifiEnabled = false;
 	    break;
 	}
     }
@@ -808,7 +807,7 @@ public class WifiFixerService extends Service {
     }
 
     boolean hMainCheck(int hmain) {
-	if (TEMPLOCK) {
+	if (templock) {
 	    // prevent running posts during lock
 	    if (hmain == RECONNECT || hmain == REPAIR || hmain == WIFITASK)
 		return false;
@@ -837,7 +836,7 @@ public class WifiFixerService extends Service {
 
     boolean hostup() {
 
-	if (HTTPPREF)
+	if (httppref)
 	    return httpHostup();
 	else
 	    return icmpHostup();
@@ -903,8 +902,8 @@ public class WifiFixerService extends Service {
 			wfLog(APP_NAME, "Found SSID:" + sResult.SSID);
 			wfLog(APP_NAME, "Capabilities:" + sResult.capabilities);
 		    }
-		    LASTNID = (i2);
-		    LASTSSID = sResult.SSID;
+		    lastnid = (i2);
+		    lastssid = sResult.SSID;
 		    state = true;
 		    return state;
 		}
@@ -915,11 +914,11 @@ public class WifiFixerService extends Service {
 
     void loadPrefs() {
 	settings = PreferenceManager.getDefaultSharedPreferences(this);
-	LOCKPREF = settings.getBoolean(WIFILOCK_KEY, false);
-	NOTIFPREF = settings.getBoolean(NOTIF_KEY, false);
-	RUNPREF = settings.getBoolean(DISABLE_KEY, false);
-	SCREENPREF = settings.getBoolean(SCREEN_KEY, false);
-	WIDGETPREF = settings.getBoolean(WIDGET_KEY, false);
+	lockpref = settings.getBoolean(WIFILOCK_KEY, false);
+	notifpref = settings.getBoolean(NOTIF_KEY, false);
+	runpref = settings.getBoolean(DISABLE_KEY, false);
+	screenpref = settings.getBoolean(SCREEN_KEY, false);
+	widgetpref = settings.getBoolean(WIDGET_KEY, false);
 	String PERFORMANCE = settings.getString(PERFORMANCE_KEY, "0");
 	// Kill the Log Service if it's up
 	if (LOGGING && !settings.getBoolean(LOG_KEY, false))
@@ -927,36 +926,36 @@ public class WifiFixerService extends Service {
 	LOGGING = settings.getBoolean(LOG_KEY, false);
 	// Check RUNPREF and set SHOULDRUN
 	// Make sure Main loop restarts if this is a change
-	if (RUNPREF) {
+	if (runpref) {
 	    ServiceAlarm.unsetAlarm(this);
-	    SHOULDRUN = false;
+	    shouldrun = false;
 	} else {
-	    if (!SHOULDRUN) {
-		SHOULDRUN = true;
+	    if (!shouldrun) {
+		shouldrun = true;
 	    }
 	    ServiceAlarm.setAlarm(this, true);
 	}
 	// Setting defaults if performance not set
-	if (PERFORMANCE == "0" && !LOCKPREF) {
+	if (PERFORMANCE == "0" && !lockpref) {
 	    SharedPreferences.Editor edit = settings.edit();
 	    edit.putString(PERFORMANCE_KEY, "2");
 	    edit.putBoolean(WIFILOCK_KEY, true);
 	    edit.commit();
-	    LOCKPREF = true;
+	    lockpref = true;
 	}
 
 	if (LOGGING) {
 	    wfLog(APP_NAME, "Loading Settings");
-	    if (LOCKPREF)
+	    if (lockpref)
 		wfLog(APP_NAME, "LOCKPREF");
 
-	    if (NOTIFPREF)
+	    if (notifpref)
 		wfLog(APP_NAME, "NOTIFPREF");
 
-	    if (RUNPREF)
+	    if (runpref)
 		wfLog(APP_NAME, "RUNPREF");
 
-	    if (SCREENPREF)
+	    if (screenpref)
 		wfLog(APP_NAME, "SCREENPREF");
 
 	}
@@ -985,12 +984,12 @@ public class WifiFixerService extends Service {
 	    wfLog(APP_NAME, "Supplicant Nonresponsive");
 
 	}
-	wfLog(APP_NAME, "SSID:" + LASTSSID);
+	wfLog(APP_NAME, "SSID:" + lastssid);
 
     }
 
     void notifyWrap(String message) {
-	if (NOTIFPREF) {
+	if (notifpref) {
 	    showNotification("Wifi Connection Problem:" + message, message,
 		    false);
 	}
@@ -1008,11 +1007,11 @@ public class WifiFixerService extends Service {
     public void onCreate() {
 
 	wm = getWifiManager();
-	WIFI_ENABLED = wm.isWifiEnabled();
+	wifiEnabled = wm.isWifiEnabled();
 	getPackageInfo();
 
 	if (LOGGING) {
-	    wfLog(APP_NAME, "WifiFixerService Build:" + VERSION);
+	    wfLog(APP_NAME, "WifiFixerService Build:" + version);
 	}
 	loadPrefs();
 
@@ -1119,15 +1118,15 @@ public class WifiFixerService extends Service {
     }
 
     void switchHostMethod() {
-	if (HTTPPREF)
-	    HTTPPREF = false;
+	if (httppref)
+	    httppref = false;
 	else
-	    HTTPPREF = true;
+	    httppref = true;
     }
 
     void supplicantFix(boolean wftoggle) {
 	// Toggling wifi fixes the supplicant
-	PENDINGSCAN = true;
+	pendingscan = true;
 	if (wftoggle)
 	    toggleWifi();
 	startScan();
@@ -1143,10 +1142,10 @@ public class WifiFixerService extends Service {
     }
 
     void toggleWifi() {
-	if (PENDINGWIFITOGGLE)
+	if (pendingwifitoggle)
 	    return;
 
-	PENDINGWIFITOGGLE = true;
+	pendingwifitoggle = true;
 	cleanupPosts();
 	tempLock(CONNECTWAIT);
 	// Wake lock
@@ -1162,10 +1161,10 @@ public class WifiFixerService extends Service {
 	    wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
 		    "WFWakeLock");
 	    wakelock.acquire();
-	    HASWAKELOCK = true;
+	    haswakelock = true;
 	} else {
 	    wakelock.release();
-	    HASWAKELOCK = false;
+	    haswakelock = false;
 	}
 
     }
