@@ -100,7 +100,7 @@ public class WifiFixerService extends Service {
 
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
-    private static URI HEAD_URI;
+    private static URI headURI;
 
     // Logging Intent
     private static final String LOGINTENT = "org.wahtod.wififixer.LogService.LOG";
@@ -514,8 +514,8 @@ public class WifiFixerService extends Service {
 
 	if (httpclient == null) {
 	    httpclient = new DefaultHttpClient();
-	    HEAD_URI = new URI(H_TARGET);
-	    head = new HttpHead(HEAD_URI);
+	    headURI = new URI(H_TARGET);
+	    head = new HttpHead(headURI);
 	    httpparams = new BasicHttpParams();
 	    HttpConnectionParams.setConnectionTimeout(httpparams, HTTPREACH);
 	    HttpConnectionParams.setSoTimeout(httpparams, HTTPREACH);
