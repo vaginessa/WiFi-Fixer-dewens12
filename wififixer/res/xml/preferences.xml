@@ -61,6 +61,11 @@
                 android:title="Widget Behavior"
                 android:summary="Checked is Toggle Wifi, unchecked is Reassociate"/>
                 
+               	<CheckBoxPreference
+                android:key="SUPFIX"
+                android:title="Disable Supplicant Fixes"
+                android:summary="Check if having trouble, or on Android 1.5 or 1.6"/>
+                
 	        
 	       </PreferenceCategory>
 	        
