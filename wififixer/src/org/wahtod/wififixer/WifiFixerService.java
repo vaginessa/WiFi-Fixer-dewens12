@@ -100,7 +100,7 @@ public class WifiFixerService extends Service {
     private static final String SCANNING = "SCANNING";
     private static final String DISCONNECTED = "DISCONNECTED";
     private static final String INACTIVE = "INACTIVE";
-    private static final String ASSOCIATED = "ASSOCIATED";
+    private static final String COMPLETED = "COMPLETED";
 
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
@@ -375,6 +375,9 @@ public class WifiFixerService extends Service {
 		handleSupplicantIntent(intent);
 	    else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
 		handleWifiResults();
+	    else if (iAction
+		    .equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
+		handleNetworkAction(intent);
 
 	}
 
@@ -627,6 +630,17 @@ public class WifiFixerService extends Service {
 	}
     }
 
+    private void handleNetworkAction(Intent intent) {
+	/*
+	 * This action means network connectivty has changed
+	 * but, we only want to run this code for wifi
+	 */
+	if(!WIFI_ENABLED || !getIsOnWifi())
+	    return;
+	
+	icmpCache();
+    }
+
     void handleScreenAction(String iAction) {
 
 	if (SCREENPREF)
@@ -695,16 +709,12 @@ public class WifiFixerService extends Service {
 
 	if (LOGGING && !SCREENISOFF)
 	    logSupplicant(sState);
-
-	if (sState == ASSOCIATED) {
-	    icmpCache();
-	}
 	/*
-	 * Moved the version check here 
-	 * so that the supplicant CONNECT
-	 * code runs in all cases
+	 * Moved the version check here so that the ip cache code runs in all
+	 * cases
 	 */
-	else if (!WIFI_ENABLED || SCREENISOFF
+
+	if (!WIFI_ENABLED || SCREENISOFF
 		|| ANDROID >= Build.VERSION_CODES.ECLAIR)
 	    return;
 	else if (sState == SCANNING) {
@@ -847,12 +857,14 @@ public class WifiFixerService extends Service {
 		isUp = true;
 	    }
 	} catch (UnknownHostException e) {
-	    // hurf
+	    if (LOGGING)
+		wfLog(APP_NAME, "UnknownHostException");
 	} catch (IOException e) {
-	    // burf
+	    if (LOGGING)
+		wfLog(APP_NAME, "IOException");
 	}
 	if (LOGGING)
-	    wfLog(APP_NAME, "ICMP Method");
+	    wfLog(APP_NAME, "ICMP Method:" + cachedIP);
 	return isUp;
     }
 
@@ -1048,6 +1060,9 @@ public class WifiFixerService extends Service {
 
 	// Supplicant State filter
 	myFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+
+	// Network State filter
+	myFilter.addAction(android.net.ConnectivityManager.CONNECTIVITY_ACTION);
 
 	// wifi scan results available callback
 	myFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
