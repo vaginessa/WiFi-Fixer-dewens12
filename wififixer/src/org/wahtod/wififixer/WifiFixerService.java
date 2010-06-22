@@ -110,8 +110,8 @@ public class WifiFixerService extends Service {
     // For wifi state
     public static boolean wifiEnabled = false;
     // ms for IsReachable
-    final static int REACHABLE = 2500;
-    final static int HTTPREACH = 3000;
+    final static int REACHABLE = 3000;
+    final static int HTTPREACH = 6000;
     // ms for main loop sleep
     final static int LOOPWAIT = 10000;
     // ms for lock delays
