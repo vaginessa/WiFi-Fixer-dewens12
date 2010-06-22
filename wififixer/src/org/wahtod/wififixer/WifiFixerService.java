@@ -113,7 +113,9 @@ public class WifiFixerService extends Service {
     final static int REACHABLE = 2500;
     final static int HTTPREACH = 3000;
     // ms for main loop sleep
-    final static int LOOPWAIT = 5000;
+    final static int LOOPWAIT = 10000;
+    // ms for lock delays
+    final static int LOCKWAIT = 5000;
     // ms to wait after trying to connect
     private static final int CONNECTWAIT = 10000;
 
@@ -768,7 +770,7 @@ public class WifiFixerService extends Service {
 	case WifiManager.WIFI_STATE_ENABLED:
 	    if (logging)
 		wfLog(APP_NAME, "WIFI_STATE_ENABLED");
-	    hMainWrapper(TEMPLOCK_OFF, LOOPWAIT);
+	    hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
 	    wifiEnabled = true;
 	    wifishouldbeon = false;
 	    break;
@@ -1137,7 +1139,7 @@ public class WifiFixerService extends Service {
     void startScan() {
 	// We want a lock after a scan
 	wm.startScan();
-	tempLock(LOOPWAIT);
+	tempLock(LOCKWAIT);
     }
 
     void switchHostMethod() {
@@ -1175,7 +1177,7 @@ public class WifiFixerService extends Service {
 	wakeLock(true);
 	showNotification("Toggling Wifi", "Toggling Wifi", NOTIFID);
 	hMainWrapper(WIFI_OFF);
-	hMainWrapper(WIFI_ON, LOOPWAIT);
+	hMainWrapper(WIFI_ON, LOCKWAIT);
     }
 
     void wakeLock(boolean state) {
