@@ -958,7 +958,12 @@ public class WifiFixerService extends Service {
 	if (!settings.getBoolean(SUPFIX_DEFAULT, false)) {
 	    SharedPreferences.Editor edit = settings.edit();
 	    edit.putBoolean(SUPFIX_DEFAULT, true);
-	    float ver = Float.valueOf(Build.VERSION.RELEASE);
+	    int ver;
+	    try {
+		ver = Integer.valueOf(Build.VERSION.RELEASE.substring(0, 1));
+	    } catch (NumberFormatException e) {
+		ver = 0;
+	    }
 	    if (logging)
 		wfLog(APP_NAME, "Version:" + ver);
 	    if (ver < 2) {
@@ -982,9 +987,9 @@ public class WifiFixerService extends Service {
 
 	    if (screenpref)
 		wfLog(APP_NAME, "SCREENPREF");
-	    
+
 	    if (supfix)
-		wfLog(APP_NAME,	"SUPPREF");
+		wfLog(APP_NAME, "SUPPREF");
 
 	}
 
