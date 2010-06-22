@@ -950,22 +950,21 @@ public class WifiFixerService extends Service {
 	}
 
 	/*
-	 * Sets default for Supplicant Fix pref
-	 * on < 2.0 to true
+	 * Sets default for Supplicant Fix pref on < 2.0 to true
 	 */
 
 	if (!settings.getBoolean(SUPFIX_DEFAULT, false)) {
 	    SharedPreferences.Editor edit = settings.edit();
 	    edit.putBoolean(SUPFIX_DEFAULT, true);
 	    float ver = Float.valueOf(Build.VERSION.RELEASE);
-	    if(logging)
-		wfLog(APP_NAME,"Version:"+ver);
-	    if(ver<2) {
-		edit.putBoolean(SUPPFIX_KEY,true);
+	    if (logging)
+		wfLog(APP_NAME, "Version:" + ver);
+	    if (ver < 2) {
+		edit.putBoolean(SUPPFIX_KEY, true);
 	    }
-	    
+
 	    edit.commit();
-	    
+
 	}
 
 	if (logging) {
@@ -981,6 +980,9 @@ public class WifiFixerService extends Service {
 
 	    if (screenpref)
 		wfLog(APP_NAME, "SCREENPREF");
+	    
+	    if (supfix)
+		wfLog(APP_NAME,	"SUPPREF");
 
 	}
 
