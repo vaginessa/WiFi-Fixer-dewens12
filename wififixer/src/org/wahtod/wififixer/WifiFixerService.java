@@ -51,6 +51,7 @@ import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -89,6 +90,7 @@ public class WifiFixerService extends Service {
     private static final String PERFORMANCE_KEY = "Performance";
     private static final String LOG_KEY = "SLOG";
     private static final String SUPPFIX_KEY = "SUPFIX";
+    private static final String SUPFIX_DEFAULT = "SPF_DEF";
 
     // ID For notification
     private static final int NOTIFID = 31337;
@@ -694,7 +696,7 @@ public class WifiFixerService extends Service {
 
     private void handleSupplicantIntent(Intent intent) {
 	/*
-	 *  New setting disabling supplicant fixes
+	 * New setting disabling supplicant fixes
 	 */
 	if (supfix)
 	    return;
@@ -921,7 +923,7 @@ public class WifiFixerService extends Service {
 	runpref = settings.getBoolean(DISABLE_KEY, false);
 	screenpref = settings.getBoolean(SCREEN_KEY, false);
 	widgetpref = settings.getBoolean(WIDGET_KEY, false);
-	supfix = settings.getBoolean(SUPPFIX_KEY, true);
+	supfix = settings.getBoolean(SUPPFIX_KEY, false);
 	String PERFORMANCE = settings.getString(PERFORMANCE_KEY, "0");
 	// Kill the Log Service if it's up
 	if (logging && !settings.getBoolean(LOG_KEY, false))
@@ -945,6 +947,25 @@ public class WifiFixerService extends Service {
 	    edit.putBoolean(WIFILOCK_KEY, true);
 	    edit.commit();
 	    lockpref = true;
+	}
+
+	/*
+	 * Sets default for Supplicant Fix pref
+	 * on < 2.0 to true
+	 */
+
+	if (!settings.getBoolean(SUPFIX_DEFAULT, false)) {
+	    SharedPreferences.Editor edit = settings.edit();
+	    edit.putBoolean(SUPFIX_DEFAULT, true);
+	    float ver = Float.valueOf(Build.VERSION.RELEASE);
+	    if(logging)
+		wfLog(APP_NAME,"Version:"+ver);
+	    if(ver<2) {
+		edit.putBoolean(SUPPFIX_KEY,true);
+	    }
+	    
+	    edit.commit();
+	    
 	}
 
 	if (logging) {
