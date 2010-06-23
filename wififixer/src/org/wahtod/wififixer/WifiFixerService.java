@@ -89,8 +89,8 @@ public class WifiFixerService extends Service {
     private static final String WIDGET_KEY = "WidgetBehavior";
     private static final String PERFORMANCE_KEY = "Performance";
     private static final String LOG_KEY = "SLOG";
-    private static final String SUPPFIX_KEY = "SUPFIX";
-    private static final String SUPFIX_DEFAULT = "SPF_DEF";
+    private static final String SUPFIX_KEY = "SUPFIX";
+    private static final String SUPFIX_DEFAULT = "SPFDEF";
 
     // ID For notification
     private static final int NOTIFID = 31337;
@@ -111,7 +111,7 @@ public class WifiFixerService extends Service {
     public static boolean wifiEnabled = false;
     // ms for IsReachable
     final static int REACHABLE = 3000;
-    final static int HTTPREACH = 6000;
+    final static int HTTPREACH = 8000;
     // ms for main loop sleep
     final static int LOOPWAIT = 10000;
     // ms for lock delays
@@ -890,9 +890,10 @@ public class WifiFixerService extends Service {
     boolean isKnownAPinRange() {
 	boolean state = false;
 	wifiList = wm.getScanResults();
-	// Bet you're wondering why this is here, aren't you?
-	// Because sometimes, rarely, this can run after wifi was disabled
-	// Which could mean the scan results are null
+	/*
+	 * Catch null if scan results fires after wifi disabled or while wifi is
+	 * in intermediate state
+	 */
 	if (wifiList == null) {
 	    if (logging)
 		wfLog(APP_NAME, "Null Scan Results");
@@ -925,7 +926,7 @@ public class WifiFixerService extends Service {
 	runpref = settings.getBoolean(DISABLE_KEY, false);
 	screenpref = settings.getBoolean(SCREEN_KEY, false);
 	widgetpref = settings.getBoolean(WIDGET_KEY, false);
-	supfix = settings.getBoolean(SUPPFIX_KEY, false);
+	supfix = settings.getBoolean(SUPFIX_KEY, false);
 	String PERFORMANCE = settings.getString(PERFORMANCE_KEY, "0");
 	// Kill the Log Service if it's up
 	if (logging && !settings.getBoolean(LOG_KEY, false))
@@ -967,7 +968,7 @@ public class WifiFixerService extends Service {
 	    if (logging)
 		wfLog(APP_NAME, "Version:" + ver);
 	    if (ver < 2) {
-		edit.putBoolean(SUPPFIX_KEY, true);
+		edit.putBoolean(SUPFIX_KEY, true);
 	    }
 
 	    edit.commit();
@@ -993,19 +994,6 @@ public class WifiFixerService extends Service {
 
 	}
 
-	/*
-	 * // Here we go, checking for Wifi network notification // Notify user
-	 * if this setting is true try { int iNotif =
-	 * android.provider.Settings.Secure .getInt( getContentResolver(),
-	 * android
-	 * .provider.Settings.Secure.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON);
-	 * if (iNotif == 1) {
-	 * showNotification("Please disable Wifi Network Notification.",
-	 * "Attention!", true); }
-	 * 
-	 * } catch (SettingNotFoundException e) { // bweep if(LOGGING)
-	 * wfLog(APP_NAME,"Whoops! Obeselete!"); }
-	 */
     }
 
     void logSupplicant(String state) {

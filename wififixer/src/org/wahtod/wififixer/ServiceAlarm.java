@@ -8,7 +8,7 @@ import android.os.SystemClock;
 
 public final class ServiceAlarm extends Object {
     public static final long PERIOD = 300000;
-    public static final long STARTDELAY = 60000;
+    public static final long STARTDELAY = 120000;
     private static final long NODELAY = 0;
 
     public static void setAlarm(Context c, boolean initialdelay) {
