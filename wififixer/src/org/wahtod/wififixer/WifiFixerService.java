@@ -62,10 +62,12 @@ import android.widget.Toast;
 
 public class WifiFixerService extends Service {
 
+    /*
+     * Hey, if you're poking into this, and have the brains to figure out my
+     * code, you can afford to donate. I don't need a fancy auth scheme.
+     */
+
     // Constants
-    // Hey, if you're poking into this, and have the brains to figure out my
-    // code,
-    // you can afford to donate. I don't need a fancy auth scheme.
     public static final String FIXWIFI = "FIXWIFI";
     public static final String AUTHSTRING = "31415927";
     // http://www.jerkcity.com
@@ -107,8 +109,6 @@ public class WifiFixerService extends Service {
     // Logging Intent
     private static final String LOGINTENT = "org.wahtod.wififixer.LogService.LOG";
 
-    // For wifi state
-    public static boolean wifiEnabled = false;
     // ms for IsReachable
     final static int REACHABLE = 3000;
     final static int HTTPREACH = 8000;
@@ -217,7 +217,7 @@ public class WifiFixerService extends Service {
 
     Runnable rRepair = new Runnable() {
 	public void run() {
-	    if (!wifiEnabled) {
+	    if (!getIsWifiEnabled()) {
 		hMainWrapper(TEMPLOCK_OFF);
 		return;
 	    }
@@ -244,7 +244,7 @@ public class WifiFixerService extends Service {
 
     Runnable rReconnect = new Runnable() {
 	public void run() {
-	    if (!wifiEnabled) {
+	    if (!getIsWifiEnabled()) {
 		hMainWrapper(TEMPLOCK_OFF);
 		return;
 	    }
@@ -270,11 +270,11 @@ public class WifiFixerService extends Service {
 	    // Queue next run of main runnable
 	    hMainWrapper(MAIN, LOOPWAIT);
 	    // Watchdog
-	    if (!wifiEnabled)
+	    if (!getIsWifiEnabled())
 		checkWifiState();
 
 	    // Check Supplicant
-	    if (!wm.pingSupplicant() && wifiEnabled) {
+	    if (!wm.pingSupplicant() && getIsWifiEnabled()) {
 		if (logging)
 		    wfLog(APP_NAME, "Supplicant Nonresponsive, toggling wifi");
 		toggleWifi();
@@ -454,7 +454,7 @@ public class WifiFixerService extends Service {
     }
 
     void checkWifiState() {
-	if (!wifiEnabled && wifishouldbeon) {
+	if (!getIsWifiEnabled() && wifishouldbeon) {
 	    hMainWrapper(WIFI_ON);
 	}
     }
@@ -472,7 +472,7 @@ public class WifiFixerService extends Service {
     }
 
     void doWidgetAction() {
-	if (wifiEnabled) {
+	if (getIsWifiEnabled()) {
 	    if (widgetpref) {
 		Toast.makeText(WifiFixerService.this, "Toggling Wifi",
 			Toast.LENGTH_LONG).show();
@@ -555,7 +555,7 @@ public class WifiFixerService extends Service {
     boolean getIsWifiEnabled() {
 	boolean enabled = false;
 
-	if (wifiEnabled) {
+	if (wm.isWifiEnabled()) {
 	    if (logging)
 		wfLog(APP_NAME, "Wifi is Enabled");
 	    enabled = true;
@@ -637,7 +637,7 @@ public class WifiFixerService extends Service {
 	 * This action means network connectivty has changed but, we only want
 	 * to run this code for wifi
 	 */
-	if (!wifiEnabled || !getIsOnWifi())
+	if (!getIsWifiEnabled() || !getIsOnWifi())
 	    return;
 
 	icmpCache();
@@ -717,7 +717,7 @@ public class WifiFixerService extends Service {
 	 * Dispatches appropriate supplicant fix
 	 */
 
-	if (!wifiEnabled || screenisoff)
+	if (!getIsWifiEnabled() || screenisoff)
 	    return;
 	else if (sState == SCANNING) {
 	    pendingscan = true;
@@ -737,7 +737,7 @@ public class WifiFixerService extends Service {
 
     private void handleWifiResults() {
 	hMainWrapper(TEMPLOCK_OFF);
-	if (!wifiEnabled)
+	if (!getIsWifiEnabled())
 	    return;
 
 	if (!pendingscan) {
@@ -771,7 +771,6 @@ public class WifiFixerService extends Service {
 	    if (logging)
 		wfLog(APP_NAME, "WIFI_STATE_ENABLED");
 	    hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
-	    wifiEnabled = true;
 	    wifishouldbeon = false;
 	    break;
 	case WifiManager.WIFI_STATE_ENABLING:
@@ -782,17 +781,14 @@ public class WifiFixerService extends Service {
 	    if (logging)
 		wfLog(APP_NAME, "WIFI_STATE_DISABLED");
 	    hMainWrapper(TEMPLOCK_ON);
-	    wifiEnabled = false;
 	    break;
 	case WifiManager.WIFI_STATE_DISABLING:
 	    if (logging)
 		wfLog(APP_NAME, "WIFI_STATE_DISABLING");
-	    wifiEnabled = false;
 	    break;
 	case WifiManager.WIFI_STATE_UNKNOWN:
 	    if (logging)
 		wfLog(APP_NAME, "WIFI_STATE_UNKNOWN");
-	    wifiEnabled = false;
 	    break;
 	}
     }
@@ -1028,7 +1024,6 @@ public class WifiFixerService extends Service {
     public void onCreate() {
 
 	wm = getWifiManager();
-	wifiEnabled = wm.isWifiEnabled();
 	getPackageInfo();
 
 	if (logging) {
