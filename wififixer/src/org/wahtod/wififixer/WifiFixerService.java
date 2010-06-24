@@ -731,7 +731,7 @@ public class WifiFixerService extends Service {
 	 * Dispatches appropriate supplicant fix
 	 */
 
-	if (!getIsWifiEnabled() || screenisoff)
+	if (!getIsWifiEnabled())
 	    return;
 	else if (sState == SCANNING) {
 	    pendingscan = true;
