@@ -489,7 +489,7 @@ public class WifiFixerService extends Service {
     }
 
     void fixWifi() {
-	if (getIsWifiEnabled()) {
+	if (getIsWifiEnabled(true)) {
 	    if (getSupplicantState() == SupplicantState.ASSOCIATED
 		    || getSupplicantState() == SupplicantState.COMPLETED) {
 		if (!checkNetwork()) {
@@ -553,6 +553,20 @@ public class WifiFixerService extends Service {
     }
 
     boolean getIsWifiEnabled() {
+	boolean enabled = false;
+
+	if (wm.isWifiEnabled()) {
+	    enabled = true;
+	} else {
+	   /*
+	    * it's false
+	    */
+	}
+
+	return enabled;
+    }
+    
+    boolean getIsWifiEnabled(boolean log) {
 	boolean enabled = false;
 
 	if (wm.isWifiEnabled()) {
