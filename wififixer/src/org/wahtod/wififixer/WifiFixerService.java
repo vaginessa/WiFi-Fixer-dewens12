@@ -96,6 +96,9 @@ public class WifiFixerService extends Service {
     // ID For notification
     private static final int NOTIFID = 31337;
 
+    // Wifi Lock tag
+    private static final String WFLOCK_TAG = "WFLock";
+
     // Supplicant Constants
     private static final String SCANNING = "SCANNING";
     private static final String DISCONNECTED = "DISCONNECTED";
@@ -829,7 +832,7 @@ public class WifiFixerService extends Service {
 
     boolean hMainCheck(int hmain) {
 	/*
-	 * Deprecated.  We'll get to this. 
+	 * Deprecated. We'll get to this.
 	 */
 	return true;
     }
@@ -1116,7 +1119,7 @@ public class WifiFixerService extends Service {
 
     void setup() {
 	// WIFI_MODE_FULL should p. much always be used
-	lock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, "WFLock");
+	lock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, WFLOCK_TAG);
 	checkLock(lock);
 	IntentFilter myFilter = new IntentFilter();
 
@@ -1128,7 +1131,6 @@ public class WifiFixerService extends Service {
 	myFilter.addAction(Intent.ACTION_SCREEN_ON);
 
 	// Supplicant State filter
-
 	myFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
 
 	// Network State filter
