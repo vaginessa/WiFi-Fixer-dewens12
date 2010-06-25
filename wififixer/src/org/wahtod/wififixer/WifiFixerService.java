@@ -622,6 +622,13 @@ public class WifiFixerService extends Service {
 	return myWifi.getSupplicantState();
     }
 
+    List<WifiConfiguration> getWifiConfigurations() {
+
+	List<WifiConfiguration> conflist = wm.getConfiguredNetworks();
+
+	return conflist;
+    }
+
     WifiManager getWifiManager() {
 	return (WifiManager) getSystemService(Context.WIFI_SERVICE);
     }
@@ -898,7 +905,7 @@ public class WifiFixerService extends Service {
     boolean isKnownAPinRange() {
 	boolean state = false;
 	wifiList = wm.getScanResults();
-	if(logging)
+	if (logging)
 	    wfLog(APP_NAME, wifiList.toString());
 	/*
 	 * Catch null if scan results fires after wifi disabled or while wifi is
@@ -912,8 +919,8 @@ public class WifiFixerService extends Service {
 	/*
 	 * wifiConfigs is just a reference to known networks.
 	 */
-	wifiConfigs = wm.getConfiguredNetworks();
-	if(logging)
+	wifiConfigs = getWifiConfigurations();
+	if (logging)
 	    wfLog(APP_NAME, wifiConfigs.toString());
 
 	/*
