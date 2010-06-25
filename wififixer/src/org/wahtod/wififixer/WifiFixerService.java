@@ -828,11 +828,9 @@ public class WifiFixerService extends Service {
     }
 
     boolean hMainCheck(int hmain) {
-	if (templock) {
-	    // prevent running posts during lock
-	    if (hmain == RECONNECT || hmain == REPAIR || hmain == WIFITASK)
-		return false;
-	}
+	/*
+	 * Deprecated.  We'll get to this. 
+	 */
 	return true;
     }
 
@@ -905,8 +903,6 @@ public class WifiFixerService extends Service {
     boolean isKnownAPinRange() {
 	boolean state = false;
 	wifiList = wm.getScanResults();
-	if (logging)
-	    wfLog(APP_NAME, wifiList.toString());
 	/*
 	 * Catch null if scan results fires after wifi disabled or while wifi is
 	 * in intermediate state
@@ -920,8 +916,6 @@ public class WifiFixerService extends Service {
 	 * wifiConfigs is just a reference to known networks.
 	 */
 	wifiConfigs = getWifiConfigurations();
-	if (logging)
-	    wfLog(APP_NAME, wifiConfigs.toString());
 
 	/*
 	 * Iterate the known networks over the scan results, adding found known
@@ -939,6 +933,9 @@ public class WifiFixerService extends Service {
 	    sResult = wifiList.get(i);
 	    for (int i2 = 0; i2 < wifiConfigs.size(); i2++) {
 		wfResult = wifiConfigs.get(i2);
+		/*
+		 * Using .contains to find sResult.SSID in doublequoted string
+		 */
 		if (wfResult.SSID.contains(sResult.SSID)) {
 		    if (logging) {
 			wfLog(APP_NAME, "Found SSID:" + sResult.SSID);
