@@ -558,14 +558,14 @@ public class WifiFixerService extends Service {
 	if (wm.isWifiEnabled()) {
 	    enabled = true;
 	} else {
-	   /*
-	    * it's false
-	    */
+	    /*
+	     * it's false
+	     */
 	}
 
 	return enabled;
     }
-    
+
     boolean getIsWifiEnabled(boolean log) {
 	boolean enabled = false;
 
@@ -731,7 +731,7 @@ public class WifiFixerService extends Service {
 	 * Dispatches appropriate supplicant fix
 	 */
 
-	if (!getIsWifiEnabled())
+	if (!getIsWifiEnabled() || screenisoff)
 	    return;
 	else if (sState == SCANNING) {
 	    pendingscan = true;
