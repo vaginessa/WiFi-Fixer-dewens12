@@ -149,7 +149,7 @@ public class WifiFixerService extends Service {
     private static final int HTTP_NULL = -1;
     public int lastnid = HTTP_NULL;
     private String cachedIP;
-    private final String EMPTYSTRING="";
+    private final String EMPTYSTRING = "";
 
     // flags
     public boolean pendingscan = false;
@@ -689,32 +689,32 @@ public class WifiFixerService extends Service {
 
     void handleStart(Intent intent) {
 
-	// Handle NPE
+	/*
+	 * Handle null intent first might be from widget or from Android
+	 */
+	if (intent.getAction() == null) {
 
-	try {
 	    if (intent.hasExtra(FIXWIFI)) {
 		if (intent.getBooleanExtra(FIXWIFI, false)) {
 		    doWidgetAction();
 		}
 		if (logging)
 		    wfLog(APP_NAME, "Called by Widget");
-	    } else {
-
-		String iAction = intent.getAction();
-		// Looking for auth intent
-		if (iAction.contains(AUTH)) {
-		    handleAuth(intent);
-		    return;
-		} else {
-		    loadPrefs();
-		    prefschanged = true;
-		    if (logging)
-			wfLog(APP_NAME, "Normal Startup or reload");
-		}
-	    }
-	} catch (NullPointerException e) {
-	    if (logging)
+	    } else if (logging)
 		wfLog(APP_NAME, "Tickled");
+	    return;
+	}
+
+	String iAction = intent.getAction();
+	// Looking for auth intent
+	if (iAction.contains(AUTH)) {
+	    handleAuth(intent);
+	    return;
+	} else {
+	    loadPrefs();
+	    prefschanged = true;
+	    if (logging)
+		wfLog(APP_NAME, "Normal Startup or reload");
 	}
 
     }
@@ -816,17 +816,38 @@ public class WifiFixerService extends Service {
 	}
     }
 
-    // Why do we do this? Because race can occur
-    // in the queue.
+    /*
+     * Controlling all possible sources of race
+     */
     void hMainWrapper(int hmain) {
-	hMain.removeMessages(hmain);
-	hMain.sendEmptyMessage(hmain);
+	if (hMainCheck(hmain)) {
+	    hMain.removeMessages(hmain);
+	    hMain.sendEmptyMessage(hmain);
+	} else {
+	    hMain.removeMessages(hmain);
+	    hMain.sendEmptyMessageDelayed(hmain, REACHABLE);
+	}
     }
 
-    // whee overloading methods, <3 java
     void hMainWrapper(int hmain, long delay) {
-	hMain.removeMessages(hmain);
-	hMain.sendEmptyMessageDelayed(hmain, delay);
+	if (hMainCheck(hmain)) {
+	    hMain.removeMessages(hmain);
+	    hMain.sendEmptyMessageDelayed(hmain, delay);
+	} else {
+	    hMain.removeMessages(hmain);
+	    hMain.sendEmptyMessageDelayed(hmain, delay + REACHABLE);
+	}
+    }
+
+    boolean hMainCheck(int hmain) {
+	if (templock) {
+	    /*
+	     * Check if is appropriate post and if lock exists
+	     */
+	    if (hmain == RECONNECT || hmain == REPAIR || hmain == WIFITASK)
+		return false;
+	}
+	return true;
     }
 
     boolean httpHostup() {
