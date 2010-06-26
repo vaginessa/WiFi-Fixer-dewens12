@@ -959,7 +959,10 @@ public class WifiFixerService extends Service {
 	}
 
 	/*
-	 * Here's where we sort by signal returning best found known network
+	 * Set lastnid and lastssid to known network
+	 * with highest level from scanresults
+	 * 
+	 * if !state nothing was found
 	 */
 	if (state) {
 	    lastnid = best_id;
