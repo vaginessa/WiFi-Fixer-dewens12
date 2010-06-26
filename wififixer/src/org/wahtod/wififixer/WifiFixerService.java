@@ -149,6 +149,7 @@ public class WifiFixerService extends Service {
     private static final int HTTP_NULL = -1;
     public int lastnid = HTTP_NULL;
     private String cachedIP;
+    private final String EMPTYSTRING="";
 
     // flags
     public boolean pendingscan = false;
@@ -160,8 +161,8 @@ public class WifiFixerService extends Service {
     // http://bash.org/?924453
 
     // misc types
-    public String lastssid = " ";
-    public int version = 0;
+    public String lastssid = EMPTYSTRING;
+    public int version = MAIN;
     // Public Utilities
     public WifiManager wm;
     public WifiInfo myWifi;
@@ -819,22 +820,13 @@ public class WifiFixerService extends Service {
     // in the queue.
     void hMainWrapper(int hmain) {
 	hMain.removeMessages(hmain);
-	if (hMainCheck(hmain))
-	    hMain.sendEmptyMessage(hmain);
+	hMain.sendEmptyMessage(hmain);
     }
 
     // whee overloading methods, <3 java
     void hMainWrapper(int hmain, long delay) {
 	hMain.removeMessages(hmain);
-	if (hMainCheck(hmain))
-	    hMain.sendEmptyMessageDelayed(hmain, delay);
-    }
-
-    boolean hMainCheck(int hmain) {
-	/*
-	 * Deprecated. We'll get to this.
-	 */
-	return true;
+	hMain.sendEmptyMessageDelayed(hmain, delay);
     }
 
     boolean httpHostup() {
@@ -959,8 +951,8 @@ public class WifiFixerService extends Service {
 	}
 
 	/*
-	 * Set lastnid and lastssid to known network
-	 * with highest level from scanresults
+	 * Set lastnid and lastssid to known network with highest level from
+	 * scanresults
 	 * 
 	 * if !state nothing was found
 	 */
