@@ -919,7 +919,7 @@ public class WifiFixerService extends Service {
 
 	int best_id = HTTP_NULL;
 	int best_signal = DBM_DEFAULT;
-	String best_ssid = "";
+	String best_ssid = EMPTYSTRING;
 
 	if (logging)
 	    wfLog(APP_NAME, "Parsing Scan Results");
