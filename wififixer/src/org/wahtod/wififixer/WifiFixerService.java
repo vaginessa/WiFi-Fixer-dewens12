@@ -81,7 +81,16 @@ public class WifiFixerService extends Service {
     private static final int TEMPLOCK_OFF = 5;
     private static final int WIFI_OFF = 6;
     private static final int WIFI_ON = 7;
+    
+    /*
+     * Constants for wifirepair values
+     */
 
+    private static final int W_REASSOCIATE=0;
+    private static final int W_RECONNECT=1;
+    private static final int W_REPAIR=2;
+    
+    
     // Preference key constants
     private static final String WIFILOCK_KEY = "WiFiLock";
     private static final String NOTIF_KEY = "Notifications";
@@ -103,6 +112,7 @@ public class WifiFixerService extends Service {
     private static final String SCANNING = "SCANNING";
     private static final String DISCONNECTED = "DISCONNECTED";
     private static final String INACTIVE = "INACTIVE";
+    private static final String COMPLETED = "COMPLETED";
 
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
@@ -145,7 +155,7 @@ public class WifiFixerService extends Service {
     public static boolean screenisoff = false;
     public boolean shouldrun = true;
     // various
-    public int wifirepair = 0;
+    public int wifirepair = W_REASSOCIATE;
     private static final int HTTP_NULL = -1;
     public int lastnid = HTTP_NULL;
     private String cachedIP;
@@ -266,11 +276,12 @@ public class WifiFixerService extends Service {
 		if (logging)
 		    wfLog(APP_NAME, "Connected to Network:" + getNetworkID());
 	    } else {
-		wifirepair = 0;
-		pendingscan = false;
-		hMainWrapper(TEMPLOCK_OFF);
+		wifirepair = W_REASSOCIATE;
+		pendingscan = true;
+		startScan();
 		if (logging)
-		    wfLog(APP_NAME, "Exiting N1 Fix thread.");
+		    wfLog(APP_NAME,
+			    "Exiting Supplicant Fix Thread:Starting Scan");
 	    }
 
 	}
@@ -312,7 +323,7 @@ public class WifiFixerService extends Service {
 	    // dispatch appropriate level
 	    switch (wifirepair) {
 
-	    case 0:
+	    case W_REASSOCIATE:
 		// Let's try to reassociate first..
 		wm.reassociate();
 		if (logging)
@@ -322,7 +333,7 @@ public class WifiFixerService extends Service {
 		notifyWrap("Reassociating");
 		break;
 
-	    case 1:
+	    case W_RECONNECT:
 		// Ok, now force reconnect..
 		wm.reconnect();
 		if (logging)
@@ -332,11 +343,11 @@ public class WifiFixerService extends Service {
 		notifyWrap("Reconnecting");
 		break;
 
-	    case 2:
+	    case W_REPAIR:
 		// Start Scan
 		pendingscan = true;
 		startScan();
-		wifirepair = 0;
+		wifirepair = W_REASSOCIATE;
 		if (logging)
 		    wfLog(APP_NAME, "Repairing");
 		notifyWrap("Repairing");
@@ -448,6 +459,15 @@ public class WifiFixerService extends Service {
 	hMain.removeMessages(TEMPLOCK_OFF);
     }
 
+    void clearQueue() {
+	hMain.removeMessages(RECONNECT);
+	hMain.removeMessages(REPAIR);
+	hMain.removeMessages(WIFITASK);
+	hMain.removeMessages(WIFI_OFF);
+	pendingscan = false;
+	pendingreconnect = false;
+    }
+
     boolean checkNetwork() {
 	boolean isup = false;
 	/*
@@ -460,7 +480,7 @@ public class WifiFixerService extends Service {
 	    if (!isup)
 		switchHostMethod();
 	} else
-	    wifirepair = 0;
+	    wifirepair = W_REASSOCIATE;
 
 	return isup;
     }
@@ -492,12 +512,9 @@ public class WifiFixerService extends Service {
 	    } else {
 		Toast.makeText(WifiFixerService.this, "Reassociating",
 			Toast.LENGTH_LONG).show();
-		/*
-		 * wifirepair = 0; wifiRepair();
-		 */
-		pendingscan = true;
-		pendingreconnect = true;
-		startScan();
+
+		wifirepair = W_REASSOCIATE;
+		wifiRepair();
 	    }
 	} else
 	    Toast.makeText(WifiFixerService.this, "Wifi Is Disabled",
@@ -690,46 +707,61 @@ public class WifiFixerService extends Service {
     void handleStart(Intent intent) {
 
 	/*
-	 * Handle null intent first might be from widget or from Android
+	 * Handle null intent: might be from widget or from Android
 	 */
-	if (intent.getAction() == null) {
-
+	try {
 	    if (intent.hasExtra(FIXWIFI)) {
 		if (intent.getBooleanExtra(FIXWIFI, false)) {
 		    doWidgetAction();
 		}
 		if (logging)
 		    wfLog(APP_NAME, "Called by Widget");
-	    } else if (logging)
-		wfLog(APP_NAME, "Tickled");
-	    return;
-	}
+	    } else {
 
-	String iAction = intent.getAction();
-	// Looking for auth intent
-	if (iAction.contains(AUTH)) {
-	    handleAuth(intent);
-	    return;
-	} else {
-	    loadPrefs();
-	    prefschanged = true;
+		String iAction = intent.getAction();
+		// Looking for auth intent
+		if (iAction.contains(AUTH)) {
+		    handleAuth(intent);
+		    return;
+		} else {
+		    loadPrefs();
+		    prefschanged = true;
+		    if (logging)
+			wfLog(APP_NAME, "Normal Startup or reload");
+		}
+	    }
+	} catch (NullPointerException e) {
 	    if (logging)
-		wfLog(APP_NAME, "Normal Startup or reload");
+		wfLog(APP_NAME, "Tickled");
 	}
 
     }
 
     private void handleSupplicantIntent(Intent intent) {
+
+	/*
+	 * Get Supplicant New State
+	 */
+	String sState = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE)
+		.toString();
+
+	/*
+	 * Flush queue if connected
+	 */
+	if (sState == COMPLETED) {
+	    clearQueue();
+	    return;
+	}
+
 	/*
 	 * New setting disabling supplicant fixes
 	 */
 	if (supfix)
 	    return;
-	// supplicant fixes
 
-	String sState = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE)
-		.toString();
-
+	/*
+	 * The actual meat of the supplicant fixes
+	 */
 	handleSupplicantState(sState);
 
     }
