@@ -1271,9 +1271,13 @@ public class WifiFixerService extends Service {
 
     void wakeLock(boolean state) {
 	PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-	if (state && !wakelock.isHeld()) {
+
+	if (wakelock == null)
 	    wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
 		    "WFWakeLock");
+
+	if (state && !wakelock.isHeld()) {
+
 	    wakelock.acquire();
 	    if (logging)
 		wfLog(APP_NAME, "Acquiring Wake Lock");
