@@ -81,16 +81,15 @@ public class WifiFixerService extends Service {
     private static final int TEMPLOCK_OFF = 5;
     private static final int WIFI_OFF = 6;
     private static final int WIFI_ON = 7;
-    
+
     /*
      * Constants for wifirepair values
      */
 
-    private static final int W_REASSOCIATE=0;
-    private static final int W_RECONNECT=1;
-    private static final int W_REPAIR=2;
-    
-    
+    private static final int W_REASSOCIATE = 0;
+    private static final int W_RECONNECT = 1;
+    private static final int W_REPAIR = 2;
+
     // Preference key constants
     private static final String WIFILOCK_KEY = "WiFiLock";
     private static final String NOTIF_KEY = "Notifications";
@@ -148,7 +147,6 @@ public class WifiFixerService extends Service {
     public boolean widgetpref = false;
     public boolean prefschanged = false;
     public boolean wifishouldbeon = false;
-    public boolean haswakelock = false;
 
     // Locks and such
     public boolean templock = false;
@@ -270,8 +268,8 @@ public class WifiFixerService extends Service {
 		    wfLog(APP_NAME, "Wifi Off:Aborting Reconnect");
 		return;
 	    }
-	    isKnownAPinRange(); // Crazy but should work.
-	    if (connectToAP(lastnid, true) && (getNetworkID() != HTTP_NULL)) {
+	    if (isKnownAPinRange() && connectToAP(lastnid, true)
+		    && (getNetworkID() != HTTP_NULL)) {
 		pendingreconnect = false;
 		if (logging)
 		    wfLog(APP_NAME, "Connected to Network:" + getNetworkID());
@@ -374,8 +372,7 @@ public class WifiFixerService extends Service {
 	    wm.setWifiEnabled(true);
 	    pendingwifitoggle = false;
 	    wifishouldbeon = true;
-	    if (haswakelock)
-		wakeLock(false);
+	    wakeLock(false);
 	    deleteNotification(NOTIFID);
 	}
 
@@ -1274,14 +1271,16 @@ public class WifiFixerService extends Service {
 
     void wakeLock(boolean state) {
 	PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-	if (state) {
+	if (state && !wakelock.isHeld()) {
 	    wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
 		    "WFWakeLock");
 	    wakelock.acquire();
-	    haswakelock = true;
-	} else {
+	    if (logging)
+		wfLog(APP_NAME, "Acquiring Wake Lock");
+	} else if (wakelock.isHeld()) {
 	    wakelock.release();
-	    haswakelock = false;
+	    if (logging)
+		wfLog(APP_NAME, "Releasing Wake Lock");
 	}
 
     }
