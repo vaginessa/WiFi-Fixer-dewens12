@@ -510,12 +510,9 @@ public class WifiFixerService extends Service {
 		Toast.makeText(WifiFixerService.this, "Reassociating",
 			Toast.LENGTH_LONG).show();
 
-		/*
-		 * wifirepair = W_REASSOCIATE; wifiRepair();
-		 */
-		pendingscan = true;
-		pendingreconnect = true;
-		startScan();
+		wifirepair = W_REASSOCIATE;
+		wifiRepair();
+
 	    }
 	} else
 	    Toast.makeText(WifiFixerService.this, "Wifi Is Disabled",
@@ -736,7 +733,7 @@ public class WifiFixerService extends Service {
 	    if (intent.getFlags() == 0x10000000) {
 		doWidgetAction();
 	    } else if (logging) {
-		wfLog(APP_NAME, "Tickled:"+intent.toString());
+		wfLog(APP_NAME, "Tickled:" + intent.toString());
 	    }
 	}
 
