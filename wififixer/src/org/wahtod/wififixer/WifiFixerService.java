@@ -641,10 +641,11 @@ public class WifiFixerService extends Service {
     }
 
     List<WifiConfiguration> getWifiConfigurations() {
+	/*
+	 * Don't need to copy this: it doesn't change much
+	 */
 
-	List<WifiConfiguration> conflist = wm.getConfiguredNetworks();
-
-	return conflist;
+	return wm.getConfiguredNetworks();
     }
 
     WifiManager getWifiManager() {
@@ -1185,6 +1186,32 @@ public class WifiFixerService extends Service {
 	myFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 	registerReceiver(receiver, myFilter);
 
+	/*
+	 * This is EXPERIMENTAL!
+	 */
+	setHidden();
+    }
+
+    void setHidden() {
+	wifiConfigs = getWifiConfigurations();
+	int result = HTTP_NULL;
+	for (int n = 0; n < wifiConfigs.size(); n++) {
+	    wfResult = wifiConfigs.get(n);
+	    if (!wfResult.hiddenSSID) {
+		wfResult.hiddenSSID = true;
+		result = wm.updateNetwork(wfResult);
+		if (result == HTTP_NULL) {
+		    if (logging)
+			wfLog(APP_NAME, "Network:" + n
+				+ " NOT updated to hidden");
+		} else {
+		    if (logging)
+			wfLog(APP_NAME, "Network:" + result
+				+ " updated to hidden");
+		}
+	    }
+
+	}
     }
 
     void showNotification(String message, String tickerText, boolean bSpecial) {
