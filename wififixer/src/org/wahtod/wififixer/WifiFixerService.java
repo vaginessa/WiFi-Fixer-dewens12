@@ -733,8 +733,11 @@ public class WifiFixerService extends Service {
 		}
 	    }
 	} catch (NullPointerException e) {
-	    if (logging)
-		wfLog(APP_NAME, "Tickled");
+	    if (intent.getFlags() == 0x10000000) {
+		doWidgetAction();
+	    } else if (logging) {
+		wfLog(APP_NAME, "Tickled:"+intent.toString());
+	    }
 	}
 
     }

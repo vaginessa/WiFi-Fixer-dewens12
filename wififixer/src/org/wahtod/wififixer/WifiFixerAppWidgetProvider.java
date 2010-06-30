@@ -29,7 +29,6 @@ public class WifiFixerAppWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 	    int[] appWidgetIds) {
 	final int N = appWidgetIds.length;
-	final int FLAG_CANCEL_CURRENT = 268435456;
 
 	// Perform this loop procedure for each App Widget that belongs to this
 	// provider
@@ -40,7 +39,7 @@ public class WifiFixerAppWidgetProvider extends AppWidgetProvider {
 	    Intent intent = new Intent(context, WifiFixerService.class);
 	    intent.putExtra(WifiFixerService.FIXWIFI, true);
 	    PendingIntent pendingIntent = PendingIntent.getService(context
-		    .getApplicationContext(), 0, intent, FLAG_CANCEL_CURRENT);
+		    .getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 	    // Get the layout for the App Widget and attach an on-click listener
 	    // to the button
