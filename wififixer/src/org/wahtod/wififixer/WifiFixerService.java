@@ -100,7 +100,6 @@ public class WifiFixerService extends Service {
     private static final String LOG_KEY = "SLOG";
     private static final String SUPFIX_KEY = "SUPFIX";
     private static final String SUPFIX_DEFAULT = "SPFDEF";
-    private static final String HIDDEN_KEY = "HASHIDDEN";
 
     // ID For notification
     private static final int NOTIFID = 31337;
@@ -134,9 +133,6 @@ public class WifiFixerService extends Service {
     // for Dbm
     private static final int DBM_DEFAULT = -100;
 
-    // Fake best signal
-    private static final int FAKE_SIGNAL = 50;
-
     // Enable logging
     public static boolean logging = false;
     // *****************************
@@ -151,7 +147,6 @@ public class WifiFixerService extends Service {
     public boolean widgetpref = false;
     public boolean prefschanged = false;
     public boolean wifishouldbeon = false;
-    public boolean hashidden = false;
 
     // Locks and such
     public boolean templock = false;
@@ -515,8 +510,12 @@ public class WifiFixerService extends Service {
 		Toast.makeText(WifiFixerService.this, "Reassociating",
 			Toast.LENGTH_LONG).show();
 
-		wifirepair = W_REASSOCIATE;
-		wifiRepair();
+		/*
+		 * wifirepair = W_REASSOCIATE; wifiRepair();
+		 */
+		pendingscan = true;
+		pendingreconnect = true;
+		startScan();
 	    }
 	} else
 	    Toast.makeText(WifiFixerService.this, "Wifi Is Disabled",
@@ -980,33 +979,6 @@ public class WifiFixerService extends Service {
 	if (logging)
 	    wfLog(APP_NAME, "Parsing Scan Results");
 
-	/*
-	 * First we check for hidden SSIDs if hidden pref is set
-	 */
-
-	if (hashidden) {
-	    if (logging)
-		wfLog(APP_NAME, "Checking for hidden networks");
-
-	    for (int h = 0; h < wifiConfigs.size(); h++) {
-		wfResult = wifiConfigs.get(h);
-		if (wfResult.hiddenSSID && wm.enableNetwork(h, false)) {
-		    if (logging) {
-			wfLog(APP_NAME, "Found  Hidden SSID:" + wfResult.SSID);
-		    }
-		    /*
-		     * We can't get a signal from hidden SSIDs so faking
-		     */
-		    best_id = h;
-		    best_signal = FAKE_SIGNAL;
-		    best_ssid = wfResult.SSID;
-		    state = true;
-		}
-	    }
-	}
-	/*
-	 * Now we do a regular check
-	 */
 	for (int i = 0; i < wifiList.size(); i++) {
 	    sResult = wifiList.get(i);
 	    for (int i2 = 0; i2 < wifiConfigs.size(); i2++) {
@@ -1024,7 +996,7 @@ public class WifiFixerService extends Service {
 		     * Comparing and storing best signal level
 		     */
 		    if (sResult.level > best_signal) {
-			best_id = i2;
+			best_id = wfResult.networkId;
 			best_signal = sResult.level;
 			best_ssid = sResult.SSID;
 		    }
@@ -1045,6 +1017,9 @@ public class WifiFixerService extends Service {
 	    if (logging)
 		wfLog(APP_NAME, "Best Signal: SSID " + best_ssid + " Signal:"
 			+ best_signal);
+	} else {
+	    if (logging)
+		wfLog(APP_NAME, "No known networks found");
 	}
 
 	return state;
@@ -1058,7 +1033,6 @@ public class WifiFixerService extends Service {
 	screenpref = settings.getBoolean(SCREEN_KEY, false);
 	widgetpref = settings.getBoolean(WIDGET_KEY, false);
 	supfix = settings.getBoolean(SUPFIX_KEY, false);
-	hashidden = settings.getBoolean(HIDDEN_KEY, false);
 	String PERFORMANCE = settings.getString(PERFORMANCE_KEY, "0");
 	// Kill the Log Service if it's up
 	if (logging && !settings.getBoolean(LOG_KEY, false))
@@ -1123,9 +1097,6 @@ public class WifiFixerService extends Service {
 
 	    if (supfix)
 		wfLog(APP_NAME, "SUPPREF");
-
-	    if (hashidden)
-		wfLog(APP_NAME, "HASHIDDEN");
 
 	}
 

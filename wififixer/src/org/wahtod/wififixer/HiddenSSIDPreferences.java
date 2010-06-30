@@ -17,8 +17,6 @@
 package org.wahtod.wififixer;
 
 import java.util.List;
-import java.util.Map;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -137,7 +135,9 @@ public class HiddenSSIDPreferences extends PreferenceActivity implements
 	    /*
 	     * Persist network configuration changes and restart service
 	     */
-	    wm.saveConfiguration();
+	    if(wifiConfigs.get(network).hiddenSSID==state){
+		wm.saveConfiguration();
+	    }
 	    Intent sendIntent = new Intent(WifiFixerService.class.getName());
 	    startService(sendIntent);
 
