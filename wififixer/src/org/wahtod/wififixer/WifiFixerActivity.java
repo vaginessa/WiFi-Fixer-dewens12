@@ -91,7 +91,7 @@ public class WifiFixerActivity extends Activity {
 	    prefs = prefs + "SCREENPREF:True\n";
 	else
 	    prefs = prefs + "SCREENPREF:False\n";
-	
+
 	if (settings.getBoolean("SUPFIX", false))
 	    prefs = prefs + "SUPPREF:True\n";
 	else

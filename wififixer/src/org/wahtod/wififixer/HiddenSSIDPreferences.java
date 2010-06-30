@@ -19,6 +19,7 @@ package org.wahtod.wififixer;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.wifi.WifiConfiguration;
@@ -73,7 +74,7 @@ public class HiddenSSIDPreferences extends PreferenceActivity implements
 
 	return root;
     }
-    
+
     @Override
     protected void onResume() {
 	super.onResume();
@@ -91,16 +92,42 @@ public class HiddenSSIDPreferences extends PreferenceActivity implements
 	getPreferenceScreen().getSharedPreferences()
 		.unregisterOnSharedPreferenceChangeListener(this);
     }
-    
+
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+	/*
+	 * Escape if the key is HASHIDDEN
+	 */
+	if (key == "HASHIDDEN")
+	    return;
+	/*
+	 * First mark that we have hidden ssids
+	 */
+	boolean state = prefs.getBoolean(key, false);
+
+	if (state && !prefs.getBoolean("HASHIDDEN", false)) {
+	    SharedPreferences.Editor edit = prefs.edit();
+	    edit.putBoolean("HASHIDDEN", true);
+	    edit.commit();
+	    /*
+	     * Send Reload intent to the service
+	     */
+	    Intent sendIntent = new Intent(WifiFixerService.class.getName());
+	    startService(sendIntent);
+	}
 
 	int network = Integer
 		.valueOf((String) key.subSequence(7, key.length()));
 	List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
 	WifiConfiguration wfResult = wifiConfigs.get(network);
-	boolean state = prefs.getBoolean(key, false);
+
 	wfResult.hiddenSSID = state;
-	if(wm.updateNetwork(wfResult)==network)
-	    Log.i("HiddenSSIDPreferences","Successfully Updated network:"+network);
+	if (wm.updateNetwork(wfResult) == network) {
+	    Log.i("HiddenSSIDPreferences", "Successfully Updated network:"
+		    + network + " to " + state);
+	    /*
+	     * Persist network configuration changes
+	     */
+	    wm.saveConfiguration();
+	}
     }
 }
