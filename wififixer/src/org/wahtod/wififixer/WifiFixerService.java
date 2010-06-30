@@ -990,7 +990,7 @@ public class WifiFixerService extends Service {
 
 	    for (int h = 0; h < wifiConfigs.size(); h++) {
 		wfResult = wifiConfigs.get(h);
-		if (wfResult.hiddenSSID && wm.enableNetwork(h, true)) {
+		if (wfResult.hiddenSSID && wm.enableNetwork(h, false)) {
 		    if (logging) {
 			wfLog(APP_NAME, "Found  Hidden SSID:" + wfResult.SSID);
 		    }
