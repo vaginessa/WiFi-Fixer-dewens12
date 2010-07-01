@@ -120,6 +120,9 @@ public class WifiFixerService extends Service {
     // Logging Intent
     private static final String LOGINTENT = "org.wahtod.wififixer.LogService.LOG";
 
+    // Widget Intent
+    private static final String WIDGETINTENT = "android.appwidget.action.APPWIDGET_UPDATE";
+
     // ms for IsReachable
     final static int REACHABLE = 3000;
     final static int HTTPREACH = 8000;
@@ -730,9 +733,7 @@ public class WifiFixerService extends Service {
 		}
 	    }
 	} catch (NullPointerException e) {
-	    if (intent.getFlags() == 0x10000000) {
-		doWidgetAction();
-	    } else if (logging) {
+	    if (logging) {
 		wfLog(APP_NAME, "Tickled:" + intent.toString());
 	    }
 	}
@@ -1144,6 +1145,7 @@ public class WifiFixerService extends Service {
 	// Setup, formerly in Run thread
 	setup();
 	hMain.sendEmptyMessage(MAIN);
+	refreshWidget();
 
 	if (logging)
 	    wfLog(APP_NAME, "OnCreate");
@@ -1170,6 +1172,11 @@ public class WifiFixerService extends Service {
 	return START_STICKY;
     }
 
+    private void refreshWidget() {
+	Intent intent = new Intent(WIDGETINTENT);
+	sendBroadcast(intent);
+    }
+    
     void setup() {
 	// WIFI_MODE_FULL should p. much always be used
 	lock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, WFLOCK_TAG);

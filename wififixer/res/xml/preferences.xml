@@ -30,9 +30,6 @@
 			<CheckBoxPreference android:key="SUPFIX"
 				android:title="Disable Supplicant Fixes" android:summary="Check if having trouble, or on Android 1.5 or 1.6" />
 
-			<Preference android:title="Set Hidden SSIDs"
-				android:summary="Allows connecting to non-broadcast SSIDs"
-				android:key="HIDDENSSID" />
 
 		</PreferenceScreen>
 

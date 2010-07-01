@@ -20,9 +20,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.util.Log;
 
 public class WifiFixerPreferences extends PreferenceActivity implements
@@ -33,16 +31,6 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 
 	addPreferencesFromResource(R.xml.preferences);
 
-	Preference customPref = (Preference) findPreference("HIDDENSSID");
-	customPref
-		.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-
-		    public boolean onPreferenceClick(Preference preference) {
-			launchSSIDPref();
-			return true;
-		    }
-
-		});
 
     }
 
@@ -62,11 +50,6 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	// Unregister the listener whenever a key changes
 	getPreferenceScreen().getSharedPreferences()
 		.unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    private void launchSSIDPref() {
-	Intent myIntent = new Intent(this, HiddenSSIDPreferences.class);
-	startActivity(myIntent);
     }
 
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {

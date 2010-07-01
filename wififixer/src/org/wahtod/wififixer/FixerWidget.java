@@ -23,15 +23,33 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
-public class WifiFixerAppWidgetProvider extends AppWidgetProvider {
+public class FixerWidget extends AppWidgetProvider {
+
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIds) {
+	super.onDeleted(context, appWidgetIds);
+    }
+
+    @Override
+    public void onDisabled(Context context) {
+	super.onDisabled(context);
+    }
+
+    @Override
+    public void onEnabled(Context context) {
+	super.onEnabled(context);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+	super.onReceive(context, intent);
+    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 	    int[] appWidgetIds) {
 	final int N = appWidgetIds.length;
 
-	// Perform this loop procedure for each App Widget that belongs to this
-	// provider
 	for (int i = 0; i < N; i++) {
 	    int appWidgetId = appWidgetIds[i];
 
@@ -39,7 +57,8 @@ public class WifiFixerAppWidgetProvider extends AppWidgetProvider {
 	    Intent intent = new Intent(context, WifiFixerService.class);
 	    intent.putExtra(WifiFixerService.FIXWIFI, true);
 	    PendingIntent pendingIntent = PendingIntent.getService(context
-		    .getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		    .getApplicationContext(), 0, intent,
+		    PendingIntent.FLAG_UPDATE_CURRENT);
 
 	    // Get the layout for the App Widget and attach an on-click listener
 	    // to the button
@@ -52,5 +71,6 @@ public class WifiFixerAppWidgetProvider extends AppWidgetProvider {
 	    appWidgetManager.updateAppWidget(appWidgetId, views);
 	}
 
+	super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 }
