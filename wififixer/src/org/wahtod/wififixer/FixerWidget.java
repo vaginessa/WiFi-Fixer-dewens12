@@ -16,11 +16,14 @@
 
 package org.wahtod.wififixer;
 
+import android.app.IntentService;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 public class FixerWidget extends AppWidgetProvider {
@@ -42,35 +45,59 @@ public class FixerWidget extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+	Log.i(this.getClass().getName(), intent.toString());
 	super.onReceive(context, intent);
+
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 	    int[] appWidgetIds) {
-	final int N = appWidgetIds.length;
 
-	for (int i = 0; i < N; i++) {
-	    int appWidgetId = appWidgetIds[i];
+	/*
+	 * Service seems like a better idea
+	 */
+	Log.i(this.getClass().getName(), "Widget Update Called");
+	context.startService(new Intent(context, UpdateService.class));
+	super.onUpdate(context, appWidgetManager, appWidgetIds);
+    }
 
-	    // Create an Intent to launch the service
-	    Intent intent = new Intent(context, WifiFixerService.class);
-	    intent.putExtra(WifiFixerService.FIXWIFI, true);
-	    PendingIntent pendingIntent = PendingIntent.getService(context
-		    .getApplicationContext(), 0, intent,
-		    PendingIntent.FLAG_UPDATE_CURRENT);
-
-	    // Get the layout for the App Widget and attach an on-click listener
-	    // to the button
-	    RemoteViews views = new RemoteViews(context.getPackageName(),
-		    R.layout.widget);
-	    views.setOnClickPendingIntent(R.id.Button, pendingIntent);
-
-	    // Tell the AppWidgetManager to perform an update on the current App
-	    // Widget
-	    appWidgetManager.updateAppWidget(appWidgetId, views);
+    public static class UpdateService extends IntentService {
+	public UpdateService() {
+	    super("FixerWidget$UpdateService");
 	}
 
-	super.onUpdate(context, appWidgetManager, appWidgetIds);
+	@Override
+	protected void onHandleIntent(Intent intent) {
+	    // Build the widget update for today
+	    RemoteViews updateViews = doUpdate(this);
+
+	    // Push update for this widget to the home screen
+	    ComponentName thisWidget = new ComponentName(this,
+		    FixerWidget.class);
+	    AppWidgetManager manager = AppWidgetManager.getInstance(this);
+	    manager.updateAppWidget(thisWidget, updateViews);
+
+	}
+
+    }
+
+    public static RemoteViews doUpdate(Context context) {
+
+	// Create an Intent to launch the service
+	Intent intent = new Intent(context, WifiFixerService.class);
+	intent.putExtra(WifiFixerService.FIXWIFI, true);
+	PendingIntent pendingIntent = PendingIntent.getService(context
+		.getApplicationContext(), 0, intent,
+		PendingIntent.FLAG_UPDATE_CURRENT);
+
+	// Get the layout for the App Widget and attach an on-click listener
+	// to the button
+	RemoteViews views = new RemoteViews(context.getPackageName(),
+		R.layout.widget);
+	views.setOnClickPendingIntent(R.id.Button, pendingIntent);
+
+	return views;
     }
 }

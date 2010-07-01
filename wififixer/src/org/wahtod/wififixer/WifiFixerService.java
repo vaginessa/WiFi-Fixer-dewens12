@@ -34,6 +34,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -119,9 +120,6 @@ public class WifiFixerService extends Service {
 
     // Logging Intent
     private static final String LOGINTENT = "org.wahtod.wififixer.LogService.LOG";
-
-    // Widget Intent
-    private static final String WIDGETINTENT = "android.appwidget.action.APPWIDGET_UPDATE";
 
     // ms for IsReachable
     final static int REACHABLE = 3000;
@@ -1173,10 +1171,13 @@ public class WifiFixerService extends Service {
     }
 
     private void refreshWidget() {
-	Intent intent = new Intent(WIDGETINTENT);
+	Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+	int[] widgetids = { 0, 1, 2 };
+	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetids);
+	intent.setClass(this, FixerWidget.class);
 	sendBroadcast(intent);
     }
-    
+
     void setup() {
 	// WIFI_MODE_FULL should p. much always be used
 	lock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, WFLOCK_TAG);
