@@ -401,6 +401,8 @@ public class WifiFixerService extends Service {
 	    else if (iAction
 		    .equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
 		handleNetworkAction(intent);
+	    else if (iAction.equals(FixerWidget.W_INTENT))
+		handleWidgetAction();
 
 	}
 
@@ -499,25 +501,6 @@ public class WifiFixerService extends Service {
     void deleteNotification(int id) {
 	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	nm.cancel(id);
-    }
-
-    void doWidgetAction() {
-	if (getIsWifiEnabled()) {
-	    if (widgetpref) {
-		Toast.makeText(WifiFixerService.this, "Toggling Wifi",
-			Toast.LENGTH_LONG).show();
-		toggleWifi();
-	    } else {
-		Toast.makeText(WifiFixerService.this, "Reassociating",
-			Toast.LENGTH_LONG).show();
-
-		wifirepair = W_REASSOCIATE;
-		wifiRepair();
-
-	    }
-	} else
-	    Toast.makeText(WifiFixerService.this, "Wifi Is Disabled",
-		    Toast.LENGTH_LONG).show();
     }
 
     void fixWifi() {
@@ -710,16 +693,18 @@ public class WifiFixerService extends Service {
 	 * Handle null intent: might be from widget or from Android
 	 */
 	try {
-	    if (intent.hasExtra(FIXWIFI)) {
-		if (intent.getBooleanExtra(FIXWIFI, false)) {
-		    doWidgetAction();
+	    if (intent.hasExtra(ServiceAlarm.ALARM)) {
+		if (intent.getBooleanExtra(ServiceAlarm.ALARM, false)) {
+		    if (logging)
+			wfLog(APP_NAME, "Alarm Intent");
 		}
-		if (logging)
-		    wfLog(APP_NAME, "Called by Widget");
+
 	    } else {
 
 		String iAction = intent.getAction();
-		// Looking for auth intent
+		/*
+		 * AUTH from donate service
+		 */
 		if (iAction.contains(AUTH)) {
 		    handleAuth(intent);
 		    return;
@@ -732,7 +717,7 @@ public class WifiFixerService extends Service {
 	    }
 	} catch (NullPointerException e) {
 	    if (logging) {
-		wfLog(APP_NAME, "Tickled:" + intent.toString());
+		wfLog(APP_NAME, "Tickled:");
 	    }
 	}
 
@@ -789,6 +774,30 @@ public class WifiFixerService extends Service {
 
 	if (logging && !screenisoff)
 	    logSupplicant(sState);
+    }
+
+    private void handleWidgetAction() {
+	if (logging)
+	    wfLog(APP_NAME, "***Widget Action***");
+	/*
+	 * Handle widget action
+	 */
+	if (getIsWifiEnabled()) {
+	    if (widgetpref) {
+		Toast.makeText(WifiFixerService.this, "Toggling Wifi",
+			Toast.LENGTH_LONG).show();
+		toggleWifi();
+	    } else {
+		Toast.makeText(WifiFixerService.this, "Reassociating",
+			Toast.LENGTH_LONG).show();
+
+		wifirepair = W_REASSOCIATE;
+		wifiRepair();
+
+	    }
+	} else
+	    Toast.makeText(WifiFixerService.this, "Wifi Is Disabled",
+		    Toast.LENGTH_LONG).show();
     }
 
     private void handleWifiResults() {
@@ -1199,6 +1208,10 @@ public class WifiFixerService extends Service {
 
 	// wifi scan results available callback
 	myFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+
+	// Widget Action
+	myFilter.addAction(FixerWidget.W_INTENT);
+
 	registerReceiver(receiver, myFilter);
 
     }

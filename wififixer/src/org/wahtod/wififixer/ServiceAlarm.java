@@ -11,6 +11,7 @@ public final class ServiceAlarm extends Object {
     public static final long STARTDELAY = 120000;
     private static final long NODELAY = 0;
     private static final String STARTINTENT = "org.wahtod.wififixer.WifiFixerService";
+    public static final String ALARM = "ALARM";
 
     public static void setAlarm(Context c, boolean initialdelay) {
 	Long delay;
@@ -21,10 +22,11 @@ public final class ServiceAlarm extends Object {
 
 	Intent myStarterIntent = new Intent(STARTINTENT);
 	myStarterIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
+	myStarterIntent.putExtra(ALARM, true);
 	AlarmManager mgr = (AlarmManager) c
 		.getSystemService(Context.ALARM_SERVICE);
 	PendingIntent pendingintent = PendingIntent.getService(c, 0,
-		myStarterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		myStarterIntent, 0);
 
 	mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock
 		.elapsedRealtime()
@@ -37,7 +39,7 @@ public final class ServiceAlarm extends Object {
 	AlarmManager mgr = (AlarmManager) c
 		.getSystemService(Context.ALARM_SERVICE);
 	PendingIntent pendingintent = PendingIntent.getService(c, 0,
-		myStarterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		myStarterIntent, 0);
 
 	mgr.cancel(pendingintent);
     }

@@ -27,6 +27,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 public class FixerWidget extends AppWidgetProvider {
+    public static final String W_INTENT = "org.wahtod.wifixer.WififixerService.WIDGET";
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
@@ -86,11 +87,9 @@ public class FixerWidget extends AppWidgetProvider {
     public static RemoteViews doUpdate(Context context) {
 
 	// Create an Intent to launch the service
-	Intent intent = new Intent(context, WifiFixerService.class);
-	intent.putExtra(WifiFixerService.FIXWIFI, true);
-	PendingIntent pendingIntent = PendingIntent.getService(context
-		.getApplicationContext(), 0, intent,
-		PendingIntent.FLAG_UPDATE_CURRENT);
+	Intent intent = new Intent(W_INTENT);
+	PendingIntent pendingIntent = PendingIntent.getBroadcast(context
+		.getApplicationContext(), 0, intent, 0);
 
 	// Get the layout for the App Widget and attach an on-click listener
 	// to the button
