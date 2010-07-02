@@ -1119,6 +1119,10 @@ public class WifiFixerService extends Service {
 	    wfLog(APP_NAME, "Supplicant Nonresponsive");
 
 	}
+	
+	if(lastssid.length()<2)
+	    getNetworkID();
+	
 	wfLog(APP_NAME, "SSID:" + lastssid);
 
     }
