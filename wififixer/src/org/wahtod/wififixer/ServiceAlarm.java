@@ -10,6 +10,7 @@ public final class ServiceAlarm extends Object {
     public static final long PERIOD = 300000;
     public static final long STARTDELAY = 120000;
     private static final long NODELAY = 0;
+    private static final String STARTINTENT = "org.wahtod.wififixer.WifiFixerService";
 
     public static void setAlarm(Context c, boolean initialdelay) {
 	Long delay;
@@ -18,7 +19,7 @@ public final class ServiceAlarm extends Object {
 	else
 	    delay = NODELAY;
 
-	Intent myStarterIntent = new Intent(c, WifiFixerService.class);
+	Intent myStarterIntent = new Intent(STARTINTENT);
 	myStarterIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 	AlarmManager mgr = (AlarmManager) c
 		.getSystemService(Context.ALARM_SERVICE);
