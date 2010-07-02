@@ -31,7 +31,7 @@
 				android:title="Disable Supplicant Fixes" android:summary="Check if having trouble, or on Android 1.5 or 1.6" />
 
 
-		</PreferenceScreen>
+	  </PreferenceScreen>
 
 		<ListPreference android:title="Set Performance"
 			android:summary="Allows setting from wifi performance to minimal battery use"
