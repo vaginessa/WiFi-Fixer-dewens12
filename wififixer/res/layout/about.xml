@@ -55,6 +55,15 @@
                         android:textSize="12sp"
                         android:textColor="#bebebe"
                         android:autoLink="web|email"/>
+                        
+              <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="Wifi Fixer is an Open Source project.\n Visit the git repository at\n http://github.com/Zanshinmu/Wifi-Fixer "
+                        android:textSize="12sp"
+                        android:textColor="#bebebe"
+                        android:autoLink="web"/>
 
 
         </LinearLayout>

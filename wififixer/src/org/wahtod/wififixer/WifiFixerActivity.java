@@ -241,6 +241,11 @@ public class WifiFixerActivity extends Activity {
 	nm.notify(31337, notif);
 
     }
+    
+    private void removeNag() {
+	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+	nm.cancel(31337);
+    }
 
     void toggleLog() {
 
@@ -363,7 +368,7 @@ public class WifiFixerActivity extends Activity {
     @Override
     public void onPause() {
 	super.onPause();
-
+	removeNag();
     }
 
     @Override
