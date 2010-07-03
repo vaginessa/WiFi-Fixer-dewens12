@@ -177,8 +177,6 @@ public class WifiFixerService extends Service {
     public WifiInfo myWifi;
     public WifiManager.WifiLock lock;
     public SharedPreferences settings;
-    public ScanResult sResult;
-    public WifiConfiguration wfResult;
     public List<ScanResult> wifiList;
     public List<WifiConfiguration> wifiConfigs;
     private PowerManager.WakeLock wakelock;
@@ -987,10 +985,8 @@ public class WifiFixerService extends Service {
 	if (logging)
 	    wfLog(APP_NAME, "Parsing Scan Results");
 
-	for (int i = 0; i < wifiList.size(); i++) {
-	    sResult = wifiList.get(i);
-	    for (int i2 = 0; i2 < wifiConfigs.size(); i2++) {
-		wfResult = wifiConfigs.get(i2);
+	for (ScanResult sResult : wifiList) {
+	    for (WifiConfiguration wfResult : wifiConfigs) {
 		/*
 		 * Using .contains to find sResult.SSID in doublequoted string
 		 */
