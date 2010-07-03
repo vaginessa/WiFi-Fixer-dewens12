@@ -187,7 +187,7 @@ public class WifiFixerService extends Service {
     private HttpHead head;
     private HttpResponse response;
 
-    private Handler hMain = new Handler() {
+    private final Handler hMain = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
 	    switch (message.what) {
@@ -599,7 +599,7 @@ public class WifiFixerService extends Service {
     int getNetworkID() {
 	myWifi = wm.getConnectionInfo();
 	int id = myWifi.getNetworkId();
-	if (!(id == HTTP_NULL)) {
+	if (id != HTTP_NULL) {
 	    lastnid = id;
 	    lastssid = myWifi.getSSID();
 	}
@@ -1119,10 +1119,10 @@ public class WifiFixerService extends Service {
 	    wfLog(APP_NAME, "Supplicant Nonresponsive");
 
 	}
-	
-	if(lastssid.length()<2)
+
+	if (lastssid.length() < 2)
 	    getNetworkID();
-	
+
 	wfLog(APP_NAME, "SSID:" + lastssid);
 
     }
