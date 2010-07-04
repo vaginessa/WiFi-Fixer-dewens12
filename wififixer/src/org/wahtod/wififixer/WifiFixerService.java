@@ -730,6 +730,8 @@ public class WifiFixerService extends Service {
 	if (sState == COMPLETED) {
 	    clearQueue();
 	    notifCancel(ERR_NOTIF);
+	    pendingscan=false;
+	    pendingreconnect=false;
 	    return;
 	}
 
