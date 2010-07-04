@@ -662,9 +662,6 @@ public class WifiFixerService extends Service {
 
     void handleScreenAction(String iAction) {
 
-	if (screenpref)
-	    return;
-
 	if (iAction.equals(Intent.ACTION_SCREEN_OFF)) {
 	    screenisoff = true;
 	    if (logging) {
@@ -755,20 +752,21 @@ public class WifiFixerService extends Service {
 	 * Dispatches appropriate supplicant fix
 	 */
 
-	if (!getIsWifiEnabled() || screenisoff)
+	if (!getIsWifiEnabled()) {
 	    return;
-	else if (sState == SCANNING) {
+	} else if (sState == SCANNING) {
 	    pendingscan = true;
-
 	} else if (sState == DISCONNECTED) {
 	    pendingscan = true;
 	    startScan();
 	    notifyWrap(sState);
-	} else if (sState == INACTIVE) {
+	} else if (screenisoff)
+	    return;
+	else if (sState == INACTIVE) {
 	    supplicantFix(true);
 	    notifyWrap(sState);
 	}
-
+	
 	if (logging && !screenisoff)
 	    logSupplicant(sState);
     }
