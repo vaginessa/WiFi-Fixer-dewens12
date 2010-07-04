@@ -105,6 +105,8 @@ public class WifiFixerService extends Service {
     // ID For notification
     private static final int NOTIFID = 31337;
 
+    private static final int ERR_NOTIF = 7972;
+
     // Wifi Lock tag
     private static final String WFLOCK_TAG = "WFLock";
 
@@ -733,9 +735,12 @@ public class WifiFixerService extends Service {
 
 	/*
 	 * Flush queue if connected
+	 * 
+	 * Also clear any error notifications
 	 */
 	if (sState == COMPLETED) {
 	    clearQueue();
+	    notifCancel(ERR_NOTIF);
 	    return;
 	}
 
@@ -1126,11 +1131,16 @@ public class WifiFixerService extends Service {
     }
 
     void notifyWrap(String message) {
+	final String WIFI_NOTIF = "Wifi Connection Problem:";
 	if (notifpref) {
-	    showNotification("Wifi Connection Problem:" + message, message,
-		    false);
+	    showNotification(WIFI_NOTIF + message, message, ERR_NOTIF);
 	}
 
+    }
+
+    private void notifCancel(int notif) {
+	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+	nm.cancel(notif);
     }
 
     @Override
