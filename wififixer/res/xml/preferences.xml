@@ -33,8 +33,8 @@
 
 		</PreferenceScreen>
 
-		<ListPreference android:title="Set Performance"
-			android:summary="Allows setting from wifi performance to minimal battery use"
+		<ListPreference android:title="Set Wifi Usablity"
+			android:summary="Allows setting from max wifi usability to minimal battery use"
 			android:key="Performance" android:entries="@array/entries"
 			android:entryValues="@array/entryValues" />
 
