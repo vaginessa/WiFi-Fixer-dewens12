@@ -71,7 +71,7 @@ public class WifiFixerService extends Service {
     public static final String FIXWIFI = "FIXWIFI";
     public static final String AUTHSTRING = "31415927";
     // http://www.jerkcity.com
-    private static final String AUTHEXTRA = "DICKS.ETC";
+    private static final String AUTHEXTRA = "IRRADIATED";
     private static final String AUTH = "AUTH";
     // Runnable Constants for handler
     private static final int MAIN = 0;
