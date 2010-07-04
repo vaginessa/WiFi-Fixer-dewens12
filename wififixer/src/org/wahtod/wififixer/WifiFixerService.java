@@ -540,7 +540,7 @@ public class WifiFixerService extends Service {
 	    httpparams = new BasicHttpParams();
 	    HttpConnectionParams.setConnectionTimeout(httpparams, HTTPREACH);
 	    HttpConnectionParams.setSoTimeout(httpparams, HTTPREACH);
-	    HttpConnectionParams.setLinger(httpparams, 1);
+	    HttpConnectionParams.setLinger(httpparams, REPAIR);
 	    HttpConnectionParams.setStaleCheckingEnabled(httpparams, false);
 	    httpclient.setParams(httpparams);
 	}
@@ -625,14 +625,6 @@ public class WifiFixerService extends Service {
     SupplicantState getSupplicantState() {
 	myWifi = wm.getConnectionInfo();
 	return myWifi.getSupplicantState();
-    }
-
-    List<WifiConfiguration> getWifiConfigurations() {
-	/*
-	 * Don't need to copy this: it doesn't change much
-	 */
-
-	return wm.getConfiguredNetworks();
     }
 
     WifiManager getWifiManager() {
@@ -978,7 +970,7 @@ public class WifiFixerService extends Service {
 	/*
 	 * wifiConfigs is just a reference to known networks.
 	 */
-	wifiConfigs = getWifiConfigurations();
+	wifiConfigs = wm.getConfiguredNetworks();
 
 	/*
 	 * Iterate the known networks over the scan results, adding found known
