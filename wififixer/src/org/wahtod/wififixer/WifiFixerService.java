@@ -159,6 +159,8 @@ public class WifiFixerService extends Service {
     public int lastnid = HTTP_NULL;
     private String cachedIP;
     private final String EMPTYSTRING = "";
+    private final String STRINGZERO = "0";
+    private final String STRINGTWO = "2";
 
     // flags
     public boolean pendingscan = false;
@@ -1037,7 +1039,7 @@ public class WifiFixerService extends Service {
 	screenpref = settings.getBoolean(SCREEN_KEY, false);
 	widgetpref = settings.getBoolean(WIDGET_KEY, false);
 	supfix = settings.getBoolean(SUPFIX_KEY, false);
-	String PERFORMANCE = settings.getString(PERFORMANCE_KEY, "0");
+	String PERFORMANCE = settings.getString(PERFORMANCE_KEY, STRINGZERO);
 	// Kill the Log Service if it's up
 	if (logging && !settings.getBoolean(LOG_KEY, false))
 	    wfLog(LogService.DIE, null);
@@ -1054,9 +1056,9 @@ public class WifiFixerService extends Service {
 	    ServiceAlarm.setAlarm(this, true);
 	}
 	// Setting defaults if performance not set
-	if (PERFORMANCE == "0" && !lockpref) {
+	if (PERFORMANCE == STRINGZERO && !lockpref) {
 	    SharedPreferences.Editor edit = settings.edit();
-	    edit.putString(PERFORMANCE_KEY, "2");
+	    edit.putString(PERFORMANCE_KEY, STRINGTWO);
 	    edit.putBoolean(WIFILOCK_KEY, true);
 	    edit.commit();
 	    lockpref = true;
@@ -1220,7 +1222,7 @@ public class WifiFixerService extends Service {
 
 	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-	CharSequence from = "Wifi Fixer";
+	CharSequence from = getText(R.string.app_name);
 	PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 		new Intent(), 0);
 	if (bSpecial) {
@@ -1241,7 +1243,7 @@ public class WifiFixerService extends Service {
     void showNotification(String message, String tickerText, int id) {
 	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-	CharSequence from = "Wifi Fixer";
+	CharSequence from = getText(R.string.app_name);
 	PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 		new Intent(), 0);
 
