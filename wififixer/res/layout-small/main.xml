@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+android:id="@+id/widget46"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+xmlns:android="http://schemas.android.com/apk/res/android"
+>
+<ImageView
+android:id="@+id/wficon"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_x="95px"
+android:src="@drawable/icon" android:layout_y="35px">>
+</ImageView>
+<ImageButton
+android:id="@+id/ImageButton01"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_y="162px"
+android:layout_x="75px">
+</ImageButton>
+<TextView
+android:id="@+id/version"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_marginLeft="50px"
+android:text="@+id/TextView02"
+android:layout_y="46px" android:layout_x="145px">
+</TextView>
+<TextView
+android:id="@+id/aboutText"
+android:layout_width="181px"
+android:layout_height="82px"
+android:layout_marginLeft="20px"
+android:layout_marginRight="20px"
+android:text="Wifi Fixer is a low-resource background program (service) that maintains your wifi connection."
+android:textSize="14px"
+android:layout_x="23px"
+android:layout_y="85px"
+>
+</TextView>
+<TextView
+android:id="@+id/widget39"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Wifi Fixer"
+android:textSize="24sp"
+android:typeface="serif"
+android:textStyle="bold"
+android:layout_x="59px"
+android:layout_y="4px"
+>
+</TextView>
+<TextView
+android:id="@+id/TextView01"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Use Menu Button for Options"
+android:textSize="14px"
+android:layout_x="24px"
+android:layout_y="213px"
+>
+</TextView>
+<Button
+android:id="@+id/aboutButton"
+android:layout_width="wrap_content"
+android:layout_height="34px"
+android:text="About"
+android:layout_x="83px"
+android:layout_y="239px"
+>
+</Button>
+</AbsoluteLayout>
