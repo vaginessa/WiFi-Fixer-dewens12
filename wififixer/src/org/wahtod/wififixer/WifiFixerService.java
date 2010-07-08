@@ -299,7 +299,6 @@ public class WifiFixerService extends Service {
 	private List<String> keyVals = new ArrayList<String>();
 
 	public void loadPrefs(Context context) {
-
 	    settings = PreferenceManager.getDefaultSharedPreferences(context);
 
 	    /*
@@ -410,11 +409,9 @@ public class WifiFixerService extends Service {
 	}
 
 	private void specialCase(Context context) {
-
 	    /*
-	     * Finally, log
+	     * Any special case code here
 	     */
-	    log();
 	}
 
 	private void log() {
