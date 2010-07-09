@@ -21,7 +21,8 @@
 		<PreferenceScreen android:title="Advanced Options">
 
 			<CheckBoxPreference android:key="WiFiLock"
-				android:title="Enable Wifi Lock" android:summary="Enables Wifi Lock, which will increase battery use" />
+				android:defaultValue="true" android:title="Enable Wifi Lock"
+				android:summary="Enables Wifi Lock, which will increase battery use" />
 
 			<CheckBoxPreference android:key="SCREEN"
 				android:title="Disable Sleep"
@@ -34,6 +35,7 @@
 		</PreferenceScreen>
 
 		<ListPreference android:title="Set Wifi Usablity"
+			android:defaultValue="true"
 			android:summary="Allows setting from max wifi usability to minimal battery use"
 			android:key="Performance" android:entries="@array/entries"
 			android:entryValues="@array/entryValues" />

@@ -101,7 +101,6 @@ public class WifiFixerService extends Service {
     private static final String SCREEN_KEY = "SCREEN";
     private static final String DISABLE_KEY = "Disable";
     private static final String WIDGET_KEY = "WidgetBehavior";
-    private static final String PERFORMANCE_KEY = "Performance";
     private static final String LOG_KEY = "SLOG";
     private static final String SUPFIX_KEY = "SUPFIX";
     private static final String SUPFIX_DEFAULT = "SPFDEF";
@@ -262,8 +261,6 @@ public class WifiFixerService extends Service {
     public int lastnid = HTTP_NULL;
     private String cachedIP;
     private final String EMPTYSTRING = "";
-    private final String STRINGZERO = "0";
-    private final String STRINGTWO = "2";
 
     // flags
     public boolean pendingscan = false;
@@ -297,6 +294,11 @@ public class WifiFixerService extends Service {
 
 	public void loadPrefs(Context context) {
 	    settings = PreferenceManager.getDefaultSharedPreferences(context);
+	    /*
+	     * Set defaults. Doing here instead of activity because service may 
+	     * be started first. 
+	     */
+	    PreferenceManager.setDefaultValues(context , R.xml.preferences, false);
 
 	    /*
 	     * Pre-prefs load
@@ -332,16 +334,6 @@ public class WifiFixerService extends Service {
 	}
 
 	private void preLoad(Context context) {
-	    // Setting defaults if performance not set
-	    String PERFORMANCE = settings
-		    .getString(PERFORMANCE_KEY, STRINGZERO);
-	    if (PERFORMANCE == STRINGZERO && !getFlag(lockpref)) {
-		SharedPreferences.Editor edit = settings.edit();
-		edit.putString(PERFORMANCE_KEY, STRINGTWO);
-		edit.putBoolean(WIFILOCK_KEY, true);
-		edit.commit();
-		setFlag(lockpref, true);
-	    }
 
 	    /*
 	     * Sets default for Supplicant Fix pref on < 2.0 to true
@@ -430,6 +422,7 @@ public class WifiFixerService extends Service {
 	    return keyVals[ikey];
 	}
 
+	@SuppressWarnings("unused")
 	public void setFlag(int iKey, boolean flag) {
 	    keyVals[iKey] = flag;
 	}
