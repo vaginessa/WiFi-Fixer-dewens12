@@ -21,7 +21,6 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -294,9 +293,7 @@ public class WifiFixerService extends Service {
 
     private final class WFPreferences extends Object {
 
-	private static final String trueS = "t";
-	private static final String falseS = "f";
-	private List<String> keyVals = new ArrayList<String>();
+	private boolean[] keyVals = new boolean[prefsList.size()];
 
 	public void loadPrefs(Context context) {
 	    settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -309,24 +306,25 @@ public class WifiFixerService extends Service {
 	    /*
 	     * Load
 	     */
-	    keyVals.clear();
-
+	    int index;
 	    for (String prefkey : prefsList) {
+		/*
+		 * Get index
+		 */
+		index = prefsList.indexOf(prefkey);
 		/*
 		 * Before value changes from loading
 		 */
-		preValChanged(context, prefsList.indexOf(prefkey));
+		preValChanged(context, index);
 		/*
 		 * Setting the value from prefs
 		 */
-		if (settings.getBoolean(prefkey, false))
-		    keyVals.add(trueS);
-		else
-		    keyVals.add(falseS);
+		keyVals[index] = settings.getBoolean(prefkey, false);
+
 		/*
 		 * After value changes from loading
 		 */
-		postValChanged(context, prefsList.indexOf(prefkey));
+		postValChanged(context, index);
 
 	    }
 	    specialCase(context);
@@ -417,37 +415,23 @@ public class WifiFixerService extends Service {
 	private void log() {
 	    if (logging) {
 		wfLog(APP_NAME, Logstring.LOADINGSETTINGS);
-		if (getFlag(lockpref))
-		    wfLog(APP_NAME, Logstring.LOCKPREF);
-
-		if (getFlag(notifpref))
-		    wfLog(APP_NAME, Logstring.NOTIFPREF);
-
-		if (getFlag(runpref))
-		    wfLog(APP_NAME, Logstring.RUNPREF);
-
-		if (getFlag(screenpref))
-		    wfLog(APP_NAME, Logstring.SCREENPREF);
-
-		if (getFlag(supfix))
-		    wfLog(APP_NAME, Logstring.SUPPREF);
+		int index;
+		for (String prefkey : prefsList) {
+		    index = prefsList.indexOf(prefkey);
+		    if (keyVals[index])
+			wfLog(APP_NAME, prefkey);
+		}
 
 	    }
 	}
 
 	public boolean getFlag(int ikey) {
 
-	    if (keyVals.get(ikey).equals(trueS))
-		return true;
-	    else
-		return false;
+	    return keyVals[ikey];
 	}
 
 	public void setFlag(int iKey, boolean flag) {
-	    if (flag)
-		keyVals.set(iKey, trueS);
-	    else
-		keyVals.set(iKey, falseS);
+	    keyVals[iKey] = flag;
 	}
 
     };
