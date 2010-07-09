@@ -20,16 +20,18 @@
 
 		<PreferenceScreen android:title="Advanced Options">
 
-			<CheckBoxPreference android:key="WiFiLock"
-				android:defaultValue="true" android:title="Enable Wifi Lock"
-				android:summary="Enables Wifi Lock, which will increase battery use" />
-
-			<CheckBoxPreference android:key="SCREEN"
-				android:title="Disable Sleep"
-				android:summary="Disables sleep on Screen Off, which will increase battery use moderately" />
-
-			<CheckBoxPreference android:key="SUPFIX"
-				android:title="Disable Supplicant Fixes" android:summary="Check if having trouble, or on Android 1.5 or 1.6" />
+			<PreferenceCategory android:title="Wifi Usability">
+				<CheckBoxPreference android:key="WiFiLock"
+					android:defaultValue="true" android:title="Enable Wifi Lock"
+					android:summary="Enables Wifi Lock, which will increase battery use" />
+				<CheckBoxPreference android:key="SCREEN"
+					android:title="Disable Sleep"
+					android:summary="Disables sleep on Screen Off, which will increase battery use moderately" />
+			</PreferenceCategory>
+			<PreferenceCategory android:title="Specialized Fixes">
+				<CheckBoxPreference android:key="SUPFIX"
+					android:title="Disable Supplicant Fixes" android:summary="Check if having trouble, or on Android 1.5 or 1.6" />
+			</PreferenceCategory>
 
 
 		</PreferenceScreen>
