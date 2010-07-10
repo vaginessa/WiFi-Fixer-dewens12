@@ -79,13 +79,5 @@ android:layout_x="64px"
 android:layout_y="353px"
 >
 </TextView>
-<Button
-android:id="@+id/aboutButton"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text="About"
-android:layout_x="122px"
-android:layout_y="376px"
->
-</Button>
+
 </AbsoluteLayout>

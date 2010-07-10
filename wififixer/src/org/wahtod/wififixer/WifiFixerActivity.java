@@ -31,8 +31,6 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.RemoteViews;
 import android.widget.TextView;
@@ -51,22 +49,13 @@ public class WifiFixerActivity extends Activity {
     private static final int MENU_SEND = 2;
     private static final int MENU_PREFS = 3;
     private static final int MENU_HELP = 4;
+    private static final int MENU_ABOUT = 5;
     private static final int LOGGING_GROUP = 42;
     SharedPreferences settings;
     // New key for About nag
     // Set this when you change the About xml
     static final String sABOUT = "ABOUT2";
 
-    OnClickListener clickR = new OnClickListener() {
-	public void onClick(View target) {
-	    switch (target.getId()) {
-	    case R.id.aboutButton:
-		Intent myIntent = new Intent(target.getContext(), About.class);
-		startActivity(myIntent);
-		break;
-	    }
-	}
-    };
 
     String getPrefs() {
 	settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -174,7 +163,9 @@ public class WifiFixerActivity extends Activity {
 	    // ---display the versioncode--
 	    vers = pi.versionName;
 	} catch (NameNotFoundException e) {
-	    // TODO Auto-generated catch block
+	    /*
+	     * shouldn't ever be not found
+	     */
 	    e.printStackTrace();
 	}
 	TextView vButton = (TextView) findViewById(R.id.version);
@@ -241,7 +232,7 @@ public class WifiFixerActivity extends Activity {
 	nm.notify(31337, notif);
 
     }
-    
+
     private void removeNag() {
 	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	nm.cancel(31337);
@@ -279,11 +270,6 @@ public class WifiFixerActivity extends Activity {
 	// Set layout version code
 	setText();
 	// handle input
-
-	// set up all the buttons
-	// Wish we could use a clicklistener in the xml but buh duh 1.5
-	findViewById(R.id.aboutButton).setOnClickListener(clickR);
-	// findViewById(R.id.okButton).setOnClickListener(clickR);
 
 	oncreate_setup();
 
@@ -337,6 +323,9 @@ public class WifiFixerActivity extends Activity {
 	menu.add(Menu.NONE, MENU_HELP, 3, "Help").setIcon(
 		R.drawable.ic_menu_help);
 
+	menu.add(Menu.NONE, MENU_ABOUT, 4, "About").setIcon(
+		R.drawable.ic_menu_info);
+
 	return true;
     }
 
@@ -346,9 +335,11 @@ public class WifiFixerActivity extends Activity {
 	super.onOptionsItemSelected(item);
 
 	switch (item.getItemId()) {
+	
 	case MENU_LOGGING:
 	    toggleLog();
 	    return true;
+	    
 	case MENU_SEND:
 	    sendLog();
 	    return true;
@@ -359,6 +350,10 @@ public class WifiFixerActivity extends Activity {
 
 	case MENU_HELP:
 	    launchHelp();
+	    return true;
+	case MENU_ABOUT:
+	    Intent myIntent = new Intent(this, About.class);
+	    startActivity(myIntent);
 	    return true;
 
 	}
