@@ -70,8 +70,8 @@ public class WifiFixerService extends Service {
     // Intent Constants
     public static final String FIXWIFI = "FIXWIFI";
     private static final String AUTHSTRING = "31415927";
-    
-    //For Auth
+
+    // For Auth
     private static final String AUTHEXTRA = "IRRADIATED";
     private static final String AUTH = "AUTH";
 
@@ -195,7 +195,6 @@ public class WifiFixerService extends Service {
     private boolean pendingreconnect = false;
     // Switch for network check type
     private boolean httppref = false;
- 
 
     // misc types
     private String lastssid = EMPTYSTRING;
@@ -352,7 +351,6 @@ public class WifiFixerService extends Service {
 	    return keyVals[ikey];
 	}
 
-	
 	@SuppressWarnings("unused")
 	public void setFlag(final int iKey, final boolean flag) {
 	    keyVals[iKey] = flag;
@@ -411,7 +409,7 @@ public class WifiFixerService extends Service {
 	}
     };
 
-   private final Runnable rRepair = new Runnable() {
+    private final Runnable rRepair = new Runnable() {
 	public void run() {
 	    if (!getIsWifiEnabled()) {
 		hMainWrapper(TEMPLOCK_OFF);
@@ -745,7 +743,8 @@ public class WifiFixerService extends Service {
 
     }
 
-    private final boolean getHttpHeaders() throws IOException, URISyntaxException {
+    private final boolean getHttpHeaders() throws IOException,
+	    URISyntaxException {
 
 	// Turns out the old way was better
 	// I just wasn't doing it right.
@@ -892,13 +891,13 @@ public class WifiFixerService extends Service {
 	    sleepCheck(true);
 	    if (logging) {
 		wfLog(this, APP_NAME, getString(R.string.screen_off_handler));
-		if(!prefs.getFlag(screenpref))
+		if (!prefs.getFlag(screenpref))
 		    wfLog(this, LogService.SCREEN_OFF, null);
 	    }
 	} else {
 	    if (logging) {
 		wfLog(this, APP_NAME, getString(R.string.screen_on_handler));
-		if(!prefs.getFlag(screenpref))
+		if (!prefs.getFlag(screenpref))
 		    wfLog(this, LogService.SCREEN_ON, null);
 	    }
 	    screenisoff = false;
@@ -1100,7 +1099,7 @@ public class WifiFixerService extends Service {
 	}
     }
 
-    private final void hMainWrapper(final int hmain,final long delay) {
+    private final void hMainWrapper(final int hmain, final long delay) {
 	if (hMainCheck(hmain)) {
 	    hMain.removeMessages(hmain);
 	    hMain.sendEmptyMessageDelayed(hmain, delay);
@@ -1403,8 +1402,8 @@ public class WifiFixerService extends Service {
 
     }
 
-    private final void showNotification(final String message, final String tickerText,
-	    final boolean bSpecial) {
+    private final void showNotification(final String message,
+	    final String tickerText, final boolean bSpecial) {
 
 	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
@@ -1426,7 +1425,8 @@ public class WifiFixerService extends Service {
 
     }
 
-    private final void showNotification(final String message, final String tickerText, final int id) {
+    private final void showNotification(final String message,
+	    final String tickerText, final int id) {
 	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
 	CharSequence from = getText(R.string.app_name);
@@ -1513,7 +1513,8 @@ public class WifiFixerService extends Service {
 	    wfLog(this, APP_NAME, getString(R.string.running_wifi_repair));
     }
 
-    private final static void wfLog(final Context context,final String APP_NAME, final String Message) {
+    private final static void wfLog(final Context context,
+	    final String APP_NAME, final String Message) {
 	Intent sendIntent = new Intent(LOGINTENT);
 	sendIntent.putExtra(LogService.APPNAME, APP_NAME);
 	sendIntent.putExtra(LogService.Message, Message);
