@@ -30,5 +30,16 @@
         <item>3</item>
     </string-array>
     
+    <string-array name="wfsleep">
+        <item>Default</item>
+        <item>Never While Plugged In</item>
+        <item>Never</item>
+    </string-array>
+    
+    <string-array name="wfsleepValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
     
 </resources>

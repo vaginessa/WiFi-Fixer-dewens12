@@ -37,7 +37,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -330,8 +329,8 @@ public class WifiFixerService extends Service {
 	    /*
 	     * Any special case code here
 	     */
-	    ContentResolver cr = getContentResolver();
-            android.provider.Settings.System.putInt(cr, android.provider.Settings.System.WIFI_SLEEP_POLICY, android.provider.Settings.System.WIFI_SLEEP_POLICY_NEVER);
+
+	    
 	}
 
 	private void log() {

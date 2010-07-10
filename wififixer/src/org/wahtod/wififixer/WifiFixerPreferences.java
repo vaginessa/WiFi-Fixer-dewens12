@@ -16,11 +16,13 @@
 
 package org.wahtod.wififixer;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.provider.Settings.SettingNotFoundException;
 import android.util.Log;
 
 public class WifiFixerPreferences extends PreferenceActivity implements
@@ -30,7 +32,6 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	super.onCreate(savedInstanceState);
 
 	addPreferencesFromResource(R.xml.preferences);
-
 
     }
 
@@ -89,6 +90,35 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	    stopService(new Intent(this, WifiFixerService.class));
 	    edit.putBoolean("SLOG", false);
 	    edit.commit();
+	} else if (key.contains("WFSLEEP")) {
+	    /*
+	     * Setting Wifi Sleep Policy
+	     */
+	    ContentResolver cr = getContentResolver();
+	    String wfsleep = prefs.getString("WFSLEEP", "3");
+	    if (wfsleep != "3") {
+
+		android.provider.Settings.System.putInt(cr,
+			android.provider.Settings.System.WIFI_SLEEP_POLICY,
+			Integer.valueOf(wfsleep));
+	    } else {
+		/*
+		 * Set to system state
+		 */
+		try {
+		    wfsleep = String
+			    .valueOf(android.provider.Settings.System
+				    .getInt(
+					    cr,
+					    android.provider.Settings.System.WIFI_SLEEP_POLICY));
+		    edit.putString("WFSLEEP", wfsleep);
+		    edit.commit();
+		} catch (SettingNotFoundException e) {
+		    /*
+		     * Should always be found since our clients are > SDK2
+		     */
+		}
+	    }
 	}
 
 	// Send reload intent to WifiFixerService when a preference value
@@ -96,5 +126,4 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	Intent sendIntent = new Intent(WifiFixerService.class.getName());
 	startService(sendIntent);
     }
-
 }

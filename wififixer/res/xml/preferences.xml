@@ -29,7 +29,12 @@
 					android:summary="Disables sleep on Screen Off, which will increase battery use moderately" />
 			</PreferenceCategory>
 			<PreferenceCategory android:title="Specialized Fixes">
-				<CheckBoxPreference android:key="SUPFIX"
+			<ListPreference android:title="Wifi Sleep Policy"
+			android:defaultValue="3"
+			android:summary="Controls when Wifi chip sleeps"
+			android:key="WFSLEEP" android:entries="@array/wfsleep"
+			android:entryValues="@array/wfsleepValues" />
+			<CheckBoxPreference android:key="SUPFIX"
 					android:title="Disable Supplicant Fixes" android:summary="Check if having trouble, or on Android 1.5 or 1.6" />
 			</PreferenceCategory>
 
