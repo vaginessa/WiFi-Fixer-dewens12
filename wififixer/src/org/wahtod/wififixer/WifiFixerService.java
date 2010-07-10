@@ -1158,6 +1158,8 @@ public class WifiFixerService extends Service {
 	try {
 	    if (InetAddress.getByName(cachedIP).isReachable(REACHABLE)) {
 		isUp = true;
+		if (logging)
+		    wfLog(this, APP_NAME, getString(R.string.icmp_success));
 	    }
 	} catch (UnknownHostException e) {
 	    if (logging)
