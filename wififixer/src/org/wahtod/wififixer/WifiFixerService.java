@@ -330,7 +330,6 @@ public class WifiFixerService extends Service {
 	     * Any special case code here
 	     */
 
-	    
 	}
 
 	private void log() {
@@ -669,7 +668,6 @@ public class WifiFixerService extends Service {
 	hMain.removeMessages(REPAIR);
 	hMain.removeMessages(WIFITASK);
 	hMain.removeMessages(TEMPLOCK_ON);
-	hMain.removeMessages(TEMPLOCK_OFF);
     }
 
     private void clearQueue() {
@@ -1385,7 +1383,7 @@ public class WifiFixerService extends Service {
     }
 
     private void sleepCheck(boolean state) {
-	if (state && prefs.getFlag(screenpref)) {
+	if (state && prefs.getFlag(screenpref) && getIsWifiEnabled()) {
 	    /*
 	     * Start sleep check
 	     */
