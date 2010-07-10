@@ -260,7 +260,7 @@ public class WifiFixerService extends Service {
 	    log();
 	}
 
-	private void preLoad(Context context) {
+	private final void preLoad(Context context) {
 
 	    /*
 	     * Sets default for Supplicant Fix pref on < 2.0 to true
@@ -289,7 +289,7 @@ public class WifiFixerService extends Service {
 
 	}
 
-	private void preValChanged(Context context, int index) {
+	private final void preValChanged(Context context, int index) {
 	    switch (index) {
 	    case loggingpref:
 		// Kill the Log Service if it's up
@@ -301,7 +301,7 @@ public class WifiFixerService extends Service {
 
 	}
 
-	private void postValChanged(Context context, int index) {
+	private final void postValChanged(Context context, int index) {
 	    switch (index) {
 	    case runpref:
 		// Check RUNPREF and set SHOULDRUN
@@ -326,14 +326,14 @@ public class WifiFixerService extends Service {
 	    }
 	}
 
-	private void specialCase(Context context) {
+	private final void specialCase(Context context) {
 	    /*
 	     * Any special case code here
 	     */
 
 	}
 
-	private void log() {
+	private final void log() {
 	    if (logging) {
 		wfLog(getBaseContext(), APP_NAME,
 			getString(R.string.loading_settings));
@@ -347,13 +347,14 @@ public class WifiFixerService extends Service {
 	    }
 	}
 
-	public boolean getFlag(int ikey) {
+	public final boolean getFlag(final int ikey) {
 
 	    return keyVals[ikey];
 	}
 
+	
 	@SuppressWarnings("unused")
-	public void setFlag(int iKey, boolean flag) {
+	public void setFlag(final int iKey, final boolean flag) {
 	    keyVals[iKey] = flag;
 	}
 
@@ -410,7 +411,7 @@ public class WifiFixerService extends Service {
 	}
     };
 
-    Runnable rRepair = new Runnable() {
+   private final Runnable rRepair = new Runnable() {
 	public void run() {
 	    if (!getIsWifiEnabled()) {
 		hMainWrapper(TEMPLOCK_OFF);
@@ -442,7 +443,7 @@ public class WifiFixerService extends Service {
 
     };
 
-    Runnable rReconnect = new Runnable() {
+    private final Runnable rReconnect = new Runnable() {
 	public void run() {
 	    if (!getIsWifiEnabled()) {
 		hMainWrapper(TEMPLOCK_OFF);
@@ -473,7 +474,7 @@ public class WifiFixerService extends Service {
 
     };
 
-    Runnable rMain = new Runnable() {
+    private final Runnable rMain = new Runnable() {
 	public void run() {
 	    // Queue next run of main runnable
 	    hMainWrapper(MAIN, LOOPWAIT);
@@ -507,7 +508,7 @@ public class WifiFixerService extends Service {
 	}
     };
 
-    Runnable rWifiTask = new Runnable() {
+    private final Runnable rWifiTask = new Runnable() {
 	public void run() {
 	    // dispatch appropriate level
 	    switch (wifirepair) {
@@ -556,14 +557,14 @@ public class WifiFixerService extends Service {
 	}
     };
 
-    Runnable rWifiOff = new Runnable() {
+    private final Runnable rWifiOff = new Runnable() {
 	public void run() {
 	    wm.setWifiEnabled(false);
 	}
 
     };
 
-    Runnable rWifiOn = new Runnable() {
+    private final Runnable rWifiOn = new Runnable() {
 	public void run() {
 	    wm.setWifiEnabled(true);
 	    pendingwifitoggle = false;
@@ -574,7 +575,7 @@ public class WifiFixerService extends Service {
 
     };
 
-    Runnable rSleepcheck = new Runnable() {
+    private final Runnable rSleepcheck = new Runnable() {
 	public void run() {
 	    /*
 	     * This is all we want to do.
@@ -618,7 +619,7 @@ public class WifiFixerService extends Service {
 
     };
 
-    void checkLock(WifiManager.WifiLock lock) {
+    private final void checkLock(WifiManager.WifiLock lock) {
 	if (!prefschanged) {
 	    // Yeah, first run. Ok, if LOCKPREF true, acquire lock.
 	    if (prefs.getFlag(lockpref)) {
@@ -650,7 +651,7 @@ public class WifiFixerService extends Service {
 	}
     }
 
-    void cleanup() {
+    private final void cleanup() {
 
 	if (!cleanup) {
 
@@ -664,14 +665,14 @@ public class WifiFixerService extends Service {
 	stopSelf();
     }
 
-    private void cleanupPosts() {
+    private final void cleanupPosts() {
 	hMain.removeMessages(RECONNECT);
 	hMain.removeMessages(REPAIR);
 	hMain.removeMessages(WIFITASK);
 	hMain.removeMessages(TEMPLOCK_ON);
     }
 
-    private void clearQueue() {
+    private final void clearQueue() {
 	hMain.removeMessages(RECONNECT);
 	hMain.removeMessages(REPAIR);
 	hMain.removeMessages(WIFITASK);
@@ -680,7 +681,7 @@ public class WifiFixerService extends Service {
 	pendingreconnect = false;
     }
 
-    private boolean checkNetwork() {
+    private final boolean checkNetwork() {
 	boolean isup = false;
 
 	/*
@@ -709,13 +710,13 @@ public class WifiFixerService extends Service {
 	return isup;
     }
 
-    private void checkWifiState() {
+    private final void checkWifiState() {
 	if (!getIsWifiEnabled() && wifishouldbeon) {
 	    hMainWrapper(WIFI_ON);
 	}
     }
 
-    private boolean connectToAP(int AP, boolean disableOthers) {
+    private final boolean connectToAP(int AP, boolean disableOthers) {
 	if (logging)
 	    wfLog(this, APP_NAME, getString(R.string.connecting_to_network)
 		    + AP);
@@ -723,12 +724,12 @@ public class WifiFixerService extends Service {
 	return wm.enableNetwork(AP, disableOthers);
     }
 
-    private void deleteNotification(int id) {
+    private final void deleteNotification(int id) {
 	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	nm.cancel(id);
     }
 
-    private void fixWifi() {
+    private final void fixWifi() {
 	if (getIsWifiEnabled(true)) {
 	    if (getSupplicantState() == SupplicantState.ASSOCIATED
 		    || getSupplicantState() == SupplicantState.COMPLETED) {
@@ -744,7 +745,7 @@ public class WifiFixerService extends Service {
 
     }
 
-    private boolean getHttpHeaders() throws IOException, URISyntaxException {
+    private final boolean getHttpHeaders() throws IOException, URISyntaxException {
 
 	// Turns out the old way was better
 	// I just wasn't doing it right.
@@ -782,7 +783,7 @@ public class WifiFixerService extends Service {
 	return isup;
     }
 
-    private boolean getIsOnWifi() {
+    private final boolean getIsOnWifi() {
 	boolean wifi = false;
 	ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 	if (cm.getActiveNetworkInfo() != null
@@ -791,7 +792,7 @@ public class WifiFixerService extends Service {
 	return wifi;
     }
 
-    private boolean getIsWifiEnabled() {
+    private final boolean getIsWifiEnabled() {
 	boolean enabled = false;
 
 	if (wm.isWifiEnabled()) {
@@ -805,7 +806,7 @@ public class WifiFixerService extends Service {
 	return enabled;
     }
 
-    private boolean getIsWifiEnabled(boolean log) {
+    private final boolean getIsWifiEnabled(boolean log) {
 	boolean enabled = false;
 
 	if (wm.isWifiEnabled()) {
@@ -820,7 +821,7 @@ public class WifiFixerService extends Service {
 	return enabled;
     }
 
-    private int getNetworkID() {
+    private final int getNetworkID() {
 	myWifi = wm.getConnectionInfo();
 	int id = myWifi.getNetworkId();
 	if (id != HTTP_NULL) {
@@ -830,7 +831,7 @@ public class WifiFixerService extends Service {
 	return id;
     }
 
-    private void getPackageInfo() {
+    private final void getPackageInfo() {
 	PackageManager pm = getPackageManager();
 	try {
 	    // ---get the package info---
@@ -845,16 +846,16 @@ public class WifiFixerService extends Service {
 	}
     }
 
-    private SupplicantState getSupplicantState() {
+    private final SupplicantState getSupplicantState() {
 	myWifi = wm.getConnectionInfo();
 	return myWifi.getSupplicantState();
     }
 
-    private WifiManager getWifiManager() {
+    private final WifiManager getWifiManager() {
 	return (WifiManager) getSystemService(Context.WIFI_SERVICE);
     }
 
-    private void handleAuth(Intent intent) {
+    private final void handleAuth(final Intent intent) {
 	if (intent.getStringExtra(AUTHEXTRA).contains(AUTHSTRING)) {
 	    if (logging)
 		wfLog(this, APP_NAME, getString(R.string.authed));
@@ -873,7 +874,7 @@ public class WifiFixerService extends Service {
 	}
     }
 
-    private void handleNetworkAction() {
+    private final void handleNetworkAction() {
 	/*
 	 * This action means network connectivty has changed but, we only want
 	 * to run this code for wifi
@@ -884,7 +885,7 @@ public class WifiFixerService extends Service {
 	icmpCache();
     }
 
-    private void handleScreenAction(String iAction) {
+    private final void handleScreenAction(final String iAction) {
 
 	if (iAction.equals(Intent.ACTION_SCREEN_OFF)) {
 	    screenisoff = true;
@@ -906,7 +907,7 @@ public class WifiFixerService extends Service {
 
     }
 
-    private void handleStart(Intent intent) {
+    private final void handleStart(final Intent intent) {
 
 	/*
 	 * Handle null intent: might be from widget or from Android
@@ -943,7 +944,7 @@ public class WifiFixerService extends Service {
 
     }
 
-    private void handleSupplicantIntent(Intent intent) {
+    private final void handleSupplicantIntent(final Intent intent) {
 
 	/*
 	 * Get Supplicant New State
@@ -977,7 +978,7 @@ public class WifiFixerService extends Service {
 
     }
 
-    private void handleSupplicantState(String sState) {
+    private final void handleSupplicantState(final String sState) {
 
 	/*
 	 * Dispatches appropriate supplicant fix
@@ -1002,7 +1003,7 @@ public class WifiFixerService extends Service {
 	    logSupplicant(sState);
     }
 
-    private void handleWidgetAction() {
+    private final void handleWidgetAction() {
 	if (logging)
 	    wfLog(this, APP_NAME, getString(R.string.widgetaction));
 	/*
@@ -1029,7 +1030,7 @@ public class WifiFixerService extends Service {
 		    .show();
     }
 
-    private void handleWifiResults() {
+    private final void handleWifiResults() {
 	hMainWrapper(TEMPLOCK_OFF);
 	if (!getIsWifiEnabled())
 	    return;
@@ -1055,7 +1056,7 @@ public class WifiFixerService extends Service {
 
     }
 
-    private void handleWifiState(Intent intent) {
+    private final void handleWifiState(final Intent intent) {
 	// What kind of state change is it?
 	int state = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
 		WifiManager.WIFI_STATE_UNKNOWN);
@@ -1089,7 +1090,7 @@ public class WifiFixerService extends Service {
     /*
      * Controlling all possible sources of race
      */
-    private void hMainWrapper(int hmain) {
+    private final void hMainWrapper(final int hmain) {
 	if (hMainCheck(hmain)) {
 	    hMain.removeMessages(hmain);
 	    hMain.sendEmptyMessage(hmain);
@@ -1099,7 +1100,7 @@ public class WifiFixerService extends Service {
 	}
     }
 
-    private void hMainWrapper(int hmain, long delay) {
+    private final void hMainWrapper(final int hmain,final long delay) {
 	if (hMainCheck(hmain)) {
 	    hMain.removeMessages(hmain);
 	    hMain.sendEmptyMessageDelayed(hmain, delay);
@@ -1109,7 +1110,7 @@ public class WifiFixerService extends Service {
 	}
     }
 
-    private boolean hMainCheck(int hmain) {
+    private final boolean hMainCheck(final int hmain) {
 	if (templock) {
 	    /*
 	     * Check if is appropriate post and if lock exists
@@ -1139,7 +1140,7 @@ public class WifiFixerService extends Service {
 	return isUp;
     }
 
-    private boolean hostup() {
+    private final boolean hostup() {
 
 	if (httppref)
 	    return httpHostup();
@@ -1148,7 +1149,7 @@ public class WifiFixerService extends Service {
 
     }
 
-    private boolean icmpHostup() {
+    private final boolean icmpHostup() {
 	boolean isUp = false;
 	/*
 	 * If IP hasn't been cached yet cache it
@@ -1174,7 +1175,7 @@ public class WifiFixerService extends Service {
 	return isUp;
     }
 
-    private void icmpCache() {
+    private final void icmpCache() {
 	/*
 	 * Caches DHCP gateway IP for ICMP check
 	 */
@@ -1184,11 +1185,11 @@ public class WifiFixerService extends Service {
 	    wfLog(this, APP_NAME, getString(R.string.cached_ip) + cachedIP);
     }
 
-    private static String intToIp(int i) {
+    private final static String intToIp(final int i) {
 	return Formatter.formatIpAddress(i);
     }
 
-    private boolean isKnownAPinRange() {
+    private final boolean isKnownAPinRange() {
 	boolean state = false;
 	wifiList = wm.getScanResults();
 	/*
@@ -1266,7 +1267,7 @@ public class WifiFixerService extends Service {
 	return state;
     }
 
-    private void logSupplicant(String state) {
+    private final void logSupplicant(final String state) {
 
 	wfLog(this, APP_NAME, getString(R.string.supplicant_state) + state);
 	if (wm.pingSupplicant()) {
@@ -1283,7 +1284,7 @@ public class WifiFixerService extends Service {
 
     }
 
-    private void notifyWrap(String message) {
+    private final void notifyWrap(final String message) {
 	if (prefs.getFlag(notifpref)) {
 	    showNotification(getString(R.string.wifi_connection_problem)
 		    + message, message, ERR_NOTIF);
@@ -1291,7 +1292,7 @@ public class WifiFixerService extends Service {
 
     }
 
-    private static void notifCancel(int notif, Context context) {
+    private final static void notifCancel(final int notif, final Context context) {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(NOTIFICATION_SERVICE);
 	nm.cancel(notif);
@@ -1350,7 +1351,7 @@ public class WifiFixerService extends Service {
 	return START_STICKY;
     }
 
-    private static void refreshWidget(Context context) {
+    private final static void refreshWidget(final Context context) {
 	Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 	int[] widgetids = { 0, 1, 2 };
 	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetids);
@@ -1358,7 +1359,7 @@ public class WifiFixerService extends Service {
 	context.sendBroadcast(intent);
     }
 
-    private void setup() {
+    private final void setup() {
 	// WIFI_MODE_FULL should p. much always be used
 	lock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, WFLOCK_TAG);
 	checkLock(lock);
@@ -1387,7 +1388,7 @@ public class WifiFixerService extends Service {
 
     }
 
-    private void sleepCheck(boolean state) {
+    private final void sleepCheck(final boolean state) {
 	if (state && prefs.getFlag(screenpref) && getIsWifiEnabled()) {
 	    /*
 	     * Start sleep check
@@ -1402,8 +1403,8 @@ public class WifiFixerService extends Service {
 
     }
 
-    private void showNotification(String message, String tickerText,
-	    boolean bSpecial) {
+    private final void showNotification(final String message, final String tickerText,
+	    final boolean bSpecial) {
 
 	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
@@ -1425,7 +1426,7 @@ public class WifiFixerService extends Service {
 
     }
 
-    private void showNotification(String message, String tickerText, int id) {
+    private final void showNotification(final String message, final String tickerText, final int id) {
 	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
 	CharSequence from = getText(R.string.app_name);
@@ -1441,20 +1442,20 @@ public class WifiFixerService extends Service {
 	nm.notify(id, notif);
     }
 
-    private void startScan() {
+    private final void startScan() {
 	// We want a lock after a scan
 	wm.startScan();
 	tempLock(LOCKWAIT);
     }
 
-    private void switchHostMethod() {
+    private final void switchHostMethod() {
 	if (httppref)
 	    httppref = false;
 	else
 	    httppref = true;
     }
 
-    private void supplicantFix(boolean wftoggle) {
+    private final void supplicantFix(final boolean wftoggle) {
 	// Toggling wifi fixes the supplicant
 	pendingscan = true;
 	if (wftoggle)
@@ -1464,14 +1465,14 @@ public class WifiFixerService extends Service {
 	    wfLog(this, APP_NAME, getString(R.string.running_supplicant_fix));
     }
 
-    private void tempLock(int time) {
+    private final void tempLock(final int time) {
 
 	hMainWrapper(TEMPLOCK_ON);
 	// Queue for later
 	hMainWrapper(TEMPLOCK_OFF, time);
     }
 
-    private void toggleWifi() {
+    private final void toggleWifi() {
 	if (pendingwifitoggle)
 	    return;
 
@@ -1486,7 +1487,7 @@ public class WifiFixerService extends Service {
 	hMainWrapper(WIFI_ON, LOCKWAIT);
     }
 
-    private void wakeLock(boolean state) {
+    private final void wakeLock(final boolean state) {
 	PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 
 	if (wakelock == null)
@@ -1506,13 +1507,13 @@ public class WifiFixerService extends Service {
 
     }
 
-    private void wifiRepair() {
+    private final void wifiRepair() {
 	hMainWrapper(WIFITASK);
 	if (logging)
 	    wfLog(this, APP_NAME, getString(R.string.running_wifi_repair));
     }
 
-    private static void wfLog(Context context, String APP_NAME, String Message) {
+    private final static void wfLog(final Context context,final String APP_NAME, final String Message) {
 	Intent sendIntent = new Intent(LOGINTENT);
 	sendIntent.putExtra(LogService.APPNAME, APP_NAME);
 	sendIntent.putExtra(LogService.Message, Message);
