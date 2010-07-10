@@ -1362,6 +1362,9 @@ public class WifiFixerService extends Service {
 	// WIFI_MODE_FULL should p. much always be used
 	lock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, WFLOCK_TAG);
 	checkLock(lock);
+	/*
+	 * Create filter, add intents we're looking for. 
+	 */
 	IntentFilter myFilter = new IntentFilter();
 
 	// Wifi State filter

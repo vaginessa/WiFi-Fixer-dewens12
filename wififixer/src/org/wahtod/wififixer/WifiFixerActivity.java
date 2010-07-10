@@ -320,7 +320,7 @@ public class WifiFixerActivity extends Activity {
 	menu.add(Menu.NONE, MENU_PREFS, 2, "Preferences").setIcon(
 		R.drawable.ic_prefs);
 
-	menu.add(Menu.NONE, MENU_HELP, 3, "Help").setIcon(
+	menu.add(Menu.NONE, MENU_HELP, 3, "Documentation").setIcon(
 		R.drawable.ic_menu_help);
 
 	menu.add(Menu.NONE, MENU_ABOUT, 4, "About").setIcon(

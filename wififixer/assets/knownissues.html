@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Menu</title>
+<meta name="generator" content="Bluefish 1.0.7">
+<meta name="author" content="virtualbox">
+<meta name="date" content="2010-05-12T14:40:38-0700">
+<meta name="copyright" content="">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta http-equiv="content-style-type" content="text/css">
+<meta http-equiv="expires" content="0">
+</head>
+<body link="silver" alink="aqua" vlink="lightblue">
+<font color="white">
+<div><h2>Known Issues:</h2></div>
+
+
+<h4>Wifi Sleep Policy</h4>
+<br>
+On Nexus One devices and some few others, Wifi Sleep Policy is ignored when the screen is off.<br><br>
+This has been reported happening on every Android version, and may have to do with the specific wifi chipset.<br><br>
+There is currently no workaround other than setting Wifi Performance to Max Wifi.  This may or may not work.<br><br>
+<br>
+
+<h4>Network Notifications</h4>
+Because Wifi Fixer intercepts Wifi scans, it causes Network Notifications to function erratically.<br><br>
+Wifi Fixer will have its own Network Notifications in a future release.<br><br>
+<br>
+<h4>Slower Reconnection</h4>
+The main network check was reduced from every 5 seconds to every 10 seconds. In testing, it was found that the perceived responsiveness was nearly as high as 5 seconds, but the battery savings were substantial. 
+<br>
+<br>
+<H4>Hidden SSIDs</H4>
+Android is not able to work with wifi networks using hidden SSIDs.<br><br>
+If your network is set to non-broadcast SSID, you will have to change it to broadcast.<br>
+<br>
+<br>
+<h4>Task Killers</h4>
+Important: Wifi Fixer's service can be rendered inoperable by task managers and auto task killers.<br><br>
+It is strongly recommended that you do not use Wifi Fixer with this kind of software, but if you must, add WifiFixerService and LogService to the allowed list.<br><br>
+
+<br><br>
+<div align="center"><a href="index.html">Index</a></div>
+<br><br>
+<div align="center"><a href="stop">Close Help</a></div>
+<font>
+</body>
+</html>
