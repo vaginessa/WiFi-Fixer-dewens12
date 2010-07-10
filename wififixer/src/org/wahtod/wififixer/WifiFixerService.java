@@ -890,12 +890,14 @@ public class WifiFixerService extends Service {
 	    sleepCheck(true);
 	    if (logging) {
 		wfLog(this, APP_NAME, getString(R.string.screen_off_handler));
-		wfLog(this, LogService.SCREEN_OFF, null);
+		if(!prefs.getFlag(screenpref))
+		    wfLog(this, LogService.SCREEN_OFF, null);
 	    }
 	} else {
 	    if (logging) {
 		wfLog(this, APP_NAME, getString(R.string.screen_on_handler));
-		wfLog(this, LogService.SCREEN_ON, null);
+		if(!prefs.getFlag(screenpref))
+		    wfLog(this, LogService.SCREEN_ON, null);
 	    }
 	    screenisoff = false;
 	    sleepCheck(false);
