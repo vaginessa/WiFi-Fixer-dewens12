@@ -204,8 +204,6 @@ public class WifiFixerService extends Service {
     private WifiInfo myWifi;
     private WifiManager.WifiLock lock;
     private SharedPreferences settings;
-    private List<ScanResult> wifiList;
-    private List<WifiConfiguration> wifiConfigs;
     private PowerManager.WakeLock wakelock;
     private DefaultHttpClient httpclient;
     private HttpParams httpparams;
@@ -1190,7 +1188,9 @@ public class WifiFixerService extends Service {
 
     private final boolean isKnownAPinRange() {
 	boolean state = false;
-	wifiList = wm.getScanResults();
+	;
+	;
+	final List<ScanResult> wifiList = wm.getScanResults();
 	/*
 	 * Catch null if scan results fires after wifi disabled or while wifi is
 	 * in intermediate state
@@ -1203,7 +1203,7 @@ public class WifiFixerService extends Service {
 	/*
 	 * wifiConfigs is just a reference to known networks.
 	 */
-	wifiConfigs = wm.getConfiguredNetworks();
+	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
 
 	/*
 	 * Iterate the known networks over the scan results, adding found known
@@ -1363,7 +1363,7 @@ public class WifiFixerService extends Service {
 	lock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, WFLOCK_TAG);
 	checkLock(lock);
 	/*
-	 * Create filter, add intents we're looking for. 
+	 * Create filter, add intents we're looking for.
 	 */
 	IntentFilter myFilter = new IntentFilter();
 
