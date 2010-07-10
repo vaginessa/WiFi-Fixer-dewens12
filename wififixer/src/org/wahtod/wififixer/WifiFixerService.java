@@ -70,7 +70,7 @@ public class WifiFixerService extends Service {
 
     // Constants
     public static final String FIXWIFI = "FIXWIFI";
-    public static final String AUTHSTRING = "31415927";
+    private static final String AUTHSTRING = "31415927";
     // http://www.jerkcity.com
     private static final String AUTHEXTRA = "IRRADIATED";
     private static final String AUTH = "AUTH";
@@ -95,16 +95,6 @@ public class WifiFixerService extends Service {
     private static final int W_RECONNECT = 1;
     private static final int W_REPAIR = 2;
 
-    // Preference key constants
-    private static final String WIFILOCK_KEY = "WiFiLock";
-    private static final String NOTIF_KEY = "Notifications";
-    private static final String SCREEN_KEY = "SCREEN";
-    private static final String DISABLE_KEY = "Disable";
-    private static final String WIDGET_KEY = "WidgetBehavior";
-    private static final String LOG_KEY = "SLOG";
-    private static final String SUPFIX_KEY = "SUPFIX";
-    private static final String SUPFIX_DEFAULT = "SPFDEF";
-
     // ID For notification
     private static final int NOTIFID = 31337;
 
@@ -127,12 +117,12 @@ public class WifiFixerService extends Service {
     private static final String LOGINTENT = "org.wahtod.wififixer.LogService.LOG";
 
     // ms for IsReachable
-    final static int REACHABLE = 3000;
-    final static int HTTPREACH = 8000;
+    private final static int REACHABLE = 3000;
+    private final static int HTTPREACH = 8000;
     // ms for main loop sleep
-    final static int LOOPWAIT = 10000;
+    private final static int LOOPWAIT = 10000;
     // ms for lock delays
-    final static int LOCKWAIT = 5000;
+    private final static int LOCKWAIT = 5000;
     // ms to wait after trying to connect
     private static final int CONNECTWAIT = 10000;
 
@@ -140,68 +130,79 @@ public class WifiFixerService extends Service {
     private static final int DBM_DEFAULT = -100;
 
     // *****************************
-    public final static String APP_NAME = "WifiFixerService";
+    final static String APP_NAME = "WifiFixerService";
 
     // Flags
-    public boolean cleanup = false;
-    public boolean haslock = false;
-    public boolean prefschanged = false;
-    public boolean wifishouldbeon = false;
+    private boolean cleanup = false;
+    private boolean haslock = false;
+    private boolean prefschanged = false;
+    private boolean wifishouldbeon = false;
+
+    /*
+     * preferences key constants
+     */
+    private static final String WIFILOCK_KEY = "WiFiLock";
+    private static final String NOTIF_KEY = "Notifications";
+    private static final String SCREEN_KEY = "SCREEN";
+    private static final String DISABLE_KEY = "Disable";
+    private static final String WIDGET_KEY = "WidgetBehavior";
+    private static final String LOG_KEY = "SLOG";
+    private static final String SUPFIX_KEY = "SUPFIX";
+    private static final String SUPFIX_DEFAULT = "SPFDEF";
 
     /*
      * Preferences currently used in list form.
      */
-    List<String> prefsList = Arrays.asList(WIFILOCK_KEY, DISABLE_KEY,
+    private List<String> prefsList = Arrays.asList(WIFILOCK_KEY, DISABLE_KEY,
 	    SCREEN_KEY, WIDGET_KEY, SUPFIX_KEY, NOTIF_KEY, LOG_KEY);
     /*
      * prefsList maps to values
      */
-    public final int lockpref = 0;
-    public final int runpref = 1;
-    public final int screenpref = 2;
-    public final int widgetpref = 3;
-    public final int supfix = 4;
-    public final int notifpref = 5;
-    public final int loggingpref = 6;
+    private final int lockpref = 0;
+    private final int runpref = 1;
+    private final int screenpref = 2;
+    private final int widgetpref = 3;
+    private final int supfixpref = 4;
+    private final int notifpref = 5;
+    private final int loggingpref = 6;
 
     // logging flag, local for performance
-    public boolean logging = false;
+    private boolean logging = false;
 
     /*
      * 
      */
 
     // Locks and such
-    public boolean templock = false;
-    public static boolean screenisoff = false;
-    public boolean shouldrun = true;
+    private boolean templock = false;
+    private boolean screenisoff = false;
+    private boolean shouldrun = true;
     // various
-    public int wifirepair = W_REASSOCIATE;
+    private int wifirepair = W_REASSOCIATE;
     private static final int HTTP_NULL = -1;
 
-    public int lastnid = HTTP_NULL;
+    private int lastnid = HTTP_NULL;
     private String cachedIP;
     private final String EMPTYSTRING = "";
 
-    // flags
-    public boolean pendingscan = false;
-    public boolean pendingwifitoggle = false;
-    public boolean pendingreconnect = false;
-    public boolean sconnected = false;
+    // Wifi Fix flags
+    private boolean pendingscan = false;
+    private boolean pendingwifitoggle = false;
+    private boolean pendingreconnect = false;
     // Switch for network check type
-    public boolean httppref = false;
+    private boolean httppref = false;
     // http://bash.org/?924453
 
     // misc types
-    public String lastssid = EMPTYSTRING;
-    public int version = MAIN;
+    private String lastssid = EMPTYSTRING;
+    private int version = MAIN;
     // Public Utilities
-    public WifiManager wm;
-    public WifiInfo myWifi;
-    public WifiManager.WifiLock lock;
-    public SharedPreferences settings;
-    public List<ScanResult> wifiList;
-    public List<WifiConfiguration> wifiConfigs;
+    private WifiManager wm;
+    private WifiInfo myWifi;
+    private WifiManager.WifiLock lock;
+    private SharedPreferences settings;
+    private List<ScanResult> wifiList;
+    private List<WifiConfiguration> wifiConfigs;
     private PowerManager.WakeLock wakelock;
     private DefaultHttpClient httpclient;
     private HttpParams httpparams;
@@ -267,7 +268,7 @@ public class WifiFixerService extends Service {
 		int ver;
 		try {
 		    ver = Integer
-		    .valueOf(Build.VERSION.RELEASE.substring(0, 1));
+			    .valueOf(Build.VERSION.RELEASE.substring(0, 1));
 		} catch (NumberFormatException e) {
 		    ver = 0;
 		}
@@ -416,7 +417,7 @@ public class WifiFixerService extends Service {
 		    if (logging)
 			wfLog(getBaseContext(), APP_NAME,
 				getString(R.string.connected_to_network)
-				+ getNetworkID());
+					+ getNetworkID());
 		} else {
 		    pendingreconnect = true;
 		    toggleWifi();
@@ -447,7 +448,7 @@ public class WifiFixerService extends Service {
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME,
 			    getString(R.string.connected_to_network)
-			    + getNetworkID());
+				    + getNetworkID());
 	    } else {
 		wifirepair = W_REASSOCIATE;
 		pendingscan = true;
@@ -539,9 +540,9 @@ public class WifiFixerService extends Service {
 	    if (logging) {
 		wfLog(getBaseContext(), APP_NAME,
 			getString(R.string.fix_algorithm)
-			+ Integer.toString(wifirepair)
-			+ getString(R.string.lastnid)
-			+ Integer.toString(lastnid));
+				+ Integer.toString(wifirepair)
+				+ getString(R.string.lastnid)
+				+ Integer.toString(lastnid));
 	    }
 	}
     };
@@ -910,7 +911,7 @@ public class WifiFixerService extends Service {
 	 * Get Supplicant New State
 	 */
 	String sState = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE)
-	.toString();
+		.toString();
 
 	/*
 	 * Flush queue if connected
@@ -928,7 +929,7 @@ public class WifiFixerService extends Service {
 	/*
 	 * New setting disabling supplicant fixes
 	 */
-	if (prefs.getFlag(supfix))
+	if (prefs.getFlag(supfixpref))
 	    return;
 
 	/*
@@ -1252,7 +1253,7 @@ public class WifiFixerService extends Service {
 
     private static void notifCancel(int notif, Context context) {
 	NotificationManager nm = (NotificationManager) context
-	.getSystemService(NOTIFICATION_SERVICE);
+		.getSystemService(NOTIFICATION_SERVICE);
 	nm.cancel(notif);
     }
 
