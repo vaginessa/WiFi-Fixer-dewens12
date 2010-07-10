@@ -46,7 +46,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
-import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
@@ -77,6 +76,7 @@ public class WifiFixerService extends Service {
 
     // Wake Lock Tag
     private static final String WFWAKELOCK = "WFWakeLock";
+
     // Runnable Constants for handler
     private static final int MAIN = 0;
     private static final int REPAIR = 1;
@@ -86,6 +86,7 @@ public class WifiFixerService extends Service {
     private static final int TEMPLOCK_OFF = 5;
     private static final int WIFI_OFF = 6;
     private static final int WIFI_ON = 7;
+    private static final int SLEEPCHECK = 8;
 
     /*
      * Constants for wifirepair values
@@ -121,6 +122,8 @@ public class WifiFixerService extends Service {
     private final static int HTTPREACH = 8000;
     // ms for main loop sleep
     private final static int LOOPWAIT = 10000;
+    // ms for sleep loop check
+    private final static long SLEEPWAIT = 60000;
     // ms for lock delays
     private final static int LOCKWAIT = 5000;
     // ms to wait after trying to connect
@@ -397,6 +400,10 @@ public class WifiFixerService extends Service {
 		hMain.post(rWifiOn);
 		break;
 
+	    case SLEEPCHECK:
+		hMain.post(rSleepcheck);
+		break;
+
 	    }
 	}
     };
@@ -565,6 +572,21 @@ public class WifiFixerService extends Service {
 
     };
 
+    Runnable rSleepcheck = new Runnable() {
+	public void run() {
+	    /*
+	     * This is all we want to do.
+	     */
+
+	    fixWifi();
+	    /*
+	     * Post next run
+	     */
+	    hMainWrapper(SLEEPCHECK, SLEEPWAIT);
+	}
+
+    };
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 	public void onReceive(Context context, Intent intent) {
 
@@ -659,6 +681,18 @@ public class WifiFixerService extends Service {
 
     private boolean checkNetwork() {
 	boolean isup = false;
+
+	/*
+	 * First check if wifi is current network
+	 */
+
+	if (!getIsOnWifi()) {
+	    if (logging)
+		wfLog(this, APP_NAME,
+			getString(R.string.wifi_not_current_network));
+	    return false;
+	}
+
 	/*
 	 * Failover switch
 	 */
@@ -750,9 +784,8 @@ public class WifiFixerService extends Service {
     private boolean getIsOnWifi() {
 	boolean wifi = false;
 	ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-	NetworkInfo ni = cm.getActiveNetworkInfo();
-	// Null check, this can be null, so NPE
-	if (ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI)
+	if (cm.getActiveNetworkInfo() != null
+		&& cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI)
 	    wifi = true;
 	return wifi;
     }
@@ -779,7 +812,7 @@ public class WifiFixerService extends Service {
 		wfLog(this, APP_NAME, getString(R.string.wifi_is_enabled));
 	    enabled = true;
 	} else {
-	    if (logging)
+	    if (logging && log)
 		wfLog(this, APP_NAME, getString(R.string.wifi_is_disabled));
 	}
 
@@ -854,6 +887,7 @@ public class WifiFixerService extends Service {
 
 	if (iAction.equals(Intent.ACTION_SCREEN_OFF)) {
 	    screenisoff = true;
+	    sleepCheck(true);
 	    if (logging) {
 		wfLog(this, APP_NAME, getString(R.string.screen_off_handler));
 		wfLog(this, LogService.SCREEN_OFF, null);
@@ -864,6 +898,7 @@ public class WifiFixerService extends Service {
 		wfLog(this, LogService.SCREEN_ON, null);
 	    }
 	    screenisoff = false;
+	    sleepCheck(false);
 	}
 
     }
@@ -947,15 +982,15 @@ public class WifiFixerService extends Service {
 
 	if (!getIsWifiEnabled()) {
 	    return;
-	} else if (sState == SCANNING) {
+	} else if (screenisoff && !prefs.getFlag(screenpref))
+	    return;
+	else if (sState == SCANNING) {
 	    pendingscan = true;
 	} else if (sState == DISCONNECTED) {
 	    pendingscan = true;
 	    startScan();
 	    notifyWrap(sState);
-	} else if (screenisoff)
-	    return;
-	else if (sState == INACTIVE) {
+	} else if (sState == INACTIVE) {
 	    supplicantFix(true);
 	    notifyWrap(sState);
 	}
@@ -1344,6 +1379,21 @@ public class WifiFixerService extends Service {
 	myFilter.addAction(FixerWidget.W_INTENT);
 
 	registerReceiver(receiver, myFilter);
+
+    }
+
+    private void sleepCheck(boolean state) {
+	if (state && prefs.getFlag(screenpref)) {
+	    /*
+	     * Start sleep check
+	     */
+	    hMainWrapper(SLEEPCHECK, SLEEPWAIT);
+	} else {
+	    /*
+	     * Screen is on, remove any posts
+	     */
+	    hMain.removeMessages(SLEEPCHECK);
+	}
 
     }
 

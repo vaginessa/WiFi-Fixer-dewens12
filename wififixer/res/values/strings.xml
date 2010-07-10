@@ -16,6 +16,7 @@
 
 -->
 <resources>
+    <string name="wifi_not_current_network">Wifi Not Current Network</string>
     <string name="running_wifi_repair">Running Wifi Repair</string>
     <string name="releasing_wake_lock">Releasing Wake Lock</string>
     <string name="acquiring_wake_lock">Acquiring Wake Lock</string>
