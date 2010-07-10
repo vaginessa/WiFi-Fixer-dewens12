@@ -67,10 +67,11 @@ public class WifiFixerService extends Service {
      * code, you can afford to donate. I don't need a fancy auth scheme.
      */
 
-    // Constants
+    // Intent Constants
     public static final String FIXWIFI = "FIXWIFI";
     private static final String AUTHSTRING = "31415927";
-    // http://www.jerkcity.com
+    
+    //For Auth
     private static final String AUTHEXTRA = "IRRADIATED";
     private static final String AUTH = "AUTH";
 
@@ -194,7 +195,7 @@ public class WifiFixerService extends Service {
     private boolean pendingreconnect = false;
     // Switch for network check type
     private boolean httppref = false;
-    // http://bash.org/?924453
+ 
 
     // misc types
     private String lastssid = EMPTYSTRING;
