@@ -157,7 +157,7 @@ public class WifiFixerService extends Service {
     /*
      * Preferences currently used in list form.
      */
-    private static List<String> prefsList = Arrays
+    private static final List<String> prefsList = Arrays
 	    .asList(WIFILOCK_KEY, DISABLE_KEY, SCREEN_KEY, WIDGET_KEY,
 		    SUPFIX_KEY, NOTIF_KEY, LOG_KEY);
     /*
@@ -362,11 +362,10 @@ public class WifiFixerService extends Service {
 
     };
 
-    
     /*
      * Handler for rMain tick and other runnables
      */
-    
+
     private final Handler hMain = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
@@ -453,7 +452,7 @@ public class WifiFixerService extends Service {
 	}
 
     };
-    
+
     /*
      * Runs first time supplicant nonresponsive
      */
@@ -487,7 +486,7 @@ public class WifiFixerService extends Service {
 	}
 
     };
-    
+
     /*
      * Main tick
      */
@@ -526,7 +525,7 @@ public class WifiFixerService extends Service {
     };
 
     /*
-     * Handles non-supplicant wifi fixes. 
+     * Handles non-supplicant wifi fixes.
      */
     private final Runnable rWifiTask = new Runnable() {
 	public void run() {
