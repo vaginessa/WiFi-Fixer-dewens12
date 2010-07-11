@@ -157,61 +157,63 @@ public class WifiFixerService extends Service {
     /*
      * Preferences currently used in list form.
      */
-    private List<String> prefsList = Arrays.asList(WIFILOCK_KEY, DISABLE_KEY,
-	    SCREEN_KEY, WIDGET_KEY, SUPFIX_KEY, NOTIF_KEY, LOG_KEY);
+    private static List<String> prefsList = Arrays
+	    .asList(WIFILOCK_KEY, DISABLE_KEY, SCREEN_KEY, WIDGET_KEY,
+		    SUPFIX_KEY, NOTIF_KEY, LOG_KEY);
     /*
      * prefsList maps to values
      */
-    private final int lockpref = 0;
-    private final int runpref = 1;
-    private final int screenpref = 2;
-    private final int widgetpref = 3;
-    private final int supfixpref = 4;
-    private final int notifpref = 5;
-    private final int loggingpref = 6;
+    private final static int lockpref = 0;
+    private final static int runpref = 1;
+    private final static int screenpref = 2;
+    private final static int widgetpref = 3;
+    private final static int supfixpref = 4;
+    private final static int notifpref = 5;
+    private final static int loggingpref = 6;
 
     // logging flag, local for performance
-    private boolean logging = false;
+    private static boolean logging = false;
 
     /*
      * 
      */
 
     // Locks and such
-    private boolean templock = false;
-    private boolean screenisoff = false;
-    private boolean shouldrun = true;
+    private static boolean templock = false;
+    private static boolean screenisoff = false;
+    private static boolean shouldrun = true;
     // various
     private int wifirepair = W_REASSOCIATE;
     private static final int HTTP_NULL = -1;
 
-    private int lastnid = HTTP_NULL;
-    private String cachedIP;
-    private final String EMPTYSTRING = "";
+    private static int lastnid = HTTP_NULL;
+    private static String cachedIP;
+    // Empty string
+    private final static String EMPTYSTRING = "";
 
     // Wifi Fix flags
-    private boolean pendingscan = false;
-    private boolean pendingwifitoggle = false;
-    private boolean pendingreconnect = false;
+    private static boolean pendingscan = false;
+    private static boolean pendingwifitoggle = false;
+    private static boolean pendingreconnect = false;
     // Switch for network check type
-    private boolean httppref = false;
+    private static boolean httppref = false;
 
     // misc types
-    private String lastssid = EMPTYSTRING;
-    private int version = MAIN;
+    private static String lastssid = EMPTYSTRING;
+    private static int version = MAIN;
     // Public Utilities
-    private WifiManager wm;
-    private WifiInfo myWifi;
-    private WifiManager.WifiLock lock;
-    private SharedPreferences settings;
-    private PowerManager.WakeLock wakelock;
-    private DefaultHttpClient httpclient;
-    private HttpParams httpparams;
-    private HttpHead head;
-    private HttpResponse response;
-    private WFPreferences prefs = new WFPreferences();
+    private static WifiManager wm;
+    private static WifiInfo myWifi;
+    private static WifiManager.WifiLock lock;
+    private static SharedPreferences settings;
+    private static PowerManager.WakeLock wakelock;
+    private static DefaultHttpClient httpclient;
+    private static HttpParams httpparams;
+    private static HttpHead head;
+    private static HttpResponse response;
+    private static WFPreferences prefs = new WFPreferences();
 
-    private final class WFPreferences extends Object {
+    private static final class WFPreferences extends Object {
 
 	private boolean[] keyVals = new boolean[prefsList.size()];
 
@@ -254,7 +256,7 @@ public class WifiFixerService extends Service {
 
 	    }
 	    specialCase(context);
-	    log();
+	    log(context);
 	}
 
 	private final void preLoad(Context context) {
@@ -274,8 +276,9 @@ public class WifiFixerService extends Service {
 		    ver = 0;
 		}
 		if (logging)
-		    wfLog(getBaseContext(), APP_NAME,
-			    getString(R.string.version) + ver);
+		    wfLog(context, APP_NAME, context
+			    .getString(R.string.version)
+			    + ver);
 		if (ver < 2) {
 		    edit.putBoolean(SUPFIX_KEY, true);
 		}
@@ -291,7 +294,7 @@ public class WifiFixerService extends Service {
 	    case loggingpref:
 		// Kill the Log Service if it's up
 		if (logging && !settings.getBoolean(LOG_KEY, false))
-		    wfLog(getBaseContext(), LogService.DIE, null);
+		    wfLog(context, LogService.DIE, null);
 		break;
 
 	    }
@@ -330,15 +333,15 @@ public class WifiFixerService extends Service {
 
 	}
 
-	private final void log() {
+	private final void log(Context context) {
 	    if (logging) {
-		wfLog(getBaseContext(), APP_NAME,
-			getString(R.string.loading_settings));
+		wfLog(context, APP_NAME, context
+			.getString(R.string.loading_settings));
 		int index;
 		for (String prefkey : prefsList) {
 		    index = prefsList.indexOf(prefkey);
 		    if (keyVals[index])
-			wfLog(getBaseContext(), APP_NAME, prefkey);
+			wfLog(context, APP_NAME, prefkey);
 		}
 
 	    }
@@ -418,12 +421,13 @@ public class WifiFixerService extends Service {
 	    }
 
 	    if (isKnownAPinRange()) {
-		if (connectToAP(lastnid, true) && (getNetworkID() != HTTP_NULL)) {
+		if (connectToAP(lastnid, true)
+			&& (getNetworkID(getBaseContext()) != HTTP_NULL)) {
 		    pendingreconnect = false;
 		    if (logging)
 			wfLog(getBaseContext(), APP_NAME,
 				getString(R.string.connected_to_network)
-					+ getNetworkID());
+					+ getNetworkID(getBaseContext()));
 		} else {
 		    pendingreconnect = true;
 		    toggleWifi();
@@ -449,12 +453,12 @@ public class WifiFixerService extends Service {
 		return;
 	    }
 	    if (isKnownAPinRange() && connectToAP(lastnid, true)
-		    && (getNetworkID() != HTTP_NULL)) {
+		    && (getNetworkID(getBaseContext()) != HTTP_NULL)) {
 		pendingreconnect = false;
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME,
 			    getString(R.string.connected_to_network)
-				    + getNetworkID());
+				    + getNetworkID(getBaseContext()));
 	    } else {
 		wifirepair = W_REASSOCIATE;
 		pendingscan = true;
@@ -470,7 +474,7 @@ public class WifiFixerService extends Service {
 
     };
 
-    private final Runnable rMain = new Runnable() {
+    private final  Runnable rMain = new Runnable() {
 	public void run() {
 	    // Queue next run of main runnable
 	    hMainWrapper(MAIN, LOOPWAIT);
@@ -504,7 +508,7 @@ public class WifiFixerService extends Service {
 	}
     };
 
-    private final Runnable rWifiTask = new Runnable() {
+    private final  Runnable rWifiTask = new Runnable() {
 	public void run() {
 	    // dispatch appropriate level
 	    switch (wifirepair) {
@@ -818,11 +822,12 @@ public class WifiFixerService extends Service {
 	return enabled;
     }
 
-    private final int getNetworkID() {
+    private static final int getNetworkID(Context context) {
+	WifiManager wm = getWifiManager(context);
 	myWifi = wm.getConnectionInfo();
 	int id = myWifi.getNetworkId();
 	if (id != HTTP_NULL) {
-	    lastnid = id;
+	    WifiFixerService.lastnid = id;
 	    lastssid = myWifi.getSSID();
 	}
 	return id;
@@ -848,8 +853,8 @@ public class WifiFixerService extends Service {
 	return myWifi.getSupplicantState();
     }
 
-    private final WifiManager getWifiManager() {
-	return (WifiManager) getSystemService(Context.WIFI_SERVICE);
+    private static final WifiManager getWifiManager(Context context) {
+	return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     }
 
     private final void handleAuth(final Intent intent) {
@@ -1277,7 +1282,7 @@ public class WifiFixerService extends Service {
 	}
 
 	if (lastssid.length() < 2)
-	    getNetworkID();
+	    getNetworkID(getBaseContext());
 
 	wfLog(this, APP_NAME, getString(R.string.ssid) + lastssid);
 
@@ -1308,7 +1313,7 @@ public class WifiFixerService extends Service {
     @Override
     public void onCreate() {
 
-	wm = getWifiManager();
+	wm = getWifiManager(this);
 	getPackageInfo();
 
 	if (logging) {
