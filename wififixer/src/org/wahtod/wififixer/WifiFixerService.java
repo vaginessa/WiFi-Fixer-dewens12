@@ -719,7 +719,7 @@ public class WifiFixerService extends Service {
 	 * First check if wifi is current network
 	 */
 
-	if (!getIsOnWifi()) {
+	if (!getIsOnWifi(this)) {
 	    if (logging)
 		wfLog(this, APP_NAME,
 			getString(R.string.wifi_not_current_network));
@@ -761,7 +761,7 @@ public class WifiFixerService extends Service {
     }
 
     private final void fixWifi() {
-	if (getIsWifiEnabled(true)) {
+	if (getIsWifiEnabled(this, true)) {
 	    if (getSupplicantState() == SupplicantState.ASSOCIATED
 		    || getSupplicantState() == SupplicantState.COMPLETED) {
 		if (!checkNetwork()) {
@@ -815,16 +815,17 @@ public class WifiFixerService extends Service {
 	return isup;
     }
 
-    private final boolean getIsOnWifi() {
+    private static final boolean getIsOnWifi(Context context) {
 	boolean wifi = false;
-	ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	ConnectivityManager cm = (ConnectivityManager) context
+		.getSystemService(Context.CONNECTIVITY_SERVICE);
 	if (cm.getActiveNetworkInfo() != null
 		&& cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI)
 	    wifi = true;
 	return wifi;
     }
 
-    private final boolean getIsWifiEnabled() {
+    private static final boolean getIsWifiEnabled() {
 	boolean enabled = false;
 
 	if (wm.isWifiEnabled()) {
@@ -838,16 +839,18 @@ public class WifiFixerService extends Service {
 	return enabled;
     }
 
-    private final boolean getIsWifiEnabled(boolean log) {
+    private static final boolean getIsWifiEnabled(Context context, boolean log) {
 	boolean enabled = false;
 
 	if (wm.isWifiEnabled()) {
 	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.wifi_is_enabled));
+		wfLog(context, APP_NAME, context
+			.getString(R.string.wifi_is_enabled));
 	    enabled = true;
 	} else {
 	    if (logging && log)
-		wfLog(this, APP_NAME, getString(R.string.wifi_is_disabled));
+		wfLog(context, APP_NAME, context
+			.getString(R.string.wifi_is_disabled));
 	}
 
 	return enabled;
@@ -912,7 +915,7 @@ public class WifiFixerService extends Service {
 	 * This action means network connectivty has changed but, we only want
 	 * to run this code for wifi
 	 */
-	if (!getIsWifiEnabled() || !getIsOnWifi())
+	if (!getIsWifiEnabled() || !getIsOnWifi(this))
 	    return;
 
 	icmpCache();
