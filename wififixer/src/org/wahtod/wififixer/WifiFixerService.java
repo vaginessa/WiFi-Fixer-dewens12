@@ -213,6 +213,9 @@ public class WifiFixerService extends Service {
     private static HttpResponse response;
     private static WFPreferences prefs = new WFPreferences();
 
+    /*
+     * Preferences object
+     */
     private static final class WFPreferences extends Object {
 
 	private boolean[] keyVals = new boolean[prefsList.size()];
@@ -359,6 +362,11 @@ public class WifiFixerService extends Service {
 
     };
 
+    
+    /*
+     * Handler for rMain tick and other runnables
+     */
+    
     private final Handler hMain = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
@@ -410,6 +418,9 @@ public class WifiFixerService extends Service {
 	}
     };
 
+    /*
+     * Runs second time supplicant nonresponsive
+     */
     private final Runnable rRepair = new Runnable() {
 	public void run() {
 	    if (!getIsWifiEnabled()) {
@@ -442,7 +453,10 @@ public class WifiFixerService extends Service {
 	}
 
     };
-
+    
+    /*
+     * Runs first time supplicant nonresponsive
+     */
     private final Runnable rReconnect = new Runnable() {
 	public void run() {
 	    if (!getIsWifiEnabled()) {
@@ -473,8 +487,11 @@ public class WifiFixerService extends Service {
 	}
 
     };
-
-    private final  Runnable rMain = new Runnable() {
+    
+    /*
+     * Main tick
+     */
+    private final Runnable rMain = new Runnable() {
 	public void run() {
 	    // Queue next run of main runnable
 	    hMainWrapper(MAIN, LOOPWAIT);
@@ -508,7 +525,10 @@ public class WifiFixerService extends Service {
 	}
     };
 
-    private final  Runnable rWifiTask = new Runnable() {
+    /*
+     * Handles non-supplicant wifi fixes. 
+     */
+    private final Runnable rWifiTask = new Runnable() {
 	public void run() {
 	    // dispatch appropriate level
 	    switch (wifirepair) {
@@ -557,6 +577,9 @@ public class WifiFixerService extends Service {
 	}
     };
 
+    /*
+     * Turns off wifi
+     */
     private final Runnable rWifiOff = new Runnable() {
 	public void run() {
 	    wm.setWifiEnabled(false);
@@ -564,6 +587,9 @@ public class WifiFixerService extends Service {
 
     };
 
+    /*
+     * Turns on wifi
+     */
     private final Runnable rWifiOn = new Runnable() {
 	public void run() {
 	    wm.setWifiEnabled(true);
@@ -575,6 +601,9 @@ public class WifiFixerService extends Service {
 
     };
 
+    /*
+     * Sleep tick if wifi is enabled and screenpref
+     */
     private final Runnable rSleepcheck = new Runnable() {
 	public void run() {
 	    /*
@@ -590,6 +619,9 @@ public class WifiFixerService extends Service {
 
     };
 
+    /*
+     * Handles intents we've registered for
+     */
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 	public void onReceive(Context context, Intent intent) {
 
