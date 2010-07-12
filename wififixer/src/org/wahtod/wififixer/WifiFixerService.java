@@ -250,7 +250,7 @@ public class WifiFixerService extends Service {
 		/*
 		 * Setting the value from prefs
 		 */
-		keyVals[index] = settings.getBoolean(prefkey, false);
+		setFlag(index, settings.getBoolean(prefkey, false));
 
 		/*
 		 * After value changes from loading
@@ -355,7 +355,6 @@ public class WifiFixerService extends Service {
 	    return keyVals[ikey];
 	}
 
-	@SuppressWarnings("unused")
 	public void setFlag(final int iKey, final boolean flag) {
 	    keyVals[iKey] = flag;
 	}
@@ -882,7 +881,7 @@ public class WifiFixerService extends Service {
 	}
     }
 
-    private final SupplicantState getSupplicantState() {
+    private static final SupplicantState getSupplicantState() {
 	myWifi = wm.getConnectionInfo();
 	return myWifi.getSupplicantState();
     }
