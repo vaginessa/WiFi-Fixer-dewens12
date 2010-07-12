@@ -593,7 +593,7 @@ public class WifiFixerService extends Service {
 	    wm.setWifiEnabled(true);
 	    pendingwifitoggle = false;
 	    wifishouldbeon = true;
-	    wakeLock(false);
+	    wakeLock(getBaseContext(), false);
 	    deleteNotification(NOTIFID);
 	}
 
