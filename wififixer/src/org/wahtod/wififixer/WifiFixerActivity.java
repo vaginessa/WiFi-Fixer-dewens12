@@ -56,7 +56,6 @@ public class WifiFixerActivity extends Activity {
     // Set this when you change the About xml
     static final String sABOUT = "ABOUT2";
 
-
     String getPrefs() {
 	settings = PreferenceManager.getDefaultSharedPreferences(this);
 	String prefs = "Settings:\n";
@@ -335,11 +334,11 @@ public class WifiFixerActivity extends Activity {
 	super.onOptionsItemSelected(item);
 
 	switch (item.getItemId()) {
-	
+
 	case MENU_LOGGING:
 	    toggleLog();
 	    return true;
-	    
+
 	case MENU_SEND:
 	    sendLog();
 	    return true;

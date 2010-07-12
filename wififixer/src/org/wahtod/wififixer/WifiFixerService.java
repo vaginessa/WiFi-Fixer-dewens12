@@ -220,7 +220,7 @@ public class WifiFixerService extends Service {
 
 	private boolean[] keyVals = new boolean[prefsList.size()];
 
-	public void loadPrefs(Context context) {
+	public void loadPrefs(final Context context) {
 	    settings = PreferenceManager.getDefaultSharedPreferences(context);
 	    /*
 	     * Set defaults. Doing here instead of activity because service may
@@ -262,7 +262,7 @@ public class WifiFixerService extends Service {
 	    log(context);
 	}
 
-	private void preLoad(Context context) {
+	private void preLoad(final Context context) {
 
 	    /*
 	     * Sets default for Supplicant Fix pref on < 2.0 to true
@@ -292,7 +292,7 @@ public class WifiFixerService extends Service {
 
 	}
 
-	private void preValChanged(Context context, int index) {
+	private void preValChanged(final Context context, final int index) {
 	    switch (index) {
 	    case loggingpref:
 		// Kill the Log Service if it's up
@@ -304,7 +304,7 @@ public class WifiFixerService extends Service {
 
 	}
 
-	private void postValChanged(Context context, int index) {
+	private void postValChanged(final Context context, final int index) {
 	    switch (index) {
 	    case runpref:
 		// Check RUNPREF and set SHOULDRUN
@@ -329,14 +329,14 @@ public class WifiFixerService extends Service {
 	    }
 	}
 
-	private void specialCase(Context context) {
+	private void specialCase(final Context context) {
 	    /*
 	     * Any special case code here
 	     */
 
 	}
 
-	private void log(Context context) {
+	private void log(final Context context) {
 	    if (logging) {
 		wfLog(context, APP_NAME, context
 			.getString(R.string.loading_settings));
@@ -621,7 +621,7 @@ public class WifiFixerService extends Service {
      * Handles intents we've registered for
      */
     private BroadcastReceiver receiver = new BroadcastReceiver() {
-	public void onReceive(Context context, Intent intent) {
+	public void onReceive(final Context context, final Intent intent) {
 
 	    /*
 	     * Dispatches the broadcast intent to the appropriate handler method
@@ -641,7 +641,7 @@ public class WifiFixerService extends Service {
 		handleWifiResults();
 	    else if (iAction
 		    .equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
-		handleNetworkAction();
+		handleNetworkAction(getBaseContext());
 	    else if (iAction.equals(FixerWidget.W_INTENT))
 		handleWidgetAction();
 
@@ -728,10 +728,10 @@ public class WifiFixerService extends Service {
 	/*
 	 * Failover switch
 	 */
-	isup = hostup();
+	isup = hostup(this);
 	if (!isup) {
 	    switchHostMethod();
-	    isup = hostup();
+	    isup = hostup(this);
 	    if (!isup)
 		switchHostMethod();
 	} else
@@ -775,7 +775,8 @@ public class WifiFixerService extends Service {
 
     }
 
-    private boolean getHttpHeaders() throws IOException, URISyntaxException {
+    private static boolean getHttpHeaders(final Context context) throws IOException,
+	    URISyntaxException {
 
 	// Turns out the old way was better
 	// I just wasn't doing it right.
@@ -795,7 +796,7 @@ public class WifiFixerService extends Service {
 	    HttpConnectionParams.setConnectionTimeout(httpparams, HTTPREACH);
 	    HttpConnectionParams.setSoTimeout(httpparams, HTTPREACH);
 	    HttpConnectionParams.setLinger(httpparams, REPAIR);
-	    HttpConnectionParams.setStaleCheckingEnabled(httpparams, false);
+	    HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
 	    httpclient.setParams(httpparams);
 	}
 	/*
@@ -807,13 +808,14 @@ public class WifiFixerService extends Service {
 	if (status != HTTP_NULL)
 	    isup = true;
 	if (logging) {
-	    wfLog(this, APP_NAME, getString(R.string.http_status) + status);
+	    wfLog(context, APP_NAME, context.getString(R.string.http_status)
+		    + status);
 	}
 
 	return isup;
     }
 
-    private static boolean getIsOnWifi(Context context) {
+    private static boolean getIsOnWifi(final Context context) {
 	boolean wifi = false;
 	ConnectivityManager cm = (ConnectivityManager) context
 		.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -886,7 +888,7 @@ public class WifiFixerService extends Service {
 	return myWifi.getSupplicantState();
     }
 
-    private static WifiManager getWifiManager(Context context) {
+    private static WifiManager getWifiManager(final Context context) {
 	return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     }
 
@@ -909,15 +911,15 @@ public class WifiFixerService extends Service {
 	}
     }
 
-    private void handleNetworkAction() {
+  private static void handleNetworkAction(final Context context) {
 	/*
 	 * This action means network connectivty has changed but, we only want
 	 * to run this code for wifi
 	 */
-	if (!getIsWifiEnabled() || !getIsOnWifi(this))
+	if (!getIsWifiEnabled() || !getIsOnWifi(context))
 	    return;
 
-	icmpCache();
+	icmpCache(context);
     }
 
     private void handleScreenAction(final String iAction) {
@@ -1156,68 +1158,87 @@ public class WifiFixerService extends Service {
 	return true;
     }
 
-    private boolean httpHostup() {
+    private static boolean httpHostup(final Context context) {
 	boolean isUp = false;
 	/*
 	 * getHttpHeaders() does all the heavy lifting
 	 */
 	try {
-	    isUp = getHttpHeaders();
+	    isUp = getHttpHeaders(context);
 	} catch (IOException e) {
-	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.httpexception));
+	    try {
+		/*
+		 * Second try
+		 */
+		isUp = getHttpHeaders(context);
+	    } catch (IOException e1) {
+		if (logging)
+		    wfLog(context, APP_NAME, context
+			    .getString(R.string.httpexception));
+	    } catch (URISyntaxException e1) {
+		if (logging)
+		    wfLog(context, APP_NAME, context
+			    .getString(R.string.http_method));
+	    }
+
 	} catch (URISyntaxException e) {
 	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.urlexception));
+		wfLog(context, APP_NAME, context
+			.getString(R.string.urlexception));
 	}
 	if (logging)
-	    wfLog(this, APP_NAME, getString(R.string.http_method));
+	    wfLog(context, APP_NAME, context.getString(R.string.http_method));
 	return isUp;
     }
 
-    private boolean hostup() {
+    private static boolean hostup(final Context context) {
 
 	if (httppref)
-	    return httpHostup();
+	    return httpHostup(context);
 	else
-	    return icmpHostup();
+	    return icmpHostup(context);
 
     }
 
-    private boolean icmpHostup() {
+    private static boolean icmpHostup(final Context context) {
 	boolean isUp = false;
 	/*
 	 * If IP hasn't been cached yet cache it
 	 */
 	if (cachedIP == null)
-	    icmpCache();
+	    icmpCache(context);
 
 	try {
 	    if (InetAddress.getByName(cachedIP).isReachable(REACHABLE)) {
 		isUp = true;
 		if (logging)
-		    wfLog(this, APP_NAME, getString(R.string.icmp_success));
+		    wfLog(context, APP_NAME, context
+			    .getString(R.string.icmp_success));
 	    }
 	} catch (UnknownHostException e) {
 	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.unknownhostexception));
+		wfLog(context, APP_NAME, context
+			.getString(R.string.unknownhostexception));
 	} catch (IOException e) {
 	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.ioexception));
+		wfLog(context, APP_NAME, context
+			.getString(R.string.ioexception));
 	}
 	if (logging)
-	    wfLog(this, APP_NAME, getString(R.string.icmp_method) + cachedIP);
+	    wfLog(context, APP_NAME, context.getString(R.string.icmp_method)
+		    + cachedIP);
 	return isUp;
     }
 
-    private void icmpCache() {
+    private static void icmpCache(final Context context) {
 	/*
 	 * Caches DHCP gateway IP for ICMP check
 	 */
 	DhcpInfo info = wm.getDhcpInfo();
 	cachedIP = intToIp(info.gateway);
 	if (logging)
-	    wfLog(this, APP_NAME, getString(R.string.cached_ip) + cachedIP);
+	    wfLog(context, APP_NAME, context.getString(R.string.cached_ip)
+		    + cachedIP);
     }
 
     private static String intToIp(final int i) {
