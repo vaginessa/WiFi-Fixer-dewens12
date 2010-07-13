@@ -16,6 +16,7 @@
 
 -->
 <resources>
+    <string name="wifi_repair_post_failed">Wifi Repair post failed</string>
     <string name="icmp_success">ICMP Success</string>
     <string name="wifi_not_current_network">Wifi Not Current Network</string>
     <string name="running_wifi_repair">Running Wifi Repair</string>

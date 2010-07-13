@@ -528,7 +528,7 @@ public class WifiFixerService extends Service {
      */
     private Runnable rWifiTask = new Runnable() {
 	public void run() {
-	    // dispatch appropriate level
+
 	    switch (wifirepair) {
 
 	    case W_REASSOCIATE:
@@ -734,6 +734,8 @@ public class WifiFixerService extends Service {
 	    isup = hostup(this);
 	    if (!isup)
 		switchHostMethod();
+	    else
+		wifirepair = W_REASSOCIATE;
 	} else
 	    wifirepair = W_REASSOCIATE;
 
@@ -775,8 +777,8 @@ public class WifiFixerService extends Service {
 
     }
 
-    private static boolean getHttpHeaders(final Context context) throws IOException,
-	    URISyntaxException {
+    private static boolean getHttpHeaders(final Context context)
+	    throws IOException, URISyntaxException {
 
 	// Turns out the old way was better
 	// I just wasn't doing it right.
@@ -911,7 +913,7 @@ public class WifiFixerService extends Service {
 	}
     }
 
-  private static void handleNetworkAction(final Context context) {
+    private static void handleNetworkAction(final Context context) {
 	/*
 	 * This action means network connectivty has changed but, we only want
 	 * to run this code for wifi
@@ -1127,23 +1129,27 @@ public class WifiFixerService extends Service {
     /*
      * Controlling all possible sources of race
      */
-    private void hMainWrapper(final int hmain) {
+    private boolean hMainWrapper(final int hmain) {
 	if (hMainCheck(hmain)) {
 	    hMain.removeMessages(hmain);
 	    hMain.sendEmptyMessage(hmain);
+	    return true;
 	} else {
 	    hMain.removeMessages(hmain);
 	    hMain.sendEmptyMessageDelayed(hmain, REACHABLE);
+	    return false;
 	}
     }
 
-    private void hMainWrapper(final int hmain, final long delay) {
+    private boolean hMainWrapper(final int hmain, final long delay) {
 	if (hMainCheck(hmain)) {
 	    hMain.removeMessages(hmain);
 	    hMain.sendEmptyMessageDelayed(hmain, delay);
+	    return true;
 	} else {
 	    hMain.removeMessages(hmain);
 	    hMain.sendEmptyMessageDelayed(hmain, delay + REACHABLE);
+	    return false;
 	}
     }
 
@@ -1573,9 +1579,10 @@ public class WifiFixerService extends Service {
     }
 
     private void wifiRepair() {
-	hMainWrapper(WIFITASK);
-	if (logging)
+	if (hMainWrapper(WIFITASK) && logging)
 	    wfLog(this, APP_NAME, getString(R.string.running_wifi_repair));
+	else
+	    wfLog(this, APP_NAME, getString(R.string.wifi_repair_post_failed));
     }
 
     private static void wfLog(final Context context, final String APP_NAME,
