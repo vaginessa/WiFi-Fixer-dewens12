@@ -183,7 +183,7 @@ public class WifiFixerService extends Service {
     private static boolean screenisoff = false;
     private static boolean shouldrun = true;
     // various
-    private int wifirepair = W_REASSOCIATE;
+    private static int wifirepair = W_REASSOCIATE;
     private static final int HTTP_NULL = -1;
 
     private static int lastnid = HTTP_NULL;
@@ -195,8 +195,6 @@ public class WifiFixerService extends Service {
     private static boolean pendingscan = false;
     private static boolean pendingwifitoggle = false;
     private static boolean pendingreconnect = false;
-    // Switch for network check type
-    private static boolean httppref = false;
 
     // misc types
     private static String lastssid = EMPTYSTRING;
@@ -567,7 +565,7 @@ public class WifiFixerService extends Service {
 	    /*
 	     * Remove wake lock if there is one
 	     */
-	    wakeLock(getBaseContext(),false);
+	    wakeLock(getBaseContext(), false);
 
 	    if (logging) {
 		wfLog(getBaseContext(), APP_NAME,
@@ -715,30 +713,27 @@ public class WifiFixerService extends Service {
 	pendingreconnect = false;
     }
 
-    private boolean checkNetwork() {
+    private static boolean checkNetwork(final Context context) {
 	boolean isup = false;
 
 	/*
 	 * First check if wifi is current network
 	 */
 
-	if (!getIsOnWifi(this)) {
+	if (!getIsOnWifi(context)) {
 	    if (logging)
-		wfLog(this, APP_NAME,
-			getString(R.string.wifi_not_current_network));
+		wfLog(context, APP_NAME, context
+			.getString(R.string.wifi_not_current_network));
 	    return false;
 	}
 
 	/*
 	 * Failover switch
 	 */
-	isup = hostup(this);
+	isup = icmpHostup(context);
 	if (!isup) {
-	    switchHostMethod();
-	    isup = hostup(this);
-	    if (!isup)
-		switchHostMethod();
-	    else
+	    isup = httpHostup(context);
+	    if(isup)
 		wifirepair = W_REASSOCIATE;
 	} else
 	    wifirepair = W_REASSOCIATE;
@@ -769,7 +764,7 @@ public class WifiFixerService extends Service {
 	if (getIsWifiEnabled(this, true)) {
 	    if (getSupplicantState() == SupplicantState.ASSOCIATED
 		    || getSupplicantState() == SupplicantState.COMPLETED) {
-		if (!checkNetwork()) {
+		if (!checkNetwork(this)) {
 		    wifiRepair();
 		}
 	    } else {
@@ -1136,28 +1131,25 @@ public class WifiFixerService extends Service {
     private boolean hMainWrapper(final int hmain) {
 	if (hMainCheck(hmain)) {
 	    hMain.removeMessages(hmain);
-	    hMain.sendEmptyMessage(hmain);
-	    return true;
+	    return hMain.sendEmptyMessage(hmain);
+
 	} else {
 	    hMain.removeMessages(hmain);
-	    hMain.sendEmptyMessageDelayed(hmain, REACHABLE);
-	    return false;
+	    return hMain.sendEmptyMessageDelayed(hmain, REACHABLE);
 	}
     }
 
     private boolean hMainWrapper(final int hmain, final long delay) {
 	if (hMainCheck(hmain)) {
 	    hMain.removeMessages(hmain);
-	    hMain.sendEmptyMessageDelayed(hmain, delay);
-	    return true;
+	    return hMain.sendEmptyMessageDelayed(hmain, delay);
 	} else {
 	    hMain.removeMessages(hmain);
-	    hMain.sendEmptyMessageDelayed(hmain, delay + REACHABLE);
-	    return false;
+	    return hMain.sendEmptyMessageDelayed(hmain, delay + REACHABLE);
 	}
     }
 
-    private boolean hMainCheck(final int hmain) {
+    private static boolean hMainCheck(final int hmain) {
 	if (templock) {
 	    /*
 	     * Check if is appropriate post and if lock exists
@@ -1199,15 +1191,6 @@ public class WifiFixerService extends Service {
 	if (logging)
 	    wfLog(context, APP_NAME, context.getString(R.string.http_method));
 	return isUp;
-    }
-
-    private static boolean hostup(final Context context) {
-
-	if (httppref)
-	    return httpHostup(context);
-	else
-	    return icmpHostup(context);
-
     }
 
     private static boolean icmpHostup(final Context context) {
@@ -1520,12 +1503,6 @@ public class WifiFixerService extends Service {
 	tempLock(LOCKWAIT);
     }
 
-    private static void switchHostMethod() {
-	if (httppref)
-	    httppref = false;
-	else
-	    httppref = true;
-    }
 
     private void supplicantFix(final boolean wftoggle) {
 	// Toggling wifi fixes the supplicant
@@ -1583,16 +1560,25 @@ public class WifiFixerService extends Service {
     }
 
     private void wifiRepair() {
-	/*
-	 * obtain wake lock if screen is off posts don't run when in deep sleep
-	 */
-	if (screenisoff)
-	    wakeLock(this, true);
+
 	/*
 	 * Queue rWifiTask runnable
 	 */
-	if (hMainWrapper(WIFITASK) && logging)
-	    wfLog(this, APP_NAME, getString(R.string.running_wifi_repair));
+	if (!screenisoff) {
+	    hMainWrapper(WIFITASK);
+	    if (logging)
+		wfLog(this, APP_NAME, getString(R.string.running_wifi_repair));
+	} else {
+	    /*
+	     * if screen off, try wake lock then resubmit to handler
+	     */
+	    wakeLock(this, true);
+	    hMainWrapper(WIFITASK, REACHABLE);
+	    if (logging)
+		wfLog(this, APP_NAME,
+			getString(R.string.wifi_repair_post_failed));
+	}
+
     }
 
     private static void wfLog(final Context context, final String APP_NAME,
