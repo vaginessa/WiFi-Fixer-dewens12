@@ -564,6 +564,10 @@ public class WifiFixerService extends Service {
 		notifyWrap(getString(R.string.repairing));
 		break;
 	    }
+	    /*
+	     * Remove wake lock if there is one
+	     */
+	    wakeLock(getBaseContext(),false);
 
 	    if (logging) {
 		wfLog(getBaseContext(), APP_NAME,
@@ -1579,10 +1583,16 @@ public class WifiFixerService extends Service {
     }
 
     private void wifiRepair() {
+	/*
+	 * obtain wake lock if screen is off posts don't run when in deep sleep
+	 */
+	if (screenisoff)
+	    wakeLock(this, true);
+	/*
+	 * Queue rWifiTask runnable
+	 */
 	if (hMainWrapper(WIFITASK) && logging)
 	    wfLog(this, APP_NAME, getString(R.string.running_wifi_repair));
-	else
-	    wfLog(this, APP_NAME, getString(R.string.wifi_repair_post_failed));
     }
 
     private static void wfLog(final Context context, final String APP_NAME,
