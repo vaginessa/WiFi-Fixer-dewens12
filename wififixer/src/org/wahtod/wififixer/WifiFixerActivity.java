@@ -58,6 +58,16 @@ public class WifiFixerActivity extends Activity {
     // Set this when you change the About xml
     static final String sABOUT = "ABOUT2";
 
+    void authCheck() {
+	if (!ISAUTHED) {
+	    // Handle Donate Auth
+	    Intent sendIntent = new Intent(
+		    "com.wahtod.wififixer.WFDonateService");
+	    startService(sendIntent);
+	    nagNotification();
+	}
+    }
+
     String getPrefs() {
 	settings = PreferenceManager.getDefaultSharedPreferences(this);
 	String prefs = "Settings:\n";
@@ -161,11 +171,11 @@ public class WifiFixerActivity extends Activity {
 	edit.commit();
 	Intent sendIntent = new Intent(WifiFixerService.class.getName());
 	startService(sendIntent);
-	if(state) {
+	if (state) {
 	    File file = new File(Environment.getExternalStorageDirectory()
-			+ LogService.DIRNAME + LogService.FILENAME);
-            file.delete();
-		
+		    + LogService.DIRNAME + LogService.FILENAME);
+	    file.delete();
+
 	}
     }
 
@@ -305,13 +315,7 @@ public class WifiFixerActivity extends Activity {
 	}
 
 	// Here's where we fire the nag
-	if (!ISAUTHED) {
-	    // Handle Donate Auth
-	    Intent sendIntent = new Intent(
-		    "com.wahtod.wififixer.WFDonateService");
-	    startService(sendIntent);
-	    nagNotification();
-	}
+	authCheck();
 
 	startwfService();
 
@@ -382,6 +386,12 @@ public class WifiFixerActivity extends Activity {
     public void onPause() {
 	super.onPause();
 	removeNag();
+    }
+
+    @Override
+    public void onResume() {
+	super.onResume();
+	authCheck();
     }
 
     @Override
