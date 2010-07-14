@@ -49,7 +49,6 @@ public class LogService extends Service {
     static final String SCREEN_ON = "SCREEN_ON";
     static final String SCREEN_OFF = "SCREEN_OFF";
     static final String LOG = "LOG";
-    static final long MAXFILESIZE = 102400;
     static final String FILENAME = "/wififixer_log.txt";
     static final String DIRNAME = "/data/org.wahtod.wififixer";
 
@@ -176,8 +175,6 @@ public class LogService extends Service {
 	// Remove if over 100k
 
 	try {
-	    if (fiyul.length() > MAXFILESIZE)
-		fiyul.delete();
 	    if (!fiyul.exists()) {
 		fiyul.createNewFile();
 	    }

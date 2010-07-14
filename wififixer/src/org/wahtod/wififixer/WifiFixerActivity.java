@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -105,6 +107,8 @@ public class WifiFixerActivity extends Activity {
     }
 
     void sendLog() {
+	File file = new File(Environment.getExternalStorageDirectory()
+		+ LogService.DIRNAME + LogService.FILENAME);
 
 	if (Environment.getExternalStorageState() != null
 		&& !(Environment.getExternalStorageState().contains("mounted"))) {
@@ -112,8 +116,13 @@ public class WifiFixerActivity extends Activity {
 		    Toast.LENGTH_LONG).show();
 
 	    return;
-	}
 
+	} else if (!file.exists()) {
+	    Toast.makeText(WifiFixerActivity.this, "Log doesn't exist",
+		    Toast.LENGTH_LONG).show();
+	    return;
+	}
+	setLogging(false);
 	Intent sendIntent = new Intent(Intent.ACTION_SEND);
 	sendIntent.setType("text/plain");
 	sendIntent.putExtra(Intent.EXTRA_EMAIL,
@@ -129,6 +138,7 @@ public class WifiFixerActivity extends Activity {
 			+ LogService.getBuildInfo() + getPrefs());
 
 	startActivity(Intent.createChooser(sendIntent, "Email:"));
+
     }
 
     void setIcon() {
@@ -151,6 +161,12 @@ public class WifiFixerActivity extends Activity {
 	edit.commit();
 	Intent sendIntent = new Intent(WifiFixerService.class.getName());
 	startService(sendIntent);
+	if(state) {
+	    File file = new File(Environment.getExternalStorageDirectory()
+			+ LogService.DIRNAME + LogService.FILENAME);
+            file.delete();
+		
+	}
     }
 
     void setText() {
@@ -173,10 +189,13 @@ public class WifiFixerActivity extends Activity {
 
     void setToggleIcon(Menu menu) {
 	MenuItem logging = menu.getItem(MENU_LOGGING - 1);
-	if (LOGGING)
+	if (LOGGING) {
 	    logging.setIcon(R.drawable.logging_enabled);
-	else
+	    logging.setTitle(R.string.turn_logging_off);
+	} else {
 	    logging.setIcon(R.drawable.logging_disabled);
+	    logging.setTitle(R.string.turn_logging_on);
+	}
 
     }
 

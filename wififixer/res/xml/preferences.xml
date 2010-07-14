@@ -31,7 +31,7 @@
 			<PreferenceCategory android:title="Specialized Fixes">
 			<ListPreference android:title="Wifi Sleep Policy"
 			android:defaultValue="3"
-			android:summary="Controls when Wifi chip sleeps"
+			android:summary="Controls Wifi sleep policy: See Known Issues in Documentation"
 			android:key="WFSLEEP" android:entries="@array/wfsleep"
 			android:entryValues="@array/wfsleepValues" />
 			<CheckBoxPreference android:key="SUPFIX"
