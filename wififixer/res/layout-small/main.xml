@@ -16,6 +16,7 @@ android:src="@drawable/icon" android:layout_y="35px">>
 android:id="@+id/ImageButton01"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
+android:clickable="false"
 android:layout_y="162px"
 android:layout_x="75px">
 </ImageButton>
