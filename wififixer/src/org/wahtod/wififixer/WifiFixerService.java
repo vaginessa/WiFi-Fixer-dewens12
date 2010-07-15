@@ -1452,6 +1452,7 @@ public class WifiFixerService extends Service {
 	     * Tentative N1 sleep fix
 	     */
 	    wakeLock(this, true);
+	    wakeLock(this, false);
 	} else {
 	    /*
 	     * Screen is on, remove any posts
