@@ -88,6 +88,7 @@ public class WifiFixerService extends Service {
     private static final int WIFI_OFF = 6;
     private static final int WIFI_ON = 7;
     private static final int SLEEPCHECK = 8;
+    private static final int N1FIX = 9;
 
     /*
      * Constants for wifirepair values
@@ -409,6 +410,10 @@ public class WifiFixerService extends Service {
 	    case SLEEPCHECK:
 		hMain.post(rSleepcheck);
 		break;
+		
+	    case N1FIX:
+		hMain.post(rN1fix);
+		break;
 
 	    }
 	}
@@ -619,6 +624,20 @@ public class WifiFixerService extends Service {
 
     };
 
+    /*
+     * N1 fix
+     */
+    private Runnable rN1fix = new Runnable() {
+	public void run() {
+	   /*
+	    * I think it's reassociating with a wake lock. 
+	    */
+	   wm.reassociate();
+	   wakeLock(getBaseContext(),false);
+	}
+
+    };
+    
     /*
      * Handles intents we've registered for
      */
@@ -1449,10 +1468,11 @@ public class WifiFixerService extends Service {
 	     */
 	    hMainWrapper(SLEEPCHECK, SLEEPWAIT);
 	    /*
-	     * Tentative N1 sleep fix
+	     * N1 sleep fix take 2
 	     */
-	    wakeLock(this, true);
-	    wakeLock(this, false);
+	     wakeLock(this, true);
+	     hMainWrapper(N1FIX,REACHABLE);
+	    
 	} else {
 	    /*
 	     * Screen is on, remove any posts
