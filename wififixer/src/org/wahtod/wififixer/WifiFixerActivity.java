@@ -391,7 +391,6 @@ public class WifiFixerActivity extends Activity {
     @Override
     public void onResume() {
 	super.onResume();
-	authCheck();
     }
 
     @Override
