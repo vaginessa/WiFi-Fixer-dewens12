@@ -733,7 +733,7 @@ public class WifiFixerService extends Service {
 	isup = icmpHostup(context);
 	if (!isup) {
 	    isup = httpHostup(context);
-	    if(isup)
+	    if (isup)
 		wifirepair = W_REASSOCIATE;
 	} else
 	    wifirepair = W_REASSOCIATE;
@@ -1448,6 +1448,10 @@ public class WifiFixerService extends Service {
 	     * Start sleep check
 	     */
 	    hMainWrapper(SLEEPCHECK, SLEEPWAIT);
+	    /*
+	     * Tentative N1 sleep fix
+	     */
+	    wakeLock(this, true);
 	} else {
 	    /*
 	     * Screen is on, remove any posts
@@ -1502,7 +1506,6 @@ public class WifiFixerService extends Service {
 	wm.startScan();
 	tempLock(LOCKWAIT);
     }
-
 
     private void supplicantFix(final boolean wftoggle) {
 	// Toggling wifi fixes the supplicant
