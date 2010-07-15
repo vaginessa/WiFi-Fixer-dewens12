@@ -155,13 +155,14 @@ public class WifiFixerService extends Service {
     private static final String SUPFIX_KEY = "SUPFIX";
     private static final String SUPFIX_DEFAULT = "SPFDEF";
     private static final String N1FIX_KEY = "N1FIX";
+    private static final String N1FIX2_KEY = "N1FIX2";
 
     /*
      * Preferences currently used in list form.
      */
     private static final List<String> prefsList = Arrays.asList(WIFILOCK_KEY,
 	    DISABLE_KEY, SCREEN_KEY, WIDGET_KEY, SUPFIX_KEY, NOTIF_KEY,
-	    LOG_KEY, N1FIX_KEY);
+	    LOG_KEY, N1FIX_KEY, N1FIX2_KEY);
     /*
      * prefsList maps to values
      */
@@ -173,6 +174,7 @@ public class WifiFixerService extends Service {
     private final static int notifpref = 5;
     private final static int loggingpref = 6;
     private final static int n1fixpref = 7;
+    private final static int n1fix2pref = 8;
 
     // logging flag, local for performance
     private static boolean logging = false;
@@ -949,6 +951,12 @@ public class WifiFixerService extends Service {
 	if (iAction.equals(Intent.ACTION_SCREEN_OFF)) {
 	    screenisoff = true;
 	    sleepCheck(true);
+	    /*
+	     * Nexus One Sleep Fix 2 duplicating widget function
+	     */
+	    if (prefs.getFlag(n1fix2pref)) {
+		toggleWifi();
+	    }
 	    if (logging) {
 		wfLog(this, APP_NAME, getString(R.string.screen_off_handler));
 		if (!prefs.getFlag(screenpref))
@@ -1470,7 +1478,7 @@ public class WifiFixerService extends Service {
 	     */
 	    hMainWrapper(SLEEPCHECK, SLEEPWAIT);
 	    /*
-	     * N1 sleep fix take 2
+	     * N1 sleep fix
 	     */
 	    if (prefs.getFlag(n1fixpref)) {
 		wakeLock(this, true);

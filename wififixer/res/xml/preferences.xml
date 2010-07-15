@@ -38,6 +38,8 @@
 					android:title="Disable Supplicant Fixes" android:summary="Check if having trouble, or on Android 1.5 or 1.6" />
 			<CheckBoxPreference android:key="N1FIX"
 					android:title="Nexus One Sleep Fix" android:summary="This is experimental.  Please read Known Issues in Documentation." />
+			<CheckBoxPreference android:key="N1FIX2"
+					android:title="Nexus One Sleep Fix 2" android:summary="If the first sleep fix option doesn't work, try this one." />
 			</PreferenceCategory>
 
 
