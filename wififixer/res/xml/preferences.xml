@@ -36,6 +36,8 @@
 			android:entryValues="@array/wfsleepValues" />
 			<CheckBoxPreference android:key="SUPFIX"
 					android:title="Disable Supplicant Fixes" android:summary="Check if having trouble, or on Android 1.5 or 1.6" />
+			<CheckBoxPreference android:key="N1FIX"
+					android:title="Nexus One Sleep Fix" android:summary="This is experimental.  Please read Known Issues in Documentation." />
 			</PreferenceCategory>
 
 

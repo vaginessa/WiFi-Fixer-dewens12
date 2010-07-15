@@ -154,13 +154,14 @@ public class WifiFixerService extends Service {
     private static final String LOG_KEY = "SLOG";
     private static final String SUPFIX_KEY = "SUPFIX";
     private static final String SUPFIX_DEFAULT = "SPFDEF";
+    private static final String N1FIX_KEY = "N1FIX";
 
     /*
      * Preferences currently used in list form.
      */
-    private static final List<String> prefsList = Arrays
-	    .asList(WIFILOCK_KEY, DISABLE_KEY, SCREEN_KEY, WIDGET_KEY,
-		    SUPFIX_KEY, NOTIF_KEY, LOG_KEY);
+    private static final List<String> prefsList = Arrays.asList(WIFILOCK_KEY,
+	    DISABLE_KEY, SCREEN_KEY, WIDGET_KEY, SUPFIX_KEY, NOTIF_KEY,
+	    LOG_KEY, N1FIX_KEY);
     /*
      * prefsList maps to values
      */
@@ -171,6 +172,7 @@ public class WifiFixerService extends Service {
     private final static int supfixpref = 4;
     private final static int notifpref = 5;
     private final static int loggingpref = 6;
+    private final static int n1fixpref = 7;
 
     // logging flag, local for performance
     private static boolean logging = false;
@@ -410,7 +412,7 @@ public class WifiFixerService extends Service {
 	    case SLEEPCHECK:
 		hMain.post(rSleepcheck);
 		break;
-		
+
 	    case N1FIX:
 		hMain.post(rN1fix);
 		break;
@@ -629,15 +631,15 @@ public class WifiFixerService extends Service {
      */
     private Runnable rN1fix = new Runnable() {
 	public void run() {
-	   /*
-	    * I think it's reassociating with a wake lock. 
-	    */
-	   wm.reassociate();
-	   wakeLock(getBaseContext(),false);
+	    /*
+	     * I think it's reassociating with a wake lock.
+	     */
+	    wm.reassociate();
+	    wakeLock(getBaseContext(), false);
 	}
 
     };
-    
+
     /*
      * Handles intents we've registered for
      */
@@ -1470,9 +1472,11 @@ public class WifiFixerService extends Service {
 	    /*
 	     * N1 sleep fix take 2
 	     */
-	     wakeLock(this, true);
-	     hMainWrapper(N1FIX,REACHABLE);
-	    
+	    if (prefs.getFlag(n1fixpref)) {
+		wakeLock(this, true);
+		hMainWrapper(N1FIX, REACHABLE);
+	    }
+
 	} else {
 	    /*
 	     * Screen is on, remove any posts
