@@ -954,7 +954,7 @@ public class WifiFixerService extends Service {
 	    /*
 	     * Nexus One Sleep Fix 2 duplicating widget function
 	     */
-	    if (prefs.getFlag(n1fix2pref)) {
+	    if (getIsWifiEnabled() && prefs.getFlag(n1fix2pref)) {
 		toggleWifi();
 	    }
 	    if (logging) {
