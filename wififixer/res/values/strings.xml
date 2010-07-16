@@ -80,10 +80,10 @@
     <string name="reconnecting">Reconnecting</string>
     <string name="reassociating">Reassociating</string>
     <string name="shouldrun_false_dying">SHOULDRUN false, dying.</string>
-    <string name="supplicant_nonresponsive_toggling_wifi">Supplicant Nonresponsive, toggling wifi</string>
+    <string name="supplicant_nonresponsive_toggling_wifi">Supplicant Nonresponsive, resetting wifi</string>
     <string name="exiting_supplicant_fix_thread_starting_scan">Exiting Supplicant Fix Thread:Starting Scan</string>
     <string name="wifi_off_aborting_reconnect">Wifi Off:Aborting Reconnect</string>
-    <string name="toggling_wifi">Toggling Wifi</string>
+    <string name="toggling_wifi">Resetting Wifi</string>
     <string name="connected_to_network">Connected to Network:</string>
     <string name="wifi_off_aborting_repair">Wifi Off:Aborting Repair</string>
     <string name="removing_temp_lock">Removing Temp Lock</string>
