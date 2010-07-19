@@ -1133,6 +1133,7 @@ public class WifiFixerService extends Service {
 		wfLog(this, APP_NAME, getString(R.string.wifi_state_enabled));
 	    hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
 	    wifishouldbeon = false;
+	    hMain.sendEmptyMessageDelayed(MAIN, REACHABLE);
 	    break;
 	case WifiManager.WIFI_STATE_ENABLING:
 	    if (logging)
@@ -1142,6 +1143,7 @@ public class WifiFixerService extends Service {
 	    if (logging)
 		wfLog(this, APP_NAME, getString(R.string.wifi_state_disabled));
 	    hMainWrapper(TEMPLOCK_ON);
+	    hMain.removeMessages(MAIN);
 	    break;
 	case WifiManager.WIFI_STATE_DISABLING:
 	    if (logging)
