@@ -929,7 +929,7 @@ public class WifiFixerService extends Service {
 		editor.putBoolean(getString(R.string.isauthed), true);
 		editor.commit();
 		showNotification(getString(R.string.donatethanks),
-			getString(R.string.authorized), true);
+			getString(R.string.authorized), 4144, true);
 	    }
 
 	}
@@ -1369,7 +1369,7 @@ public class WifiFixerService extends Service {
     private void notifyWrap(final String message) {
 	if (prefs.getFlag(notifpref)) {
 	    showNotification(getString(R.string.wifi_connection_problem)
-		    + message, message, ERR_NOTIF);
+		    + message, message, ERR_NOTIF, false);
 	}
 
     }
@@ -1497,7 +1497,7 @@ public class WifiFixerService extends Service {
     }
 
     private void showNotification(final String message,
-	    final String tickerText, final boolean bSpecial) {
+	    final String tickerText, final int id, final boolean bSpecial) {
 
 	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
@@ -1515,25 +1515,8 @@ public class WifiFixerService extends Service {
 	notif.setLatestEventInfo(this, from, message, contentIntent);
 	notif.flags = Notification.FLAG_AUTO_CANCEL;
 	// unique ID
-	nm.notify(4144, notif);
-
-    }
-
-    private void showNotification(final String message,
-	    final String tickerText, final int id) {
-	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-	CharSequence from = getText(R.string.app_name);
-	PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-		new Intent(), 0);
-
-	Notification notif = new Notification(R.drawable.icon, tickerText,
-		System.currentTimeMillis());
-
-	notif.setLatestEventInfo(this, from, message, contentIntent);
-	notif.flags = Notification.FLAG_AUTO_CANCEL;
-	// unique ID
 	nm.notify(id, notif);
+
     }
 
     private void startScan() {
@@ -1569,7 +1552,7 @@ public class WifiFixerService extends Service {
 	// Wake lock
 	wakeLock(this, true);
 	showNotification(getString(R.string.toggling_wifi),
-		getString(R.string.toggling_wifi), NOTIFID);
+		getString(R.string.toggling_wifi), NOTIFID, false);
 	hMainWrapper(WIFI_OFF);
 	hMainWrapper(WIFI_ON, LOCKWAIT);
     }
