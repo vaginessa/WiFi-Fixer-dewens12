@@ -217,16 +217,15 @@ public class WifiFixerService extends Service {
     private static HttpParams httpparams;
     private static HttpHead head;
     private static HttpResponse response;
-    private static WFPreferences prefs = new WFPreferences();
 
     /*
      * Preferences object
      */
     private static class WFPreferences extends Object {
 
-	private boolean[] keyVals = new boolean[prefsList.size()];
+	private static boolean[] keyVals = new boolean[prefsList.size()];
 
-	public void loadPrefs(final Context context) {
+	public static void loadPrefs(final Context context) {
 	    settings = PreferenceManager.getDefaultSharedPreferences(context);
 	    /*
 	     * Set defaults. Doing here instead of activity because service may
@@ -268,7 +267,7 @@ public class WifiFixerService extends Service {
 	    log(context);
 	}
 
-	private void preLoad(final Context context) {
+	private static void preLoad(final Context context) {
 
 	    /*
 	     * Sets default for Supplicant Fix pref on < 2.0 to true
@@ -298,7 +297,7 @@ public class WifiFixerService extends Service {
 
 	}
 
-	private void preValChanged(final Context context, final int index) {
+	private static void preValChanged(final Context context, final int index) {
 	    switch (index) {
 	    case loggingpref:
 		// Kill the Log Service if it's up
@@ -310,7 +309,7 @@ public class WifiFixerService extends Service {
 
 	}
 
-	private void postValChanged(final Context context, final int index) {
+	private static void postValChanged(final Context context, final int index) {
 	    switch (index) {
 	    case runpref:
 		// Check RUNPREF and set SHOULDRUN
@@ -335,14 +334,14 @@ public class WifiFixerService extends Service {
 	    }
 	}
 
-	private void specialCase(final Context context) {
+	private static void specialCase(final Context context) {
 	    /*
 	     * Any special case code here
 	     */
 
 	}
 
-	private void log(final Context context) {
+	private static void log(final Context context) {
 	    if (logging) {
 		wfLog(context, APP_NAME, context
 			.getString(R.string.loading_settings));
@@ -356,12 +355,12 @@ public class WifiFixerService extends Service {
 	    }
 	}
 
-	public boolean getFlag(final int ikey) {
+	public static boolean getFlag(final int ikey) {
 
 	    return keyVals[ikey];
 	}
 
-	public void setFlag(final int iKey, final boolean flag) {
+	public static void setFlag(final int iKey, final boolean flag) {
 	    keyVals[iKey] = flag;
 	}
 
@@ -696,7 +695,7 @@ public class WifiFixerService extends Service {
     private void checkLock(WifiManager.WifiLock lock) {
 	if (!prefschanged) {
 	    // Yeah, first run. Ok, if LOCKPREF true, acquire lock.
-	    if (prefs.getFlag(lockpref)) {
+	    if (WFPreferences.getFlag(lockpref)) {
 		lock.acquire();
 		haslock = true;
 		if (logging)
@@ -706,7 +705,7 @@ public class WifiFixerService extends Service {
 	} else {
 	    // ok, this is when prefs have changed, soo..
 	    prefschanged = false;
-	    if (prefs.getFlag(lockpref) && haslock) {
+	    if (WFPreferences.getFlag(lockpref) && haslock) {
 		// generate new lock
 		lock.acquire();
 		haslock = true;
@@ -714,7 +713,7 @@ public class WifiFixerService extends Service {
 		    wfLog(this, APP_NAME,
 			    getString(R.string.acquiring_wifi_lock));
 	    } else {
-		if (haslock && !prefs.getFlag(lockpref)) {
+		if (haslock && !WFPreferences.getFlag(lockpref)) {
 		    lock.release();
 		    haslock = false;
 		    if (logging)
@@ -1057,7 +1056,6 @@ public class WifiFixerService extends Service {
 	    screenisoff = true;
 	    onScreenOff();
 	} else {
-
 	    screenisoff = false;
 	    onScreenOn();
 	}
@@ -1086,7 +1084,7 @@ public class WifiFixerService extends Service {
 		    handleAuth(intent);
 		    return;
 		} else {
-		    prefs.loadPrefs(this);
+		    WFPreferences.loadPrefs(this);
 		    prefschanged = true;
 		    if (logging)
 			wfLog(this, APP_NAME,
@@ -1125,7 +1123,7 @@ public class WifiFixerService extends Service {
 	/*
 	 * New setting disabling supplicant fixes
 	 */
-	if (prefs.getFlag(supfixpref))
+	if (WFPreferences.getFlag(supfixpref))
 	    return;
 
 	/*
@@ -1143,7 +1141,7 @@ public class WifiFixerService extends Service {
 
 	if (!getIsWifiEnabled()) {
 	    return;
-	} else if (screenisoff && !prefs.getFlag(screenpref))
+	} else if (screenisoff && !WFPreferences.getFlag(screenpref))
 	    return;
 	else if (sState == SCANNING) {
 	    pendingscan = true;
@@ -1167,7 +1165,7 @@ public class WifiFixerService extends Service {
 	 * Handle widget action
 	 */
 	if (getIsWifiEnabled()) {
-	    if (prefs.getFlag(widgetpref)) {
+	    if (WFPreferences.getFlag(widgetpref)) {
 		Toast.makeText(WifiFixerService.this,
 			getString(R.string.toggling_wifi), Toast.LENGTH_LONG)
 			.show();
@@ -1192,7 +1190,7 @@ public class WifiFixerService extends Service {
 	if (!getIsWifiEnabled())
 	    return;
 
-	if (!pendingscan) {
+	if (!pendingscan && !screenisoff) {
 	    if (getIsOnWifi(this)) {
 		/*
 		 * We're on wifi, so we want to check for better signal
@@ -1383,7 +1381,7 @@ public class WifiFixerService extends Service {
     }
 
     private void notifyWrap(final String message) {
-	if (prefs.getFlag(notifpref)) {
+	if (WFPreferences.getFlag(notifpref)) {
 	    showNotification(getString(R.string.wifi_connection_problem)
 		    + message, message, ERR_NOTIF, false);
 	}
@@ -1417,7 +1415,7 @@ public class WifiFixerService extends Service {
 	/*
 	 * Seeing if this is more efficient
 	 */
-	prefs.loadPrefs(this);
+	WFPreferences.loadPrefs(this);
 
 	// Setup, formerly in Run thread
 	setup();
@@ -1454,12 +1452,12 @@ public class WifiFixerService extends Service {
 	/*
 	 * Nexus One Sleep Fix 2 duplicating widget function
 	 */
-	if (getIsWifiEnabled() && prefs.getFlag(n1fix2pref)) {
+	if (getIsWifiEnabled() && WFPreferences.getFlag(n1fix2pref)) {
 	    toggleWifi();
 	}
 	if (logging) {
 	    wfLog(this, APP_NAME, getString(R.string.screen_off_handler));
-	    if (!prefs.getFlag(screenpref))
+	    if (!WFPreferences.getFlag(screenpref))
 		wfLog(this, LogService.SCREEN_OFF, null);
 	}
 	hMain.removeMessages(SCAN);
@@ -1469,10 +1467,10 @@ public class WifiFixerService extends Service {
 	sleepCheck(false);
 	if (logging) {
 	    wfLog(this, APP_NAME, getString(R.string.screen_on_handler));
-	    if (!prefs.getFlag(screenpref))
+	    if (!WFPreferences.getFlag(screenpref))
 		wfLog(this, LogService.SCREEN_ON, null);
 	}
-	hMainWrapper(SCAN,SCANINTERVAL);
+	hMainWrapper(SCAN, SCANINTERVAL);
     }
 
     private void onWifiDisabled() {
@@ -1484,8 +1482,10 @@ public class WifiFixerService extends Service {
     private void onWifiEnabled() {
 	hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
 	wifishouldbeon = false;
-	hMain.sendEmptyMessageDelayed(MAIN, REACHABLE);
-	hMainWrapper(SCAN, SCANINTERVAL);
+	if (!screenisoff) {
+	    hMain.sendEmptyMessageDelayed(MAIN, REACHABLE);
+	    hMainWrapper(SCAN, SCANINTERVAL);
+	}
     }
 
     private static void refreshWidget(final Context context) {
@@ -1529,7 +1529,7 @@ public class WifiFixerService extends Service {
     }
 
     private void sleepCheck(final boolean state) {
-	if (state && prefs.getFlag(screenpref) && getIsWifiEnabled()) {
+	if (state && WFPreferences.getFlag(screenpref) && getIsWifiEnabled()) {
 	    /*
 	     * Start sleep check
 	     */
@@ -1537,7 +1537,7 @@ public class WifiFixerService extends Service {
 	    /*
 	     * N1 sleep fix
 	     */
-	    if (prefs.getFlag(n1fixpref)) {
+	    if (WFPreferences.getFlag(n1fixpref)) {
 		wakeLock(this, true);
 		hMainWrapper(N1FIX, REACHABLE);
 	    }
