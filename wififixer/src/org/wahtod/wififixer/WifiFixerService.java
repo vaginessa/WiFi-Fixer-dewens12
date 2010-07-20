@@ -128,7 +128,7 @@ public class WifiFixerService extends Service {
     // ms for sleep loop check
     private final static long SLEEPWAIT = 60000;
     // ms for scan innterval
-    private final static long SCANINTERVAL = 60000;
+    private final static long SCANINTERVAL = 52000;
     // ms for lock delays
     private final static int LOCKWAIT = 5000;
     // ms to wait after trying to connect
@@ -1055,26 +1055,11 @@ public class WifiFixerService extends Service {
 
 	if (iAction.equals(Intent.ACTION_SCREEN_OFF)) {
 	    screenisoff = true;
-	    sleepCheck(true);
-	    /*
-	     * Nexus One Sleep Fix 2 duplicating widget function
-	     */
-	    if (getIsWifiEnabled() && prefs.getFlag(n1fix2pref)) {
-		toggleWifi();
-	    }
-	    if (logging) {
-		wfLog(this, APP_NAME, getString(R.string.screen_off_handler));
-		if (!prefs.getFlag(screenpref))
-		    wfLog(this, LogService.SCREEN_OFF, null);
-	    }
+	    onScreenOff();
 	} else {
-	    if (logging) {
-		wfLog(this, APP_NAME, getString(R.string.screen_on_handler));
-		if (!prefs.getFlag(screenpref))
-		    wfLog(this, LogService.SCREEN_ON, null);
-	    }
+
 	    screenisoff = false;
-	    sleepCheck(false);
+	    onScreenOn();
 	}
 
     }
@@ -1464,6 +1449,32 @@ public class WifiFixerService extends Service {
 	return START_STICKY;
     }
 
+    private void onScreenOff() {
+	sleepCheck(true);
+	/*
+	 * Nexus One Sleep Fix 2 duplicating widget function
+	 */
+	if (getIsWifiEnabled() && prefs.getFlag(n1fix2pref)) {
+	    toggleWifi();
+	}
+	if (logging) {
+	    wfLog(this, APP_NAME, getString(R.string.screen_off_handler));
+	    if (!prefs.getFlag(screenpref))
+		wfLog(this, LogService.SCREEN_OFF, null);
+	}
+	hMain.removeMessages(SCAN);
+    }
+
+    private void onScreenOn() {
+	sleepCheck(false);
+	if (logging) {
+	    wfLog(this, APP_NAME, getString(R.string.screen_on_handler));
+	    if (!prefs.getFlag(screenpref))
+		wfLog(this, LogService.SCREEN_ON, null);
+	}
+	hMainWrapper(SCAN,SCANINTERVAL);
+    }
+
     private void onWifiDisabled() {
 	hMainWrapper(TEMPLOCK_ON);
 	hMain.removeMessages(MAIN);
@@ -1574,8 +1585,8 @@ public class WifiFixerService extends Service {
 	    return;
 	else if (bestap != getNetworkID(this)) {
 	    connectToAP(bestap, true);
-	    if(logging)
-		wfLog(this,APP_NAME,getString(R.string.hopping)+bestap);
+	    if (logging)
+		wfLog(this, APP_NAME, getString(R.string.hopping) + bestap);
 	}
     }
 
