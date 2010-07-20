@@ -771,7 +771,7 @@ public class WifiFixerService extends Service {
 	}
     }
 
-    private boolean connectToAP(int AP, boolean disableOthers) {
+    private boolean connectToAP(final int AP, final boolean disableOthers) {
 	if (logging)
 	    wfLog(this, APP_NAME, getString(R.string.connecting_to_network)
 		    + AP);
@@ -799,7 +799,7 @@ public class WifiFixerService extends Service {
 	}
 
     }
-    
+
     private static int getBestAPinRange(final Context context) {
 	boolean state = false;
 	;
@@ -887,7 +887,6 @@ public class WifiFixerService extends Service {
 	return best_id;
     }
 
-
     private static boolean getHttpHeaders(final Context context)
 	    throws IOException, URISyntaxException {
 
@@ -971,7 +970,6 @@ public class WifiFixerService extends Service {
     }
 
     private static int getNetworkID(final Context context) {
-	WifiManager wm = getWifiManager(context);
 	myWifi = wm.getConnectionInfo();
 	int id = myWifi.getNetworkId();
 	if (id != HTTP_NULL) {
@@ -1192,7 +1190,18 @@ public class WifiFixerService extends Service {
 	    return;
 
 	if (!pendingscan) {
-
+	    if (getIsOnWifi(this)) {
+		/*
+		 * We're on wifi, so we want to check for better signal
+		 */
+		signalCheck();
+	    } else {
+		/*
+		 * Normal scan 
+		 * this is where network notifications
+		 * will be handled
+		 */
+	    }
 	    return;
 	}
 
@@ -1357,7 +1366,6 @@ public class WifiFixerService extends Service {
 	return Formatter.formatIpAddress(i);
     }
 
-    
     private void logSupplicant(final String state) {
 
 	wfLog(this, APP_NAME, getString(R.string.supplicant_state) + state);
@@ -1526,6 +1534,20 @@ public class WifiFixerService extends Service {
 	// unique ID
 	nm.notify(id, notif);
 
+    }
+
+    private void signalCheck() {
+	/*
+	 * Finds the best signal of known APs in the scan results and switches
+	 * if it's not the current
+	 */
+
+	int bestap = getBestAPinRange(this);
+	if (bestap == HTTP_NULL)
+	    return;
+	else if (bestap != getNetworkID(this)) {
+	    connectToAP(bestap, true);
+	}
     }
 
     private void startScan() {
