@@ -658,7 +658,7 @@ public class WifiFixerService extends Service {
 	    /*
 	     * Start scan if nothing is holding a temp lock
 	     */
-	    if (templock) {
+	    if (!templock) {
 		startScan();
 		hMainWrapper(SCAN, SCANINTERVAL);
 	    } else
@@ -1478,6 +1478,8 @@ public class WifiFixerService extends Service {
 		wfLog(this, LogService.SCREEN_ON, null);
 	}
 	hMainWrapper(SCAN, SCANINTERVAL);
+	if(getIsWifiEnabled())
+	    hMainWrapper(MAIN, REACHABLE);
     }
 
     private void onWifiDisabled() {
