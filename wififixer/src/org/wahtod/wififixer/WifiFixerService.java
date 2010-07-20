@@ -436,7 +436,7 @@ public class WifiFixerService extends Service {
 		return;
 	    }
 
-	    if (isKnownAPinRange()) {
+	    if (getBestAPinRange(getBaseContext()) != HTTP_NULL) {
 		if (connectToAP(lastnid, true)
 			&& (getNetworkID(getBaseContext()) != HTTP_NULL)) {
 		    pendingreconnect = false;
@@ -471,7 +471,8 @@ public class WifiFixerService extends Service {
 			    getString(R.string.wifi_off_aborting_reconnect));
 		return;
 	    }
-	    if (isKnownAPinRange() && connectToAP(lastnid, true)
+	    if (getBestAPinRange(getBaseContext()) != HTTP_NULL
+		    && connectToAP(lastnid, true)
 		    && (getNetworkID(getBaseContext()) != HTTP_NULL)) {
 		pendingreconnect = false;
 		if (logging)
@@ -798,6 +799,94 @@ public class WifiFixerService extends Service {
 	}
 
     }
+    
+    private static int getBestAPinRange(final Context context) {
+	boolean state = false;
+	;
+	;
+	final List<ScanResult> wifiList = wm.getScanResults();
+	/*
+	 * Catch null if scan results fires after wifi disabled or while wifi is
+	 * in intermediate state
+	 */
+	if (wifiList == null) {
+	    if (logging)
+		wfLog(context, APP_NAME, context
+			.getString(R.string.null_scan_results));
+	    return HTTP_NULL;
+	}
+	/*
+	 * wifiConfigs is just a reference to known networks.
+	 */
+	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+
+	/*
+	 * Iterate the known networks over the scan results, adding found known
+	 * networks.
+	 */
+
+	int best_id = HTTP_NULL;
+	int best_signal = DBM_DEFAULT;
+	String best_ssid = EMPTYSTRING;
+
+	if (logging)
+	    wfLog(context, APP_NAME, context
+		    .getString(R.string.parsing_scan_results));
+
+	for (ScanResult sResult : wifiList) {
+	    for (WifiConfiguration wfResult : wifiConfigs) {
+		/*
+		 * Using .contains to find sResult.SSID in doublequoted string
+		 */
+		if (wfResult.SSID.contains(sResult.SSID)) {
+		    if (logging) {
+			wfLog(context, APP_NAME, context
+				.getString(R.string.found_ssid)
+				+ sResult.SSID);
+			wfLog(context, APP_NAME, context
+				.getString(R.string.capabilities)
+				+ sResult.capabilities);
+			wfLog(context, APP_NAME, context
+				.getString(R.string.signal_level)
+				+ sResult.level);
+		    }
+		    /*
+		     * Comparing and storing best signal level
+		     */
+		    if (sResult.level > best_signal) {
+			best_id = wfResult.networkId;
+			best_signal = sResult.level;
+			best_ssid = sResult.SSID;
+		    }
+		    state = true;
+		}
+	    }
+	}
+
+	/*
+	 * Set lastnid and lastssid to known network with highest level from
+	 * scanresults
+	 * 
+	 * if !state nothing was found
+	 */
+	if (state) {
+	    lastnid = best_id;
+	    lastssid = best_ssid;
+	    if (logging)
+		wfLog(context, APP_NAME, context
+			.getString(R.string.best_signal_ssid)
+			+ best_ssid
+			+ context.getString(R.string.signal_level)
+			+ best_signal);
+	} else {
+	    if (logging)
+		wfLog(context, APP_NAME, context
+			.getString(R.string.no_known_networks_found));
+	}
+
+	return best_id;
+    }
+
 
     private static boolean getHttpHeaders(final Context context)
 	    throws IOException, URISyntaxException {
@@ -1103,8 +1192,7 @@ public class WifiFixerService extends Service {
 	    return;
 
 	if (!pendingscan) {
-	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.nopendingscan));
+
 	    return;
 	}
 
@@ -1269,86 +1357,7 @@ public class WifiFixerService extends Service {
 	return Formatter.formatIpAddress(i);
     }
 
-    private boolean isKnownAPinRange() {
-	boolean state = false;
-	;
-	;
-	final List<ScanResult> wifiList = wm.getScanResults();
-	/*
-	 * Catch null if scan results fires after wifi disabled or while wifi is
-	 * in intermediate state
-	 */
-	if (wifiList == null) {
-	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.null_scan_results));
-	    return false;
-	}
-	/*
-	 * wifiConfigs is just a reference to known networks.
-	 */
-	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
-
-	/*
-	 * Iterate the known networks over the scan results, adding found known
-	 * networks.
-	 */
-
-	int best_id = HTTP_NULL;
-	int best_signal = DBM_DEFAULT;
-	String best_ssid = EMPTYSTRING;
-
-	if (logging)
-	    wfLog(this, APP_NAME, getString(R.string.parsing_scan_results));
-
-	for (ScanResult sResult : wifiList) {
-	    for (WifiConfiguration wfResult : wifiConfigs) {
-		/*
-		 * Using .contains to find sResult.SSID in doublequoted string
-		 */
-		if (wfResult.SSID.contains(sResult.SSID)) {
-		    if (logging) {
-			wfLog(this, APP_NAME, getString(R.string.found_ssid)
-				+ sResult.SSID);
-			wfLog(this, APP_NAME, getString(R.string.capabilities)
-				+ sResult.capabilities);
-			wfLog(this, APP_NAME, getString(R.string.signal_level)
-				+ sResult.level);
-		    }
-		    /*
-		     * Comparing and storing best signal level
-		     */
-		    if (sResult.level > best_signal) {
-			best_id = wfResult.networkId;
-			best_signal = sResult.level;
-			best_ssid = sResult.SSID;
-		    }
-		    state = true;
-		}
-	    }
-	}
-
-	/*
-	 * Set lastnid and lastssid to known network with highest level from
-	 * scanresults
-	 * 
-	 * if !state nothing was found
-	 */
-	if (state) {
-	    lastnid = best_id;
-	    lastssid = best_ssid;
-	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.best_signal_ssid)
-			+ best_ssid + getString(R.string.signal_level)
-			+ best_signal);
-	} else {
-	    if (logging)
-		wfLog(this, APP_NAME,
-			getString(R.string.no_known_networks_found));
-	}
-
-	return state;
-    }
-
+    
     private void logSupplicant(final String state) {
 
 	wfLog(this, APP_NAME, getString(R.string.supplicant_state) + state);
