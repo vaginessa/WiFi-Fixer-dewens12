@@ -309,7 +309,8 @@ public class WifiFixerService extends Service {
 
 	}
 
-	private static void postValChanged(final Context context, final int index) {
+	private static void postValChanged(final Context context,
+		final int index) {
 	    switch (index) {
 	    case runpref:
 		// Check RUNPREF and set SHOULDRUN
@@ -654,8 +655,14 @@ public class WifiFixerService extends Service {
      */
     private Runnable rScan = new Runnable() {
 	public void run() {
-	    startScan();
-	    hMain.sendEmptyMessageDelayed(SCAN, SCANINTERVAL);
+	    /*
+	     * Start scan if nothing is holding a temp lock
+	     */
+	    if (templock) {
+		startScan();
+		hMainWrapper(SCAN, SCANINTERVAL);
+	    } else
+		hMainWrapper(SCAN, CONNECTWAIT);
 	}
 
     };
