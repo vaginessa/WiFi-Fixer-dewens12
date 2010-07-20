@@ -16,6 +16,7 @@
 
 -->
 <resources>
+    <string name="hopping">Found better signal: hopping to network  </string>
     <string name="turn_logging_off">Disable Logging</string>
     <string name="turn_logging_on">Enable Logging</string>
     <string name="wifi_repair_post_failed">Wifi Repair:Screen Off</string>

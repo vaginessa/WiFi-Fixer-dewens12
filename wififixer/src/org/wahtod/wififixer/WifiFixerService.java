@@ -89,6 +89,7 @@ public class WifiFixerService extends Service {
     private static final int WIFI_ON = 7;
     private static final int SLEEPCHECK = 8;
     private static final int N1FIX = 9;
+    private static final int SCAN = 10;
 
     /*
      * Constants for wifirepair values
@@ -126,10 +127,12 @@ public class WifiFixerService extends Service {
     private final static int LOOPWAIT = 10000;
     // ms for sleep loop check
     private final static long SLEEPWAIT = 60000;
+    // ms for scan innterval
+    private final static long SCANINTERVAL = 60000;
     // ms for lock delays
     private final static int LOCKWAIT = 5000;
     // ms to wait after trying to connect
-    private static final int CONNECTWAIT = 10000;
+    private static final int CONNECTWAIT = 8000;
 
     // for Dbm
     private static final int DBM_DEFAULT = -100;
@@ -419,6 +422,10 @@ public class WifiFixerService extends Service {
 		hMain.post(rN1fix);
 		break;
 
+	    case SCAN:
+		hMain.post(rScan);
+		break;
+
 	    }
 	}
     };
@@ -514,7 +521,7 @@ public class WifiFixerService extends Service {
 			    getString(R.string.supplicant_nonresponsive_toggling_wifi));
 		toggleWifi();
 	    } else if (!templock && !screenisoff)
-		fixWifi();
+		checkWifi();
 
 	    if (prefschanged)
 		checkLock(lock);
@@ -620,7 +627,7 @@ public class WifiFixerService extends Service {
 	     * This is all we want to do.
 	     */
 
-	    fixWifi();
+	    checkWifi();
 	    /*
 	     * Post next run
 	     */
@@ -635,10 +642,21 @@ public class WifiFixerService extends Service {
     private Runnable rN1fix = new Runnable() {
 	public void run() {
 	    /*
-	     * I think it's reassociating with a wake lock.
+	     * May be deprecated
 	     */
 	    wm.reassociate();
 	    wakeLock(getBaseContext(), false);
+	}
+
+    };
+
+    /*
+     * Scanner runnable
+     */
+    private Runnable rScan = new Runnable() {
+	public void run() {
+	    startScan();
+	    hMain.sendEmptyMessageDelayed(SCAN, SCANINTERVAL);
 	}
 
     };
@@ -765,6 +783,22 @@ public class WifiFixerService extends Service {
 	return isup;
     }
 
+    private void checkWifi() {
+	if (getIsWifiEnabled(this, true)) {
+	    if (getSupplicantState() == SupplicantState.ASSOCIATED
+		    || getSupplicantState() == SupplicantState.COMPLETED) {
+		if (!checkNetwork(this)) {
+		    wifiRepair();
+		}
+	    } else {
+		pendingscan = true;
+		tempLock(CONNECTWAIT);
+	    }
+
+	}
+
+    }
+
     private void checkWifiState() {
 	if (!getIsWifiEnabled() && wifishouldbeon) {
 	    hMainWrapper(WIFI_ON);
@@ -782,22 +816,6 @@ public class WifiFixerService extends Service {
     private void deleteNotification(int id) {
 	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	nm.cancel(id);
-    }
-
-    private void fixWifi() {
-	if (getIsWifiEnabled(this, true)) {
-	    if (getSupplicantState() == SupplicantState.ASSOCIATED
-		    || getSupplicantState() == SupplicantState.COMPLETED) {
-		if (!checkNetwork(this)) {
-		    wifiRepair();
-		}
-	    } else {
-		pendingscan = true;
-		tempLock(CONNECTWAIT);
-	    }
-
-	}
-
     }
 
     private static int getBestAPinRange(final Context context) {
@@ -1197,9 +1215,8 @@ public class WifiFixerService extends Service {
 		signalCheck();
 	    } else {
 		/*
-		 * Normal scan 
-		 * this is where network notifications
-		 * will be handled
+		 * Normal scan this is where network notifications will be
+		 * handled
 		 */
 	    }
 	    return;
@@ -1228,9 +1245,7 @@ public class WifiFixerService extends Service {
 	case WifiManager.WIFI_STATE_ENABLED:
 	    if (logging)
 		wfLog(this, APP_NAME, getString(R.string.wifi_state_enabled));
-	    hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
-	    wifishouldbeon = false;
-	    hMain.sendEmptyMessageDelayed(MAIN, REACHABLE);
+	    onWifiEnabled();
 	    break;
 	case WifiManager.WIFI_STATE_ENABLING:
 	    if (logging)
@@ -1239,8 +1254,7 @@ public class WifiFixerService extends Service {
 	case WifiManager.WIFI_STATE_DISABLED:
 	    if (logging)
 		wfLog(this, APP_NAME, getString(R.string.wifi_state_disabled));
-	    hMainWrapper(TEMPLOCK_ON);
-	    hMain.removeMessages(MAIN);
+	    onWifiDisabled();
 	    break;
 	case WifiManager.WIFI_STATE_DISABLING:
 	    if (logging)
@@ -1422,7 +1436,7 @@ public class WifiFixerService extends Service {
 
 	// Setup, formerly in Run thread
 	setup();
-	hMain.sendEmptyMessage(MAIN);
+	onWifiEnabled();
 	refreshWidget(this);
 
 	if (logging)
@@ -1448,6 +1462,19 @@ public class WifiFixerService extends Service {
 	handleStart(intent);
 
 	return START_STICKY;
+    }
+
+    private void onWifiDisabled() {
+	hMainWrapper(TEMPLOCK_ON);
+	hMain.removeMessages(MAIN);
+	hMain.removeMessages(SCAN);
+    }
+
+    private void onWifiEnabled() {
+	hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
+	wifishouldbeon = false;
+	hMain.sendEmptyMessageDelayed(MAIN, REACHABLE);
+	hMainWrapper(SCAN, SCANINTERVAL);
     }
 
     private static void refreshWidget(final Context context) {
@@ -1547,6 +1574,8 @@ public class WifiFixerService extends Service {
 	    return;
 	else if (bestap != getNetworkID(this)) {
 	    connectToAP(bestap, true);
+	    if(logging)
+		wfLog(this,APP_NAME,getString(R.string.hopping)+bestap);
 	}
     }
 
