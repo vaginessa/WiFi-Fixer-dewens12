@@ -16,6 +16,9 @@
 
 -->
 <resources>
+    <string name="network_notification_scan">Network Notification Scan</string>
+    <string name="network_notification">Open Network Notification</string>
+    <string name="open_network_found">Open Network Found</string>
     <string name="hopping">Found better signal: hopping to network  </string>
     <string name="turn_logging_off">Disable Logging</string>
     <string name="turn_logging_on">Enable Logging</string>

@@ -58,6 +58,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.text.format.Formatter;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 public class WifiFixerService extends Service {
@@ -99,9 +100,9 @@ public class WifiFixerService extends Service {
     private static final int W_RECONNECT = 1;
     private static final int W_REPAIR = 2;
 
-    // ID For notification
+    // IDs For notifications
     private static final int NOTIFID = 31337;
-
+    private static final int NETNOTIFID = 8236;
     private static final int ERR_NOTIF = 7972;
 
     // Wifi Lock tag
@@ -159,13 +160,14 @@ public class WifiFixerService extends Service {
     private static final String SUPFIX_DEFAULT = "SPFDEF";
     private static final String N1FIX_KEY = "N1FIX";
     private static final String N1FIX2_KEY = "N1FIX2";
+    private static final String NETNOT_KEY = "NetNotif";
 
     /*
      * Preferences currently used in list form.
      */
     private static final List<String> prefsList = Arrays.asList(WIFILOCK_KEY,
 	    DISABLE_KEY, SCREEN_KEY, WIDGET_KEY, SUPFIX_KEY, NOTIF_KEY,
-	    LOG_KEY, N1FIX_KEY, N1FIX2_KEY);
+	    LOG_KEY, N1FIX_KEY, N1FIX2_KEY, NETNOT_KEY);
     /*
      * prefsList maps to values
      */
@@ -178,6 +180,7 @@ public class WifiFixerService extends Service {
     private final static int loggingpref = 6;
     private final static int n1fixpref = 7;
     private final static int n1fix2pref = 8;
+    private final static int netnotpref = 9;
 
     // logging flag, local for performance
     private static boolean logging = false;
@@ -198,6 +201,8 @@ public class WifiFixerService extends Service {
     private static String cachedIP;
     // Empty string
     private final static String EMPTYSTRING = "";
+    private static final String SIGNAL = ": Signal:";
+    private static final String NEWLINE = "\n";
 
     // Wifi Fix flags
     private static boolean pendingscan = false;
@@ -513,7 +518,7 @@ public class WifiFixerService extends Service {
 		checkWifiState();
 
 	    // Check Supplicant
-	    if (!wm.pingSupplicant() && getIsWifiEnabled()) {
+	    if (getIsWifiEnabled() && !wm.pingSupplicant()) {
 		if (logging)
 		    wfLog(
 			    getBaseContext(),
@@ -698,6 +703,35 @@ public class WifiFixerService extends Service {
 	}
 
     };
+
+    private static void addNetNotif(final Context context, final String message) {
+	NotificationManager nm = (NotificationManager) context
+		.getSystemService(NOTIFICATION_SERVICE);
+
+	Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+		intent, 0);
+
+	Notification notif = new Notification(R.drawable.wifi_ap, context
+		.getString(R.string.open_network_found), System
+		.currentTimeMillis());
+	if (message != EMPTYSTRING) {
+	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
+		    R.layout.netnotif_layout);
+	    contentView.setTextViewText(R.id.text, message);
+	    notif.contentView = contentView;
+	    notif.contentIntent = contentIntent;
+	    notif.flags = Notification.FLAG_ONGOING_EVENT;
+	    notif.tickerText = context.getText(R.string.open_network_found);
+	    /*
+	     * Fire notification, cancel if message empty
+	     * empty means no open APs
+	     */
+	    nm.notify(NETNOTIFID, notif);
+	} else
+	    nm.cancel(NETNOTIFID);
+
+    }
 
     private void checkLock(WifiManager.WifiLock lock) {
 	if (!prefschanged) {
@@ -908,6 +942,12 @@ public class WifiFixerService extends Service {
 			.getString(R.string.no_known_networks_found));
 	}
 
+	if (WFPreferences.getFlag(netnotpref)) {
+	    if (logging)
+		wfLog(context, APP_NAME, context
+			.getString(R.string.network_notification_scan));
+	    networkNotify(context);
+	}
 	return best_id;
     }
 
@@ -1128,6 +1168,13 @@ public class WifiFixerService extends Service {
 	}
 
 	/*
+	 * exit on templock
+	 */
+
+	if (templock)
+	    return;
+
+	/*
 	 * New setting disabling supplicant fixes
 	 */
 	if (WFPreferences.getFlag(supfixpref))
@@ -1193,7 +1240,6 @@ public class WifiFixerService extends Service {
     }
 
     private void handleWifiResults() {
-	hMainWrapper(TEMPLOCK_OFF);
 	if (!getIsWifiEnabled())
 	    return;
 
@@ -1387,6 +1433,20 @@ public class WifiFixerService extends Service {
 
     }
 
+    private static void networkNotify(final Context context) {
+	final List<ScanResult> wifiList = wm.getScanResults();
+	String message = EMPTYSTRING;
+	int n = 0;
+	for (ScanResult sResult : wifiList) {
+	    if (sResult.capabilities.length() == W_REASSOCIATE && n < 3) {
+		message = message + sResult.SSID + SIGNAL + sResult.level
+			+ NEWLINE;
+		n++;
+	    }
+	}
+	addNetNotif(context, message);
+    }
+
     private void notifyWrap(final String message) {
 	if (WFPreferences.getFlag(notifpref)) {
 	    showNotification(getString(R.string.wifi_connection_problem)
@@ -1426,7 +1486,12 @@ public class WifiFixerService extends Service {
 
 	// Setup, formerly in Run thread
 	setup();
-	onWifiEnabled();
+	/*
+	 * Start ticks
+	 */
+	hMain.sendEmptyMessage(MAIN);
+	hMain.sendEmptyMessageDelayed(SCAN,SCANINTERVAL);
+	
 	refreshWidget(this);
 
 	if (logging)
@@ -1478,13 +1543,10 @@ public class WifiFixerService extends Service {
 		wfLog(this, LogService.SCREEN_ON, null);
 	}
 	hMainWrapper(SCAN, SCANINTERVAL);
-	if(getIsWifiEnabled())
-	    hMainWrapper(MAIN, REACHABLE);
     }
 
     private void onWifiDisabled() {
 	hMainWrapper(TEMPLOCK_ON);
-	hMain.removeMessages(MAIN);
 	hMain.removeMessages(SCAN);
     }
 
@@ -1492,7 +1554,6 @@ public class WifiFixerService extends Service {
 	hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
 	wifishouldbeon = false;
 	if (!screenisoff) {
-	    hMain.sendEmptyMessageDelayed(MAIN, REACHABLE);
 	    hMainWrapper(SCAN, SCANINTERVAL);
 	}
     }

@@ -54,6 +54,10 @@
 		<CheckBoxPreference android:key="Notifications"
 			android:title="Enable Notifications"
 			android:summary="Displays a notification when Wifi Fixer fixes a problem" />
+			
+		<CheckBoxPreference android:key="NetNotif"
+			android:title="Network Notifications"
+			android:summary="Displays a notification when a new open network is detected" />
 
 		<CheckBoxPreference android:key="Logging"
 			android:title="Enable Log Menu" android:summary="Note: Logging stores some personal information" />
