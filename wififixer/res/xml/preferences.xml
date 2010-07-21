@@ -18,8 +18,30 @@
 		<CheckBoxPreference android:key="Disable"
 			android:title="Disable Service" android:summary="Causes Wifi Fixer to stop running in the background" />
 
-		<PreferenceScreen android:title="Advanced Options">
+		
 
+		<ListPreference android:title="Set Wifi Usablity"
+			android:defaultValue="2"
+			android:summary="Allows setting from max wifi usability to minimal battery use"
+			android:key="Performance" android:entries="@array/entries"
+			android:entryValues="@array/entryValues" />
+		
+		<PreferenceScreen android:title="Notifications">
+		<CheckBoxPreference android:key="Notifications"
+			android:title="Enable Notifications"
+			android:summary="Displays a notification when Wifi Fixer fixes a problem" />
+			
+		<CheckBoxPreference android:key="NetNotif"
+			android:title="Network Notifications"
+			android:summary="Displays a notification when a new open network is detected" />
+		</PreferenceScreen>
+			
+		<PreferenceScreen android:title="Advanced Options">
+			<PreferenceCategory android:title="Logging">
+			<CheckBoxPreference android:key="Logging"
+			android:title="Enable Log Menu" android:summary="Note: Logging stores some personal information" />
+			</PreferenceCategory>
+			
 			<PreferenceCategory android:title="Wifi Usability">
 				<CheckBoxPreference android:key="WiFiLock"
 					android:defaultValue="true" android:title="Enable Wifi Lock"
@@ -36,31 +58,14 @@
 			android:entryValues="@array/wfsleepValues" />
 			<CheckBoxPreference android:key="SUPFIX"
 					android:title="Disable Supplicant Fixes" android:summary="Check if having trouble, or on Android 1.5 or 1.6" />
-			<CheckBoxPreference android:key="N1FIX"
-					android:title="Nexus One Sleep Fix" android:summary="This is experimental.  Please read Known Issues in Documentation." />
 			<CheckBoxPreference android:key="N1FIX2"
-					android:title="Nexus One Sleep Fix 2" android:summary="If the first sleep fix option doesn't work, try this one." />
+					android:title="Nexus One Sleep Fix" android:summary="Experimental: please read Known Issues in Documentation." />
 			</PreferenceCategory>
 
 
 		</PreferenceScreen>
 
-		<ListPreference android:title="Set Wifi Usablity"
-			android:defaultValue="2"
-			android:summary="Allows setting from max wifi usability to minimal battery use"
-			android:key="Performance" android:entries="@array/entries"
-			android:entryValues="@array/entryValues" />
-
-		<CheckBoxPreference android:key="Notifications"
-			android:title="Enable Notifications"
-			android:summary="Displays a notification when Wifi Fixer fixes a problem" />
-			
-		<CheckBoxPreference android:key="NetNotif"
-			android:title="Network Notifications"
-			android:summary="Displays a notification when a new open network is detected" />
-
-		<CheckBoxPreference android:key="Logging"
-			android:title="Enable Log Menu" android:summary="Note: Logging stores some personal information" />
+		
 
 		<CheckBoxPreference android:key="WidgetBehavior"
 			android:title="Widget Behavior" android:summary="Checked is reset Wifi, unchecked is reassociate" />

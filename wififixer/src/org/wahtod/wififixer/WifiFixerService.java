@@ -89,8 +89,7 @@ public class WifiFixerService extends Service {
     private static final int WIFI_OFF = 6;
     private static final int WIFI_ON = 7;
     private static final int SLEEPCHECK = 8;
-    private static final int N1FIX = 9;
-    private static final int SCAN = 10;
+    private static final int SCAN = 9;
 
     /*
      * Constants for wifirepair values
@@ -158,7 +157,6 @@ public class WifiFixerService extends Service {
     private static final String LOG_KEY = "SLOG";
     private static final String SUPFIX_KEY = "SUPFIX";
     private static final String SUPFIX_DEFAULT = "SPFDEF";
-    private static final String N1FIX_KEY = "N1FIX";
     private static final String N1FIX2_KEY = "N1FIX2";
     private static final String NETNOT_KEY = "NetNotif";
 
@@ -167,7 +165,7 @@ public class WifiFixerService extends Service {
      */
     private static final List<String> prefsList = Arrays.asList(WIFILOCK_KEY,
 	    DISABLE_KEY, SCREEN_KEY, WIDGET_KEY, SUPFIX_KEY, NOTIF_KEY,
-	    LOG_KEY, N1FIX_KEY, N1FIX2_KEY, NETNOT_KEY);
+	    LOG_KEY, N1FIX2_KEY, NETNOT_KEY);
     /*
      * prefsList maps to values
      */
@@ -178,9 +176,8 @@ public class WifiFixerService extends Service {
     private final static int supfixpref = 4;
     private final static int notifpref = 5;
     private final static int loggingpref = 6;
-    private final static int n1fixpref = 7;
-    private final static int n1fix2pref = 8;
-    private final static int netnotpref = 9;
+    private final static int n1fix2pref = 7;
+    private final static int netnotpref = 8;
 
     // logging flag, local for performance
     private static boolean logging = false;
@@ -423,10 +420,6 @@ public class WifiFixerService extends Service {
 		hMain.post(rSleepcheck);
 		break;
 
-	    case N1FIX:
-		hMain.post(rN1fix);
-		break;
-
 	    case SCAN:
 		hMain.post(rScan);
 		break;
@@ -642,20 +635,6 @@ public class WifiFixerService extends Service {
     };
 
     /*
-     * N1 fix
-     */
-    private Runnable rN1fix = new Runnable() {
-	public void run() {
-	    /*
-	     * May be deprecated
-	     */
-	    wm.reassociate();
-	    wakeLock(getBaseContext(), false);
-	}
-
-    };
-
-    /*
      * Scanner runnable
      */
     private Runnable rScan = new Runnable() {
@@ -724,8 +703,8 @@ public class WifiFixerService extends Service {
 	    notif.flags = Notification.FLAG_ONGOING_EVENT;
 	    notif.tickerText = context.getText(R.string.open_network_found);
 	    /*
-	     * Fire notification, cancel if message empty
-	     * empty means no open APs
+	     * Fire notification, cancel if message empty empty means no open
+	     * APs
 	     */
 	    nm.notify(NETNOTIFID, notif);
 	} else
@@ -1490,8 +1469,8 @@ public class WifiFixerService extends Service {
 	 * Start ticks
 	 */
 	hMain.sendEmptyMessage(MAIN);
-	hMain.sendEmptyMessageDelayed(SCAN,SCANINTERVAL);
-	
+	hMain.sendEmptyMessageDelayed(SCAN, SCANINTERVAL);
+
 	refreshWidget(this);
 
 	if (logging)
@@ -1604,13 +1583,6 @@ public class WifiFixerService extends Service {
 	     * Start sleep check
 	     */
 	    hMainWrapper(SLEEPCHECK, SLEEPWAIT);
-	    /*
-	     * N1 sleep fix
-	     */
-	    if (WFPreferences.getFlag(n1fixpref)) {
-		wakeLock(this, true);
-		hMainWrapper(N1FIX, REACHABLE);
-	    }
 
 	} else {
 	    /*
