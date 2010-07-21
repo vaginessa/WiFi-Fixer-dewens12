@@ -334,6 +334,14 @@ public class WifiFixerService extends Service {
 		 */
 		logging = getFlag(loggingpref);
 		break;
+
+	    case netnotpref:
+		/*
+		 * Disable notification if 
+		 * pref changed to false
+		 */
+		if(!getFlag(netnotpref))
+		    addNetNotif(context,EMPTYSTRING);
 	    }
 	}
 
