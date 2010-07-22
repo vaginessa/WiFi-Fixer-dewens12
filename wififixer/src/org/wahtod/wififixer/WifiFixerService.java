@@ -1414,17 +1414,20 @@ public class WifiFixerService extends Service {
     }
 
     private static void networkNotify(final Context context) {
+	final int NUM_SSIDS = 3;
+	final int SSID_LENGTH = 10;
 	final List<ScanResult> wifiList = wm.getScanResults();
 	String ssid = EMPTYSTRING;
 	String signal = EMPTYSTRING;
 	int n = 0;
 	for (ScanResult sResult : wifiList) {
-	    if (sResult.capabilities.length() == W_REASSOCIATE && n < 4) {
-		if (sResult.SSID.length() > 8)
-		    ssid = ssid + sResult.SSID.substring(0, 8) + NEWLINE;
+	    if (sResult.capabilities.length() == W_REASSOCIATE && n < NUM_SSIDS) {
+		if (sResult.SSID.length() > SSID_LENGTH)
+		    ssid = ssid + sResult.SSID.substring(0, SSID_LENGTH)
+			    + NEWLINE;
 		else
 		    ssid = ssid + sResult.SSID + NEWLINE;
-		
+
 		signal = signal + sResult.level + NEWLINE;
 		n++;
 	    }
