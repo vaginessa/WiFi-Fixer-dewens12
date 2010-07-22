@@ -1536,6 +1536,10 @@ public class WifiFixerService extends Service {
     private void onWifiDisabled() {
 	hMainWrapper(TEMPLOCK_ON);
 	hMain.removeMessages(SCAN);
+	/*
+	 * Remove any network notifications
+	 */
+	addNetNotif(this, EMPTYSTRING, EMPTYSTRING);
     }
 
     private void onWifiEnabled() {
