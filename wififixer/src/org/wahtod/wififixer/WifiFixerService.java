@@ -1155,13 +1155,6 @@ public class WifiFixerService extends Service {
 	}
 
 	/*
-	 * exit on templock
-	 */
-
-	if (templock)
-	    return;
-
-	/*
 	 * New setting disabling supplicant fixes
 	 */
 	if (WFPreferences.getFlag(supfixpref))
