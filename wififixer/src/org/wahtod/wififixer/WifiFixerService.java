@@ -1538,8 +1538,10 @@ public class WifiFixerService extends Service {
 	hMain.removeMessages(SCAN);
 	/*
 	 * Remove any network notifications
+	 * if this is manual 
 	 */
-	addNetNotif(this, EMPTYSTRING, EMPTYSTRING);
+	if(!pendingwifitoggle)
+	    addNetNotif(this, EMPTYSTRING, EMPTYSTRING);
     }
 
     private void onWifiEnabled() {
