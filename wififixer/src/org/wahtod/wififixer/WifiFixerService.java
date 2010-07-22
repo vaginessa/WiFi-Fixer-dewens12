@@ -198,7 +198,6 @@ public class WifiFixerService extends Service {
     private static String cachedIP;
     // Empty string
     private final static String EMPTYSTRING = "";
-    private static final String SIGNAL = ": Signal:";
     private static final String NEWLINE = "\n";
 
     // Wifi Fix flags
@@ -337,11 +336,10 @@ public class WifiFixerService extends Service {
 
 	    case netnotpref:
 		/*
-		 * Disable notification if 
-		 * pref changed to false
+		 * Disable notification if pref changed to false
 		 */
-		if(!getFlag(netnotpref))
-		    addNetNotif(context,EMPTYSTRING);
+		if (!getFlag(netnotpref))
+		    addNetNotif(context, EMPTYSTRING, EMPTYSTRING);
 	    }
 	}
 
@@ -691,7 +689,8 @@ public class WifiFixerService extends Service {
 
     };
 
-    private static void addNetNotif(final Context context, final String message) {
+    private static void addNetNotif(final Context context, final String ssid,
+	    final String signal) {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(NOTIFICATION_SERVICE);
 
@@ -702,10 +701,11 @@ public class WifiFixerService extends Service {
 	Notification notif = new Notification(R.drawable.wifi_ap, context
 		.getString(R.string.open_network_found), System
 		.currentTimeMillis());
-	if (message != EMPTYSTRING) {
+	if (ssid != EMPTYSTRING) {
 	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
 		    R.layout.netnotif_layout);
-	    contentView.setTextViewText(R.id.text, message);
+	    contentView.setTextViewText(R.id.ssid, ssid);
+	    contentView.setTextViewText(R.id.signal, signal);
 	    notif.contentView = contentView;
 	    notif.contentIntent = contentIntent;
 	    notif.flags = Notification.FLAG_ONGOING_EVENT;
@@ -1422,16 +1422,21 @@ public class WifiFixerService extends Service {
 
     private static void networkNotify(final Context context) {
 	final List<ScanResult> wifiList = wm.getScanResults();
-	String message = EMPTYSTRING;
+	String ssid = EMPTYSTRING;
+	String signal = EMPTYSTRING;
 	int n = 0;
 	for (ScanResult sResult : wifiList) {
-	    if (sResult.capabilities.length() == W_REASSOCIATE && n < 3) {
-		message = message + sResult.SSID + SIGNAL + sResult.level
-			+ NEWLINE;
+	    if (sResult.capabilities.length() == W_REASSOCIATE && n < 4) {
+		if (sResult.SSID.length() > 8)
+		    ssid = ssid + sResult.SSID.substring(0, 8) + NEWLINE;
+		else
+		    ssid = ssid + sResult.SSID + NEWLINE;
+		
+		signal = signal + sResult.level + NEWLINE;
 		n++;
 	    }
 	}
-	addNetNotif(context, message);
+	addNetNotif(context, ssid, signal);
     }
 
     private void notifyWrap(final String message) {

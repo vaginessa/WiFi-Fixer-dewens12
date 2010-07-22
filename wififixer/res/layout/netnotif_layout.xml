@@ -31,15 +31,24 @@
               android:layout_height="fill_parent"
               android:gravity="center_vertical"
               android:textColor="#000"
-              android:text="Open Networks"
+              android:text="Open\nNetworks"
               android:textStyle="bold"
               android:layout_marginRight="5dp"
               />          
               
-    <TextView android:id="@+id/text"
+    <TextView android:id="@+id/ssid"
               android:layout_width="wrap_content"
               android:layout_height="fill_parent"
               android:textColor="#000"
               android:layout_marginLeft="5dp"
+              android:layout_marginRight="5dp"
               />
+    <TextView android:id="@+id/signal"
+              android:layout_width="wrap_content"
+              android:layout_height="fill_parent"
+              android:textColor="#000"
+              android:layout_marginLeft="5dp"
+              android:layout_marginRight="5dp"
+              />          
+              
 </LinearLayout>
