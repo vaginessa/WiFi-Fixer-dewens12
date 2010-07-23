@@ -136,6 +136,7 @@ public class WifiFixerService extends Service {
 
     // for Dbm
     private static final int DBM_DEFAULT = -100;
+    private static final int DBM_FLOOR = -90;
 
     // *****************************
     final static String APP_NAME = "WifiFixerService";
@@ -448,13 +449,12 @@ public class WifiFixerService extends Service {
 	    }
 
 	    if (getBestAPinRange(getBaseContext()) != HTTP_NULL) {
-		if (connectToAP(lastnid, true)
-			&& (getNetworkID(getBaseContext()) != HTTP_NULL)) {
+		if (connectToAP(lastnid, true) && (getNetworkID() != HTTP_NULL)) {
 		    pendingreconnect = false;
 		    if (logging)
 			wfLog(getBaseContext(), APP_NAME,
 				getString(R.string.connected_to_network)
-					+ getNetworkID(getBaseContext()));
+					+ getNetworkID());
 		} else {
 		    pendingreconnect = true;
 		    toggleWifi();
@@ -484,12 +484,12 @@ public class WifiFixerService extends Service {
 	    }
 	    if (getBestAPinRange(getBaseContext()) != HTTP_NULL
 		    && connectToAP(lastnid, true)
-		    && (getNetworkID(getBaseContext()) != HTTP_NULL)) {
+		    && (getNetworkID() != HTTP_NULL)) {
 		pendingreconnect = false;
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME,
 			    getString(R.string.connected_to_network)
-				    + getNetworkID(getBaseContext()));
+				    + getNetworkID());
 	    } else {
 		wifirepair = W_REASSOCIATE;
 		pendingscan = true;
@@ -650,7 +650,6 @@ public class WifiFixerService extends Service {
 	     */
 	    if (!templock) {
 		startScan();
-		hMainWrapper(SCAN, SCANINTERVAL);
 	    } else
 		hMainWrapper(SCAN, CONNECTWAIT);
 	}
@@ -807,7 +806,23 @@ public class WifiFixerService extends Service {
 	} else
 	    wifirepair = W_REASSOCIATE;
 
+	/*
+	 * Signal check
+	 */
+
+	checkSignal(context);
+
 	return isup;
+    }
+
+    private static void checkSignal(final Context context) {
+	int signal = getSignal();
+	
+	if (signal < DBM_FLOOR)
+	    wm.startScan();
+	
+	if(logging)
+	    wfLog(context,APP_NAME,context.getString(R.string.current_dbm)+signal);
     }
 
     private void checkWifi() {
@@ -1020,7 +1035,7 @@ public class WifiFixerService extends Service {
 	return enabled;
     }
 
-    private static int getNetworkID(final Context context) {
+    private static int getNetworkID() {
 	myWifi = wm.getConnectionInfo();
 	int id = myWifi.getNetworkId();
 	if (id != HTTP_NULL) {
@@ -1043,6 +1058,10 @@ public class WifiFixerService extends Service {
 	     * If own package isn't found, something is horribly wrong.
 	     */
 	}
+    }
+
+    private static int getSignal() {
+	return wm.getConnectionInfo().getRssi();
     }
 
     private static SupplicantState getSupplicantState() {
@@ -1407,7 +1426,7 @@ public class WifiFixerService extends Service {
 	}
 
 	if (lastssid.length() < 2)
-	    getNetworkID(getBaseContext());
+	    getNetworkID();
 
 	wfLog(this, APP_NAME, getString(R.string.ssid) + lastssid);
 
@@ -1474,11 +1493,11 @@ public class WifiFixerService extends Service {
 
 	// Setup, formerly in Run thread
 	setup();
+
 	/*
-	 * Start ticks
+	 * Start Main tick
 	 */
 	hMain.sendEmptyMessage(MAIN);
-	hMain.sendEmptyMessageDelayed(SCAN, SCANINTERVAL);
 
 	refreshWidget(this);
 
@@ -1537,10 +1556,9 @@ public class WifiFixerService extends Service {
 	hMainWrapper(TEMPLOCK_ON);
 	hMain.removeMessages(SCAN);
 	/*
-	 * Remove any network notifications
-	 * if this is manual 
+	 * Remove any network notifications if this is manual
 	 */
-	if(!pendingwifitoggle)
+	if (!pendingwifitoggle)
 	    addNetNotif(this, EMPTYSTRING, EMPTYSTRING);
     }
 
@@ -1640,7 +1658,7 @@ public class WifiFixerService extends Service {
 	int bestap = getBestAPinRange(this);
 	if (bestap == HTTP_NULL)
 	    return;
-	else if (bestap != getNetworkID(this)) {
+	else if (bestap != getNetworkID()) {
 	    connectToAP(bestap, true);
 	    if (logging)
 		wfLog(this, APP_NAME, getString(R.string.hopping) + bestap);
@@ -1715,6 +1733,10 @@ public class WifiFixerService extends Service {
 	 */
 	if (!screenisoff) {
 	    hMainWrapper(WIFITASK);
+	    /*
+	     * Do network hop check
+	     */
+	    hMainWrapper(SCAN);
 	    if (logging)
 		wfLog(this, APP_NAME, getString(R.string.running_wifi_repair));
 	} else {
