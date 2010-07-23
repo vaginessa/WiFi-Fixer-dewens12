@@ -127,8 +127,6 @@ public class WifiFixerService extends Service {
     private final static int LOOPWAIT = 10000;
     // ms for sleep loop check
     private final static long SLEEPWAIT = 60000;
-    // ms for scan innterval
-    private final static long SCANINTERVAL = 52000;
     // ms for lock delays
     private final static int LOCKWAIT = 5000;
     // ms to wait after trying to connect
@@ -1539,7 +1537,6 @@ public class WifiFixerService extends Service {
 	    if (!WFPreferences.getFlag(screenpref))
 		wfLog(this, LogService.SCREEN_OFF, null);
 	}
-	hMain.removeMessages(SCAN);
     }
 
     private void onScreenOn() {
@@ -1549,12 +1546,10 @@ public class WifiFixerService extends Service {
 	    if (!WFPreferences.getFlag(screenpref))
 		wfLog(this, LogService.SCREEN_ON, null);
 	}
-	hMainWrapper(SCAN, SCANINTERVAL);
     }
 
     private void onWifiDisabled() {
 	hMainWrapper(TEMPLOCK_ON);
-	hMain.removeMessages(SCAN);
 	/*
 	 * Remove any network notifications if this is manual
 	 */
@@ -1565,9 +1560,6 @@ public class WifiFixerService extends Service {
     private void onWifiEnabled() {
 	hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
 	wifishouldbeon = false;
-	if (!screenisoff) {
-	    hMainWrapper(SCAN, SCANINTERVAL);
-	}
     }
 
     private static void refreshWidget(final Context context) {
