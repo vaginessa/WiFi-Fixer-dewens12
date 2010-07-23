@@ -26,7 +26,8 @@
 			android:key="Performance" android:entries="@array/entries"
 			android:entryValues="@array/entryValues" />
 		
-		<PreferenceScreen android:title="Notifications">
+		<PreferenceScreen android:title="Notifications"
+		android:summary="Network and status notifications">
 		<CheckBoxPreference android:key="Notifications"
 			android:title="Enable Notifications"
 			android:summary="Displays a notification when Wifi Fixer fixes a problem" />
@@ -36,7 +37,8 @@
 			android:summary="Displays a notification when a new open network is detected" />
 		</PreferenceScreen>
 			
-		<PreferenceScreen android:title="Advanced Options">
+		<PreferenceScreen android:title="Advanced Options"
+		android:summary="Please read documentation before changing these settings">
 			<PreferenceCategory android:title="Logging">
 			<CheckBoxPreference android:key="Logging"
 			android:title="Enable Log Menu" android:summary="Note: Logging stores some personal information" />

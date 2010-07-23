@@ -815,12 +815,13 @@ public class WifiFixerService extends Service {
 
     private static void checkSignal(final Context context) {
 	int signal = getSignal();
-	
+
 	if (signal < DBM_FLOOR)
 	    wm.startScan();
-	
-	if(logging)
-	    wfLog(context,APP_NAME,context.getString(R.string.current_dbm)+signal);
+
+	if (logging)
+	    wfLog(context, APP_NAME, context.getString(R.string.current_dbm)
+		    + signal);
     }
 
     private void checkWifi() {
