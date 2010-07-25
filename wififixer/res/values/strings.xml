@@ -16,7 +16,7 @@
 
 -->
 <resources>
-    <string name="current_dbm">Current DbM:</string>
+    <string name="current_dbm">Current dBm:</string>
     <string name="network_notification_scan">Network Notification Scan</string>
     <string name="network_notification">Open Network Notification</string>
     <string name="open_network_found">Open Network Found</string>

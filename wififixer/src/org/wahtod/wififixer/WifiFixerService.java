@@ -618,7 +618,7 @@ public class WifiFixerService extends Service {
 	    pendingwifitoggle = false;
 	    wifishouldbeon = true;
 	    wakeLock(getBaseContext(), false);
-	    deleteNotification(NOTIFID);
+	    deleteNotification(getBaseContext(),NOTIFID);
 	}
 
     };
@@ -857,8 +857,8 @@ public class WifiFixerService extends Service {
 	return wm.enableNetwork(AP, disableOthers);
     }
 
-    private void deleteNotification(int id) {
-	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    private static void deleteNotification(final Context context, final int id) {
+	NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 	nm.cancel(id);
     }
 
