@@ -817,7 +817,7 @@ public class WifiFixerService extends Service {
     }
 
     private static void checkSignal(final Context context) {
-	int signal = getSignal();
+	int signal = wm.getConnectionInfo().getRssi();
 
 	if (signal < DBM_FLOOR)
 	    wm.startScan();
@@ -1061,10 +1061,6 @@ public class WifiFixerService extends Service {
 	     * If own package isn't found, something is horribly wrong.
 	     */
 	}
-    }
-
-    private static int getSignal() {
-	return wm.getConnectionInfo().getRssi();
     }
 
     private static SupplicantState getSupplicantState() {
