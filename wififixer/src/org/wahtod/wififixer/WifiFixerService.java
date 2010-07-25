@@ -819,8 +819,10 @@ public class WifiFixerService extends Service {
     private static void checkSignal(final Context context) {
 	int signal = wm.getConnectionInfo().getRssi();
 
-	if (signal < DBM_FLOOR)
+	if (signal < DBM_FLOOR) {
+	    notifyWrap(context, context.getString(R.string.signal_poor));
 	    wm.startScan();
+	}
 
 	if (logging)
 	    wfLog(context, APP_NAME, context.getString(R.string.current_dbm)
