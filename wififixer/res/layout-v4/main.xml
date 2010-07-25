@@ -46,7 +46,7 @@ android:layout_width="271px"
 android:layout_height="131px"
 android:layout_marginLeft="20px"
 android:layout_marginRight="20px"
-android:text="Wifi Fixer is a low-resource background program (service) that maintains your wifi connection."
+android:text="Wifi Fixer is a low-resource service that maintains your wifi connection."
 android:layout_centerVertical="true"
 android:layout_centerHorizontal="true"
 android:typeface="serif" android:textStyle="normal" android:textSize="20px">
