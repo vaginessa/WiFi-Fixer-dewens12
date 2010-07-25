@@ -1538,8 +1538,8 @@ public class WifiFixerService extends Service {
 	}
 	if (logging) {
 	    wfLog(this, APP_NAME, getString(R.string.screen_off_handler));
-	    if (!WFPreferences.getFlag(screenpref))
-		wfLog(this, LogService.SCREEN_OFF, null);
+
+	    wfLog(this, LogService.SCREEN_OFF, EMPTYSTRING);
 	}
     }
 
@@ -1547,8 +1547,8 @@ public class WifiFixerService extends Service {
 	sleepCheck(false);
 	if (logging) {
 	    wfLog(this, APP_NAME, getString(R.string.screen_on_handler));
-	    if (!WFPreferences.getFlag(screenpref))
-		wfLog(this, LogService.SCREEN_ON, null);
+
+	    wfLog(this, LogService.SCREEN_ON, EMPTYSTRING);
 	}
     }
 

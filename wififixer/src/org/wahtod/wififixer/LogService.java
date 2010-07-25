@@ -37,18 +37,19 @@ public class LogService extends Service {
     public static final String APPNAME = "APPNAME";
     public static final String Message = "Message";
     private static final long ALARMREPEAT = 10000;
+    private static final long SLEEPREPEAT = 60000;
     public int VERSION = 0;
-    private static String VSTRING = " ";
-    private static String APP_NAME = " ";
+    private static String vstring = " ";
+    private static String app_name = " ";
     private static String sMessage = " ";
     public FileWriter fWriter;
-    private static boolean SCREENISOFF = false;
-    private static boolean LOGGING = true;
+    private static boolean screenisoff = false;
+    private static boolean logging = true;
     // constants
-    static final String DIE = "DIE";
-    static final String SCREEN_ON = "SCREEN_ON";
-    static final String SCREEN_OFF = "SCREEN_OFF";
-    static final String LOG = "LOG";
+    public static final String DIE = "DIE";
+    public static final String SCREEN_ON = "SCREEN_ON";
+    public static final String SCREEN_OFF = "SCREEN_OFF";
+    public static final String LOG = "LOG";
     static final String FILENAME = "/wififixer_log.txt";
     static final String DIRNAME = "/data/org.wahtod.wififixer";
 
@@ -72,7 +73,7 @@ public class LogService extends Service {
 	    PackageInfo pi = pm.getPackageInfo("org.wahtod.wififixer", 0);
 	    // ---display the versioncode--
 	    VERSION = pi.versionCode;
-	    VSTRING = pi.versionName;
+	    vstring = pi.versionName;
 	} catch (NameNotFoundException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
@@ -85,8 +86,8 @@ public class LogService extends Service {
 	    return;
 	try {
 	    sMessage = intent.getStringExtra(Message);
-	    APP_NAME = intent.getStringExtra(APPNAME);
-	    wfLog(APP_NAME, sMessage);
+	    app_name = intent.getStringExtra(APPNAME);
+	    wfLog(app_name, sMessage);
 	} catch (NullPointerException e) {
 	    e.printStackTrace();
 
@@ -102,7 +103,6 @@ public class LogService extends Service {
     public void onCreate() {
 
 	getPackageInfo();
-	LOGGING = true;
 	wfLog(WifiFixerService.APP_NAME, getBuildInfo());
 	timeStamp();
 
@@ -117,36 +117,36 @@ public class LogService extends Service {
 	}
     }
 
-    public boolean processCommands(String Command) {
+    public boolean processCommands(String command) {
 
-	if (Command.contains(DIE)) {
-	    LOGGING = false;
-	    Log.v(this.getClass().getName(), "Dying");
+	if (command.equals(DIE)) {
+	    logging = false;
+	    Log.i(this.getClass().getName(), "Dying");
 	    return true;
-	} else if (Command.contains(SCREEN_ON)) {
-	    SCREENISOFF = false;
+	} else if (command.equals(SCREEN_ON)) {
+	    screenisoff = false;
+	    Log.i(this.getClass().getName(), "Screen On");
 	    return true;
-	} else if (Command.contains(SCREEN_OFF)) {
-	    SCREENISOFF = true;
+	} else if (command.equals(SCREEN_OFF)) {
+	    Log.v(this.getClass().getName(), "Screen Off");
+	    screenisoff = true;
 	    return true;
 	}
 
 	return false;
     }
 
-    void timeStamp() {
-	if (SCREENISOFF && LOGGING) {
+   private void timeStamp() {
+	if (screenisoff)
+	    tsHandler.sendEmptyMessageDelayed(1, SLEEPREPEAT);
+	else
 	    tsHandler.sendEmptyMessageDelayed(1, ALARMREPEAT);
-	    return;
-	}
 
 	Date time = new Date();
-	String message = "Build:" + VSTRING + ":" + VERSION + " " + ":"
+	String message = "Build:" + vstring + ":" + VERSION + " " + ":"
 		+ time.toString();
 	wfLog("WifiFixerService", message);
-	if (LOGGING)
-	    tsHandler.sendEmptyMessageDelayed(1, ALARMREPEAT);
-	else {
+	if (!logging) {
 	    tsHandler.removeMessages(1);
 	    stopSelf();
 	}
