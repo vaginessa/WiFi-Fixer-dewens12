@@ -618,7 +618,7 @@ public class WifiFixerService extends Service {
 	    pendingwifitoggle = false;
 	    wifishouldbeon = true;
 	    wakeLock(getBaseContext(), false);
-	    deleteNotification(getBaseContext(),NOTIFID);
+	    deleteNotification(getBaseContext(), NOTIFID);
 	}
 
     };
@@ -858,7 +858,8 @@ public class WifiFixerService extends Service {
     }
 
     private static void deleteNotification(final Context context, final int id) {
-	NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+	NotificationManager nm = (NotificationManager) context
+		.getSystemService(NOTIFICATION_SERVICE);
 	nm.cancel(id);
     }
 
@@ -1408,14 +1409,10 @@ public class WifiFixerService extends Service {
 	 * Caches DHCP gateway IP for ICMP check
 	 */
 	DhcpInfo info = wm.getDhcpInfo();
-	cachedIP = intToIp(info.gateway);
+	cachedIP = Formatter.formatIpAddress(info.gateway);
 	if (logging)
 	    wfLog(context, APP_NAME, context.getString(R.string.cached_ip)
 		    + cachedIP);
-    }
-
-    private static String intToIp(final int i) {
-	return Formatter.formatIpAddress(i);
     }
 
     private static void logSupplicant(final Context context, final String state) {
