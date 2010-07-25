@@ -1207,7 +1207,7 @@ public class WifiFixerService extends Service {
 	}
 
 	if (logging && !screenisoff)
-	    logSupplicant(sState);
+	    logSupplicant(this, sState);
     }
 
     private void handleWidgetAction() {
@@ -1414,20 +1414,23 @@ public class WifiFixerService extends Service {
 	return Formatter.formatIpAddress(i);
     }
 
-    private void logSupplicant(final String state) {
+    private static void logSupplicant(final Context context, final String state) {
 
-	wfLog(this, APP_NAME, getString(R.string.supplicant_state) + state);
+	wfLog(context, APP_NAME, context.getString(R.string.supplicant_state)
+		+ state);
 	if (wm.pingSupplicant()) {
-	    wfLog(this, APP_NAME, getString(R.string.supplicant_responded));
+	    wfLog(context, APP_NAME, context
+		    .getString(R.string.supplicant_responded));
 	} else {
-	    wfLog(this, APP_NAME, getString(R.string.supplicant_nonresponsive));
+	    wfLog(context, APP_NAME, context
+		    .getString(R.string.supplicant_nonresponsive));
 
 	}
 
 	if (lastssid.length() < 2)
 	    getNetworkID();
 
-	wfLog(this, APP_NAME, getString(R.string.ssid) + lastssid);
+	wfLog(context, APP_NAME, context.getString(R.string.ssid) + lastssid);
 
     }
 
