@@ -556,7 +556,8 @@ public class WifiFixerService extends Service {
 			    getString(R.string.reassociating));
 		tempLock(REACHABLE);
 		wifirepair++;
-		notifyWrap(getString(R.string.reassociating));
+		notifyWrap(getBaseContext(), getBaseContext().getString(
+			R.string.reassociating));
 		break;
 
 	    case W_RECONNECT:
@@ -567,7 +568,8 @@ public class WifiFixerService extends Service {
 			    getString(R.string.reconnecting));
 		tempLock(REACHABLE);
 		wifirepair++;
-		notifyWrap(getString(R.string.reconnecting));
+		notifyWrap(getBaseContext(), getBaseContext().getString(
+			R.string.reconnecting));
 		break;
 
 	    case W_REPAIR:
@@ -576,9 +578,10 @@ public class WifiFixerService extends Service {
 		startScan();
 		wifirepair = W_REASSOCIATE;
 		if (logging)
-		    wfLog(getBaseContext(), APP_NAME,
-			    getString(R.string.repairing));
-		notifyWrap(getString(R.string.repairing));
+		    wfLog(getBaseContext(), APP_NAME, getBaseContext()
+			    .getString(R.string.repairing));
+		notifyWrap(getBaseContext(), getBaseContext().getString(
+			R.string.repairing));
 		break;
 	    }
 	    /*
@@ -1072,20 +1075,21 @@ public class WifiFixerService extends Service {
 	return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     }
 
-    private void handleAuth(final Intent intent) {
+    private static void handleAuth(final Context context, final Intent intent) {
 	if (intent.getStringExtra(AUTHEXTRA).contains(AUTHSTRING)) {
 	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.authed));
+		wfLog(context, APP_NAME, context.getString(R.string.authed));
 	    // Ok, do the auth
-	    settings = PreferenceManager.getDefaultSharedPreferences(this);
-	    boolean IS_AUTHED = settings.getBoolean(
-		    getString(R.string.isauthed), false);
+	    settings = PreferenceManager.getDefaultSharedPreferences(context);
+	    boolean IS_AUTHED = settings.getBoolean(context
+		    .getString(R.string.isauthed), false);
 	    if (!IS_AUTHED) {
 		SharedPreferences.Editor editor = settings.edit();
-		editor.putBoolean(getString(R.string.isauthed), true);
+		editor.putBoolean(context.getString(R.string.isauthed), true);
 		editor.commit();
-		showNotification(getString(R.string.donatethanks),
-			getString(R.string.authorized), 4144, true);
+		showNotification(context, context
+			.getString(R.string.donatethanks), context
+			.getString(R.string.authorized), 4144, true);
 	    }
 
 	}
@@ -1133,7 +1137,7 @@ public class WifiFixerService extends Service {
 		 * AUTH from donate service
 		 */
 		if (iAction.contains(AUTH)) {
-		    handleAuth(intent);
+		    handleAuth(this, intent);
 		    return;
 		} else {
 		    WFPreferences.loadPrefs(this);
@@ -1200,10 +1204,10 @@ public class WifiFixerService extends Service {
 	} else if (sState == DISCONNECTED) {
 	    pendingscan = true;
 	    startScan();
-	    notifyWrap(sState);
+	    notifyWrap(this, sState);
 	} else if (sState == INACTIVE) {
 	    supplicantFix(true);
-	    notifyWrap(sState);
+	    notifyWrap(this, sState);
 	}
 
 	if (logging && !screenisoff)
@@ -1456,9 +1460,10 @@ public class WifiFixerService extends Service {
 	addNetNotif(context, ssid, signal);
     }
 
-    private void notifyWrap(final String message) {
+    private static void notifyWrap(final Context context, final String message) {
 	if (WFPreferences.getFlag(notifpref)) {
-	    showNotification(getString(R.string.wifi_connection_problem)
+	    showNotification(context, context
+		    .getString(R.string.wifi_connection_problem)
 		    + message, message, ERR_NOTIF, false);
 	}
 
@@ -1622,23 +1627,25 @@ public class WifiFixerService extends Service {
 
     }
 
-    private void showNotification(final String message,
-	    final String tickerText, final int id, final boolean bSpecial) {
+    private static void showNotification(final Context context,
+	    final String message, final String tickerText, final int id,
+	    final boolean bSpecial) {
 
-	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+	NotificationManager nm = (NotificationManager) context
+		.getSystemService(NOTIFICATION_SERVICE);
 
-	CharSequence from = getText(R.string.app_name);
-	PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+	CharSequence from = context.getText(R.string.app_name);
+	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 		new Intent(), 0);
 	if (bSpecial) {
-	    contentIntent = PendingIntent.getActivity(this, 0, new Intent(
+	    contentIntent = PendingIntent.getActivity(context, 0, new Intent(
 		    android.provider.Settings.ACTION_WIFI_SETTINGS), 0);
 	}
 
 	Notification notif = new Notification(R.drawable.icon, tickerText,
 		System.currentTimeMillis());
 
-	notif.setLatestEventInfo(this, from, message, contentIntent);
+	notif.setLatestEventInfo(context, from, message, contentIntent);
 	notif.flags = Notification.FLAG_AUTO_CANCEL;
 	// unique ID
 	nm.notify(id, notif);
@@ -1693,7 +1700,7 @@ public class WifiFixerService extends Service {
 	tempLock(CONNECTWAIT);
 	// Wake lock
 	wakeLock(this, true);
-	showNotification(getString(R.string.toggling_wifi),
+	showNotification(this, getString(R.string.toggling_wifi),
 		getString(R.string.toggling_wifi), NOTIFID, false);
 	hMainWrapper(WIFI_OFF);
 	hMainWrapper(WIFI_ON, LOCKWAIT);
