@@ -21,6 +21,7 @@ import java.io.FileWriter;
 import java.util.Date;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -36,19 +37,25 @@ public class LogService extends Service {
 
     public static final String APPNAME = "APPNAME";
     public static final String Message = "Message";
+    private static final String BUILD = "Build:";
+    private static final String SPACE = " ";
+    private static final String COLON = ":";
     private static final long ALARMREPEAT = 10000;
     private static final long SLEEPREPEAT = 60000;
     public int VERSION = 0;
     private static String vstring = " ";
     private static String app_name = " ";
     private static String sMessage = " ";
-    public FileWriter fWriter;
+    private static FileWriter fWriter;
     private static boolean screenisoff = false;
     private static boolean logging = true;
+    private static boolean screenpref = false;
     // constants
     public static final String DIE = "DIE";
     public static final String SCREEN_ON = "SCREEN_ON";
     public static final String SCREEN_OFF = "SCREEN_OFF";
+    public static final String SCREENPREF_ON = "SCPREF_ON";
+    public static final String SCREENPREF_OFF = "SCPREF_OFF";
     public static final String LOG = "LOG";
     static final String FILENAME = "/wififixer_log.txt";
     static final String DIRNAME = "/data/org.wahtod.wififixer";
@@ -56,7 +63,11 @@ public class LogService extends Service {
     private Handler tsHandler = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
-	    timeStamp();
+	    switch (message.what) {
+	    case 1:
+		timeStamp();
+		break;
+	    }
 	}
 
     };
@@ -75,8 +86,9 @@ public class LogService extends Service {
 	    VERSION = pi.versionCode;
 	    vstring = pi.versionName;
 	} catch (NameNotFoundException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+	   /*
+	    * We will always find our own package name
+	    */
 	}
     }
 
@@ -87,7 +99,7 @@ public class LogService extends Service {
 	try {
 	    sMessage = intent.getStringExtra(Message);
 	    app_name = intent.getStringExtra(APPNAME);
-	    wfLog(app_name, sMessage);
+	    wfLog(this, app_name, sMessage);
 	} catch (NullPointerException e) {
 	    e.printStackTrace();
 
@@ -103,7 +115,7 @@ public class LogService extends Service {
     public void onCreate() {
 
 	getPackageInfo();
-	wfLog(WifiFixerService.APP_NAME, getBuildInfo());
+	wfLog(this, WifiFixerService.APP_NAME, getBuildInfo());
 	timeStamp();
 
     }
@@ -117,49 +129,60 @@ public class LogService extends Service {
 	}
     }
 
-    public boolean processCommands(String command) {
+    public static boolean processCommands(final Context context,
+	    final String command) {
 
 	if (command.equals(DIE)) {
 	    logging = false;
-	    Log.i(this.getClass().getName(), "Dying");
+	    Log.i(context.getClass().getName(), context
+		    .getString(R.string.dying));
 	    return true;
 	} else if (command.equals(SCREEN_ON)) {
 	    screenisoff = false;
-	    Log.i(this.getClass().getName(), "Screen On");
 	    return true;
 	} else if (command.equals(SCREEN_OFF)) {
-	    Log.v(this.getClass().getName(), "Screen Off");
 	    screenisoff = true;
+	    return true;
+	} else if (command.equals(SCREENPREF_OFF)) {
+	    screenpref = false;
+	    return true;
+	} else if (command.equals(SCREENPREF_ON)) {
+	    screenpref = true;
 	    return true;
 	}
 
 	return false;
     }
 
-   private void timeStamp() {
-	if (screenisoff)
+    void timeStamp() {
+	if (!logging) {
+	    tsHandler.removeMessages(1);
+	    stopSelf();
+	    return;
+	} else if (screenisoff)
 	    tsHandler.sendEmptyMessageDelayed(1, SLEEPREPEAT);
 	else
 	    tsHandler.sendEmptyMessageDelayed(1, ALARMREPEAT);
 
-	Date time = new Date();
-	String message = "Build:" + vstring + ":" + VERSION + " " + ":"
-		+ time.toString();
-	wfLog("WifiFixerService", message);
-	if (!logging) {
-	    tsHandler.removeMessages(1);
-	    stopSelf();
+	if (!screenisoff || (screenisoff && screenpref)) {
+
+	    Date time = new Date();
+	    String message = BUILD + vstring + COLON + VERSION + SPACE + COLON
+		    + time.toString();
+	    wfLog(this, WifiFixerService.APP_NAME, message);
 	}
+
     }
 
-    void wfLog(String APP_NAME, String Message) {
-	if (processCommands(APP_NAME))
+    static void wfLog(final Context context, final String APP_NAME,
+	    final String Message) {
+	if (processCommands(context, APP_NAME))
 	    return;
 	Log.i(APP_NAME, Message);
-	writeToFileLog(Message);
+	writeToFileLog(context, Message);
     }
 
-    void writeToFileLog(String message) {
+    static void writeToFileLog(final Context context, String message) {
 	if (Environment.getExternalStorageState() != null
 		&& !(Environment.getExternalStorageState()
 			.contains(Environment.MEDIA_MOUNTED))) {

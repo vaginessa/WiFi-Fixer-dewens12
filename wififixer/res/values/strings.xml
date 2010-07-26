@@ -16,6 +16,7 @@
 
 -->
 <resources>
+    <string name="dying">Dying</string>
     <string name="signal_poor">Signal poor: scanning for better network.</string>
     <string name="current_dbm">Current dBm:</string>
     <string name="network_notification_scan">Network Notification Scan</string>

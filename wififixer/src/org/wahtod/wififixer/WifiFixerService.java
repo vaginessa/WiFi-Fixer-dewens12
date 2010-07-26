@@ -331,6 +331,16 @@ public class WifiFixerService extends Service {
 		 * Set logging flag
 		 */
 		logging = getFlag(loggingpref);
+
+		/*
+		 * send Logger screenpref state
+		 */
+		if (logging) {
+		    if (WFPreferences.getFlag(screenpref))
+			wfLog(context, LogService.SCREENPREF_ON, EMPTYSTRING);
+		    else
+			wfLog(context, LogService.SCREENPREF_OFF, EMPTYSTRING);
+		}
 		break;
 
 	    case netnotpref:
@@ -339,7 +349,10 @@ public class WifiFixerService extends Service {
 		 */
 		if (!getFlag(netnotpref))
 		    addNetNotif(context, EMPTYSTRING, EMPTYSTRING);
+
+		break;
 	    }
+
 	}
 
 	private static void specialCase(final Context context) {
