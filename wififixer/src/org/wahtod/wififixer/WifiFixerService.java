@@ -630,8 +630,6 @@ public class WifiFixerService extends Service {
 	    wm.setWifiEnabled(true);
 	    pendingwifitoggle = false;
 	    wifishouldbeon = true;
-	    wakeLock(getBaseContext(), false);
-	    deleteNotification(getBaseContext(), NOTIFID);
 	}
 
     };
@@ -1577,6 +1575,8 @@ public class WifiFixerService extends Service {
     private void onWifiEnabled() {
 	hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
 	wifishouldbeon = false;
+	wakeLock(getBaseContext(), false);
+	deleteNotification(getBaseContext(), NOTIFID);
     }
 
     private static void refreshWidget(final Context context) {

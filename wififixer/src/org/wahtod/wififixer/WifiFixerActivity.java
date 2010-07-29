@@ -250,7 +250,7 @@ public class WifiFixerActivity extends Activity {
 	contentView
 		.setTextViewText(
 			R.id.text,
-			"Thank you for using Wifi Fixer. If you find this software useful, please tap here to purchase the donate version");
+			"Thank you for using Wifi Fixer. If you find this software useful, please tap here to donate.");
 	notif.contentView = contentView;
 	notif.contentIntent = contentIntent;
 
