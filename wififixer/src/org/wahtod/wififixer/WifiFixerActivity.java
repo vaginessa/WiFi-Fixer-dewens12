@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -229,9 +230,9 @@ public class WifiFixerActivity extends Activity {
 
     }
 
-    void startwfService() {
+    static void startwfService(final Context context) {
 	Intent sendIntent = new Intent(WifiFixerService.class.getName());
-	startService(sendIntent);
+	context.startService(sendIntent);
     }
 
     void nagNotification() {
@@ -261,8 +262,8 @@ public class WifiFixerActivity extends Activity {
 
     }
 
-    private void removeNag() {
-	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    private static void removeNag(final Context context) {
+	NotificationManager nm = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
 	nm.cancel(31337);
     }
 
@@ -317,7 +318,7 @@ public class WifiFixerActivity extends Activity {
 	// Here's where we fire the nag
 	authCheck();
 
-	startwfService();
+	startwfService(this);
 
     }
 
@@ -385,7 +386,7 @@ public class WifiFixerActivity extends Activity {
     @Override
     public void onPause() {
 	super.onPause();
-	removeNag();
+	removeNag(this);
     }
 
     @Override

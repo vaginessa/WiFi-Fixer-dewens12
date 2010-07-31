@@ -966,7 +966,11 @@ public class WifiFixerService extends Service {
 			.getString(R.string.network_notification_scan));
 	    networkNotify(context);
 	}
-	return best_id;
+
+	if (state)
+	    return best_id;
+	else
+	    return HTTP_NULL;
     }
 
     private static boolean getHttpHeaders(final Context context)
