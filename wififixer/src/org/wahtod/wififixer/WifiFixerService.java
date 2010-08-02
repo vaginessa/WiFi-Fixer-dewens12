@@ -90,6 +90,8 @@ public class WifiFixerService extends Service {
     private static final int WIFI_ON = 7;
     private static final int SLEEPCHECK = 8;
     private static final int SCAN = 9;
+    private static final int N1CHECK = 10;
+    private static final int WATCHDOG = 11;
 
     /*
      * Constants for wifirepair values
@@ -442,6 +444,14 @@ public class WifiFixerService extends Service {
 		hMain.post(rScan);
 		break;
 
+	    case N1CHECK:
+
+		break;
+
+	    case WATCHDOG:
+		checkWifiState();
+		break;
+
 	    }
 	}
     };
@@ -523,9 +533,6 @@ public class WifiFixerService extends Service {
 	public void run() {
 	    // Queue next run of main runnable
 	    hMainWrapper(MAIN, LOOPWAIT);
-	    // Watchdog
-	    if (!getIsWifiEnabled())
-		checkWifiState();
 
 	    // Check Supplicant
 	    if (getIsWifiEnabled() && !wm.pingSupplicant()) {
@@ -859,6 +866,7 @@ public class WifiFixerService extends Service {
     private void checkWifiState() {
 	if (!getIsWifiEnabled() && wifishouldbeon) {
 	    hMainWrapper(WIFI_ON);
+	    hMainWrapper(WATCHDOG, REACHABLE);
 	}
     }
 
@@ -1716,6 +1724,7 @@ public class WifiFixerService extends Service {
 		getString(R.string.toggling_wifi), NOTIFID, false);
 	hMainWrapper(WIFI_OFF);
 	hMainWrapper(WIFI_ON, LOCKWAIT);
+	hMainWrapper(WATCHDOG, LOCKWAIT + REACHABLE);
     }
 
     private static void wakeLock(final Context context, final boolean state) {
