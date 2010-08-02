@@ -968,13 +968,6 @@ public class WifiFixerService extends Service {
 			.getString(R.string.no_known_networks_found));
 	}
 
-	if (WFPreferences.getFlag(netnotpref)) {
-	    if (logging)
-		wfLog(context, APP_NAME, context
-			.getString(R.string.network_notification_scan));
-	    networkNotify(context);
-	}
-
 	if (state)
 	    return best_id;
 	else
@@ -1267,19 +1260,25 @@ public class WifiFixerService extends Service {
 	if (!getIsWifiEnabled())
 	    return;
 
-	if (!pendingscan && !screenisoff) {
+	if (!pendingscan) {
 	    if (getIsOnWifi(this)) {
 		/*
 		 * We're on wifi, so we want to check for better signal
 		 */
 		signalCheck();
+		return;
 	    } else {
 		/*
-		 * Normal scan this is where network notifications will be
-		 * handled
+		 * Network notification check
 		 */
+		if (WFPreferences.getFlag(netnotpref)) {
+		    if (logging)
+			wfLog(this, APP_NAME, this
+				.getString(R.string.network_notification_scan));
+		    networkNotify(this);
+		    return;
+		}
 	    }
-	    return;
 	}
 
 	if (!pendingreconnect) {
