@@ -445,7 +445,7 @@ public class WifiFixerService extends Service {
 		break;
 
 	    case N1CHECK:
-
+		n1Fix();
 		break;
 
 	    case WATCHDOG:
@@ -1456,6 +1456,15 @@ public class WifiFixerService extends Service {
 
     }
 
+    private void n1Fix() {
+	/*
+	 * Nexus One Sleep Fix duplicating widget function
+	 */
+	if (getIsWifiEnabled() && WFPreferences.getFlag(n1fix2pref)) {
+	    toggleWifi();
+	}
+    }
+
     private static void networkNotify(final Context context) {
 	final int NUM_SSIDS = 3;
 	final int SSID_LENGTH = 10;
@@ -1554,11 +1563,10 @@ public class WifiFixerService extends Service {
     private void onScreenOff() {
 	sleepCheck(true);
 	/*
-	 * Nexus One Sleep Fix 2 duplicating widget function
+	 * Schedule N1 fix
 	 */
-	if (getIsWifiEnabled() && WFPreferences.getFlag(n1fix2pref)) {
-	    toggleWifi();
-	}
+	hMainWrapper(N1CHECK, REACHABLE);
+
 	if (logging) {
 	    wfLog(this, APP_NAME, getString(R.string.screen_off_handler));
 
