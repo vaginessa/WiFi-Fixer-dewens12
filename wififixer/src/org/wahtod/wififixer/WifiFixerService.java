@@ -1186,6 +1186,7 @@ public class WifiFixerService extends Service {
 	if (sState == COMPLETED) {
 	    clearQueue();
 	    notifCancel(ERR_NOTIF, this);
+	    notifCancel(NETNOTIFID, this);
 	    pendingscan = false;
 	    pendingreconnect = false;
 	    return;
@@ -1282,7 +1283,9 @@ public class WifiFixerService extends Service {
 	}
 
 	if (!pendingreconnect) {
-
+	    /*
+	     * Service called the scan dispatch appropriate runnable
+	     */
 	    pendingscan = false;
 	    hMainWrapper(REPAIR);
 	    if (logging)
