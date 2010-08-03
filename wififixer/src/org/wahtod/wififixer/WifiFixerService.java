@@ -21,7 +21,10 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -135,7 +138,6 @@ public class WifiFixerService extends Service {
     private static final int CONNECTWAIT = 8000;
 
     // for Dbm
-    private static final int DBM_DEFAULT = -100;
     private static final int DBM_FLOOR = -90;
 
     // *****************************
@@ -194,9 +196,8 @@ public class WifiFixerService extends Service {
     // various
     private static int wifirepair = W_REASSOCIATE;
     private static final int HTTP_NULL = -1;
-
-    private static int lastnid = HTTP_NULL;
     private static String cachedIP;
+    private static int numKnownAPs = -1;
     // Empty string
     private final static String EMPTYSTRING = "";
     private static final String NEWLINE = "\n";
@@ -206,8 +207,7 @@ public class WifiFixerService extends Service {
     private static boolean pendingwifitoggle = false;
     private static boolean pendingreconnect = false;
 
-    // misc types
-    private static String lastssid = EMPTYSTRING;
+    // Version
     private static int version = MAIN;
     // Public Utilities
     private static WifiManager wm;
@@ -461,7 +461,7 @@ public class WifiFixerService extends Service {
      */
     private Runnable rRepair = new Runnable() {
 	public void run() {
-	    if (!getIsWifiEnabled()) {
+	    if (!wm.isWifiEnabled()) {
 		hMainWrapper(TEMPLOCK_OFF);
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME,
@@ -469,24 +469,21 @@ public class WifiFixerService extends Service {
 		return;
 	    }
 
-	    if (getBestAPinRange(getBaseContext()) != HTTP_NULL) {
-		if (connectToAP(lastnid, true) && (getNetworkID() != HTTP_NULL)) {
-		    pendingreconnect = false;
-		    if (logging)
-			wfLog(getBaseContext(), APP_NAME,
-				getString(R.string.connected_to_network)
-					+ getNetworkID());
-		} else {
-		    pendingreconnect = true;
-		    toggleWifi();
-		    if (logging)
-			wfLog(getBaseContext(), APP_NAME,
-				getString(R.string.toggling_wifi));
-		}
+	    if (connectToAP(getBestAPinRange(getBaseContext()), true)
+		    && (getNetworkID() != HTTP_NULL)) {
+		pendingreconnect = false;
+		if (logging)
+		    wfLog(getBaseContext(), APP_NAME,
+			    getString(R.string.connected_to_network)
+				    + getNetworkID());
+	    } else {
+		pendingreconnect = true;
+		toggleWifi();
+		if (logging)
+		    wfLog(getBaseContext(), APP_NAME,
+			    getString(R.string.toggling_wifi));
 
-	    } else
-		hMainWrapper(TEMPLOCK_OFF);
-
+	    }
 	}
 
     };
@@ -496,15 +493,14 @@ public class WifiFixerService extends Service {
      */
     private Runnable rReconnect = new Runnable() {
 	public void run() {
-	    if (!getIsWifiEnabled()) {
+	    if (!wm.isWifiEnabled()) {
 		hMainWrapper(TEMPLOCK_OFF);
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME,
 			    getString(R.string.wifi_off_aborting_reconnect));
 		return;
 	    }
-	    if (getBestAPinRange(getBaseContext()) != HTTP_NULL
-		    && connectToAP(lastnid, true)
+	    if (connectToAP(getBestAPinRange(getBaseContext()), true)
 		    && (getNetworkID() != HTTP_NULL)) {
 		pendingreconnect = false;
 		if (logging)
@@ -513,8 +509,7 @@ public class WifiFixerService extends Service {
 				    + getNetworkID());
 	    } else {
 		wifirepair = W_REASSOCIATE;
-		pendingscan = true;
-		startScan();
+		startScan(true);
 		if (logging)
 		    wfLog(
 			    getBaseContext(),
@@ -535,7 +530,7 @@ public class WifiFixerService extends Service {
 	    hMainWrapper(MAIN, LOOPWAIT);
 
 	    // Check Supplicant
-	    if (getIsWifiEnabled() && !wm.pingSupplicant()) {
+	    if (wm.isWifiEnabled() && !wm.pingSupplicant()) {
 		if (logging)
 		    wfLog(
 			    getBaseContext(),
@@ -594,8 +589,7 @@ public class WifiFixerService extends Service {
 
 	    case W_REPAIR:
 		// Start Scan
-		pendingscan = true;
-		startScan();
+		startScan(true);
 		wifirepair = W_REASSOCIATE;
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME, getBaseContext()
@@ -614,7 +608,7 @@ public class WifiFixerService extends Service {
 			getString(R.string.fix_algorithm)
 				+ Integer.toString(wifirepair)
 				+ getString(R.string.lastnid)
-				+ Integer.toString(lastnid));
+				+ Integer.toString(getNetworkID()));
 	    }
 	}
     };
@@ -668,7 +662,7 @@ public class WifiFixerService extends Service {
 	     * Start scan if nothing is holding a temp lock
 	     */
 	    if (!templock) {
-		startScan();
+		startScan(false);
 	    } else
 		hMainWrapper(SCAN, CONNECTWAIT);
 	}
@@ -736,6 +730,24 @@ public class WifiFixerService extends Service {
 	} else
 	    nm.cancel(NETNOTIFID);
 
+    }
+    
+    private static int badAPCheck(final Context context){
+	if (numKnownAPs < RECONNECT)
+	    return HTTP_NULL;
+	int network = getNetworkID();
+	int newnet = HTTP_NULL;
+	ArrayList<ScanResult> results = sortBySignal(context);
+	/*
+	 * Iterate through till we find better network
+	 */
+	for(ScanResult sResult:results){
+	    newnet=getNIDfromSSID(sResult.SSID);
+	    if(newnet !=network) {
+		return newnet;
+	    }
+	}
+	return HTTP_NULL;
     }
 
     private void checkLock(WifiManager.WifiLock lock) {
@@ -848,11 +860,15 @@ public class WifiFixerService extends Service {
     }
 
     private void checkWifi() {
-	if (getIsWifiEnabled(this, true)) {
+	if (getisWifiEnabled(this)) {
 	    if (getSupplicantState() == SupplicantState.ASSOCIATED
 		    || getSupplicantState() == SupplicantState.COMPLETED) {
 		if (!checkNetwork(this)) {
-		    wifiRepair();
+		    int check = badAPCheck(this);
+		    if(check != HTTP_NULL)
+			wifiRepair();
+		    else
+			connectToAP(check,true);
 		}
 	    } else {
 		pendingscan = true;
@@ -864,7 +880,7 @@ public class WifiFixerService extends Service {
     }
 
     private void checkWifiState() {
-	if (!getIsWifiEnabled() && wifishouldbeon) {
+	if (!wm.isWifiEnabled() && wifishouldbeon) {
 	    hMainWrapper(WIFI_ON);
 	    hMainWrapper(WATCHDOG, REACHABLE);
 	}
@@ -885,100 +901,41 @@ public class WifiFixerService extends Service {
     }
 
     private static int getBestAPinRange(final Context context) {
-	boolean state = false;
-	;
-	;
-	final List<ScanResult> wifiList = wm.getScanResults();
+
+	ArrayList<ScanResult> results = sortBySignal(context);
 	/*
-	 * Catch null if scan results fires after wifi disabled or while wifi is
-	 * in intermediate state
+	 * Return -1 if empty
 	 */
-	if (wifiList == null) {
-	    if (logging)
-		wfLog(context, APP_NAME, context
-			.getString(R.string.null_scan_results));
+	if(results == null)
 	    return HTTP_NULL;
-	}
 	/*
-	 * wifiConfigs is just a reference to known networks.
+	 * Get first result, sorted for best signal
 	 */
-	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+	ScanResult best = results.get(MAIN);
 
-	/*
-	 * Iterate the known networks over the scan results, adding found known
-	 * networks.
-	 */
-
-	int best_id = HTTP_NULL;
-	int best_signal = DBM_DEFAULT;
-	String best_ssid = EMPTYSTRING;
+	int lastnid = getNIDfromSSID(best.SSID);
+	if (logging)
+	    wfLog(context, APP_NAME, context
+		    .getString(R.string.best_signal_ssid)
+		    + EMPTYSTRING
+		    + lastnid
+		    + EMPTYSTRING
+		    + best.SSID
+		    + context.getString(R.string.signal_level) + best.level);
 
 	if (logging)
 	    wfLog(context, APP_NAME, context
-		    .getString(R.string.parsing_scan_results));
-
-	for (ScanResult sResult : wifiList) {
-	    for (WifiConfiguration wfResult : wifiConfigs) {
-		/*
-		 * Using .contains to find sResult.SSID in doublequoted string
-		 */
-		if (wfResult.SSID.contains(sResult.SSID)) {
-		    if (logging) {
-			wfLog(context, APP_NAME, context
-				.getString(R.string.found_ssid)
-				+ sResult.SSID);
-			wfLog(context, APP_NAME, context
-				.getString(R.string.capabilities)
-				+ sResult.capabilities);
-			wfLog(context, APP_NAME, context
-				.getString(R.string.signal_level)
-				+ sResult.level);
-		    }
-		    /*
-		     * Comparing and storing best signal level
-		     */
-		    if (sResult.level > best_signal) {
-			best_id = wfResult.networkId;
-			best_signal = sResult.level;
-			best_ssid = sResult.SSID;
-		    }
-		    state = true;
-		}
-	    }
-	}
-
-	/*
-	 * Set lastnid and lastssid to known network with highest level from
-	 * scanresults
-	 * 
-	 * if !state nothing was found
-	 */
-	if (state) {
-	    lastnid = best_id;
-	    lastssid = best_ssid;
-	    if (logging)
-		wfLog(context, APP_NAME, context
-			.getString(R.string.best_signal_ssid)
-			+ best_ssid
-			+ context.getString(R.string.signal_level)
-			+ best_signal);
-	} else {
-	    if (logging)
-		wfLog(context, APP_NAME, context
-			.getString(R.string.no_known_networks_found));
-	}
-
-	if (state)
-	    return best_id;
-	else
-	    return HTTP_NULL;
+		    .getString(R.string.known_networks_found)
+		    + results.size());
+	return lastnid;
     }
 
     private static boolean getHttpHeaders(final Context context)
 	    throws IOException, URISyntaxException {
 
-	// Turns out the old way was better
-	// I just wasn't doing it right.
+	/*
+	 * Performs HTTP HEAD request and returns boolean success or failure
+	 */
 
 	boolean isup = false;
 	int status = HTTP_NULL;
@@ -1024,22 +981,7 @@ public class WifiFixerService extends Service {
 	return wifi;
     }
 
-    private static boolean getIsWifiEnabled() {
-	boolean enabled = false;
-
-	if (wm.isWifiEnabled()) {
-	    enabled = true;
-	} else {
-	    /*
-	     * it's false
-	     */
-	}
-
-	return enabled;
-    }
-
-    private static boolean getIsWifiEnabled(final Context context,
-	    final boolean log) {
+    private static boolean getisWifiEnabled(final Context context) {
 	boolean enabled = false;
 
 	if (wm.isWifiEnabled()) {
@@ -1048,7 +990,7 @@ public class WifiFixerService extends Service {
 			.getString(R.string.wifi_is_enabled));
 	    enabled = true;
 	} else {
-	    if (logging && log)
+	    if (logging)
 		wfLog(context, APP_NAME, context
 			.getString(R.string.wifi_is_disabled));
 	}
@@ -1056,14 +998,85 @@ public class WifiFixerService extends Service {
 	return enabled;
     }
 
+    private static ArrayList<ScanResult> getKnownAPsInRange(
+	    final Context context) {
+
+	final List<ScanResult> wifiList = wm.getScanResults();
+	/*
+	 * Catch null if scan results fires after wifi disabled or while wifi is
+	 * in intermediate state
+	 */
+	if (wifiList == null) {
+	    if (logging)
+		wfLog(context, APP_NAME, context
+			.getString(R.string.null_scan_results));
+	    return null;
+
+	}
+	/*
+	 * List of In-range APs
+	 */
+	ArrayList<ScanResult> inrange = new ArrayList<ScanResult>();
+	/*
+	 * Known Networks
+	 */
+	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+
+	/*
+	 * Iterate the known networks over the scan results, adding found known
+	 * networks.
+	 */
+	inrange.clear();
+	for (ScanResult sResult : wifiList) {
+	    for (WifiConfiguration wfResult : wifiConfigs) {
+		/*
+		 * Using .contains to find sResult.SSID in doublequoted string
+		 */
+		if (wfResult.SSID.contains(sResult.SSID)) {
+		    inrange.add(sResult);
+		    if (logging) {
+			wfLog(context, APP_NAME, context
+				.getString(R.string.found_ssid)
+				+ sResult.SSID);
+			wfLog(context, APP_NAME, context
+				.getString(R.string.capabilities)
+				+ sResult.capabilities);
+			wfLog(context, APP_NAME, context
+				.getString(R.string.signal_level)
+				+ sResult.level);
+		    }
+		}
+	    }
+	}
+	if (logging)
+	    wfLog(context, APP_NAME, context
+		    .getString(R.string.known_networks_found)
+		    + inrange.size());
+	
+	numKnownAPs = inrange.size();
+
+	return inrange;
+
+    }
+
     private static int getNetworkID() {
 	myWifi = wm.getConnectionInfo();
-	int id = myWifi.getNetworkId();
-	if (id != HTTP_NULL) {
-	    WifiFixerService.lastnid = id;
-	    lastssid = myWifi.getSSID();
+	if (myWifi == null)
+	    return HTTP_NULL;
+	else {
+	    int networkid = myWifi.getNetworkId();
+	    return networkid;
 	}
-	return id;
+    }
+
+    private static int getNIDfromSSID(final String SSID) {
+	int nid = HTTP_NULL;
+	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+	for (WifiConfiguration wfResult : wifiConfigs) {
+	    if (wfResult.SSID.contains(SSID))
+		return wfResult.networkId;
+	}
+	return nid;
     }
 
     private void getPackageInfo() {
@@ -1079,6 +1092,10 @@ public class WifiFixerService extends Service {
 	     * If own package isn't found, something is horribly wrong.
 	     */
 	}
+    }
+
+    private static String getSSID() {
+	return wm.getConnectionInfo().getSSID();
     }
 
     private static SupplicantState getSupplicantState() {
@@ -1115,7 +1132,7 @@ public class WifiFixerService extends Service {
 	 * This action means network connectivty has changed but, we only want
 	 * to run this code for wifi
 	 */
-	if (!getIsWifiEnabled() || !getIsOnWifi(context))
+	if (!wm.isWifiEnabled() || !getIsOnWifi(context))
 	    return;
 
 	icmpCache(context);
@@ -1211,15 +1228,14 @@ public class WifiFixerService extends Service {
 	 * Dispatches appropriate supplicant fix
 	 */
 
-	if (!getIsWifiEnabled()) {
+	if (!wm.isWifiEnabled()) {
 	    return;
 	} else if (screenisoff && !WFPreferences.getFlag(screenpref))
 	    return;
 	else if (sState == SCANNING) {
 	    pendingscan = true;
 	} else if (sState == DISCONNECTED) {
-	    pendingscan = true;
-	    startScan();
+	    startScan(true);
 	    notifyWrap(this, sState);
 	} else if (sState == INACTIVE) {
 	    supplicantFix(true);
@@ -1236,7 +1252,7 @@ public class WifiFixerService extends Service {
 	/*
 	 * Handle widget action
 	 */
-	if (getIsWifiEnabled()) {
+	if (wm.isWifiEnabled()) {
 	    if (WFPreferences.getFlag(widgetpref)) {
 		Toast.makeText(WifiFixerService.this,
 			getString(R.string.toggling_wifi), Toast.LENGTH_LONG)
@@ -1247,8 +1263,10 @@ public class WifiFixerService extends Service {
 			getString(R.string.reassociating), Toast.LENGTH_LONG)
 			.show();
 
-		wifirepair = W_REASSOCIATE;
-		wifiRepair();
+		/*
+		 * wifirepair = W_REASSOCIATE; wifiRepair();
+		 */
+		startScan(true);
 
 	    }
 	} else
@@ -1258,7 +1276,7 @@ public class WifiFixerService extends Service {
     }
 
     private void handleWifiResults() {
-	if (!getIsWifiEnabled())
+	if (!wm.isWifiEnabled())
 	    return;
 
 	if (!pendingscan) {
@@ -1451,10 +1469,7 @@ public class WifiFixerService extends Service {
 
 	}
 
-	if (lastssid.length() < 2)
-	    getNetworkID();
-
-	wfLog(context, APP_NAME, context.getString(R.string.ssid) + lastssid);
+	wfLog(context, APP_NAME, context.getString(R.string.ssid) + getSSID());
 
     }
 
@@ -1462,8 +1477,7 @@ public class WifiFixerService extends Service {
 	/*
 	 * Nexus One Sleep Fix duplicating widget function
 	 */
-	if (getIsWifiEnabled() && WFPreferences.getFlag(n1fix2pref)
-		&& screenisoff) {
+	if (wm.isWifiEnabled() && screenisoff) {
 	    toggleWifi();
 	}
     }
@@ -1515,7 +1529,7 @@ public class WifiFixerService extends Service {
 
     @Override
     public void onCreate() {
-
+	super.onCreate();
 	wm = getWifiManager(this);
 	getPackageInfo();
 
@@ -1564,11 +1578,16 @@ public class WifiFixerService extends Service {
     }
 
     private void onScreenOff() {
-	sleepCheck(true);
+	/*
+	 * Disable Sleep check
+	 */
+	if (WFPreferences.getFlag(screenpref))
+	    sleepCheck(true);
 	/*
 	 * Schedule N1 fix
 	 */
-	hMainWrapper(N1CHECK, REACHABLE);
+	if (WFPreferences.getFlag(n1fix2pref))
+	    hMainWrapper(N1CHECK, REACHABLE);
 
 	if (logging) {
 	    wfLog(this, APP_NAME, getString(R.string.screen_off_handler));
@@ -1643,7 +1662,7 @@ public class WifiFixerService extends Service {
     }
 
     private void sleepCheck(final boolean state) {
-	if (state && WFPreferences.getFlag(screenpref) && getIsWifiEnabled()) {
+	if (state && wm.isWifiEnabled()) {
 	    /*
 	     * Start sleep check
 	     */
@@ -1695,22 +1714,64 @@ public class WifiFixerService extends Service {
 	else if (bestap != getNetworkID()) {
 	    connectToAP(bestap, true);
 	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.hopping) + bestap);
+		wfLog(this, APP_NAME, getString(R.string.hopping) + bestap
+			+ NEWLINE + getNetworkID());
 	}
     }
+    
+    private static ArrayList<ScanResult> sortBySignal(final Context context){
+	/*
+	 * Populate results
+	 */
+	ArrayList<ScanResult> results = getKnownAPsInRange(context);
+	/*
+	 * Return -1 if no results
+	 */
+	if (results.size() == MAIN) {
+	    if (logging)
+		wfLog(context, APP_NAME, context
+			.getString(R.string.null_scan_results));
+	    return null;
+	}
 
-    private void startScan() {
+	/*
+	 * Comparator by signal
+	 */
+
+	class SortBySignal implements Comparator<ScanResult> {
+
+	    @Override
+	    public int compare(ScanResult o1, ScanResult o2) {
+		if (o1.level < o2.level)
+		    return REPAIR;
+		else if (o1.level == o2.level)
+		    return MAIN;
+		else
+		    return HTTP_NULL;
+	    }
+
+	}
+
+	/*
+	 * Sort by signal
+	 */
+	if (results.size() > REPAIR)
+	    Collections.sort(results, new SortBySignal());
+	return results;
+    }
+
+    private void startScan(final boolean pending) {
 	// We want a lock after a scan
+	pendingscan = pending;
 	wm.startScan();
 	tempLock(LOCKWAIT);
     }
 
     private void supplicantFix(final boolean wftoggle) {
 	// Toggling wifi fixes the supplicant
-	pendingscan = true;
 	if (wftoggle)
 	    toggleWifi();
-	startScan();
+	startScan(true);
 	if (logging)
 	    wfLog(this, APP_NAME, getString(R.string.running_supplicant_fix));
     }

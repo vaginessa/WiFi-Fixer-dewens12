@@ -16,6 +16,7 @@
 
 -->
 <resources>
+    <string name="known_networks_found">Known Networks Found: </string>
     <string name="dying">Dying</string>
     <string name="signal_poor">Signal poor: scanning for better network.</string>
     <string name="current_dbm">Current dBm:</string>
@@ -43,7 +44,7 @@
     <string name="loading_settings">Loading Settings</string>
     <string name="version">Version:</string>
     <string name="no_known_networks_found">No known networks found</string>
-    <string name="best_signal_ssid">Best Signal: SSID </string>
+    <string name="best_signal_ssid">Best Signal: SSID: </string>
     <string name="signal_level">Signal Level:</string>
     <string name="capabilities">Capabilities:</string>
     <string name="found_ssid">Found SSID:</string>

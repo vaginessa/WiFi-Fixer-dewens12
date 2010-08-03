@@ -69,38 +69,7 @@ public class WifiFixerActivity extends Activity {
 	}
     }
 
-    String getPrefs() {
-	settings = PreferenceManager.getDefaultSharedPreferences(this);
-	String prefs = "Settings:\n";
-
-	if (settings.getBoolean("Disable", false))
-	    prefs = prefs + "DISABLE:True\n";
-	else
-	    prefs = prefs + "DISABLE:False\n";
-
-	if (settings.getBoolean("WiFiLock", false))
-	    prefs = prefs + "LOCKPREF:True\n";
-	else
-	    prefs = prefs + "LOCKPREF:False\n";
-
-	if (settings.getBoolean("Notifications", false))
-	    prefs = prefs + "NOTIFPREF:True\n";
-	else
-	    prefs = prefs + "NOTIFPREF:False\n";
-
-	if (settings.getBoolean("SCREEN", false))
-	    prefs = prefs + "SCREENPREF:True\n";
-	else
-	    prefs = prefs + "SCREENPREF:False\n";
-
-	if (settings.getBoolean("SUPFIX", false))
-	    prefs = prefs + "SUPPREF:True\n";
-	else
-	    prefs = prefs + "SUPPREF:False\n";
-
-	return prefs;
-
-    }
+   
 
     boolean getLogging() {
 	settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -146,7 +115,7 @@ public class WifiFixerActivity extends Activity {
 				.parse("file:///sdcard/data/org.wahtod.wififixer/wififixer_log.txt"));
 	sendIntent.putExtra(Intent.EXTRA_TEXT,
 		"Please include time at which issue occurred and description of the issue:\n\n"
-			+ LogService.getBuildInfo() + getPrefs());
+			+ LogService.getBuildInfo());
 
 	startActivity(Intent.createChooser(sendIntent, "Email:"));
 
