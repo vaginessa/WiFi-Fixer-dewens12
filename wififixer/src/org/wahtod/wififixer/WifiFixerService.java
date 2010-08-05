@@ -943,7 +943,8 @@ public class WifiFixerService extends Service {
 		 * containsBSSID filters out duplicate MACs in broken scans
 		 * (yes, that happens)
 		 */
-		if (wfResult.SSID.contains(sResult.SSID) && !containsBSSID(sResult.BSSID,knownbysignal)) {
+		if (wfResult.SSID.contains(sResult.SSID)
+			&& !containsBSSID(sResult.BSSID, knownbysignal)) {
 		    if (logging) {
 			wfLog(context, APP_NAME, context
 				.getString(R.string.found_ssid)

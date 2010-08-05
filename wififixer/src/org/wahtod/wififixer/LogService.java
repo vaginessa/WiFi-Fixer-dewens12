@@ -86,9 +86,9 @@ public class LogService extends Service {
 	    VERSION = pi.versionCode;
 	    vstring = pi.versionName;
 	} catch (NameNotFoundException e) {
-	   /*
-	    * We will always find our own package name
-	    */
+	    /*
+	     * We will always find our own package name
+	     */
 	}
     }
 

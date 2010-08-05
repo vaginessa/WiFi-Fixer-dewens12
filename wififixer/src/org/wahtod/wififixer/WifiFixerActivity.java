@@ -69,8 +69,6 @@ public class WifiFixerActivity extends Activity {
 	}
     }
 
-   
-
     boolean getLogging() {
 	settings = PreferenceManager.getDefaultSharedPreferences(this);
 	return settings.getBoolean("SLOG", false);
@@ -232,7 +230,8 @@ public class WifiFixerActivity extends Activity {
     }
 
     private static void removeNag(final Context context) {
-	NotificationManager nm = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
+	NotificationManager nm = (NotificationManager) context
+		.getSystemService(NOTIFICATION_SERVICE);
 	nm.cancel(31337);
     }
 
