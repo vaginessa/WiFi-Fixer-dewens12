@@ -33,26 +33,26 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	super.onCreate(savedInstanceState);
 
 	addPreferencesFromResource(R.xml.preferences);
-	
-	    /*
-	     * Handle Wifi Sleep Policy
-	     */
-	    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-	    ContentResolver cr = getContentResolver();
-	    SharedPreferences.Editor edit = prefs.edit();
-	    try {
-		String wfsleep = String
-		.valueOf(android.provider.Settings.System
-		    .getInt(
-			    cr,
+
+	/*
+	 * Handle Wifi Sleep Policy
+	 */
+	SharedPreferences prefs = PreferenceManager
+		.getDefaultSharedPreferences(this);
+	ContentResolver cr = getContentResolver();
+	SharedPreferences.Editor edit = prefs.edit();
+	try {
+	    String wfsleep = String
+		    .valueOf(android.provider.Settings.System.getInt(cr,
 			    android.provider.Settings.System.WIFI_SLEEP_POLICY));
-		  edit.putString("WFSLEEP", wfsleep);
-		    edit.commit();
-	    } catch (SettingNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	    
+	    edit.putString("WFSLEEP", wfsleep);
+	    edit.commit();
+	} catch (SettingNotFoundException e) {
+	    /*
+	     * Don't need a catch, all clients are >= 1.5 per manifest market
+	     * restriction
+	     */
+	}
 
     }
 

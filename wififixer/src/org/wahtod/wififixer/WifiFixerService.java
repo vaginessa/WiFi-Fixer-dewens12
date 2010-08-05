@@ -193,7 +193,7 @@ public class WifiFixerService extends Service {
     private static boolean shouldrun = true;
     // various
     private static int wifirepair = W_REASSOCIATE;
-    private static final int HTTP_NULL = -1;
+    private static final int NULLVAL = -1;
     private static String cachedIP;
     private static int numKnownAPs = -1;
     // Empty string
@@ -468,7 +468,7 @@ public class WifiFixerService extends Service {
 	    }
 
 	    if (connectToAP(getBestAPinRange(getBaseContext()), true)
-		    && (getNetworkID() != HTTP_NULL)) {
+		    && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME,
@@ -499,7 +499,7 @@ public class WifiFixerService extends Service {
 		return;
 	    }
 	    if (connectToAP(getBestAPinRange(getBaseContext()), true)
-		    && (getNetworkID() != HTTP_NULL)) {
+		    && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME,
@@ -887,7 +887,7 @@ public class WifiFixerService extends Service {
 	    if (logging)
 		wfLog(context, APP_NAME, context
 			.getString(R.string.null_scan_results));
-	    return HTTP_NULL;
+	    return NULLVAL;
 	}
 	/*
 	 * wifiConfigs is just a reference to known networks.
@@ -899,7 +899,7 @@ public class WifiFixerService extends Service {
 	 * networks.
 	 */
 
-	int best_id = HTTP_NULL;
+	int best_id = NULLVAL;
 	int best_signal = DBM_DEFAULT;
 	String best_ssid = EMPTYSTRING;
 	numKnownAPs = 0;
@@ -961,7 +961,7 @@ public class WifiFixerService extends Service {
 	if (state)
 	    return best_id;
 	else
-	    return HTTP_NULL;
+	    return NULLVAL;
     }
 
     private static boolean getHttpHeaders(final Context context)
@@ -972,7 +972,7 @@ public class WifiFixerService extends Service {
 	 */
 
 	boolean isup = false;
-	int status = HTTP_NULL;
+	int status = NULLVAL;
 
 	/*
 	 * Reusing our Httpclient, only initializing first time
@@ -995,7 +995,7 @@ public class WifiFixerService extends Service {
 	 */
 	response = httpclient.execute(head);
 	status = response.getStatusLine().getStatusCode();
-	if (status != HTTP_NULL)
+	if (status != NULLVAL)
 	    isup = true;
 	if (logging) {
 	    wfLog(context, APP_NAME, context.getString(R.string.http_status)
@@ -1035,7 +1035,7 @@ public class WifiFixerService extends Service {
     private static int getNetworkID() {
 	myWifi = wm.getConnectionInfo();
 	if (myWifi == null)
-	    return HTTP_NULL;
+	    return NULLVAL;
 	else {
 	    int networkid = myWifi.getNetworkId();
 	    return networkid;
@@ -1247,7 +1247,7 @@ public class WifiFixerService extends Service {
 		/*
 		 * We're on wifi, so we want to check for better signal
 		 */
-		signalCheck();
+		signalHop();
 		return;
 	    } else {
 		/*
@@ -1665,14 +1665,14 @@ public class WifiFixerService extends Service {
 
     }
 
-    private void signalCheck() {
+    private void signalHop() {
 	/*
 	 * Finds the best signal of known APs in the scan results and switches
 	 * if it's not the current
 	 */
 
 	int bestap = getBestAPinRange(this);
-	if (bestap == HTTP_NULL)
+	if (bestap == NULLVAL)
 	    return;
 	else if (bestap != getNetworkID()) {
 	    connectToAP(bestap, true);
@@ -1723,7 +1723,10 @@ public class WifiFixerService extends Service {
     private static void wakeLock(final Context context, final boolean state) {
 	PowerManager pm = (PowerManager) context
 		.getSystemService(Context.POWER_SERVICE);
-
+         /*
+          * Initialized as a static
+          * for sharing across service class
+          */
 	if (wakelock == null)
 	    wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
 		    WFWAKELOCK);
