@@ -199,6 +199,7 @@ public class WifiFixerService extends Service {
     private static String cachedIP;
     private static int numKnownAPs = -1;
     private static int FIRST = 0;
+    private static int SECOND = 1;
     // Empty string
     private final static String EMPTYSTRING = "";
     private static final String NEWLINE = "\n";
@@ -691,7 +692,7 @@ public class WifiFixerService extends Service {
 		    .equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION))
 		handleSupplicantIntent(intent);
 	    else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
-		handleWifiResults();
+		handleScanResults();
 	    else if (iAction
 		    .equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
 		handleNetworkAction(getBaseContext());
@@ -844,8 +845,7 @@ public class WifiFixerService extends Service {
 
     private void checkWifi() {
 	if (getisWifiEnabled(this)) {
-	    if (getSupplicantState() == SupplicantState.ASSOCIATED
-		    || getSupplicantState() == SupplicantState.COMPLETED) {
+	    if (getIsSupplicantConnected(this)) {
 		if (!checkNetwork(this)) {
 		    wifiRepair();
 		}
@@ -956,6 +956,9 @@ public class WifiFixerService extends Service {
 				.getString(R.string.signal_level)
 				+ sResult.level);
 		    }
+		    /*
+		     * Add result to knownbysignal
+		     */
 		    knownbysignal.add(sResult);
 		    state = true;
 
@@ -1044,6 +1047,15 @@ public class WifiFixerService extends Service {
 		&& cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI)
 	    wifi = true;
 	return wifi;
+    }
+
+    private static boolean getIsSupplicantConnected(final Context context) {
+	SupplicantState sstate = getSupplicantState();
+	if (sstate == SupplicantState.ASSOCIATED
+		|| sstate == SupplicantState.COMPLETED)
+	    return true;
+	else
+	    return false;
     }
 
     private static boolean getisWifiEnabled(final Context context) {
@@ -1140,6 +1152,48 @@ public class WifiFixerService extends Service {
 	    return;
 
 	icmpCache(context);
+    }
+
+    private void handleScanResults() {
+	if (!wm.isWifiEnabled())
+	    return;
+
+	if (!pendingscan) {
+	    if (getIsOnWifi(this)) {
+		/*
+		 * We're on wifi, so we want to check for better signal
+		 */
+		signalHop();
+		return;
+	    } else {
+		/*
+		 * Network notification check
+		 */
+		if (WFPreferences.getFlag(netnotpref)) {
+		    if (logging)
+			wfLog(this, APP_NAME, this
+				.getString(R.string.network_notification_scan));
+		    networkNotify(this);
+		    return;
+		}
+	    }
+	}
+
+	if (!pendingreconnect) {
+	    /*
+	     * Service called the scan dispatch appropriate runnable
+	     */
+	    pendingscan = false;
+	    hMainWrapper(REPAIR);
+	    if (logging)
+		wfLog(this, APP_NAME, getString(R.string.repairhandler));
+	} else {
+	    pendingscan = false;
+	    hMainWrapper(RECONNECT);
+	    if (logging)
+		wfLog(this, APP_NAME, getString(R.string.reconnecthandler));
+	}
+
     }
 
     private void handleScreenAction(final String iAction) {
@@ -1277,48 +1331,6 @@ public class WifiFixerService extends Service {
 	    Toast.makeText(WifiFixerService.this,
 		    getString(R.string.wifi_is_disabled), Toast.LENGTH_LONG)
 		    .show();
-    }
-
-    private void handleWifiResults() {
-	if (!wm.isWifiEnabled())
-	    return;
-
-	if (!pendingscan) {
-	    if (getIsOnWifi(this)) {
-		/*
-		 * We're on wifi, so we want to check for better signal
-		 */
-		signalHop();
-		return;
-	    } else {
-		/*
-		 * Network notification check
-		 */
-		if (WFPreferences.getFlag(netnotpref)) {
-		    if (logging)
-			wfLog(this, APP_NAME, this
-				.getString(R.string.network_notification_scan));
-		    networkNotify(this);
-		    return;
-		}
-	    }
-	}
-
-	if (!pendingreconnect) {
-	    /*
-	     * Service called the scan dispatch appropriate runnable
-	     */
-	    pendingscan = false;
-	    hMainWrapper(REPAIR);
-	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.repairhandler));
-	} else {
-	    pendingscan = false;
-	    hMainWrapper(RECONNECT);
-	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.reconnecthandler));
-	}
-
     }
 
     private void handleWifiState(final Intent intent) {
@@ -1711,8 +1723,12 @@ public class WifiFixerService extends Service {
 	 * Finds the best signal of known APs in the scan results and switches
 	 * if it's not the current
 	 */
+	int bestap = NULLVAL;
+	if (numKnownAPs == 1)
+	    bestap = getBestAPinRange(this, FIRST);
+	else
+	    bestap = getBestAPinRange(this, SECOND);
 
-	int bestap = getBestAPinRange(this, FIRST);
 	if (bestap == NULLVAL)
 	    return;
 	else if (bestap != getNetworkID()) {
