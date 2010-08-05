@@ -21,7 +21,10 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -136,7 +139,6 @@ public class WifiFixerService extends Service {
 
     // for Dbm
     private static final int DBM_FLOOR = -90;
-    private static final int DBM_DEFAULT = -100;
 
     // *****************************
     final static String APP_NAME = "WifiFixerService";
@@ -196,6 +198,7 @@ public class WifiFixerService extends Service {
     private static final int NULLVAL = -1;
     private static String cachedIP;
     private static int numKnownAPs = -1;
+    private static int FIRST = 0;
     // Empty string
     private final static String EMPTYSTRING = "";
     private static final String NEWLINE = "\n";
@@ -294,7 +297,7 @@ public class WifiFixerService extends Service {
 		edit.commit();
 
 	    }
-	    
+
 	}
 
 	private static void preValChanged(final Context context, final int index) {
@@ -467,7 +470,7 @@ public class WifiFixerService extends Service {
 		return;
 	    }
 
-	    if (connectToAP(getBestAPinRange(getBaseContext()), true)
+	    if (connectToAP(getBestAPinRange(getBaseContext(), FIRST), true)
 		    && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
 		if (logging)
@@ -498,7 +501,7 @@ public class WifiFixerService extends Service {
 			    getString(R.string.wifi_off_aborting_reconnect));
 		return;
 	    }
-	    if (connectToAP(getBestAPinRange(getBaseContext()), true)
+	    if (connectToAP(getBestAPinRange(getBaseContext(), FIRST), true)
 		    && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
 		if (logging)
@@ -876,21 +879,50 @@ public class WifiFixerService extends Service {
 	nm.cancel(id);
     }
 
-    private static int getBestAPinRange(final Context context) {
+    private static boolean containsBSSID(final String bssid,
+	    final ArrayList<ScanResult> results) {
+	for (ScanResult sResult : results) {
+	    if (sResult.BSSID.equals(bssid))
+		return true;
+	}
+	return false;
+    }
+
+    private static int getBestAPinRange(final Context context, final int nth) {
 	boolean state = false;
-	final List<ScanResult> wifiList = wm.getScanResults();
+	List<ScanResult> scanResults = wm.getScanResults();
+	ArrayList<ScanResult> knownbysignal = new ArrayList<ScanResult>();
+
+	class SortBySignal implements Comparator<ScanResult> {
+
+	    @Override
+	    public int compare(ScanResult o1, ScanResult o2) {
+		if (o1.level < o2.level)
+		    return 0;
+		else if (o1.level == o2.level)
+		    return 1;
+		else
+		    return -1;
+	    }
+	}
+	/*
+	 * Sort by ScanResult.level which is signal
+	 */
+	Collections.sort(scanResults, new SortBySignal());
+	wfLog(context, APP_NAME, scanResults.toString());
+
 	/*
 	 * Catch null if scan results fires after wifi disabled or while wifi is
 	 * in intermediate state
 	 */
-	if (wifiList == null) {
+	if (scanResults == null) {
 	    if (logging)
 		wfLog(context, APP_NAME, context
 			.getString(R.string.null_scan_results));
 	    return NULLVAL;
 	}
 	/*
-	 * wifiConfigs is just a reference to known networks.
+	 * Known networks from supplicant.
 	 */
 	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
 
@@ -899,21 +931,19 @@ public class WifiFixerService extends Service {
 	 * networks.
 	 */
 
-	int best_id = NULLVAL;
-	int best_signal = DBM_DEFAULT;
-	String best_ssid = EMPTYSTRING;
-	numKnownAPs = 0;
-
 	if (logging)
 	    wfLog(context, APP_NAME, context
 		    .getString(R.string.parsing_scan_results));
 
-	for (ScanResult sResult : wifiList) {
+	for (ScanResult sResult : scanResults) {
 	    for (WifiConfiguration wfResult : wifiConfigs) {
 		/*
 		 * Using .contains to find sResult.SSID in doublequoted string
+		 * 
+		 * containsBSSID filters out duplicate MACs in broken scans
+		 * (yes, that happens)
 		 */
-		if (wfResult.SSID.contains(sResult.SSID)) {
+		if (wfResult.SSID.contains(sResult.SSID) && !containsBSSID(sResult.BSSID,knownbysignal)) {
 		    if (logging) {
 			wfLog(context, APP_NAME, context
 				.getString(R.string.found_ssid)
@@ -925,19 +955,18 @@ public class WifiFixerService extends Service {
 				.getString(R.string.signal_level)
 				+ sResult.level);
 		    }
-		    /*
-		     * Comparing and storing best signal level
-		     */
-		    if (sResult.level > best_signal) {
-			best_id = wfResult.networkId;
-			best_signal = sResult.level;
-			best_ssid = sResult.SSID;
-		    }
+		    knownbysignal.add(sResult);
 		    state = true;
-		    numKnownAPs++;
+
 		}
 	    }
 	}
+
+	numKnownAPs = knownbysignal.size();
+	if (logging)
+	    wfLog(context, APP_NAME, context
+		    .getString(R.string.number_of_known)
+		    + numKnownAPs);
 
 	/*
 	 * Set lastnid and lastssid to known network with highest level from
@@ -945,23 +974,24 @@ public class WifiFixerService extends Service {
 	 * 
 	 * if !state nothing was found
 	 */
+
 	if (state) {
+	    ScanResult best = knownbysignal.get(nth);
+	    int bestnid = getNIDfromSSID(best.SSID);
 	    if (logging)
 		wfLog(context, APP_NAME, context
 			.getString(R.string.best_signal_ssid)
-			+ best_ssid
+			+ best.SSID
 			+ context.getString(R.string.signal_level)
-			+ best_signal);
+			+ best.level);
+	    return bestnid;
 	} else {
 	    if (logging)
 		wfLog(context, APP_NAME, context
 			.getString(R.string.no_known_networks_found));
 	}
 
-	if (state)
-	    return best_id;
-	else
-	    return NULLVAL;
+	return NULLVAL;
     }
 
     private static boolean getHttpHeaders(final Context context)
@@ -1040,6 +1070,16 @@ public class WifiFixerService extends Service {
 	    int networkid = myWifi.getNetworkId();
 	    return networkid;
 	}
+    }
+
+    private static int getNIDfromSSID(final String SSID) {
+	int nid = NULLVAL;
+	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+	for (WifiConfiguration wfResult : wifiConfigs) {
+	    if (wfResult.SSID.contains(SSID))
+		return wfResult.networkId;
+	}
+	return nid;
     }
 
     private void getPackageInfo() {
@@ -1671,7 +1711,7 @@ public class WifiFixerService extends Service {
 	 * if it's not the current
 	 */
 
-	int bestap = getBestAPinRange(this);
+	int bestap = getBestAPinRange(this, FIRST);
 	if (bestap == NULLVAL)
 	    return;
 	else if (bestap != getNetworkID()) {
@@ -1723,10 +1763,9 @@ public class WifiFixerService extends Service {
     private static void wakeLock(final Context context, final boolean state) {
 	PowerManager pm = (PowerManager) context
 		.getSystemService(Context.POWER_SERVICE);
-         /*
-          * Initialized as a static
-          * for sharing across service class
-          */
+	/*
+	 * Initialized as a static for sharing across service class
+	 */
 	if (wakelock == null)
 	    wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
 		    WFWAKELOCK);

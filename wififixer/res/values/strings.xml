@@ -16,6 +16,7 @@
 
 -->
 <resources>
+    <string name="number_of_known">Number of known networks:</string>
     <string name="known_networks_found">Known Networks Found: </string>
     <string name="dying">Dying</string>
     <string name="signal_poor">Signal poor: scanning for better network.</string>
