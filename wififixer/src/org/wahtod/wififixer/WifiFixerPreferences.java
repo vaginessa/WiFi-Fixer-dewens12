@@ -17,6 +17,7 @@
 package org.wahtod.wififixer;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -33,13 +34,36 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	super.onCreate(savedInstanceState);
 
 	addPreferencesFromResource(R.xml.preferences);
+	setWifiSleepPolicy(this);
 
+    }
+
+    @Override
+    protected void onResume() {
+	super.onResume();
+
+	// Set up a listener whenever a key changes
+	getPreferenceScreen().getSharedPreferences()
+		.registerOnSharedPreferenceChangeListener(this);
+	setWifiSleepPolicy(this);
+    }
+
+    @Override
+    protected void onPause() {
+	super.onPause();
+
+	// Unregister the listener whenever a key changes
+	getPreferenceScreen().getSharedPreferences()
+		.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    private static void setWifiSleepPolicy(final Context context) {
 	/*
 	 * Handle Wifi Sleep Policy
 	 */
 	SharedPreferences prefs = PreferenceManager
-		.getDefaultSharedPreferences(this);
-	ContentResolver cr = getContentResolver();
+		.getDefaultSharedPreferences(context);
+	ContentResolver cr = context.getContentResolver();
 	SharedPreferences.Editor edit = prefs.edit();
 	try {
 	    String wfsleep = String
@@ -53,25 +77,6 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	     * restriction
 	     */
 	}
-
-    }
-
-    @Override
-    protected void onResume() {
-	super.onResume();
-
-	// Set up a listener whenever a key changes
-	getPreferenceScreen().getSharedPreferences()
-		.registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    protected void onPause() {
-	super.onPause();
-
-	// Unregister the listener whenever a key changes
-	getPreferenceScreen().getSharedPreferences()
-		.unregisterOnSharedPreferenceChangeListener(this);
     }
 
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
