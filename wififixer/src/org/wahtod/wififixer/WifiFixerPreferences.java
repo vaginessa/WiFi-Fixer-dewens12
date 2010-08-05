@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.provider.Settings.SettingNotFoundException;
 import android.util.Log;
 
@@ -32,6 +33,26 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	super.onCreate(savedInstanceState);
 
 	addPreferencesFromResource(R.xml.preferences);
+	
+	    /*
+	     * Handle Wifi Sleep Policy
+	     */
+	    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+	    ContentResolver cr = getContentResolver();
+	    SharedPreferences.Editor edit = prefs.edit();
+	    try {
+		String wfsleep = String
+		.valueOf(android.provider.Settings.System
+		    .getInt(
+			    cr,
+			    android.provider.Settings.System.WIFI_SLEEP_POLICY));
+		  edit.putString("WFSLEEP", wfsleep);
+		    edit.commit();
+	    } catch (SettingNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	    
 
     }
 

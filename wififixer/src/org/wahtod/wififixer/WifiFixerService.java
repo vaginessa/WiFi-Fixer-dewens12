@@ -294,7 +294,7 @@ public class WifiFixerService extends Service {
 		edit.commit();
 
 	    }
-
+	    
 	}
 
 	private static void preValChanged(final Context context, final int index) {
