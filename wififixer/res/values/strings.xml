@@ -85,7 +85,7 @@
     <string name="connecting_to_network">Connecting to Network:</string>
     <string name="releasing_wifi_lock">Releasing Wifi Lock</string>
     <string name="acquiring_wifi_lock">Acquiring Wifi Lock</string>
-    <string name="lastnid">:Last NID:</string>
+    <string name="nid"> NID:</string>
     <string name="fix_algorithm">Fix Algorithm </string>
     <string name="repairing">Repairing</string>
     <string name="reconnecting">Reconnecting</string>

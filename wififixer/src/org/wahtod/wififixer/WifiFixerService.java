@@ -117,6 +117,7 @@ public class WifiFixerService extends Service {
     private static final String DISCONNECTED = "DISCONNECTED";
     private static final String INACTIVE = "INACTIVE";
     private static final String COMPLETED = "COMPLETED";
+    private static final String ASSOCIATED = "ASSOCIATED";
 
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
@@ -197,8 +198,10 @@ public class WifiFixerService extends Service {
     private static int wifirepair = W_REASSOCIATE;
     private static final int NULLVAL = -1;
     private static String cachedIP;
-    private static int FIRST = 0;
-    private static int SECOND = 1;
+    @SuppressWarnings("unused")
+    private static int badAP = NULLVAL;
+    private static int lastAP = NULLVAL;
+    
     // Empty string
     private final static String EMPTYSTRING = "";
     private static final String NEWLINE = "\n";
@@ -472,8 +475,8 @@ public class WifiFixerService extends Service {
 	    }
 
 	    if (getKnownAPsScannedBySignal(getBaseContext()) > 0
-		    && connectToAP(getBestKnownNIDScanned(getBaseContext(),
-			    FIRST), true) && (getNetworkID() != NULLVAL)) {
+		    && connectToAP(getBestKnownNIDScanned(getBaseContext()),
+			    true) && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME,
@@ -504,8 +507,8 @@ public class WifiFixerService extends Service {
 		return;
 	    }
 	    if (getKnownAPsScannedBySignal(getBaseContext()) > 0
-		    && connectToAP(getBestKnownNIDScanned(getBaseContext(),
-			    FIRST), true) && (getNetworkID() != NULLVAL)) {
+		    && connectToAP(getBestKnownNIDScanned(getBaseContext()),
+			    true) && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME,
@@ -610,9 +613,7 @@ public class WifiFixerService extends Service {
 	    if (logging) {
 		wfLog(getBaseContext(), APP_NAME,
 			getString(R.string.fix_algorithm)
-				+ Integer.toString(wifirepair)
-				+ getString(R.string.lastnid)
-				+ Integer.toString(getNetworkID()));
+				+ Integer.toString(wifirepair));
 	    }
 	}
     };
@@ -910,7 +911,6 @@ public class WifiFixerService extends Service {
 	 * Sort by ScanResult.level which is signal
 	 */
 	Collections.sort(scanResults, new SortBySignal());
-	wfLog(context, APP_NAME, scanResults.toString());
 
 	/*
 	 * Catch null if scan results fires after wifi disabled or while wifi is
@@ -975,19 +975,20 @@ public class WifiFixerService extends Service {
 	return numKnownAPs;
     }
 
-    private static int getBestKnownNIDScanned(final Context context,
-	    final int nth) {
+    private static int getBestKnownNIDScanned(final Context context) {
 	/*
 	 * Get nth best network id from scanned;
 	 */
-	ScanResult best = knownbysignal.get(nth);
+	wfLog(context, APP_NAME, knownbysignal.toString());
+	ScanResult best = knownbysignal.get(0);
 	int bestnid = getNIDfromSSID(best.SSID);
 	if (logging)
 	    wfLog(context, APP_NAME, context
 		    .getString(R.string.best_signal_ssid)
 		    + best.SSID
 		    + context.getString(R.string.signal_level)
-		    + best.level);
+		    + best.level + context.getString(R.string.nid) + bestnid);
+
 	return bestnid;
 
     }
@@ -1071,12 +1072,7 @@ public class WifiFixerService extends Service {
 
     private static int getNetworkID() {
 	myWifi = wm.getConnectionInfo();
-	if (myWifi == null)
-	    return NULLVAL;
-	else {
-	    int networkid = myWifi.getNetworkId();
-	    return networkid;
-	}
+	return myWifi.getNetworkId();
     }
 
     private static int getNIDfromSSID(final String SSID) {
@@ -1252,12 +1248,13 @@ public class WifiFixerService extends Service {
 	 * 
 	 * Also clear any error notifications
 	 */
-	if (sState == COMPLETED) {
+	if (sState == COMPLETED || sState == ASSOCIATED) {
 	    clearQueue();
 	    notifCancel(ERR_NOTIF, this);
 	    notifCancel(NETNOTIFID, this);
 	    pendingscan = false;
 	    pendingreconnect = false;
+	    lastAP=getNetworkID();
 	    return;
 	}
 
@@ -1541,6 +1538,7 @@ public class WifiFixerService extends Service {
     public void onCreate() {
 	super.onCreate();
 	wm = getWifiManager(this);
+	lastAP = getNetworkID();
 	getPackageInfo();
 
 	if (logging) {
@@ -1719,25 +1717,25 @@ public class WifiFixerService extends Service {
 	 */
 	int bestap = NULLVAL;
 	int numKnownAPs = getKnownAPsScannedBySignal(this);
-	if(numKnownAPs == 0){
+	if (numKnownAPs == 0) {
 	    if (logging)
-		wfLog(this,APP_NAME,getString(R.string.signalhop_nonetworks));
+		wfLog(this, APP_NAME, getString(R.string.signalhop_nonetworks));
 	    return;
 	}
-	if (numKnownAPs == 1)
-	    bestap = getBestKnownNIDScanned(this, FIRST);
-	else
-	    bestap = getBestKnownNIDScanned(this, SECOND);
 
-	if (bestap == NULLVAL){
+	bestap = getBestKnownNIDScanned(this);
+
+	if (bestap == NULLVAL) {
 	    if (logging)
-		wfLog(this,APP_NAME,getString(R.string.signalhop_no_result));
+		wfLog(this, APP_NAME, getString(R.string.signalhop_no_result));
 	    return;
-	}
-	else if (bestap != getNetworkID()) {
+	} else if (bestap != lastAP) {
 	    connectToAP(bestap, true);
-	    if (logging)
+	    if (logging) {
 		wfLog(this, APP_NAME, getString(R.string.hopping) + bestap);
+		wfLog(this, APP_NAME, getString(R.string.nid) + lastAP);
+	    }
+
 	}
     }
 

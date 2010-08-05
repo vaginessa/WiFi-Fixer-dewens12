@@ -194,15 +194,15 @@ public class LogService extends Service {
 	if (!dir.exists()) {
 	    dir.mkdirs();
 	}
-	File fiyul = new File(dir.getAbsolutePath() + FILENAME);
+	File file = new File(dir.getAbsolutePath() + FILENAME);
 	// Remove if over 100k
 
 	try {
-	    if (!fiyul.exists()) {
-		fiyul.createNewFile();
+	    if (!file.exists()) {
+		file.createNewFile();
 	    }
 
-	    fWriter = new FileWriter(fiyul.getAbsolutePath(), true);
+	    fWriter = new FileWriter(file.getAbsolutePath(), true);
 	    fWriter.write(message);
 	    fWriter.flush();
 	    fWriter.close();
