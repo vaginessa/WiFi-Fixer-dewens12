@@ -16,6 +16,8 @@
 
 -->
 <resources>
+    <string name="signalhop_no_result">Signalhop: No best network result</string>
+    <string name="signalhop_nonetworks">SignalHop: No known networks scanned</string>
     <string name="number_of_known">Number of known networks:</string>
     <string name="known_networks_found">Known Networks Found: </string>
     <string name="dying">Dying</string>

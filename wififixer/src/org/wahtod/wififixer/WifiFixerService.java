@@ -197,7 +197,6 @@ public class WifiFixerService extends Service {
     private static int wifirepair = W_REASSOCIATE;
     private static final int NULLVAL = -1;
     private static String cachedIP;
-    private static int numKnownAPs = -1;
     private static int FIRST = 0;
     private static int SECOND = 1;
     // Empty string
@@ -221,6 +220,7 @@ public class WifiFixerService extends Service {
     private static HttpParams httpparams;
     private static HttpHead head;
     private static HttpResponse response;
+    private static ArrayList<ScanResult> knownbysignal = new ArrayList<ScanResult>();
 
     /*
      * Preferences object
@@ -471,8 +471,9 @@ public class WifiFixerService extends Service {
 		return;
 	    }
 
-	    if (connectToAP(getBestAPinRange(getBaseContext(), FIRST), true)
-		    && (getNetworkID() != NULLVAL)) {
+	    if (getKnownAPsScannedBySignal(getBaseContext()) > 0
+		    && connectToAP(getBestKnownNIDScanned(getBaseContext(),
+			    FIRST), true) && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME,
@@ -502,8 +503,9 @@ public class WifiFixerService extends Service {
 			    getString(R.string.wifi_off_aborting_reconnect));
 		return;
 	    }
-	    if (connectToAP(getBestAPinRange(getBaseContext(), FIRST), true)
-		    && (getNetworkID() != NULLVAL)) {
+	    if (getKnownAPsScannedBySignal(getBaseContext()) > 0
+		    && connectToAP(getBestKnownNIDScanned(getBaseContext(),
+			    FIRST), true) && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME,
@@ -888,10 +890,9 @@ public class WifiFixerService extends Service {
 	return false;
     }
 
-    private static int getBestAPinRange(final Context context, final int nth) {
-	boolean state = false;
+    private static int getKnownAPsScannedBySignal(final Context context) {
 	List<ScanResult> scanResults = wm.getScanResults();
-	ArrayList<ScanResult> knownbysignal = new ArrayList<ScanResult>();
+	knownbysignal.clear();
 
 	class SortBySignal implements Comparator<ScanResult> {
 
@@ -919,7 +920,7 @@ public class WifiFixerService extends Service {
 	    if (logging)
 		wfLog(context, APP_NAME, context
 			.getString(R.string.null_scan_results));
-	    return NULLVAL;
+	    return 0;
 	}
 	/*
 	 * Known networks from supplicant.
@@ -960,42 +961,35 @@ public class WifiFixerService extends Service {
 		     * Add result to knownbysignal
 		     */
 		    knownbysignal.add(sResult);
-		    state = true;
 
 		}
 	    }
 	}
 
-	numKnownAPs = knownbysignal.size();
+	int numKnownAPs = knownbysignal.size();
 	if (logging)
 	    wfLog(context, APP_NAME, context
 		    .getString(R.string.number_of_known)
 		    + numKnownAPs);
 
+	return numKnownAPs;
+    }
+
+    private static int getBestKnownNIDScanned(final Context context,
+	    final int nth) {
 	/*
-	 * Set lastnid and lastssid to known network with highest level from
-	 * scanresults
-	 * 
-	 * if !state nothing was found
+	 * Get nth best network id from scanned;
 	 */
+	ScanResult best = knownbysignal.get(nth);
+	int bestnid = getNIDfromSSID(best.SSID);
+	if (logging)
+	    wfLog(context, APP_NAME, context
+		    .getString(R.string.best_signal_ssid)
+		    + best.SSID
+		    + context.getString(R.string.signal_level)
+		    + best.level);
+	return bestnid;
 
-	if (state) {
-	    ScanResult best = knownbysignal.get(nth);
-	    int bestnid = getNIDfromSSID(best.SSID);
-	    if (logging)
-		wfLog(context, APP_NAME, context
-			.getString(R.string.best_signal_ssid)
-			+ best.SSID
-			+ context.getString(R.string.signal_level)
-			+ best.level);
-	    return bestnid;
-	} else {
-	    if (logging)
-		wfLog(context, APP_NAME, context
-			.getString(R.string.no_known_networks_found));
-	}
-
-	return NULLVAL;
     }
 
     private static boolean getHttpHeaders(final Context context)
@@ -1724,13 +1718,22 @@ public class WifiFixerService extends Service {
 	 * if it's not the current
 	 */
 	int bestap = NULLVAL;
-	if (numKnownAPs == 1)
-	    bestap = getBestAPinRange(this, FIRST);
-	else
-	    bestap = getBestAPinRange(this, SECOND);
-
-	if (bestap == NULLVAL)
+	int numKnownAPs = getKnownAPsScannedBySignal(this);
+	if(numKnownAPs == 0){
+	    if (logging)
+		wfLog(this,APP_NAME,getString(R.string.signalhop_nonetworks));
 	    return;
+	}
+	if (numKnownAPs == 1)
+	    bestap = getBestKnownNIDScanned(this, FIRST);
+	else
+	    bestap = getBestKnownNIDScanned(this, SECOND);
+
+	if (bestap == NULLVAL){
+	    if (logging)
+		wfLog(this,APP_NAME,getString(R.string.signalhop_no_result));
+	    return;
+	}
 	else if (bestap != getNetworkID()) {
 	    connectToAP(bestap, true);
 	    if (logging)
