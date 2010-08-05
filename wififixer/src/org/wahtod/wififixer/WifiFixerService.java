@@ -198,10 +198,9 @@ public class WifiFixerService extends Service {
     private static int wifirepair = W_REASSOCIATE;
     private static final int NULLVAL = -1;
     private static String cachedIP;
-    @SuppressWarnings("unused")
     private static int badAP = NULLVAL;
     private static int lastAP = NULLVAL;
-    
+
     // Empty string
     private final static String EMPTYSTRING = "";
     private static final String NEWLINE = "\n";
@@ -475,8 +474,8 @@ public class WifiFixerService extends Service {
 	    }
 
 	    if (getKnownAPsScannedBySignal(getBaseContext()) > 0
-		    && connectToAP(getBestKnownNIDScanned(getBaseContext()),
-			    true) && (getNetworkID() != NULLVAL)) {
+		    && connectToAP(getBestNID(getBaseContext()), true)
+		    && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME,
@@ -507,8 +506,8 @@ public class WifiFixerService extends Service {
 		return;
 	    }
 	    if (getKnownAPsScannedBySignal(getBaseContext()) > 0
-		    && connectToAP(getBestKnownNIDScanned(getBaseContext()),
-			    true) && (getNetworkID() != NULLVAL)) {
+		    && connectToAP(getBestNID(getBaseContext()), true)
+		    && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME,
@@ -850,6 +849,10 @@ public class WifiFixerService extends Service {
 	if (getisWifiEnabled(this)) {
 	    if (getIsSupplicantConnected(this)) {
 		if (!checkNetwork(this)) {
+		    /*
+		     * Mark this AP bad for hop check then repair
+		     */
+		    badAP = lastAP;
 		    wifiRepair();
 		}
 	    } else {
@@ -889,6 +892,40 @@ public class WifiFixerService extends Service {
 		return true;
 	}
 	return false;
+    }
+
+    private static int getBestNID(final Context context) {
+	/*
+	 * Get nth best network id from scanned;
+	 */
+	for (ScanResult best : knownbysignal) {
+	    int bestnid = getNIDfromSSID(best.SSID);
+	    if (knownbysignal.size() == 1) {
+		if (logging)
+		    wfLog(context, APP_NAME, context
+			    .getString(R.string.best_signal_ssid)
+			    + best.SSID
+			    + context.getString(R.string.signal_level)
+			    + best.level
+			    + context.getString(R.string.nid)
+			    + bestnid);
+		return bestnid;
+	    } else {
+		if (bestnid != badAP) {
+		    if (logging)
+			wfLog(context, APP_NAME, context
+				.getString(R.string.second_best_signal)
+				+ best.SSID
+				+ context.getString(R.string.signal_level)
+				+ best.level
+				+ context.getString(R.string.nid)
+				+ bestnid);
+		    return bestnid;
+		}
+	    }
+	}
+
+	return NULLVAL;
     }
 
     private static int getKnownAPsScannedBySignal(final Context context) {
@@ -973,24 +1010,6 @@ public class WifiFixerService extends Service {
 		    + numKnownAPs);
 
 	return numKnownAPs;
-    }
-
-    private static int getBestKnownNIDScanned(final Context context) {
-	/*
-	 * Get nth best network id from scanned;
-	 */
-	wfLog(context, APP_NAME, knownbysignal.toString());
-	ScanResult best = knownbysignal.get(0);
-	int bestnid = getNIDfromSSID(best.SSID);
-	if (logging)
-	    wfLog(context, APP_NAME, context
-		    .getString(R.string.best_signal_ssid)
-		    + best.SSID
-		    + context.getString(R.string.signal_level)
-		    + best.level + context.getString(R.string.nid) + bestnid);
-
-	return bestnid;
-
     }
 
     private static boolean getHttpHeaders(final Context context)
@@ -1254,7 +1273,7 @@ public class WifiFixerService extends Service {
 	    notifCancel(NETNOTIFID, this);
 	    pendingscan = false;
 	    pendingreconnect = false;
-	    lastAP=getNetworkID();
+	    lastAP = getNetworkID();
 	    return;
 	}
 
@@ -1723,7 +1742,7 @@ public class WifiFixerService extends Service {
 	    return;
 	}
 
-	bestap = getBestKnownNIDScanned(this);
+	bestap = getBestNID(this);
 
 	if (bestap == NULLVAL) {
 	    if (logging)
