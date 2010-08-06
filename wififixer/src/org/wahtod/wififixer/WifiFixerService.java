@@ -117,7 +117,6 @@ public class WifiFixerService extends Service {
     private static final String DISCONNECTED = "DISCONNECTED";
     private static final String INACTIVE = "INACTIVE";
     private static final String COMPLETED = "COMPLETED";
-    private static final String ASSOCIATED = "ASSOCIATED";
 
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
@@ -1267,7 +1266,7 @@ public class WifiFixerService extends Service {
 	 * 
 	 * Also clear any error notifications
 	 */
-	if (sState == COMPLETED || sState == ASSOCIATED) {
+	if (sState == COMPLETED) {
 	    clearQueue();
 	    notifCancel(ERR_NOTIF, this);
 	    notifCancel(NETNOTIFID, this);
