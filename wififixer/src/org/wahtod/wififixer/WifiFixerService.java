@@ -221,7 +221,7 @@ public class WifiFixerService extends Service {
     private static HttpParams httpparams;
     private static HttpHead head;
     private static HttpResponse response;
-    private static ArrayList<ScanResult> knownbysignal = new ArrayList<ScanResult>();
+    private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
 
     /*
      * Preferences object
@@ -472,7 +472,7 @@ public class WifiFixerService extends Service {
 		return;
 	    }
 
-	    if (getKnownAPsScannedBySignal(getBaseContext()) > 0
+	    if (getKnownAPsBySignal(getBaseContext()) > 0
 		    && connectToAP(getBestNID(getBaseContext()), true)
 		    && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
@@ -504,7 +504,7 @@ public class WifiFixerService extends Service {
 			    getString(R.string.wifi_off_aborting_reconnect));
 		return;
 	    }
-	    if (getKnownAPsScannedBySignal(getBaseContext()) > 0
+	    if (getKnownAPsBySignal(getBaseContext()) > 0
 		    && connectToAP(getBestNID(getBaseContext()), true)
 		    && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
@@ -884,26 +884,17 @@ public class WifiFixerService extends Service {
 	nm.cancel(id);
     }
 
-    private static boolean containsBSSID(final String bssid,
-	    final ArrayList<ScanResult> results) {
-	for (ScanResult sResult : results) {
-	    if (sResult.BSSID.equals(bssid))
-		return true;
-	}
-	return false;
-    }
-
     private static int getBestNID(final Context context) {
 	/*
 	 * Get nth best network id from scanned;
 	 */
-	for (ScanResult best : knownbysignal) {
-	    int bestnid = getNIDfromSSID(best.SSID);
+	for (WFConfig best : knownbysignal) {
+	    int bestnid = best.wificonfig.networkId;
 	    if (knownbysignal.size() == 1) {
 		if (logging)
 		    wfLog(context, APP_NAME, context
 			    .getString(R.string.best_signal_ssid)
-			    + best.SSID
+			    + best.wificonfig.SSID
 			    + context.getString(R.string.signal_level)
 			    + best.level
 			    + context.getString(R.string.nid)
@@ -914,7 +905,7 @@ public class WifiFixerService extends Service {
 		    if (logging)
 			wfLog(context, APP_NAME, context
 				.getString(R.string.second_best_signal)
-				+ best.SSID
+				+ best.wificonfig.SSID
 				+ context.getString(R.string.signal_level)
 				+ best.level
 				+ context.getString(R.string.nid)
@@ -927,7 +918,7 @@ public class WifiFixerService extends Service {
 	return NULLVAL;
     }
 
-    private static int getKnownAPsScannedBySignal(final Context context) {
+    private static int getKnownAPsBySignal(final Context context) {
 	List<ScanResult> scanResults = wm.getScanResults();
 	knownbysignal.clear();
 
@@ -980,8 +971,14 @@ public class WifiFixerService extends Service {
 		 * containsBSSID filters out duplicate MACs in broken scans
 		 * (yes, that happens)
 		 */
-		if (wfResult.SSID.contains(sResult.SSID)
-			&& !containsBSSID(sResult.BSSID, knownbysignal)) {
+		if (wfResult.SSID.contains(sResult.SSID)) {
+		    /*
+		     * If BSSID is null update entry with BSSID
+		     */
+		    if (wfResult.BSSID == null) {
+			wm.updateNetwork(wfconfigFromScanResults(sResult,
+				wfResult).wificonfig);
+		    }
 		    if (logging) {
 			wfLog(context, APP_NAME, context
 				.getString(R.string.found_ssid)
@@ -996,7 +993,8 @@ public class WifiFixerService extends Service {
 		    /*
 		     * Add result to knownbysignal
 		     */
-		    knownbysignal.add(sResult);
+		    knownbysignal
+			    .add(wfconfigFromScanResults(sResult, wfResult));
 
 		}
 	    }
@@ -1091,16 +1089,6 @@ public class WifiFixerService extends Service {
     private static int getNetworkID() {
 	myWifi = wm.getConnectionInfo();
 	return myWifi.getNetworkId();
-    }
-
-    private static int getNIDfromSSID(final String SSID) {
-	int nid = NULLVAL;
-	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
-	for (WifiConfiguration wfResult : wifiConfigs) {
-	    if (wfResult.SSID.contains(SSID))
-		return wfResult.networkId;
-	}
-	return nid;
     }
 
     private void getPackageInfo() {
@@ -1734,7 +1722,7 @@ public class WifiFixerService extends Service {
 	 * if it's not the current
 	 */
 	int bestap = NULLVAL;
-	int numKnownAPs = getKnownAPsScannedBySignal(this);
+	int numKnownAPs = getKnownAPsBySignal(this);
 	if (numKnownAPs == 0) {
 	    if (logging)
 		wfLog(this, APP_NAME, getString(R.string.signalhop_nonetworks));
@@ -1794,6 +1782,17 @@ public class WifiFixerService extends Service {
 	hMainWrapper(WIFI_OFF);
 	hMainWrapper(WIFI_ON, LOCKWAIT);
 	hMainWrapper(WATCHDOG, LOCKWAIT + REACHABLE);
+    }
+
+    private static WFConfig wfconfigFromScanResults(final ScanResult sResult,
+	    final WifiConfiguration wConfig) {
+
+	WFConfig wfnew = new WFConfig();
+	wfnew.level = sResult.level;
+	wfnew.wificonfig = wConfig;
+	wfnew.wificonfig.BSSID = sResult.BSSID;
+	return wfnew;
+
     }
 
     private static void wakeLock(final Context context, final boolean state) {
