@@ -18,25 +18,12 @@ package org.wahtod.wififixer;
 
 import android.net.wifi.WifiConfiguration;
 
-public class WFConfig extends Object {
+public class WFConfig extends WifiConfiguration {
     /*
      * Object to store WifiConfigurations and level
      */
 
-    public WifiConfiguration wificonfig = new WifiConfiguration();
     public int level = -1;
 
-    @Override
-    public String toString() {
-	StringBuilder result = new StringBuilder();
-	String NEW_LINE = System.getProperty("line.separator");
-
-	result.append(this.getClass().getName() + " Object {" + NEW_LINE);
-	result.append("WifiConfiguration:" + wificonfig.toString() + NEW_LINE);
-	result.append("Level: " + level);
-	result.append("}");
-
-	return result.toString();
-    }
 
 }
