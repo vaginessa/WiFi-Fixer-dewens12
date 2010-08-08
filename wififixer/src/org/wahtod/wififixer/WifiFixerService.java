@@ -881,7 +881,7 @@ public class WifiFixerService extends Service {
     private static boolean containsBSSID(final String bssid,
 	    final List<WFConfig> results) {
 	for (WFConfig sResult : results) {
-	    if (sResult.BSSID.equals(bssid))
+	    if (sResult.wificonfig.BSSID.equals(bssid))
 		return true;
 	}
 	return false;
@@ -899,29 +899,29 @@ public class WifiFixerService extends Service {
 	 */
 	int bestnid = NULLVAL;
 	for (WFConfig best : knownbysignal) {
-	    bestnid = best.networkId;
+	    bestnid = best.wificonfig.networkId;
 	    if (knownbysignal.size() == 1) {
 		if (logging)
 		    wfLog(context, APP_NAME, context
 			    .getString(R.string.best_signal_ssid)
-			    + best.SSID
+			    + best.wificonfig.SSID
 			    + context.getString(R.string.signal_level)
 			    + best.level
 			    + context.getString(R.string.nid)
 			    + bestnid);
-		wm.updateNetwork(best);
+		wm.updateNetwork(best.wificonfig);
 		return bestnid;
 	    } else {
-		if (badAP == null || best.BSSID != badAP) {
+		if (badAP == null || best.wificonfig.BSSID != badAP) {
 		    if (logging)
 			wfLog(context, APP_NAME, context
 				.getString(R.string.second_best_signal)
-				+ best.SSID
+				+ best.wificonfig.SSID
 				+ context.getString(R.string.signal_level)
 				+ best.level
 				+ context.getString(R.string.nid)
 				+ bestnid);
-		    wm.updateNetwork(best);
+		    wm.updateNetwork(best.wificonfig);
 		    return bestnid;
 		}
 	    }
@@ -1800,8 +1800,8 @@ public class WifiFixerService extends Service {
 
 	WFConfig wfnew = new WFConfig();
 	wfnew.level = sResult.level;
-	wfnew = (WFConfig) wConfig;
-	wfnew.BSSID = sResult.BSSID;
+	wfnew.wificonfig = wConfig;
+	wfnew.wificonfig.BSSID = sResult.BSSID;
 	return wfnew;
 
     }
