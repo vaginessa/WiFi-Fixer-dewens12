@@ -126,7 +126,7 @@ public class WifiFixerService extends Service {
     private static final String LOGINTENT = "org.wahtod.wififixer.LogService.LOG";
 
     // ms for IsReachable
-    private final static int REACHABLE = 3000;
+    private final static int REACHABLE = 4000;
     private final static int HTTPREACH = 8000;
     // ms for main loop sleep
     private final static int LOOPWAIT = 10000;
@@ -796,6 +796,7 @@ public class WifiFixerService extends Service {
 	hMain.removeMessages(WIFI_OFF);
 	pendingscan = false;
 	pendingreconnect = false;
+	shouldrepair = false;
     }
 
     private static boolean checkNetwork(final Context context) {
@@ -1803,7 +1804,11 @@ public class WifiFixerService extends Service {
 
     private static WFConfig wfconfigFromScanResults(final ScanResult sResult,
 	    final WifiConfiguration wConfig) {
-
+	/*
+	 * Copy over BSSID from ScanResult
+	 * copy WifiConfiguration param to wificonfig
+	 * add level
+	 */
 	WFConfig wfnew = new WFConfig();
 	wfnew.level = sResult.level;
 	wfnew.wificonfig = wConfig;
