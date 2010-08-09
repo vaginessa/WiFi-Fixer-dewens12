@@ -193,6 +193,7 @@ public class WifiFixerService extends Service {
     private static boolean templock = false;
     private static boolean screenisoff = false;
     private static boolean shouldrun = true;
+    private static boolean shouldrepair = false;
     // various
     private static int wifirepair = W_REASSOCIATE;
     private static final int NULLVAL = -1;
@@ -852,7 +853,8 @@ public class WifiFixerService extends Service {
 		     * Mark this AP bad for hop check then repair
 		     */
 		    badAP = getBSSID();
-		    wifiRepair();
+		    shouldrepair = true;
+		    hMainWrapper(SCAN);
 		}
 	    } else {
 		pendingscan = true;
@@ -1010,7 +1012,6 @@ public class WifiFixerService extends Service {
 		}
 	    }
 	}
-	wfLog(context, APP_NAME, knownbysignal.toString());
 
 	if (logging)
 	    wfLog(context, APP_NAME, context
@@ -1328,12 +1329,8 @@ public class WifiFixerService extends Service {
 		Toast.makeText(WifiFixerService.this,
 			getString(R.string.reassociating), Toast.LENGTH_LONG)
 			.show();
-
-		/*
-		 * wifirepair = W_REASSOCIATE; wifiRepair();
-		 */
-		startScan(true);
-
+		wifirepair = W_REASSOCIATE;
+		wifiRepair();
 	    }
 	} else
 	    Toast.makeText(WifiFixerService.this,
@@ -1731,29 +1728,37 @@ public class WifiFixerService extends Service {
 	/*
 	 * Finds the best signal of known APs in the scan results and switches
 	 * if it's not the current
+	 * 
+	 * If there are not alternate APs just does a wifi repair. 
 	 */
 	int bestap = NULLVAL;
 	int numKnownAPs = getKnownAPsBySignal(this);
-	if (numKnownAPs == 0) {
-	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.signalhop_nonetworks));
-	    return;
-	}
+	if (numKnownAPs > 1) {
+	    bestap = getBestNID(this);
 
-	bestap = getBestNID(this);
+	    if (bestap == NULLVAL) {
+		if (logging)
+		    wfLog(this, APP_NAME,
+			    getString(R.string.signalhop_no_result));
+		hMainWrapper(TEMPLOCK_OFF);
+		wifiRepair();
+		return;
+	    } else if (bestap != lastAP) {
+		connectToAP(bestap, true);
+		if (logging) {
+		    wfLog(this, APP_NAME, getString(R.string.hopping) + bestap);
+		    wfLog(this, APP_NAME, getString(R.string.nid) + lastAP);
+		}
 
-	if (bestap == NULLVAL) {
-	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.signalhop_no_result));
-	    return;
-	} else if (bestap != lastAP) {
-	    connectToAP(bestap, true);
-	    if (logging) {
-		wfLog(this, APP_NAME, getString(R.string.hopping) + bestap);
-		wfLog(this, APP_NAME, getString(R.string.nid) + lastAP);
 	    }
 
 	}
+
+	if (logging)
+	    wfLog(this, APP_NAME, getString(R.string.signalhop_nonetworks));
+	hMainWrapper(TEMPLOCK_OFF);
+	wifiRepair();
+
     }
 
     private void startScan(final boolean pending) {
@@ -1832,16 +1837,14 @@ public class WifiFixerService extends Service {
     }
 
     private void wifiRepair() {
+	if (!shouldrepair)
+	    return;
 
-	/*
-	 * Queue rWifiTask runnable
-	 */
 	if (!screenisoff) {
-	    hMainWrapper(WIFITASK);
 	    /*
-	     * Do network hop check
+	     * Start Wifi Task
 	     */
-	    hMainWrapper(SCAN);
+	    hMainWrapper(WIFITASK);
 	    if (logging)
 		wfLog(this, APP_NAME, getString(R.string.running_wifi_repair));
 	} else {
@@ -1854,6 +1857,8 @@ public class WifiFixerService extends Service {
 		wfLog(this, APP_NAME,
 			getString(R.string.wifi_repair_post_failed));
 	}
+
+	shouldrepair = false;
 
     }
 
