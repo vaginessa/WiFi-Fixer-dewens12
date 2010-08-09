@@ -1329,6 +1329,7 @@ public class WifiFixerService extends Service {
 		Toast.makeText(WifiFixerService.this,
 			getString(R.string.reassociating), Toast.LENGTH_LONG)
 			.show();
+		shouldrepair = true;
 		wifirepair = W_REASSOCIATE;
 		wifiRepair();
 	    }
@@ -1751,7 +1752,7 @@ public class WifiFixerService extends Service {
 		}
 
 	    }
-
+	   return;
 	}
 
 	if (logging)
