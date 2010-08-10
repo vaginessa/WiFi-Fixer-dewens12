@@ -22,9 +22,8 @@ public class WFConfig extends Object {
     /*
      * Object to store WifiConfigurations and level
      * 
-     * Why isn't this an extension of WifiConfiguration?
-     * Because WFConfig is only downclassed.  More efficient
-     * than copying all fields individually. 
+     * Why isn't this an extension of WifiConfiguration? Because WFConfig is
+     * only downclassed. More efficient than copying all fields individually.
      */
 
     public WifiConfiguration wificonfig = new WifiConfiguration();

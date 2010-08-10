@@ -198,7 +198,6 @@ public class WifiFixerService extends Service {
     private static int wifirepair = W_REASSOCIATE;
     private static final int NULLVAL = -1;
     private static String cachedIP;
-    private static String badAP;
     private static int lastAP = NULLVAL;
 
     // Empty string
@@ -474,7 +473,7 @@ public class WifiFixerService extends Service {
 	    }
 
 	    if (getKnownAPsBySignal(getBaseContext()) > 0
-		    && connectToAP(getBestNID(getBaseContext()), true)
+		    && connectToBest(getBaseContext()) != NULLVAL
 		    && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
 		if (logging)
@@ -506,7 +505,7 @@ public class WifiFixerService extends Service {
 		return;
 	    }
 	    if (getKnownAPsBySignal(getBaseContext()) > 0
-		    && connectToAP(getBestNID(getBaseContext()), true)
+		    && connectToBest(getBaseContext()) != NULLVAL
 		    && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
 		if (logging)
@@ -736,6 +735,12 @@ public class WifiFixerService extends Service {
 
     }
 
+    private static void cancelNotification(final Context context, final int id) {
+	NotificationManager nm = (NotificationManager) context
+		.getSystemService(NOTIFICATION_SERVICE);
+	nm.cancel(id);
+    }
+
     private void checkLock(WifiManager.WifiLock lock) {
 	if (!prefschanged) {
 	    // Yeah, first run. Ok, if LOCKPREF true, acquire lock.
@@ -850,10 +855,6 @@ public class WifiFixerService extends Service {
 	if (getisWifiEnabled(this)) {
 	    if (getIsSupplicantConnected(this)) {
 		if (!checkNetwork(this)) {
-		    /*
-		     * Mark this AP bad for hop check then repair
-		     */
-		    badAP = getBSSID();
 		    shouldrepair = true;
 		    hMainWrapper(SCAN);
 		}
@@ -873,12 +874,32 @@ public class WifiFixerService extends Service {
 	}
     }
 
-    private boolean connectToAP(final int AP, final boolean disableOthers) {
-	if (logging)
-	    wfLog(this, APP_NAME, getString(R.string.connecting_to_network)
-		    + AP);
-	tempLock(CONNECTWAIT);
-	return wm.enableNetwork(AP, disableOthers);
+    private static int connectToBest(final Context context) {
+	/*
+	 * Get nth best network id from scanned by connecting and doing a
+	 * network check
+	 */
+	int bestnid = NULLVAL;
+	for (WFConfig best : knownbysignal) {
+	    bestnid = best.wificonfig.networkId;
+	    wm.updateNetwork(best.wificonfig);
+	    if (bestnid == lastAP) {
+		if (checkNetwork(context))
+		    return bestnid;
+	    } else if (wm.enableNetwork(bestnid, true))
+		if (checkNetwork(context)) {
+		    if (logging)
+			wfLog(context, APP_NAME, context
+				.getString(R.string.best_signal_ssid)
+				+ best.wificonfig.SSID
+				+ context.getString(R.string.signal_level)
+				+ best.level
+				+ context.getString(R.string.nid)
+				+ bestnid);
+		    return bestnid;
+		}
+	}
+	return bestnid;
     }
 
     private static boolean containsBSSID(final String bssid,
@@ -890,54 +911,6 @@ public class WifiFixerService extends Service {
 	return false;
     }
 
-    private static void deleteNotification(final Context context, final int id) {
-	NotificationManager nm = (NotificationManager) context
-		.getSystemService(NOTIFICATION_SERVICE);
-	nm.cancel(id);
-    }
-
-    private static int getBestNID(final Context context) {
-	/*
-	 * Get nth best network id from scanned;
-	 */
-	int bestnid = NULLVAL;
-	for (WFConfig best : knownbysignal) {
-	    bestnid = best.wificonfig.networkId;
-	    if (knownbysignal.size() == 1) {
-		if (logging)
-		    wfLog(context, APP_NAME, context
-			    .getString(R.string.best_signal_ssid)
-			    + best.wificonfig.SSID
-			    + context.getString(R.string.signal_level)
-			    + best.level
-			    + context.getString(R.string.nid)
-			    + bestnid);
-		wm.updateNetwork(best.wificonfig);
-		return bestnid;
-	    } else {
-		if (badAP == null || best.wificonfig.BSSID != badAP) {
-		    if (logging)
-			wfLog(context, APP_NAME, context
-				.getString(R.string.second_best_signal)
-				+ best.wificonfig.SSID
-				+ context.getString(R.string.signal_level)
-				+ best.level
-				+ context.getString(R.string.nid)
-				+ bestnid);
-		    wm.updateNetwork(best.wificonfig);
-		    return bestnid;
-		}
-	    }
-	}
-
-	return NULLVAL;
-    }
-
-    private static String getBSSID() {
-	myWifi = wm.getConnectionInfo();
-	return myWifi.getBSSID();
-    }
-
     private static int getKnownAPsBySignal(final Context context) {
 	List<ScanResult> scanResults = wm.getScanResults();
 	knownbysignal.clear();
@@ -946,10 +919,10 @@ public class WifiFixerService extends Service {
 
 	    @Override
 	    public int compare(ScanResult o1, ScanResult o2) {
-		if (o1.level < o2.level)
-		    return 0;
-		else if (o1.level == o2.level)
+		if (o1.level > o2.level)
 		    return 1;
+		else if (o1.level == o2.level)
+		    return 0;
 		else
 		    return -1;
 	    }
@@ -1642,7 +1615,7 @@ public class WifiFixerService extends Service {
 	hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
 	wifishouldbeon = false;
 	wakeLock(getBaseContext(), false);
-	deleteNotification(getBaseContext(), NOTIFID);
+	cancelNotification(getBaseContext(), NOTIFID);
     }
 
     private static void refreshWidget(final Context context) {
@@ -1731,12 +1704,12 @@ public class WifiFixerService extends Service {
 	 * Finds the best signal of known APs in the scan results and switches
 	 * if it's not the current
 	 * 
-	 * If there are not alternate APs just does a wifi repair. 
+	 * If there are not alternate APs just does a wifi repair.
 	 */
 	int bestap = NULLVAL;
 	int numKnownAPs = getKnownAPsBySignal(this);
 	if (numKnownAPs > 1) {
-	    bestap = getBestNID(this);
+	    bestap = connectToBest(this);
 
 	    if (bestap == NULLVAL) {
 		if (logging)
@@ -1745,15 +1718,13 @@ public class WifiFixerService extends Service {
 		hMainWrapper(TEMPLOCK_OFF);
 		wifiRepair();
 		return;
-	    } else if (bestap != lastAP) {
-		connectToAP(bestap, true);
+	    } else {
 		if (logging) {
 		    wfLog(this, APP_NAME, getString(R.string.hopping) + bestap);
 		    wfLog(this, APP_NAME, getString(R.string.nid) + lastAP);
 		}
-
 	    }
-	   return;
+	    return;
 	}
 
 	if (logging)
@@ -1805,9 +1776,8 @@ public class WifiFixerService extends Service {
     private static WFConfig wfconfigFromScanResults(final ScanResult sResult,
 	    final WifiConfiguration wConfig) {
 	/*
-	 * Copy over BSSID from ScanResult
-	 * copy WifiConfiguration param to wificonfig
-	 * add level
+	 * Copy over BSSID from ScanResult copy WifiConfiguration param to
+	 * wificonfig add level
 	 */
 	WFConfig wfnew = new WFConfig();
 	wfnew.level = sResult.level;
@@ -1828,7 +1798,6 @@ public class WifiFixerService extends Service {
 		    WFWAKELOCK);
 
 	if (state && !wakelock.isHeld()) {
-
 	    wakelock.acquire();
 	    if (logging)
 		wfLog(context, APP_NAME, context
