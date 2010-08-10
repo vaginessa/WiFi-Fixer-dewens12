@@ -16,6 +16,7 @@
 
 package org.wahtod.wififixer;
 
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 
 public class WFConfig extends Object {
@@ -26,8 +27,14 @@ public class WFConfig extends Object {
      * only downclassed. More efficient than copying all fields individually.
      */
 
-    public WifiConfiguration wificonfig = new WifiConfiguration();
-    public int level = -1;
+    public WifiConfiguration wificonfig;
+    public int level;
+
+    public WFConfig(final ScanResult sResult, final WifiConfiguration wConfig) {
+	level = sResult.level;
+	wificonfig = wConfig;
+	wificonfig.BSSID = sResult.BSSID;
+    }
 
     @Override
     public String toString() {

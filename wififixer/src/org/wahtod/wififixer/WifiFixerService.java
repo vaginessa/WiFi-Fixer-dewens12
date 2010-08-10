@@ -981,7 +981,7 @@ public class WifiFixerService extends Service {
 		     * Add result to knownbysignal
 		     */
 		    knownbysignal
-			    .add(wfconfigFromScanResults(sResult, wfResult));
+			    .add(new WFConfig(sResult, wfResult));
 
 		}
 	    }
@@ -1771,20 +1771,6 @@ public class WifiFixerService extends Service {
 	hMainWrapper(WIFI_OFF);
 	hMainWrapper(WIFI_ON, LOCKWAIT);
 	hMainWrapper(WATCHDOG, LOCKWAIT + REACHABLE);
-    }
-
-    private static WFConfig wfconfigFromScanResults(final ScanResult sResult,
-	    final WifiConfiguration wConfig) {
-	/*
-	 * Copy over BSSID from ScanResult copy WifiConfiguration param to
-	 * wificonfig add level
-	 */
-	WFConfig wfnew = new WFConfig();
-	wfnew.level = sResult.level;
-	wfnew.wificonfig = wConfig;
-	wfnew.wificonfig.BSSID = sResult.BSSID;
-	return wfnew;
-
     }
 
     private static void wakeLock(final Context context, final boolean state) {
