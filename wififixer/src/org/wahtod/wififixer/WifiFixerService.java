@@ -82,20 +82,6 @@ public class WifiFixerService extends Service {
     // Wake Lock Tag
     private static final String WFWAKELOCK = "WFWakeLock";
 
-    // Runnable Constants for handler
-    private static final int MAIN = 0;
-    private static final int REPAIR = 1;
-    private static final int RECONNECT = 2;
-    private static final int WIFITASK = 3;
-    private static final int TEMPLOCK_ON = 4;
-    private static final int TEMPLOCK_OFF = 5;
-    private static final int WIFI_OFF = 6;
-    private static final int WIFI_ON = 7;
-    private static final int SLEEPCHECK = 8;
-    private static final int SCAN = 9;
-    private static final int N1CHECK = 10;
-    private static final int WATCHDOG = 11;
-
     /*
      * Constants for wifirepair values
      */
@@ -210,7 +196,7 @@ public class WifiFixerService extends Service {
     private static boolean pendingreconnect = false;
 
     // Version
-    private static int version = MAIN;
+    private static int version = 0;
     // Public Utilities
     private static WifiManager wm;
     private static WifiInfo myWifi;
@@ -391,6 +377,21 @@ public class WifiFixerService extends Service {
 	}
 
     };
+    
+    // Runnable Constants for handler
+    private static final int MAIN = 0;
+    private static final int REPAIR = 1;
+    private static final int RECONNECT = 2;
+    private static final int WIFITASK = 3;
+    private static final int TEMPLOCK_ON = 4;
+    private static final int TEMPLOCK_OFF = 5;
+    private static final int WIFI_OFF = 6;
+    private static final int WIFI_ON = 7;
+    private static final int SLEEPCHECK = 8;
+    private static final int SCAN = 9;
+    private static final int N1CHECK = 10;
+    private static final int WATCHDOG = 11;
+    private static final int SIGNALHOP = 12;
 
     /*
      * Handler for rMain tick and other runnables
