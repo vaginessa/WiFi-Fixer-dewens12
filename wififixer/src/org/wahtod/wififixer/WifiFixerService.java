@@ -377,7 +377,7 @@ public class WifiFixerService extends Service {
 	}
 
     };
-    
+
     // Runnable Constants for handler
     private static final int MAIN = 0;
     private static final int REPAIR = 1;
@@ -454,6 +454,10 @@ public class WifiFixerService extends Service {
 
 	    case WATCHDOG:
 		checkWifiState();
+		break;
+
+	    case SIGNALHOP:
+		hMain.post(rSignalhop);
 		break;
 
 	    }
@@ -669,6 +673,29 @@ public class WifiFixerService extends Service {
 		startScan(false);
 	    } else
 		hMainWrapper(SCAN, CONNECTWAIT);
+	}
+
+    };
+    
+    /*
+     * SignalHop runnable
+     */
+    private Runnable rSignalhop = new Runnable() {
+	public void run() {
+	    /*
+	     * Remove all posts first
+	     */
+	    clearQueue();
+	    hMain.removeMessages(MAIN);
+	    /*
+	     * run the signal hop 
+	     * check
+	     */
+	    signalHop();
+	    /*
+	     * Then restore main tick
+	     */
+	    hMainWrapper(MAIN);
 	}
 
     };
@@ -981,8 +1008,7 @@ public class WifiFixerService extends Service {
 		    /*
 		     * Add result to knownbysignal
 		     */
-		    knownbysignal
-			    .add(new WFConfig(sResult, wfResult));
+		    knownbysignal.add(new WFConfig(sResult, wfResult));
 
 		}
 	    }
@@ -1146,7 +1172,7 @@ public class WifiFixerService extends Service {
 		/*
 		 * We're on wifi, so we want to check for better signal
 		 */
-		signalHop();
+		hMainWrapper(SIGNALHOP);
 		return;
 	    } else {
 		/*
