@@ -685,6 +685,7 @@ public class WifiFixerService extends Service {
 	    /*
 	     * Remove all posts first
 	     */
+	    wakeLock(getBaseContext(),true);
 	    clearQueue();
 	    hMain.removeMessages(MAIN);
 	    /*
@@ -696,6 +697,7 @@ public class WifiFixerService extends Service {
 	     * Then restore main tick
 	     */
 	    hMainWrapper(MAIN);
+	    wakeLock(getBaseContext(),false);
 	}
 
     };
