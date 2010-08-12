@@ -757,8 +757,8 @@ public class WifiFixerService extends Service {
 	    notif.flags = Notification.FLAG_ONGOING_EVENT;
 	    notif.tickerText = context.getText(R.string.open_network_found);
 	    /*
-	     * Fire notification, cancel if message empty empty means no open
-	     * APs
+	     * Fire notification, cancel if message empty:
+	     * means no open APs
 	     */
 	    nm.notify(NETNOTIFID, notif);
 	} else
@@ -774,7 +774,7 @@ public class WifiFixerService extends Service {
 
     private void checkLock(WifiManager.WifiLock lock) {
 	if (!prefschanged) {
-	    // Yeah, first run. Ok, if LOCKPREF true, acquire lock.
+	    // First run. If LOCKPREF true, acquire lock.
 	    if (WFPreferences.getFlag(lockpref)) {
 		lock.acquire();
 		haslock = true;
@@ -783,7 +783,7 @@ public class WifiFixerService extends Service {
 			    getString(R.string.acquiring_wifi_lock));
 	    }
 	} else {
-	    // ok, this is when prefs have changed, soo..
+	    // This is when prefs have changed
 	    prefschanged = false;
 	    if (WFPreferences.getFlag(lockpref) && haslock) {
 		// generate new lock
