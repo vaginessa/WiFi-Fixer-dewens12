@@ -651,13 +651,13 @@ public class WifiFixerService extends Service {
 	    /*
 	     * This is all we want to do.
 	     */
-	    wakeLock(getBaseContext(),true);
+	    wakeLock(getBaseContext(), true);
 	    checkWifi();
 	    /*
 	     * Post next run
 	     */
 	    hMainWrapper(SLEEPCHECK, SLEEPWAIT);
-	    wakeLock(getBaseContext(),false);
+	    wakeLock(getBaseContext(), false);
 	}
 
     };
@@ -677,7 +677,7 @@ public class WifiFixerService extends Service {
 	}
 
     };
-    
+
     /*
      * SignalHop runnable
      */
@@ -686,19 +686,18 @@ public class WifiFixerService extends Service {
 	    /*
 	     * Remove all posts first
 	     */
-	    wakeLock(getBaseContext(),true);
+	    wakeLock(getBaseContext(), true);
 	    clearQueue();
 	    hMain.removeMessages(MAIN);
 	    /*
-	     * run the signal hop 
-	     * check
+	     * run the signal hop check
 	     */
 	    signalHop();
 	    /*
 	     * Then restore main tick
 	     */
 	    hMainWrapper(MAIN);
-	    wakeLock(getBaseContext(),false);
+	    wakeLock(getBaseContext(), false);
 	}
 
     };
@@ -757,8 +756,7 @@ public class WifiFixerService extends Service {
 	    notif.flags = Notification.FLAG_ONGOING_EVENT;
 	    notif.tickerText = context.getText(R.string.open_network_found);
 	    /*
-	     * Fire notification, cancel if message empty:
-	     * means no open APs
+	     * Fire notification, cancel if message empty: means no open APs
 	     */
 	    nm.notify(NETNOTIFID, notif);
 	} else
@@ -1049,6 +1047,8 @@ public class WifiFixerService extends Service {
 	    HttpConnectionParams.setLinger(httpparams, REPAIR);
 	    HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
 	    httpclient.setParams(httpparams);
+	    wfLog(context, APP_NAME, context
+		    .getString(R.string.instantiating_httpclient));
 	}
 	/*
 	 * The next two lines actually perform the connection since it's the
@@ -1078,7 +1078,9 @@ public class WifiFixerService extends Service {
 
     private static boolean getIsSupplicantConnected(final Context context) {
 	SupplicantState sstate = getSupplicantState();
-	if (sstate == SupplicantState.ASSOCIATED
+	if (sstate == null)
+	    return false;
+	else if (sstate == SupplicantState.ASSOCIATED
 		|| sstate == SupplicantState.COMPLETED)
 	    return true;
 	else
@@ -1193,7 +1195,7 @@ public class WifiFixerService extends Service {
 
 	if (!pendingreconnect) {
 	    /*
-	     * Service called the scan dispatch appropriate runnable
+	     * Service called the scan: dispatch appropriate runnable
 	     */
 	    pendingscan = false;
 	    hMainWrapper(REPAIR);

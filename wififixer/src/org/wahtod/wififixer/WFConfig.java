@@ -31,6 +31,9 @@ public class WFConfig extends Object {
     public int level;
 
     public WFConfig(final ScanResult sResult, final WifiConfiguration wConfig) {
+	/*
+	 * Constructor for only use of object so far
+	 */
 	level = sResult.level;
 	wificonfig = wConfig;
 	wificonfig.BSSID = sResult.BSSID;
