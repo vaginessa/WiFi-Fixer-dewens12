@@ -651,12 +651,13 @@ public class WifiFixerService extends Service {
 	    /*
 	     * This is all we want to do.
 	     */
-
+	    wakeLock(getBaseContext(),true);
 	    checkWifi();
 	    /*
 	     * Post next run
 	     */
 	    hMainWrapper(SLEEPCHECK, SLEEPWAIT);
+	    wakeLock(getBaseContext(),false);
 	}
 
     };
