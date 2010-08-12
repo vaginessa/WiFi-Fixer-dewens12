@@ -205,7 +205,6 @@ public class WifiFixerService extends Service {
     private final static int n1fix2pref = 7;
     private final static int netnotpref = 8;
 
-    
     /*
      * Preferences object
      */
