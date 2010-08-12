@@ -798,37 +798,6 @@ public class WifiFixerService extends Service {
 	}
     }
 
-    private void cleanup() {
-
-	if (!cleanup) {
-
-	    if (haslock && lock.isHeld())
-		lock.release();
-	    unregisterReceiver(receiver);
-	    hMain.removeMessages(MAIN);
-	    cleanupPosts();
-	    cleanup = true;
-	}
-	stopSelf();
-    }
-
-    private void cleanupPosts() {
-	hMain.removeMessages(RECONNECT);
-	hMain.removeMessages(REPAIR);
-	hMain.removeMessages(WIFITASK);
-	hMain.removeMessages(TEMPLOCK_ON);
-    }
-
-    private void clearQueue() {
-	hMain.removeMessages(RECONNECT);
-	hMain.removeMessages(REPAIR);
-	hMain.removeMessages(WIFITASK);
-	hMain.removeMessages(WIFI_OFF);
-	pendingscan = false;
-	pendingreconnect = false;
-	shouldrepair = false;
-    }
-
     private static boolean checkNetwork(final Context context) {
 	boolean isup = false;
 
@@ -861,6 +830,37 @@ public class WifiFixerService extends Service {
 	checkSignal(context);
 
 	return isup;
+    }
+
+    private void cleanup() {
+
+	if (!cleanup) {
+
+	    if (haslock && lock.isHeld())
+		lock.release();
+	    unregisterReceiver(receiver);
+	    hMain.removeMessages(MAIN);
+	    cleanupPosts();
+	    cleanup = true;
+	}
+	stopSelf();
+    }
+
+    private void cleanupPosts() {
+	hMain.removeMessages(RECONNECT);
+	hMain.removeMessages(REPAIR);
+	hMain.removeMessages(WIFITASK);
+	hMain.removeMessages(TEMPLOCK_ON);
+    }
+
+    private void clearQueue() {
+	hMain.removeMessages(RECONNECT);
+	hMain.removeMessages(REPAIR);
+	hMain.removeMessages(WIFITASK);
+	hMain.removeMessages(WIFI_OFF);
+	pendingscan = false;
+	pendingreconnect = false;
+	shouldrepair = false;
     }
 
     private static void checkSignal(final Context context) {
@@ -956,7 +956,7 @@ public class WifiFixerService extends Service {
 	 * Sort by ScanResult.level which is signal
 	 */
 	Collections.sort(scanResults, new SortBySignal());
-
+	wfLog(context, APP_NAME, scanResults.toString());
 	/*
 	 * Catch null if scan results fires after wifi disabled or while wifi is
 	 * in intermediate state
