@@ -135,45 +135,8 @@ public class WifiFixerService extends Service {
     private boolean prefschanged = false;
     private boolean wifishouldbeon = false;
 
-    /*
-     * preferences key constants
-     */
-    private static final String WIFILOCK_KEY = "WiFiLock";
-    private static final String NOTIF_KEY = "Notifications";
-    private static final String SCREEN_KEY = "SCREEN";
-    private static final String DISABLE_KEY = "Disable";
-    private static final String WIDGET_KEY = "WidgetBehavior";
-    private static final String LOG_KEY = "SLOG";
-    private static final String SUPFIX_KEY = "SUPFIX";
-    private static final String SUPFIX_DEFAULT = "SPFDEF";
-    private static final String N1FIX2_KEY = "N1FIX2";
-    private static final String NETNOT_KEY = "NetNotif";
-
-    /*
-     * Preferences currently used in list form.
-     */
-    private static final List<String> prefsList = Arrays.asList(WIFILOCK_KEY,
-	    DISABLE_KEY, SCREEN_KEY, WIDGET_KEY, SUPFIX_KEY, NOTIF_KEY,
-	    LOG_KEY, N1FIX2_KEY, NETNOT_KEY);
-    /*
-     * prefsList maps to values
-     */
-    private final static int lockpref = 0;
-    private final static int runpref = 1;
-    private final static int screenpref = 2;
-    private final static int widgetpref = 3;
-    private final static int supfixpref = 4;
-    private final static int notifpref = 5;
-    private final static int loggingpref = 6;
-    private final static int n1fix2pref = 7;
-    private final static int netnotpref = 8;
-
     // logging flag, local for performance
     private static boolean logging = false;
-
-    /*
-     * 
-     */
 
     // Locks and such
     private static boolean templock = false;
@@ -209,6 +172,40 @@ public class WifiFixerService extends Service {
     private static HttpResponse response;
     private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
 
+    /*
+     * preferences key constants
+     */
+    private static final String WIFILOCK_KEY = "WiFiLock";
+    private static final String NOTIF_KEY = "Notifications";
+    private static final String SCREEN_KEY = "SCREEN";
+    private static final String DISABLE_KEY = "Disable";
+    private static final String WIDGET_KEY = "WidgetBehavior";
+    private static final String LOG_KEY = "SLOG";
+    private static final String SUPFIX_KEY = "SUPFIX";
+    private static final String SUPFIX_DEFAULT = "SPFDEF";
+    private static final String N1FIX2_KEY = "N1FIX2";
+    private static final String NETNOT_KEY = "NetNotif";
+
+    /*
+     * Preferences currently used in list form.
+     */
+    private static final List<String> prefsList = Arrays.asList(WIFILOCK_KEY,
+	    DISABLE_KEY, SCREEN_KEY, WIDGET_KEY, SUPFIX_KEY, NOTIF_KEY,
+	    LOG_KEY, N1FIX2_KEY, NETNOT_KEY);
+    /*
+     * prefsList maps to values
+     */
+    private final static int lockpref = 0;
+    private final static int runpref = 1;
+    private final static int screenpref = 2;
+    private final static int widgetpref = 3;
+    private final static int supfixpref = 4;
+    private final static int notifpref = 5;
+    private final static int loggingpref = 6;
+    private final static int n1fix2pref = 7;
+    private final static int netnotpref = 8;
+
+    
     /*
      * Preferences object
      */
