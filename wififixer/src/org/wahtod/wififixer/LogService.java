@@ -93,7 +93,12 @@ public class LogService extends Service {
     }
 
     void handleStart(Intent intent) {
-
+	
+	if(!logging){
+	    logging=true;
+	    timeStamp();
+	}
+	
 	if (!intent.getAction().contains(LOG))
 	    return;
 	try {

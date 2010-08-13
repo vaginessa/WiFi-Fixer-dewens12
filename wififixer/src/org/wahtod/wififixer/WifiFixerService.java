@@ -956,7 +956,6 @@ public class WifiFixerService extends Service {
 	 * Sort by ScanResult.level which is signal
 	 */
 	Collections.sort(scanResults, new SortBySignal());
-	wfLog(context, APP_NAME, scanResults.toString());
 	/*
 	 * Catch null if scan results fires after wifi disabled or while wifi is
 	 * in intermediate state
