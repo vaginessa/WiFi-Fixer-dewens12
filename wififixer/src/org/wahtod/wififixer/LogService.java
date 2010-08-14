@@ -93,14 +93,14 @@ public class LogService extends Service {
     }
 
     void handleStart(Intent intent) {
-	
-	if(!logging){
-	    logging=true;
-	    timeStamp();
-	}
-	
-	if (!intent.getAction().contains(LOG))
+
+	if (!intent.getAction().contains(LOG)) {
+	    if (!logging) {
+		logging = true;
+		timeStamp();
+	    }
 	    return;
+	}
 	try {
 	    sMessage = intent.getStringExtra(Message);
 	    app_name = intent.getStringExtra(APPNAME);

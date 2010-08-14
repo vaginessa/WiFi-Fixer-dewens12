@@ -684,7 +684,11 @@ public class WifiFixerService extends Service {
 	     */
 	    wakeLock(getBaseContext(), true);
 	    clearQueue();
-	    hMain.removeMessages(MAIN);
+	    hMain.removeMessages(TEMPLOCK_OFF);
+	    /*
+	     * Set Lock
+	     */
+	    hMainWrapper(TEMPLOCK_ON);
 	    /*
 	     * run the signal hop check
 	     */
@@ -692,7 +696,7 @@ public class WifiFixerService extends Service {
 	    /*
 	     * Then restore main tick
 	     */
-	    hMainWrapper(MAIN);
+	    hMain.sendEmptyMessage(TEMPLOCK_OFF);
 	    wakeLock(getBaseContext(), false);
 	}
 
@@ -1042,8 +1046,9 @@ public class WifiFixerService extends Service {
 	    HttpConnectionParams.setLinger(httpparams, REPAIR);
 	    HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
 	    httpclient.setParams(httpparams);
-	    wfLog(context, APP_NAME, context
-		    .getString(R.string.instantiating_httpclient));
+	    if (logging)
+		wfLog(context, APP_NAME, context
+			.getString(R.string.instantiating_httpclient));
 	}
 	/*
 	 * The next two lines actually perform the connection since it's the
