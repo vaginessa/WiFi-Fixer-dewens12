@@ -915,6 +915,8 @@ public class WifiFixerService extends Service {
 	    if (bestnid == lastAP) {
 		if (checkNetwork(context))
 		    return bestnid;
+		else if (knownbysignal.indexOf(best) == knownbysignal.size() - 1)
+		    return NULLVAL;
 	    } else if (wm.enableNetwork(bestnid, true))
 		if (checkNetwork(context)) {
 		    if (logging)
