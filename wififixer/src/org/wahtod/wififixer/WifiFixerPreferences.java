@@ -32,9 +32,9 @@ public class WifiFixerPreferences extends PreferenceActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-
-	addPreferencesFromResource(R.xml.preferences);
 	setWifiSleepPolicy(this);
+	addPreferencesFromResource(R.xml.preferences);
+	
 
     }
 
