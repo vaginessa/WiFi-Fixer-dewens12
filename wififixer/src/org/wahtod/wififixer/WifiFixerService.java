@@ -122,6 +122,7 @@ public class WifiFixerService extends Service {
     private final static int LOCKWAIT = 5000;
     // ms to wait after trying to connect
     private static final int CONNECTWAIT = 8000;
+    private static final int SHORTWAIT = 1500;
 
     // for Dbm
     private static final int DBM_FLOOR = -90;
@@ -688,7 +689,7 @@ public class WifiFixerService extends Service {
 	    /*
 	     * Set Lock
 	     */
-	    hMainWrapper(TEMPLOCK_ON);
+	    hMainWrapper(TEMPLOCK_ON, SHORTWAIT);
 	    /*
 	     * run the signal hop check
 	     */
@@ -696,7 +697,7 @@ public class WifiFixerService extends Service {
 	    /*
 	     * Then restore main tick
 	     */
-	    hMain.sendEmptyMessage(TEMPLOCK_OFF);
+	    hMain.sendEmptyMessageDelayed(TEMPLOCK_OFF, SHORTWAIT);
 	    wakeLock(getBaseContext(), false);
 	}
 
