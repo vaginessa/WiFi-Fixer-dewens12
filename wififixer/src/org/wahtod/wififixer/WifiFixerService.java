@@ -1713,6 +1713,14 @@ public class WifiFixerService extends Service {
 	    final String message, final String tickerText, final int id,
 	    final boolean bSpecial) {
 
+	/*
+	 * Do not notify when screen is off as it causes notification to stick
+	 * when cancelled
+	 */
+
+	if (screenisoff)
+	    return;
+
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(NOTIFICATION_SERVICE);
 
@@ -1765,6 +1773,7 @@ public class WifiFixerService extends Service {
 	if (logging)
 	    wfLog(this, APP_NAME, getString(R.string.signalhop_nonetworks));
 	hMainWrapper(TEMPLOCK_OFF);
+	wifirepair=W_REASSOCIATE;
 	wifiRepair();
 
     }
