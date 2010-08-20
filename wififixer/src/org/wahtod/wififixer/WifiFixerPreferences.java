@@ -34,7 +34,6 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	super.onCreate(savedInstanceState);
 	setWifiSleepPolicy(this);
 	addPreferencesFromResource(R.xml.preferences);
-	
 
     }
 

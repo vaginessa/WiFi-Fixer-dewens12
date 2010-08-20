@@ -889,8 +889,10 @@ public class WifiFixerService extends Service {
 		    hMainWrapper(SCAN);
 		}
 	    } else {
-		pendingscan = true;
-		tempLock(CONNECTWAIT);
+		if(screenisoff)
+		    startScan(true);
+		else
+		    pendingscan=true;
 	    }
 
 	}
@@ -1773,7 +1775,7 @@ public class WifiFixerService extends Service {
 	if (logging)
 	    wfLog(this, APP_NAME, getString(R.string.signalhop_nonetworks));
 	hMainWrapper(TEMPLOCK_OFF);
-	wifirepair=W_REASSOCIATE;
+	wifirepair = W_REASSOCIATE;
 	wifiRepair();
 
     }
