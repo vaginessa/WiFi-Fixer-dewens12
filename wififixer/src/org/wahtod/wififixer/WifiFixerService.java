@@ -1707,6 +1707,10 @@ public class WifiFixerService extends Service {
 	     * Screen is on, remove any posts
 	     */
 	    hMain.removeMessages(SLEEPCHECK);
+	    /*
+	     * Check state
+	     */
+	    hMainWrapper(MAIN,SHORTWAIT);
 	}
 
     }
