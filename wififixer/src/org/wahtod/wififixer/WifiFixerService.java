@@ -908,6 +908,11 @@ public class WifiFixerService extends Service {
 
     private static int connectToBest(final Context context) {
 	/*
+	 * Make sure knownbysignal is populated first
+	 */
+	if (knownbysignal.size() == 0)
+	    return NULLVAL;
+	/*
 	 * Get nth best network id from scanned by connecting and doing a
 	 * network check
 	 */
