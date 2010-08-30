@@ -889,10 +889,10 @@ public class WifiFixerService extends Service {
 		    hMainWrapper(SCAN);
 		}
 	    } else {
-		if(screenisoff)
+		if (screenisoff)
 		    startScan(true);
 		else
-		    pendingscan=true;
+		    pendingscan = true;
 	    }
 
 	}
@@ -1715,7 +1715,7 @@ public class WifiFixerService extends Service {
 	    /*
 	     * Check state
 	     */
-	    hMainWrapper(MAIN,SHORTWAIT);
+	    hMainWrapper(MAIN, SHORTWAIT);
 	}
 
     }

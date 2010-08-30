@@ -67,21 +67,22 @@ public class HelpActivity extends Activity {
 			new String[] { "zanshin.g1@gmail.com" });
 		startActivity(Intent.createChooser(sendIntent, "Email:"));
 		return true;
-	    }
-
-	    if (url.contains("http://wififixer.wordpress.com")) {
+	    } else if (url.contains("http://wififixer.wordpress.com")) {
 		Intent i = new Intent(Intent.ACTION_VIEW);
 		Uri u = Uri.parse("http://wififixer.wordpress.com");
 		i.setData(u);
 		startActivity(i);
 		return true;
-	    }
-
-	    if (url.contains("stop")) {
+	    } else if (url.contains("stop")) {
 		HelpActivity.this.finish();
 		return true;
+	    } else if (url.contains("http://cyanogenmod.com")) {
+		Intent i = new Intent(Intent.ACTION_VIEW);
+		Uri u = Uri.parse("http://cyanogenmod.com");
+		i.setData(u);
+		startActivity(i);
+		return true;
 	    }
-
 	    view.loadUrl(url);
 	    return true;
 	}
