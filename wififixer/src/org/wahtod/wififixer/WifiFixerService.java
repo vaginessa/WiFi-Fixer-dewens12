@@ -952,6 +952,17 @@ public class WifiFixerService extends Service {
 
     private static int getKnownAPsBySignal(final Context context) {
 	List<ScanResult> scanResults = wm.getScanResults();
+	/*
+	 * Catch null if scan results fires after wifi disabled or while wifi is
+	 * in intermediate state
+	 */
+	if (scanResults == null) {
+	    if (logging)
+		wfLog(context, APP_NAME, context
+			.getString(R.string.null_scan_results));
+	    return NULLVAL;
+	}
+	
 	knownbysignal.clear();
 
 	class SortBySignal implements Comparator<ScanResult> {
@@ -970,16 +981,6 @@ public class WifiFixerService extends Service {
 	 * Sort by ScanResult.level which is signal
 	 */
 	Collections.sort(scanResults, new SortBySignal());
-	/*
-	 * Catch null if scan results fires after wifi disabled or while wifi is
-	 * in intermediate state
-	 */
-	if (scanResults == null) {
-	    if (logging)
-		wfLog(context, APP_NAME, context
-			.getString(R.string.null_scan_results));
-	    return 0;
-	}
 	/*
 	 * Known networks from supplicant.
 	 */
