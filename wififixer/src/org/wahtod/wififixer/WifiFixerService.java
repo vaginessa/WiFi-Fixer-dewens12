@@ -906,6 +906,32 @@ public class WifiFixerService extends Service {
 	}
     }
 
+    private static boolean connectToAP(int bestnid) {
+	/*
+	 * Handles connection to network re-enables any disabled networks
+	 */
+
+	/*
+	 * Connection
+	 */
+	boolean state = wm.enableNetwork(bestnid, true);
+	/*
+	 * Fix for disabled networks
+	 */
+
+	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+	for (WifiConfiguration wfResult : wifiConfigs) {
+	    if (wfResult.status == WifiConfiguration.Status.DISABLED) {
+		wfResult.status = WifiConfiguration.Status.ENABLED;
+		wm.updateNetwork(wfResult);
+	    }
+	}
+	/*
+	 * Now return connection state
+	 */
+	return state;
+    }
+
     private static int connectToBest(final Context context) {
 	/*
 	 * Make sure knownbysignal is populated first
@@ -925,7 +951,7 @@ public class WifiFixerService extends Service {
 		    return bestnid;
 		else if (knownbysignal.indexOf(best) == knownbysignal.size() - 1)
 		    return NULLVAL;
-	    } else if (wm.enableNetwork(bestnid, true))
+	    } else if (connectToAP(bestnid))
 		if (checkNetwork(context)) {
 		    if (logging)
 			wfLog(context, APP_NAME, context
@@ -962,7 +988,7 @@ public class WifiFixerService extends Service {
 			.getString(R.string.null_scan_results));
 	    return NULLVAL;
 	}
-	
+
 	knownbysignal.clear();
 
 	class SortBySignal implements Comparator<ScanResult> {
@@ -1657,8 +1683,9 @@ public class WifiFixerService extends Service {
     private void onWifiEnabled() {
 	hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
 	wifishouldbeon = false;
-	wakeLock(getBaseContext(), false);
 	cancelNotification(getBaseContext(), NOTIFID);
+	wakeLock(getBaseContext(), false);
+
     }
 
     private static void refreshWidget(final Context context) {
