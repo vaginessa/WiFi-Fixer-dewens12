@@ -16,6 +16,7 @@
 
 -->
 <resources>
+    <string name="initiating_scan">Initiating Scan</string>
     <string name="instantiating_httpclient">Instantiating httpclient</string>
     <string name="signalhop_no_result">Signalhop: No best network result</string>
     <string name="signalhop_nonetworks">SignalHop: No alternate networks</string>

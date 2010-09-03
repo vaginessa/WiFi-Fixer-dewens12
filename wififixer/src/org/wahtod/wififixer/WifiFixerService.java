@@ -886,6 +886,7 @@ public class WifiFixerService extends Service {
 	    if (getIsSupplicantConnected(this)) {
 		if (!checkNetwork(this)) {
 		    shouldrepair = true;
+		    hMainWrapper(TEMPLOCK_OFF);
 		    hMainWrapper(SCAN);
 		}
 	    } else {
@@ -908,28 +909,9 @@ public class WifiFixerService extends Service {
 
     private static boolean connectToAP(int bestnid) {
 	/*
-	 * Handles connection to network re-enables any disabled networks
+	 * Handles connection to network
 	 */
-
-	/*
-	 * Connection
-	 */
-	boolean state = wm.enableNetwork(bestnid, true);
-	/*
-	 * Fix for disabled networks
-	 */
-
-	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
-	for (WifiConfiguration wfResult : wifiConfigs) {
-	    if (wfResult.status == WifiConfiguration.Status.DISABLED) {
-		wfResult.status = WifiConfiguration.Status.ENABLED;
-		wm.updateNetwork(wfResult);
-	    }
-	}
-	/*
-	 * Now return connection state
-	 */
-	return state;
+	return wm.enableNetwork(bestnid, true);
     }
 
     private static int connectToBest(final Context context) {
@@ -976,6 +958,20 @@ public class WifiFixerService extends Service {
 	return false;
     }
 
+    private static void fixDisabled() {
+	/*
+	 * Fix for disabled networks
+	 */
+
+	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+	for (WifiConfiguration wfResult : wifiConfigs) {
+	    if (wfResult.status == WifiConfiguration.Status.DISABLED) {
+		wfResult.status = WifiConfiguration.Status.ENABLED;
+		wm.updateNetwork(wfResult);
+	    }
+	}
+    }
+
     private static int getKnownAPsBySignal(final Context context) {
 	List<ScanResult> scanResults = wm.getScanResults();
 	/*
@@ -1010,6 +1006,7 @@ public class WifiFixerService extends Service {
 	/*
 	 * Known networks from supplicant.
 	 */
+	fixDisabled();
 	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
 
 	/*
@@ -1235,6 +1232,7 @@ public class WifiFixerService extends Service {
 	     * Service called the scan: dispatch appropriate runnable
 	     */
 	    pendingscan = false;
+	    hMainWrapper(TEMPLOCK_OFF);
 	    hMainWrapper(REPAIR);
 	    if (logging)
 		wfLog(this, APP_NAME, getString(R.string.repairhandler));
@@ -1821,6 +1819,8 @@ public class WifiFixerService extends Service {
 	// We want a lock after a scan
 	pendingscan = pending;
 	wm.startScan();
+	if(logging)
+	    wfLog(this, APP_NAME, getString(R.string.initiating_scan));
 	tempLock(LOCKWAIT);
     }
 
