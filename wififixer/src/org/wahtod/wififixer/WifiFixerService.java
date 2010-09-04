@@ -888,8 +888,8 @@ public class WifiFixerService extends Service {
 	    if (getIsSupplicantConnected(this)) {
 		if (!checkNetwork(this)) {
 		    shouldrepair = true;
-		    hMainWrapper(TEMPLOCK_OFF, REALLYSHORTWAIT);
-		    hMainWrapper(SCAN, REALLYSHORTWAIT);
+		    hMainWrapper(TEMPLOCK_OFF);
+		    hMainWrapper(SCAN);
 		}
 	    } else {
 		if (screenisoff)
@@ -1418,7 +1418,10 @@ public class WifiFixerService extends Service {
     private boolean hMainWrapper(final int hmain) {
 	if (hMainCheck(hmain)) {
 	    hMain.removeMessages(hmain);
-	    return hMain.sendEmptyMessage(hmain);
+	    if (!screenisoff)
+		return hMain.sendEmptyMessage(hmain);
+	    else
+		return hMain.sendEmptyMessageDelayed(hmain, REALLYSHORTWAIT);
 
 	} else {
 	    hMain.removeMessages(hmain);
