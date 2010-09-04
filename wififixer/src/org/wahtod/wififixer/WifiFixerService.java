@@ -123,6 +123,7 @@ public class WifiFixerService extends Service {
     // ms to wait after trying to connect
     private static final int CONNECTWAIT = 8000;
     private static final int SHORTWAIT = 1500;
+    private static final int REALLYSHORTWAIT = 200;
 
     // for Dbm
     private static final int DBM_FLOOR = -90;
@@ -671,6 +672,7 @@ public class WifiFixerService extends Service {
 		startScan(false);
 	    } else
 		hMainWrapper(SCAN, CONNECTWAIT);
+
 	}
 
     };
@@ -886,8 +888,8 @@ public class WifiFixerService extends Service {
 	    if (getIsSupplicantConnected(this)) {
 		if (!checkNetwork(this)) {
 		    shouldrepair = true;
-		    hMainWrapper(TEMPLOCK_OFF);
-		    hMainWrapper(SCAN);
+		    hMainWrapper(TEMPLOCK_OFF, REALLYSHORTWAIT);
+		    hMainWrapper(SCAN, REALLYSHORTWAIT);
 		}
 	    } else {
 		if (screenisoff)
@@ -909,7 +911,7 @@ public class WifiFixerService extends Service {
 
     private static boolean connectToAP(int bestnid) {
 	/*
-	 * Handles connection to network
+	 * Handles connection to network disableOthers should always be true
 	 */
 	return wm.enableNetwork(bestnid, true);
     }
@@ -1450,6 +1452,9 @@ public class WifiFixerService extends Service {
 	/*
 	 * getHttpHeaders() does all the heavy lifting
 	 */
+	if (logging)
+	    wfLog(context, APP_NAME, context.getString(R.string.http_method));
+
 	try {
 	    isUp = getHttpHeaders(context);
 	} catch (IOException e) {
@@ -1473,8 +1478,7 @@ public class WifiFixerService extends Service {
 		wfLog(context, APP_NAME, context
 			.getString(R.string.urlexception));
 	}
-	if (logging)
-	    wfLog(context, APP_NAME, context.getString(R.string.http_method));
+
 	return isUp;
     }
 
@@ -1485,6 +1489,10 @@ public class WifiFixerService extends Service {
 	 */
 	if (cachedIP == null)
 	    icmpCache(context);
+
+	if (logging)
+	    wfLog(context, APP_NAME, context.getString(R.string.icmp_method)
+		    + cachedIP);
 
 	try {
 	    if (InetAddress.getByName(cachedIP).isReachable(REACHABLE)) {
@@ -1502,9 +1510,6 @@ public class WifiFixerService extends Service {
 		wfLog(context, APP_NAME, context
 			.getString(R.string.ioexception));
 	}
-	if (logging)
-	    wfLog(context, APP_NAME, context.getString(R.string.icmp_method)
-		    + cachedIP);
 	return isUp;
     }
 
@@ -1819,7 +1824,7 @@ public class WifiFixerService extends Service {
 	// We want a lock after a scan
 	pendingscan = pending;
 	wm.startScan();
-	if(logging)
+	if (logging)
 	    wfLog(this, APP_NAME, getString(R.string.initiating_scan));
 	tempLock(LOCKWAIT);
     }
