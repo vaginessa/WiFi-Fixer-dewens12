@@ -1819,6 +1819,7 @@ public class WifiFixerService extends Service {
 	    wfLog(this, APP_NAME, getString(R.string.signalhop_nonetworks));
 	hMainWrapper(TEMPLOCK_OFF);
 	wifirepair = W_REASSOCIATE;
+	shouldrepair=true;
 	wifiRepair();
 
     }
@@ -1904,7 +1905,7 @@ public class WifiFixerService extends Service {
 	     * if screen off, try wake lock then resubmit to handler
 	     */
 	    wakeLock(this, true);
-	    hMainWrapper(WIFITASK, REACHABLE);
+	    hMainWrapper(WIFITASK);
 	    if (logging)
 		wfLog(this, APP_NAME,
 			getString(R.string.wifi_repair_post_failed));

@@ -16,7 +16,7 @@
 	<PreferenceCategory android:title="Wifi Fixer Preferences">
 
 		<CheckBoxPreference android:key="Disable"
-			android:title="Disable Service" android:summary="Causes Wifi Fixer to stop running in the background" />
+			android:title="Disable Service" android:summary="Causes the Wifi Fixer service to stop running" />
 
 		
 
@@ -59,7 +59,7 @@
 			android:key="WFSLEEP" android:entries="@array/wfsleep"
 			android:entryValues="@array/wfsleepValues" />
 			<CheckBoxPreference android:key="SUPFIX"
-					android:title="Disable Supplicant Fixes" android:summary="Check if having trouble, or on Android 1.5 or 1.6" />
+					android:title="Disable Supplicant Fixes" android:summary="Check if having trouble on Android 1.5 or 1.6" />
 			<CheckBoxPreference android:key="N1FIX2"
 					android:title="Nexus One Sleep Fix" android:summary="Experimental: please read Known Issues in Documentation." />
 			</PreferenceCategory>
@@ -70,7 +70,7 @@
 		
 
 		<CheckBoxPreference android:key="WidgetBehavior"
-			android:title="Widget Behavior" android:summary="Checked is reset Wifi, unchecked is reassociate" />
+			android:title="Widget Behavior" android:summary="Checked resets Wifi, unchecked reassociates" />
 
 
 
