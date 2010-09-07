@@ -960,20 +960,6 @@ public class WifiFixerService extends Service {
 	return false;
     }
 
-    private static void fixDisabled() {
-	/*
-	 * Fix for disabled networks
-	 */
-
-	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
-	for (WifiConfiguration wfResult : wifiConfigs) {
-	    if (wfResult.status == WifiConfiguration.Status.DISABLED) {
-		wfResult.status = WifiConfiguration.Status.ENABLED;
-		wm.updateNetwork(wfResult);
-	    }
-	}
-    }
-
     private static int getKnownAPsBySignal(final Context context) {
 	List<ScanResult> scanResults = wm.getScanResults();
 	/*
@@ -1008,7 +994,6 @@ public class WifiFixerService extends Service {
 	/*
 	 * Known networks from supplicant.
 	 */
-	fixDisabled();
 	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
 
 	/*
@@ -1819,7 +1804,7 @@ public class WifiFixerService extends Service {
 	    wfLog(this, APP_NAME, getString(R.string.signalhop_nonetworks));
 	hMainWrapper(TEMPLOCK_OFF);
 	wifirepair = W_REASSOCIATE;
-	shouldrepair=true;
+	shouldrepair = true;
 	wifiRepair();
 
     }
