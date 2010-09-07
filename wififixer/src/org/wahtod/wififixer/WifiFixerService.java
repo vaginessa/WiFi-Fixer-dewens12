@@ -99,7 +99,6 @@ public class WifiFixerService extends Service {
     private static final String WFLOCK_TAG = "WFLock";
 
     // Supplicant Constants
-    private static final String SCANNING = "SCANNING";
     private static final String DISCONNECTED = "DISCONNECTED";
     private static final String INACTIVE = "INACTIVE";
     private static final String COMPLETED = "COMPLETED";
@@ -1209,7 +1208,6 @@ public class WifiFixerService extends Service {
 			wfLog(this, APP_NAME, this
 				.getString(R.string.network_notification_scan));
 		    networkNotify(this);
-		    return;
 		}
 	    }
 	}
@@ -1327,9 +1325,7 @@ public class WifiFixerService extends Service {
 	    return;
 	} else if (screenisoff && !WFPreferences.getFlag(screenpref))
 	    return;
-	else if (sState == SCANNING) {
-	    pendingscan = true;
-	} else if (sState == DISCONNECTED) {
+	else if (sState == DISCONNECTED) {
 	    startScan(true);
 	    notifyWrap(this, sState);
 	} else if (sState == INACTIVE) {
@@ -1774,11 +1770,21 @@ public class WifiFixerService extends Service {
 
     private void signalHop() {
 	/*
-	 * Finds the best signal of known APs in the scan results and switches
-	 * if it's not the current
+	 * First checks the signal, if network pass fails: Finds the best signal
+	 * of known APs in the scan results and switches if it's not the current
 	 * 
 	 * If there are not alternate APs just does a wifi repair.
 	 */
+
+	if (getisWifiEnabled(this))
+	    if (getIsSupplicantConnected(this))
+		if (checkNetwork(this)) {
+		    /*
+		     * Network is fine
+		     */
+		    return;
+		}
+
 	int bestap = NULLVAL;
 	int numKnownAPs = getKnownAPsBySignal(this);
 	if (numKnownAPs > 1) {
@@ -1803,7 +1809,6 @@ public class WifiFixerService extends Service {
 	if (logging)
 	    wfLog(this, APP_NAME, getString(R.string.signalhop_nonetworks));
 	hMainWrapper(TEMPLOCK_OFF);
-	wifirepair = W_REASSOCIATE;
 	shouldrepair = true;
 	wifiRepair();
 
