@@ -1678,8 +1678,8 @@ public class WifiFixerService extends Service {
     private static void refreshWidget(final Context context) {
 	Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 	/*
-	 * Why would anyone possibly want more than 3?
-	 * Hell, why would anyone want 3?
+	 * Why would anyone possibly want more than 3? Hell, why would anyone
+	 * want 3?
 	 */
 	int[] widgetids = { 0, 1, 2 };
 	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetids);
@@ -1774,9 +1774,9 @@ public class WifiFixerService extends Service {
 
     private void signalHop() {
 	/*
-	 * Walks the list of known APs in the scan results by signal
-	 * connects, network check pass: stay connected
-	 * network check fail, try next until list exhausted
+	 * Walks the list of known APs in the scan results by signal connects,
+	 * network check pass: stay connected network check fail, try next until
+	 * list exhausted
 	 * 
 	 * If there are not alternate APs just does a wifi repair.
 	 */
