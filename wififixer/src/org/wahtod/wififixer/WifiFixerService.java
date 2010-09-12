@@ -1774,8 +1774,9 @@ public class WifiFixerService extends Service {
 
     private void signalHop() {
 	/*
-	 * First checks the signal, if network pass fails: Finds the best signal
-	 * of known APs in the scan results and switches if it's not the current
+	 * Walks the list of known APs in the scan results by signal
+	 * connects, network check pass: stay connected
+	 * network check fail, try next until list exhausted
 	 * 
 	 * If there are not alternate APs just does a wifi repair.
 	 */
