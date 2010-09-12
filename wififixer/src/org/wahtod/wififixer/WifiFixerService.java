@@ -1677,6 +1677,10 @@ public class WifiFixerService extends Service {
 
     private static void refreshWidget(final Context context) {
 	Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+	/*
+	 * Why would anyone possibly want more than 3?
+	 * Hell, why would anyone want 3?
+	 */
 	int[] widgetids = { 0, 1, 2 };
 	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetids);
 	intent.setClass(context, FixerWidget.class);
