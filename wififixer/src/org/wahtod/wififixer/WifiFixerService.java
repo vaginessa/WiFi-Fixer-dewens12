@@ -1012,25 +1012,35 @@ public class WifiFixerService extends Service {
 		 * containsBSSID filters out duplicate MACs in broken scans
 		 * (yes, that happens)
 		 */
-		if (sResult.SSID != null
-			&& wfResult.SSID.contains(sResult.SSID)
-			&& !containsBSSID(sResult.BSSID, knownbysignal)) {
-		    if (logging) {
-			wfLog(context, APP_NAME, context
-				.getString(R.string.found_ssid)
-				+ sResult.SSID);
-			wfLog(context, APP_NAME, context
-				.getString(R.string.capabilities)
-				+ sResult.capabilities);
-			wfLog(context, APP_NAME, context
-				.getString(R.string.signal_level)
-				+ sResult.level);
-		    }
-		    /*
-		     * Add result to knownbysignal
-		     */
-		    knownbysignal.add(new WFConfig(sResult, wfResult));
+		try {
+		    if (wfResult.SSID.contains(sResult.SSID)
+			    && !containsBSSID(sResult.BSSID, knownbysignal)) {
+			if (logging) {
+			    wfLog(context, APP_NAME, context
+				    .getString(R.string.found_ssid)
+				    + sResult.SSID);
+			    wfLog(context, APP_NAME, context
+				    .getString(R.string.capabilities)
+				    + sResult.capabilities);
+			    wfLog(context, APP_NAME, context
+				    .getString(R.string.signal_level)
+				    + sResult.level);
+			}
+			/*
+			 * Add result to knownbysignal
+			 */
+			knownbysignal.add(new WFConfig(sResult, wfResult));
 
+		    }
+		} catch (NullPointerException e) {
+		    if (logging) {
+			if (wfResult.SSID == null)
+			    wfLog(context, APP_NAME, context
+				    .getString(R.string.wfresult_null));
+			else if (sResult.SSID == null)
+			    wfLog(context, APP_NAME, context
+				    .getString(R.string.sresult_null));
+		    }
 		}
 	    }
 	}

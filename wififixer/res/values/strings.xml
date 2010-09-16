@@ -16,6 +16,8 @@
 
 -->
 <resources>
+    <string name="sresult_null">sResult null</string>
+    <string name="wfresult_null">WFResult null</string>
     <string name="initiating_scan">Initiating Scan</string>
     <string name="instantiating_httpclient">Instantiating httpclient</string>
     <string name="signalhop_no_result">Signalhop: No best network result</string>
