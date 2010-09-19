@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Date;
 
-import android.app.Service;
+import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -28,49 +28,32 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.util.Log;
 
-public class LogService extends Service {
+public class LogService extends IntentService {
+
+    public LogService(String name) {
+	super(name);
+	// TODO Auto-generated constructor stub
+    }
 
     public static final String APPNAME = "APPNAME";
     public static final String Message = "Message";
     private static final String BUILD = "Build:";
     private static final String SPACE = " ";
     private static final String COLON = ":";
-    private static final long ALARMREPEAT = 10000;
-    private static final long SLEEPREPEAT = 60000;
     public int VERSION = 0;
     private static String vstring = " ";
     private static String app_name = " ";
     private static String sMessage = " ";
     private static FileWriter fWriter;
-    private static boolean screenisoff = false;
     private static boolean logging = true;
-    private static boolean screenpref = false;
     // constants
-    public static final String DIE = "DIE";
-    public static final String SCREEN_ON = "SCREEN_ON";
-    public static final String SCREEN_OFF = "SCREEN_OFF";
-    public static final String SCREENPREF_ON = "SCPREF_ON";
-    public static final String SCREENPREF_OFF = "SCPREF_OFF";
+    public static final String TIMESTAMP = "TIMESTAMP";
     public static final String LOG = "LOG";
     static final String FILENAME = "/wififixer_log.txt";
     static final String DIRNAME = "/data/org.wahtod.wififixer";
-
-    private Handler tsHandler = new Handler() {
-	@Override
-	public void handleMessage(Message message) {
-	    switch (message.what) {
-	    case 1:
-		timeStamp();
-		break;
-	    }
-	}
-
-    };
 
     static String getBuildInfo() {
 
@@ -125,34 +108,12 @@ public class LogService extends Service {
 
     }
 
-    public void onStart(Intent intent, int startId) {
-
-	try {
-	    handleStart(intent);
-	} catch (NullPointerException e) {
-
-	}
-    }
-
-    public static boolean processCommands(final Context context,
-	    final String command) {
-
-	if (command.equals(DIE)) {
-	    logging = false;
-	    Log.i(context.getClass().getName(), context
-		    .getString(R.string.dying));
-	    return true;
-	} else if (command.equals(SCREEN_ON)) {
-	    screenisoff = false;
-	    return true;
-	} else if (command.equals(SCREEN_OFF)) {
-	    screenisoff = true;
-	    return true;
-	} else if (command.equals(SCREENPREF_OFF)) {
-	    screenpref = false;
-	    return true;
-	} else if (command.equals(SCREENPREF_ON)) {
-	    screenpref = true;
+    public boolean processCommands(final String command) {
+	/*
+	 * Incoming intents will have a command which we process here
+	 */
+	if (command.equals(TIMESTAMP)) {
+	    timeStamp();
 	    return true;
 	}
 
@@ -160,28 +121,18 @@ public class LogService extends Service {
     }
 
     void timeStamp() {
-	if (!logging) {
-	    tsHandler.removeMessages(1);
-	    stopSelf();
-	    return;
-	} else if (screenisoff)
-	    tsHandler.sendEmptyMessageDelayed(1, SLEEPREPEAT);
-	else
-	    tsHandler.sendEmptyMessageDelayed(1, ALARMREPEAT);
 
-	if (!screenisoff || (screenisoff && screenpref)) {
 
 	    Date time = new Date();
 	    String message = BUILD + vstring + COLON + VERSION + SPACE + COLON
 		    + time.toString();
 	    wfLog(this, WifiFixerService.APP_NAME, message);
-	}
 
     }
 
-    static void wfLog(final Context context, final String APP_NAME,
+    void wfLog(final Context context, final String APP_NAME,
 	    final String Message) {
-	if (processCommands(context, APP_NAME))
+	if (processCommands(APP_NAME))
 	    return;
 	Log.i(APP_NAME, Message);
 	writeToFileLog(context, Message);
@@ -214,6 +165,15 @@ public class LogService extends Service {
 	} catch (Exception e) {
 
 	    e.printStackTrace();
+	}
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+	try {
+	    handleStart(intent);
+	} catch (NullPointerException e) {
+
 	}
     }
 }
