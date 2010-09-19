@@ -76,7 +76,6 @@ public class LogService extends IntentService {
     }
 
     void handleStart(Intent intent) {
-
 	if (!intent.getAction().contains(LOG)) {
 	    if (!logging) {
 		logging = true;
@@ -101,7 +100,7 @@ public class LogService extends IntentService {
 
     @Override
     public void onCreate() {
-
+	super.onCreate();
 	getPackageInfo();
 	wfLog(this, WifiFixerService.APP_NAME, getBuildInfo());
 	timeStamp();
