@@ -39,7 +39,7 @@ public class WFConfig extends Object {
 	wificonfig.BSSID = sResult.BSSID;
     }
 
-    public WifiConfiguration sparseConfig() {
+    public static WifiConfiguration sparseConfig(final WifiConfiguration wificonfig) {
 	WifiConfiguration config = new WifiConfiguration();
 	config.networkId = wificonfig.networkId;
 	config.BSSID = wificonfig.BSSID;
