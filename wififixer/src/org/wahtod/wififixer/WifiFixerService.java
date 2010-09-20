@@ -924,7 +924,7 @@ public class WifiFixerService extends Service {
 	if (logging) {
 	    if (state)
 		wfLog(context, APP_NAME, context
-			.getString(R.string.connect_succeded));
+			.getString(R.string.connect_succeeded));
 	    else
 		wfLog(context, APP_NAME, context
 			.getString(R.string.connect_failed));
