@@ -919,11 +919,29 @@ public class WifiFixerService extends Service {
 	}
     }
 
-    private static boolean connectToAP(int bestnid) {
+    private static boolean connectToAP(final Context context,
+	    final WFConfig best) {
 	/*
 	 * Handles connection to network disableOthers should always be true
 	 */
-	return wm.enableNetwork(bestnid, true);
+
+	if (logging)
+	    wfLog(context, APP_NAME, context
+		    .getString(R.string.connecting_to_network)
+		    + best.wificonfig.SSID);
+
+	boolean state = wm.enableNetwork(best.wificonfig.networkId, true);
+
+	if (logging) {
+	    if (state)
+		wfLog(context, APP_NAME, context
+			.getString(R.string.connect_succeeded));
+	    else
+		wfLog(context, APP_NAME, context
+			.getString(R.string.connect_failed));
+	}
+
+	return state;
     }
 
     private static int connectToBest(final Context context) {
@@ -939,13 +957,13 @@ public class WifiFixerService extends Service {
 	int bestnid = NULLVAL;
 	for (WFConfig best : knownbysignal) {
 	    bestnid = best.wificonfig.networkId;
-	    wm.updateNetwork(best.sparseConfig());
+	    wm.updateNetwork(WFConfig.sparseConfig(best.wificonfig));
 	    if (bestnid == lastAP) {
 		if (checkNetwork(context))
 		    return bestnid;
 		else if (knownbysignal.indexOf(best) == knownbysignal.size() - 1)
 		    return NULLVAL;
-	    } else if (connectToAP(bestnid))
+	    } else if (connectToAP(context, best))
 		if (checkNetwork(context)) {
 		    if (logging)
 			wfLog(context, APP_NAME, context
