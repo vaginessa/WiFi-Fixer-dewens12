@@ -120,9 +120,6 @@ public class WifiFixerService extends Service {
     private static final int CONNECTWAIT = 8000;
     private static final int SHORTWAIT = 1500;
     private static final int REALLYSHORTWAIT = 200;
-    // Log Timestamp
-    private static final long TS_WAIT_SCREENON = 10000;
-    private static final long TS_WAIT_SCREENOFF = 60000;
 
     // for Dbm
     private static final int DBM_FLOOR = -90;
@@ -141,7 +138,7 @@ public class WifiFixerService extends Service {
 
     // Locks and such
     private static boolean templock = false;
-    private static boolean screenisoff = false;
+    static boolean screenisoff = false;
     private static boolean shouldrun = true;
     private static boolean shouldrepair = false;
     // various
@@ -313,6 +310,7 @@ public class WifiFixerService extends Service {
 
 	    case loggingpref:
 		logging = getFlag(loggingpref);
+		ServiceAlarm.setLogTS(context, logging, 0);
 		break;
 
 	    case netnotpref:
@@ -373,7 +371,6 @@ public class WifiFixerService extends Service {
     private static final int N1CHECK = 10;
     private static final int WATCHDOG = 11;
     private static final int SIGNALHOP = 12;
-    private static final int TIMESTAMP = 13;
 
     /*
      * Handler for rMain tick and other runnables
@@ -440,10 +437,6 @@ public class WifiFixerService extends Service {
 
 	    case SIGNALHOP:
 		hMain.post(rSignalhop);
-		break;
-
-	    case TIMESTAMP:
-		hMain.post(rTimestamp);
 		break;
 
 	    }
@@ -689,22 +682,6 @@ public class WifiFixerService extends Service {
 	     */
 	    hMain.sendEmptyMessageDelayed(TEMPLOCK_OFF, SHORTWAIT);
 	    wakeLock(getBaseContext(), false);
-	}
-
-    };
-
-    /*
-     * SignalHop runnable
-     */
-    private Runnable rTimestamp = new Runnable() {
-	public void run() {
-	    if (logging) {
-		timeStamp(getBaseContext());
-	    }
-	    if (!screenisoff)
-		hMainWrapper(TIMESTAMP, TS_WAIT_SCREENON);
-	    else
-		hMainWrapper(TIMESTAMP, TS_WAIT_SCREENOFF);
 	}
 
     };
@@ -1872,13 +1849,6 @@ public class WifiFixerService extends Service {
 	hMainWrapper(TEMPLOCK_ON);
 	// Queue for later
 	hMainWrapper(TEMPLOCK_OFF, time);
-    }
-
-    private static void timeStamp(final Context context) {
-	/*
-	 * Sends Timestamp message to LogService
-	 */
-	wfLog(context, LogService.TIMESTAMP, EMPTYSTRING);
     }
 
     private void toggleWifi() {

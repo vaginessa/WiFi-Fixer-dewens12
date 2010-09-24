@@ -29,7 +29,7 @@ public final class ServiceAlarm extends Object {
     private static final String STARTINTENT = "org.wahtod.wififixer.WifiFixerService";
     public static final String ALARM = "ALARM";
 
-    public static void setAlarm(Context c, boolean initialdelay) {
+    public static void setAlarm(final Context c, final boolean initialdelay) {
 	Long delay;
 	if (initialdelay)
 	    delay = PERIOD;
@@ -49,7 +49,7 @@ public final class ServiceAlarm extends Object {
 		+ delay, PERIOD, pendingintent);
     }
 
-    public static void unsetAlarm(Context c) {
+    public static void unsetAlarm(final Context c) {
 	Intent myStarterIntent = new Intent(c, WifiFixerService.class);
 	myStarterIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 	AlarmManager mgr = (AlarmManager) c
@@ -58,5 +58,22 @@ public final class ServiceAlarm extends Object {
 		myStarterIntent, 0);
 
 	mgr.cancel(pendingintent);
+    }
+
+    public static void setLogTS(Context c, boolean state, final long delay) {
+	Intent myStarterIntent = new Intent(LogService.class.getName());
+	myStarterIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
+	myStarterIntent.putExtra(LogService.APPNAME, LogService.TIMESTAMP);
+	myStarterIntent.putExtra(LogService.Message, " ");
+	AlarmManager mgr = (AlarmManager) c
+		.getSystemService(Context.ALARM_SERVICE);
+	PendingIntent pendingintent = PendingIntent.getService(c, 0,
+		myStarterIntent, 0);
+	if (state)
+	    mgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock
+		    .elapsedRealtime()
+		    + delay, pendingintent);
+	else
+	    mgr.cancel(pendingintent);
     }
 }

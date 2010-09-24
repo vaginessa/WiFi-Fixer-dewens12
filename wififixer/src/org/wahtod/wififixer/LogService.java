@@ -53,6 +53,9 @@ public class LogService extends IntentService {
     public static final String LOG = "LOG";
     static final String FILENAME = "/wififixer_log.txt";
     static final String DIRNAME = "/data/org.wahtod.wififixer";
+    // Log Timestamp
+    private static final long TS_WAIT_SCREENON = 10000;
+    private static final long TS_WAIT_SCREENOFF = 60000;
 
     static String getBuildInfo() {
 
@@ -76,8 +79,8 @@ public class LogService extends IntentService {
 
     void handleStart(Intent intent) {
 	try {
-	    sMessage = intent.getStringExtra(Message);
 	    app_name = intent.getStringExtra(APPNAME);
+	    sMessage = intent.getStringExtra(Message);
 	    wfLog(this, app_name, sMessage);
 	} catch (NullPointerException e) {
 	    Log.i(LogService.class.getName(), "Non Log Intent");
@@ -115,6 +118,16 @@ public class LogService extends IntentService {
 	String message = BUILD + vstring + COLON + VERSION + SPACE + COLON
 		+ time.toString();
 	wfLog(this, WifiFixerService.APP_NAME, message);
+
+	/*
+	 * Schedule next timestamp
+	 */
+	
+	if(WifiFixerService.screenisoff)
+	    ServiceAlarm.setLogTS(this,true,TS_WAIT_SCREENOFF);
+	else
+	    ServiceAlarm.setLogTS(this,true,TS_WAIT_SCREENON);
+	    
 
     }
 
