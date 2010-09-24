@@ -35,7 +35,6 @@ public class LogService extends IntentService {
 
     public LogService() {
 	super(LogService.class.getName());
-	// TODO Auto-generated constructor stub
     }
 
     public static final String APPNAME = "APPNAME";
@@ -50,6 +49,7 @@ public class LogService extends IntentService {
     private static FileWriter fWriter;
     // constants
     public static final String TIMESTAMP = "TIMESTAMP";
+    public static final String DUMPBUILD = "DUMPBUILD";
     public static final String LOG = "LOG";
     static final String FILENAME = "/wififixer_log.txt";
     static final String DIRNAME = "/data/org.wahtod.wififixer";
@@ -107,6 +107,9 @@ public class LogService extends IntentService {
 	if (command.equals(TIMESTAMP)) {
 	    timeStamp();
 	    return true;
+	} else if (command.equals(DUMPBUILD)) {
+	    wfLog(this, WifiFixerService.APP_NAME, getBuildInfo());
+	    return true;
 	}
 
 	return false;
@@ -122,13 +125,12 @@ public class LogService extends IntentService {
 	/*
 	 * Schedule next timestamp
 	 */
-	
-	if(WifiFixerService.screenisoff)
-	    ServiceAlarm.setLogTS(this,true,TS_WAIT_SCREENOFF);
-	else
-	    ServiceAlarm.setLogTS(this,true,TS_WAIT_SCREENON);
-	    
 
+	if (WifiFixerService.WFPreferences.readPrefKey(this,
+		WifiFixerService.SCREENOFF))
+	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENOFF);
+	else
+	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENON);
     }
 
     void wfLog(final Context context, final String APP_NAME,

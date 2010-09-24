@@ -98,6 +98,9 @@ public class WifiFixerService extends Service {
     // Wifi Lock tag
     private static final String WFLOCK_TAG = "WFLock";
 
+    // Screen State SharedPref key
+    static final String SCREENOFF = "SCREENOFF";
+
     // Supplicant Constants
     private static final String DISCONNECTED = "DISCONNECTED";
     private static final String INACTIVE = "INACTIVE";
@@ -138,7 +141,7 @@ public class WifiFixerService extends Service {
 
     // Locks and such
     private static boolean templock = false;
-    static boolean screenisoff = false;
+    private static boolean screenisoff = false;
     private static boolean shouldrun = true;
     private static boolean shouldrepair = false;
     // various
@@ -206,12 +209,12 @@ public class WifiFixerService extends Service {
     /*
      * Preferences object
      */
-    private static class WFPreferences extends Object {
+    static class WFPreferences extends Object {
 
 	private static boolean[] keyVals = new boolean[prefsList.size()];
 
 	public static void loadPrefs(final Context context) {
-	    settings = PreferenceManager.getDefaultSharedPreferences(context);
+
 	    /*
 	     * Set defaults. Doing here instead of activity because service may
 	     * be started first.
@@ -240,7 +243,7 @@ public class WifiFixerService extends Service {
 		/*
 		 * Setting the value from prefs
 		 */
-		setFlag(index, settings.getBoolean(prefkey, false));
+		setFlag(index, readPrefKey(context, prefkey));
 
 		/*
 		 * After value changes from loading
@@ -258,9 +261,8 @@ public class WifiFixerService extends Service {
 	     * Sets default for Supplicant Fix pref on < 2.0 to true
 	     */
 
-	    if (!settings.getBoolean(SUPFIX_DEFAULT, false)) {
-		SharedPreferences.Editor edit = settings.edit();
-		edit.putBoolean(SUPFIX_DEFAULT, true);
+	    if (!readPrefKey(context, SUPFIX_DEFAULT)) {
+		writePrefKey(context, SUPFIX_DEFAULT, true);
 		int ver;
 		try {
 		    ver = Integer
@@ -273,10 +275,8 @@ public class WifiFixerService extends Service {
 			    .getString(R.string.version)
 			    + ver);
 		if (ver < 2) {
-		    edit.putBoolean(SUPFIX_KEY, true);
+		    writePrefKey(context, SUPFIX_KEY, true);
 		}
-
-		edit.commit();
 
 	    }
 
@@ -311,6 +311,8 @@ public class WifiFixerService extends Service {
 	    case loggingpref:
 		logging = getFlag(loggingpref);
 		ServiceAlarm.setLogTS(context, logging, 0);
+		if (logging)
+		    wfLog(context, LogService.DUMPBUILD, EMPTYSTRING);
 		break;
 
 	    case netnotpref:
@@ -323,6 +325,21 @@ public class WifiFixerService extends Service {
 		break;
 	    }
 
+	}
+
+	public static boolean readPrefKey(final Context context,
+		final String key) {
+
+	    settings = PreferenceManager.getDefaultSharedPreferences(context);
+	    return settings.getBoolean(key, false);
+	}
+
+	public static void writePrefKey(final Context context,
+		final String key, final boolean value) {
+	    settings = PreferenceManager.getDefaultSharedPreferences(context);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putBoolean(key, value);
+	    editor.commit();
 	}
 
 	private static void specialCase(final Context context) {
@@ -1642,6 +1659,12 @@ public class WifiFixerService extends Service {
     }
 
     private void onScreenOff() {
+
+	/*
+	 * Set shared pref state
+	 */
+	WFPreferences.writePrefKey(this, SCREENOFF, true);
+
 	/*
 	 * Disable Sleep check
 	 */
@@ -1659,6 +1682,12 @@ public class WifiFixerService extends Service {
     }
 
     private void onScreenOn() {
+
+	/*
+	 * Set shared pref state
+	 */
+	WFPreferences.writePrefKey(this, SCREENOFF, false);
+
 	sleepCheck(false);
 	if (logging) {
 	    wfLog(this, APP_NAME, getString(R.string.screen_on_handler));
