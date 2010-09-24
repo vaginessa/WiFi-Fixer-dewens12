@@ -59,7 +59,7 @@
 		<service android:name=".LogService" class="LogService"
 			android:process="org.wahtod.wififixer.LogService">
 			<intent-filter>
-				<action android:name="org.wahtod.wififixer.LogService.LOG" />
+				<action android:name="org.wahtod.wififixer.LogService" />
 			</intent-filter>
 
 		</service>

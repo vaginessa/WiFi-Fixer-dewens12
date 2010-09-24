@@ -107,9 +107,6 @@ public class WifiFixerService extends Service {
     private static final String H_TARGET = "http://www.google.com";
     private static URI headURI;
 
-    // Logging Intent
-    private static final String LOGINTENT = "org.wahtod.wififixer.LogService.LOG";
-
     // ms for IsReachable
     private final static int REACHABLE = 4000;
     private final static int HTTPREACH = 8000;
@@ -315,10 +312,7 @@ public class WifiFixerService extends Service {
 		break;
 
 	    case loggingpref:
-		/*
-		 * Deprecated
-		 */
-		    
+		logging = getFlag(loggingpref);
 		break;
 
 	    case netnotpref:
@@ -1955,7 +1949,7 @@ public class WifiFixerService extends Service {
 
     private static void wfLog(final Context context, final String APP_NAME,
 	    final String Message) {
-	Intent sendIntent = new Intent(LOGINTENT);
+	Intent sendIntent = new Intent(LogService.class.getName());
 	sendIntent.putExtra(LogService.APPNAME, APP_NAME);
 	sendIntent.putExtra(LogService.Message, Message);
 	context.startService(sendIntent);

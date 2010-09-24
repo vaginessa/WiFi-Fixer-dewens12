@@ -33,8 +33,8 @@ import android.util.Log;
 
 public class LogService extends IntentService {
 
-    public LogService(String name) {
-	super(name);
+    public LogService() {
+	super(LogService.class.getName());
 	// TODO Auto-generated constructor stub
     }
 
@@ -48,7 +48,6 @@ public class LogService extends IntentService {
     private static String app_name = " ";
     private static String sMessage = " ";
     private static FileWriter fWriter;
-    private static boolean logging = true;
     // constants
     public static final String TIMESTAMP = "TIMESTAMP";
     public static final String LOG = "LOG";
@@ -76,19 +75,12 @@ public class LogService extends IntentService {
     }
 
     void handleStart(Intent intent) {
-	if (!intent.getAction().contains(LOG)) {
-	    if (!logging) {
-		logging = true;
-		timeStamp();
-	    }
-	    return;
-	}
 	try {
 	    sMessage = intent.getStringExtra(Message);
 	    app_name = intent.getStringExtra(APPNAME);
 	    wfLog(this, app_name, sMessage);
 	} catch (NullPointerException e) {
-	    e.printStackTrace();
+	    Log.i(LogService.class.getName(), "Non Log Intent");
 
 	}
     }
@@ -102,8 +94,6 @@ public class LogService extends IntentService {
     public void onCreate() {
 	super.onCreate();
 	getPackageInfo();
-	wfLog(this, WifiFixerService.APP_NAME, getBuildInfo());
-	timeStamp();
 
     }
 
@@ -121,11 +111,10 @@ public class LogService extends IntentService {
 
     void timeStamp() {
 
-
-	    Date time = new Date();
-	    String message = BUILD + vstring + COLON + VERSION + SPACE + COLON
-		    + time.toString();
-	    wfLog(this, WifiFixerService.APP_NAME, message);
+	Date time = new Date();
+	String message = BUILD + vstring + COLON + VERSION + SPACE + COLON
+		+ time.toString();
+	wfLog(this, WifiFixerService.APP_NAME, message);
 
     }
 
@@ -133,8 +122,10 @@ public class LogService extends IntentService {
 	    final String Message) {
 	if (processCommands(APP_NAME))
 	    return;
-	Log.i(APP_NAME, Message);
-	writeToFileLog(context, Message);
+	else {
+	    Log.i(APP_NAME, Message);
+	    writeToFileLog(context, Message);
+	}
     }
 
     static void writeToFileLog(final Context context, String message) {
