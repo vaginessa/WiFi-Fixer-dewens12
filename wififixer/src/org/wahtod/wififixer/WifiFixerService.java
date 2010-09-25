@@ -640,6 +640,10 @@ public class WifiFixerService extends Service {
 
 	    if (lock.isHeld())
 		lock.release();
+	    
+	    if(wakelock != null && wakelock.isHeld())
+		wakelock.release();
+	    
 	    unregisterReceiver(receiver);
 	    hMain.removeMessages(MAIN);
 	    cleanupPosts();
