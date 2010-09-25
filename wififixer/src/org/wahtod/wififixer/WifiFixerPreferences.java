@@ -81,8 +81,14 @@ public class WifiFixerPreferences extends PreferenceActivity implements
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 
 	SharedPreferences.Editor edit = prefs.edit();
-
-	if (key.contains("Performance")) {
+	/*
+	 * Dispatch intent if this is a pref service is interested in
+	 */
+	if (WifiFixerService.prefsList.indexOf(key) != -1) {
+	    Intent intent = new Intent(WifiFixerService.class.getName());
+	    intent.putExtra(WifiFixerService.PREFCHANGEKEY, key);
+	    startService(intent);
+	} else if (key.contains("Performance")) {
 
 	    String sPerf = prefs.getString("Performance", "2");
 	    int pVal = Integer.parseInt(sPerf);
@@ -145,10 +151,5 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 		}
 	    }
 	}
-
-	// Send reload intent to WifiFixerService when a preference value
-	// changes
-	Intent sendIntent = new Intent(WifiFixerService.class.getName());
-	startService(sendIntent);
     }
 }

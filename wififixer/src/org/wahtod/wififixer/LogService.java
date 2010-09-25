@@ -126,7 +126,7 @@ public class LogService extends IntentService {
 	 * Schedule next timestamp
 	 */
 
-	if (WifiFixerService.WFPreferences.readPrefKey(this,
+	if (PreferencesUtil.readPrefKey(this,
 		WifiFixerService.SCREENOFF))
 	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENOFF);
 	else
