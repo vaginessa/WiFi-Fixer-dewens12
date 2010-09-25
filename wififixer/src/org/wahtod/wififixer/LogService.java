@@ -123,11 +123,11 @@ public class LogService extends IntentService {
 	wfLog(this, WifiFixerService.APP_NAME, message);
 
 	/*
-	 * Schedule next timestamp
+	 * Schedule next timestamp or terminate
 	 */
-
-	if (PreferencesUtil.readPrefKey(this,
-		WifiFixerService.SCREENOFF))
+	if (PreferencesUtil.readPrefKey(this, WifiFixerService.DISABLE_KEY))
+	    return;
+	else if (PreferencesUtil.readPrefKey(this, WifiFixerService.SCREENOFF))
 	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENOFF);
 	else
 	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENON);

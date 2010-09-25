@@ -25,14 +25,12 @@ import android.util.Log;
 
 public class PreferencesUtil extends Object {
 
-    private static boolean[] keyVals;
-    private static List<String> prefsList;
-    private static SharedPreferences settings;
+    private boolean[] keyVals;
+    private List<String> prefsList;
 
     public PreferencesUtil(final Context context, final List<String> pList) {
 	prefsList = pList;
 	keyVals = new boolean[prefsList.size()];
-	settings = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public void loadPrefs(final Context context) {
@@ -53,15 +51,19 @@ public class PreferencesUtil extends Object {
 	 */
 	for (String prefkey : prefsList) {
 
-	    handlePrefChange(context, prefkey);
+	    handleLoadPref(context, prefkey);
 
 	}
 	specialCase();
 	log();
     }
 
-    void handlePrefChange(final Context context,
-	    final String prefkey) {
+    void handleLoadPref(final Context context, final String prefkey) {
+	int index = prefsList.indexOf(prefkey);
+	setFlag(index, readPrefKey(context, prefkey));
+    }
+
+    void handlePrefChange(final String prefkey, final boolean flagval) {
 
 	/*
 	 * Get index
@@ -71,11 +73,11 @@ public class PreferencesUtil extends Object {
 	/*
 	 * Before value changes from loading
 	 */
-	preValChanged( index);
+	preValChanged(index);
 	/*
 	 * Setting the value from prefs
 	 */
-	setFlag(index, readPrefKey(context, prefkey));
+	setFlag(index, flagval);
 
 	/*
 	 * After value changes from loading
@@ -100,16 +102,17 @@ public class PreferencesUtil extends Object {
 
     }
 
-    public void postValChanged( final int index) {
-	
+    public void postValChanged(final int index) {
+
     }
 
     public static boolean readPrefKey(final Context context, final String key) {
+	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 	return settings.getBoolean(key, false);
     }
 
-    public static void writePrefKey(final Context context, final String key,
-	    final boolean value) {
+    public static void writePrefKey(final Context context,final String key, final boolean value) {
+	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 	SharedPreferences.Editor editor = settings.edit();
 	editor.putBoolean(key, value);
 	editor.commit();
@@ -122,8 +125,8 @@ public class PreferencesUtil extends Object {
 
     }
 
-   public void log() {
-	
+    public void log() {
+
     }
 
     public boolean getFlag(final int ikey) {
@@ -131,8 +134,9 @@ public class PreferencesUtil extends Object {
 	return keyVals[ikey];
     }
 
-    public static void setFlag(final int iKey, final boolean flag) {
+    public void setFlag(final int iKey, final boolean flag) {
 	keyVals[iKey] = flag;
     }
+
 
 }

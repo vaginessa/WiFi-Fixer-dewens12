@@ -41,7 +41,7 @@ public class WifiFixerPreferences extends PreferenceActivity implements
     protected void onResume() {
 	super.onResume();
 
-	// Set up a listener whenever a key changes
+	// Set up a listener for when key changes
 	getPreferenceScreen().getSharedPreferences()
 		.registerOnSharedPreferenceChangeListener(this);
 	setWifiSleepPolicy(this);
@@ -51,7 +51,7 @@ public class WifiFixerPreferences extends PreferenceActivity implements
     protected void onPause() {
 	super.onPause();
 
-	// Unregister the listener whenever a key changes
+	// Unregister the listener when paused
 	getPreferenceScreen().getSharedPreferences()
 		.unregisterOnSharedPreferenceChangeListener(this);
     }
@@ -79,15 +79,25 @@ public class WifiFixerPreferences extends PreferenceActivity implements
     }
 
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-
 	SharedPreferences.Editor edit = prefs.edit();
 	/*
 	 * Dispatch intent if this is a pref service is interested in
 	 */
 	if (WifiFixerService.prefsList.indexOf(key) != -1) {
-	    Intent intent = new Intent(WifiFixerService.class.getName());
-	    intent.putExtra(WifiFixerService.PREFCHANGEKEY, key);
-	    startService(intent);
+	    /*
+	     * First handle Service disable case
+	     */
+	    if (PreferencesUtil.readPrefKey(this, WifiFixerService.DISABLE_KEY)) {
+		if (key == WifiFixerService.DISABLE_KEY) {
+		    stopService(new Intent(WifiFixerService.class.getName()));
+		}
+	    } else {
+		Intent intent = new Intent(WifiFixerService.class.getName());
+		intent.putExtra(WifiFixerService.PREFCHANGEKEY, key);
+		intent.putExtra(WifiFixerService.PREFSTATEKEY, prefs
+			.getBoolean(key, false));
+		startService(intent);
+	    }
 	} else if (key.contains("Performance")) {
 
 	    String sPerf = prefs.getString("Performance", "2");

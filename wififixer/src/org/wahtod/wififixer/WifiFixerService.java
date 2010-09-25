@@ -73,6 +73,7 @@ public class WifiFixerService extends Service {
     public static final String FIXWIFI = "FIXWIFI";
     private static final String AUTHSTRING = "31415927";
     public static final String PREFCHANGEKEY = "PREFCHANGEKEY";
+    public static final String PREFSTATEKEY = "PREFSTATEKEY";
 
     // For Auth
     private static final String AUTHEXTRA = "IRRADIATED";
@@ -175,7 +176,7 @@ public class WifiFixerService extends Service {
     private static final String WIFILOCK_KEY = "WiFiLock";
     private static final String NOTIF_KEY = "Notifications";
     private static final String SCREEN_KEY = "SCREEN";
-    private static final String DISABLE_KEY = "Disable";
+    public static final String DISABLE_KEY = "Disable";
     private static final String WIDGET_KEY = "WidgetBehavior";
     private static final String LOG_KEY = "SLOG";
     private static final String SUPFIX_KEY = "SUPFIX";
@@ -203,7 +204,7 @@ public class WifiFixerService extends Service {
     private final static int n1fix2pref = 7;
     private final static int netnotpref = 8;
 
-    static PreferencesUtil WFPreferences;
+    static PreferencesUtil wfPreferences;
 
     // Runnable Constants for handler
     private static final int MAIN = 0;
@@ -981,19 +982,18 @@ public class WifiFixerService extends Service {
 	return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     }
 
-    private static void handleAuth(final Context context, final Intent intent) {
+    private void handleAuth(final Intent intent) {
 	if (intent.getStringExtra(AUTHEXTRA).contains(AUTHSTRING)) {
 	    if (logging)
-		wfLog(context, APP_NAME, context.getString(R.string.authed));
+		wfLog(this, APP_NAME, getString(R.string.authed));
 	    // Ok, do the auth
-	    boolean IS_AUTHED = PreferencesUtil.readPrefKey(context, context
-		    .getString(R.string.isauthed));
+	    boolean IS_AUTHED = PreferencesUtil.readPrefKey(this,
+		    getString(R.string.isauthed));
 	    if (!IS_AUTHED) {
-		PreferencesUtil.writePrefKey(context, context
-			.getString(R.string.isauthed), true);
-		showNotification(context, context
-			.getString(R.string.donatethanks), context
-			.getString(R.string.authorized), 4144, true);
+		PreferencesUtil.writePrefKey(this,
+			getString(R.string.isauthed), true);
+		showNotification(this, getString(R.string.donatethanks),
+			getString(R.string.authorized), 4144, true);
 	    }
 
 	}
@@ -1025,7 +1025,7 @@ public class WifiFixerService extends Service {
 		/*
 		 * Network notification check
 		 */
-		if (WFPreferences.getFlag(netnotpref)) {
+		if (wfPreferences.getFlag(netnotpref)) {
 		    if (logging)
 			wfLog(this, APP_NAME, this
 				.getString(R.string.network_notification_scan));
@@ -1077,8 +1077,9 @@ public class WifiFixerService extends Service {
 		}
 
 	    } else if (intent.hasExtra(PREFCHANGEKEY)) {
-		WFPreferences.handlePrefChange(this, intent
-			.getStringExtra(PREFCHANGEKEY));
+		wfPreferences.handlePrefChange(intent
+			.getStringExtra(PREFCHANGEKEY), intent.getBooleanExtra(
+			PREFSTATEKEY, false));
 	    } else {
 
 		String iAction = intent.getAction();
@@ -1086,7 +1087,7 @@ public class WifiFixerService extends Service {
 		 * AUTH from donate service
 		 */
 		if (iAction.contains(AUTH)) {
-		    handleAuth(this, intent);
+		    handleAuth(intent);
 		    return;
 		} else {
 		    if (logging)
@@ -1128,7 +1129,7 @@ public class WifiFixerService extends Service {
 	/*
 	 * New setting disabling supplicant fixes
 	 */
-	if (WFPreferences.getFlag(supfixpref))
+	if (wfPreferences.getFlag(supfixpref))
 	    return;
 
 	/*
@@ -1146,7 +1147,7 @@ public class WifiFixerService extends Service {
 
 	if (!wm.isWifiEnabled()) {
 	    return;
-	} else if (screenisoff && !WFPreferences.getFlag(screenpref))
+	} else if (screenisoff && !wfPreferences.getFlag(screenpref))
 	    return;
 	else if (sState == DISCONNECTED) {
 	    startScan(true);
@@ -1167,7 +1168,7 @@ public class WifiFixerService extends Service {
 	 * Handle widget action
 	 */
 	if (wm.isWifiEnabled()) {
-	    if (WFPreferences.getFlag(widgetpref)) {
+	    if (wfPreferences.getFlag(widgetpref)) {
 		Toast.makeText(WifiFixerService.this,
 			getString(R.string.toggling_wifi), Toast.LENGTH_LONG)
 			.show();
@@ -1380,7 +1381,7 @@ public class WifiFixerService extends Service {
     }
 
     private static void notifyWrap(final Context context, final String message) {
-	if (WFPreferences.getFlag(notifpref)) {
+	if (wfPreferences.getFlag(notifpref)) {
 	    showNotification(context, context
 		    .getString(R.string.wifi_connection_problem)
 		    + message, message, ERR_NOTIF, false);
@@ -1422,7 +1423,7 @@ public class WifiFixerService extends Service {
 	/*
 	 * Load Preferences
 	 */
-	preferenceInitialize();
+	preferenceInitialize(this);
 
 	// Set up broadcastreceivers
 	setup();
@@ -1469,12 +1470,12 @@ public class WifiFixerService extends Service {
 	/*
 	 * Disable Sleep check
 	 */
-	if (WFPreferences.getFlag(screenpref))
+	if (wfPreferences.getFlag(screenpref))
 	    sleepCheck(true);
 	/*
 	 * Schedule N1 fix
 	 */
-	if (WFPreferences.getFlag(n1fix2pref))
+	if (wfPreferences.getFlag(n1fix2pref))
 	    hMainWrapper(N1CHECK, REACHABLE);
 
 	if (logging) {
@@ -1512,8 +1513,8 @@ public class WifiFixerService extends Service {
 
     }
 
-    private void preferenceInitialize() {
-	WFPreferences = new PreferencesUtil(this, prefsList) {
+    private void preferenceInitialize(final Context context) {
+	wfPreferences = new PreferencesUtil(this, prefsList) {
 	    @Override
 	    public void preLoad() {
 
@@ -1521,8 +1522,8 @@ public class WifiFixerService extends Service {
 		 * Sets default for Supplicant Fix pref on < 2.0 to true
 		 */
 
-		if (!readPrefKey(getBaseContext(), SUPFIX_DEFAULT)) {
-		    writePrefKey(getBaseContext(), SUPFIX_DEFAULT, true);
+		if (!readPrefKey(context, SUPFIX_DEFAULT)) {
+		    writePrefKey(context, SUPFIX_DEFAULT, true);
 		    int ver;
 		    try {
 			ver = Integer.valueOf(Build.VERSION.RELEASE.substring(
@@ -1535,7 +1536,7 @@ public class WifiFixerService extends Service {
 				.getString(R.string.version)
 				+ ver);
 		    if (ver < 2) {
-			writePrefKey(getBaseContext(), SUPFIX_KEY, true);
+			writePrefKey(context, SUPFIX_KEY, true);
 		    }
 
 		}
@@ -1545,6 +1546,23 @@ public class WifiFixerService extends Service {
 	    @Override
 	    public void postValChanged(final int index) {
 		switch (index) {
+
+		case lockpref:
+		    if (wfPreferences.getFlag(lockpref) && !lock.isHeld()) {
+			// generate new lock
+			lock.acquire();
+			if (logging)
+			    wfLog(getBaseContext(), APP_NAME, getBaseContext()
+				    .getString(R.string.acquiring_wifi_lock));
+		    } else if (lock.isHeld()
+			    && !wfPreferences.getFlag(lockpref)) {
+			lock.release();
+			if (logging)
+			    wfLog(getBaseContext(), APP_NAME, getBaseContext()
+				    .getString(R.string.releasing_wifi_lock));
+		    }
+		    break;
+
 		case runpref:
 		    // Check RUNPREF and set SHOULDRUN
 		    // Make sure Main loop restarts if this is a change
@@ -1575,27 +1593,33 @@ public class WifiFixerService extends Service {
 			addNetNotif(getBaseContext(), EMPTYSTRING, EMPTYSTRING);
 
 		    break;
-
-		case lockpref:
-		    if (getFlag(lockpref) && !lock.isHeld()) {
-			// generate new lock
-			lock.acquire();
-			if (logging)
-			    wfLog(getBaseContext(), APP_NAME, getBaseContext()
-				    .getString(R.string.acquiring_wifi_lock));
-		    } else if (lock.isHeld() && !getFlag(lockpref)) {
-			lock.release();
-			if (logging)
-			    wfLog(getBaseContext(), APP_NAME, getBaseContext()
-				    .getString(R.string.releasing_wifi_lock));
-		    }
-		    break;
 		}
+
+	    }
+
+	    @Override
+	    public void log() {
+		if (logging) {
+		    wfLog(getBaseContext(), APP_NAME, getBaseContext()
+			    .getString(R.string.loading_settings));
+		    for (String prefkey : prefsList) {
+			if (getFlag(prefsList.indexOf(prefkey)))
+			    wfLog(getBaseContext(), APP_NAME, prefkey);
+		    }
+
+		}
+	    }
+
+	    @Override
+	    public void specialCase() {
+		postValChanged(loggingpref);
+		postValChanged(lockpref);
+		postValChanged(runpref);
 
 	    }
 	};
 
-	WFPreferences.loadPrefs(this);
+	wfPreferences.loadPrefs(this);
 
     }
 
