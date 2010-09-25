@@ -70,8 +70,7 @@ public class WifiFixerActivity extends Activity {
     }
 
     boolean getLogging() {
-	settings = PreferenceManager.getDefaultSharedPreferences(this);
-	return settings.getBoolean("SLOG", false);
+	return PreferencesUtil.readPrefKey(this, WifiFixerService.LOG_KEY);
     }
 
     void launchHelp() {
@@ -132,14 +131,18 @@ public class WifiFixerActivity extends Activity {
 
     void setLogging(boolean state) {
 	LOGGING = state;
-	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(this);
-	SharedPreferences.Editor edit = settings.edit();
-	edit.putBoolean("SLOG", state);
-	edit.commit();
+	PreferencesUtil.writePrefKey(this,WifiFixerService.LOG_KEY, state);
+	/*
+	 * Notify Service of new logging state
+	 */
 	Intent sendIntent = new Intent(WifiFixerService.class.getName());
+	sendIntent.putExtra(WifiFixerService.PREFCHANGEKEY, WifiFixerService.LOG_KEY);
+	sendIntent.putExtra(WifiFixerService.PREFSTATEKEY, state);
 	startService(sendIntent);
 	if (state) {
+	    /*
+	     * Delete old log if toggling logging on
+	     */
 	    File file = new File(Environment.getExternalStorageDirectory()
 		    + LogService.DIRNAME + LogService.FILENAME);
 	    file.delete();

@@ -21,7 +21,6 @@ import java.util.List;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class PreferencesUtil extends Object {
 
@@ -69,7 +68,6 @@ public class PreferencesUtil extends Object {
 	 * Get index
 	 */
 	int index = prefsList.indexOf(prefkey);
-	Log.i("WFPreferences", "Value Changed:" + prefkey + ":" + index);
 	/*
 	 * Before value changes from loading
 	 */

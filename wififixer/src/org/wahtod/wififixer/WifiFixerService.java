@@ -178,7 +178,7 @@ public class WifiFixerService extends Service {
     private static final String SCREEN_KEY = "SCREEN";
     public static final String DISABLE_KEY = "Disable";
     private static final String WIDGET_KEY = "WidgetBehavior";
-    private static final String LOG_KEY = "SLOG";
+    static final String LOG_KEY = "SLOG";
     private static final String SUPFIX_KEY = "SUPFIX";
     private static final String SUPFIX_DEFAULT = "SPFDEF";
     private static final String N1FIX2_KEY = "N1FIX2";
