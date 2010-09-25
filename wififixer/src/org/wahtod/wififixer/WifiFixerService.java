@@ -43,7 +43,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -59,7 +58,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
-import android.preference.PreferenceManager;
 import android.text.format.Formatter;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -164,7 +162,6 @@ public class WifiFixerService extends Service {
     private static WifiManager wm;
     private static WifiInfo myWifi;
     private static WifiManager.WifiLock lock;
-    private static SharedPreferences settings;
     private static PowerManager.WakeLock wakelock;
     private static DefaultHttpClient httpclient;
     private static HttpParams httpparams;
@@ -989,12 +986,11 @@ public class WifiFixerService extends Service {
 	    if (logging)
 		wfLog(context, APP_NAME, context.getString(R.string.authed));
 	    // Ok, do the auth
-	    boolean IS_AUTHED = settings.getBoolean(context
-		    .getString(R.string.isauthed), false);
+	    boolean IS_AUTHED = PreferencesUtil.readPrefKey(context, context
+		    .getString(R.string.isauthed));
 	    if (!IS_AUTHED) {
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putBoolean(context.getString(R.string.isauthed), true);
-		editor.commit();
+		PreferencesUtil.writePrefKey(context, context
+			.getString(R.string.isauthed), true);
 		showNotification(context, context
 			.getString(R.string.donatethanks), context
 			.getString(R.string.authorized), 4144, true);
@@ -1426,91 +1422,7 @@ public class WifiFixerService extends Service {
 	/*
 	 * Load Preferences
 	 */
-	settings = PreferenceManager.getDefaultSharedPreferences(this);
-
-	WFPreferences = new PreferencesUtil(this, prefsList) {
-	    @Override
-	    public void preLoad() {
-
-		/*
-		 * Sets default for Supplicant Fix pref on < 2.0 to true
-		 */
-
-		if (!readPrefKey(getBaseContext(), SUPFIX_DEFAULT)) {
-		    writePrefKey(getBaseContext(), SUPFIX_DEFAULT, true);
-		    int ver;
-		    try {
-			ver = Integer.valueOf(Build.VERSION.RELEASE.substring(
-				0, 1));
-		    } catch (NumberFormatException e) {
-			ver = 0;
-		    }
-		    if (logging)
-			wfLog(getBaseContext(), APP_NAME, getBaseContext()
-				.getString(R.string.version)
-				+ ver);
-		    if (ver < 2) {
-			writePrefKey(getBaseContext(), SUPFIX_KEY, true);
-		    }
-
-		}
-
-	    }
-
-	    @Override
-	    public void postValChanged(final int index) {
-		switch (index) {
-		case runpref:
-		    // Check RUNPREF and set SHOULDRUN
-		    // Make sure Main loop restarts if this is a change
-		    if (getFlag(runpref)) {
-			ServiceAlarm.unsetAlarm(getBaseContext());
-			shouldrun = false;
-		    } else {
-			if (!shouldrun) {
-			    shouldrun = true;
-			}
-			ServiceAlarm.setAlarm(getBaseContext(), true);
-		    }
-		    break;
-
-		case loggingpref:
-		    logging = getFlag(loggingpref);
-		    ServiceAlarm.setLogTS(getBaseContext(), logging, 0);
-		    if (logging)
-			wfLog(getBaseContext(), LogService.DUMPBUILD,
-				EMPTYSTRING);
-		    break;
-
-		case netnotpref:
-		    /*
-		     * Disable notification if pref changed to false
-		     */
-		    if (!getFlag(netnotpref))
-			addNetNotif(getBaseContext(), EMPTYSTRING, EMPTYSTRING);
-
-		    break;
-
-		case lockpref:
-		    if (getFlag(lockpref) && !lock.isHeld()) {
-			// generate new lock
-			lock.acquire();
-			if (logging)
-			    wfLog(getBaseContext(), APP_NAME, getBaseContext()
-				    .getString(R.string.acquiring_wifi_lock));
-		    } else if (lock.isHeld() && !getFlag(lockpref)) {
-			lock.release();
-			if (logging)
-			    wfLog(getBaseContext(), APP_NAME, getBaseContext()
-				    .getString(R.string.releasing_wifi_lock));
-		    }
-		    break;
-		}
-
-	    }
-	};
-
-	WFPreferences.loadPrefs(this);
+	preferenceInitialize();
 
 	// Set up broadcastreceivers
 	setup();
@@ -1597,6 +1509,93 @@ public class WifiFixerService extends Service {
 	wifishouldbeon = false;
 	cancelNotification(getBaseContext(), NOTIFID);
 	wakeLock(getBaseContext(), false);
+
+    }
+
+    private void preferenceInitialize() {
+	WFPreferences = new PreferencesUtil(this, prefsList) {
+	    @Override
+	    public void preLoad() {
+
+		/*
+		 * Sets default for Supplicant Fix pref on < 2.0 to true
+		 */
+
+		if (!readPrefKey(getBaseContext(), SUPFIX_DEFAULT)) {
+		    writePrefKey(getBaseContext(), SUPFIX_DEFAULT, true);
+		    int ver;
+		    try {
+			ver = Integer.valueOf(Build.VERSION.RELEASE.substring(
+				0, 1));
+		    } catch (NumberFormatException e) {
+			ver = 0;
+		    }
+		    if (logging)
+			wfLog(getBaseContext(), APP_NAME, getBaseContext()
+				.getString(R.string.version)
+				+ ver);
+		    if (ver < 2) {
+			writePrefKey(getBaseContext(), SUPFIX_KEY, true);
+		    }
+
+		}
+
+	    }
+
+	    @Override
+	    public void postValChanged(final int index) {
+		switch (index) {
+		case runpref:
+		    // Check RUNPREF and set SHOULDRUN
+		    // Make sure Main loop restarts if this is a change
+		    if (getFlag(runpref)) {
+			ServiceAlarm.unsetAlarm(getBaseContext());
+			shouldrun = false;
+		    } else {
+			if (!shouldrun) {
+			    shouldrun = true;
+			}
+			ServiceAlarm.setAlarm(getBaseContext(), true);
+		    }
+		    break;
+
+		case loggingpref:
+		    logging = getFlag(loggingpref);
+		    ServiceAlarm.setLogTS(getBaseContext(), logging, 0);
+		    if (logging)
+			wfLog(getBaseContext(), LogService.DUMPBUILD,
+				EMPTYSTRING);
+		    break;
+
+		case netnotpref:
+		    /*
+		     * Disable notification if pref changed to false
+		     */
+		    if (!getFlag(netnotpref))
+			addNetNotif(getBaseContext(), EMPTYSTRING, EMPTYSTRING);
+
+		    break;
+
+		case lockpref:
+		    if (getFlag(lockpref) && !lock.isHeld()) {
+			// generate new lock
+			lock.acquire();
+			if (logging)
+			    wfLog(getBaseContext(), APP_NAME, getBaseContext()
+				    .getString(R.string.acquiring_wifi_lock));
+		    } else if (lock.isHeld() && !getFlag(lockpref)) {
+			lock.release();
+			if (logging)
+			    wfLog(getBaseContext(), APP_NAME, getBaseContext()
+				    .getString(R.string.releasing_wifi_lock));
+		    }
+		    break;
+		}
+
+	    }
+	};
+
+	WFPreferences.loadPrefs(this);
 
     }
 
