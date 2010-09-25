@@ -640,10 +640,10 @@ public class WifiFixerService extends Service {
 
 	    if (lock.isHeld())
 		lock.release();
-	    
-	    if(wakelock != null && wakelock.isHeld())
+
+	    if (wakelock != null && wakelock.isHeld())
 		wakelock.release();
-	    
+
 	    unregisterReceiver(receiver);
 	    hMain.removeMessages(MAIN);
 	    cleanupPosts();
@@ -1584,9 +1584,11 @@ public class WifiFixerService extends Service {
 		case loggingpref:
 		    logging = getFlag(loggingpref);
 		    ServiceAlarm.setLogTS(getBaseContext(), logging, 0);
-		    if (logging)
+		    if (logging) {
 			wfLog(getBaseContext(), LogService.DUMPBUILD,
 				EMPTYSTRING);
+			log();
+		    }
 		    break;
 
 		case netnotpref:

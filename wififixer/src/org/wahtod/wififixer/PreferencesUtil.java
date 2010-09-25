@@ -105,12 +105,15 @@ public class PreferencesUtil extends Object {
     }
 
     public static boolean readPrefKey(final Context context, final String key) {
-	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+	SharedPreferences settings = PreferenceManager
+		.getDefaultSharedPreferences(context);
 	return settings.getBoolean(key, false);
     }
 
-    public static void writePrefKey(final Context context,final String key, final boolean value) {
-	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+    public static void writePrefKey(final Context context, final String key,
+	    final boolean value) {
+	SharedPreferences settings = PreferenceManager
+		.getDefaultSharedPreferences(context);
 	SharedPreferences.Editor editor = settings.edit();
 	editor.putBoolean(key, value);
 	editor.commit();
@@ -135,6 +138,5 @@ public class PreferencesUtil extends Object {
     public void setFlag(final int iKey, final boolean flag) {
 	keyVals[iKey] = flag;
     }
-
 
 }

@@ -131,12 +131,13 @@ public class WifiFixerActivity extends Activity {
 
     void setLogging(boolean state) {
 	LOGGING = state;
-	PreferencesUtil.writePrefKey(this,WifiFixerService.LOG_KEY, state);
+	PreferencesUtil.writePrefKey(this, WifiFixerService.LOG_KEY, state);
 	/*
 	 * Notify Service of new logging state
 	 */
 	Intent sendIntent = new Intent(WifiFixerService.class.getName());
-	sendIntent.putExtra(WifiFixerService.PREFCHANGEKEY, WifiFixerService.LOG_KEY);
+	sendIntent.putExtra(WifiFixerService.PREFCHANGEKEY,
+		WifiFixerService.LOG_KEY);
 	sendIntent.putExtra(WifiFixerService.PREFSTATEKEY, state);
 	startService(sendIntent);
 	if (state) {
