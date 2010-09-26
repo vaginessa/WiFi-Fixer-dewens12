@@ -1600,7 +1600,15 @@ public class WifiFixerService extends Service {
 
 		    break;
 		}
-
+		
+		/*
+		 * Log change
+		 */
+		if (logging)
+		    wfLog(getBaseContext(), APP_NAME,
+			    getString(R.string.prefs_change)
+				    + prefsList.get(index)
+				    + getString(R.string.colon)+getFlag(index));
 	    }
 
 	    @Override

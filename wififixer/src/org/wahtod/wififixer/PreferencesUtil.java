@@ -54,7 +54,6 @@ public class PreferencesUtil extends Object {
 
 	}
 	specialCase();
-	log();
     }
 
     void handleLoadPref(final Context context, final String prefkey) {

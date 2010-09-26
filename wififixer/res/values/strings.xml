@@ -16,6 +16,8 @@
 
 -->
 <resources>
+    <string name="colon">:</string>
+    <string name="prefs_change">Prefs Change:</string>
     <string name="connect_failed">Connect Failed</string>
     <string name="connect_succeeded">Connect Succeeded</string>
     <string name="sresult_null">sResult null</string>
