@@ -1602,7 +1602,7 @@ public class WifiFixerService extends Service {
 		}
 		
 		/*
-		 * Log change
+		 * Log change of preference state
 		 */
 		if (logging)
 		    wfLog(getBaseContext(), APP_NAME,
