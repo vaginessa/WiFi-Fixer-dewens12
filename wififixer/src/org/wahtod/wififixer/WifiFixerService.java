@@ -1512,8 +1512,8 @@ public class WifiFixerService extends Service {
     private void onWifiEnabled() {
 	hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
 	wifishouldbeon = false;
-	cancelNotification(getBaseContext(), NOTIFID);
-	wakeLock(getBaseContext(), false);
+	cancelNotification(this, NOTIFID);
+	wakeLock(this, false);
 
     }
 
