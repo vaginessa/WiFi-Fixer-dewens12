@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Date;
 
+import org.wahtod.wififixer.LegacySupport.VersionedScreenState;
+
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -56,6 +58,8 @@ public class LogService extends IntentService {
     // Log Timestamp
     private static final long TS_WAIT_SCREENON = 10000;
     private static final long TS_WAIT_SCREENOFF = 60000;
+
+    private static VersionedScreenState screenState;
 
     static String getBuildInfo() {
 
@@ -97,6 +101,7 @@ public class LogService extends IntentService {
     public void onCreate() {
 	super.onCreate();
 	getPackageInfo();
+	screenState = VersionedScreenState.newInstance(this);
 
     }
 
@@ -127,10 +132,10 @@ public class LogService extends IntentService {
 	 */
 	if (PreferencesUtil.readPrefKey(this, WifiFixerService.DISABLE_KEY))
 	    return;
-	else if (PreferencesUtil.readPrefKey(this, WifiFixerService.SCREENOFF))
-	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENOFF);
-	else
+	else if (screenState.getScreenState(this))
 	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENON);
+	else
+	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENOFF);
     }
 
     void wfLog(final Context context, final String APP_NAME,

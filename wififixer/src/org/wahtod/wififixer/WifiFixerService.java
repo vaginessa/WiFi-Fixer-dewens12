@@ -33,6 +33,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.wahtod.wififixer.LegacySupport.VersionedScreenState;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -99,7 +100,7 @@ public class WifiFixerService extends Service {
     private static final String WFLOCK_TAG = "WFLock";
 
     // Screen State SharedPref key
-    static final String SCREENOFF = "SCREENOFF";
+    public static final String SCREENOFF = "SCREENOFF";
 
     // Supplicant Constants
     private static final String DISCONNECTED = "DISCONNECTED";
@@ -1433,6 +1434,12 @@ public class WifiFixerService extends Service {
 	setup();
 
 	/*
+	 * Set initial screen state
+	 */
+
+	setInitialScreenState(this);
+
+	/*
 	 * Start Main tick
 	 */
 	hMain.sendEmptyMessage(MAIN);
@@ -1600,7 +1607,7 @@ public class WifiFixerService extends Service {
 
 		    break;
 		}
-		
+
 		/*
 		 * Log change of preference state
 		 */
@@ -1608,7 +1615,8 @@ public class WifiFixerService extends Service {
 		    wfLog(getBaseContext(), APP_NAME,
 			    getString(R.string.prefs_change)
 				    + prefsList.get(index)
-				    + getString(R.string.colon)+getFlag(index));
+				    + getString(R.string.colon)
+				    + getFlag(index));
 	    }
 
 	    @Override
@@ -1676,6 +1684,14 @@ public class WifiFixerService extends Service {
 
 	registerReceiver(receiver, myFilter);
 
+    }
+
+    private static void setInitialScreenState(final Context context) {
+	VersionedScreenState sstate = VersionedScreenState.newInstance(context);
+	if (sstate.getScreenState(context))
+	    screenisoff = false;
+	else
+	    screenisoff = true;
     }
 
     private void sleepCheck(final boolean state) {
