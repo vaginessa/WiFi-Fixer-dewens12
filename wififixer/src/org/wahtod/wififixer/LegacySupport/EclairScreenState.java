@@ -19,7 +19,7 @@ package org.wahtod.wififixer.LegacySupport;
 import android.content.Context;
 import android.os.PowerManager;
 
-public class CupcakeScreenState extends VersionedScreenState {
+public class EclairScreenState extends VersionedScreenState {
 
     @Override
     public boolean getScreenState(Context context) {

@@ -27,7 +27,7 @@ public abstract class VersionedScreenState {
 	if (sdkVersion < Build.VERSION_CODES.ECLAIR_MR1) {
 	    detector = new LegacyScreenState();
 	} else
-	    detector = new CupcakeScreenState();
+	    detector = new EclairScreenState();
 
 	return detector;
     }
