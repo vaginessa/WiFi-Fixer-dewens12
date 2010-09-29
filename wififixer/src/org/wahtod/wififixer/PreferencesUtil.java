@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 
 public class PreferencesUtil extends Object {
@@ -53,15 +52,7 @@ public class PreferencesUtil extends Object {
 	prefsList = pList;
 	context = c;
 	keyVals = new boolean[prefsList.size()];
-	IntentFilter myFilter = new IntentFilter();
-
-	// wifi scan results available callback
-	myFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-
-	// Widget Action
-	myFilter.addAction(VALUE_CHANGED_ACTION);
-
-	context.registerReceiver(changeReceiver, myFilter);
+	context.registerReceiver(changeReceiver, new IntentFilter(VALUE_CHANGED_ACTION));
     }
 
     public void loadPrefs() {
