@@ -18,21 +18,53 @@ package org.wahtod.wififixer;
 
 import java.util.List;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 
 public class PreferencesUtil extends Object {
 
+    /*
+     * Intent Constants
+     */
+    private static final String VALUE_CHANGED_ACTION = "ACTION.PREFS.VALUECHANGED";
+    private static final String VALUE_KEY = "VALUEKEY";
+
+    /*
+     * Fields
+     */
     private boolean[] keyVals;
     private List<String> prefsList;
+    private Context context;
 
-    public PreferencesUtil(final Context context, final List<String> pList) {
+    private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
+	public void onReceive(final Context context, final Intent intent) {
+	    String valuekey = intent.getStringExtra(VALUE_KEY);
+	    handlePrefChange(valuekey, readPrefKey(context, valuekey));
+	}
+
+    };
+
+    public PreferencesUtil(final Context c, final List<String> pList) {
 	prefsList = pList;
+	context = c;
 	keyVals = new boolean[prefsList.size()];
+	IntentFilter myFilter = new IntentFilter();
+
+	// wifi scan results available callback
+	myFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+
+	// Widget Action
+	myFilter.addAction(VALUE_CHANGED_ACTION);
+
+	context.registerReceiver(changeReceiver, myFilter);
     }
 
-    public void loadPrefs(final Context context) {
+    public void loadPrefs() {
 
 	/*
 	 * Set defaults. Doing here instead of activity because service may be
@@ -50,13 +82,13 @@ public class PreferencesUtil extends Object {
 	 */
 	for (String prefkey : prefsList) {
 
-	    handleLoadPref(context, prefkey);
+	    handleLoadPref(prefkey);
 
 	}
 	specialCase();
     }
 
-    void handleLoadPref(final Context context, final String prefkey) {
+    void handleLoadPref(final String prefkey) {
 	int index = prefsList.indexOf(prefkey);
 	setFlag(index, readPrefKey(context, prefkey));
     }
@@ -82,6 +114,12 @@ public class PreferencesUtil extends Object {
 	postValChanged(index);
     }
 
+    public static void notifyPrefChange(final Context c, final String key) {
+	Intent intent = new Intent(VALUE_CHANGED_ACTION);
+	intent.putExtra(VALUE_KEY, key);
+	c.sendBroadcast(intent);
+    }
+
     public void preLoad() {
 
 	/*
@@ -103,16 +141,16 @@ public class PreferencesUtil extends Object {
 
     }
 
-    public static boolean readPrefKey(final Context context, final String key) {
+    public static boolean readPrefKey(final Context ctxt, final String key) {
 	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(context);
+		.getDefaultSharedPreferences(ctxt);
 	return settings.getBoolean(key, false);
     }
 
-    public static void writePrefKey(final Context context, final String key,
+    public static void writePrefKey(final Context ctxt, final String key,
 	    final boolean value) {
 	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(context);
+		.getDefaultSharedPreferences(ctxt);
 	SharedPreferences.Editor editor = settings.edit();
 	editor.putBoolean(key, value);
 	editor.commit();
@@ -136,6 +174,10 @@ public class PreferencesUtil extends Object {
 
     public void setFlag(final int iKey, final boolean flag) {
 	keyVals[iKey] = flag;
+    }
+
+    public void unRegisterReciever() {
+	context.unregisterReceiver(changeReceiver);
     }
 
 }

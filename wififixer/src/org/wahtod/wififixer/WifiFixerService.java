@@ -73,8 +73,6 @@ public class WifiFixerService extends Service {
     // Intent Constants
     public static final String FIXWIFI = "FIXWIFI";
     private static final String AUTHSTRING = "31415927";
-    public static final String PREFCHANGEKEY = "PREFCHANGEKEY";
-    public static final String PREFSTATEKEY = "PREFSTATEKEY";
 
     // For Auth
     private static final String AUTHEXTRA = "IRRADIATED";
@@ -646,6 +644,7 @@ public class WifiFixerService extends Service {
 		wakelock.release();
 
 	    unregisterReceiver(receiver);
+	    wfPreferences.unRegisterReciever();
 	    hMain.removeMessages(MAIN);
 	    cleanupPosts();
 	    cleanup = true;
@@ -1080,11 +1079,6 @@ public class WifiFixerService extends Service {
 		    if (logging)
 			wfLog(this, APP_NAME, getString(R.string.alarm_intent));
 		}
-
-	    } else if (intent.hasExtra(PREFCHANGEKEY)) {
-		wfPreferences.handlePrefChange(intent
-			.getStringExtra(PREFCHANGEKEY), intent.getBooleanExtra(
-			PREFSTATEKEY, false));
 	    } else {
 
 		String iAction = intent.getAction();
@@ -1641,7 +1635,7 @@ public class WifiFixerService extends Service {
 	    }
 	};
 
-	wfPreferences.loadPrefs(this);
+	wfPreferences.loadPrefs();
 
     }
 

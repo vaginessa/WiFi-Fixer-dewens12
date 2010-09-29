@@ -13,7 +13,7 @@
    limitations under the License.
 
  */
- 
+
 package org.wahtod.wififixer.LegacySupport;
 
 import org.wahtod.wififixer.PreferencesUtil;

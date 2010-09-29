@@ -24,7 +24,7 @@ public class EclairScreenState extends VersionedScreenState {
     @Override
     public boolean getScreenState(Context context) {
 	PowerManager pm = (PowerManager) context
-	.getSystemService(Context.POWER_SERVICE);
+		.getSystemService(Context.POWER_SERVICE);
 	return pm.isScreenOn();
     }
 
