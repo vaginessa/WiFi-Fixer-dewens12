@@ -29,14 +29,12 @@ import android.util.Log;
 
 public class WifiFixerPreferences extends PreferenceActivity implements
 	OnSharedPreferenceChangeListener {
-    private PrefChangeNotifier notifier;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setWifiSleepPolicy(this);
 	addPreferencesFromResource(R.xml.preferences);
-	notifier = PrefChangeNotifier.getInstance();
+
     }
 
     @Override
@@ -94,7 +92,7 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 		    stopService(new Intent(WifiFixerService.class.getName()));
 
 	    } else
-		notifier.notifyPrefChange(key);
+		PreferencesUtil.notifyPrefChange(this, key);
 
 	} else if (key.contains("Performance")) {
 

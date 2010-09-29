@@ -644,6 +644,7 @@ public class WifiFixerService extends Service {
 		wakelock.release();
 
 	    unregisterReceiver(receiver);
+	    wfPreferences.unRegisterReciever();
 	    hMain.removeMessages(MAIN);
 	    cleanupPosts();
 	    cleanup = true;

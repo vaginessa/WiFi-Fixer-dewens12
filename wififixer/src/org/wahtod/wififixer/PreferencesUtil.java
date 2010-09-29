@@ -18,11 +18,21 @@ package org.wahtod.wififixer;
 
 import java.util.List;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 
-public class PreferencesUtil extends Object implements PreferenceChange {
+public class PreferencesUtil extends Object {
+
+    /*
+     * Intent Constants
+     */
+    private static final String VALUE_CHANGED_ACTION = "ACTION.PREFS.VALUECHANGED";
+    private static final String VALUE_KEY = "VALUEKEY";
 
     /*
      * Fields
@@ -30,14 +40,28 @@ public class PreferencesUtil extends Object implements PreferenceChange {
     private boolean[] keyVals;
     private List<String> prefsList;
     private Context context;
-    public PrefChangeNotifier notifier;
+
+    private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
+	public void onReceive(final Context context, final Intent intent) {
+	    String valuekey = intent.getStringExtra(VALUE_KEY);
+	    handlePrefChange(valuekey, readPrefKey(context, valuekey));
+	}
+
+    };
 
     public PreferencesUtil(final Context c, final List<String> pList) {
 	prefsList = pList;
 	context = c;
 	keyVals = new boolean[prefsList.size()];
-	notifier = PrefChangeNotifier.getInstance();
-	notifier.registerClient(this);
+	IntentFilter myFilter = new IntentFilter();
+
+	// wifi scan results available callback
+	myFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+
+	// Widget Action
+	myFilter.addAction(VALUE_CHANGED_ACTION);
+
+	context.registerReceiver(changeReceiver, myFilter);
     }
 
     public void loadPrefs() {
@@ -88,6 +112,12 @@ public class PreferencesUtil extends Object implements PreferenceChange {
 	 * After value changes from loading
 	 */
 	postValChanged(index);
+    }
+
+    public static void notifyPrefChange(final Context c, final String key) {
+	Intent intent = new Intent(VALUE_CHANGED_ACTION);
+	intent.putExtra(VALUE_KEY, key);
+	c.sendBroadcast(intent);
     }
 
     public void preLoad() {
@@ -146,8 +176,8 @@ public class PreferencesUtil extends Object implements PreferenceChange {
 	keyVals[iKey] = flag;
     }
 
-    public void preferenceChangeEvent(String key) {
-	handlePrefChange(key, readPrefKey(context, key));
+    public void unRegisterReciever() {
+	context.unregisterReceiver(changeReceiver);
     }
 
 }
