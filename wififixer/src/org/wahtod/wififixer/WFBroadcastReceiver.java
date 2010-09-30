@@ -22,7 +22,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
-public class wififixer extends BroadcastReceiver {
+public class WFBroadcastReceiver extends BroadcastReceiver {
 
     private Context ctxt;
 

@@ -52,7 +52,8 @@ public class PreferencesUtil extends Object {
 	prefsList = pList;
 	context = c;
 	keyVals = new boolean[prefsList.size()];
-	context.registerReceiver(changeReceiver, new IntentFilter(VALUE_CHANGED_ACTION));
+	context.registerReceiver(changeReceiver, new IntentFilter(
+		VALUE_CHANGED_ACTION));
     }
 
     public void loadPrefs() {

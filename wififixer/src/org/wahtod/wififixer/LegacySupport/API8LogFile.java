@@ -21,8 +21,8 @@ import android.content.Context;
 
 public class API8LogFile extends VersionedLogFile {
 
-   final static String FILENAME = "wififixer_log.txt";
-   
+    final static String FILENAME = "wififixer_log.txt";
+
     public File getLogFile(Context context) {
 	/*
 	 * Whee

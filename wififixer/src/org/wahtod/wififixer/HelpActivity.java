@@ -67,9 +67,9 @@ public class HelpActivity extends Activity {
 			new String[] { "zanshin.g1@gmail.com" });
 		startActivity(Intent.createChooser(sendIntent, "Email:"));
 		return true;
-	    } else if (url.contains("http://wififixer.wordpress.com")) {
+	    } else if (url.contains("http://WFBroadcastReceiver.wordpress.com")) {
 		Intent i = new Intent(Intent.ACTION_VIEW);
-		Uri u = Uri.parse("http://wififixer.wordpress.com");
+		Uri u = Uri.parse("http://WFBroadcastReceiver.wordpress.com");
 		i.setData(u);
 		startActivity(i);
 		return true;

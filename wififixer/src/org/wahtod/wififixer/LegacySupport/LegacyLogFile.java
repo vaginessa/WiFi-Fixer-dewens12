@@ -23,6 +23,7 @@ import android.os.Environment;
 public class LegacyLogFile extends VersionedLogFile {
     static final String FILENAME = "/wififixer_log.txt";
     static final String DIRNAME = "/data/org.wahtod.wififixer";
+
     @Override
     public File getLogFile(Context context) {
 	File dir = new File(Environment.getExternalStorageDirectory() + DIRNAME);

@@ -82,15 +82,11 @@ public class LogService extends IntentService {
     }
 
     void handleStart(Intent intent) {
-	try {
+
+	if (intent.hasExtra(APPNAME) && intent.hasExtra(Message)) {
 	    app_name = intent.getStringExtra(APPNAME);
 	    sMessage = intent.getStringExtra(Message);
 	    wfLog(this, app_name, sMessage);
-	} catch (NullPointerException e) {
-	   /*
-	    * Ignore null intents
-	    */
-
 	}
     }
 
@@ -175,7 +171,9 @@ public class LogService extends IntentService {
 	try {
 	    handleStart(intent);
 	} catch (NullPointerException e) {
-
+	    /*
+	     * Ignore null intents: system uses them to stop after processing
+	     */
 	}
     }
 }

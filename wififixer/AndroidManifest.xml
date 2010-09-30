@@ -35,7 +35,7 @@
 		<activity android:name=".About" />
 		<activity android:name=".WifiFixerPreferences" />
 		<activity android:name=".HelpActivity" />
-		<receiver android:name=".wififixer">
+		<receiver android:name=".WFBroadcastReceiver">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 				<category android:name="android.intent.category.HOME" />
