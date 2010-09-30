@@ -168,7 +168,10 @@ public class WifiFixerService extends Service {
     private static HttpHead head;
     private static HttpResponse response;
     private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
-
+    /*
+     * Cache context for notifications
+     */
+    private Context notifcontext;
     /*
      * preferences key constants
      */
@@ -792,22 +795,16 @@ public class WifiFixerService extends Service {
 
 	knownbysignal.clear();
 
-	class SortBySignal implements Comparator<ScanResult> {
-
+	class SortBySignal implements Comparator<WFConfig> {
 	    @Override
-	    public int compare(ScanResult o1, ScanResult o2) {
-		if (o1.level > o2.level)
-		    return 1;
-		else if (o1.level == o2.level)
-		    return 0;
-		else
-		    return -1;
+	    public int compare(WFConfig o2, WFConfig o1) {
+		/*
+		 * Sort by signal
+		 */
+		return (o1.level < o2.level ? -1 : (o1.level == o2.level ? 0
+			: 1));
 	    }
 	}
-	/*
-	 * Sort by ScanResult.level which is signal
-	 */
-	Collections.sort(scanResults, new SortBySignal());
 	/*
 	 * Known networks from supplicant.
 	 */
@@ -867,6 +864,11 @@ public class WifiFixerService extends Service {
 	    wfLog(context, APP_NAME, context
 		    .getString(R.string.number_of_known)
 		    + knownbysignal.size());
+
+	/*
+	 * Sort by ScanResult.level which is signal
+	 */
+	Collections.sort(knownbysignal, new SortBySignal());
 
 	return knownbysignal.size();
     }
@@ -1432,6 +1434,11 @@ public class WifiFixerService extends Service {
 	 */
 
 	setInitialScreenState(this);
+	
+	/*
+	 * Cache context for notifications
+	 */
+	notifcontext = this;
 
 	/*
 	 * Start Main tick
@@ -1513,7 +1520,7 @@ public class WifiFixerService extends Service {
     private void onWifiEnabled() {
 	hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
 	wifishouldbeon = false;
-	cancelNotification(this, NOTIFID);
+	cancelNotification(notifcontext, NOTIFID);
 	wakeLock(this, false);
 
     }
@@ -1636,6 +1643,8 @@ public class WifiFixerService extends Service {
 	};
 
 	wfPreferences.loadPrefs();
+	cancelNotification(notifcontext, NOTIFID);
+	wakeLock(getBaseContext(), false);
 
     }
 
@@ -1822,7 +1831,7 @@ public class WifiFixerService extends Service {
 	tempLock(CONNECTWAIT);
 	// Wake lock
 	wakeLock(this, true);
-	showNotification(this, getString(R.string.toggling_wifi),
+	showNotification(notifcontext, getString(R.string.toggling_wifi),
 		getString(R.string.toggling_wifi), NOTIFID, false);
 	hMainWrapper(WIFI_OFF);
 	hMainWrapper(WIFI_ON, LOCKWAIT);
