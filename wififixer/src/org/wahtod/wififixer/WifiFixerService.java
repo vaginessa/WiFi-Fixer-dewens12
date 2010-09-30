@@ -942,8 +942,6 @@ public class WifiFixerService extends Service {
 	 */
 	if (knownbysignal.size() == 0)
 	    return NULLVAL;
-	if (logging)
-	    wfLog(context, APP_NAME, knownbysignal.toString());
 	/*
 	 * Get nth best network id from scanned by connecting and doing a
 	 * network check
