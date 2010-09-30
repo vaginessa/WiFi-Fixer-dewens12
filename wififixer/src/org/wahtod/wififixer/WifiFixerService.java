@@ -172,7 +172,10 @@ public class WifiFixerService extends Service {
     private static HttpHead head;
     private static HttpResponse response;
     private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
-
+    /*
+     * Cache context for notifications
+     */
+    private Context notifcontext;
     /*
      * preferences key constants
      */
@@ -1000,7 +1003,8 @@ public class WifiFixerService extends Service {
 		/*
 		 * Sort by signal
 		 */
-		return (o1.level< o2.level ? -1 : (o1.level==o2.level ? 0 : 1));
+		return (o1.level < o2.level ? -1 : (o1.level == o2.level ? 0
+			: 1));
 	    }
 	}
 	/*
@@ -1628,6 +1632,11 @@ public class WifiFixerService extends Service {
 	setup();
 
 	/*
+	 * Cache context for notifications
+	 */
+	notifcontext = this;
+
+	/*
 	 * Start Main tick
 	 */
 	hMain.sendEmptyMessage(MAIN);
@@ -1699,7 +1708,7 @@ public class WifiFixerService extends Service {
     private void onWifiEnabled() {
 	hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
 	wifishouldbeon = false;
-	cancelNotification(getBaseContext(), NOTIFID);
+	cancelNotification(notifcontext, NOTIFID);
 	wakeLock(getBaseContext(), false);
 
     }
@@ -1882,7 +1891,7 @@ public class WifiFixerService extends Service {
 	tempLock(CONNECTWAIT);
 	// Wake lock
 	wakeLock(this, true);
-	showNotification(this, getString(R.string.toggling_wifi),
+	showNotification(notifcontext, getString(R.string.toggling_wifi),
 		getString(R.string.toggling_wifi), NOTIFID, false);
 	hMainWrapper(WIFI_OFF);
 	hMainWrapper(WIFI_ON, LOCKWAIT);
