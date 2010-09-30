@@ -939,6 +939,8 @@ public class WifiFixerService extends Service {
 	 */
 	if (knownbysignal.size() == 0)
 	    return NULLVAL;
+	if (logging)
+	    wfLog(context, APP_NAME, knownbysignal.toString());
 	/*
 	 * Get nth best network id from scanned by connecting and doing a
 	 * network check
@@ -992,22 +994,15 @@ public class WifiFixerService extends Service {
 
 	knownbysignal.clear();
 
-	class SortBySignal implements Comparator<ScanResult> {
-
+	class SortBySignal implements Comparator<WFConfig> {
 	    @Override
-	    public int compare(ScanResult o1, ScanResult o2) {
-		if (o1.level > o2.level)
-		    return 1;
-		else if (o1.level == o2.level)
-		    return 0;
-		else
-		    return -1;
+	    public int compare(WFConfig o2, WFConfig o1) {
+		/*
+		 * Sort by signal
+		 */
+		return (o1.level< o2.level ? -1 : (o1.level==o2.level ? 0 : 1));
 	    }
 	}
-	/*
-	 * Sort by ScanResult.level which is signal
-	 */
-	Collections.sort(scanResults, new SortBySignal());
 	/*
 	 * Known networks from supplicant.
 	 */
@@ -1067,6 +1062,11 @@ public class WifiFixerService extends Service {
 	    wfLog(context, APP_NAME, context
 		    .getString(R.string.number_of_known)
 		    + knownbysignal.size());
+
+	/*
+	 * Sort by ScanResult.level which is signal
+	 */
+	Collections.sort(knownbysignal, new SortBySignal());
 
 	return knownbysignal.size();
     }
