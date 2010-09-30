@@ -18,6 +18,8 @@ package org.wahtod.wififixer;
 
 import java.io.File;
 
+import org.wahtod.wififixer.LegacySupport.LegacyLogFile;
+
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -55,6 +57,7 @@ public class WifiFixerActivity extends Activity {
     private static final int MENU_ABOUT = 5;
     private static final int LOGGING_GROUP = 42;
     SharedPreferences settings;
+    LegacyLogFile logfile;
     // New key for About nag
     // Set this when you change the About xml
     static final String sABOUT = "ABOUT2";
@@ -84,11 +87,11 @@ public class WifiFixerActivity extends Activity {
     }
 
     void sendLog() {
-	File file = new File(Environment.getExternalStorageDirectory()
-		+ LogService.DIRNAME + LogService.FILENAME);
+	File file = logfile.getLogFile(this);
 
 	if (Environment.getExternalStorageState() != null
-		&& !(Environment.getExternalStorageState().contains("mounted"))) {
+		&& !(Environment.getExternalStorageState()
+			.contains(Environment.MEDIA_MOUNTED))) {
 	    Toast.makeText(WifiFixerActivity.this, "SD Card Unavailable",
 		    Toast.LENGTH_LONG).show();
 
@@ -136,8 +139,11 @@ public class WifiFixerActivity extends Activity {
 	    /*
 	     * Delete old log if toggling logging on
 	     */
-	    File file = new File(Environment.getExternalStorageDirectory()
-		    + LogService.DIRNAME + LogService.FILENAME);
+	    if (logfile != null) {
+
+	    } else
+		logfile = new LegacyLogFile();
+	    File file = logfile.getLogFile(this);
 	    file.delete();
 
 	}

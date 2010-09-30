@@ -1882,6 +1882,7 @@ public class WifiFixerService extends Service {
     private static void wfLog(final Context context, final String APP_NAME,
 	    final String Message) {
 	Intent sendIntent = new Intent(LogService.class.getName());
+	sendIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 	sendIntent.putExtra(LogService.APPNAME, APP_NAME);
 	sendIntent.putExtra(LogService.Message, Message);
 	context.startService(sendIntent);

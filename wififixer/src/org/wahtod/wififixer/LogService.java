@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Date;
 
+import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
 import org.wahtod.wififixer.LegacySupport.VersionedScreenState;
 
 import android.app.IntentService;
@@ -30,7 +31,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Environment;
-import android.os.IBinder;
 import android.util.Log;
 
 public class LogService extends IntentService {
@@ -53,13 +53,13 @@ public class LogService extends IntentService {
     public static final String TIMESTAMP = "TIMESTAMP";
     public static final String DUMPBUILD = "DUMPBUILD";
     public static final String LOG = "LOG";
-    static final String FILENAME = "/wififixer_log.txt";
-    static final String DIRNAME = "/data/org.wahtod.wififixer";
+
     // Log Timestamp
     private static final long TS_WAIT_SCREENON = 10000;
     private static final long TS_WAIT_SCREENOFF = 60000;
 
     private static VersionedScreenState screenState;
+    private static VersionedLogFile logFile;
 
     static String getBuildInfo() {
 
@@ -87,14 +87,11 @@ public class LogService extends IntentService {
 	    sMessage = intent.getStringExtra(Message);
 	    wfLog(this, app_name, sMessage);
 	} catch (NullPointerException e) {
-	    Log.i(LogService.class.getName(), "Non Log Intent");
+	   /*
+	    * Ignore null intents
+	    */
 
 	}
-    }
-
-    @Override
-    public IBinder onBind(Intent arg0) {
-	return null;
     }
 
     @Override
@@ -156,12 +153,7 @@ public class LogService extends IntentService {
 	}
 
 	message = message + "\n";
-	File dir = new File(Environment.getExternalStorageDirectory() + DIRNAME);
-	if (!dir.exists()) {
-	    dir.mkdirs();
-	}
-	File file = new File(dir.getAbsolutePath() + FILENAME);
-	// Remove if over 100k
+	File file = logFile.getLogFile(context);
 
 	try {
 	    if (!file.exists()) {
