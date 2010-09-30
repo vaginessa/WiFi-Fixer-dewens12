@@ -44,12 +44,12 @@ public class LogService extends IntentService {
     private static final String BUILD = "Build:";
     private static final String SPACE = " ";
     private static final String COLON = ":";
+    private static final String NEWLINE = "\n";
     public int VERSION = 0;
-    private static String vstring = " ";
-    private static String app_name = " ";
-    private static String sMessage = " ";
+    private static String vstring = SPACE;
+    private static String app_name = SPACE;
+    private static String sMessage = SPACE;
     private static FileWriter fWriter;
-    // constants
     public static final String TIMESTAMP = "TIMESTAMP";
     public static final String DUMPBUILD = "DUMPBUILD";
     public static final String LOG = "LOG";
@@ -58,19 +58,19 @@ public class LogService extends IntentService {
     private static final long TS_WAIT_SCREENON = 10000;
     private static final long TS_WAIT_SCREENOFF = 60000;
 
-    private static VersionedScreenState screenState;
-    private static VersionedLogFile logFile;
+    private static VersionedScreenState vscreenState;
+    private static VersionedLogFile vlogfile;
 
     static String getBuildInfo() {
 
-	return Build.MODEL + "\n" + Build.VERSION.RELEASE + "\n";
+	return Build.MODEL + NEWLINE + Build.VERSION.RELEASE + NEWLINE;
     }
 
     void getPackageInfo() {
 	PackageManager pm = getPackageManager();
 	try {
 	    // ---get the package info---
-	    PackageInfo pi = pm.getPackageInfo("org.wahtod.wififixer", 0);
+	    PackageInfo pi = pm.getPackageInfo(this.getPackageName(), 0);
 	    // ---display the versioncode--
 	    VERSION = pi.versionCode;
 	    vstring = pi.versionName;
@@ -94,7 +94,7 @@ public class LogService extends IntentService {
     public void onCreate() {
 	super.onCreate();
 	getPackageInfo();
-	screenState = VersionedScreenState.newInstance(this);
+	vscreenState = VersionedScreenState.newInstance(this);
 
     }
 
@@ -125,7 +125,7 @@ public class LogService extends IntentService {
 	 */
 	if (PreferencesUtil.readPrefKey(this, WifiFixerService.DISABLE_KEY))
 	    return;
-	else if (screenState.getScreenState(this))
+	else if (vscreenState.getScreenState(this))
 	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENON);
 	else
 	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENOFF);
@@ -148,8 +148,7 @@ public class LogService extends IntentService {
 	    return;
 	}
 
-	message = message + "\n";
-	File file = logFile.getLogFile(context);
+	File file = vlogfile.getLogFile(context);
 
 	try {
 	    if (!file.exists()) {
@@ -157,7 +156,7 @@ public class LogService extends IntentService {
 	    }
 
 	    fWriter = new FileWriter(file.getAbsolutePath(), true);
-	    fWriter.write(message);
+	    fWriter.write(message + NEWLINE);
 	    fWriter.flush();
 	    fWriter.close();
 	} catch (Exception e) {
