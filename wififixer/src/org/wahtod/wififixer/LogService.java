@@ -58,7 +58,7 @@ public class LogService extends IntentService {
     private static final long TS_WAIT_SCREENON = 10000;
     private static final long TS_WAIT_SCREENOFF = 60000;
 
-    private static VersionedScreenState vscreenState;
+    private static VersionedScreenState vscreenstate;
     private static VersionedLogFile vlogfile;
 
     static String getBuildInfo() {
@@ -94,7 +94,8 @@ public class LogService extends IntentService {
     public void onCreate() {
 	super.onCreate();
 	getPackageInfo();
-	vscreenState = VersionedScreenState.newInstance(this);
+	vscreenstate = VersionedScreenState.newInstance(this);
+	vlogfile = VersionedLogFile.newInstance(this);
 
     }
 
@@ -125,7 +126,7 @@ public class LogService extends IntentService {
 	 */
 	if (PreferencesUtil.readPrefKey(this, WifiFixerService.DISABLE_KEY))
 	    return;
-	else if (vscreenState.getScreenState(this))
+	else if (vscreenstate.getScreenState(this))
 	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENON);
 	else
 	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENOFF);

@@ -19,6 +19,7 @@ package org.wahtod.wififixer;
 import java.io.File;
 
 import org.wahtod.wififixer.LegacySupport.LegacyLogFile;
+import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -34,6 +35,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
@@ -57,7 +59,7 @@ public class WifiFixerActivity extends Activity {
     private static final int MENU_ABOUT = 5;
     private static final int LOGGING_GROUP = 42;
     SharedPreferences settings;
-    LegacyLogFile logfile;
+    VersionedLogFile vlogfile;
     // New key for About nag
     // Set this when you change the About xml
     static final String sABOUT = "ABOUT2";
@@ -87,7 +89,9 @@ public class WifiFixerActivity extends Activity {
     }
 
     void sendLog() {
-	File file = logfile.getLogFile(this);
+
+	File file = vlogfile.getLogFile(getBaseContext());
+	Log.i("WifiFixerActivity", file.getAbsolutePath());
 
 	if (Environment.getExternalStorageState() != null
 		&& !(Environment.getExternalStorageState()
@@ -139,11 +143,11 @@ public class WifiFixerActivity extends Activity {
 	    /*
 	     * Delete old log if toggling logging on
 	     */
-	    if (logfile != null) {
+	    if (vlogfile != null) {
 
 	    } else
-		logfile = new LegacyLogFile();
-	    File file = logfile.getLogFile(this);
+		vlogfile = new LegacyLogFile();
+	    File file = vlogfile.getLogFile(this);
 	    file.delete();
 
 	}
@@ -289,6 +293,7 @@ public class WifiFixerActivity extends Activity {
 	authCheck();
 
 	startwfService(this);
+	vlogfile = VersionedLogFile.newInstance(this);
 
     }
 

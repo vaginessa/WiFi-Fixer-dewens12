@@ -1407,6 +1407,11 @@ public class WifiFixerService extends Service {
     @Override
     public void onCreate() {
 	super.onCreate();
+	/*
+	 * Cache context for notifications
+	 */
+	notifcontext = this;
+
 	wm = getWifiManager(this);
 	lastAP = getNetworkID();
 	getPackageInfo();
@@ -1434,11 +1439,6 @@ public class WifiFixerService extends Service {
 	 */
 
 	setInitialScreenState(this);
-	
-	/*
-	 * Cache context for notifications
-	 */
-	notifcontext = this;
 
 	/*
 	 * Start Main tick
