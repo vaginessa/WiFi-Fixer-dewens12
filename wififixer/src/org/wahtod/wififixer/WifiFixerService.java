@@ -1842,7 +1842,7 @@ public class WifiFixerService extends Service {
 	PowerManager pm = (PowerManager) context
 		.getSystemService(Context.POWER_SERVICE);
 	/*
-	 * Initialized as a static for sharing across service class
+	 * wakelock is static
 	 */
 	if (wakelock == null)
 	    wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
