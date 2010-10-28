@@ -83,12 +83,13 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	/*
 	 * Dispatch intent if this is a pref service is interested in
 	 */
-	if (WifiFixerService.prefsList.indexOf(key) != -1) {
+	if (PreferenceConstants.prefsList.indexOf(key) != -1) {
 	    /*
 	     * First handle Service disable case
 	     */
-	    if (PreferencesUtil.readPrefKey(this, WifiFixerService.DISABLE_KEY)) {
-		if (key == WifiFixerService.DISABLE_KEY)
+	    if (PreferencesUtil.readPrefKey(this,
+		    PreferenceConstants.DISABLE_KEY)) {
+		if (key == PreferenceConstants.DISABLE_KEY)
 		    stopService(new Intent(WifiFixerService.class.getName()));
 
 	    } else
@@ -101,31 +102,31 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 
 	    switch (pVal) {
 	    case 1:
-		edit.putBoolean("WiFiLock", true);
-		edit.putBoolean("SCREEN", true);
+		edit.putBoolean(PreferenceConstants.WIFILOCK_KEY, true);
+		edit.putBoolean(PreferenceConstants.SCREEN_KEY, true);
 		if (!edit.commit())
 		    Log.i("Preferences", "Commit failed");
 		break;
 
 	    case 2:
-		edit.putBoolean("WiFiLock", true);
-		edit.putBoolean("SCREEN", false);
+		edit.putBoolean(PreferenceConstants.WIFILOCK_KEY, true);
+		edit.putBoolean(PreferenceConstants.SCREEN_KEY, false);
 		if (!edit.commit())
 		    Log.i("Preferences", "Commit failed");
 		break;
 
 	    case 3:
-		edit.putBoolean("WiFiLock", false);
-		edit.putBoolean("SCREEN", false);
+		edit.putBoolean(PreferenceConstants.WIFILOCK_KEY, false);
+		edit.putBoolean(PreferenceConstants.SCREEN_KEY, false);
 		if (!edit.commit())
 		    Log.i("Preferences", "Commit failed");
 		break;
 	    }
 	    WifiFixerPreferences.this.finish();
 
-	} else if (key.contains("Disable")) {
+	} else if (key.contains(PreferenceConstants.DISABLE_KEY)) {
 	    stopService(new Intent(this, WifiFixerService.class));
-	    edit.putBoolean("SLOG", false);
+	    edit.putBoolean(PreferenceConstants.LOG_KEY, false);
 	    edit.commit();
 	} else if (key.contains("WFSLEEP")) {
 	    /*

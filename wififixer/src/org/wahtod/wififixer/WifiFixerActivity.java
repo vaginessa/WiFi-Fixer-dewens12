@@ -75,7 +75,7 @@ public class WifiFixerActivity extends Activity {
     }
 
     boolean getLogging() {
-	return PreferencesUtil.readPrefKey(this, WifiFixerService.LOG_KEY);
+	return PreferencesUtil.readPrefKey(this, PreferenceConstants.LOG_KEY);
     }
 
     void launchHelp() {
@@ -138,7 +138,8 @@ public class WifiFixerActivity extends Activity {
 
     void setLogging(boolean state) {
 	LOGGING = state;
-	PreferencesUtil.writePrefKey(this, WifiFixerService.LOG_KEY, state);
+	PreferencesUtil.writePrefKey(this, PreferenceConstants.LOG_KEY, state);
+	PreferencesUtil.notifyPrefChange(this, PreferenceConstants.LOG_KEY);
 	if (state) {
 	    /*
 	     * Delete old log if toggling logging on

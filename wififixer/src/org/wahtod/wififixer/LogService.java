@@ -124,7 +124,7 @@ public class LogService extends IntentService {
 	/*
 	 * Schedule next timestamp or terminate
 	 */
-	if (PreferencesUtil.readPrefKey(this, WifiFixerService.DISABLE_KEY))
+	if (PreferencesUtil.readPrefKey(this, PreferenceConstants.DISABLE_KEY))
 	    return;
 	else if (vscreenstate.getScreenState(this))
 	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENON);
