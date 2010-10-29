@@ -42,7 +42,9 @@ public class PreferencesUtil extends Object {
     private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
 	public void onReceive(final Context context, final Intent intent) {
 	    String valuekey = intent.getStringExtra(VALUE_KEY);
-	    handlePrefChange(valuekey, readPrefKey(context, Pref.get(valuekey)));
+	    Pref p = Pref.get(valuekey);
+	    if (p != null)
+		handlePrefChange(p, readPrefKey(context, p));
 	}
 
     };
@@ -72,20 +74,17 @@ public class PreferencesUtil extends Object {
 	 */
 	for (Pref prefkey : Pref.values()) {
 
-	    handleLoadPref(prefkey.key());
+	    handleLoadPref(prefkey);
 
 	}
 	specialCase();
     }
 
-    void handleLoadPref(final String prefkey) {
-	Pref p = Pref.get(prefkey);
-	setFlag(p, readPrefKey(context, p));
+    void handleLoadPref(final Pref prefkey) {
+	setFlag(prefkey, readPrefKey(context, prefkey));
     }
 
-    void handlePrefChange(final String prefkey, final boolean flagval) {
-
-	Pref p = Pref.get(prefkey);
+    void handlePrefChange(final Pref p, final boolean flagval) {
 	/*
 	 * Before value changes from loading
 	 */
