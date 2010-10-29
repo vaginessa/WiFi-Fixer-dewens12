@@ -1423,6 +1423,8 @@ public class WifiFixerService extends Service {
     public void onDestroy() {
 	super.onDestroy();
 	cleanup();
+	if(logging)
+	    wfLog(this, APP_NAME, getString(R.string.ondestroy));
     }
 
     @Override

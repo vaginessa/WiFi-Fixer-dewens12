@@ -16,6 +16,7 @@
 
 -->
 <resources>
+    <string name="ondestroy">onDestroy, killed by Android</string>
     <string name="colon">:</string>
     <string name="prefs_change">Prefs Change:</string>
     <string name="connect_failed">Connect Failed</string>

@@ -26,7 +26,7 @@ public final class ServiceAlarm extends Object {
     public static final long PERIOD = 300000;
     public static final long STARTDELAY = 120000;
     private static final long NODELAY = 0;
-    private static final String STARTINTENT = "org.wahtod.wififixer.WifiFixerService";
+    private static final String STARTINTENT = WifiFixerService.class.getName();
     public static final String ALARM = "ALARM";
 
     public static void setAlarm(final Context c, final boolean initialdelay) {
