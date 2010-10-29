@@ -79,27 +79,26 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	}
     }
 
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 	/*
 	 * Dispatch intent if this is a pref service is interested in
 	 */
 	if (Pref.get(key) != null) {
 	    /*
-	     * First handle Service disable case
+	     * First handle Service enable case
 	     */
-	    if (PreferencesUtil.readPrefKey(this, Pref.DISABLE_KEY)) {
+	    if (key == Pref.DISABLE_KEY.key()) {
 		Intent intent = new Intent(WifiFixerService.class.getName());
-		if (key == Pref.DISABLE_KEY.key()) {
-		  /*
-		   * We don't have to do anything, the service will kill itself.
-		   */
-		}
-		else
+		if (!PreferencesUtil.readPrefKey(this, Pref.DISABLE_KEY)) 
 		    startService(intent);
+		else
+		    stopService(intent);
 
 	    }
 	    /*
-	     * We want to notify for these, since they're prefs the service is interested in. 
+	     * We want to notify for these, since they're prefs the service is
+	     * interested in.
 	     */
 
 	    PreferencesUtil.notifyPrefChange(this, Pref.get(key));

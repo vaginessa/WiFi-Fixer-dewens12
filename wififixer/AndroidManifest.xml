@@ -53,7 +53,7 @@
 				android:resource="@xml/widget_provider" />
 		</receiver>
 		<service android:persistent="true" android:exported="true"
-			class="WifiFixerService" android:process="org.wahtod.wififixer.WifiFixerService"
+			class="WifiFixerService" android:process=":org.wahtod.wififixer.WifiFixerService"
 			android:name="WifiFixerService">
 			<intent-filter>
 				<action android:name="org.wahtod.wififixer.WifiFixerService" />
@@ -61,7 +61,7 @@
 			</intent-filter>
 		</service>
 		<service android:name=".LogService" class="LogService"
-			android:process="org.wahtod.wififixer.LogService">
+			android:process=":org.wahtod.wififixer.LogService">
 			<intent-filter>
 				<action android:name="org.wahtod.wififixer.LogService" />
 			</intent-filter>

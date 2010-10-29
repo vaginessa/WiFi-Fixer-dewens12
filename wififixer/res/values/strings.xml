@@ -99,7 +99,7 @@
     <string name="repairing">Repairing</string>
     <string name="reconnecting">Reconnecting</string>
     <string name="reassociating">Reassociating</string>
-    <string name="shouldrun_false_dying">SHOULDRUN false, dying.</string>
+    <string name="shouldrun_false_dying">SHOULDRUN false, pausing.</string>
     <string name="supplicant_nonresponsive_toggling_wifi">Supplicant Nonresponsive, resetting wifi</string>
     <string name="exiting_supplicant_fix_thread_starting_scan">Exiting Supplicant Fix Thread:Starting Scan</string>
     <string name="wifi_off_aborting_reconnect">Wifi Off:Aborting Reconnect</string>

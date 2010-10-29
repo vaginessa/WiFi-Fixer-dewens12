@@ -337,8 +337,6 @@ public class WifiFixerService extends Service {
      */
     private Runnable rMain = new Runnable() {
 	public void run() {
-	    // Queue next run of main runnable
-	    hMainWrapper(MAIN, LOOPWAIT);
 
 	    // Check Supplicant
 	    if (wm.isWifiEnabled() && !wm.pingSupplicant()) {
@@ -356,9 +354,9 @@ public class WifiFixerService extends Service {
 		    wfLog(getBaseContext(), APP_NAME,
 			    getString(R.string.shouldrun_false_dying));
 		}
-		// Cleanup
-		cleanup();
-	    }
+	    } else
+		// Queue next run of main runnable
+		hMainWrapper(MAIN, LOOPWAIT);
 
 	}
     };
@@ -615,14 +613,13 @@ public class WifiFixerService extends Service {
 
 	if (wakelock != null && wakelock.isHeld())
 	    wakelock.release();
-	if(!unregistered) {
+	if (!unregistered) {
 	    unregisterReceiver(receiver);
 	    wfPreferences.unRegisterReciever();
 	    unregistered = true;
 	}
 	hMain.removeMessages(MAIN);
 	cleanupPosts();
-	stopSelf();
     }
 
     private void cleanupPosts() {
@@ -1563,6 +1560,9 @@ public class WifiFixerService extends Service {
 		    } else {
 			if (!shouldrun) {
 			    shouldrun = true;
+			    hMain.sendEmptyMessage(MAIN);
+			    logging = getFlag(Pref.LOG_KEY);
+			    ServiceAlarm.setLogTS(getBaseContext(), logging, 0);
 			}
 			ServiceAlarm.setAlarm(getBaseContext(), true);
 		    }
