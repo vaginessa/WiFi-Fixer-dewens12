@@ -509,6 +509,7 @@ public class WifiFixerService extends Service {
      * Handles intents we've registered for
      */
     private BroadcastReceiver receiver = new BroadcastReceiver() {
+	@Override
 	public void onReceive(final Context context, final Intent intent) {
 
 	    /*

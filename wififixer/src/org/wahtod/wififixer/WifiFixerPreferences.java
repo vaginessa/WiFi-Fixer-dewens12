@@ -117,9 +117,6 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	    }
 	    WifiFixerPreferences.this.finish();
 
-	} else if (key.contains(Pref.DISABLE_KEY.key())) {
-	    stopService(new Intent(this, WifiFixerService.class));
-	    PreferencesUtil.writePrefKey(this, Pref.LOG_KEY, false);
 	} else if (key.contains("WFSLEEP")) {
 	    /*
 	     * Setting Wifi Sleep Policy
