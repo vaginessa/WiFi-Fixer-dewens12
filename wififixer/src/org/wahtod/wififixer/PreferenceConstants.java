@@ -33,10 +33,15 @@ public class PreferenceConstants {
      */
 
     static enum Pref {
-	WIFILOCK_KEY("WiFiLock"), NOTIF_KEY("Notifications"), DISABLE_KEY(
-		"Disable"), WIDGET_KEY("WidgetBehavior"), LOG_KEY("SLOG"), SUPFIX_KEY(
-		"SUPFIX"), N1FIX2_KEY("N1FIX2"), NETNOT_KEY("NetNotif"), SCREEN_KEY(
-		"SCREEN");
+	WIFILOCK_KEY("WiFiLock"),
+	NOTIF_KEY("Notifications"),
+	DISABLE_KEY("Disable"),
+	WIDGET_KEY("WidgetBehavior"),
+	LOG_KEY("SLOG"),
+	SUPFIX_KEY("SUPFIX"),
+	N1FIX2_KEY("N1FIX2"),
+	NETNOT_KEY("NetNotif"),
+	SCREEN_KEY("SCREEN");
 
 	private final String key;
 	private static final Map<String, Pref> lookup = new HashMap<String, Pref>();
