@@ -14,7 +14,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.wahtod.wififixer" android:versionName="0.8.0p5"
-	android:versionCode="633">
+	android:versionCode="635">
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
 	<uses-feature android:name="android.hardware.wifi"
 		android:required="true" />
@@ -22,7 +22,8 @@
 		android:description="@string/app_desc">
 
 		<activity android:name=".WifiFixerActivity"
-			android:screenOrientation="portrait" android:configChanges="keyboardHidden">
+			android:launchMode="singleTask" android:screenOrientation="portrait"
+			android:configChanges="keyboardHidden">
 			<intent-filter>
 				<!--
 					The MAIN action describes a main entry point into an activity,

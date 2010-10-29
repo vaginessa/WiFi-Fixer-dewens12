@@ -113,11 +113,8 @@ public class WifiFixerActivity extends Activity {
 	sendIntent.putExtra(Intent.EXTRA_EMAIL,
 		new String[] { "zanshin.g1@gmail.com" });
 	sendIntent.putExtra(Intent.EXTRA_SUBJECT, "WifiFixer Log");
-	sendIntent
-		.putExtra(
-			Intent.EXTRA_STREAM,
-			Uri
-				.parse("file:///sdcard/data/org.wahtod.wififixer/wififixer_log.txt"));
+	sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.toURI()
+		.toString()));
 	sendIntent.putExtra(Intent.EXTRA_TEXT,
 		"Please include time at which issue occurred and description of the issue:\n\n"
 			+ LogService.getBuildInfo());
@@ -207,7 +204,8 @@ public class WifiFixerActivity extends Activity {
 
     static void startwfService(final Context context) {
 	Intent sendIntent = new Intent(WifiFixerService.class.getName());
-	context.startService(sendIntent);
+	if (!PreferencesUtil.readPrefKey(context, Pref.DISABLE_KEY))
+	    context.startService(sendIntent);
     }
 
     void nagNotification() {

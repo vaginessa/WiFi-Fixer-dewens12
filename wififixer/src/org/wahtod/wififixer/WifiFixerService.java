@@ -131,8 +131,8 @@ public class WifiFixerService extends Service {
     final static String APP_NAME = "WifiFixerService";
 
     // Flags
-    private boolean cleanup = false;
     private boolean wifishouldbeon = false;
+    private static boolean unregistered = false;
 
     // logging flag, local for performance
     private static boolean logging = false;
@@ -610,20 +610,18 @@ public class WifiFixerService extends Service {
 
     private void cleanup() {
 
-	if (!cleanup) {
+	if (lock.isHeld())
+	    lock.release();
 
-	    if (lock.isHeld())
-		lock.release();
-
-	    if (wakelock != null && wakelock.isHeld())
-		wakelock.release();
-
+	if (wakelock != null && wakelock.isHeld())
+	    wakelock.release();
+	if(!unregistered) {
 	    unregisterReceiver(receiver);
 	    wfPreferences.unRegisterReciever();
-	    hMain.removeMessages(MAIN);
-	    cleanupPosts();
-	    cleanup = true;
+	    unregistered = true;
 	}
+	hMain.removeMessages(MAIN);
+	cleanupPosts();
 	stopSelf();
     }
 
@@ -1501,12 +1499,13 @@ public class WifiFixerService extends Service {
 	wfPreferences = new PreferencesUtil(this) {
 	    @Override
 	    public void preLoad() {
-		
+
 		/*
-		 * Set defaults. Doing here instead of activity because service may be
-		 * started first.
+		 * Set defaults. Doing here instead of activity because service
+		 * may be started first.
 		 */
-		PreferenceManager.setDefaultValues(context, R.xml.preferences, false);
+		PreferenceManager.setDefaultValues(context, R.xml.preferences,
+			false);
 
 		/*
 		 * Sets default for Supplicant Fix pref on < 2.0 to true

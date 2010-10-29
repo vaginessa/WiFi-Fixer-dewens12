@@ -88,11 +88,21 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	     * First handle Service disable case
 	     */
 	    if (PreferencesUtil.readPrefKey(this, Pref.DISABLE_KEY)) {
-		if (key == Pref.DISABLE_KEY.key())
-		    stopService(new Intent(WifiFixerService.class.getName()));
+		Intent intent = new Intent(WifiFixerService.class.getName());
+		if (key == Pref.DISABLE_KEY.key()) {
+		  /*
+		   * We don't have to do anything, the service will kill itself.
+		   */
+		}
+		else
+		    startService(intent);
 
-	    } else
-		PreferencesUtil.notifyPrefChange(this, Pref.get(key));
+	    }
+	    /*
+	     * We want to notify for these, since they're prefs the service is interested in. 
+	     */
+
+	    PreferencesUtil.notifyPrefChange(this, Pref.get(key));
 
 	} else if (key.contains("Performance")) {
 
