@@ -16,7 +16,7 @@
 
 package org.wahtod.wififixer;
 
-import java.util.List;
+import org.wahtod.wififixer.PreferenceConstants.Pref;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,21 +37,19 @@ public class PreferencesUtil extends Object {
      * Fields
      */
     private boolean[] keyVals;
-    private List<String> prefsList;
     private Context context;
 
     private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
 	public void onReceive(final Context context, final Intent intent) {
 	    String valuekey = intent.getStringExtra(VALUE_KEY);
-	    handlePrefChange(valuekey, readPrefKey(context, valuekey));
+	    handlePrefChange(valuekey, readPrefKey(context, Pref.get(valuekey)));
 	}
 
     };
 
-    public PreferencesUtil(final Context c, final List<String> pList) {
-	prefsList = pList;
+    public PreferencesUtil(final Context c) {
 	context = c;
-	keyVals = new boolean[prefsList.size()];
+	keyVals = new boolean[Pref.values().length];
 	context.registerReceiver(changeReceiver, new IntentFilter(
 		VALUE_CHANGED_ACTION));
     }
@@ -72,43 +70,40 @@ public class PreferencesUtil extends Object {
 	/*
 	 * Load
 	 */
-	for (String prefkey : prefsList) {
+	for (Pref prefkey : Pref.values()) {
 
-	    handleLoadPref(prefkey);
+	    handleLoadPref(prefkey.key());
 
 	}
 	specialCase();
     }
 
     void handleLoadPref(final String prefkey) {
-	int index = prefsList.indexOf(prefkey);
-	setFlag(index, readPrefKey(context, prefkey));
+	Pref p = Pref.get(prefkey);
+	setFlag(p, readPrefKey(context, p));
     }
 
     void handlePrefChange(final String prefkey, final boolean flagval) {
 
-	/*
-	 * Get index
-	 */
-	int index = prefsList.indexOf(prefkey);
+	Pref p = Pref.get(prefkey);
 	/*
 	 * Before value changes from loading
 	 */
-	preValChanged(index);
+	preValChanged(p);
 	/*
 	 * Setting the value from prefs
 	 */
-	setFlag(index, flagval);
+	setFlag(p, flagval);
 
 	/*
 	 * After value changes from loading
 	 */
-	postValChanged(index);
+	postValChanged(p);
     }
 
-    public static void notifyPrefChange(final Context c, final String key) {
+    public static void notifyPrefChange(final Context c, final Pref logKey) {
 	Intent intent = new Intent(VALUE_CHANGED_ACTION);
-	intent.putExtra(VALUE_KEY, key);
+	intent.putExtra(VALUE_KEY, logKey.key());
 	c.sendBroadcast(intent);
     }
 
@@ -120,8 +115,8 @@ public class PreferencesUtil extends Object {
 
     }
 
-    public void preValChanged(final int index) {
-	switch (index) {
+    public void preValChanged(final Pref p) {
+	switch (p) {
 	/*
 	 * Pre Value Changed here
 	 */
@@ -129,14 +124,29 @@ public class PreferencesUtil extends Object {
 
     }
 
-    public void postValChanged(final int index) {
+    public void postValChanged(final Pref p) {
 
+    }
+
+    public static boolean readPrefKey(final Context ctxt, final Pref pref) {
+	SharedPreferences settings = PreferenceManager
+		.getDefaultSharedPreferences(ctxt);
+	return settings.getBoolean(pref.key(), false);
     }
 
     public static boolean readPrefKey(final Context ctxt, final String key) {
 	SharedPreferences settings = PreferenceManager
 		.getDefaultSharedPreferences(ctxt);
 	return settings.getBoolean(key, false);
+    }
+
+    public static void writePrefKey(final Context ctxt, final Pref pref,
+	    final boolean value) {
+	SharedPreferences settings = PreferenceManager
+		.getDefaultSharedPreferences(ctxt);
+	SharedPreferences.Editor editor = settings.edit();
+	editor.putBoolean(pref.key(), value);
+	editor.commit();
     }
 
     public static void writePrefKey(final Context ctxt, final String key,
@@ -159,13 +169,13 @@ public class PreferencesUtil extends Object {
 
     }
 
-    public boolean getFlag(final int ikey) {
+    public boolean getFlag(final Pref pref) {
 
-	return keyVals[ikey];
+	return keyVals[pref.ordinal()];
     }
 
-    public void setFlag(final int iKey, final boolean flag) {
-	keyVals[iKey] = flag;
+    public void setFlag(final Pref pref, final boolean flag) {
+	keyVals[pref.ordinal()] = flag;
     }
 
     public void unRegisterReciever() {

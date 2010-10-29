@@ -16,42 +16,49 @@
 
 package org.wahtod.wififixer;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PreferenceConstants {
+
     /*
-     * preferences key constants
+     * Constants
      */
-    static final String WIFILOCK_KEY = "WiFiLock";
-    static final String NOTIF_KEY = "Notifications";
-    static final String SCREEN_KEY = "SCREEN";
-    static final String DISABLE_KEY = "Disable";
-    static final String WIDGET_KEY = "WidgetBehavior";
-    static final String LOG_KEY = "SLOG";
-    static final String SUPFIX_KEY = "SUPFIX";
+
     static final String SUPFIX_DEFAULT = "SPFDEF";
-    static final String N1FIX2_KEY = "N1FIX2";
-    static final String NETNOT_KEY = "NetNotif";
 
     /*
-     * Preferences currently used in list form.
+     * PrefsList enum
      */
-    static final List<String> prefsList = Arrays.asList(WIFILOCK_KEY,
-	    DISABLE_KEY, SCREEN_KEY, WIDGET_KEY, SUPFIX_KEY, NOTIF_KEY,
-	    LOG_KEY, N1FIX2_KEY, NETNOT_KEY);
 
-    /*
-     * prefsList maps to values
-     */
-    final static int lockpref = 0;
-    final static int runpref = 1;
-    final static int screenpref = 2;
-    final static int widgetpref = 3;
-    final static int supfixpref = 4;
-    final static int notifpref = 5;
-    final static int loggingpref = 6;
-    final static int n1fix2pref = 7;
-    final static int netnotpref = 8;
+    static enum Pref {
+	WIFILOCK_KEY("WiFiLock"), NOTIF_KEY("Notifications"), DISABLE_KEY(
+		"Disable"), WIDGET_KEY("WidgetBehavior"), LOG_KEY("SLOG"), SUPFIX_KEY(
+		"SUPFIX"), N1FIX2_KEY("N1FIX2"), NETNOT_KEY("NetNotif"), SCREEN_KEY(
+		"SCREEN");
+
+	private final String key;
+	private static final Map<String, Pref> lookup = new HashMap<String, Pref>();
+
+	static {
+	    for (Pref p : EnumSet.allOf(Pref.class))
+		lookup.put(p.key(), p);
+	}
+
+	Pref(String key) {
+	    this.key = key;
+	}
+
+	public String key() {
+	    return key;
+	}
+
+	public static Pref get(final String pstring) {
+
+	    return lookup.get(pstring);
+	}
+
+    }
 
 }

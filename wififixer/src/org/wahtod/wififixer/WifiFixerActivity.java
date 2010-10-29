@@ -20,6 +20,7 @@ import java.io.File;
 
 import org.wahtod.wififixer.LegacySupport.LegacyLogFile;
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
+import org.wahtod.wififixer.PreferenceConstants.Pref;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -75,7 +76,7 @@ public class WifiFixerActivity extends Activity {
     }
 
     boolean getLogging() {
-	return PreferencesUtil.readPrefKey(this, PreferenceConstants.LOG_KEY);
+	return PreferencesUtil.readPrefKey(this, Pref.LOG_KEY);
     }
 
     void launchHelp() {
@@ -138,8 +139,8 @@ public class WifiFixerActivity extends Activity {
 
     void setLogging(boolean state) {
 	LOGGING = state;
-	PreferencesUtil.writePrefKey(this, PreferenceConstants.LOG_KEY, state);
-	PreferencesUtil.notifyPrefChange(this, PreferenceConstants.LOG_KEY);
+	PreferencesUtil.writePrefKey(this, Pref.LOG_KEY, state);
+	PreferencesUtil.notifyPrefChange(this, Pref.LOG_KEY);
 	if (state) {
 	    /*
 	     * Delete old log if toggling logging on

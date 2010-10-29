@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer;
 
+import org.wahtod.wififixer.PreferenceConstants.Pref;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +27,6 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.provider.Settings.SettingNotFoundException;
-import android.util.Log;
 
 public class WifiFixerPreferences extends PreferenceActivity implements
 	OnSharedPreferenceChangeListener {
@@ -79,21 +80,19 @@ public class WifiFixerPreferences extends PreferenceActivity implements
     }
 
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-	SharedPreferences.Editor edit = prefs.edit();
 	/*
 	 * Dispatch intent if this is a pref service is interested in
 	 */
-	if (PreferenceConstants.prefsList.indexOf(key) != -1) {
+	if (Pref.get(key) != null) {
 	    /*
 	     * First handle Service disable case
 	     */
-	    if (PreferencesUtil.readPrefKey(this,
-		    PreferenceConstants.DISABLE_KEY)) {
-		if (key == PreferenceConstants.DISABLE_KEY)
+	    if (PreferencesUtil.readPrefKey(this, Pref.DISABLE_KEY)) {
+		if (key == Pref.DISABLE_KEY.key())
 		    stopService(new Intent(WifiFixerService.class.getName()));
 
 	    } else
-		PreferencesUtil.notifyPrefChange(this, key);
+		PreferencesUtil.notifyPrefChange(this, Pref.get(key));
 
 	} else if (key.contains("Performance")) {
 
@@ -102,32 +101,25 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 
 	    switch (pVal) {
 	    case 1:
-		edit.putBoolean(PreferenceConstants.WIFILOCK_KEY, true);
-		edit.putBoolean(PreferenceConstants.SCREEN_KEY, true);
-		if (!edit.commit())
-		    Log.i("Preferences", "Commit failed");
+		PreferencesUtil.writePrefKey(this, Pref.WIFILOCK_KEY, true);
+		PreferencesUtil.writePrefKey(this, Pref.SCREEN_KEY, true);
 		break;
 
 	    case 2:
-		edit.putBoolean(PreferenceConstants.WIFILOCK_KEY, true);
-		edit.putBoolean(PreferenceConstants.SCREEN_KEY, false);
-		if (!edit.commit())
-		    Log.i("Preferences", "Commit failed");
+		PreferencesUtil.writePrefKey(this, Pref.WIFILOCK_KEY, true);
+		PreferencesUtil.writePrefKey(this, Pref.SCREEN_KEY, false);
 		break;
 
 	    case 3:
-		edit.putBoolean(PreferenceConstants.WIFILOCK_KEY, false);
-		edit.putBoolean(PreferenceConstants.SCREEN_KEY, false);
-		if (!edit.commit())
-		    Log.i("Preferences", "Commit failed");
+		PreferencesUtil.writePrefKey(this, Pref.WIFILOCK_KEY, false);
+		PreferencesUtil.writePrefKey(this, Pref.SCREEN_KEY, false);
 		break;
 	    }
 	    WifiFixerPreferences.this.finish();
 
-	} else if (key.contains(PreferenceConstants.DISABLE_KEY)) {
+	} else if (key.contains(Pref.DISABLE_KEY.key())) {
 	    stopService(new Intent(this, WifiFixerService.class));
-	    edit.putBoolean(PreferenceConstants.LOG_KEY, false);
-	    edit.commit();
+	    PreferencesUtil.writePrefKey(this, Pref.LOG_KEY, false);
 	} else if (key.contains("WFSLEEP")) {
 	    /*
 	     * Setting Wifi Sleep Policy
@@ -149,6 +141,7 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 				    .getInt(
 					    cr,
 					    android.provider.Settings.System.WIFI_SLEEP_POLICY));
+		    SharedPreferences.Editor edit = prefs.edit();
 		    edit.putString("WFSLEEP", wfsleep);
 		    edit.commit();
 		} catch (SettingNotFoundException e) {
