@@ -132,7 +132,7 @@ public class WifiFixerService extends Service {
 
     // Flags
     private boolean wifishouldbeon = false;
-    private static boolean unregistered = false;
+    private static boolean registered = false;
 
     // logging flag, local for performance
     private static boolean logging = false;
@@ -353,6 +353,7 @@ public class WifiFixerService extends Service {
 		if (logging) {
 		    wfLog(getBaseContext(), APP_NAME,
 			    getString(R.string.shouldrun_false_dying));
+		    stopSelf();
 		}
 	    } else
 		// Queue next run of main runnable
@@ -513,7 +514,6 @@ public class WifiFixerService extends Service {
 	    /*
 	     * Dispatches the broadcast intent to the appropriate handler method
 	     */
-
 	    String iAction = intent.getAction();
 
 	    if ((iAction.equals(Intent.ACTION_SCREEN_ON))
@@ -613,11 +613,7 @@ public class WifiFixerService extends Service {
 
 	if (wakelock != null && wakelock.isHeld())
 	    wakelock.release();
-	if (!unregistered) {
-	    unregisterReceiver(receiver);
-	    wfPreferences.unRegisterReciever();
-	    unregistered = true;
-	}
+
 	hMain.removeMessages(MAIN);
 	cleanupPosts();
     }
@@ -1040,28 +1036,28 @@ public class WifiFixerService extends Service {
     private void handleStart(final Intent intent) {
 
 	/*
+	 * First, if we're running this we've been explicitly started so set
+	 * shouldrun = true;
+	 */
+
+	shouldrun = true;
+
+	/*
 	 * Handle null intent: might be from widget or from Android
 	 */
 	try {
-	    if (intent.hasExtra(ServiceAlarm.ALARM)) {
-		if (intent.getBooleanExtra(ServiceAlarm.ALARM, false)) {
-		    if (logging)
-			wfLog(this, APP_NAME, getString(R.string.alarm_intent));
-		}
-	    } else {
 
-		String iAction = intent.getAction();
-		/*
-		 * AUTH from donate service
-		 */
-		if (iAction.contains(AUTH)) {
-		    handleAuth(intent);
-		    return;
-		} else {
-		    if (logging)
-			wfLog(this, APP_NAME,
-				getString(R.string.normal_startup_or_reload));
-		}
+	    String iAction = intent.getAction();
+	    /*
+	     * AUTH from donate service
+	     */
+	    if (iAction.contains(AUTH)) {
+		handleAuth(intent);
+		return;
+	    } else {
+		if (logging)
+		    wfLog(this, APP_NAME,
+			    getString(R.string.normal_startup_or_reload));
 	    }
 	} catch (NullPointerException e) {
 	    if (logging) {
@@ -1399,7 +1395,7 @@ public class WifiFixerService extends Service {
 	preferenceInitialize(this);
 
 	// Set up broadcastreceivers
-	setup();
+	registerMainReceiver();
 
 	/*
 	 * Set initial screen state
@@ -1422,22 +1418,22 @@ public class WifiFixerService extends Service {
     @Override
     public void onDestroy() {
 	super.onDestroy();
-	cleanup();
-	if(logging)
+	shouldrun = false;
+	unregisterReceivers();
+	if (logging)
 	    wfLog(this, APP_NAME, getString(R.string.ondestroy));
+	cleanup();
+
     }
 
     @Override
     public void onStart(Intent intent, int startId) {
-
 	handleStart(intent);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
 	handleStart(intent);
-
 	return START_STICKY;
     }
 
@@ -1553,23 +1549,6 @@ public class WifiFixerService extends Service {
 		    }
 		    break;
 
-		case DISABLE_KEY:
-		    // Check RUNPREF and set SHOULDRUN
-		    // Make sure Main loop restarts if this is a change
-		    if (getFlag(Pref.DISABLE_KEY)) {
-			ServiceAlarm.unsetAlarm(getBaseContext());
-			shouldrun = false;
-		    } else {
-			if (!shouldrun) {
-			    shouldrun = true;
-			    hMain.sendEmptyMessage(MAIN);
-			    logging = getFlag(Pref.LOG_KEY);
-			    ServiceAlarm.setLogTS(getBaseContext(), logging, 0);
-			}
-			ServiceAlarm.setAlarm(getBaseContext(), true);
-		    }
-		    break;
-
 		case LOG_KEY:
 		    logging = getFlag(Pref.LOG_KEY);
 		    ServiceAlarm.setLogTS(getBaseContext(), logging, 0);
@@ -1616,7 +1595,6 @@ public class WifiFixerService extends Service {
 	    public void specialCase() {
 		postValChanged(Pref.LOG_KEY);
 		postValChanged(Pref.WIFILOCK_KEY);
-		postValChanged(Pref.DISABLE_KEY);
 
 	    }
 	};
@@ -1639,7 +1617,7 @@ public class WifiFixerService extends Service {
 	context.sendBroadcast(intent);
     }
 
-    private void setup() {
+    private void registerMainReceiver() {
 	/*
 	 * Create filter, add intents we're looking for.
 	 */
@@ -1665,6 +1643,7 @@ public class WifiFixerService extends Service {
 	myFilter.addAction(FixerWidget.W_INTENT);
 
 	registerReceiver(receiver, myFilter);
+	registered = true;
 
     }
 
@@ -1799,6 +1778,14 @@ public class WifiFixerService extends Service {
 	hMainWrapper(TEMPLOCK_ON);
 	// Queue for later
 	hMainWrapper(TEMPLOCK_OFF, time);
+    }
+
+    private void unregisterReceivers() {
+	if (registered) {
+	    unregisterReceiver(receiver);
+	    wfPreferences.unRegisterReciever();
+	    registered = false;
+	}
     }
 
     private void toggleWifi() {

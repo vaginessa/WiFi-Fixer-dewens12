@@ -124,10 +124,8 @@ public class WifiFixerActivity extends Activity {
     }
 
     void setIcon() {
-	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(this);
 	ImageButton serviceButton = (ImageButton) findViewById(R.id.ImageButton01);
-	if (settings.getBoolean("Disable", false)) {
+	if (PreferencesUtil.readPrefKey(this, Pref.DISABLE_KEY)) {
 	    serviceButton.setImageResource(R.drawable.inactive);
 	} else {
 	    serviceButton.setImageResource(R.drawable.active);
@@ -202,10 +200,10 @@ public class WifiFixerActivity extends Activity {
 
     }
 
-    static void startwfService(final Context context) {
-	Intent sendIntent = new Intent(WifiFixerService.class.getName());
-	if (!PreferencesUtil.readPrefKey(context, Pref.DISABLE_KEY))
-	    context.startService(sendIntent);
+    private static void startwfService(final Context context) {
+	Intent sendIntent = new Intent(
+		IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
+	context.sendBroadcast(sendIntent);
     }
 
     void nagNotification() {
@@ -291,8 +289,6 @@ public class WifiFixerActivity extends Activity {
 
 	// Here's where we fire the nag
 	authCheck();
-
-	startwfService(this);
 	vlogfile = VersionedLogFile.newInstance(this);
 
     }
@@ -303,6 +299,7 @@ public class WifiFixerActivity extends Activity {
 	setIcon();
 	LOGGING_MENU = (settings.getBoolean("Logging", false));
 	LOGGING = getLogging();
+	startwfService(this);
     }
 
     // Create menus

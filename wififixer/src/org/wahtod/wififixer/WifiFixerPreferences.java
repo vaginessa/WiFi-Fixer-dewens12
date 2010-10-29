@@ -88,13 +88,20 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	    /*
 	     * First handle Service enable case
 	     */
-	    if (key == Pref.DISABLE_KEY.key()) {
-		Intent intent = new Intent(WifiFixerService.class.getName());
-		if (!PreferencesUtil.readPrefKey(this, Pref.DISABLE_KEY)) 
-		    startService(intent);
-		else
-		    stopService(intent);
+	    if (key.equals(Pref.DISABLE_KEY.key())) {
+		if (!PreferencesUtil.readPrefKey(this, Pref.DISABLE_KEY)) {
+		    Intent intent = new Intent(
+			    IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
+		    sendBroadcast(intent);
+		}
 
+		else {
+		    Intent intent = new Intent(
+			    IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
+		    sendBroadcast(intent);
+		}
+
+		return;
 	    }
 	    /*
 	     * We want to notify for these, since they're prefs the service is

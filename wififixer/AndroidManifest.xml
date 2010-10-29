@@ -13,8 +13,8 @@
 	-->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.wahtod.wififixer" android:versionName="0.8.0p5"
-	android:versionCode="636">
+	package="org.wahtod.wififixer" android:versionName="0.8.0p6"
+	android:versionCode="638">
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
 	<uses-feature android:name="android.hardware.wifi"
 		android:required="true" />
@@ -43,6 +43,9 @@
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 				<category android:name="android.intent.category.HOME" />
+				<action android:name="org.wahtod.wififixer.WIFI_ACTION_SERVICE_DISABLE"/>
+				<action android:name="org.wahtod.wififixer.WIFI_ACTION_SERVICE_ENABLE"/>
+				
 			</intent-filter>
 		</receiver>
 		<receiver android:name=".FixerWidget">
@@ -53,15 +56,15 @@
 				android:resource="@xml/widget_provider" />
 		</receiver>
 		<service android:persistent="true" android:exported="true"
-			class="WifiFixerService" android:process=":org.wahtod.wififixer.WifiFixerService"
-			android:name="WifiFixerService">
+			android:name=".WifiFixerService" class="WifiFixerService"
+			android:process=":WifiFixerService">
 			<intent-filter>
 				<action android:name="org.wahtod.wififixer.WifiFixerService" />
 				<action android:name="org.wahtod.wififixer.WifiFixerService.AUTH" />
 			</intent-filter>
 		</service>
 		<service android:name=".LogService" class="LogService"
-			android:process=":org.wahtod.wififixer.LogService">
+			android:process=":LogService">
 			<intent-filter>
 				<action android:name="org.wahtod.wififixer.LogService" />
 			</intent-filter>

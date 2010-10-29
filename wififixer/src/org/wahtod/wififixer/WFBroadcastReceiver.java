@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer;
 
+import org.wahtod.wififixer.PreferenceConstants.Pref;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -36,10 +38,38 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-	// Create intent which will start the Service.
-	ctxt = context;
-	tHandler.sendEmptyMessageDelayed(0, ServiceAlarm.STARTDELAY);
+	// Cache context for handler
+	if (ctxt == null)
+	    ctxt = context;
+	/*
+	 * Respond to manifest intents
+	 */
+	String action = intent.getAction();
 
+	/*
+	 * For boot completed, check DISABLE_KEY if false, schedule the service
+	 * run
+	 */
+	if (action.equals(Intent.ACTION_BOOT_COMPLETED)
+		&& !PreferencesUtil.readPrefKey(context, Pref.DISABLE_KEY))
+	    tHandler.sendEmptyMessageDelayed(0, ServiceAlarm.STARTDELAY);
+	/*
+	 * For WIFI_SERVICE_ENABLE intent, run the service if
+	 * not disabled by pref
+	 */
+	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)
+		&& !PreferencesUtil.readPrefKey(context, Pref.DISABLE_KEY)) {
+	    context.startService(new Intent(WifiFixerService.class.getName()));
+	}
+	/*
+	 * For WIFI_SERVICE_DISABLE intent, send stop to service and unset
+	 * logging and service alarms.
+	 */
+	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_DISABLE)) {
+	    context.stopService(new Intent(WifiFixerService.class.getName()));
+	    ServiceAlarm.setLogTS(context, false, 0);
+	    ServiceAlarm.unsetAlarm(context);
+	}
     }
 
 }
