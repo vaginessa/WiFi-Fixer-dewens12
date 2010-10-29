@@ -59,12 +59,6 @@ public class PreferencesUtil extends Object {
     public void loadPrefs() {
 
 	/*
-	 * Set defaults. Doing here instead of activity because service may be
-	 * started first.
-	 */
-	PreferenceManager.setDefaultValues(context, R.xml.preferences, false);
-
-	/*
 	 * Pre-prefs load
 	 */
 	preLoad();

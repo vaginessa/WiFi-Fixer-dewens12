@@ -59,6 +59,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.text.format.Formatter;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -1499,6 +1500,12 @@ public class WifiFixerService extends Service {
 	wfPreferences = new PreferencesUtil(this) {
 	    @Override
 	    public void preLoad() {
+		
+		/*
+		 * Set defaults. Doing here instead of activity because service may be
+		 * started first.
+		 */
+		PreferenceManager.setDefaultValues(context, R.xml.preferences, false);
 
 		/*
 		 * Sets default for Supplicant Fix pref on < 2.0 to true
