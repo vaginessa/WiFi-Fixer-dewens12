@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 public class WFBroadcastReceiver extends BroadcastReceiver {
 
@@ -35,6 +36,13 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	}
 
     };
+
+    private static boolean isDisabled(final Context context) {
+	boolean state = false;
+	state = PreferencesUtil.readPrefKey(context, Pref.DISABLE_KEY);
+	Log.d(WFBroadcastReceiver.class.getName(), Boolean.toString(state));
+	return state;
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -50,15 +58,14 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	 * For boot completed, check DISABLE_KEY if false, schedule the service
 	 * run
 	 */
-	if (action.equals(Intent.ACTION_BOOT_COMPLETED)
-		&& !PreferencesUtil.readPrefKey(context, Pref.DISABLE_KEY))
+	if (action.equals(Intent.ACTION_BOOT_COMPLETED) && !isDisabled(context))
 	    tHandler.sendEmptyMessageDelayed(0, ServiceAlarm.STARTDELAY);
 	/*
-	 * For WIFI_SERVICE_ENABLE intent, run the service if
-	 * not disabled by pref
+	 * For WIFI_SERVICE_ENABLE intent, run the service if not disabled by
+	 * pref
 	 */
 	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)
-		&& !PreferencesUtil.readPrefKey(context, Pref.DISABLE_KEY)) {
+		&& !isDisabled(context)) {
 	    context.startService(new Intent(WifiFixerService.class.getName()));
 	}
 	/*

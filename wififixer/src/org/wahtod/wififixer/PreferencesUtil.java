@@ -123,20 +123,20 @@ public class PreferencesUtil extends Object {
 
     public static boolean readPrefKey(final Context ctxt, final Pref pref) {
 	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(ctxt);
+		.getDefaultSharedPreferences(ctxt.getApplicationContext());
 	return settings.getBoolean(pref.key(), false);
     }
 
     public static boolean readPrefKey(final Context ctxt, final String key) {
 	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(ctxt);
+		.getDefaultSharedPreferences(ctxt.getApplicationContext());
 	return settings.getBoolean(key, false);
     }
 
     public static void writePrefKey(final Context ctxt, final Pref pref,
 	    final boolean value) {
 	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(ctxt);
+		.getDefaultSharedPreferences(ctxt.getApplicationContext());
 	SharedPreferences.Editor editor = settings.edit();
 	editor.putBoolean(pref.key(), value);
 	editor.commit();
@@ -145,7 +145,7 @@ public class PreferencesUtil extends Object {
     public static void writePrefKey(final Context ctxt, final String key,
 	    final boolean value) {
 	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(ctxt);
+		.getDefaultSharedPreferences(ctxt.getApplicationContext());
 	SharedPreferences.Editor editor = settings.edit();
 	editor.putBoolean(key, value);
 	editor.commit();
