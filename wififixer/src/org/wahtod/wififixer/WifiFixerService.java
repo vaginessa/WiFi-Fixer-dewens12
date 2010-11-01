@@ -1409,6 +1409,9 @@ public class WifiFixerService extends Service {
 	hMain.sendEmptyMessage(MAIN);
 
 	refreshWidget(this);
+	
+	if(!ServiceAlarm.alarmExists(this))
+	    ServiceAlarm.setAlarm(this, true);
 
 	if (logging)
 	    wfLog(this, APP_NAME, getString(R.string.oncreate));

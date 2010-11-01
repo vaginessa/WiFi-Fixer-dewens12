@@ -26,7 +26,14 @@ public final class ServiceAlarm extends Object {
     public static final long PERIOD = 300000;
     public static final long STARTDELAY = 120000;
     private static final long NODELAY = 0;
-    
+
+    public static boolean alarmExists(final Context c) {
+	Intent intent = new Intent(IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
+	return (PendingIntent.getBroadcast(c, 0, intent,
+		PendingIntent.FLAG_NO_CREATE) != null);
+
+    }
+
     public static void setAlarm(final Context c, final boolean initialdelay) {
 	Long delay;
 	if (initialdelay)
@@ -38,8 +45,8 @@ public final class ServiceAlarm extends Object {
 	intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 	AlarmManager mgr = (AlarmManager) c
 		.getSystemService(Context.ALARM_SERVICE);
-	PendingIntent pendingintent = PendingIntent.getBroadcast(c, 0,
-		intent, 0);
+	PendingIntent pendingintent = PendingIntent.getBroadcast(c, 0, intent,
+		0);
 
 	mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock
 		.elapsedRealtime()
@@ -52,22 +59,21 @@ public final class ServiceAlarm extends Object {
 	intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 	AlarmManager mgr = (AlarmManager) c
 		.getSystemService(Context.ALARM_SERVICE);
-	PendingIntent pendingintent = PendingIntent.getBroadcast(c, 0,
-		intent, 0);
+	PendingIntent pendingintent = PendingIntent.getBroadcast(c, 0, intent,
+		0);
 
 	mgr.cancel(pendingintent);
     }
 
     public static void setLogTS(final Context c, final boolean state,
 	    final long delay) {
-	Intent myStarterIntent = new Intent(LogService.class.getName());
-	myStarterIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
-	myStarterIntent.putExtra(LogService.APPNAME, LogService.TIMESTAMP);
-	myStarterIntent.putExtra(LogService.Message, " ");
+	Intent intent = new Intent(LogService.class.getName());
+	intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
+	intent.putExtra(LogService.APPNAME, LogService.TIMESTAMP);
+	intent.putExtra(LogService.Message, " ");
 	AlarmManager mgr = (AlarmManager) c
 		.getSystemService(Context.ALARM_SERVICE);
-	PendingIntent pendingintent = PendingIntent.getService(c, 0,
-		myStarterIntent, 0);
+	PendingIntent pendingintent = PendingIntent.getService(c, 0, intent, 0);
 	if (state)
 	    mgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock
 		    .elapsedRealtime()

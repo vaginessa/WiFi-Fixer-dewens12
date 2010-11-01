@@ -19,8 +19,10 @@ package org.wahtod.wififixer;
 import org.wahtod.wififixer.PreferenceConstants.Pref;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -37,11 +39,26 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 
     };
 
-    private static boolean isDisabled(final Context context) {
+    private static boolean isserviceDisabled(final Context context) {
 	boolean state = false;
 	state = PreferencesUtil.readPrefKey(context, Pref.DISABLE_KEY);
 	Log.d(WFBroadcastReceiver.class.getName(), Boolean.toString(state));
 	return state;
+    }
+
+    private static void setServiceEnabled(final Context context,
+	    final Boolean state) {
+	PackageManager pm = context.getPackageManager();
+	ComponentName service = new ComponentName(context,
+		WifiFixerService.class);
+	if (state)
+	    pm.setComponentEnabledSetting(service,
+		    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+		    PackageManager.DONT_KILL_APP);
+	else
+	    pm.setComponentEnabledSetting(service,
+		    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+		    PackageManager.DONT_KILL_APP);
     }
 
     @Override
@@ -58,14 +75,16 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	 * For boot completed, check DISABLE_KEY if false, schedule the service
 	 * run
 	 */
-	if (action.equals(Intent.ACTION_BOOT_COMPLETED) && !isDisabled(context))
+	if (action.equals(Intent.ACTION_BOOT_COMPLETED)
+		&& !isserviceDisabled(context))
 	    tHandler.sendEmptyMessageDelayed(0, ServiceAlarm.STARTDELAY);
 	/*
 	 * For WIFI_SERVICE_ENABLE intent, run the service if not disabled by
 	 * pref
 	 */
 	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)
-		&& !isDisabled(context)) {
+		&& !isserviceDisabled(context)) {
+	    setServiceEnabled(context, true);
 	    context.startService(new Intent(WifiFixerService.class.getName()));
 	}
 	/*
@@ -74,6 +93,7 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	 */
 	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_DISABLE)) {
 	    context.stopService(new Intent(WifiFixerService.class.getName()));
+	    setServiceEnabled(context, false);
 	    ServiceAlarm.setLogTS(context, false, 0);
 	    ServiceAlarm.unsetAlarm(context);
 	}
