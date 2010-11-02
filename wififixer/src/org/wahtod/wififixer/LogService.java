@@ -22,7 +22,7 @@ import java.util.Date;
 
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
 import org.wahtod.wififixer.LegacySupport.VersionedScreenState;
-import org.wahtod.wififixer.PreferenceConstants.Pref;
+import org.wahtod.wififixer.PrefConstants.Pref;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -125,7 +125,7 @@ public class LogService extends IntentService {
 	/*
 	 * Schedule next timestamp or terminate
 	 */
-	if (PreferencesUtil.readPrefKey(this, Pref.DISABLE_KEY))
+	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY))
 	    return;
 	else if (vscreenstate.getScreenState(this))
 	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENON);

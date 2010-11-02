@@ -23,7 +23,7 @@
 		<ListPreference android:title="Set Wifi Usablity"
 			android:defaultValue="2"
 			android:summary="Allows setting from max wifi usability to minimal battery use"
-			android:key="Performance" android:entries="@array/entries"
+			android:key="Perf_Mode" android:entries="@array/entries"
 			android:entryValues="@array/entryValues" />
 		
 		<PreferenceScreen android:title="Notifications"
@@ -56,7 +56,7 @@
 			<ListPreference android:title="Wifi Sleep Policy"
 			android:defaultValue="3"
 			android:summary="Controls Wifi sleep policy: See Known Issues in Documentation"
-			android:key="WFSLEEP" android:entries="@array/wfsleep"
+			android:key="SLEEP_POLICY" android:entries="@array/wfsleep"
 			android:entryValues="@array/wfsleepValues" />
 			<CheckBoxPreference android:key="SUPFIX"
 					android:title="Disable Supplicant Fixes" android:summary="Check if having trouble on Android 1.5 or 1.6" />
@@ -68,10 +68,10 @@
 		</PreferenceScreen>
 
 		
-
-		<CheckBoxPreference android:key="WidgetBehavior"
-			android:title="Widget Behavior" android:summary="Checked resets Wifi, unchecked reassociates" />
-
+		<ListPreference android:title="Widget Behavior" android:summary="Selects widget behavior"
+			android:defaultValue="3"
+			android:key="WIDGET" android:entries="@array/widget"
+			android:entryValues="@array/widgetValues" />
 
 
 	</PreferenceCategory>

@@ -24,11 +24,11 @@
         <item>Max Battery</item>
     </string-array>
     
-    <string-array name="entryValues">
+    <integer-array name="entryValues">
         <item>1</item>
         <item>2</item>
         <item>3</item>
-    </string-array>
+    </integer-array>
     
     <string-array name="wfsleep">
         <item>When Screen is Off</item>
@@ -36,10 +36,22 @@
         <item>Never</item>
     </string-array>
     
-    <string-array name="wfsleepValues">
+    <integer-array name="wfsleepValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+    </integer-array>
+    
+     <string-array name="widget">
+        <item>Reassociate</item>
+        <item>Reset Wifi</item>
+        <item>Connections</item>
     </string-array>
+    
+    <integer-array name="widgetValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
     
 </resources>

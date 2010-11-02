@@ -33,7 +33,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.wahtod.wififixer.LegacySupport.VersionedScreenState;
-import org.wahtod.wififixer.PreferenceConstants.Pref;
+import org.wahtod.wififixer.PrefConstants.Pref;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -177,7 +177,7 @@ public class WifiFixerService extends Service {
     /*
      * Preferences
      */
-    static PreferencesUtil wfPreferences;
+    static PrefUtil wfPreferences;
 
     // Runnable Constants for handler
     private static final int MAIN = 0;
@@ -956,10 +956,10 @@ public class WifiFixerService extends Service {
 	    if (logging)
 		wfLog(this, APP_NAME, getString(R.string.authed));
 	    // Ok, do the auth
-	    boolean IS_AUTHED = PreferencesUtil.readPrefKey(this,
+	    boolean IS_AUTHED = PrefUtil.readBoolean(this,
 		    getString(R.string.isauthed));
 	    if (!IS_AUTHED) {
-		PreferencesUtil.writePrefKey(this,
+		PrefUtil.writeBoolean(this,
 			getString(R.string.isauthed), true);
 		showNotification(this, getString(R.string.donatethanks),
 			getString(R.string.authorized), 4144, true);
@@ -1036,11 +1036,15 @@ public class WifiFixerService extends Service {
     private void handleStart(final Intent intent) {
 
 	/*
-	 * First, if we're running this we've been explicitly started so set
-	 * shouldrun = true;
+	 * If shouldrun is false we're being restarted so also start main tick
 	 */
-
-	shouldrun = true;
+	if (!shouldrun) {
+	    shouldrun = true;
+	    /*
+	     * Start Main tick
+	     */
+	    hMain.sendEmptyMessage(MAIN);
+	}
 
 	/*
 	 * Handle null intent: might be from widget or from Android
@@ -1130,7 +1134,7 @@ public class WifiFixerService extends Service {
 	    wfLog(this, APP_NAME, getString(R.string.widgetaction));
 	/*
 	 * Handle widget action
-	 */
+	 
 	if (wm.isWifiEnabled()) {
 	    if (wfPreferences.getFlag(Pref.WIDGET_KEY)) {
 		Toast.makeText(WifiFixerService.this,
@@ -1148,7 +1152,7 @@ public class WifiFixerService extends Service {
 	} else
 	    Toast.makeText(WifiFixerService.this,
 		    getString(R.string.wifi_is_disabled), Toast.LENGTH_LONG)
-		    .show();
+		    .show();*/
     }
 
     private void handleWifiState(final Intent intent) {
@@ -1409,8 +1413,8 @@ public class WifiFixerService extends Service {
 	hMain.sendEmptyMessage(MAIN);
 
 	refreshWidget(this);
-	
-	if(!ServiceAlarm.alarmExists(this))
+
+	if (!ServiceAlarm.alarmExists(this))
 	    ServiceAlarm.setAlarm(this, true);
 
 	if (logging)
@@ -1445,7 +1449,7 @@ public class WifiFixerService extends Service {
 	/*
 	 * Set shared pref state
 	 */
-	PreferencesUtil.writePrefKey(this, SCREENOFF, true);
+	PrefUtil.writeBoolean(this, SCREENOFF, true);
 
 	/*
 	 * Disable Sleep check
@@ -1468,7 +1472,7 @@ public class WifiFixerService extends Service {
 	/*
 	 * Set shared pref state
 	 */
-	PreferencesUtil.writePrefKey(this, SCREENOFF, false);
+	PrefUtil.writeBoolean(this, SCREENOFF, false);
 
 	sleepCheck(false);
 	if (logging) {
@@ -1494,7 +1498,7 @@ public class WifiFixerService extends Service {
     }
 
     private void preferenceInitialize(final Context context) {
-	wfPreferences = new PreferencesUtil(this) {
+	wfPreferences = new PrefUtil(this) {
 	    @Override
 	    public void preLoad() {
 
@@ -1509,8 +1513,8 @@ public class WifiFixerService extends Service {
 		 * Sets default for Supplicant Fix pref on < 2.0 to true
 		 */
 
-		if (!readPrefKey(context, PreferenceConstants.SUPFIX_DEFAULT)) {
-		    writePrefKey(context, PreferenceConstants.SUPFIX_DEFAULT,
+		if (!readBoolean(context, PrefConstants.SUPFIX_DEFAULT)) {
+		    writeBoolean(context, PrefConstants.SUPFIX_DEFAULT,
 			    true);
 		    int ver;
 		    try {
@@ -1524,11 +1528,15 @@ public class WifiFixerService extends Service {
 				.getString(R.string.version)
 				+ ver);
 		    if (ver < 2) {
-			writePrefKey(context, Pref.SUPFIX_KEY, true);
+			writeBoolean(context, Pref.SUPFIX_KEY, true);
 		    }
 
 		}
-
+		
+		/*
+		 * Sets default for Widget behavior
+		 */
+		//if()
 	    }
 
 	    @Override

@@ -16,7 +16,7 @@
 
 package org.wahtod.wififixer;
 
-import org.wahtod.wififixer.PreferenceConstants.Pref;
+import org.wahtod.wififixer.PrefConstants.Pref;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -41,7 +41,7 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 
     private static boolean isserviceDisabled(final Context context) {
 	boolean state = false;
-	state = PreferencesUtil.readPrefKey(context, Pref.DISABLE_KEY);
+	state = PrefUtil.readBoolean(context, Pref.DISABLE_KEY);
 	Log.d(WFBroadcastReceiver.class.getName(), Boolean.toString(state));
 	return state;
     }

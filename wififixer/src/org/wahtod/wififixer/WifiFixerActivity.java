@@ -20,7 +20,7 @@ import java.io.File;
 
 import org.wahtod.wififixer.LegacySupport.LegacyLogFile;
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
-import org.wahtod.wififixer.PreferenceConstants.Pref;
+import org.wahtod.wififixer.PrefConstants.Pref;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -76,7 +76,7 @@ public class WifiFixerActivity extends Activity {
     }
 
     boolean getLogging() {
-	return PreferencesUtil.readPrefKey(this, Pref.LOG_KEY);
+	return PrefUtil.readBoolean(this, Pref.LOG_KEY);
     }
 
     void launchHelp() {
@@ -85,7 +85,7 @@ public class WifiFixerActivity extends Activity {
     }
 
     void launchPrefs() {
-	Intent myIntent = new Intent(this, WifiFixerPreferences.class);
+	Intent myIntent = new Intent(this, PrefActivity.class);
 	startActivity(myIntent);
     }
 
@@ -125,7 +125,7 @@ public class WifiFixerActivity extends Activity {
 
     void setIcon() {
 	ImageButton serviceButton = (ImageButton) findViewById(R.id.ImageButton01);
-	if (PreferencesUtil.readPrefKey(this, Pref.DISABLE_KEY)) {
+	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY)) {
 	    serviceButton.setImageResource(R.drawable.inactive);
 	} else {
 	    serviceButton.setImageResource(R.drawable.active);
@@ -134,8 +134,8 @@ public class WifiFixerActivity extends Activity {
 
     void setLogging(boolean state) {
 	LOGGING = state;
-	PreferencesUtil.writePrefKey(this, Pref.LOG_KEY, state);
-	PreferencesUtil.notifyPrefChange(this, Pref.LOG_KEY);
+	PrefUtil.writeBoolean(this, Pref.LOG_KEY, state);
+	PrefUtil.notifyPrefChange(this, Pref.LOG_KEY);
 	if (state) {
 	    /*
 	     * Delete old log if toggling logging on

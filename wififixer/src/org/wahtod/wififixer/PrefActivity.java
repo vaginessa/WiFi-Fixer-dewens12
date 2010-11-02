@@ -16,7 +16,7 @@
 
 package org.wahtod.wififixer;
 
-import org.wahtod.wififixer.PreferenceConstants.Pref;
+import org.wahtod.wififixer.PrefConstants.Pref;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -25,10 +25,9 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 import android.provider.Settings.SettingNotFoundException;
 
-public class WifiFixerPreferences extends PreferenceActivity implements
+public class PrefActivity extends PreferenceActivity implements
 	OnSharedPreferenceChangeListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +60,11 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	/*
 	 * Handle Wifi Sleep Policy
 	 */
-	SharedPreferences prefs = PreferenceManager
-		.getDefaultSharedPreferences(context);
 	ContentResolver cr = context.getContentResolver();
-	SharedPreferences.Editor edit = prefs.edit();
 	try {
-	    String wfsleep = String
-		    .valueOf(android.provider.Settings.System.getInt(cr,
-			    android.provider.Settings.System.WIFI_SLEEP_POLICY));
-	    edit.putString("WFSLEEP", wfsleep);
-	    edit.commit();
+	    int wfsleep = android.provider.Settings.System.getInt(cr,
+		    android.provider.Settings.System.WIFI_SLEEP_POLICY);
+	    PrefUtil.writeInt(context, Pref.SLPOLICY_KEY, wfsleep);
 	} catch (SettingNotFoundException e) {
 	    /*
 	     * Don't need a catch, all clients are >= 1.5 per manifest market
@@ -89,7 +83,7 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	     * First handle Service enable case
 	     */
 	    if (key.equals(Pref.DISABLE_KEY.key())) {
-		if (!PreferencesUtil.readPrefKey(this, Pref.DISABLE_KEY)) {
+		if (!PrefUtil.readBoolean(this, Pref.DISABLE_KEY)) {
 		    Intent intent = new Intent(
 			    IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
 		    sendBroadcast(intent);
@@ -108,38 +102,37 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	     * interested in.
 	     */
 
-	    PreferencesUtil.notifyPrefChange(this, Pref.get(key));
+	    PrefUtil.notifyPrefChange(this, Pref.get(key));
 
-	} else if (key.contains("Performance")) {
+	} else if (key.contains(Pref.PERF_KEY.key())) {
 
-	    String sPerf = prefs.getString("Performance", "2");
-	    int pVal = Integer.parseInt(sPerf);
+	    int pVal = PrefUtil.readInt(this, Pref.PERF_KEY);
 
 	    switch (pVal) {
 	    case 1:
-		PreferencesUtil.writePrefKey(this, Pref.WIFILOCK_KEY, true);
-		PreferencesUtil.writePrefKey(this, Pref.SCREEN_KEY, true);
+		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY, true);
+		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY, true);
 		break;
 
 	    case 2:
-		PreferencesUtil.writePrefKey(this, Pref.WIFILOCK_KEY, true);
-		PreferencesUtil.writePrefKey(this, Pref.SCREEN_KEY, false);
+		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY, true);
+		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY, false);
 		break;
 
 	    case 3:
-		PreferencesUtil.writePrefKey(this, Pref.WIFILOCK_KEY, false);
-		PreferencesUtil.writePrefKey(this, Pref.SCREEN_KEY, false);
+		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY, false);
+		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY, false);
 		break;
 	    }
-	    WifiFixerPreferences.this.finish();
+	    PrefActivity.this.finish();
 
-	} else if (key.contains("WFSLEEP")) {
+	} else if (key.contains(Pref.SLPOLICY_KEY.key())) {
 	    /*
 	     * Setting Wifi Sleep Policy
 	     */
 	    ContentResolver cr = getContentResolver();
-	    String wfsleep = prefs.getString("WFSLEEP", "3");
-	    if (wfsleep != "3") {
+	    int wfsleep = PrefUtil.readInt(this, Pref.SLPOLICY_KEY);
+	    if (wfsleep != 3) {
 
 		android.provider.Settings.System.putInt(cr,
 			android.provider.Settings.System.WIFI_SLEEP_POLICY,
@@ -149,14 +142,10 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 		 * Set to system state
 		 */
 		try {
-		    wfsleep = String
-			    .valueOf(android.provider.Settings.System
-				    .getInt(
-					    cr,
-					    android.provider.Settings.System.WIFI_SLEEP_POLICY));
-		    SharedPreferences.Editor edit = prefs.edit();
-		    edit.putString("WFSLEEP", wfsleep);
-		    edit.commit();
+		    wfsleep = android.provider.Settings.System.getInt(cr,
+			    android.provider.Settings.System.WIFI_SLEEP_POLICY);
+		    PrefUtil.writeInt(this, Pref.SLPOLICY_KEY, wfsleep);
+
 		} catch (SettingNotFoundException e) {
 		    /*
 		     * Should always be found since our clients are > SDK2
