@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer;
 
+import java.util.Map;
+
 import org.wahtod.wififixer.PrefConstants.Pref;
 
 import android.content.BroadcastReceiver;

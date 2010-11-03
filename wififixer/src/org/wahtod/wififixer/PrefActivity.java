@@ -64,7 +64,7 @@ public class PrefActivity extends PreferenceActivity implements
 	try {
 	    int wfsleep = android.provider.Settings.System.getInt(cr,
 		    android.provider.Settings.System.WIFI_SLEEP_POLICY);
-	    PrefUtil.writeInt(context, Pref.SLPOLICY_KEY, wfsleep);
+	    PrefUtil.writeInt(context, PrefConstants.SLPOLICY_KEY, wfsleep);
 	} catch (SettingNotFoundException e) {
 	    /*
 	     * Don't need a catch, all clients are >= 1.5 per manifest market
@@ -104,9 +104,9 @@ public class PrefActivity extends PreferenceActivity implements
 
 	    PrefUtil.notifyPrefChange(this, Pref.get(key));
 
-	} else if (key.contains(Pref.PERF_KEY.key())) {
+	} else if (key.contains(PrefConstants.PERF_KEY)) {
 
-	    int pVal = PrefUtil.readInt(this, Pref.PERF_KEY);
+	    int pVal = PrefUtil.readInt(this, PrefConstants.PERF_KEY);
 
 	    switch (pVal) {
 	    case 1:
@@ -126,12 +126,12 @@ public class PrefActivity extends PreferenceActivity implements
 	    }
 	    PrefActivity.this.finish();
 
-	} else if (key.contains(Pref.SLPOLICY_KEY.key())) {
+	} else if (key.contains(PrefConstants.SLPOLICY_KEY)) {
 	    /*
 	     * Setting Wifi Sleep Policy
 	     */
 	    ContentResolver cr = getContentResolver();
-	    int wfsleep = PrefUtil.readInt(this, Pref.SLPOLICY_KEY);
+	    int wfsleep = PrefUtil.readInt(this, PrefConstants.SLPOLICY_KEY);
 	    if (wfsleep != 3) {
 
 		android.provider.Settings.System.putInt(cr,
@@ -144,7 +144,8 @@ public class PrefActivity extends PreferenceActivity implements
 		try {
 		    wfsleep = android.provider.Settings.System.getInt(cr,
 			    android.provider.Settings.System.WIFI_SLEEP_POLICY);
-		    PrefUtil.writeInt(this, Pref.SLPOLICY_KEY, wfsleep);
+		    PrefUtil
+			    .writeInt(this, PrefConstants.SLPOLICY_KEY, wfsleep);
 
 		} catch (SettingNotFoundException e) {
 		    /*

@@ -37,7 +37,7 @@
 
 		</activity>
 		<activity android:name=".About" />
-		<activity android:name=".WifiFixerPreferences" />
+		<activity android:name=".PrefActivity" />
 		<activity android:name=".HelpActivity" />
 		<receiver android:name=".WFBroadcastReceiver">
 			<intent-filter>

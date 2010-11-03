@@ -959,8 +959,7 @@ public class WifiFixerService extends Service {
 	    boolean IS_AUTHED = PrefUtil.readBoolean(this,
 		    getString(R.string.isauthed));
 	    if (!IS_AUTHED) {
-		PrefUtil.writeBoolean(this,
-			getString(R.string.isauthed), true);
+		PrefUtil.writeBoolean(this, getString(R.string.isauthed), true);
 		showNotification(this, getString(R.string.donatethanks),
 			getString(R.string.authorized), 4144, true);
 	    }
@@ -1134,25 +1133,16 @@ public class WifiFixerService extends Service {
 	    wfLog(this, APP_NAME, getString(R.string.widgetaction));
 	/*
 	 * Handle widget action
-	 
-	if (wm.isWifiEnabled()) {
-	    if (wfPreferences.getFlag(Pref.WIDGET_KEY)) {
-		Toast.makeText(WifiFixerService.this,
-			getString(R.string.toggling_wifi), Toast.LENGTH_LONG)
-			.show();
-		toggleWifi();
-	    } else {
-		Toast.makeText(WifiFixerService.this,
-			getString(R.string.reassociating), Toast.LENGTH_LONG)
-			.show();
-		shouldrepair = true;
-		wifirepair = W_REASSOCIATE;
-		wifiRepair();
-	    }
-	} else
-	    Toast.makeText(WifiFixerService.this,
-		    getString(R.string.wifi_is_disabled), Toast.LENGTH_LONG)
-		    .show();*/
+	 * 
+	 * if (wm.isWifiEnabled()) { if (wfPreferences.getFlag(Pref.WIDGET_KEY))
+	 * { Toast.makeText(WifiFixerService.this,
+	 * getString(R.string.toggling_wifi), Toast.LENGTH_LONG) .show();
+	 * toggleWifi(); } else { Toast.makeText(WifiFixerService.this,
+	 * getString(R.string.reassociating), Toast.LENGTH_LONG) .show();
+	 * shouldrepair = true; wifirepair = W_REASSOCIATE; wifiRepair(); } }
+	 * else Toast.makeText(WifiFixerService.this,
+	 * getString(R.string.wifi_is_disabled), Toast.LENGTH_LONG) .show();
+	 */
     }
 
     private void handleWifiState(final Intent intent) {
@@ -1514,8 +1504,7 @@ public class WifiFixerService extends Service {
 		 */
 
 		if (!readBoolean(context, PrefConstants.SUPFIX_DEFAULT)) {
-		    writeBoolean(context, PrefConstants.SUPFIX_DEFAULT,
-			    true);
+		    writeBoolean(context, PrefConstants.SUPFIX_DEFAULT, true);
 		    int ver;
 		    try {
 			ver = Integer.valueOf(Build.VERSION.RELEASE.substring(
@@ -1532,11 +1521,11 @@ public class WifiFixerService extends Service {
 		    }
 
 		}
-		
+
 		/*
 		 * Sets default for Widget behavior
 		 */
-		//if()
+		// if()
 	    }
 
 	    @Override
