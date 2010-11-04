@@ -106,7 +106,8 @@ public class PrefActivity extends PreferenceActivity implements
 
 	} else if (key.contains(PrefConstants.PERF_KEY)) {
 
-	    int pVal = PrefUtil.readInt(this, PrefConstants.PERF_KEY);
+	    int pVal = Integer.valueOf(PrefUtil.readString(this,
+		    PrefConstants.PERF_KEY));
 
 	    switch (pVal) {
 	    case 1:
@@ -131,12 +132,13 @@ public class PrefActivity extends PreferenceActivity implements
 	     * Setting Wifi Sleep Policy
 	     */
 	    ContentResolver cr = getContentResolver();
-	    int wfsleep = PrefUtil.readInt(this, PrefConstants.SLPOLICY_KEY);
+	    int wfsleep = Integer.valueOf(PrefUtil.readString(this,
+		    PrefConstants.SLPOLICY_KEY));
 	    if (wfsleep != 3) {
 
 		android.provider.Settings.System.putInt(cr,
 			android.provider.Settings.System.WIFI_SLEEP_POLICY,
-			Integer.valueOf(wfsleep));
+			wfsleep);
 	    } else {
 		/*
 		 * Set to system state
@@ -144,8 +146,8 @@ public class PrefActivity extends PreferenceActivity implements
 		try {
 		    wfsleep = android.provider.Settings.System.getInt(cr,
 			    android.provider.Settings.System.WIFI_SLEEP_POLICY);
-		    PrefUtil
-			    .writeInt(this, PrefConstants.SLPOLICY_KEY, wfsleep);
+		    PrefUtil.writeString(this, PrefConstants.SLPOLICY_KEY,
+			    String.valueOf(wfsleep));
 
 		} catch (SettingNotFoundException e) {
 		    /*
