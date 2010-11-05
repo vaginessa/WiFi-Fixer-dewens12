@@ -59,6 +59,22 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 		    PackageManager.DONT_KILL_APP);
     }
 
+    private static void handleWidgetAction(final Context context, int i) {
+	switch (i) {
+	case 0:
+	    context.sendBroadcast(new Intent(WidgetHandler.REASSOCIATE));
+	    break;
+
+	case 1:
+	    context.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
+	    break;
+
+	case 2:
+	    // yet to implement
+	    break;
+	}
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
 	// Cache context for handler
@@ -83,21 +99,20 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)
 		&& !isserviceDisabled(context)) {
 	    setServiceEnabled(context, true);
-	    context.startService(new Intent(context,WifiFixerService.class));
+	    context.startService(new Intent(context, WifiFixerService.class));
 	}
 	/*
 	 * For WIFI_SERVICE_DISABLE intent, send stop to service and unset
 	 * logging and service alarms.
 	 */
 	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_DISABLE)) {
-	    context.stopService(new Intent(context,WifiFixerService.class));
+	    context.stopService(new Intent(context, WifiFixerService.class));
 	    setServiceEnabled(context, false);
 	    ServiceAlarm.setLogTS(context, false, 0);
 	    ServiceAlarm.unsetAlarm(context);
-	}
-	else if (action.equals(FixerWidget.W_INTENT)){
-	    Intent sendintent = new Intent(WidgetHandler.TOGGLE_WIFI);
-	    context.sendBroadcast(sendintent);
+	} else if (action.equals(FixerWidget.W_INTENT)) {
+	    handleWidgetAction(context, Integer.valueOf(PrefUtil.readString(
+		    context, PrefConstants.WIDGET_KEY)));
 	}
     }
 

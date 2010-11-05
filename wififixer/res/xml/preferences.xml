@@ -69,7 +69,7 @@
 
 		
 		<ListPreference android:title="Widget Behavior" android:summary="Selects widget behavior"
-			android:defaultValue="3"
+			android:defaultValue="0"
 			android:key="WIDGET" android:entries="@array/widget"
 			android:entryValues="@array/widgetValues" />
 

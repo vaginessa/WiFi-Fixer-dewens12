@@ -24,9 +24,8 @@ import android.content.Intent;
 
 public class NotifUtil {
 
-    public static void show(final Context context,
-	    final String message, final String tickerText, final int id,
-	    final boolean bSpecial) {
+    public static void show(final Context context, final String message,
+	    final String tickerText, final int id, final boolean bSpecial) {
 
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);

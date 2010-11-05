@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Toast;
 
 public class WidgetHandler extends BroadcastReceiver {
     private static WakeLock wlock;
@@ -33,7 +34,7 @@ public class WidgetHandler extends BroadcastReceiver {
     protected static final String WIFI_ON = "org.wahtod.wififixer.WidgetHandler.WIFI_ON";
     protected static final String WIFI_OFF = "org.wahtod.wififixer.WidgetHandler.WIFI_OFF";
     protected static final String TOGGLE_WIFI = "org.wahtod.wififixer.WidgetHandler.WIFI_TOGGLE";
-    protected static final String REASSOCIATE = "org.wahtod.wififixer.WidgetHandler.REASSOCIATE";
+    protected static final String REASSOCIATE = "org.wahtod.wififixer.WidgetHandler.WIFI_REASSOCIATE";
 
     /*
      * Handler Constants
@@ -114,18 +115,41 @@ public class WidgetHandler extends BroadcastReceiver {
 	    ctxt = context;
 
 	String action = intent.getAction();
-        /*
-         * Dispatch intent command
-         * to handler
-         */
+	/*
+	 * Dispatch intent commands to handler
+	 */
+
+	/*
+	 * Turn on WIFI
+	 */
 	if (action.equals(WIFI_ON))
 	    setWifiState(context, true);
+	/*
+	 * If Wifi is disabled, notify
+	 */
+	else if (!getWifiManager(context).isWifiEnabled()) {
+	    Toast.makeText(context,
+		    context.getString(R.string.wifi_is_disabled),
+		    Toast.LENGTH_LONG).show();
+	}
+	/*
+	 * Turn off Wifi
+	 */
 	else if (action.equals(WIFI_OFF))
 	    setWifiState(context, false);
+	/*
+	 * Toggle Wifi
+	 */
 	else if (action.equals(TOGGLE_WIFI))
 	    hWifiState.sendEmptyMessage(TOGGLE);
-	else if (action.equals(REASSOCIATE))
+	/*
+	 * Reassociate
+	 */
+	else if (action.equals(REASSOCIATE)) {
+	    Toast.makeText(context, context.getString(R.string.reassociating),
+		    Toast.LENGTH_LONG).show();
 	    getWifiManager(context).reassociate();
+	}
 
     }
 

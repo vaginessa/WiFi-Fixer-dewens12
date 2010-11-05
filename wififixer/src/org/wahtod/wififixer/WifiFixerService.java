@@ -1521,11 +1521,6 @@ public class WifiFixerService extends Service {
 		    }
 
 		}
-
-		/*
-		 * Sets default for Widget behavior
-		 */
-		// if()
 	    }
 
 	    @Override

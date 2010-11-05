@@ -74,6 +74,7 @@
 				<action android:name="org.wahtod.wififixer.WidgetHandler.WIFI_ON" />
 				<action android:name="org.wahtod.wififixer.WidgetHandler.WIFI_OFF" />
 				<action android:name="org.wahtod.wififixer.WidgetHandler.WIFI_TOGGLE" />
+				<action android:name="org.wahtod.wififixer.WidgetHandler.WIFI_REASSOCIATE" />
 			</intent-filter>
 		</receiver>
 

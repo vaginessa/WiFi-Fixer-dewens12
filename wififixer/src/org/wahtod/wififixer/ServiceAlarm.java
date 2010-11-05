@@ -54,7 +54,6 @@ public final class ServiceAlarm extends Object {
     }
 
     public static void unsetAlarm(final Context c) {
-
 	Intent intent = new Intent(IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
 	intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 	AlarmManager mgr = (AlarmManager) c
