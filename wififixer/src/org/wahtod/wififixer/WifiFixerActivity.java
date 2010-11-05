@@ -201,7 +201,7 @@ public class WifiFixerActivity extends Activity {
     }
 
     private static void startwfService(final Context context) {
-	context.startService(new Intent(context,WifiFixerService.class));
+	context.startService(new Intent(context, WifiFixerService.class));
     }
 
     void nagNotification() {
@@ -273,9 +273,9 @@ public class WifiFixerActivity extends Activity {
     };
 
     private void oncreate_setup() {
-	ISAUTHED = (settings.getBoolean("ISAUTHED", false));
-	ABOUT = (settings.getBoolean(sABOUT, false));
-	LOGGING_MENU = (settings.getBoolean("Logging", false));
+	ISAUTHED = settings.getBoolean("ISAUTHED", false);
+	ABOUT = settings.getBoolean(sABOUT, false);
+	LOGGING_MENU = settings.getBoolean("Logging", false);
 	LOGGING = getLogging();
 	// Fire new About nag
 	if (!ABOUT) {

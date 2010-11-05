@@ -17,9 +17,7 @@
 package org.wahtod.wififixer;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 public class About extends Activity {
     @Override
@@ -27,14 +25,8 @@ public class About extends Activity {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.about);
 	// Disable the nag if it's been read
-	// we use the constant from WifiFixerActivty because
-	// we want to change the value when we update the contents
-	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(this);
-	if (!settings.getBoolean(WifiFixerActivity.sABOUT, false)) {
-	    SharedPreferences.Editor editor = settings.edit();
-	    editor.putBoolean(WifiFixerActivity.sABOUT, true);
-	    editor.commit();
+	if (!PrefUtil.readBoolean(this, WifiFixerActivity.sABOUT)) {
+	    PrefUtil.writeBoolean(this, WifiFixerActivity.sABOUT, true);
 	}
     }
 }

@@ -67,7 +67,7 @@ public final class ServiceAlarm extends Object {
 
     public static void setLogTS(final Context c, final boolean state,
 	    final long delay) {
-	Intent intent = new Intent(LogService.class.getName());
+	Intent intent = new Intent(c, LogService.class);
 	intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 	intent.putExtra(LogService.APPNAME, LogService.TIMESTAMP);
 	intent.putExtra(LogService.Message, " ");
