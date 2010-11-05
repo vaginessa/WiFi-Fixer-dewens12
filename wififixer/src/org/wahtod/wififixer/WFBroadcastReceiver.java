@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 public class WFBroadcastReceiver extends BroadcastReceiver {
 
@@ -42,7 +41,6 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
     private static boolean isserviceDisabled(final Context context) {
 	boolean state = false;
 	state = PrefUtil.readBoolean(context, Pref.DISABLE_KEY);
-	Log.d(WFBroadcastReceiver.class.getName(), Boolean.toString(state));
 	return state;
     }
 
@@ -85,17 +83,21 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)
 		&& !isserviceDisabled(context)) {
 	    setServiceEnabled(context, true);
-	    context.startService(new Intent(WifiFixerService.class.getName()));
+	    context.startService(new Intent(context,WifiFixerService.class));
 	}
 	/*
 	 * For WIFI_SERVICE_DISABLE intent, send stop to service and unset
 	 * logging and service alarms.
 	 */
 	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_DISABLE)) {
-	    context.stopService(new Intent(WifiFixerService.class.getName()));
+	    context.stopService(new Intent(context,WifiFixerService.class));
 	    setServiceEnabled(context, false);
 	    ServiceAlarm.setLogTS(context, false, 0);
 	    ServiceAlarm.unsetAlarm(context);
+	}
+	else if (action.equals(FixerWidget.W_INTENT)){
+	    Intent sendintent = new Intent(WidgetHandler.TOGGLE_WIFI);
+	    context.sendBroadcast(sendintent);
 	}
     }
 

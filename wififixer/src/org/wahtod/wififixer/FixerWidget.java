@@ -27,7 +27,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 public class FixerWidget extends AppWidgetProvider {
-    public static final String W_INTENT = "org.wahtod.wifixer.WIDGET";
+    public static final String W_INTENT = "org.wahtod.wififixer.WIDGET";
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {

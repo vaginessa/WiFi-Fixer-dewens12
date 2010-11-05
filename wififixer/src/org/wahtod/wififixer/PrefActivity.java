@@ -64,7 +64,8 @@ public class PrefActivity extends PreferenceActivity implements
 	try {
 	    int wfsleep = android.provider.Settings.System.getInt(cr,
 		    android.provider.Settings.System.WIFI_SLEEP_POLICY);
-	    PrefUtil.writeInt(context, PrefConstants.SLPOLICY_KEY, wfsleep);
+	    PrefUtil.writeString(context, PrefConstants.SLPOLICY_KEY, String
+		    .valueOf(wfsleep));
 	} catch (SettingNotFoundException e) {
 	    /*
 	     * Don't need a catch, all clients are >= 1.5 per manifest market

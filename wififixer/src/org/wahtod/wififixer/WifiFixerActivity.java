@@ -201,9 +201,7 @@ public class WifiFixerActivity extends Activity {
     }
 
     private static void startwfService(final Context context) {
-	Intent sendIntent = new Intent(
-		IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
-	context.sendBroadcast(sendIntent);
+	context.startService(new Intent(context,WifiFixerService.class));
     }
 
     void nagNotification() {
@@ -265,13 +263,11 @@ public class WifiFixerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	setTitle("Wifi Fixer");
+	setTitle(R.string.app_name);
 	setContentView(R.layout.main);
 	settings = PreferenceManager.getDefaultSharedPreferences(this);
 	// Set layout version code
 	setText();
-	// handle input
-
 	oncreate_setup();
 
     };

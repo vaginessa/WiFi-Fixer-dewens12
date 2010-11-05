@@ -1639,9 +1639,6 @@ public class WifiFixerService extends Service {
 	// wifi scan results available callback
 	myFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 
-	// Widget Action
-	myFilter.addAction(FixerWidget.W_INTENT);
-
 	registerReceiver(receiver, myFilter);
 	registered = true;
 
@@ -1856,7 +1853,7 @@ public class WifiFixerService extends Service {
 
     private static void wfLog(final Context context, final String APP_NAME,
 	    final String Message) {
-	Intent sendIntent = new Intent(LogService.class.getName());
+	Intent sendIntent = new Intent(context, LogService.class);
 	sendIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 	sendIntent.putExtra(LogService.APPNAME, APP_NAME);
 	sendIntent.putExtra(LogService.Message, Message);
