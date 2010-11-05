@@ -71,9 +71,9 @@
 		<receiver android:name=".WidgetHandler" class="WidgetHandler"
 			android:process=":WidgetHandler" android:exported="false">
 			<intent-filter>
-				<action android:name="org.wahtod.wififixer.WifiStateController.WIFI_ON" />
-				<action android:name="org.wahtod.wififixer.WifiStateController.WIFI_OFF" />
-				<action android:name="org.wahtod.wififixer.WifiStateController.WIFI_TOGGLE" />
+				<action android:name="org.wahtod.wififixer.WidgetHandler.WIFI_ON" />
+				<action android:name="org.wahtod.wififixer.WidgetHandler.WIFI_OFF" />
+				<action android:name="org.wahtod.wififixer.WidgetHandler.WIFI_TOGGLE" />
 			</intent-filter>
 		</receiver>
 

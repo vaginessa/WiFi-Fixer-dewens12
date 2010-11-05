@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 public class WidgetHandler extends BroadcastReceiver {
     private static WakeLock wlock;
@@ -49,7 +48,7 @@ public class WidgetHandler extends BroadcastReceiver {
      */
 
     private static final int TOGGLE_DELAY = 3000;
-    private static final int WATCHDOG_DELAY = 2000;
+    private static final int WATCHDOG_DELAY = 5000;
 
     private Handler hWifiState = new Handler() {
 	@Override
@@ -68,16 +67,13 @@ public class WidgetHandler extends BroadcastReceiver {
 
 	    case ON:
 		setWifiState(ctxt, true);
-		Log.i(this.getClass().getName(), "Setting Wifi State:true");
 		break;
 
 	    case OFF:
 		setWifiState(ctxt, false);
-		Log.i(this.getClass().getName(), "Setting Wifi State:false");
 		break;
 
 	    case WATCHDOG:
-		Log.i(this.getClass().getName(), "Watchdog");
 		if (!getWifiManager(ctxt).isWifiEnabled()) {
 		    hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
 		    hWifiState
@@ -88,8 +84,7 @@ public class WidgetHandler extends BroadcastReceiver {
 	    case TOGGLE:
 		hWifiState.sendEmptyMessage(OFF);
 		hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
-		hWifiState.sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY
-			+ TOGGLE_DELAY);
+		hWifiState.sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
 		break;
 	    }
 	    /*
