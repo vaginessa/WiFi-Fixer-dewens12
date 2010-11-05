@@ -188,7 +188,7 @@ public class WifiFixerActivity extends Activity {
 	CharSequence from = "WiFi Fixer";
 	PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 		new Intent(this, About.class), 0);
-	// construct the Notification object.
+	// construct the NotifUtil object.
 	Notification notif = new Notification(R.drawable.icon, "Please Read",
 		System.currentTimeMillis());
 

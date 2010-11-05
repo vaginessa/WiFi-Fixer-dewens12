@@ -47,8 +47,9 @@ public class WidgetHandler extends BroadcastReceiver {
      * Delay Constants
      */
 
-    private static final int TOGGLE_DELAY = 3000;
-    private static final int WATCHDOG_DELAY = 5000;
+    private static final int TOGGLE_DELAY = 8000;
+    private static final int WATCHDOG_DELAY = 11000;
+    private static final int TOGGLE_ID = 23497;
 
     private Handler hWifiState = new Handler() {
 	@Override
@@ -78,10 +79,14 @@ public class WidgetHandler extends BroadcastReceiver {
 		    hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
 		    hWifiState
 			    .sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
-		}
+		} else
+		    NotifUtil.cancel(TOGGLE_ID, ctxt);
 		break;
 
 	    case TOGGLE:
+		NotifUtil.show(ctxt, ctxt.getString(R.string.toggling_wifi),
+			ctxt.getString(R.string.toggling_wifi), TOGGLE_ID,
+			false);
 		hWifiState.sendEmptyMessage(OFF);
 		hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
 		hWifiState.sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
@@ -109,7 +114,10 @@ public class WidgetHandler extends BroadcastReceiver {
 	    ctxt = context;
 
 	String action = intent.getAction();
-
+        /*
+         * Dispatch intent command
+         * to handler
+         */
 	if (action.equals(WIFI_ON))
 	    setWifiState(context, true);
 	else if (action.equals(WIFI_OFF))
