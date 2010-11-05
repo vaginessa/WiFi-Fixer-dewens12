@@ -110,7 +110,11 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	    setServiceEnabled(context, false);
 	    ServiceAlarm.setLogTS(context, false, 0);
 	    ServiceAlarm.unsetAlarm(context);
-	} else if (action.equals(FixerWidget.W_INTENT)) {
+	}
+	/*
+	 * Handle Widget intent
+	 */
+	else if (action.equals(FixerWidget.W_INTENT)) {
 	    handleWidgetAction(context, Integer.valueOf(PrefUtil.readString(
 		    context, PrefConstants.WIDGET_KEY)));
 	}

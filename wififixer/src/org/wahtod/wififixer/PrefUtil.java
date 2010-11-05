@@ -223,7 +223,6 @@ public class PrefUtil extends Object {
     }
 
     public boolean getFlag(final Pref pref) {
-
 	return keyVals[pref.ordinal()];
     }
 
