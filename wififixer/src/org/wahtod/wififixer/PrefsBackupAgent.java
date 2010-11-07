@@ -19,15 +19,19 @@ package org.wahtod.wififixer;
 import android.app.backup.BackupAgentHelper;
 import android.app.backup.SharedPreferencesBackupHelper;
 
+/*
+ * This, assuming you've declared properly in the Manifest will give you API8 shared preferences backup
+ * also assuming you've used SharedPreferences.getDefaultSharedPreferences 
+ */
 public class PrefsBackupAgent extends BackupAgentHelper {
-    static final String PREFS = "org.wahtod.wififixer_preferences";
+    static final String PREFS = "_preferences";
     // A key to uniquely identify the set of backup data
     static final String PREFS_BACKUP_KEY = "prefs";
 
     // Allocate a helper and add it to the backup agent
     @Override
     public void onCreate(){
-        SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this, PREFS);
+        SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this, this.getPackageName()+PREFS);
         addHelper(PREFS_BACKUP_KEY, helper);
     }
 }
