@@ -17,6 +17,7 @@
 package org.wahtod.wififixer;
 
 import java.io.File;
+import java.util.List;
 
 import org.wahtod.wififixer.LegacySupport.LegacyLogFile;
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
@@ -28,21 +29,26 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class WifiFixerActivity extends Activity {
     // Is this the paid version?
@@ -59,7 +65,6 @@ public class WifiFixerActivity extends Activity {
     private static final int MENU_HELP = 4;
     private static final int MENU_ABOUT = 5;
     private static final int LOGGING_GROUP = 42;
-    SharedPreferences settings;
     VersionedLogFile vlogfile;
     // New key for About nag
     // Set this when you change the About xml
@@ -85,8 +90,7 @@ public class WifiFixerActivity extends Activity {
     }
 
     void launchPrefs() {
-	Intent myIntent = new Intent(this, PrefActivity.class);
-	startActivity(myIntent);
+	startActivity(new Intent(this, PrefActivity.class));
     }
 
     void sendLog() {
@@ -265,17 +269,47 @@ public class WifiFixerActivity extends Activity {
 	super.onCreate(savedInstanceState);
 	setTitle(R.string.app_name);
 	setContentView(R.layout.main);
-	settings = PreferenceManager.getDefaultSharedPreferences(this);
+	
+	/*
+	 * Grab ListView
+	 */
+	ListView lv=(ListView)findViewById(R.id.ListView01);
+	lv.setTextFilterEnabled(true);
+	
+	lv.setAdapter(new ArrayAdapter<String>(this,
+		R.layout.list_item_layout, getNetworks(this)));
+
+	lv.setOnItemClickListener(new OnItemClickListener(){
+	    @Override
+	    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+		    long arg3) {
+		// TODO Auto-generated method stub
+		
+	    }
+
+	});
+	
 	// Set layout version code
 	setText();
 	oncreate_setup();
 
     };
+    
+    private static final String[] getNetworks(final Context context) {
+	WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+	List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+	String[] networks = new String[wifiConfigs.size()];
+        for (WifiConfiguration wfResult: wifiConfigs){
+            networks[wfResult.networkId]=wfResult.SSID.replace("\"", "");
+        }
+
+	return networks;
+    }
 
     private void oncreate_setup() {
-	ISAUTHED = settings.getBoolean("ISAUTHED", false);
-	ABOUT = settings.getBoolean(sABOUT, false);
-	LOGGING_MENU = settings.getBoolean("Logging", false);
+	ISAUTHED = PrefUtil.readBoolean(this,"ISAUTHED");
+	ABOUT = PrefUtil.readBoolean(this , sABOUT);
+	LOGGING_MENU = PrefUtil.readBoolean(this,"Logging");
 	LOGGING = getLogging();
 	// Fire new About nag
 	if (!ABOUT) {
@@ -293,7 +327,7 @@ public class WifiFixerActivity extends Activity {
     public void onStart() {
 	super.onStart();
 	setIcon();
-	LOGGING_MENU = (settings.getBoolean("Logging", false));
+	LOGGING_MENU = PrefUtil.readBoolean(this,"Logging");
 	LOGGING = getLogging();
 	startwfService(this);
     }
@@ -302,19 +336,19 @@ public class WifiFixerActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 	super.onCreateOptionsMenu(menu);
-	menu.add(LOGGING_GROUP, MENU_LOGGING, 0, "Toggle Logging").setIcon(
+	menu.add(LOGGING_GROUP, MENU_LOGGING, 0, R.string.toggle_logging).setIcon(
 		R.drawable.logging_enabled);
 
-	menu.add(LOGGING_GROUP, MENU_SEND, 1, "Send Log").setIcon(
+	menu.add(LOGGING_GROUP, MENU_SEND, 1, R.string.send_log).setIcon(
 		R.drawable.ic_menu_send);
 
-	menu.add(Menu.NONE, MENU_PREFS, 2, "Preferences").setIcon(
+	menu.add(Menu.NONE, MENU_PREFS, 2, R.string.preferences).setIcon(
 		R.drawable.ic_prefs);
 
-	menu.add(Menu.NONE, MENU_HELP, 3, "Documentation").setIcon(
+	menu.add(Menu.NONE, MENU_HELP, 3, R.string.documentation).setIcon(
 		R.drawable.ic_menu_help);
 
-	menu.add(Menu.NONE, MENU_ABOUT, 4, "About").setIcon(
+	menu.add(Menu.NONE, MENU_ABOUT, 4, R.string.about).setIcon(
 		R.drawable.ic_menu_info);
 
 	return true;
