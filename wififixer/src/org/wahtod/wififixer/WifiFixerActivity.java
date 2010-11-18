@@ -43,7 +43,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -51,7 +50,6 @@ import android.widget.ListView;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class WifiFixerActivity extends Activity {
@@ -74,7 +72,6 @@ public class WifiFixerActivity extends Activity {
     private static final int CONTEXT_DISABLE = 2;
     private static final int CONTEXT_CONNECT = 3;
     
-    private static Adapter adapter;
     private String clicked;
     VersionedLogFile vlogfile;
     // New key for About nag
@@ -299,10 +296,6 @@ public class WifiFixerActivity extends Activity {
 
 	});
 	registerForContextMenu(lv);
-	/*
-	 * Grab the adapter for use with context menu methods
-	 */
-	adapter = lv.getAdapter();
 
 	// Set layout version code
 	setText();
@@ -352,8 +345,9 @@ public class WifiFixerActivity extends Activity {
     public void onCreateContextMenu(ContextMenu menu, View v,
 	    ContextMenuInfo menuInfo) {
 	super.onCreateContextMenu(menu, v, menuInfo);
-	// Get the info on which item was selected
-	AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
+	/*
+	 * Clicked is the stored string triggered in the OnClickListener
+	 */
 	 menu.setHeaderTitle(clicked);
 	    menu.add(0, CONTEXT_ENABLE, 0, "Enable");
 	    menu.add(0, CONTEXT_DISABLE, 1, "Disable");
@@ -362,9 +356,7 @@ public class WifiFixerActivity extends Activity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-	AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
-		.getMenuInfo();
-	Object selected = adapter.getItem(info.position);
+	
 	return true;
     }
 
