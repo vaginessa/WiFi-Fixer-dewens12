@@ -38,9 +38,12 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -48,6 +51,7 @@ import android.widget.ListView;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class WifiFixerActivity extends Activity {
@@ -65,10 +69,18 @@ public class WifiFixerActivity extends Activity {
     private static final int MENU_HELP = 4;
     private static final int MENU_ABOUT = 5;
     private static final int LOGGING_GROUP = 42;
+    
+    private static final int CONTEXT_ENABLE = 1;
+    private static final int CONTEXT_DISABLE = 2;
+    private static final int CONTEXT_CONNECT = 3;
+    
+    private static Adapter adapter;
+    private String clicked;
     VersionedLogFile vlogfile;
     // New key for About nag
     // Set this when you change the About xml
     static final String sABOUT = "ABOUT2";
+    
 
     void authCheck() {
 	if (!ISAUTHED) {
@@ -269,47 +281,51 @@ public class WifiFixerActivity extends Activity {
 	super.onCreate(savedInstanceState);
 	setTitle(R.string.app_name);
 	setContentView(R.layout.main);
-	
-	/*
-	 * Grab ListView
-	 */
-	ListView lv=(ListView)findViewById(R.id.ListView01);
-	lv.setTextFilterEnabled(true);
-	
-	lv.setAdapter(new ArrayAdapter<String>(this,
-		R.layout.list_item_layout, getNetworks(this)));
 
-	lv.setOnItemClickListener(new OnItemClickListener(){
+	/*
+	 * Grab and set up ListView in sliding drawer for network list UI
+	 */
+	final ListView lv = (ListView) findViewById(R.id.ListView01);
+	lv.setTextFilterEnabled(true);
+	lv.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_layout,
+		getNetworks(this)));
+	lv.setOnItemClickListener(new OnItemClickListener() {
 	    @Override
-	    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-		    long arg3) {
-		// TODO Auto-generated method stub
-		
+	    public void onItemClick(AdapterView<?> arg0, View v, int position,
+		    long id) {
+		clicked= lv.getItemAtPosition(position).toString();
+
 	    }
 
 	});
-	
+	registerForContextMenu(lv);
+	/*
+	 * Grab the adapter for use with context menu methods
+	 */
+	adapter = lv.getAdapter();
+
 	// Set layout version code
 	setText();
 	oncreate_setup();
 
     };
-    
+
     private static final String[] getNetworks(final Context context) {
-	WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+	WifiManager wm = (WifiManager) context
+		.getSystemService(Context.WIFI_SERVICE);
 	List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
 	String[] networks = new String[wifiConfigs.size()];
-        for (WifiConfiguration wfResult: wifiConfigs){
-            networks[wfResult.networkId]=wfResult.SSID.replace("\"", "");
-        }
+	for (WifiConfiguration wfResult : wifiConfigs) {
+	    networks[wfResult.networkId] = wfResult.SSID.replace("\"", "");
+	}
 
 	return networks;
     }
 
     private void oncreate_setup() {
-	ISAUTHED = PrefUtil.readBoolean(this,"ISAUTHED");
-	ABOUT = PrefUtil.readBoolean(this , sABOUT);
-	LOGGING_MENU = PrefUtil.readBoolean(this,"Logging");
+	ISAUTHED = PrefUtil.readBoolean(this, "ISAUTHED");
+	ABOUT = PrefUtil.readBoolean(this, sABOUT);
+	LOGGING_MENU = PrefUtil.readBoolean(this, "Logging");
 	LOGGING = getLogging();
 	// Fire new About nag
 	if (!ABOUT) {
@@ -327,17 +343,37 @@ public class WifiFixerActivity extends Activity {
     public void onStart() {
 	super.onStart();
 	setIcon();
-	LOGGING_MENU = PrefUtil.readBoolean(this,"Logging");
+	LOGGING_MENU = PrefUtil.readBoolean(this, "Logging");
 	LOGGING = getLogging();
 	startwfService(this);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+	    ContextMenuInfo menuInfo) {
+	super.onCreateContextMenu(menu, v, menuInfo);
+	// Get the info on which item was selected
+	AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
+	 menu.setHeaderTitle(clicked);
+	    menu.add(0, CONTEXT_ENABLE, 0, "Enable");
+	    menu.add(0, CONTEXT_DISABLE, 1, "Disable");
+	    menu.add(0,CONTEXT_CONNECT, 2, "Connect Now");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+	AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+		.getMenuInfo();
+	Object selected = adapter.getItem(info.position);
+	return true;
     }
 
     // Create menus
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 	super.onCreateOptionsMenu(menu);
-	menu.add(LOGGING_GROUP, MENU_LOGGING, 0, R.string.toggle_logging).setIcon(
-		R.drawable.logging_enabled);
+	menu.add(LOGGING_GROUP, MENU_LOGGING, 0, R.string.toggle_logging)
+		.setIcon(R.drawable.logging_enabled);
 
 	menu.add(LOGGING_GROUP, MENU_SEND, 1, R.string.send_log).setIcon(
 		R.drawable.ic_menu_send);
