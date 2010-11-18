@@ -12,11 +12,17 @@
 		License.
 	-->
 <resources>
+    <string name="connect_now">Connect Now</string>
+    <string name="disable">Disable</string>
+    <string name="enable">Enable</string>
+    <string name="enabling_logging">Enabling Logging</string>
+    <string name="disabling_logging">Disabling Logging</string>
+    <string name="donatenag">Thank you for using Wifi Fixer. If you find this software useful, please tap here to donate.</string>
+    <string name="thank_you">Thank You</string>
+    <string name="aboutnag">Tap Here to Read About Page</string>
+    <string name="please_read">Please Read</string>
     <string name="emailintent">Email:</string>
-	<string name="email_footer">Please include time at which issue occurred and
-		description of the issue:
-
-</string>
+	<string name="email_footer">Please include time at which issue occurred and description of the issue:\n\n</string>
 	<string name="subject">WifiFixer Log</string>
 	<string name="email">zanshin.g1@gmail.com</string>
 	<string name="log_doesn_t_exist">Log doesn\'t exist</string>

@@ -47,6 +47,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RemoteViews;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -76,12 +77,19 @@ public class WifiFixerActivity extends Activity {
     // New key for About nag
     // Set this when you change the About xml
     static final String sABOUT = "ABOUT2";
+    /*
+     * Intent extra for widget command to open network list
+     */
+    public static final String OPEN_NETWORK_LIST = "OPEN_NETWORK_LIST";
+    /*
+     * Market URI for pendingintent
+     */
+    private static final String MARKET_URI = "market://details?id=com.wahtod.wififixer";
 
     void authCheck() {
 	if (!ISAUTHED) {
 	    // Handle Donate Auth
-	    Intent sendIntent = new Intent(getString(R.string.donateservice));
-	    startService(sendIntent);
+	    startService(new Intent(getString(R.string.donateservice)));
 	    nagNotification();
 	}
     }
@@ -100,9 +108,10 @@ public class WifiFixerActivity extends Activity {
     }
 
     void sendLog() {
-
+	/*
+	 * Gets appropriate dir and filename on sdcard across API versions.
+	 */
 	File file = vlogfile.getLogFile(getBaseContext());
-	// Log.i("WifiFixerActivity", file.getAbsolutePath());
 
 	if (Environment.getExternalStorageState() != null
 		&& !(Environment.getExternalStorageState()
@@ -122,10 +131,10 @@ public class WifiFixerActivity extends Activity {
 	sendIntent.setType("text/plain");
 	sendIntent.putExtra(Intent.EXTRA_EMAIL,
 		new String[] { getString(R.string.email) });
-	sendIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.subject);
+	sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject));
 	sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.toURI()
 		.toString()));
-	sendIntent.putExtra(Intent.EXTRA_TEXT, R.string.email_footer
+	sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.email_footer)
 		+ LogService.getBuildInfo());
 
 	startActivity(Intent.createChooser(sendIntent,
@@ -199,11 +208,11 @@ public class WifiFixerActivity extends Activity {
 	PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 		new Intent(this, About.class), 0);
 	// construct the NotifUtil object.
-	Notification notif = new Notification(R.drawable.icon, "Please Read",
-		System.currentTimeMillis());
+	Notification notif = new Notification(R.drawable.icon,
+		getString(R.string.please_read), System.currentTimeMillis());
 
 	// Set the info for the views that show in the notification panel.
-	notif.setLatestEventInfo(this, from, "Tap Here to Read About Page",
+	notif.setLatestEventInfo(this, from, getString(R.string.aboutnag),
 		contentIntent);
 	notif.flags = Notification.FLAG_AUTO_CANCEL;
 	nm.notify(4145, notif);
@@ -219,18 +228,14 @@ public class WifiFixerActivity extends Activity {
 	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
 	PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-		new Intent(Intent.ACTION_VIEW, Uri
-			.parse("market://details?id=com.wahtod.wififixer")), 0);
-	Notification notif = new Notification(R.drawable.icon, "Thank You",
-		System.currentTimeMillis());
+		new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI)), 0);
+	Notification notif = new Notification(R.drawable.icon,
+		getString(R.string.thank_you), System.currentTimeMillis());
 
 	RemoteViews contentView = new RemoteViews(getPackageName(),
 		R.layout.nag_layout);
 	contentView.setImageViewResource(R.id.image, R.drawable.icon);
-	contentView
-		.setTextViewText(
-			R.id.text,
-			"Thank you for using Wifi Fixer. If you find this software useful, please tap here to donate.");
+	contentView.setTextViewText(R.id.text, getString(R.string.donatenag));
 	notif.contentView = contentView;
 	notif.contentIntent = contentIntent;
 
@@ -251,7 +256,7 @@ public class WifiFixerActivity extends Activity {
 
 	LOGGING = getLogging();
 	if (LOGGING) {
-	    Toast.makeText(WifiFixerActivity.this, "Disabling Logging",
+	    Toast.makeText(WifiFixerActivity.this, R.string.disabling_logging,
 		    Toast.LENGTH_SHORT).show();
 	    setLogging(false);
 	} else {
@@ -264,7 +269,7 @@ public class WifiFixerActivity extends Activity {
 		return;
 	    }
 
-	    Toast.makeText(WifiFixerActivity.this, "Enabling Logging",
+	    Toast.makeText(WifiFixerActivity.this, R.string.enabling_logging,
 		    Toast.LENGTH_SHORT).show();
 	    setLogging(true);
 	}
@@ -341,6 +346,16 @@ public class WifiFixerActivity extends Activity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+	super.onNewIntent(intent);
+	/*
+	 * Pop open network list if started by widget
+	 */
+	if (intent.hasExtra(OPEN_NETWORK_LIST))
+	    openNetworkList();
+    }
+
+    @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
 	    ContextMenuInfo menuInfo) {
 	super.onCreateContextMenu(menu, v, menuInfo);
@@ -348,9 +363,9 @@ public class WifiFixerActivity extends Activity {
 	 * Clicked is the stored string triggered in the OnClickListener
 	 */
 	menu.setHeaderTitle(clicked);
-	menu.add(0, CONTEXT_ENABLE, 0, "Enable");
-	menu.add(0, CONTEXT_DISABLE, 1, "Disable");
-	menu.add(0, CONTEXT_CONNECT, 2, "Connect Now");
+	menu.add(0, CONTEXT_ENABLE, 0, R.string.enable);
+	menu.add(0, CONTEXT_DISABLE, 1, R.string.disable);
+	menu.add(0, CONTEXT_CONNECT, 2, R.string.connect_now);
     }
 
     @Override
@@ -438,4 +453,10 @@ public class WifiFixerActivity extends Activity {
 
 	return true;
     }
+
+    private void openNetworkList() {
+	final SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.SlidingDrawer);
+	drawer.animateOpen();
+    }
+
 }

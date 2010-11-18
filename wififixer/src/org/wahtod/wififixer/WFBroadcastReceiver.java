@@ -70,7 +70,10 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	    break;
 
 	case 2:
-	    // yet to implement
+	    Intent intent = new Intent(context, WifiFixerActivity.class);
+	    intent.putExtra(WifiFixerActivity.OPEN_NETWORK_LIST, true);
+	    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    context.startActivity(intent);
 	    break;
 	}
     }
