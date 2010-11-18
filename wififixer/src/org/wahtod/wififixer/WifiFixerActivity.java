@@ -37,7 +37,6 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,7 +49,7 @@ import android.widget.ListView;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 public class WifiFixerActivity extends Activity {
     // Is this the paid version?
@@ -67,23 +66,21 @@ public class WifiFixerActivity extends Activity {
     private static final int MENU_HELP = 4;
     private static final int MENU_ABOUT = 5;
     private static final int LOGGING_GROUP = 42;
-    
+
     private static final int CONTEXT_ENABLE = 1;
     private static final int CONTEXT_DISABLE = 2;
     private static final int CONTEXT_CONNECT = 3;
-    
+
     private String clicked;
     VersionedLogFile vlogfile;
     // New key for About nag
     // Set this when you change the About xml
     static final String sABOUT = "ABOUT2";
-    
 
     void authCheck() {
 	if (!ISAUTHED) {
 	    // Handle Donate Auth
-	    Intent sendIntent = new Intent(
-		    "com.wahtod.wififixer.WFDonateService");
+	    Intent sendIntent = new Intent(getString(R.string.donateservice));
 	    startService(sendIntent);
 	    nagNotification();
 	}
@@ -105,18 +102,18 @@ public class WifiFixerActivity extends Activity {
     void sendLog() {
 
 	File file = vlogfile.getLogFile(getBaseContext());
-	Log.i("WifiFixerActivity", file.getAbsolutePath());
+	// Log.i("WifiFixerActivity", file.getAbsolutePath());
 
 	if (Environment.getExternalStorageState() != null
 		&& !(Environment.getExternalStorageState()
 			.contains(Environment.MEDIA_MOUNTED))) {
-	    Toast.makeText(WifiFixerActivity.this, "SD Card Unavailable",
-		    Toast.LENGTH_LONG).show();
+	    Toast.makeText(WifiFixerActivity.this,
+		    R.string.sd_card_unavailable, Toast.LENGTH_LONG).show();
 
 	    return;
 
 	} else if (!file.exists()) {
-	    Toast.makeText(WifiFixerActivity.this, "Log doesn't exist",
+	    Toast.makeText(WifiFixerActivity.this, R.string.log_doesn_t_exist,
 		    Toast.LENGTH_LONG).show();
 	    return;
 	}
@@ -124,15 +121,15 @@ public class WifiFixerActivity extends Activity {
 	Intent sendIntent = new Intent(Intent.ACTION_SEND);
 	sendIntent.setType("text/plain");
 	sendIntent.putExtra(Intent.EXTRA_EMAIL,
-		new String[] { "zanshin.g1@gmail.com" });
-	sendIntent.putExtra(Intent.EXTRA_SUBJECT, "WifiFixer Log");
+		new String[] { getString(R.string.email) });
+	sendIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.subject);
 	sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.toURI()
 		.toString()));
-	sendIntent.putExtra(Intent.EXTRA_TEXT,
-		"Please include time at which issue occurred and description of the issue:\n\n"
-			+ LogService.getBuildInfo());
+	sendIntent.putExtra(Intent.EXTRA_TEXT, R.string.email_footer
+		+ LogService.getBuildInfo());
 
-	startActivity(Intent.createChooser(sendIntent, "Email:"));
+	startActivity(Intent.createChooser(sendIntent,
+		getString(R.string.emailintent)));
 
     }
 
@@ -168,7 +165,7 @@ public class WifiFixerActivity extends Activity {
 	String vers = "";
 	try {
 	    // ---get the package info---
-	    PackageInfo pi = pm.getPackageInfo("org.wahtod.wififixer", 0);
+	    PackageInfo pi = pm.getPackageInfo(this.getPackageName(), 0);
 	    // ---display the versioncode--
 	    vers = pi.versionName;
 	} catch (NameNotFoundException e) {
@@ -198,7 +195,7 @@ public class WifiFixerActivity extends Activity {
 	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
 	// The details of our message
-	CharSequence from = "WiFi Fixer";
+	CharSequence from = getString(R.string.app_name);
 	PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 		new Intent(this, About.class), 0);
 	// construct the NotifUtil object.
@@ -261,8 +258,9 @@ public class WifiFixerActivity extends Activity {
 	    if (Environment.getExternalStorageState() != null
 		    && !(Environment.getExternalStorageState()
 			    .contains("mounted"))) {
-		Toast.makeText(WifiFixerActivity.this, "SD Card Unavailable",
-			Toast.LENGTH_SHORT).show();
+		Toast.makeText(WifiFixerActivity.this,
+			R.string.sd_card_unavailable, Toast.LENGTH_SHORT)
+			.show();
 		return;
 	    }
 
@@ -286,12 +284,13 @@ public class WifiFixerActivity extends Activity {
 	lv.setTextFilterEnabled(true);
 	lv.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_layout,
 		getNetworks(this)));
-	lv.setOnItemClickListener(new OnItemClickListener() {
-	    @Override
-	    public void onItemClick(AdapterView<?> arg0, View v, int position,
-		    long id) {
-		clicked= lv.getItemAtPosition(position).toString();
 
+	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
+	    @Override
+	    public boolean onItemLongClick(AdapterView<?> arg0, View v,
+		    int position, long id) {
+		clicked = lv.getItemAtPosition(position).toString();
+		return false;
 	    }
 
 	});
@@ -348,15 +347,15 @@ public class WifiFixerActivity extends Activity {
 	/*
 	 * Clicked is the stored string triggered in the OnClickListener
 	 */
-	 menu.setHeaderTitle(clicked);
-	    menu.add(0, CONTEXT_ENABLE, 0, "Enable");
-	    menu.add(0, CONTEXT_DISABLE, 1, "Disable");
-	    menu.add(0,CONTEXT_CONNECT, 2, "Connect Now");
+	menu.setHeaderTitle(clicked);
+	menu.add(0, CONTEXT_ENABLE, 0, "Enable");
+	menu.add(0, CONTEXT_DISABLE, 1, "Disable");
+	menu.add(0, CONTEXT_CONNECT, 2, "Connect Now");
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-	
+
 	return true;
     }
 
