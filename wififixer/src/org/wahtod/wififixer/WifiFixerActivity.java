@@ -456,7 +456,8 @@ public class WifiFixerActivity extends Activity {
 
     private void openNetworkList() {
 	final SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.SlidingDrawer);
-	drawer.animateOpen();
+	if (!drawer.isOpened())
+	    drawer.animateOpen();
     }
 
 }
