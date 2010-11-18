@@ -74,6 +74,7 @@ public class WifiFixerActivity extends Activity {
 
     private String clicked;
     VersionedLogFile vlogfile;
+    private static View listviewitem;
     // New key for About nag
     // Set this when you change the About xml
     static final String sABOUT = "ABOUT2";
@@ -292,9 +293,10 @@ public class WifiFixerActivity extends Activity {
 
 	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	    @Override
-	    public boolean onItemLongClick(AdapterView<?> arg0, View v,
+	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 		    int position, long id) {
 		clicked = lv.getItemAtPosition(position).toString();
+	        listviewitem = v;
 		return false;
 	    }
 
@@ -370,7 +372,16 @@ public class WifiFixerActivity extends Activity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-
+	switch (item.getItemId()) {
+	case CONTEXT_ENABLE:
+	    listviewitem.setBackgroundDrawable(null);
+	    break;
+	case CONTEXT_DISABLE:
+	    listviewitem.setBackgroundResource(R.drawable.disabled_ssid);
+	    break;
+	case CONTEXT_CONNECT:
+	    break;
+	}
 	return true;
     }
 
