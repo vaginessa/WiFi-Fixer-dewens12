@@ -22,6 +22,7 @@ import java.util.List;
 import org.wahtod.wififixer.LegacySupport.LegacyLogFile;
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
 import org.wahtod.wififixer.PrefConstants.Pref;
+import org.wahtod.wififixer.R.id;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -126,7 +127,7 @@ public class WifiFixerActivity extends Activity {
 		holder = new ViewHolder();
 		holder.text = (TextView) convertView.findViewById(R.id.ssid);
 		holder.icon = (ImageView) convertView
-			.findViewById(R.id.NETWORK_DISABLED_ICON);
+			.findViewById(R.id.NETWORK_ICON);
 		convertView.setTag(holder);
 	    } else {
 		holder = (ViewHolder) convertView.getTag();
@@ -430,12 +431,13 @@ public class WifiFixerActivity extends Activity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+	ImageView iv = (ImageView) listviewitem.findViewById(id.NETWORK_ICON);
 	switch (item.getItemId()) {
 	case CONTEXT_ENABLE:
-	    listviewitem.setBackgroundDrawable(null);
+	    iv.setImageResource(R.drawable.enabled_ssid);
 	    break;
 	case CONTEXT_DISABLE:
-	    listviewitem.setBackgroundResource(R.drawable.disabled_ssid);
+	    iv.setImageResource(R.drawable.disabled_ssid);
 	    break;
 	case CONTEXT_CONNECT:
 	    break;

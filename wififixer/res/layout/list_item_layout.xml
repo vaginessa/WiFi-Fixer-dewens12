@@ -12,14 +12,17 @@
 		License.
 	-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="wrap_content" android:gravity="left|center"
-	android:layout_width="wrap_content" android:paddingBottom="5px"
+	android:orientation="horizontal"
+	android:layout_height="fill_parent" android:gravity="left|center"
+	android:layout_width="fill_parent" android:paddingBottom="5px"
 	android:paddingTop="5px" android:paddingLeft="5px">
 	<TextView android:id="@+id/ssid" android:text="default"
+		android:layout_weight="5"
 		android:layout_marginLeft="15px" android:paddingRight="50dp"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
 		android:gravity="left" android:textColor="#FFFF00"></TextView>
-	<ImageView android:id="@+id/NETWORK_DISABLED_ICON"
+	<ImageView android:id="@+id/NETWORK_ICON"
+		android:layout_weight="2"
 		android:layout_width="64px" android:layout_height="64px"
 		android:gravity="right" android:maxWidth="64px" android:maxHeight="64px"
 		android:src="@drawable/icon"></ImageView>
