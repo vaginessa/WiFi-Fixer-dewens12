@@ -38,13 +38,16 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RemoteViews;
 import android.widget.SlidingDrawer;
@@ -75,6 +78,7 @@ public class WifiFixerActivity extends Activity {
     private String clicked;
     VersionedLogFile vlogfile;
     private static View listviewitem;
+
     // New key for About nag
     // Set this when you change the About xml
     static final String sABOUT = "ABOUT2";
@@ -86,6 +90,55 @@ public class WifiFixerActivity extends Activity {
      * Market URI for pendingintent
      */
     private static final String MARKET_URI = "market://details?id=com.wahtod.wififixer";
+
+    /*
+     * custom adapter for Network List ListView
+     */
+    private static class NetworkListAdapter extends BaseAdapter {
+	private static String[] ssidArray;
+	private static LayoutInflater inflater;
+
+	public NetworkListAdapter(Context context, String[] ssids) {
+	    inflater = (LayoutInflater) context
+		    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	    ssidArray = ssids;
+	}
+
+	public int getCount() {
+	    return ssidArray.length;
+	}
+
+	public Object getItem(int position) {
+	    return position;
+	}
+
+	public long getItemId(int position) {
+	    return position;
+	}
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+	    ViewHolder holder;
+	    if (convertView == null) {
+		convertView = inflater.inflate(R.layout.list_item_layout, null);
+		holder = new ViewHolder();
+		holder.text = (TextView) convertView.findViewById(R.id.ssid);
+		holder.icon = (ImageView) convertView
+			.findViewById(R.id.NETWORK_DISABLED_ICON);
+		convertView.setTag(holder);
+	    } else {
+		holder = (ViewHolder) convertView.getTag();
+	    }
+	    holder.text.setText(ssidArray[position]);
+	    holder.icon.setImageResource(R.drawable.disabled_ssid);
+	    return convertView;
+	}
+
+	static class ViewHolder {
+	    TextView text;
+	    ImageView icon;
+	}
+
+    }
 
     void authCheck() {
 	if (!ISAUTHED) {
@@ -288,15 +341,13 @@ public class WifiFixerActivity extends Activity {
 	 */
 	final ListView lv = (ListView) findViewById(R.id.ListView01);
 	lv.setTextFilterEnabled(true);
-	lv.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_layout,
-		getNetworks(this)));
-
+	lv.setAdapter(new NetworkListAdapter(this, getNetworks(this)));
 	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	    @Override
 	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 		    int position, long id) {
 		clicked = lv.getItemAtPosition(position).toString();
-	        listviewitem = v;
+		listviewitem = v;
 		return false;
 	    }
 

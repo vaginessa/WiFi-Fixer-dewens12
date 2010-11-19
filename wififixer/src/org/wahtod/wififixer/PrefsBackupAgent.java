@@ -30,8 +30,9 @@ public class PrefsBackupAgent extends BackupAgentHelper {
 
     // Allocate a helper and add it to the backup agent
     @Override
-    public void onCreate(){
-        SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this, this.getPackageName()+PREFS);
-        addHelper(PREFS_BACKUP_KEY, helper);
+    public void onCreate() {
+	SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(
+		this, this.getPackageName() + PREFS);
+	addHelper(PREFS_BACKUP_KEY, helper);
     }
 }

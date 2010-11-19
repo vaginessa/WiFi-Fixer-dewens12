@@ -62,7 +62,6 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.text.format.Formatter;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 public class WifiFixerService extends Service {
 
