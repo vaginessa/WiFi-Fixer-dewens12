@@ -58,13 +58,14 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 public class WifiFixerActivity extends Activity {
     // Is this the paid version?
-    public boolean ISFREE = true;
-    public boolean ISAUTHED = false;
-    public boolean ABOUT = false;
-    public boolean LOGGING_MENU = false;
-    public boolean LOGGING = false;
+    public boolean isfreeFlag = true;
+    public boolean isauthedFlag = false;
+    public boolean aboutFlag = false;
+    public boolean loggingmenuFlag = false;
+    public boolean loggingFlag = false;
 
     // constants
+    public static final String NETWORK = "NETWORK_";
     private static final int MENU_LOGGING = 1;
     private static final int MENU_SEND = 2;
     private static final int MENU_PREFS = 3;
@@ -79,6 +80,10 @@ public class WifiFixerActivity extends Activity {
     private String clicked;
     VersionedLogFile vlogfile;
     private static View listviewitem;
+    /*
+     * As ugly as cacheing context is, the alternative is uglier.
+     */
+    protected static Context ctxt;
 
     // New key for About nag
     // Set this when you change the About xml
@@ -96,7 +101,6 @@ public class WifiFixerActivity extends Activity {
      * custom adapter for Network List ListView
      */
     private static class NetworkListAdapter extends BaseAdapter {
-	private static final String NETWORK = "NETWORK_";
 	private static String[] ssidArray;
 	private static LayoutInflater inflater;
 	private Context sharedContext;
@@ -149,7 +153,7 @@ public class WifiFixerActivity extends Activity {
     }
 
     void authCheck() {
-	if (!ISAUTHED) {
+	if (!isauthedFlag) {
 	    // Handle Donate Auth
 	    startService(new Intent(getString(R.string.donateservice)));
 	    nagNotification();
@@ -214,7 +218,7 @@ public class WifiFixerActivity extends Activity {
     }
 
     void setLogging(boolean state) {
-	LOGGING = state;
+	loggingFlag = state;
 	PrefUtil.writeBoolean(this, Pref.LOG_KEY, state);
 	PrefUtil.notifyPrefChange(this, Pref.LOG_KEY);
 	if (state) {
@@ -251,7 +255,7 @@ public class WifiFixerActivity extends Activity {
 
     void setToggleIcon(Menu menu) {
 	MenuItem logging = menu.getItem(MENU_LOGGING - 1);
-	if (LOGGING) {
+	if (loggingFlag) {
 	    logging.setIcon(R.drawable.logging_enabled);
 	    logging.setTitle(R.string.turn_logging_off);
 	} else {
@@ -316,8 +320,8 @@ public class WifiFixerActivity extends Activity {
 
     void toggleLog() {
 
-	LOGGING = getLogging();
-	if (LOGGING) {
+	loggingFlag = getLogging();
+	if (loggingFlag) {
 	    Toast.makeText(WifiFixerActivity.this, R.string.disabling_logging,
 		    Toast.LENGTH_SHORT).show();
 	    setLogging(false);
@@ -348,7 +352,7 @@ public class WifiFixerActivity extends Activity {
 	 * Grab and set up ListView in sliding drawer for network list UI
 	 */
 	final ListView lv = (ListView) findViewById(R.id.ListView01);
-	lv.setTextFilterEnabled(true);
+	lv.setTextFilterEnabled(false);
 	lv.setAdapter(new NetworkListAdapter(this, getNetworks(this)));
 	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	    @Override
@@ -365,6 +369,10 @@ public class WifiFixerActivity extends Activity {
 	// Set layout version code
 	setText();
 	oncreate_setup();
+	/*
+	 * For ContextMenu handler
+	 */
+	ctxt = this;
 
     };
 
@@ -381,12 +389,12 @@ public class WifiFixerActivity extends Activity {
     }
 
     private void oncreate_setup() {
-	ISAUTHED = PrefUtil.readBoolean(this, "ISAUTHED");
-	ABOUT = PrefUtil.readBoolean(this, sABOUT);
-	LOGGING_MENU = PrefUtil.readBoolean(this, "Logging");
-	LOGGING = getLogging();
+	isauthedFlag = PrefUtil.readBoolean(this, "isauthedFlag");
+	aboutFlag = PrefUtil.readBoolean(this, sABOUT);
+	loggingmenuFlag = PrefUtil.readBoolean(this, "Logging");
+	loggingFlag = getLogging();
 	// Fire new About nag
-	if (!ABOUT) {
+	if (!aboutFlag) {
 	    showNotification();
 
 	}
@@ -401,8 +409,8 @@ public class WifiFixerActivity extends Activity {
     public void onStart() {
 	super.onStart();
 	setIcon();
-	LOGGING_MENU = PrefUtil.readBoolean(this, "Logging");
-	LOGGING = getLogging();
+	loggingmenuFlag = PrefUtil.readBoolean(this, "Logging");
+	loggingFlag = getLogging();
 	startwfService(this);
     }
 
@@ -435,9 +443,11 @@ public class WifiFixerActivity extends Activity {
 	switch (item.getItemId()) {
 	case CONTEXT_ENABLE:
 	    iv.setImageResource(R.drawable.enabled_ssid);
+	    PrefUtil.removeKey(ctxt, NETWORK + clicked);
 	    break;
 	case CONTEXT_DISABLE:
 	    iv.setImageResource(R.drawable.disabled_ssid);
+	    PrefUtil.writeBoolean(ctxt, NETWORK + clicked, true);
 	    break;
 	case CONTEXT_CONNECT:
 	    break;
@@ -514,7 +524,7 @@ public class WifiFixerActivity extends Activity {
 	super.onPrepareOptionsMenu(menu);
 	// Menu drawing stuffs
 
-	if (LOGGING_MENU) {
+	if (loggingmenuFlag) {
 	    menu.setGroupVisible(LOGGING_GROUP, true);
 	    setToggleIcon(menu);
 

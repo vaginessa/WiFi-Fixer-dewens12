@@ -211,6 +211,22 @@ public class PrefUtil extends Object {
 	editor.commit();
     }
 
+    public static void removeKey(final Context ctxt, final Pref pref) {
+	SharedPreferences settings = PreferenceManager
+		.getDefaultSharedPreferences(ctxt.getApplicationContext());
+	SharedPreferences.Editor editor = settings.edit();
+	editor.remove(pref.key());
+	editor.commit();
+    }
+
+    public static void removeKey(final Context ctxt, final String key) {
+	SharedPreferences settings = PreferenceManager
+		.getDefaultSharedPreferences(ctxt.getApplicationContext());
+	SharedPreferences.Editor editor = settings.edit();
+	editor.remove(key);
+	editor.commit();
+    }
+
     public void specialCase() {
 	/*
 	 * Any special case code here
