@@ -95,13 +95,16 @@ public class WifiFixerActivity extends Activity {
      * custom adapter for Network List ListView
      */
     private static class NetworkListAdapter extends BaseAdapter {
+	private static final String NETWORK = "NETWORK_";
 	private static String[] ssidArray;
 	private static LayoutInflater inflater;
+	private Context sharedContext;
 
 	public NetworkListAdapter(Context context, String[] ssids) {
 	    inflater = (LayoutInflater) context
 		    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    ssidArray = ssids;
+	    sharedContext = context;
 	}
 
 	public int getCount() {
@@ -109,7 +112,7 @@ public class WifiFixerActivity extends Activity {
 	}
 
 	public Object getItem(int position) {
-	    return position;
+	    return ssidArray[position];
 	}
 
 	public long getItemId(int position) {
@@ -129,7 +132,11 @@ public class WifiFixerActivity extends Activity {
 		holder = (ViewHolder) convertView.getTag();
 	    }
 	    holder.text.setText(ssidArray[position]);
-	    holder.icon.setImageResource(R.drawable.disabled_ssid);
+	    if (PrefUtil.readBoolean(sharedContext, NETWORK
+		    + ssidArray[position]))
+		holder.icon.setImageResource(R.drawable.disabled_ssid);
+	    else
+		holder.icon.setImageResource(R.drawable.enabled_ssid);
 	    return convertView;
 	}
 

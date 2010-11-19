@@ -16,9 +16,11 @@
 	android:layout_width="wrap_content" android:paddingBottom="5px"
 	android:paddingTop="5px" android:paddingLeft="5px">
 	<TextView android:id="@+id/ssid" android:text="default"
+		android:layout_marginLeft="15px" android:paddingRight="50dp"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:gravity="center" android:textColor="#FFFF00"></TextView>
+		android:gravity="left" android:textColor="#FFFF00"></TextView>
 	<ImageView android:id="@+id/NETWORK_DISABLED_ICON"
 		android:layout_width="64px" android:layout_height="64px"
-		android:maxWidth="64px" android:maxHeight="64px" android:src="@drawable/icon"></ImageView>
+		android:gravity="right" android:maxWidth="64px" android:maxHeight="64px"
+		android:src="@drawable/icon"></ImageView>
 </LinearLayout>
