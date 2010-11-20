@@ -81,7 +81,7 @@ public class WifiFixerActivity extends Activity {
     VersionedLogFile vlogfile;
     private static View listviewitem;
     /*
-     * As ugly as cacheing context is, the alternative is uglier.
+     * As ugly as caching context is, the alternative is uglier.
      */
     protected static Context ctxt;
 
@@ -222,17 +222,26 @@ public class WifiFixerActivity extends Activity {
 	PrefUtil.writeBoolean(this, Pref.LOG_KEY, state);
 	PrefUtil.notifyPrefChange(this, Pref.LOG_KEY);
 	if (state) {
-	    /*
-	     * Delete old log if toggling logging on
-	     */
+
 	    if (vlogfile != null) {
 
 	    } else
 		vlogfile = new LegacyLogFile();
-	    File file = vlogfile.getLogFile(this);
-	    file.delete();
 
 	}
+    }
+
+    private void deleteLog() {
+	/*
+	 * Delete old log
+	 */
+	if (vlogfile != null) {
+
+	} else
+	    vlogfile = new LegacyLogFile();
+
+	File file = vlogfile.getLogFile(this);
+	file.delete();
     }
 
     void setText() {
@@ -422,6 +431,8 @@ public class WifiFixerActivity extends Activity {
 	 */
 	if (intent.hasExtra(OPEN_NETWORK_LIST))
 	    openNetworkList();
+	else if (intent.getData().toString().contains("DELETE_LOG"))
+	    deleteLog();
     }
 
     @Override

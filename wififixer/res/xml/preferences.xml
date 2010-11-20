@@ -18,32 +18,55 @@
 		<CheckBoxPreference android:key="Disable"
 			android:title="Disable Service" android:summary="Causes the Wifi Fixer service to stop running" />
 
-		
+
 
 		<ListPreference android:title="Set Wifi Usablity"
 			android:defaultValue="2"
 			android:summary="Allows setting from max wifi usability to minimal battery use"
 			android:key="Perf_Mode" android:entries="@array/entries"
 			android:entryValues="@array/entryValues" />
-		
-		<PreferenceScreen android:title="Notifications"
-		android:summary="Network and status notifications">
-		<CheckBoxPreference android:key="Notifications"
-			android:title="Enable Notifications"
-			android:summary="Displays a notification when Wifi Fixer fixes a problem" />
-			
-		<CheckBoxPreference android:key="NetNotif"
-			android:title="Network Notifications"
-			android:summary="Displays a notification when a new open network is detected" />
-		</PreferenceScreen>
-			
-		<PreferenceScreen android:title="Advanced Options"
-		android:summary="Please read documentation before changing these settings">
+
+		<PreferenceScreen android:title="Logging"
+			android:summary="Logging Preferences">
 			<PreferenceCategory android:title="Logging">
-			<CheckBoxPreference android:key="Logging"
-			android:title="Enable Log Menu" android:summary="Note: Logging stores some personal information" />
+				<CheckBoxPreference android:key="Logging"
+					android:title="Enable Log Menu" android:summary="Enables logging menu options in main activity" />
+				<PreferenceScreen android:title="Delete Log"
+					android:summary="Deletes Existing Log">
+					<intent android:action="android.intent.action.MAIN"
+						android:targetPackage="org.wahtod.wififixer"
+						android:targetClass="org.wahtod.wififixer.WifiFixerActivity"
+						android:data="DELETE_LOG" />
+
+				</PreferenceScreen>
 			</PreferenceCategory>
-			
+		</PreferenceScreen>
+
+		<PreferenceScreen android:title="Notifications"
+			android:summary="Network and status notifications">
+
+			<CheckBoxPreference android:key="StateNotif"
+				android:title="Status Notification"
+				android:summary="Displays an ongoing notification showing connection state" />
+
+			<CheckBoxPreference android:key="Notifications"
+				android:title="Fix Notifications"
+				android:summary="Displays a notification when Wifi Fixer fixes a problem" />
+
+			<CheckBoxPreference android:key="NetNotif"
+				android:title="Network Notifications"
+				android:summary="Displays a notification when a new open network is detected" />
+
+
+		</PreferenceScreen>
+
+		<ListPreference android:title="Widget Behavior"
+			android:summary="Selects widget behavior" android:defaultValue="0"
+			android:key="WIDGET" android:entries="@array/widget"
+			android:entryValues="@array/widgetValues" />
+
+		<PreferenceScreen android:title="Advanced Options"
+			android:summary="Please read documentation before changing these settings">
 			<PreferenceCategory android:title="Wifi Usability">
 				<CheckBoxPreference android:key="WiFiLock"
 					android:defaultValue="true" android:title="Enable Wifi Lock"
@@ -53,26 +76,20 @@
 					android:summary="Disables sleep on Screen Off, which will increase battery use moderately" />
 			</PreferenceCategory>
 			<PreferenceCategory android:title="Specialized Fixes">
-			<ListPreference android:title="Wifi Sleep Policy"
-			android:defaultValue="3"
-			android:summary="Controls Wifi sleep policy: See Known Issues in Documentation"
-			android:key="SLEEP_POLICY" android:entries="@array/wfsleep"
-			android:entryValues="@array/wfsleepValues" />
-			<CheckBoxPreference android:key="SUPFIX"
+				<ListPreference android:title="Wifi Sleep Policy"
+					android:defaultValue="3"
+					android:summary="Controls Wifi sleep policy: See Known Issues in Documentation"
+					android:key="SLEEP_POLICY" android:entries="@array/wfsleep"
+					android:entryValues="@array/wfsleepValues" />
+				<CheckBoxPreference android:key="SUPFIX"
 					android:title="Disable Supplicant Fixes" android:summary="Check if having trouble on Android 1.5 or 1.6" />
-			<CheckBoxPreference android:key="N1FIX2"
-					android:title="Nexus One Sleep Fix" android:summary="Experimental: please read Known Issues in Documentation." />
+				<CheckBoxPreference android:key="N1FIX2"
+					android:title="Nexus One Sleep Fix"
+					android:summary="Experimental: please read Known Issues in Documentation." />
 			</PreferenceCategory>
 
 
 		</PreferenceScreen>
-
-		
-		<ListPreference android:title="Widget Behavior" android:summary="Selects widget behavior"
-			android:defaultValue="0"
-			android:key="WIDGET" android:entries="@array/widget"
-			android:entryValues="@array/widgetValues" />
-
 
 	</PreferenceCategory>
 
