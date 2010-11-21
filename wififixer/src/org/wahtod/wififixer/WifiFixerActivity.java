@@ -431,7 +431,8 @@ public class WifiFixerActivity extends Activity {
 	 */
 	if (intent.hasExtra(OPEN_NETWORK_LIST))
 	    openNetworkList();
-	else if (intent.getData().toString().contains("DELETE_LOG"))
+	else if (intent.getData() != null
+		&& intent.getData().toString().contains("DELETE_LOG"))
 	    deleteLog();
     }
 
