@@ -82,6 +82,7 @@ public class WifiFixerActivity extends Activity {
     private static View listviewitem;
     private static NetworkListAdapter adapter;
     private static String[] knownnetworks;
+
     /*
      * As ugly as caching context is, the alternative is uglier.
      */
@@ -399,6 +400,9 @@ public class WifiFixerActivity extends Activity {
 
     };
 
+    /*
+     * Note that this WILL return a null String[] if called while wifi is off.
+     */
     private static final String[] getNetworks(final Context context) {
 	WifiManager wm = (WifiManager) context
 		.getSystemService(Context.WIFI_SERVICE);
@@ -551,10 +555,10 @@ public class WifiFixerActivity extends Activity {
 	super.onResume();
 	/*
 	 * Check Known Networks list against adapter array and refresh if
-	 * necessary
+	 * necessary Don't refresh if temp is empty (wifi is off)
 	 */
 	String[] temp = getNetworks(this);
-	if (!temp.equals(knownnetworks)) {
+	if (temp.length != 0 && !temp.equals(knownnetworks)) {
 	    knownnetworks = temp;
 	    adapter = new NetworkListAdapter(this, knownnetworks);
 	    final ListView lv = (ListView) findViewById(R.id.ListView01);
