@@ -33,10 +33,11 @@
 					android:title="Enable Log Menu" android:summary="Enables logging menu options in main activity" />
 				<PreferenceScreen android:title="Delete Log"
 					android:summary="Deletes Existing Log">
-					<intent android:action="android.intent.action.MAIN"
-						android:targetPackage="org.wahtod.wififixer"
-						android:targetClass="org.wahtod.wififixer.WifiFixerActivity"
-						android:data="DELETE_LOG" />
+					<intent android:targetPackage="org.wahtod.wififixer"
+						android:targetClass="org.wahtod.wififixer.WifiFixerActivity">
+						<extra android:name="DELETE_LOG" android:value="pi">
+						</extra>
+					</intent>
 
 				</PreferenceScreen>
 			</PreferenceCategory>

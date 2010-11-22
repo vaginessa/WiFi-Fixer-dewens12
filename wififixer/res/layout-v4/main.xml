@@ -73,8 +73,8 @@
 				android:textSize="20dp"></TextView>
 
 			<ListView android:layout_centerHorizontal="true"
-				android:layout_below="@+id/TextView01" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/ListView01"
+				android:layout_below="@+id/TextView01" android:layout_width="fill_parent"
+				android:layout_height="fill_parent" android:id="@+id/ListView01"
 				android:dividerHeight="1dip" android:divider="#545454"></ListView>
 		</RelativeLayout>
 	</SlidingDrawer>

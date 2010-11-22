@@ -45,7 +45,7 @@
      <string-array name="widget">
         <item>Reassociate</item>
         <item>Reset Wifi</item>
-        <item>Connections</item>
+        <item>Known Networks</item>
     </string-array>
     
     <string-array name="widgetValues">

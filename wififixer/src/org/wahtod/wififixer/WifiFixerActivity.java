@@ -96,6 +96,10 @@ public class WifiFixerActivity extends Activity {
      * Market URI for pendingintent
      */
     private static final String MARKET_URI = "market://details?id=com.wahtod.wififixer";
+    /*
+     * Delete Log intent extra
+     */
+    private static final String DELETE_LOG = "DELETE_LOG";
 
     /*
      * custom adapter for Network List ListView
@@ -158,6 +162,26 @@ public class WifiFixerActivity extends Activity {
 	    startService(new Intent(getString(R.string.donateservice)));
 	    nagNotification();
 	}
+    }
+
+    private void deleteLog() {
+	/*
+	 * Delete old log
+	 */
+	if (vlogfile != null) {
+
+	} else
+	    vlogfile = new LegacyLogFile();
+
+	File file = vlogfile.getLogFile(this);
+
+	if (file.delete())
+	    Toast.makeText(WifiFixerActivity.this,
+		    R.string.logfile_delete_toast, Toast.LENGTH_LONG).show();
+	else
+	    Toast.makeText(WifiFixerActivity.this,
+		    R.string.logfile_delete_err_toast, Toast.LENGTH_LONG)
+		    .show();
     }
 
     boolean getLogging() {
@@ -229,19 +253,6 @@ public class WifiFixerActivity extends Activity {
 		vlogfile = new LegacyLogFile();
 
 	}
-    }
-
-    private void deleteLog() {
-	/*
-	 * Delete old log
-	 */
-	if (vlogfile != null) {
-
-	} else
-	    vlogfile = new LegacyLogFile();
-
-	File file = vlogfile.getLogFile(this);
-	file.delete();
     }
 
     void setText() {
@@ -361,7 +372,6 @@ public class WifiFixerActivity extends Activity {
 	 * Grab and set up ListView in sliding drawer for network list UI
 	 */
 	final ListView lv = (ListView) findViewById(R.id.ListView01);
-	lv.setTextFilterEnabled(false);
 	lv.setAdapter(new NetworkListAdapter(this, getNetworks(this)));
 	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	    @Override
@@ -390,8 +400,15 @@ public class WifiFixerActivity extends Activity {
 		.getSystemService(Context.WIFI_SERVICE);
 	List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
 	String[] networks = new String[wifiConfigs.size()];
+	String ssid;
 	for (WifiConfiguration wfResult : wifiConfigs) {
-	    networks[wfResult.networkId] = wfResult.SSID.replace("\"", "");
+
+	    ssid = wfResult.SSID.replace("\"", "");
+
+	    if (ssid.length() > 25)
+		ssid = ssid.substring(0, 25);
+
+	    networks[wfResult.networkId] = ssid;
 	}
 
 	return networks;
@@ -431,8 +448,7 @@ public class WifiFixerActivity extends Activity {
 	 */
 	if (intent.hasExtra(OPEN_NETWORK_LIST))
 	    openNetworkList();
-	else if (intent.getData() != null
-		&& intent.getData().toString().contains("DELETE_LOG"))
+	else if (intent.hasExtra(DELETE_LOG))
 	    deleteLog();
     }
 
