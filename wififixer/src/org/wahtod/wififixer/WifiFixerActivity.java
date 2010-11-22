@@ -80,6 +80,8 @@ public class WifiFixerActivity extends Activity {
     private String clicked;
     VersionedLogFile vlogfile;
     private static View listviewitem;
+    private static NetworkListAdapter adapter;
+    private static String[] knownnetworks;
     /*
      * As ugly as caching context is, the alternative is uglier.
      */
@@ -372,7 +374,9 @@ public class WifiFixerActivity extends Activity {
 	 * Grab and set up ListView in sliding drawer for network list UI
 	 */
 	final ListView lv = (ListView) findViewById(R.id.ListView01);
-	lv.setAdapter(new NetworkListAdapter(this, getNetworks(this)));
+	knownnetworks = getNetworks(this);
+	adapter = new NetworkListAdapter(this, knownnetworks);
+	lv.setAdapter(adapter);
 	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	    @Override
 	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
@@ -545,6 +549,17 @@ public class WifiFixerActivity extends Activity {
     @Override
     public void onResume() {
 	super.onResume();
+	/*
+	 * Check Known Networks list against adapter array and refresh if
+	 * necessary
+	 */
+	String[] temp = getNetworks(this);
+	if (!temp.equals(knownnetworks)) {
+	    knownnetworks = temp;
+	    adapter = new NetworkListAdapter(this, knownnetworks);
+	    final ListView lv = (ListView) findViewById(R.id.ListView01);
+	    lv.setAdapter(adapter);
+	}
     }
 
     @Override
