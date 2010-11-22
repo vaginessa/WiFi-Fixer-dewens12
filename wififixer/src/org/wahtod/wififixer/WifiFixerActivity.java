@@ -190,6 +190,19 @@ public class WifiFixerActivity extends Activity {
     boolean getLogging() {
 	return PrefUtil.readBoolean(this, Pref.LOG_KEY);
     }
+    
+    private void handleIntent (final Intent intent) {
+	/*
+	 * Pop open network list if started by widget
+	 */
+	if (intent.hasExtra(OPEN_NETWORK_LIST))
+	    openNetworkList();
+	/*
+	 * Delete Log if called by preference
+	 */
+	else if (intent.hasExtra(DELETE_LOG))
+	    deleteLog();
+    }
 
     void launchHelp() {
 	Intent myIntent = new Intent(this, HelpActivity.class);
@@ -397,6 +410,11 @@ public class WifiFixerActivity extends Activity {
 	 * For ContextMenu handler
 	 */
 	ctxt = this;
+	/*
+	 * Handle intent command if destroyed
+	 * or first start
+	 */
+	handleIntent(getIntent());
 
     };
 
@@ -451,13 +469,7 @@ public class WifiFixerActivity extends Activity {
     @Override
     protected void onNewIntent(Intent intent) {
 	super.onNewIntent(intent);
-	/*
-	 * Pop open network list if started by widget
-	 */
-	if (intent.hasExtra(OPEN_NETWORK_LIST))
-	    openNetworkList();
-	else if (intent.hasExtra(DELETE_LOG))
-	    deleteLog();
+	handleIntent(intent);
     }
 
     @Override
