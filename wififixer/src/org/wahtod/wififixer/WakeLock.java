@@ -30,13 +30,29 @@ public class WakeLock {
 		.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_NAME);
     }
 
-    public void wakeLock(final boolean state) {
+    public void lock(final boolean state) {
 	if (state && !wakelock.isHeld()) {
 	    wakelock.acquire();
+	    onAcquire();
 
 	} else if (wakelock.isHeld()) {
 	    wakelock.release();
+	    onRelease();
 	}
+    }
+
+    public void onRelease() {
+	/*
+	 * Override
+	 */
+
+    }
+
+    public void onAcquire() {
+	/*
+	 * Override
+	 */
+
     }
 
 }

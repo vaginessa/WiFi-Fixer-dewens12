@@ -58,10 +58,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.text.format.Formatter;
-import android.widget.RemoteViews;
 
 public class WifiFixerService extends Service {
 
@@ -77,9 +75,6 @@ public class WifiFixerService extends Service {
     // For Auth
     private static final String AUTHEXTRA = "IRRADIATED";
     private static final String AUTH = "AUTH";
-
-    // Wake Lock Tag
-    private static final String WFWAKELOCK = "WFWakeLock";
 
     /*
      * Constants for wifirepair values
@@ -162,12 +157,12 @@ public class WifiFixerService extends Service {
     private static WifiManager wm;
     private static WifiInfo myWifi;
     private static WifiManager.WifiLock lock;
-    private static PowerManager.WakeLock wakelock;
     private static DefaultHttpClient httpclient;
     private static HttpParams httpparams;
     private static HttpHead head;
     private static HttpResponse response;
     private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
+    private WakeLock wakelock;
     /*
      * Cache context for notifications
      */
@@ -407,7 +402,7 @@ public class WifiFixerService extends Service {
 	    /*
 	     * Remove wake lock if there is one
 	     */
-	    wakeLock(getBaseContext(), false);
+	    wakelock.lock(false);
 
 	    if (logging) {
 		wfLog(getBaseContext(), APP_NAME,
@@ -447,13 +442,13 @@ public class WifiFixerService extends Service {
 	    /*
 	     * This is all we want to do.
 	     */
-	    wakeLock(getBaseContext(), true);
+	    wakelock.lock(true);
 	    checkWifi();
 	    /*
 	     * Post next run
 	     */
 	    hMainWrapper(SLEEPCHECK, SLEEPWAIT);
-	    wakeLock(getBaseContext(), false);
+	    wakelock.lock(false);
 	}
 
     };
@@ -483,7 +478,7 @@ public class WifiFixerService extends Service {
 	    /*
 	     * Remove all posts first
 	     */
-	    wakeLock(getBaseContext(), true);
+	    wakelock.lock(true);
 	    clearQueue();
 	    hMain.removeMessages(TEMPLOCK_OFF);
 	    /*
@@ -498,7 +493,7 @@ public class WifiFixerService extends Service {
 	     * Then restore main tick
 	     */
 	    hMain.sendEmptyMessageDelayed(TEMPLOCK_OFF, SHORTWAIT);
-	    wakeLock(getBaseContext(), false);
+	    wakelock.lock(false);
 	}
 
     };
@@ -534,36 +529,6 @@ public class WifiFixerService extends Service {
 	}
 
     };
-
-    private static void addNetNotif(final Context context, final String ssid,
-	    final String signal) {
-	NotificationManager nm = (NotificationManager) context
-		.getSystemService(NOTIFICATION_SERVICE);
-
-	Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
-	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		intent, 0);
-
-	Notification notif = new Notification(R.drawable.wifi_ap, context
-		.getString(R.string.open_network_found), System
-		.currentTimeMillis());
-	if (ssid != EMPTYSTRING) {
-	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
-		    R.layout.netnotif_layout);
-	    contentView.setTextViewText(R.id.ssid, ssid);
-	    contentView.setTextViewText(R.id.signal, signal);
-	    notif.contentView = contentView;
-	    notif.contentIntent = contentIntent;
-	    notif.flags = Notification.FLAG_ONGOING_EVENT;
-	    notif.tickerText = context.getText(R.string.open_network_found);
-	    /*
-	     * Fire notification, cancel if message empty: means no open APs
-	     */
-	    nm.notify(NETNOTIFID, notif);
-	} else
-	    nm.cancel(NETNOTIFID);
-
-    }
 
     private static void cancelNotification(final Context context, final int id) {
 	NotificationManager nm = (NotificationManager) context
@@ -610,8 +575,7 @@ public class WifiFixerService extends Service {
 	if (lock.isHeld())
 	    lock.release();
 
-	if (wakelock != null && wakelock.isHeld())
-	    wakelock.release();
+	wakelock.lock(false);
 
 	hMain.removeMessages(MAIN);
 	cleanupPosts();
@@ -1334,7 +1298,7 @@ public class WifiFixerService extends Service {
 		n++;
 	    }
 	}
-	addNetNotif(context, ssid, signal);
+	NotifUtil.addNetNotif(context, ssid, signal);
     }
 
     private static void notifyWrap(final Context context, final String message) {
@@ -1367,6 +1331,25 @@ public class WifiFixerService extends Service {
 	 * Cache context for notifications
 	 */
 	notifcontext = this;
+	
+	//Initialize WakeLock
+	wakelock = new WakeLock(this){
+
+	    @Override
+	    public void onAcquire() {
+		 if (logging)
+			wfLog(getBaseContext(), APP_NAME, getString(R.string.acquiring_wake_lock));
+		super.onAcquire();
+	    }
+
+	    @Override
+	    public void onRelease() {
+		if (logging)
+			wfLog(getBaseContext(), APP_NAME, getString(R.string.releasing_wake_lock));
+		super.onRelease();
+	    }
+	    
+	};
 
 	wm = getWifiManager(this);
 	lastAP = getNetworkID();
@@ -1475,14 +1458,14 @@ public class WifiFixerService extends Service {
 	 * Remove any network notifications if this is manual
 	 */
 	if (!pendingwifitoggle)
-	    addNetNotif(this, EMPTYSTRING, EMPTYSTRING);
+	    NotifUtil.addNetNotif(this, EMPTYSTRING, EMPTYSTRING);
     }
 
     private void onWifiEnabled() {
 	hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
 	wifishouldbeon = false;
 	cancelNotification(notifcontext, NOTIFID);
-	wakeLock(this, false);
+	wakelock.lock(false);
 
     }
 
@@ -1558,7 +1541,8 @@ public class WifiFixerService extends Service {
 		     * Disable notification if pref changed to false
 		     */
 		    if (!getFlag(Pref.NETNOT_KEY))
-			addNetNotif(getBaseContext(), EMPTYSTRING, EMPTYSTRING);
+			NotifUtil.addNetNotif(getBaseContext(), EMPTYSTRING,
+				EMPTYSTRING);
 
 		    break;
 		}
@@ -1595,7 +1579,7 @@ public class WifiFixerService extends Service {
 
 	wfPreferences.loadPrefs();
 	cancelNotification(notifcontext, NOTIFID);
-	wakeLock(getBaseContext(), false);
+	wakelock.lock(false);
 
     }
 
@@ -1787,36 +1771,12 @@ public class WifiFixerService extends Service {
 	cleanupPosts();
 	tempLock(CONNECTWAIT);
 	// Wake lock
-	wakeLock(this, true);
+	wakelock.lock(true);
 	showNotification(notifcontext, getString(R.string.toggling_wifi),
 		getString(R.string.toggling_wifi), NOTIFID, false);
 	hMainWrapper(WIFI_OFF);
 	hMainWrapper(WIFI_ON, LOCKWAIT);
 	hMainWrapper(WATCHDOG, LOCKWAIT + REACHABLE);
-    }
-
-    private static void wakeLock(final Context context, final boolean state) {
-	PowerManager pm = (PowerManager) context
-		.getSystemService(Context.POWER_SERVICE);
-	/*
-	 * wakelock is static
-	 */
-	if (wakelock == null)
-	    wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-		    WFWAKELOCK);
-
-	if (state && !wakelock.isHeld()) {
-	    wakelock.acquire();
-	    if (logging)
-		wfLog(context, APP_NAME, context
-			.getString(R.string.acquiring_wake_lock));
-	} else if (wakelock.isHeld()) {
-	    wakelock.release();
-	    if (logging)
-		wfLog(context, APP_NAME, context
-			.getString(R.string.releasing_wake_lock));
-	}
-
     }
 
     private void wifiRepair() {
@@ -1834,7 +1794,7 @@ public class WifiFixerService extends Service {
 	    /*
 	     * if screen off, try wake lock then resubmit to handler
 	     */
-	    wakeLock(this, true);
+	    wakelock.lock(true);
 	    hMainWrapper(WIFITASK);
 	    if (logging)
 		wfLog(this, APP_NAME,

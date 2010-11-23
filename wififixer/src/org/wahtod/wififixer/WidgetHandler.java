@@ -43,15 +43,19 @@ public class WidgetHandler extends BroadcastReceiver {
     private static final int OFF = 1;
     private static final int WATCHDOG = 2;
     private static final int TOGGLE = 3;
+    
+    /*
+     * Notification ID
+     */
+    private static final int TOGGLE_ID = 23497;
 
     /*
      * Delay Constants
      */
-
     private static final int TOGGLE_DELAY = 8000;
     private static final int WATCHDOG_DELAY = 11000;
-    private static final int TOGGLE_ID = 23497;
-
+    
+    
     private Handler hWifiState = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
@@ -60,7 +64,7 @@ public class WidgetHandler extends BroadcastReceiver {
 	     */
 	    if (wlock == null)
 		wlock = new WakeLock(ctxt);
-	    wlock.wakeLock(true);
+	    wlock.lock(true);
 
 	    /*
 	     * Process Message
@@ -96,7 +100,7 @@ public class WidgetHandler extends BroadcastReceiver {
 	    /*
 	     * Release Wake Lock
 	     */
-	    wlock.wakeLock(false);
+	    wlock.lock(false);
 	}
     };
 

@@ -477,7 +477,7 @@ public class WifiFixerActivity extends Activity {
 	    ContextMenuInfo menuInfo) {
 	super.onCreateContextMenu(menu, v, menuInfo);
 	/*
-	 * Clicked is the stored string triggered in the OnClickListener
+	 * Clicked is the ListView selected string, so the SSID
 	 */
 	menu.setHeaderTitle(clicked);
 	menu.add(0, CONTEXT_ENABLE, 0, R.string.enable);
