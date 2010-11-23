@@ -57,9 +57,10 @@ public class FixerWidget extends AppWidgetProvider {
 	    int[] appWidgetIds) {
 
 	/*
-	 * Service seems like a better idea
+	 * Send Update To Widgets
 	 */
-	Log.i(this.getClass().getName(), "Widget Update Called");
+	Log.i(this.getClass().getName(), context
+		.getString(R.string.widget_update_called));
 	context.startService(new Intent(context, UpdateService.class));
 	super.onUpdate(context, appWidgetManager, appWidgetIds);
     }

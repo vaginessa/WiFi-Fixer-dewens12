@@ -12,6 +12,7 @@
 		License.
 	-->
 <resources>
+    <string name="widget_update_called">Widget Update Called</string>
     <string name="logfile_delete_err_toast">Log File Doesn\'t Exist</string>
     <string name="logfile_delete_toast">Log File Deleted</string>
     <string name="connect_now">Connect Now</string>
