@@ -29,6 +29,14 @@
                 android:layout_height="wrap_content"
                 android:padding="10dip"
                 >
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="Wifi Fixer is a low-resource service that works around several problems with Android wifi.   Wifi Fixer should help immediately, but may need preferences adjusted to work optimally.  Please read the documentation for specifics."
+                        
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        />
                 
                 <TextView
                         android:layout_width="fill_parent"
@@ -47,15 +55,6 @@
                         android:textSize="16dp"
                         android:textColor="#bebebe"
                         android:autoLink="web"/>
-                
-                <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dip"
-                        android:text="Wifi Fixer is a low-resource service that works around several problems with Android devices connecting to some access points.   Wifi Fixer should help immediately, but may need preferences adjusted to work optimally.  Please read the documentation for specifics."
-                        
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        />
 
                 <TextView
                         android:layout_width="fill_parent"
@@ -71,7 +70,7 @@
                         android:paddingTop="10dip"
                         android:text="Privacy Disclosure: The Logging feature stores some personal information, specifically timezone and SSID of configured access points.  It is not enabled by default. The log may manually be sent to the developer."
                         
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         />
 
         </LinearLayout>
