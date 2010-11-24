@@ -195,8 +195,10 @@ public class WifiFixerActivity extends Activity {
 	/*
 	 * Pop open network list if started by widget
 	 */
-	if (intent.hasExtra(OPEN_NETWORK_LIST))
+	if (intent.hasExtra(OPEN_NETWORK_LIST)){
 	    openNetworkList();
+	    setIntent(intent);
+	}
 	/*
 	 * Delete Log if called by preference
 	 */
@@ -410,6 +412,7 @@ public class WifiFixerActivity extends Activity {
 	 * For ContextMenu handler
 	 */
 	ctxt = this;
+	
 	/*
 	 * Handle intent command if destroyed
 	 * or first start
