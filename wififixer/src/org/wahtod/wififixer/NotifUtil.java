@@ -58,18 +58,13 @@ public class NotifUtil {
     }
 
     public static void show(final Context context, final String message,
-	    final String tickerText, final int id, final boolean bSpecial) {
+	    final String tickerText, final int id,
+	    final PendingIntent contentIntent) {
 
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
 	CharSequence from = context.getText(R.string.app_name);
-	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		new Intent(), 0);
-	if (bSpecial) {
-	    contentIntent = PendingIntent.getActivity(context, 0, new Intent(
-		    android.provider.Settings.ACTION_WIFI_SETTINGS), 0);
-	}
 
 	Notification notif = new Notification(R.drawable.icon, tickerText,
 		System.currentTimeMillis());

@@ -16,6 +16,7 @@
 
 package org.wahtod.wififixer;
 
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -43,7 +44,7 @@ public class WidgetHandler extends BroadcastReceiver {
     private static final int OFF = 1;
     private static final int WATCHDOG = 2;
     private static final int TOGGLE = 3;
-    
+
     /*
      * Notification ID
      */
@@ -54,8 +55,7 @@ public class WidgetHandler extends BroadcastReceiver {
      */
     private static final int TOGGLE_DELAY = 8000;
     private static final int WATCHDOG_DELAY = 11000;
-    
-    
+
     private Handler hWifiState = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
@@ -91,7 +91,7 @@ public class WidgetHandler extends BroadcastReceiver {
 	    case TOGGLE:
 		NotifUtil.show(ctxt, ctxt.getString(R.string.toggling_wifi),
 			ctxt.getString(R.string.toggling_wifi), TOGGLE_ID,
-			false);
+			PendingIntent.getActivity(ctxt, 0, new Intent(), 0));
 		hWifiState.sendEmptyMessage(OFF);
 		hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
 		hWifiState.sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
