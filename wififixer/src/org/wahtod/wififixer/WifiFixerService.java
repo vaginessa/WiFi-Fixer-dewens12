@@ -69,11 +69,6 @@ public class WifiFixerService extends Service {
 
     // Intent Constants
     public static final String FIXWIFI = "FIXWIFI";
-    private static final String AUTHSTRING = "31415927";
-
-    // For Auth
-    private static final String AUTHEXTRA = "IRRADIATED";
-    private static final String AUTH = "AUTH";
 
     /*
      * Constants for wifirepair values
@@ -911,33 +906,6 @@ public class WifiFixerService extends Service {
 	return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     }
 
-    private void handleAuth(final Intent intent) {
-	if (intent.getStringExtra(AUTHEXTRA).contains(AUTHSTRING)) {
-	    if (logging)
-		wfLog(this, APP_NAME, getString(R.string.authed));
-	    // Ok, do the auth
-	    boolean IS_AUTHED = PrefUtil.readBoolean(this,
-		    getString(R.string.isauthed));
-	    if (!IS_AUTHED) {
-		PrefUtil.writeBoolean(this, getString(R.string.isauthed), true);
-		NotifUtil
-			.show(
-				this,
-				getString(R.string.donatethanks),
-				getString(R.string.authorized),
-				4144,
-				PendingIntent
-					.getActivity(
-						this,
-						0,
-						new Intent(
-							android.provider.Settings.ACTION_WIFI_SETTINGS),
-						0));
-	    }
-
-	}
-    }
-
     private static void handleNetworkAction(final Context context) {
 	/*
 	 * This action means network connectivty has changed but, we only want
@@ -1015,30 +983,8 @@ public class WifiFixerService extends Service {
 	     */
 	    hMain.sendEmptyMessage(MAIN);
 	}
-
-	/*
-	 * Handle null intent: might be from widget or from Android
-	 */
-	try {
-
-	    String iAction = intent.getAction();
-	    /*
-	     * AUTH from donate service
-	     */
-	    if (iAction.contains(AUTH)) {
-		handleAuth(intent);
-		return;
-	    } else {
-		if (logging)
-		    wfLog(this, APP_NAME,
-			    getString(R.string.normal_startup_or_reload));
-	    }
-	} catch (NullPointerException e) {
-	    if (logging) {
-		wfLog(this, APP_NAME, getString(R.string.tickled));
-	    }
-	}
-
+	if (logging)
+	    wfLog(this, APP_NAME, getString(R.string.normal_startup_or_reload));
     }
 
     private void handleSupplicantIntent(final Intent intent) {

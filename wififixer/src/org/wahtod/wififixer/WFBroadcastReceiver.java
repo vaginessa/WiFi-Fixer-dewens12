@@ -18,6 +18,7 @@ package org.wahtod.wififixer;
 
 import org.wahtod.wififixer.PrefConstants.Pref;
 
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,10 +26,18 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 public class WFBroadcastReceiver extends BroadcastReceiver {
 
     private Context ctxt;
+
+    // For Auth
+    private static final String AUTHEXTRA = "IRRADIATED";
+    private static final String AUTH_ACTION = "org.wahtod.wififixer.AUTH";
+    private static final String AUTHSTRING = "31415927";
+
+    private static final int AUTH_NOTIF_ID = 2934;
 
     private Handler tHandler = new Handler() {
 	@Override
@@ -119,6 +128,36 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	else if (action.equals(FixerWidget.W_INTENT)) {
 	    handleWidgetAction(context, Integer.valueOf(PrefUtil.readString(
 		    context, PrefConstants.WIDGET_KEY)));
+	}
+	/*
+	 * Handle authorization
+	 */
+	else if (action.equals(AUTH_ACTION)) {
+	    if (intent.hasExtra(AUTHEXTRA)
+		    && intent.getStringExtra(AUTHEXTRA).contains(AUTHSTRING)) {
+		Log.i(this.getClass().getName(), ctxt
+			.getString(R.string.authed));
+		// Ok, do the auth
+		if (!PrefUtil.readBoolean(ctxt, ctxt
+			.getString(R.string.isauthed))) {
+		    PrefUtil.writeBoolean(ctxt, ctxt
+			    .getString(R.string.isauthed), true);
+		    NotifUtil
+			    .show(
+				    ctxt,
+				    ctxt.getString(R.string.donatethanks),
+				    ctxt.getString(R.string.authorized),
+				    AUTH_NOTIF_ID,
+				    PendingIntent
+					    .getActivity(
+						    ctxt,
+						    0,
+						    new Intent(
+							    android.provider.Settings.ACTION_WIFI_SETTINGS),
+						    0));
+		}
+
+	    }
 	}
     }
 
