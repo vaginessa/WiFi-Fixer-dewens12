@@ -35,7 +35,6 @@ import org.apache.http.params.HttpParams;
 import org.wahtod.wififixer.LegacySupport.VersionedScreenState;
 import org.wahtod.wififixer.PrefConstants.Pref;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -523,8 +522,6 @@ public class WifiFixerService extends Service {
 	    else if (iAction
 		    .equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
 		handleNetworkAction(getBaseContext());
-	    else if (iAction.equals(FixerWidget.W_INTENT))
-		handleWidgetAction();
 
 	}
 
@@ -923,8 +920,19 @@ public class WifiFixerService extends Service {
 		    getString(R.string.isauthed));
 	    if (!IS_AUTHED) {
 		PrefUtil.writeBoolean(this, getString(R.string.isauthed), true);
-		showNotification(this, getString(R.string.donatethanks),
-			getString(R.string.authorized), 4144, true);
+		NotifUtil
+			.show(
+				this,
+				getString(R.string.donatethanks),
+				getString(R.string.authorized),
+				4144,
+				PendingIntent
+					.getActivity(
+						this,
+						0,
+						new Intent(
+							android.provider.Settings.ACTION_WIFI_SETTINGS),
+						0));
 	    }
 
 	}
@@ -1089,23 +1097,6 @@ public class WifiFixerService extends Service {
 
 	if (logging && !screenisoff)
 	    logSupplicant(this, sState);
-    }
-
-    private void handleWidgetAction() {
-	if (logging)
-	    wfLog(this, APP_NAME, getString(R.string.widgetaction));
-	/*
-	 * Handle widget action
-	 * 
-	 * if (wm.isWifiEnabled()) { if (wfPreferences.getFlag(Pref.WIDGET_KEY))
-	 * { Toast.makeText(WifiFixerService.this,
-	 * getString(R.string.toggling_wifi), Toast.LENGTH_LONG) .show();
-	 * toggleWifi(); } else { Toast.makeText(WifiFixerService.this,
-	 * getString(R.string.reassociating), Toast.LENGTH_LONG) .show();
-	 * shouldrepair = true; wifirepair = W_REASSOCIATE; wifiRepair(); } }
-	 * else Toast.makeText(WifiFixerService.this,
-	 * getString(R.string.wifi_is_disabled), Toast.LENGTH_LONG) .show();
-	 */
     }
 
     private void handleWifiState(final Intent intent) {
@@ -1303,9 +1294,10 @@ public class WifiFixerService extends Service {
 
     private static void notifyWrap(final Context context, final String message) {
 	if (wfPreferences.getFlag(Pref.NOTIF_KEY)) {
-	    showNotification(context, context
+	    NotifUtil.show(context, context
 		    .getString(R.string.wifi_connection_problem)
-		    + message, message, ERR_NOTIF, false);
+		    + message, message, ERR_NOTIF, PendingIntent.getActivity(
+		    context, 0, new Intent(), 0));
 	}
 
     }
@@ -1331,24 +1323,26 @@ public class WifiFixerService extends Service {
 	 * Cache context for notifications
 	 */
 	notifcontext = this;
-	
-	//Initialize WakeLock
-	wakelock = new WakeLock(this){
+
+	// Initialize WakeLock
+	wakelock = new WakeLock(this) {
 
 	    @Override
 	    public void onAcquire() {
-		 if (logging)
-			wfLog(getBaseContext(), APP_NAME, getString(R.string.acquiring_wake_lock));
+		if (logging)
+		    wfLog(getBaseContext(), APP_NAME,
+			    getString(R.string.acquiring_wake_lock));
 		super.onAcquire();
 	    }
 
 	    @Override
 	    public void onRelease() {
 		if (logging)
-			wfLog(getBaseContext(), APP_NAME, getString(R.string.releasing_wake_lock));
+		    wfLog(getBaseContext(), APP_NAME,
+			    getString(R.string.releasing_wake_lock));
 		super.onRelease();
 	    }
-	    
+
 	};
 
 	wm = getWifiManager(this);
@@ -1650,39 +1644,6 @@ public class WifiFixerService extends Service {
 
     }
 
-    private static void showNotification(final Context context,
-	    final String message, final String tickerText, final int id,
-	    final boolean bSpecial) {
-
-	/*
-	 * Do not notify when screen is off as it causes notification to stick
-	 * when cancelled
-	 */
-
-	if (screenisoff)
-	    return;
-
-	NotificationManager nm = (NotificationManager) context
-		.getSystemService(NOTIFICATION_SERVICE);
-
-	CharSequence from = context.getText(R.string.app_name);
-	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		new Intent(), 0);
-	if (bSpecial) {
-	    contentIntent = PendingIntent.getActivity(context, 0, new Intent(
-		    android.provider.Settings.ACTION_WIFI_SETTINGS), 0);
-	}
-
-	Notification notif = new Notification(R.drawable.icon, tickerText,
-		System.currentTimeMillis());
-
-	notif.setLatestEventInfo(context, from, message, contentIntent);
-	notif.flags = Notification.FLAG_AUTO_CANCEL;
-	// unique ID
-	nm.notify(id, notif);
-
-    }
-
     private void signalHop() {
 	/*
 	 * Walks the list of known APs in the scan results by signal connects,
@@ -1772,8 +1733,8 @@ public class WifiFixerService extends Service {
 	tempLock(CONNECTWAIT);
 	// Wake lock
 	wakelock.lock(true);
-	showNotification(notifcontext, getString(R.string.toggling_wifi),
-		getString(R.string.toggling_wifi), NOTIFID, false);
+	NotifUtil.show(notifcontext, getString(R.string.toggling_wifi),
+		getString(R.string.toggling_wifi), NOTIFID, null);
 	hMainWrapper(WIFI_OFF);
 	hMainWrapper(WIFI_ON, LOCKWAIT);
 	hMainWrapper(WATCHDOG, LOCKWAIT + REACHABLE);
