@@ -34,6 +34,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.wahtod.wififixer.LegacySupport.VersionedScreenState;
 import org.wahtod.wififixer.PrefConstants.Pref;
+import org.wahtod.wififixer.WFConnection;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -156,6 +157,7 @@ public class WifiFixerService extends Service {
     private static HttpResponse response;
     private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
     private WakeLock wakelock;
+    private WFConnection wifi;
     /*
      * Cache context for notifications
      */
@@ -943,7 +945,7 @@ public class WifiFixerService extends Service {
 	     */
 	    hMain.sendEmptyMessage(MAIN);
 	}
-	if (logging)
+	if (intent != null && logging)
 	    LogService.log(this, APP_NAME,
 		    getString(R.string.normal_startup_or_reload));
     }
