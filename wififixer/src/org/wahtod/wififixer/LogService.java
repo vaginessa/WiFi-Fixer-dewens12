@@ -91,6 +91,15 @@ public class LogService extends IntentService {
 	}
     }
 
+    public static void log(final Context context, final String APP_NAME,
+	    final String Message) {
+	Intent sendIntent = new Intent(context, LogService.class);
+	sendIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
+	sendIntent.putExtra(LogService.APPNAME, APP_NAME);
+	sendIntent.putExtra(LogService.Message, Message);
+	context.startService(sendIntent);
+    }
+
     @Override
     public void onCreate() {
 	super.onCreate();
