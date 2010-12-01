@@ -87,7 +87,7 @@ public class LogService extends IntentService {
 	if (intent.hasExtra(APPNAME) && intent.hasExtra(Message)) {
 	    app_name = intent.getStringExtra(APPNAME);
 	    sMessage = intent.getStringExtra(Message);
-	    wfLog(this, app_name, sMessage);
+	    processLogIntent(this, app_name, sMessage);
 	}
     }
 
@@ -117,7 +117,7 @@ public class LogService extends IntentService {
 	    timeStamp();
 	    return true;
 	} else if (command.equals(DUMPBUILD)) {
-	    wfLog(this, WifiFixerService.APP_NAME, getBuildInfo());
+	    processLogIntent(this, WifiFixerService.APP_NAME, getBuildInfo());
 	    return true;
 	}
 
@@ -129,7 +129,7 @@ public class LogService extends IntentService {
 	Date time = new Date();
 	String message = BUILD + vstring + COLON + VERSION + SPACE + COLON
 		+ time.toString();
-	wfLog(this, WifiFixerService.APP_NAME, message);
+	processLogIntent(this, WifiFixerService.APP_NAME, message);
 
 	/*
 	 * Schedule next timestamp or terminate
@@ -142,7 +142,7 @@ public class LogService extends IntentService {
 	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENOFF);
     }
 
-    void wfLog(final Context context, final String APP_NAME,
+    void processLogIntent(final Context context, final String APP_NAME,
 	    final String Message) {
 	if (processCommands(APP_NAME))
 	    return;

@@ -119,7 +119,6 @@ public class WifiFixerService extends Service {
     final static String APP_NAME = "WifiFixerService";
 
     // Flags
-    private boolean wifishouldbeon = false;
     private static boolean registered = false;
 
     // logging flag, local for performance
@@ -174,12 +173,9 @@ public class WifiFixerService extends Service {
     private static final int WIFITASK = 3;
     private static final int TEMPLOCK_ON = 4;
     private static final int TEMPLOCK_OFF = 5;
-    private static final int WIFI_OFF = 6;
-    private static final int WIFI_ON = 7;
     private static final int SLEEPCHECK = 8;
     private static final int SCAN = 9;
     private static final int N1CHECK = 10;
-    private static final int WATCHDOG = 11;
     private static final int SIGNALHOP = 12;
 
     /*
@@ -221,14 +217,6 @@ public class WifiFixerService extends Service {
 			    getString(R.string.removing_temp_lock));
 		break;
 
-	    case WIFI_OFF:
-		hMain.post(rWifiOff);
-		break;
-
-	    case WIFI_ON:
-		hMain.post(rWifiOn);
-		break;
-
 	    case SLEEPCHECK:
 		hMain.post(rSleepcheck);
 		break;
@@ -239,10 +227,6 @@ public class WifiFixerService extends Service {
 
 	    case N1CHECK:
 		n1Fix();
-		break;
-
-	    case WATCHDOG:
-		checkWifiState();
 		break;
 
 	    case SIGNALHOP:
@@ -409,28 +393,6 @@ public class WifiFixerService extends Service {
     };
 
     /*
-     * Turns off wifi
-     */
-    private Runnable rWifiOff = new Runnable() {
-	public void run() {
-	    wm.setWifiEnabled(false);
-	}
-
-    };
-
-    /*
-     * Turns on wifi
-     */
-    private Runnable rWifiOn = new Runnable() {
-	public void run() {
-	    wm.setWifiEnabled(true);
-	    pendingwifitoggle = false;
-	    wifishouldbeon = true;
-	}
-
-    };
-
-    /*
      * Sleep tick if wifi is enabled and screenpref
      */
     private Runnable rSleepcheck = new Runnable() {
@@ -586,7 +548,6 @@ public class WifiFixerService extends Service {
 	hMain.removeMessages(RECONNECT);
 	hMain.removeMessages(REPAIR);
 	hMain.removeMessages(WIFITASK);
-	hMain.removeMessages(WIFI_OFF);
 	pendingscan = false;
 	pendingreconnect = false;
 	shouldrepair = false;
@@ -623,13 +584,6 @@ public class WifiFixerService extends Service {
 
 	}
 
-    }
-
-    private void checkWifiState() {
-	if (!wm.isWifiEnabled() && wifishouldbeon) {
-	    hMainWrapper(WIFI_ON);
-	    hMainWrapper(WATCHDOG, REACHABLE);
-	}
     }
 
     private static boolean connectToAP(final Context context,
@@ -1422,8 +1376,6 @@ public class WifiFixerService extends Service {
 
     private void onWifiEnabled() {
 	hMainWrapper(TEMPLOCK_OFF, LOCKWAIT);
-	wifishouldbeon = false;
-	cancelNotification(notifcontext, NOTIFID);
 	wakelock.lock(false);
 
     }
