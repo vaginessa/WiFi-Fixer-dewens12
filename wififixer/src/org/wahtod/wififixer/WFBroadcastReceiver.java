@@ -39,13 +39,24 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 
     private static final int AUTH_NOTIF_ID = 2934;
 
-    private Handler tHandler = new Handler() {
-	@Override
-	public void handleMessage(Message message) {
-	    ServiceAlarm.setAlarm(ctxt, false);
-	}
+    private static void handleWidgetAction(final Context context, int i) {
+	switch (i) {
+	case 0:
+	    context.sendBroadcast(new Intent(WidgetHandler.REASSOCIATE));
+	    break;
 
-    };
+	case 1:
+	    context.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
+	    break;
+
+	case 2:
+	    Intent intent = new Intent(context, WifiFixerActivity.class);
+	    intent.putExtra(WifiFixerActivity.OPEN_NETWORK_LIST, true);
+	    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    context.startActivity(intent);
+	    break;
+	}
+    }
 
     private static boolean isserviceDisabled(final Context context) {
 	boolean state = PrefUtil.readBoolean(context, Pref.DISABLE_KEY);
@@ -67,24 +78,13 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 		    PackageManager.DONT_KILL_APP);
     }
 
-    private static void handleWidgetAction(final Context context, int i) {
-	switch (i) {
-	case 0:
-	    context.sendBroadcast(new Intent(WidgetHandler.REASSOCIATE));
-	    break;
-
-	case 1:
-	    context.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
-	    break;
-
-	case 2:
-	    Intent intent = new Intent(context, WifiFixerActivity.class);
-	    intent.putExtra(WifiFixerActivity.OPEN_NETWORK_LIST, true);
-	    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	    context.startActivity(intent);
-	    break;
+    private Handler tHandler = new Handler() {
+	@Override
+	public void handleMessage(Message message) {
+	    ServiceAlarm.setAlarm(ctxt, false);
 	}
-    }
+
+    };
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -130,7 +130,10 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 		    context, PrefConstants.WIDGET_KEY)));
 	}
 	/*
-	 * Handle authorization
+	 * Authorization code
+	 * 
+	 * Hey, if you're poking into this, and can read code, you can afford to
+	 * donate!  
 	 */
 	else if (action.equals(AUTH_ACTION)) {
 	    if (intent.hasExtra(AUTHEXTRA)

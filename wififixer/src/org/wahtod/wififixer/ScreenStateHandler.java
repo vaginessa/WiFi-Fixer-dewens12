@@ -1,0 +1,72 @@
+/*Copyright [2010] [David Van de Ven]
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+ */
+package org.wahtod.wififixer;
+
+import org.wahtod.wififixer.LegacySupport.VersionedScreenState;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+
+public class ScreenStateHandler {
+    public interface OnScreenStateChangedListener {
+	public abstract void onScreenStateChanged(boolean state);
+    }
+
+    private static OnScreenStateChangedListener onScreenStateChangedListener;
+
+    public static boolean getScreenState(final Context context) {
+	VersionedScreenState sstate = VersionedScreenState.newInstance(context);
+	return sstate.getScreenState(context);
+    }
+
+    private static void onScreenEvent(final boolean state) {
+	if (onScreenStateChangedListener != null)
+	    onScreenStateChangedListener.onScreenStateChanged(state);
+    }
+
+    public static void setOnScreenStateChangedListener(
+	    OnScreenStateChangedListener listener) {
+	onScreenStateChangedListener = listener;
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+	@Override
+	public void onReceive(Context context, Intent intent) {
+	    String iAction = intent.getAction();
+
+	    if (iAction.equals(Intent.ACTION_SCREEN_ON))
+		onScreenEvent(true);
+	    else
+		onScreenEvent(false);
+	}
+
+    };
+
+    public ScreenStateHandler(final Context context) {
+	/*
+	 * Register for screen state events
+	 */
+	IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+	filter.addAction(Intent.ACTION_SCREEN_ON);
+	context.registerReceiver(receiver, filter);
+    }
+    
+    public void unregister(final Context context) {
+	context.unregisterReceiver(receiver);
+    }
+}
