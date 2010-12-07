@@ -445,7 +445,7 @@ public class WFConnection extends Object implements
     public WFConnection(final Context context, PrefUtil p) {
 	wm = getWifiManager(context);
 	prefs = p;
-	appname = context.getClass().getName();
+	appname = LogService.getContextNameString(context);
 	ScreenStateHandler.setOnScreenStateChangedListener(this);
 	screenstate = ScreenStateHandler.getScreenState(context);
 	logging = prefs.getFlag(Pref.LOG_KEY);

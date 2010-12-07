@@ -138,7 +138,7 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	else if (action.equals(AUTH_ACTION)) {
 	    if (intent.hasExtra(AUTHEXTRA)
 		    && intent.getStringExtra(AUTHEXTRA).contains(AUTHSTRING)) {
-		Log.i(this.getClass().getName(), ctxt
+		Log.i(LogService.getContextNameString(ctxt), ctxt
 			.getString(R.string.authed));
 		// Ok, do the auth
 		if (!PrefUtil.readBoolean(ctxt, ctxt
