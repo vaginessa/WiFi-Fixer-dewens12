@@ -52,10 +52,11 @@ import android.os.Message;
 import android.text.format.Formatter;
 
 /*
- * Handles connecting, 
- * connection state monitoring
+ * Handles all interaction 
+ * with WifiManager
  */
-public class WFConnection extends Object implements OnScreenStateChangedListener{
+public class WFConnection extends Object implements
+	OnScreenStateChangedListener {
     private static WifiManager wm;
     private static String cachedIP;
     private static String appname;
@@ -63,20 +64,27 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
     private static Context ctxt;
     private WakeLock wakelock;
     static boolean screenstate;
-    
- // IDs For notifications
+
+    // flags
+    private static boolean pendingwifitoggle = false;
+    private static boolean shouldrepair = false;
+    private static boolean pendingscan = false;
+    private static boolean pendingreconnect = false;
+    private static final boolean screenisoff = false;
+
+    // IDs For notifications
     private static final int NOTIFID = 31337;
     private static final int NETNOTIFID = 8236;
     private static final int ERR_NOTIF = 7972;
-    
+
     // Supplicant Constants
     private static final String DISCONNECTED = "DISCONNECTED";
     private static final String INACTIVE = "INACTIVE";
     private static final String COMPLETED = "COMPLETED";
-    
+
     // Wifi Lock tag
     private static final String WFLOCK_TAG = "WFLock";
-    
+
     // Empty string
     private final static String EMPTYSTRING = "";
     private static final String NEWLINE = "\n";
@@ -101,11 +109,10 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 
     // for Dbm
     private static final int DBM_FLOOR = -90;
-    
-    //various
+
+    // various
     private static final int NULLVAL = -1;
     private static int lastAP = NULLVAL;
-
 
     private static WifiInfo myWifi;
     private static WifiManager.WifiLock lock;
@@ -114,20 +121,20 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
     private static HttpHead head;
     private static HttpResponse response;
     private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
-    
-    //deprecated
+
+    // deprecated
     static boolean templock;
     static boolean logging;
-    
+
     /*
      * Constants for wifirepair values
      */
     private static final int W_REASSOCIATE = 0;
     private static final int W_RECONNECT = 1;
     private static final int W_REPAIR = 2;
-    
+
     private static int wifirepair = W_REASSOCIATE;
-    
+
     // Runnable Constants for handler
     private static final int MAIN = 0;
     private static final int REPAIR = 1;
@@ -139,13 +146,7 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
     private static final int SCAN = 9;
     private static final int N1CHECK = 10;
     private static final int SIGNALHOP = 12;
-    private static boolean pendingwifitoggle = false;
-    private static boolean shouldrepair = false;
-    private static boolean pendingscan = false;
-    private static boolean pendingreconnect = false;
-    protected static final boolean shouldrun = false;
-    private static final boolean screenisoff = false;
-    
+
     private Handler hMain = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
@@ -170,15 +171,15 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	    case TEMPLOCK_ON:
 		templock = true;
 		if (logging)
-		    LogService.log(ctxt, appname,
-			    ctxt.getString(R.string.setting_temp_lock));
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.setting_temp_lock));
 		break;
 
 	    case TEMPLOCK_OFF:
 		templock = false;
 		if (logging)
-		    LogService.log(ctxt, appname,
-			    ctxt.getString(R.string.removing_temp_lock));
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.removing_temp_lock));
 		break;
 
 	    case SLEEPCHECK:
@@ -190,7 +191,7 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 		break;
 
 	    case N1CHECK:
-		//n1Fix();
+		n1Fix();
 		break;
 
 	    case SIGNALHOP:
@@ -200,7 +201,7 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	    }
 	}
     };
-    
+
     /*
      * Runs second time supplicant nonresponsive
      */
@@ -209,25 +210,24 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	    if (!wm.isWifiEnabled()) {
 		handlerWrapper(TEMPLOCK_OFF);
 		if (logging)
-		    LogService.log(ctxt, appname,
-			    ctxt.getString(R.string.wifi_off_aborting_repair));
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.wifi_off_aborting_repair));
 		return;
 	    }
 
-	    if (getKnownAPsBySignal(ctxt) > 0
-		    && connectToBest(ctxt) != NULLVAL
+	    if (getKnownAPsBySignal(ctxt) > 0 && connectToBest(ctxt) != NULLVAL
 		    && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
 		if (logging)
-		    LogService.log(ctxt, appname,
-			    ctxt.getString(R.string.connected_to_network)
-				    + getNetworkID());
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.connected_to_network)
+			    + getNetworkID());
 	    } else {
 		pendingreconnect = true;
 		toggleWifi();
 		if (logging)
-		    LogService.log(ctxt, appname,
-			    ctxt.getString(R.string.toggling_wifi));
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.toggling_wifi));
 
 	    }
 	}
@@ -242,18 +242,17 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	    if (!wm.isWifiEnabled()) {
 		handlerWrapper(TEMPLOCK_OFF);
 		if (logging)
-		    LogService.log(ctxt, appname,
-			    ctxt.getString(R.string.wifi_off_aborting_reconnect));
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.wifi_off_aborting_reconnect));
 		return;
 	    }
-	    if (getKnownAPsBySignal(ctxt) > 0
-		    && connectToBest(ctxt) != NULLVAL
+	    if (getKnownAPsBySignal(ctxt) > 0 && connectToBest(ctxt) != NULLVAL
 		    && (getNetworkID() != NULLVAL)) {
 		pendingreconnect = false;
 		if (logging)
-		    LogService.log(ctxt, appname,
-			    ctxt.getString(R.string.connected_to_network)
-				    + getNetworkID());
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.connected_to_network)
+			    + getNetworkID());
 	    } else {
 		wifirepair = W_REASSOCIATE;
 		startScan(true);
@@ -262,7 +261,8 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 			    .log(
 				    ctxt,
 				    appname,
-				    ctxt.getString(R.string.exiting_supplicant_fix_thread_starting_scan));
+				    ctxt
+					    .getString(R.string.exiting_supplicant_fix_thread_starting_scan));
 	    }
 
 	}
@@ -282,16 +282,17 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 			    .log(
 				    ctxt,
 				    appname,
-				    ctxt.getString(R.string.supplicant_nonresponsive_toggling_wifi));
+				    ctxt
+					    .getString(R.string.supplicant_nonresponsive_toggling_wifi));
 		toggleWifi();
 	    } else if (!templock && !screenstate)
 		checkWifi();
 
-	    if (!shouldrun) {
+	    if (prefs.getFlag(Pref.DISABLE_KEY)) {
 		if (logging) {
-		    LogService.log(ctxt, appname,
-			    ctxt.getString(R.string.shouldrun_false_dying));
-		   // stopSelf();
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.shouldrun_false_dying));
+		    // stopSelf();
 		}
 	    } else
 		// Queue next run of main runnable
@@ -312,24 +313,22 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 		// Let's try to reassociate first..
 		wm.reassociate();
 		if (logging)
-		    LogService.log(ctxt, appname,
-			    ctxt.getString(R.string.reassociating));
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.reassociating));
 		tempLock(REACHABLE);
 		wifirepair++;
-		notifyWrap(ctxt, ctxt.getString(
-			R.string.reassociating));
+		notifyWrap(ctxt, ctxt.getString(R.string.reassociating));
 		break;
 
 	    case W_RECONNECT:
 		// Ok, now force reconnect..
 		wm.reconnect();
 		if (logging)
-		    LogService.log(ctxt, appname,
-			    ctxt.getString(R.string.reconnecting));
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.reconnecting));
 		tempLock(REACHABLE);
 		wifirepair++;
-		notifyWrap(ctxt, ctxt.getString(
-			R.string.reconnecting));
+		notifyWrap(ctxt, ctxt.getString(R.string.reconnecting));
 		break;
 
 	    case W_REPAIR:
@@ -339,8 +338,7 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 		if (logging)
 		    LogService.log(ctxt, appname, ctxt
 			    .getString(R.string.repairing));
-		notifyWrap(ctxt, ctxt.getString(
-			R.string.repairing));
+		notifyWrap(ctxt, ctxt.getString(R.string.repairing));
 		break;
 	    }
 	    /*
@@ -349,9 +347,9 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	    wakelock.lock(false);
 
 	    if (logging) {
-		LogService.log(ctxt, appname,
-			ctxt.getString(R.string.fix_algorithm)
-				+ Integer.toString(wifirepair));
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.fix_algorithm)
+			+ Integer.toString(wifirepair));
 	    }
 	}
     };
@@ -420,7 +418,6 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 
     };
 
-    
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 	public void onReceive(final Context context, final Intent intent) {
 
@@ -451,16 +448,22 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	appname = context.getClass().getName();
 	ScreenStateHandler.setOnScreenStateChangedListener(this);
 	screenstate = ScreenStateHandler.getScreenState(context);
+	logging = prefs.getFlag(Pref.LOG_KEY);
 	/*
 	 * Cache Context from consumer
 	 */
 	ctxt = context;
 
-	IntentFilter myFilter = new IntentFilter();
+	/*
+	 * Set current AP int
+	 */
+	lastAP = getNetworkID();
 
-	// Wifi State filter
-	myFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-
+	/*
+	 * Set up Intent filters
+	 */
+	IntentFilter myFilter = new IntentFilter(
+		WifiManager.WIFI_STATE_CHANGED_ACTION);
 	// Supplicant State filter
 	myFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
 
@@ -473,225 +476,43 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	context.registerReceiver(receiver, myFilter);
 	/*
 	 * Acquire wifi lock WIFI_MODE_FULL should p. much always be used
+	 * acquire lock if pref says we should
 	 */
 	lock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, WFLOCK_TAG);
-	
+	if (prefs.getFlag(Pref.WIFILOCK_KEY)) {
+	    lock.acquire();
+	    if (logging)
+		LogService.log(context, appname, context
+			.getString(R.string.acquiring_wifi_lock));
+	}
+
 	// Initialize WakeLock
 	wakelock = new WakeLock(context) {
 
 	    @Override
 	    public void onAcquire() {
 		if (logging)
-		    LogService.log(context, appname,
-			    context.getString(R.string.acquiring_wake_lock));
+		    LogService.log(context, appname, context
+			    .getString(R.string.acquiring_wake_lock));
 		super.onAcquire();
 	    }
 
 	    @Override
 	    public void onRelease() {
 		if (logging)
-		    LogService.log(context, appname,
-			    context.getString(R.string.releasing_wake_lock));
+		    LogService.log(context, appname, context
+			    .getString(R.string.releasing_wake_lock));
 		super.onRelease();
 	    }
 
 	};
-    }
-    
-    private static String getSSID() {
-	return wm.getConnectionInfo().getSSID();
-    }
 
-    private static SupplicantState getSupplicantState() {
-	myWifi = wm.getConnectionInfo();
-	return myWifi.getSupplicantState();
-    }
-
-    private static WifiManager getWifiManager(final Context context) {
-	return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-    }
-
-    private static void handleNetworkAction(final Context context) {
 	/*
-	 * This action means network connectivty has changed but, we only want
-	 * to run this code for wifi
+	 * Start Main tick
 	 */
-	if (!wm.isWifiEnabled() || !getIsOnWifi(context))
-	    return;
-
-	icmpCache(context);
+	hMain.sendEmptyMessage(MAIN);
     }
 
-    private void handleScanResults() {
-	if (!wm.isWifiEnabled())
-	    return;
-
-	if (!pendingscan) {
-	    if (getIsOnWifi(ctxt)) {
-		/*
-		 * We're on wifi, so we want to check for better signal
-		 */
-		handlerWrapper(SIGNALHOP);
-		return;
-	    } else {
-		/*
-		 * Network notification check
-		 */
-		if (prefs.getFlag(Pref.NETNOT_KEY)) {
-		    if (logging)
-			LogService.log(ctxt, appname, ctxt
-				.getString(R.string.network_notification_scan));
-		    networkNotify(ctxt);
-		}
-	    }
-	}
-
-	if (!pendingreconnect) {
-	    /*
-	     * Service called the scan: dispatch appropriate runnable
-	     */
-	    pendingscan = false;
-	    handlerWrapper(TEMPLOCK_OFF);
-	    handlerWrapper(REPAIR);
-	    if (logging)
-		LogService.log(ctxt, appname,
-			ctxt.getString(R.string.repairhandler));
-	} else {
-	    pendingscan = false;
-	    handlerWrapper(RECONNECT);
-	    if (logging)
-		LogService.log(ctxt, appname,
-			ctxt.getString(R.string.reconnecthandler));
-	}
-
-    }
-
-    
-    /*
-     * Lets us control duplicate posts
-     * and odd handler behavior when 
-     * screen is off
-     */
-    private boolean handlerWrapper(final int hmain) {
-	if (handlerCheck(hmain)) {
-	    hMain.removeMessages(hmain);
-	    if (!screenstate)
-		return hMain.sendEmptyMessage(hmain);
-	    else
-		return hMain.sendEmptyMessageDelayed(hmain, REALLYSHORTWAIT);
-
-	} else {
-	    hMain.removeMessages(hmain);
-	    return hMain.sendEmptyMessageDelayed(hmain, REACHABLE);
-	}
-    }
-
-    private boolean handlerWrapper(final int hmain, final long delay) {
-	if (handlerCheck(hmain)) {
-	    hMain.removeMessages(hmain);
-	    return hMain.sendEmptyMessageDelayed(hmain, delay);
-	} else {
-	    hMain.removeMessages(hmain);
-	    return hMain.sendEmptyMessageDelayed(hmain, delay + REACHABLE);
-	}
-    }
-    
-    private static boolean handlerCheck(final int hmain) {
-	if (templock) {
-	    /*
-	     * Check if is appropriate post and if lock exists
-	     */
-	    if (hmain == RECONNECT || hmain == REPAIR || hmain == WIFITASK)
-		return false;
-	}
-	return true;
-    }
-
-    private void handleWifiState(final Intent intent) {
-	// What kind of state change is it?
-	int state = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
-		WifiManager.WIFI_STATE_UNKNOWN);
-	switch (state) {
-	case WifiManager.WIFI_STATE_ENABLED:
-	    if (prefs.getFlag(Pref.LOG_KEY))
-		LogService.log(ctxt, appname, ctxt
-			.getString(R.string.wifi_state_enabled));
-	    onWifiEnabled();
-	    break;
-	case WifiManager.WIFI_STATE_ENABLING:
-	    if (prefs.getFlag(Pref.LOG_KEY))
-		LogService.log(ctxt, appname, ctxt
-			.getString(R.string.wifi_state_enabling));
-	    break;
-	case WifiManager.WIFI_STATE_DISABLED:
-	    if (prefs.getFlag(Pref.LOG_KEY))
-		LogService.log(ctxt, appname, ctxt
-			.getString(R.string.wifi_state_disabled));
-	    onWifiDisabled();
-	    break;
-	case WifiManager.WIFI_STATE_DISABLING:
-	    if (prefs.getFlag(Pref.LOG_KEY))
-		LogService.log(ctxt, appname, ctxt
-			.getString(R.string.wifi_state_disabling));
-	    break;
-	case WifiManager.WIFI_STATE_UNKNOWN:
-	    if (prefs.getFlag(Pref.LOG_KEY))
-		LogService.log(ctxt, appname, ctxt
-			.getString(R.string.wifi_state_unknown));
-	    break;
-	}
-    }
-
-    private void onWifiDisabled() {
-	// TODO Auto-generated method stub
-
-    }
-
-    private void onWifiEnabled() {
-	// TODO Auto-generated method stub
-
-    }
-    
-    private void onScreenOff() {
-	/*
-	 * Disable Sleep check
-	 */
-	if (prefs.getFlag(Pref.SCREEN_KEY))
-	    sleepCheck(true);
-	/*
-	 * Schedule N1 fix
-	 */
-	if (prefs.getFlag(Pref.N1FIX2_KEY))
-	    handlerWrapper(N1CHECK, REACHABLE);
-
-	if (logging) {
-	    LogService.log(ctxt, appname,
-		    ctxt.getString(R.string.screen_off_handler));
-	}
-    }
-
-    private void onScreenOn() {
-
-	sleepCheck(false);
-	if (logging) {
-	    LogService.log(ctxt, appname,
-		    ctxt.getString(R.string.screen_on_handler));
-	}
-    }
-
-
-    private static void icmpCache(final Context context) {
-	/*
-	 * Caches DHCP gateway IP for ICMP check
-	 */
-	DhcpInfo info = wm.getDhcpInfo();
-	cachedIP = Formatter.formatIpAddress(info.gateway);
-	if (prefs.getFlag(Pref.LOG_KEY))
-	    LogService.log(context, appname, context
-		    .getString(R.string.cached_ip)
-		    + cachedIP);
-    }
-    
     private static boolean checkNetwork(final Context context) {
 	boolean isup = false;
 
@@ -726,33 +547,6 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	return isup;
     }
 
-    private void cleanup() {
-
-	if (lock.isHeld())
-	    lock.release();
-
-	wakelock.lock(false);
-
-	hMain.removeMessages(MAIN);
-	cleanupPosts();
-    }
-
-    private void cleanupPosts() {
-	hMain.removeMessages(RECONNECT);
-	hMain.removeMessages(REPAIR);
-	hMain.removeMessages(WIFITASK);
-	hMain.removeMessages(TEMPLOCK_ON);
-    }
-
-    private void clearQueue() {
-	hMain.removeMessages(RECONNECT);
-	hMain.removeMessages(REPAIR);
-	hMain.removeMessages(WIFITASK);
-	pendingscan = false;
-	pendingreconnect = false;
-	shouldrepair = false;
-    }
-
     private static void checkSignal(final Context context) {
 	int signal = wm.getConnectionInfo().getRssi();
 
@@ -765,25 +559,6 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	    LogService.log(context, appname, context
 		    .getString(R.string.current_dbm)
 		    + signal);
-    }
-
-    private void checkWifi() {
-	if (getisWifiEnabled(ctxt)) {
-	    if (getIsSupplicantConnected(ctxt)) {
-		if (!checkNetwork(ctxt)) {
-		    shouldrepair = true;
-		    handlerWrapper(TEMPLOCK_OFF);
-		    handlerWrapper(SCAN);
-		}
-	    } else {
-		if (screenisoff)
-		    startScan(true);
-		else
-		    pendingscan = true;
-	    }
-
-	}
-
     }
 
     private static boolean connectToAP(final Context context,
@@ -853,6 +628,89 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 		return true;
 	}
 	return false;
+    }
+
+    private static boolean getHttpHeaders(final Context context)
+	    throws IOException, URISyntaxException {
+
+	/*
+	 * Performs HTTP HEAD request and returns boolean success or failure
+	 */
+
+	boolean isup = false;
+	int status = NULLVAL;
+
+	/*
+	 * Reusing our Httpclient, only initializing first time
+	 */
+
+	if (httpclient == null) {
+	    httpclient = new DefaultHttpClient();
+	    headURI = new URI(H_TARGET);
+	    head = new HttpHead(headURI);
+	    httpparams = new BasicHttpParams();
+	    HttpConnectionParams.setConnectionTimeout(httpparams, HTTPREACH);
+	    HttpConnectionParams.setSoTimeout(httpparams, HTTPREACH);
+	    HttpConnectionParams.setLinger(httpparams, REPAIR);
+	    HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
+	    httpclient.setParams(httpparams);
+	    if (logging)
+		LogService.log(context, appname, context
+			.getString(R.string.instantiating_httpclient));
+	}
+	/*
+	 * The next two lines actually perform the connection since it's the
+	 * same, can re-use.
+	 */
+	response = httpclient.execute(head);
+	status = response.getStatusLine().getStatusCode();
+	if (status != NULLVAL)
+	    isup = true;
+	if (logging) {
+	    LogService.log(context, appname, context
+		    .getString(R.string.http_status)
+		    + status);
+	}
+
+	return isup;
+    }
+
+    private static boolean getIsOnWifi(final Context context) {
+	boolean wifi = false;
+	ConnectivityManager cm = (ConnectivityManager) context
+		.getSystemService(Context.CONNECTIVITY_SERVICE);
+	if (cm.getActiveNetworkInfo() != null
+		&& cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI)
+	    wifi = true;
+	return wifi;
+    }
+
+    private static boolean getIsSupplicantConnected(final Context context) {
+	SupplicantState sstate = getSupplicantState();
+	if (sstate == null)
+	    return false;
+	else if (sstate == SupplicantState.ASSOCIATED
+		|| sstate == SupplicantState.COMPLETED)
+	    return true;
+	else
+	    return false;
+    }
+
+    private static boolean getisWifiEnabled(final Context context) {
+	boolean enabled = false;
+
+	if (wm.isWifiEnabled()) {
+	    if (logging)
+		LogService.log(context, appname, context
+			.getString(R.string.wifi_is_enabled));
+	    enabled = true;
+	} else {
+	    if (logging)
+		LogService.log(context, appname, context
+			.getString(R.string.wifi_is_disabled));
+	}
+
+	return enabled;
     }
 
     private static int getKnownAPsBySignal(final Context context) {
@@ -948,94 +806,280 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	return knownbysignal.size();
     }
 
-    private static boolean getHttpHeaders(final Context context)
-	    throws IOException, URISyntaxException {
-
-	/*
-	 * Performs HTTP HEAD request and returns boolean success or failure
-	 */
-
-	boolean isup = false;
-	int status = NULLVAL;
-
-	/*
-	 * Reusing our Httpclient, only initializing first time
-	 */
-
-	if (httpclient == null) {
-	    httpclient = new DefaultHttpClient();
-	    headURI = new URI(H_TARGET);
-	    head = new HttpHead(headURI);
-	    httpparams = new BasicHttpParams();
-	    HttpConnectionParams.setConnectionTimeout(httpparams, HTTPREACH);
-	    HttpConnectionParams.setSoTimeout(httpparams, HTTPREACH);
-	    HttpConnectionParams.setLinger(httpparams, REPAIR);
-	    HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
-	    httpclient.setParams(httpparams);
-	    if (logging)
-		LogService.log(context, appname, context
-			.getString(R.string.instantiating_httpclient));
-	}
-	/*
-	 * The next two lines actually perform the connection since it's the
-	 * same, can re-use.
-	 */
-	response = httpclient.execute(head);
-	status = response.getStatusLine().getStatusCode();
-	if (status != NULLVAL)
-	    isup = true;
-	if (logging) {
-	    LogService.log(context, appname, context
-		    .getString(R.string.http_status)
-		    + status);
-	}
-
-	return isup;
-    }
-
-    private static boolean getIsOnWifi(final Context context) {
-	boolean wifi = false;
-	ConnectivityManager cm = (ConnectivityManager) context
-		.getSystemService(Context.CONNECTIVITY_SERVICE);
-	if (cm.getActiveNetworkInfo() != null
-		&& cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI)
-	    wifi = true;
-	return wifi;
-    }
-
-    private static boolean getIsSupplicantConnected(final Context context) {
-	SupplicantState sstate = getSupplicantState();
-	if (sstate == null)
-	    return false;
-	else if (sstate == SupplicantState.ASSOCIATED
-		|| sstate == SupplicantState.COMPLETED)
-	    return true;
-	else
-	    return false;
-    }
-
-    private static boolean getisWifiEnabled(final Context context) {
-	boolean enabled = false;
-
-	if (wm.isWifiEnabled()) {
-	    if (logging)
-		LogService.log(context, appname, context
-			.getString(R.string.wifi_is_enabled));
-	    enabled = true;
-	} else {
-	    if (logging)
-		LogService.log(context, appname, context
-			.getString(R.string.wifi_is_disabled));
-	}
-
-	return enabled;
-    }
-
     private static int getNetworkID() {
 	myWifi = wm.getConnectionInfo();
 	return myWifi.getNetworkId();
     }
-    
+
+    private static String getSSID() {
+	return wm.getConnectionInfo().getSSID();
+    }
+
+    private static SupplicantState getSupplicantState() {
+	myWifi = wm.getConnectionInfo();
+	return myWifi.getSupplicantState();
+    }
+
+    private static void handleNetworkAction(final Context context) {
+	/*
+	 * This action means network connectivty has changed but, we only want
+	 * to run this code for wifi
+	 */
+	if (!wm.isWifiEnabled() || !getIsOnWifi(context))
+	    return;
+
+	icmpCache(context);
+    }
+
+    private static boolean handlerCheck(final int hmain) {
+	if (templock) {
+	    /*
+	     * Check if is appropriate post and if lock exists
+	     */
+	    if (hmain == RECONNECT || hmain == REPAIR || hmain == WIFITASK)
+		return false;
+	}
+	return true;
+    }
+
+    private static boolean httpHostup(final Context context) {
+	boolean isUp = false;
+	/*
+	 * getHttpHeaders() does all the heavy lifting
+	 */
+	if (logging)
+	    LogService.log(context, appname, context
+		    .getString(R.string.http_method));
+
+	try {
+	    isUp = getHttpHeaders(context);
+	} catch (IOException e) {
+	    try {
+		/*
+		 * Second try
+		 */
+		isUp = getHttpHeaders(context);
+	    } catch (IOException e1) {
+		if (logging)
+		    LogService.log(context, appname, context
+			    .getString(R.string.httpexception));
+	    } catch (URISyntaxException e1) {
+		if (logging)
+		    LogService.log(context, appname, context
+			    .getString(R.string.http_method));
+	    }
+
+	} catch (URISyntaxException e) {
+	    if (logging)
+		LogService.log(context, appname, context
+			.getString(R.string.urlexception));
+	}
+
+	return isUp;
+    }
+
+    private static void icmpCache(final Context context) {
+	/*
+	 * Caches DHCP gateway IP for ICMP check
+	 */
+	DhcpInfo info = wm.getDhcpInfo();
+	cachedIP = Formatter.formatIpAddress(info.gateway);
+	if (prefs.getFlag(Pref.LOG_KEY))
+	    LogService.log(context, appname, context
+		    .getString(R.string.cached_ip)
+		    + cachedIP);
+    }
+
+    private static boolean icmpHostup(final Context context) {
+	boolean isUp = false;
+	/*
+	 * If IP hasn't been cached yet cache it
+	 */
+	if (cachedIP == null)
+	    icmpCache(context);
+
+	if (logging)
+	    LogService.log(context, appname, context
+		    .getString(R.string.icmp_method)
+		    + cachedIP);
+
+	try {
+	    if (InetAddress.getByName(cachedIP).isReachable(REACHABLE)) {
+		isUp = true;
+		if (logging)
+		    LogService.log(context, appname, context
+			    .getString(R.string.icmp_success));
+	    }
+	} catch (UnknownHostException e) {
+	    if (logging)
+		LogService.log(context, appname, context
+			.getString(R.string.unknownhostexception));
+	} catch (IOException e) {
+	    if (logging)
+		LogService.log(context, appname, context
+			.getString(R.string.ioexception));
+	}
+	return isUp;
+    }
+
+    private static void logSupplicant(final Context context, final String state) {
+
+	LogService.log(context, appname, context
+		.getString(R.string.supplicant_state)
+		+ state);
+	if (wm.pingSupplicant()) {
+	    LogService.log(context, appname, context
+		    .getString(R.string.supplicant_responded));
+	} else {
+	    LogService.log(context, appname, context
+		    .getString(R.string.supplicant_nonresponsive));
+
+	}
+
+	LogService.log(context, appname, context.getString(R.string.ssid)
+		+ getSSID());
+
+    }
+
+    private static void networkNotify(final Context context) {
+	final int NUM_SSIDS = 3;
+	final int SSID_LENGTH = 10;
+	final List<ScanResult> wifiList = wm.getScanResults();
+	String ssid = EMPTYSTRING;
+	String signal = EMPTYSTRING;
+	int n = 0;
+	for (ScanResult sResult : wifiList) {
+	    if (sResult.capabilities.length() == W_REASSOCIATE && n < NUM_SSIDS) {
+		if (sResult.SSID.length() > SSID_LENGTH)
+		    ssid = ssid + sResult.SSID.substring(0, SSID_LENGTH)
+			    + NEWLINE;
+		else
+		    ssid = ssid + sResult.SSID + NEWLINE;
+
+		signal = signal + sResult.level + NEWLINE;
+		n++;
+	    }
+	}
+	NotifUtil.addNetNotif(context, ssid, signal);
+    }
+
+    private static void notifyWrap(final Context context, final String message) {
+	if (prefs.getFlag(Pref.NOTIF_KEY)) {
+	    NotifUtil.show(context, context
+		    .getString(R.string.wifi_connection_problem)
+		    + message, message, ERR_NOTIF, PendingIntent.getActivity(
+		    context, 0, new Intent(), 0));
+	}
+
+    }
+
+    private void checkWifi() {
+	if (getisWifiEnabled(ctxt)) {
+	    if (getIsSupplicantConnected(ctxt)) {
+		if (!checkNetwork(ctxt)) {
+		    shouldrepair = true;
+		    handlerWrapper(TEMPLOCK_OFF);
+		    handlerWrapper(SCAN);
+		}
+	    } else {
+		if (screenisoff)
+		    startScan(true);
+		else
+		    pendingscan = true;
+	    }
+
+	}
+
+    }
+
+    private void cleanupPosts() {
+	hMain.removeMessages(RECONNECT);
+	hMain.removeMessages(REPAIR);
+	hMain.removeMessages(WIFITASK);
+	hMain.removeMessages(TEMPLOCK_ON);
+    }
+
+    private void clearQueue() {
+	hMain.removeMessages(RECONNECT);
+	hMain.removeMessages(REPAIR);
+	hMain.removeMessages(WIFITASK);
+	pendingscan = false;
+	pendingreconnect = false;
+	shouldrepair = false;
+    }
+
+    /*
+     * Lets us control duplicate posts and odd handler behavior when screen is
+     * off
+     */
+    private boolean handlerWrapper(final int hmain) {
+	if (handlerCheck(hmain)) {
+	    hMain.removeMessages(hmain);
+	    if (!screenstate)
+		return hMain.sendEmptyMessage(hmain);
+	    else
+		return hMain.sendEmptyMessageDelayed(hmain, REALLYSHORTWAIT);
+
+	} else {
+	    hMain.removeMessages(hmain);
+	    return hMain.sendEmptyMessageDelayed(hmain, REACHABLE);
+	}
+    }
+
+    private boolean handlerWrapper(final int hmain, final long delay) {
+	if (handlerCheck(hmain)) {
+	    hMain.removeMessages(hmain);
+	    return hMain.sendEmptyMessageDelayed(hmain, delay);
+	} else {
+	    hMain.removeMessages(hmain);
+	    return hMain.sendEmptyMessageDelayed(hmain, delay + REACHABLE);
+	}
+    }
+
+    private void handleScanResults() {
+	if (!wm.isWifiEnabled())
+	    return;
+
+	if (!pendingscan) {
+	    if (getIsOnWifi(ctxt)) {
+		/*
+		 * We're on wifi, so we want to check for better signal
+		 */
+		handlerWrapper(SIGNALHOP);
+		return;
+	    } else {
+		/*
+		 * Network notification check
+		 */
+		if (prefs.getFlag(Pref.NETNOT_KEY)) {
+		    if (logging)
+			LogService.log(ctxt, appname, ctxt
+				.getString(R.string.network_notification_scan));
+		    networkNotify(ctxt);
+		}
+	    }
+	}
+
+	if (!pendingreconnect) {
+	    /*
+	     * Service called the scan: dispatch appropriate runnable
+	     */
+	    pendingscan = false;
+	    handlerWrapper(TEMPLOCK_OFF);
+	    handlerWrapper(REPAIR);
+	    if (logging)
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.repairhandler));
+	} else {
+	    pendingscan = false;
+	    handlerWrapper(RECONNECT);
+	    if (logging)
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.reconnecthandler));
+	}
+
+    }
+
     private void handleSupplicantIntent(final Intent intent) {
 
 	/*
@@ -1094,94 +1138,39 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	    logSupplicant(ctxt, sState);
     }
 
-   
-
-    private static boolean httpHostup(final Context context) {
-	boolean isUp = false;
-	/*
-	 * getHttpHeaders() does all the heavy lifting
-	 */
-	if (logging)
-	    LogService.log(context, appname, context
-		    .getString(R.string.http_method));
-
-	try {
-	    isUp = getHttpHeaders(context);
-	} catch (IOException e) {
-	    try {
-		/*
-		 * Second try
-		 */
-		isUp = getHttpHeaders(context);
-	    } catch (IOException e1) {
-		if (logging)
-		    LogService.log(context, appname, context
-			    .getString(R.string.httpexception));
-	    } catch (URISyntaxException e1) {
-		if (logging)
-		    LogService.log(context, appname, context
-			    .getString(R.string.http_method));
-	    }
-
-	} catch (URISyntaxException e) {
-	    if (logging)
-		LogService.log(context, appname, context
-			.getString(R.string.urlexception));
+    private void handleWifiState(final Intent intent) {
+	// What kind of state change is it?
+	int state = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
+		WifiManager.WIFI_STATE_UNKNOWN);
+	switch (state) {
+	case WifiManager.WIFI_STATE_ENABLED:
+	    if (prefs.getFlag(Pref.LOG_KEY))
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.wifi_state_enabled));
+	    onWifiEnabled();
+	    break;
+	case WifiManager.WIFI_STATE_ENABLING:
+	    if (prefs.getFlag(Pref.LOG_KEY))
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.wifi_state_enabling));
+	    break;
+	case WifiManager.WIFI_STATE_DISABLED:
+	    if (prefs.getFlag(Pref.LOG_KEY))
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.wifi_state_disabled));
+	    onWifiDisabled();
+	    break;
+	case WifiManager.WIFI_STATE_DISABLING:
+	    if (prefs.getFlag(Pref.LOG_KEY))
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.wifi_state_disabling));
+	    break;
+	case WifiManager.WIFI_STATE_UNKNOWN:
+	    if (prefs.getFlag(Pref.LOG_KEY))
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.wifi_state_unknown));
+	    break;
 	}
-
-	return isUp;
-    }
-
-    private static boolean icmpHostup(final Context context) {
-	boolean isUp = false;
-	/*
-	 * If IP hasn't been cached yet cache it
-	 */
-	if (cachedIP == null)
-	    icmpCache(context);
-
-	if (logging)
-	    LogService.log(context, appname, context
-		    .getString(R.string.icmp_method)
-		    + cachedIP);
-
-	try {
-	    if (InetAddress.getByName(cachedIP).isReachable(REACHABLE)) {
-		isUp = true;
-		if (logging)
-		    LogService.log(context, appname, context
-			    .getString(R.string.icmp_success));
-	    }
-	} catch (UnknownHostException e) {
-	    if (logging)
-		LogService.log(context, appname, context
-			.getString(R.string.unknownhostexception));
-	} catch (IOException e) {
-	    if (logging)
-		LogService.log(context, appname, context
-			.getString(R.string.ioexception));
-	}
-	return isUp;
-    }
-
-   
-    private static void logSupplicant(final Context context, final String state) {
-
-	LogService.log(context, appname, context
-		.getString(R.string.supplicant_state)
-		+ state);
-	if (wm.pingSupplicant()) {
-	    LogService.log(context, appname, context
-		    .getString(R.string.supplicant_responded));
-	} else {
-	    LogService.log(context, appname, context
-		    .getString(R.string.supplicant_nonresponsive));
-
-	}
-
-	LogService.log(context, appname, context.getString(R.string.ssid)
-		+ getSSID());
-
     }
 
     private void n1Fix() {
@@ -1193,55 +1182,50 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	}
     }
 
-    private static void networkNotify(final Context context) {
-	final int NUM_SSIDS = 3;
-	final int SSID_LENGTH = 10;
-	final List<ScanResult> wifiList = wm.getScanResults();
-	String ssid = EMPTYSTRING;
-	String signal = EMPTYSTRING;
-	int n = 0;
-	for (ScanResult sResult : wifiList) {
-	    if (sResult.capabilities.length() == W_REASSOCIATE && n < NUM_SSIDS) {
-		if (sResult.SSID.length() > SSID_LENGTH)
-		    ssid = ssid + sResult.SSID.substring(0, SSID_LENGTH)
-			    + NEWLINE;
-		else
-		    ssid = ssid + sResult.SSID + NEWLINE;
+    private void onScreenOff() {
+	/*
+	 * Disable Sleep check
+	 */
+	if (prefs.getFlag(Pref.SCREEN_KEY))
+	    sleepCheck(true);
+	/*
+	 * Schedule N1 fix
+	 */
+	if (prefs.getFlag(Pref.N1FIX2_KEY))
+	    handlerWrapper(N1CHECK, REACHABLE);
 
-		signal = signal + sResult.level + NEWLINE;
-		n++;
-	    }
+	if (logging) {
+	    LogService.log(ctxt, appname, ctxt
+		    .getString(R.string.screen_off_handler));
 	}
-	NotifUtil.addNetNotif(context, ssid, signal);
     }
 
-    private static void notifyWrap(final Context context, final String message) {
-	if (prefs.getFlag(Pref.NOTIF_KEY)) {
-	    NotifUtil.show(context, context
-		    .getString(R.string.wifi_connection_problem)
-		    + message, message, ERR_NOTIF, PendingIntent.getActivity(
-		    context, 0, new Intent(), 0));
+    private void onScreenOn() {
+
+	sleepCheck(false);
+	if (logging) {
+	    LogService.log(ctxt, appname, ctxt
+		    .getString(R.string.screen_on_handler));
 	}
+    }
+
+    @Override
+    public void onScreenStateChanged(boolean state) {
+	screenstate = state;
+
+	if (state)
+	    onScreenOn();
+	else
+	    onScreenOff();
+    }
+
+    private void onWifiDisabled() {
+	// TODO Auto-generated method stub
 
     }
-   
-    private void sleepCheck(final boolean state) {
-	if (state && wm.isWifiEnabled()) {
-	    /*
-	     * Start sleep check
-	     */
-	    handlerWrapper(SLEEPCHECK, SLEEPWAIT);
 
-	} else {
-	    /*
-	     * Screen is on, remove any posts
-	     */
-	    hMain.removeMessages(SLEEPCHECK);
-	    /*
-	     * Check state
-	     */
-	    handlerWrapper(MAIN, SHORTWAIT);
-	}
+    private void onWifiEnabled() {
+	// TODO Auto-generated method stub
 
     }
 
@@ -1270,14 +1254,15 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 
 	    if (bestap == NULLVAL) {
 		if (logging)
-		    LogService.log(ctxt, appname,
-			    ctxt.getString(R.string.signalhop_no_result));
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.signalhop_no_result));
 		handlerWrapper(TEMPLOCK_OFF);
 		wifiRepair();
 		return;
 	    } else {
 		if (logging) {
-		    LogService.log(ctxt, appname, ctxt.getString(R.string.hopping)
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.hopping)
 			    + bestap);
 		    LogService.log(ctxt, appname, ctxt.getString(R.string.nid)
 			    + lastAP);
@@ -1287,11 +1272,31 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	}
 
 	if (logging)
-	    LogService.log(ctxt, appname,
-		    ctxt.getString(R.string.signalhop_nonetworks));
+	    LogService.log(ctxt, appname, ctxt
+		    .getString(R.string.signalhop_nonetworks));
 	handlerWrapper(TEMPLOCK_OFF);
 	shouldrepair = true;
 	wifiRepair();
+
+    }
+
+    private void sleepCheck(final boolean state) {
+	if (state && wm.isWifiEnabled()) {
+	    /*
+	     * Start sleep check
+	     */
+	    handlerWrapper(SLEEPCHECK, SLEEPWAIT);
+
+	} else {
+	    /*
+	     * Screen is on, remove any posts
+	     */
+	    hMain.removeMessages(SLEEPCHECK);
+	    /*
+	     * Check state
+	     */
+	    handlerWrapper(MAIN, SHORTWAIT);
+	}
 
     }
 
@@ -1300,7 +1305,8 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	pendingscan = pending;
 	wm.startScan();
 	if (logging)
-	    LogService.log(ctxt, appname, ctxt.getString(R.string.initiating_scan));
+	    LogService.log(ctxt, appname, ctxt
+		    .getString(R.string.initiating_scan));
 	tempLock(LOCKWAIT);
     }
 
@@ -1310,8 +1316,8 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	    toggleWifi();
 	startScan(true);
 	if (logging)
-	    LogService.log(ctxt, appname,
-		    ctxt.getString(R.string.running_supplicant_fix));
+	    LogService.log(ctxt, appname, ctxt
+		    .getString(R.string.running_supplicant_fix));
     }
 
     private void tempLock(final int time) {
@@ -1334,7 +1340,7 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 
 	ctxt.sendBroadcast(new Intent(IntentConstants.ACTION_WIFI_TOGGLE));
     }
-    
+
     private void wifiRepair() {
 	if (!shouldrepair)
 	    return;
@@ -1345,8 +1351,8 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	     */
 	    handlerWrapper(WIFITASK);
 	    if (logging)
-		LogService.log(ctxt, appname,
-			ctxt.getString(R.string.running_wifi_repair));
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.running_wifi_repair));
 	} else {
 	    /*
 	     * if screen off, try wake lock then resubmit to handler
@@ -1354,18 +1360,23 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 	    wakelock.lock(true);
 	    handlerWrapper(WIFITASK);
 	    if (logging)
-		LogService.log(ctxt, appname,
-			ctxt.getString(R.string.wifi_repair_post_failed));
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.wifi_repair_post_failed));
 	}
 
 	shouldrepair = false;
 
     }
 
-    @Override
-    public void onScreenStateChanged(boolean state) {
-	screenstate = state;
-	
+    public void wifiLock(final Boolean state) {
+	if (state)
+	    lock.acquire();
+	else
+	    lock.release();
+    }
+
+    public boolean wifiLockHeld() {
+	return lock.isHeld();
     }
 
 }

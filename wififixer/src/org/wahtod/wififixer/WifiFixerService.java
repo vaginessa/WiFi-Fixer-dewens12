@@ -26,21 +26,18 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 
-public class WifiFixerService extends Service implements OnScreenStateChangedListener {
-
-    
+public class WifiFixerService extends Service implements
+	OnScreenStateChangedListener {
 
     // IDs For notifications
     private static final int NOTIFID = 31337;
     // Screen State SharedPref key
     public static final String SCREENOFF = "SCREENOFF";
 
-   
     // *****************************
     final static String APP_NAME = "WifiFixerService";
     private final static String EMPTYSTRING = "";
@@ -52,13 +49,12 @@ public class WifiFixerService extends Service implements OnScreenStateChangedLis
     private static boolean logging = false;
 
     // Locks and such
-   
+
     private static boolean shouldrun = true;
-    
 
     // Version
     private static int version = 0;
-    
+
     private WakeLock wakelock;
     private WFConnection wifi;
     private static ScreenStateHandler screenstateHandler;
@@ -66,17 +62,14 @@ public class WifiFixerService extends Service implements OnScreenStateChangedLis
      * Cache context for notifications
      */
     private Context notifcontext;
-    
-    private static boolean screenstate;
-    
-    private static WifiManager.WifiLock lock;
+
+    static boolean screenstate;
 
     /*
      * Preferences
      */
     static PrefUtil prefs;
 
-   
     private static void refreshWidget(final Context context) {
 	Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 	/*
@@ -89,13 +82,11 @@ public class WifiFixerService extends Service implements OnScreenStateChangedLis
 	context.sendBroadcast(intent);
     }
 
-    
     private void cleanup() {
 	wakelock.lock(false);
 	screenstateHandler.unregister(this);
     }
 
-   
     private void getPackageInfo() {
 	PackageManager pm = getPackageManager();
 	try {
@@ -111,9 +102,6 @@ public class WifiFixerService extends Service implements OnScreenStateChangedLis
 	}
     }
 
-    
-    
-
     private void handleStart(final Intent intent) {
 
 	/*
@@ -124,7 +112,7 @@ public class WifiFixerService extends Service implements OnScreenStateChangedLis
 	    /*
 	     * Start Main tick
 	     */
-	   // hMain.sendEmptyMessage(MAIN);
+	    // hMain.sendEmptyMessage(MAIN);
 	}
 	if (intent != null && logging)
 	    LogService.log(this, APP_NAME,
@@ -168,7 +156,6 @@ public class WifiFixerService extends Service implements OnScreenStateChangedLis
 
 	};
 
-	//lastAP = getNetworkID();
 	getPackageInfo();
 
 	if (logging) {
@@ -176,36 +163,35 @@ public class WifiFixerService extends Service implements OnScreenStateChangedLis
 		    getString(R.string.wififixerservice_build) + version);
 	}
 
-	
-
 	/*
 	 * Load Preferences
 	 */
 	preferenceInitialize(this);
 
-	// Set up broadcastreceivers
-	//registerMainReceiver();
-
 	/*
 	 * Set initial screen state
 	 */
-
 	setInitialScreenState(this);
 
 	/*
-	 * Start Main tick
+	 * Refresh Widget
 	 */
-	//hMain.sendEmptyMessage(MAIN);
-
 	refreshWidget(this);
-	
+
 	/*
 	 * Initialize Wifi Connection class
 	 */
 	wifi = new WFConnection(this, prefs);
 
+	/*
+	 * Start Service watchdog alarm
+	 */
 	if (!ServiceAlarm.alarmExists(this))
 	    ServiceAlarm.setAlarm(this, true);
+	/*
+	 * Set registered flag true so unregister code runs later
+	 */
+	registered = true;
 
 	if (logging)
 	    LogService.log(this, APP_NAME, getString(R.string.oncreate));
@@ -229,17 +215,7 @@ public class WifiFixerService extends Service implements OnScreenStateChangedLis
 	 * Set shared pref state
 	 */
 	PrefUtil.writeBoolean(this, SCREENOFF, true);
-
-	/*
-	 * Disable Sleep check
-	 */
-	if (prefs.getFlag(Pref.SCREEN_KEY))
-	   // sleepCheck(true);
-	/*
-	 * Schedule N1 fix
-	 */
-	if (prefs.getFlag(Pref.N1FIX2_KEY))
-	    //hMainWrapper(N1CHECK, REACHABLE);
+	screenstate = false;
 
 	if (logging) {
 	    LogService.log(this, APP_NAME,
@@ -254,7 +230,7 @@ public class WifiFixerService extends Service implements OnScreenStateChangedLis
 	 */
 	PrefUtil.writeBoolean(this, SCREENOFF, false);
 
-	//sleepCheck(false);
+	screenstate = true;
 	if (logging) {
 	    LogService.log(this, APP_NAME,
 		    getString(R.string.screen_on_handler));
@@ -267,7 +243,7 @@ public class WifiFixerService extends Service implements OnScreenStateChangedLis
 	    onScreenOn();
 	else
 	    onScreenOff();
-	
+
     }
 
     @Override
@@ -280,7 +256,6 @@ public class WifiFixerService extends Service implements OnScreenStateChangedLis
 	handleStart(intent);
 	return START_STICKY;
     }
-
 
     private void preferenceInitialize(final Context context) {
 	prefs = new PrefUtil(this) {
@@ -303,17 +278,17 @@ public class WifiFixerService extends Service implements OnScreenStateChangedLis
 		switch (p) {
 
 		case WIFILOCK_KEY:
-		    if (prefs.getFlag(Pref.WIFILOCK_KEY)
-			    && !lock.isHeld()) {
+		    if (wifi != null && prefs.getFlag(Pref.WIFILOCK_KEY)
+			    && wifi.wifiLockHeld()) {
 			// generate new lock
-			lock.acquire();
+			wifi.wifiLock(true);
 			if (logging)
 			    LogService.log(getBaseContext(), APP_NAME,
 				    getBaseContext().getString(
 					    R.string.acquiring_wifi_lock));
-		    } else if (lock.isHeld()
+		    } else if (wifi != null && wifi.wifiLockHeld()
 			    && !prefs.getFlag(Pref.WIFILOCK_KEY)) {
-			lock.release();
+			wifi.wifiLock(false);
 			if (logging)
 			    LogService.log(getBaseContext(), APP_NAME,
 				    getBaseContext().getString(
@@ -399,22 +374,16 @@ public class WifiFixerService extends Service implements OnScreenStateChangedLis
 
     }
 
-    
-
     private void setInitialScreenState(final Context context) {
 	screenstateHandler = new ScreenStateHandler(this);
 	screenstate = ScreenStateHandler.getScreenState(context);
 	ScreenStateHandler.setOnScreenStateChangedListener(this);
     }
 
-    
-
-    
-
     private void unregisterReceivers() {
 	if (registered) {
-	    //unregisterReceiver(receiver);
 	    prefs.unRegisterReciever();
+	    screenstateHandler.unregister(this);
 	    registered = false;
 	}
     }

@@ -190,8 +190,8 @@ public class WifiFixerActivity extends Activity {
     boolean getLogging() {
 	return PrefUtil.readBoolean(this, Pref.LOG_KEY);
     }
-    
-    private void handleIntent (final Intent intent) {
+
+    private void handleIntent(final Intent intent) {
 	/*
 	 * Pop open network list if started by widget
 	 */
@@ -410,10 +410,9 @@ public class WifiFixerActivity extends Activity {
 	 * For ContextMenu handler
 	 */
 	ctxt = this;
-	
+
 	/*
-	 * Handle intent command if destroyed
-	 * or first start
+	 * Handle intent command if destroyed or first start
 	 */
 	handleIntent(getIntent());
 

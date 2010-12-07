@@ -65,7 +65,7 @@ public class ScreenStateHandler {
 	filter.addAction(Intent.ACTION_SCREEN_ON);
 	context.registerReceiver(receiver, filter);
     }
-    
+
     public void unregister(final Context context) {
 	context.unregisterReceiver(receiver);
     }

@@ -133,7 +133,7 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	 * Authorization code
 	 * 
 	 * Hey, if you're poking into this, and can read code, you can afford to
-	 * donate!  
+	 * donate!
 	 */
 	else if (action.equals(AUTH_ACTION)) {
 	    if (intent.hasExtra(AUTHEXTRA)

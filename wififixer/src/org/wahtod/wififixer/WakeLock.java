@@ -27,9 +27,9 @@ public class WakeLock {
 	PowerManager pm = (PowerManager) context
 		.getSystemService(Context.POWER_SERVICE);
 	/*
-	 * We want PowerManager.PARTIAL_WAKE_LOCK because we don't want to change
-	 * screen state, we just want to rev up the CPU so the wifi commands work
-	 * right
+	 * We want PowerManager.PARTIAL_WAKE_LOCK because we don't want to
+	 * change screen state, we just want to rev up the CPU so the wifi
+	 * commands work right
 	 */
 	wakelock = pm
 		.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_NAME);
