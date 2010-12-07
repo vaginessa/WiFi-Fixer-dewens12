@@ -77,7 +77,8 @@ public class WifiFixerActivity extends Activity {
     private static final int CONTEXT_DISABLE = 2;
     private static final int CONTEXT_CONNECT = 3;
 
-    private int clicked;
+    private String clicked;
+    private int clicked_position;
     VersionedLogFile vlogfile;
     private static View listviewitem;
     private static NetworkListAdapter adapter;
@@ -394,7 +395,8 @@ public class WifiFixerActivity extends Activity {
 	    @Override
 	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 		    int position, long id) {
-		clicked = position;
+		clicked = lv.getItemAtPosition(position).toString();
+		clicked_position = position;
 		listviewitem = v;
 		return false;
 	    }
@@ -491,11 +493,11 @@ public class WifiFixerActivity extends Activity {
 	switch (item.getItemId()) {
 	case CONTEXT_ENABLE:
 	    iv.setImageResource(R.drawable.enabled_ssid);
-	    WFConnection.setNetworkState(ctxt, clicked, true);
+	    WFConnection.setNetworkState(ctxt, clicked_position, true);
 	    break;
 	case CONTEXT_DISABLE:
 	    iv.setImageResource(R.drawable.disabled_ssid);
-	    WFConnection.setNetworkState(ctxt, clicked, true);
+	    WFConnection.setNetworkState(ctxt, clicked_position, false);
 	    break;
 	case CONTEXT_CONNECT:
 	    break;
