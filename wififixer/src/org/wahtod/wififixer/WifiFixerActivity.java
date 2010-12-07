@@ -77,7 +77,7 @@ public class WifiFixerActivity extends Activity {
     private static final int CONTEXT_DISABLE = 2;
     private static final int CONTEXT_CONNECT = 3;
 
-    private String clicked;
+    private int clicked;
     VersionedLogFile vlogfile;
     private static View listviewitem;
     private static NetworkListAdapter adapter;
@@ -144,11 +144,10 @@ public class WifiFixerActivity extends Activity {
 		holder = (ViewHolder) convertView.getTag();
 	    }
 	    holder.text.setText(ssidArray[position]);
-	    if (PrefUtil.readBoolean(sharedContext, NETWORK
-		    + ssidArray[position]))
-		holder.icon.setImageResource(R.drawable.disabled_ssid);
-	    else
+	    if (WFConnection.getNetworkState(ctxt, position))
 		holder.icon.setImageResource(R.drawable.enabled_ssid);
+	    else
+		holder.icon.setImageResource(R.drawable.disabled_ssid);
 	    return convertView;
 	}
 
@@ -395,7 +394,7 @@ public class WifiFixerActivity extends Activity {
 	    @Override
 	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 		    int position, long id) {
-		clicked = lv.getItemAtPosition(position).toString();
+		clicked = position;
 		listviewitem = v;
 		return false;
 	    }
@@ -492,11 +491,11 @@ public class WifiFixerActivity extends Activity {
 	switch (item.getItemId()) {
 	case CONTEXT_ENABLE:
 	    iv.setImageResource(R.drawable.enabled_ssid);
-	    PrefUtil.removeKey(ctxt, NETWORK + clicked);
+	    WFConnection.setNetworkState(ctxt, clicked, true);
 	    break;
 	case CONTEXT_DISABLE:
 	    iv.setImageResource(R.drawable.disabled_ssid);
-	    PrefUtil.writeBoolean(ctxt, NETWORK + clicked, true);
+	    WFConnection.setNetworkState(ctxt, clicked, true);
 	    break;
 	case CONTEXT_CONNECT:
 	    break;

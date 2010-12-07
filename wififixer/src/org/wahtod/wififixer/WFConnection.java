@@ -123,8 +123,8 @@ public class WFConnection extends Object implements
     private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
 
     // deprecated
-    static boolean templock;
-    static boolean logging;
+    static boolean templock = false;
+    static boolean logging = false;
 
     /*
      * Constants for wifirepair values
@@ -443,7 +443,7 @@ public class WFConnection extends Object implements
     };
 
     public WFConnection(final Context context, PrefUtil p) {
-	wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+	wm = getWifiManager(context);
 	prefs = p;
 	appname = context.getClass().getName();
 	ScreenStateHandler.setOnScreenStateChangedListener(this);
@@ -818,6 +818,10 @@ public class WFConnection extends Object implements
     private static SupplicantState getSupplicantState() {
 	myWifi = wm.getConnectionInfo();
 	return myWifi.getSupplicantState();
+    }
+
+    private static WifiManager getWifiManager(final Context context) {
+	return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     }
 
     private static void handleNetworkAction(final Context context) {
@@ -1227,6 +1231,28 @@ public class WFConnection extends Object implements
     private void onWifiEnabled() {
 	// TODO Auto-generated method stub
 
+    }
+
+    public static boolean setNetworkState(final Context context,
+	    final int network, final boolean state) {
+	boolean response;
+	WifiManager w = getWifiManager(context);
+	if (state)
+	    response = w.enableNetwork(network, false);
+	else
+	    response = w.disableNetwork(network);
+
+	return response;
+    }
+
+    public static boolean getNetworkState(final Context context,
+	    final int network) {
+	WifiManager w = getWifiManager(context);
+	int status = w.getConfiguredNetworks().get(network).status;
+	if (status == WifiConfiguration.Status.DISABLED)
+	    return false;
+	else
+	    return true;
     }
 
     private void signalHop() {
