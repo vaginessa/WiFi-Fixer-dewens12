@@ -30,6 +30,7 @@ public class PrefConstants {
     static final String SLPOLICY_KEY = "SLEEP_POLICY";
     static final String PERF_KEY = "Perf_Mode";
     static final String WIDGET_KEY = "WIDGET";
+    static final String WIFI_STATE_LOCK = "WFSTATELOCK";
 
     /*
      * PrefsList enum

@@ -23,7 +23,6 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 public class FixerWidget extends AppWidgetProvider {
@@ -47,7 +46,8 @@ public class FixerWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-	Log.i(this.getClass().getName(), intent.toString());
+	LogService.log(context, LogService.getLogTag(context),
+		intent.toString());
 	super.onReceive(context, intent);
 
     }
@@ -59,8 +59,8 @@ public class FixerWidget extends AppWidgetProvider {
 	/*
 	 * Send Update To Widgets
 	 */
-	Log.i(this.getClass().getName(), context
-		.getString(R.string.widget_update_called));
+	LogService.log(context, LogService.getLogTag(context),
+		context.getString(R.string.widget_update_called));
 	context.startService(new Intent(context, UpdateService.class));
 	super.onUpdate(context, appWidgetManager, appWidgetIds);
     }

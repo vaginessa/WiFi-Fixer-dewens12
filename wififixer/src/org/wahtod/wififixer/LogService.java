@@ -82,7 +82,7 @@ public class LogService extends IntentService {
 	}
     }
     
-    public static String getContextNameString(final Context context){
+    public static String getLogTag(final Context context){
 	return context.getClass().getSimpleName();
     }
 

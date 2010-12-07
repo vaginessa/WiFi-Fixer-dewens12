@@ -33,8 +33,6 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.PrefConstants.Pref;
-import org.wahtod.wififixer.ScreenStateHandler.OnScreenStateChangedListener;
-
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -55,8 +53,7 @@ import android.text.format.Formatter;
  * Handles all interaction 
  * with WifiManager
  */
-public class WFConnection extends Object implements
-	OnScreenStateChangedListener {
+public class WFConnection extends Object {
     private static WifiManager wm;
     private static String cachedIP;
     private static String appname;
@@ -285,7 +282,7 @@ public class WFConnection extends Object implements
 				    ctxt
 					    .getString(R.string.supplicant_nonresponsive_toggling_wifi));
 		toggleWifi();
-	    } else if (!templock && !screenstate)
+	    } else if (!templock && screenstate)
 		checkWifi();
 
 	    if (prefs.getFlag(Pref.DISABLE_KEY)) {
@@ -445,8 +442,7 @@ public class WFConnection extends Object implements
     public WFConnection(final Context context, PrefUtil p) {
 	wm = getWifiManager(context);
 	prefs = p;
-	appname = LogService.getContextNameString(context);
-	ScreenStateHandler.setOnScreenStateChangedListener(this);
+	appname = LogService.getLogTag(context);
 	screenstate = ScreenStateHandler.getScreenState(context);
 	logging = prefs.getFlag(Pref.LOG_KEY);
 	/*
@@ -1019,7 +1015,7 @@ public class WFConnection extends Object implements
     private boolean handlerWrapper(final int hmain) {
 	if (handlerCheck(hmain)) {
 	    hMain.removeMessages(hmain);
-	    if (!screenstate)
+	    if (screenstate)
 		return hMain.sendEmptyMessage(hmain);
 	    else
 		return hMain.sendEmptyMessageDelayed(hmain, REALLYSHORTWAIT);
@@ -1128,7 +1124,7 @@ public class WFConnection extends Object implements
 
 	if (!wm.isWifiEnabled()) {
 	    return;
-	} else if (screenstate && !prefs.getFlag(Pref.SCREEN_KEY))
+	} else if (!screenstate && !prefs.getFlag(Pref.SCREEN_KEY))
 	    return;
 	else if (sState == DISCONNECTED) {
 	    startScan(true);
@@ -1195,8 +1191,12 @@ public class WFConnection extends Object implements
 	/*
 	 * Schedule N1 fix
 	 */
-	if (prefs.getFlag(Pref.N1FIX2_KEY))
+	if (prefs.getFlag(Pref.N1FIX2_KEY)) {
 	    handlerWrapper(N1CHECK, REACHABLE);
+	    if (logging)
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.scheduling_n1_fix));
+	}
 
 	if (logging) {
 	    LogService.log(ctxt, appname, ctxt
@@ -1213,7 +1213,6 @@ public class WFConnection extends Object implements
 	}
     }
 
-    @Override
     public void onScreenStateChanged(boolean state) {
 	screenstate = state;
 
@@ -1363,15 +1362,17 @@ public class WFConnection extends Object implements
 	/*
 	 * Send Toggle request to broadcastreceiver
 	 */
-
-	ctxt.sendBroadcast(new Intent(IntentConstants.ACTION_WIFI_TOGGLE));
+	if (logging)
+	    LogService.log(ctxt, appname, ctxt
+		    .getString(R.string.toggling_wifi));
+	ctxt.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
     }
 
     private void wifiRepair() {
 	if (!shouldrepair)
 	    return;
 
-	if (!screenstate) {
+	if (screenstate) {
 	    /*
 	     * Start Wifi Task
 	     */

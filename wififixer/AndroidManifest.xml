@@ -50,6 +50,9 @@
 				<action android:name="org.wahtod.wififixer.WIFI_ACTION_SERVICE_ENABLE" />
 				<action android:name="org.wahtod.wififixer.WIDGET" />
 				<action android:name="org.wahtod.wififixer.AUTH" />
+				<action android:name="org.wahtod.wififixer.WIFI_ACTION_ON"/>
+				<action android:name="org.wahtod.wififixer.WIFI_ACTION_OFF"/>
+				<action android:name="org.wahtod.wififixer.WIFI_ACTION_TOGGLE"/>
 			</intent-filter>
 		</receiver>
 

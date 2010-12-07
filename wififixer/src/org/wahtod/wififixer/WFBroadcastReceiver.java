@@ -121,7 +121,17 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	    setServiceEnabled(context, false);
 	    ServiceAlarm.setLogTS(context, false, 0);
 	    ServiceAlarm.unsetAlarm(context);
+	} else if (action.equals(IntentConstants.ACTION_WIFI_ON)) {
+	    if (!PrefUtil.readBoolean(context, PrefConstants.WIFI_STATE_LOCK))
+		context.sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
+	} else if (action.equals(IntentConstants.ACTION_WIFI_OFF)) {
+	    if (!PrefUtil.readBoolean(context, PrefConstants.WIFI_STATE_LOCK))
+		context.sendBroadcast(new Intent(WidgetHandler.WIFI_OFF));
+	} else if (action.equals(IntentConstants.ACTION_WIFI_TOGGLE)) {
+	    if (!PrefUtil.readBoolean(context, PrefConstants.WIFI_STATE_LOCK))
+		context.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
 	}
+
 	/*
 	 * Handle Widget intent
 	 */
@@ -138,7 +148,7 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	else if (action.equals(AUTH_ACTION)) {
 	    if (intent.hasExtra(AUTHEXTRA)
 		    && intent.getStringExtra(AUTHEXTRA).contains(AUTHSTRING)) {
-		Log.i(LogService.getContextNameString(ctxt), ctxt
+		Log.i(LogService.getLogTag(ctxt), ctxt
 			.getString(R.string.authed));
 		// Ok, do the auth
 		if (!PrefUtil.readBoolean(ctxt, ctxt

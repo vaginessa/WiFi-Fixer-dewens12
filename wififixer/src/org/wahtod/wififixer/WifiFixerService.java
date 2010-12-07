@@ -216,11 +216,6 @@ public class WifiFixerService extends Service implements
 	 */
 	PrefUtil.writeBoolean(this, SCREENOFF, true);
 	screenstate = false;
-
-	if (logging) {
-	    LogService.log(this, APP_NAME,
-		    getString(R.string.screen_off_handler));
-	}
     }
 
     private void onScreenOn() {
@@ -231,10 +226,6 @@ public class WifiFixerService extends Service implements
 	PrefUtil.writeBoolean(this, SCREENOFF, false);
 
 	screenstate = true;
-	if (logging) {
-	    LogService.log(this, APP_NAME,
-		    getString(R.string.screen_on_handler));
-	}
     }
 
     @Override
@@ -243,7 +234,10 @@ public class WifiFixerService extends Service implements
 	    onScreenOn();
 	else
 	    onScreenOff();
-
+	/*
+	 * Notify instance of WFConnection
+	 */
+	wifi.onScreenStateChanged(state);
     }
 
     @Override
