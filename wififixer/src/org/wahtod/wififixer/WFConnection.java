@@ -434,7 +434,9 @@ public class WFConnection extends Object {
 	    else if (iAction
 		    .equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
 		handleNetworkAction(context);
-
+	    else if (iAction
+		    .equals(android.net.ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED))
+		handleBackgroundDataAction(context, intent);
 	}
 
     };
@@ -458,18 +460,22 @@ public class WFConnection extends Object {
 	/*
 	 * Set up Intent filters
 	 */
-	IntentFilter myFilter = new IntentFilter(
+	IntentFilter filter = new IntentFilter(
 		WifiManager.WIFI_STATE_CHANGED_ACTION);
 	// Supplicant State filter
-	myFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+	filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
 
 	// Network State filter
-	myFilter.addAction(android.net.ConnectivityManager.CONNECTIVITY_ACTION);
+	filter.addAction(android.net.ConnectivityManager.CONNECTIVITY_ACTION);
 
 	// wifi scan results available callback
-	myFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+	filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 
-	context.registerReceiver(receiver, myFilter);
+	// Background Data enable/disable
+	filter
+		.addAction(ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED);
+
+	context.registerReceiver(receiver, filter);
 	/*
 	 * Acquire wifi lock WIFI_MODE_FULL should p. much always be used
 	 * acquire lock if pref says we should
@@ -818,6 +824,26 @@ public class WFConnection extends Object {
 
     private static WifiManager getWifiManager(final Context context) {
 	return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+    }
+
+    private static void handleBackgroundDataAction(final Context context,
+	    final Intent intent) {
+	ConnectivityManager cm = (ConnectivityManager) context
+		.getSystemService(Context.CONNECTIVITY_SERVICE);
+	if (cm.getBackgroundDataSetting() == false) {
+	    /*
+	     * Background data has been disabled. Notify the user and disable
+	     * service
+	     */
+	    NotifUtil.show(ctxt, context.getString(R.string.bdata_nag), context
+		    .getString(R.string.bdata_ticker), ERR_NOTIF, PendingIntent
+		    .getActivity(context, 0, new Intent(), 0));
+	    PrefUtil.writeBoolean(context, Pref.DISABLE_KEY, true);
+	   
+	    ctxt.sendBroadcast(new Intent(
+		    IntentConstants.ACTION_WIFI_SERVICE_DISABLE));
+	    PrefUtil.notifyPrefChange(context, Pref.DISABLE_KEY);
+	}
     }
 
     private static void handleNetworkAction(final Context context) {

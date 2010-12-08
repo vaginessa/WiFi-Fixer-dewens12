@@ -12,6 +12,8 @@
 		License.
 	-->
 <resources>
+    <string name="bdata_ticker">Service Disabled</string>
+    <string name="bdata_nag">Background Data Disabled</string>
     <string name="scheduling_n1_fix">Scheduling N1 Fix</string>
     <string name="widget_update_called">Widget Update Called</string>
     <string name="logfile_delete_err_toast">Log File Doesn\'t Exist</string>

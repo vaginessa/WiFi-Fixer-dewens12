@@ -28,6 +28,7 @@ public class ScreenStateHandler {
     }
 
     private static OnScreenStateChangedListener onScreenStateChangedListener;
+    private static boolean registered;
 
     public static boolean getScreenState(final Context context) {
 	VersionedScreenState sstate = VersionedScreenState.newInstance(context);
@@ -64,9 +65,12 @@ public class ScreenStateHandler {
 	IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
 	filter.addAction(Intent.ACTION_SCREEN_ON);
 	context.registerReceiver(receiver, filter);
+	registered = true;
     }
 
     public void unregister(final Context context) {
-	context.unregisterReceiver(receiver);
+	if (registered)
+	    context.unregisterReceiver(receiver);
+	registered = false;
     }
 }

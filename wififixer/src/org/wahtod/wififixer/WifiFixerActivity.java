@@ -160,7 +160,7 @@ public class WifiFixerActivity extends Activity {
     }
 
     void authCheck() {
-	if (!isauthedFlag) {
+	if (!PrefUtil.readBoolean(this, PrefConstants.AUTH_FLAG)) {
 	    // Handle Donate Auth
 	    startService(new Intent(getString(R.string.donateservice)));
 	    nagNotification();
@@ -442,12 +442,10 @@ public class WifiFixerActivity extends Activity {
     }
 
     private void oncreate_setup() {
-	isauthedFlag = PrefUtil.readBoolean(this, "isauthedFlag");
-	aboutFlag = PrefUtil.readBoolean(this, sABOUT);
-	loggingmenuFlag = PrefUtil.readBoolean(this, "Logging");
+	loggingmenuFlag = PrefUtil.readBoolean(this, PrefConstants.LOGGING_MENU);
 	loggingFlag = getLogging();
 	// Fire new About nag
-	if (!aboutFlag) {
+	if (!PrefUtil.readBoolean(this, sABOUT)) {
 	    showNotification();
 
 	}
