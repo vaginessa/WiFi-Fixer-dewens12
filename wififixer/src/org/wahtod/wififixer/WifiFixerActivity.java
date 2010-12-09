@@ -111,13 +111,12 @@ public class WifiFixerActivity extends Activity {
     private static class NetworkListAdapter extends BaseAdapter {
 	private static String[] ssidArray;
 	private static LayoutInflater inflater;
-	private Context sharedContext;
+	
 
 	public NetworkListAdapter(Context context, String[] ssids) {
 	    inflater = (LayoutInflater) context
 		    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    ssidArray = ssids;
-	    sharedContext = context;
 	}
 
 	public int getCount() {

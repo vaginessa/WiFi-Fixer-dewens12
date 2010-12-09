@@ -67,10 +67,8 @@ public class WFConnection extends Object {
     private static boolean shouldrepair = false;
     private static boolean pendingscan = false;
     private static boolean pendingreconnect = false;
-    private static final boolean screenisoff = false;
 
     // IDs For notifications
-    private static final int NOTIFID = 31337;
     private static final int NETNOTIFID = 8236;
     private static final int ERR_NOTIF = 7972;
 
@@ -83,7 +81,7 @@ public class WFConnection extends Object {
     private static final String WFLOCK_TAG = "WFLock";
 
     // Empty string
-    private final static String EMPTYSTRING = "";
+    private static final String EMPTYSTRING = "";
     private static final String NEWLINE = "\n";
 
     // Target for header check
@@ -144,25 +142,25 @@ public class WFConnection extends Object {
     private static final int N1CHECK = 10;
     private static final int SIGNALHOP = 12;
 
-    private Handler hMain = new Handler() {
+    private Handler handler = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
 	    switch (message.what) {
 
 	    case MAIN:
-		hMain.post(rMain);
+		handler.post(rMain);
 		break;
 
 	    case REPAIR:
-		hMain.post(rRepair);
+		handler.post(rRepair);
 		break;
 
 	    case RECONNECT:
-		hMain.post(rReconnect);
+		handler.post(rReconnect);
 		break;
 
 	    case WIFITASK:
-		hMain.post(rWifiTask);
+		handler.post(rWifiTask);
 		break;
 
 	    case TEMPLOCK_ON:
@@ -180,11 +178,11 @@ public class WFConnection extends Object {
 		break;
 
 	    case SLEEPCHECK:
-		hMain.post(rSleepcheck);
+		handler.post(rSleepcheck);
 		break;
 
 	    case SCAN:
-		hMain.post(rScan);
+		handler.post(rScan);
 		break;
 
 	    case N1CHECK:
@@ -192,7 +190,7 @@ public class WFConnection extends Object {
 		break;
 
 	    case SIGNALHOP:
-		hMain.post(rSignalhop);
+		handler.post(rSignalhop);
 		break;
 
 	    }
@@ -397,7 +395,7 @@ public class WFConnection extends Object {
 	     */
 	    wakelock.lock(true);
 	    clearQueue();
-	    hMain.removeMessages(TEMPLOCK_OFF);
+	    handler.removeMessages(TEMPLOCK_OFF);
 	    /*
 	     * Set Lock
 	     */
@@ -409,7 +407,7 @@ public class WFConnection extends Object {
 	    /*
 	     * Then restore main tick
 	     */
-	    hMain.sendEmptyMessageDelayed(TEMPLOCK_OFF, SHORTWAIT);
+	    handler.sendEmptyMessageDelayed(TEMPLOCK_OFF, SHORTWAIT);
 	    wakelock.lock(false);
 	}
 
@@ -436,7 +434,7 @@ public class WFConnection extends Object {
 		handleNetworkAction(context);
 	    else if (iAction
 		    .equals(android.net.ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED))
-		handleBackgroundDataAction(context, intent);
+		checkBackgroundDataSetting(context);
 	}
 
     };
@@ -512,7 +510,26 @@ public class WFConnection extends Object {
 	/*
 	 * Start Main tick
 	 */
-	hMain.sendEmptyMessage(MAIN);
+	handler.sendEmptyMessage(MAIN);
+    }
+
+    public static void checkBackgroundDataSetting(final Context context) {
+	ConnectivityManager cm = (ConnectivityManager) context
+		.getSystemService(Context.CONNECTIVITY_SERVICE);
+	if (cm.getBackgroundDataSetting() == false) {
+	    /*
+	     * Background data has been disabled. Notify the user and disable
+	     * service
+	     */
+	    NotifUtil.show(ctxt, context.getString(R.string.bdata_nag), context
+		    .getString(R.string.bdata_ticker), ERR_NOTIF, PendingIntent
+		    .getActivity(context, 0, new Intent(), 0));
+	    PrefUtil.writeBoolean(context, Pref.DISABLE_KEY, true);
+
+	    ctxt.sendBroadcast(new Intent(
+		    IntentConstants.ACTION_WIFI_SERVICE_DISABLE));
+	    PrefUtil.notifyPrefChange(context, Pref.DISABLE_KEY);
+	}
     }
 
     private static boolean checkNetwork(final Context context) {
@@ -826,26 +843,6 @@ public class WFConnection extends Object {
 	return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     }
 
-    private static void handleBackgroundDataAction(final Context context,
-	    final Intent intent) {
-	ConnectivityManager cm = (ConnectivityManager) context
-		.getSystemService(Context.CONNECTIVITY_SERVICE);
-	if (cm.getBackgroundDataSetting() == false) {
-	    /*
-	     * Background data has been disabled. Notify the user and disable
-	     * service
-	     */
-	    NotifUtil.show(ctxt, context.getString(R.string.bdata_nag), context
-		    .getString(R.string.bdata_ticker), ERR_NOTIF, PendingIntent
-		    .getActivity(context, 0, new Intent(), 0));
-	    PrefUtil.writeBoolean(context, Pref.DISABLE_KEY, true);
-	   
-	    ctxt.sendBroadcast(new Intent(
-		    IntentConstants.ACTION_WIFI_SERVICE_DISABLE));
-	    PrefUtil.notifyPrefChange(context, Pref.DISABLE_KEY);
-	}
-    }
-
     private static void handleNetworkAction(final Context context) {
 	/*
 	 * This action means network connectivty has changed but, we only want
@@ -1008,7 +1005,7 @@ public class WFConnection extends Object {
 		    handlerWrapper(SCAN);
 		}
 	    } else {
-		if (screenisoff)
+		if (!screenstate)
 		    startScan(true);
 		else
 		    pendingscan = true;
@@ -1017,18 +1014,24 @@ public class WFConnection extends Object {
 	}
 
     }
+    
+    public void cleanup() {
+	ctxt.unregisterReceiver(receiver);
+	clearQueue();
+	handler.removeMessages(MAIN);
+    }
 
     private void cleanupPosts() {
-	hMain.removeMessages(RECONNECT);
-	hMain.removeMessages(REPAIR);
-	hMain.removeMessages(WIFITASK);
-	hMain.removeMessages(TEMPLOCK_ON);
+	handler.removeMessages(RECONNECT);
+	handler.removeMessages(REPAIR);
+	handler.removeMessages(WIFITASK);
+	handler.removeMessages(TEMPLOCK_ON);
     }
 
     private void clearQueue() {
-	hMain.removeMessages(RECONNECT);
-	hMain.removeMessages(REPAIR);
-	hMain.removeMessages(WIFITASK);
+	handler.removeMessages(RECONNECT);
+	handler.removeMessages(REPAIR);
+	handler.removeMessages(WIFITASK);
 	pendingscan = false;
 	pendingreconnect = false;
 	shouldrepair = false;
@@ -1040,25 +1043,25 @@ public class WFConnection extends Object {
      */
     private boolean handlerWrapper(final int hmain) {
 	if (handlerCheck(hmain)) {
-	    hMain.removeMessages(hmain);
+	    handler.removeMessages(hmain);
 	    if (screenstate)
-		return hMain.sendEmptyMessage(hmain);
+		return handler.sendEmptyMessage(hmain);
 	    else
-		return hMain.sendEmptyMessageDelayed(hmain, REALLYSHORTWAIT);
+		return handler.sendEmptyMessageDelayed(hmain, REALLYSHORTWAIT);
 
 	} else {
-	    hMain.removeMessages(hmain);
-	    return hMain.sendEmptyMessageDelayed(hmain, REACHABLE);
+	    handler.removeMessages(hmain);
+	    return handler.sendEmptyMessageDelayed(hmain, REACHABLE);
 	}
     }
 
     private boolean handlerWrapper(final int hmain, final long delay) {
 	if (handlerCheck(hmain)) {
-	    hMain.removeMessages(hmain);
-	    return hMain.sendEmptyMessageDelayed(hmain, delay);
+	    handler.removeMessages(hmain);
+	    return handler.sendEmptyMessageDelayed(hmain, delay);
 	} else {
-	    hMain.removeMessages(hmain);
-	    return hMain.sendEmptyMessageDelayed(hmain, delay + REACHABLE);
+	    handler.removeMessages(hmain);
+	    return handler.sendEmptyMessageDelayed(hmain, delay + REACHABLE);
 	}
     }
 
@@ -1160,7 +1163,7 @@ public class WFConnection extends Object {
 	    notifyWrap(ctxt, sState);
 	}
 
-	if (logging && !screenisoff)
+	if (logging && screenstate)
 	    logSupplicant(ctxt, sState);
     }
 
@@ -1342,7 +1345,7 @@ public class WFConnection extends Object {
 	    /*
 	     * Screen is on, remove any posts
 	     */
-	    hMain.removeMessages(SLEEPCHECK);
+	    handler.removeMessages(SLEEPCHECK);
 	    /*
 	     * Check state
 	     */

@@ -167,6 +167,12 @@ public class WifiFixerService extends Service implements
 	 * Load Preferences
 	 */
 	preferenceInitialize(this);
+	
+	/*
+	 * If BG data is off, we should quit.
+	 */
+	WFConnection.checkBackgroundDataSetting(this);
+	
 
 	/*
 	 * Set initial screen state
@@ -378,6 +384,7 @@ public class WifiFixerService extends Service implements
 	if (registered) {
 	    prefs.unRegisterReciever();
 	    screenstateHandler.unregister(this);
+	    wifi.cleanup();
 	    registered = false;
 	}
     }
