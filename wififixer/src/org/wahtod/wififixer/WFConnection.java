@@ -80,6 +80,10 @@ public class WFConnection extends Object {
     // Wifi Lock tag
     private static final String WFLOCK_TAG = "WFLock";
 
+    // Wifi Connect Intent
+    public static final String CONNECTINTENT = "org.wahtod.wififixer.CONNECT";
+    public static final String NETWORKNUMBER = "net#";
+
     // Empty string
     private static final String EMPTYSTRING = "";
     private static final String NEWLINE = "\n";
@@ -104,6 +108,12 @@ public class WFConnection extends Object {
 
     // for Dbm
     private static final int DBM_FLOOR = -90;
+
+    // For priority
+    /*
+     * WHAT DOES THE SCOUT SAY?
+     */
+    private static final int OVER9000 = 100001;
 
     // various
     private static final int NULLVAL = -1;
@@ -435,6 +445,8 @@ public class WFConnection extends Object {
 	    else if (iAction
 		    .equals(android.net.ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED))
 		checkBackgroundDataSetting(context);
+	    else if (iAction.equals(CONNECTINTENT))
+		handleConnectIntent(context, intent);
 	}
 
     };
@@ -472,6 +484,9 @@ public class WFConnection extends Object {
 	// Background Data enable/disable
 	filter
 		.addAction(ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED);
+
+	// Connect intent
+	filter.addAction(CONNECTINTENT);
 
 	context.registerReceiver(receiver, filter);
 	/*
@@ -521,12 +536,12 @@ public class WFConnection extends Object {
 	     * Background data has been disabled. Notify the user and disable
 	     * service
 	     */
-	    NotifUtil.show(ctxt, context.getString(R.string.bdata_nag), context
-		    .getString(R.string.bdata_ticker), ERR_NOTIF, PendingIntent
-		    .getActivity(context, 0, new Intent(), 0));
+	    NotifUtil.show(context, context.getString(R.string.bdata_nag),
+		    context.getString(R.string.bdata_ticker), ERR_NOTIF,
+		    PendingIntent.getActivity(context, 0, new Intent(), 0));
 	    PrefUtil.writeBoolean(context, Pref.DISABLE_KEY, true);
 
-	    ctxt.sendBroadcast(new Intent(
+	    context.sendBroadcast(new Intent(
 		    IntentConstants.ACTION_WIFI_SERVICE_DISABLE));
 	    PrefUtil.notifyPrefChange(context, Pref.DISABLE_KEY);
 	}
@@ -566,6 +581,25 @@ public class WFConnection extends Object {
 	return isup;
     }
 
+    private void clearHandler() {
+	if (handler.hasMessages(MAIN))
+	    handler.removeMessages(MAIN);
+	else if (handler.hasMessages(REPAIR))
+	    handler.removeMessages(REPAIR);
+	else if (handler.hasMessages(RECONNECT))
+	    handler.removeMessages(RECONNECT);
+	else if (handler.hasMessages(WIFITASK))
+	    handler.removeMessages(WIFITASK);
+	else if (handler.hasMessages(SLEEPCHECK))
+	    handler.removeMessages(SLEEPCHECK);
+	else if (handler.hasMessages(SCAN))
+	    handler.removeMessages(SCAN);
+	else if (handler.hasMessages(N1CHECK))
+	    handler.removeMessages(N1CHECK);
+	else if (handler.hasMessages(SIGNALHOP))
+	    handler.removeMessages(SIGNALHOP);
+    }
+
     private static void checkSignal(final Context context) {
 	int signal = wm.getConnectionInfo().getRssi();
 
@@ -583,26 +617,30 @@ public class WFConnection extends Object {
     private static boolean connectToAP(final Context context,
 	    final WFConfig best) {
 	/*
-	 * Handles connection to network disableOthers should always be true
+	 * New code. Using priority to specify connection AP.
 	 */
+
+	WifiConfiguration connectee = best.wificonfig;
+	connectee.priority = 10001;
+	wm.updateNetwork(connectee);
+	wm.startScan();
 
 	if (logging)
 	    LogService.log(context, appname, context
 		    .getString(R.string.connecting_to_network)
 		    + best.wificonfig.SSID);
 
-	boolean state = wm.enableNetwork(best.wificonfig.networkId, true);
+	// boolean state = wm.enableNetwork(best.wificonfig.networkId, true);
 
-	if (logging) {
-	    if (state)
-		LogService.log(context, appname, context
-			.getString(R.string.connect_succeeded));
-	    else
-		LogService.log(context, appname, context
-			.getString(R.string.connect_failed));
-	}
+	/*
+	 * if (logging) { if (state) LogService.log(context, appname, context
+	 * .getString(R.string.connect_succeeded)); else LogService.log(context,
+	 * appname, context .getString(R.string.connect_failed)); }
+	 * 
+	 * return state;
+	 */
 
-	return state;
+	return true;
     }
 
     private static int connectToBest(final Context context) {
@@ -826,8 +864,7 @@ public class WFConnection extends Object {
     }
 
     private static int getNetworkID() {
-	myWifi = wm.getConnectionInfo();
-	return myWifi.getNetworkId();
+	return wm.getConnectionInfo().getNetworkId();
     }
 
     private static String getSSID() {
@@ -835,12 +872,28 @@ public class WFConnection extends Object {
     }
 
     private static SupplicantState getSupplicantState() {
-	myWifi = wm.getConnectionInfo();
-	return myWifi.getSupplicantState();
+	return wm.getConnectionInfo().getSupplicantState();
     }
 
     private static WifiManager getWifiManager(final Context context) {
 	return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+    }
+
+    protected void handleConnectIntent(Context context, Intent intent) {
+	if (!wm.isWifiEnabled())
+	    return;
+	WifiConfiguration connectee = wm.getConfiguredNetworks().get(
+		intent.getIntExtra(NETWORKNUMBER, -1));
+	LogService.log(context, appname, "Previous priority:"
+		+ connectee.priority);
+	connectee.priority = OVER9000;
+	wm.updateNetwork(connectee);
+	wm.disconnect();
+	wm.startScan();
+	if (logging)
+	    LogService.log(context, appname, context
+		    .getString(R.string.connecting_to_network)
+		    + connectee.SSID);
     }
 
     private static void handleNetworkAction(final Context context) {
@@ -1014,7 +1067,7 @@ public class WFConnection extends Object {
 	}
 
     }
-    
+
     public void cleanup() {
 	ctxt.unregisterReceiver(receiver);
 	clearQueue();

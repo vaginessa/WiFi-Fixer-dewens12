@@ -111,7 +111,6 @@ public class WifiFixerActivity extends Activity {
     private static class NetworkListAdapter extends BaseAdapter {
 	private static String[] ssidArray;
 	private static LayoutInflater inflater;
-	
 
 	public NetworkListAdapter(Context context, String[] ssids) {
 	    inflater = (LayoutInflater) context
@@ -159,7 +158,7 @@ public class WifiFixerActivity extends Activity {
     }
 
     void authCheck() {
-	if (!PrefUtil.readBoolean(this, PrefConstants.AUTH_FLAG)) {
+	if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
 	    // Handle Donate Auth
 	    startService(new Intent(getString(R.string.donateservice)));
 	    nagNotification();
@@ -441,7 +440,8 @@ public class WifiFixerActivity extends Activity {
     }
 
     private void oncreate_setup() {
-	loggingmenuFlag = PrefUtil.readBoolean(this, PrefConstants.LOGGING_MENU);
+	loggingmenuFlag = PrefUtil
+		.readBoolean(this, PrefConstants.LOGGING_MENU);
 	loggingFlag = getLogging();
 	// Fire new About nag
 	if (!PrefUtil.readBoolean(this, sABOUT)) {
@@ -497,6 +497,9 @@ public class WifiFixerActivity extends Activity {
 	    WFConnection.setNetworkState(ctxt, clicked_position, false);
 	    break;
 	case CONTEXT_CONNECT:
+	    Intent intent = new Intent(WFConnection.CONNECTINTENT);
+	    intent.putExtra(WFConnection.NETWORKNUMBER, clicked_position);
+	    this.sendBroadcast(intent);
 	    break;
 	}
 	return true;
