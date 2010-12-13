@@ -331,7 +331,7 @@ public class WifiFixerService extends Service implements
 
 		/*
 		 * Set defaults. Doing here instead of activity because service
-		 * may be started first.
+		 * may be started first due to boot intent. 
 		 */
 		PreferenceManager.setDefaultValues(context, R.xml.preferences,
 			false);
