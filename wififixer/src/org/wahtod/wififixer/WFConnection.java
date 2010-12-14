@@ -43,7 +43,6 @@ import android.net.DhcpInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.Message;
@@ -873,7 +872,7 @@ public class WFConnection extends Object {
 		LogService.log(ctxt, appname, ctxt
 			.getString(R.string.connect_failed));
 	}
-	handler.sendEmptyMessageDelayed(MAIN, LOCKWAIT);
+	handlerWrapper(MAIN, LOCKWAIT);
 	wm.updateNetwork(connectee);
 	connectee = null;
     }
@@ -1296,13 +1295,11 @@ public class WFConnection extends Object {
     }
 
     private void onWifiDisabled() {
-	// TODO Auto-generated method stub
-
+	clearHandler();
     }
 
     private void onWifiEnabled() {
-	// TODO Auto-generated method stub
-
+	handlerWrapper(MAIN,LOCKWAIT);
     }
 
     public static boolean setNetworkState(final Context context,

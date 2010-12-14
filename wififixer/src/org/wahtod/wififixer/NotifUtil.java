@@ -26,6 +26,7 @@ import android.widget.RemoteViews;
 
 public class NotifUtil {
     private static final int NETNOTIFID = 8236;
+    private static final int STATNOTIFID = 2392;
 
     public static void addNetNotif(final Context context, final String ssid,
 	    final String signal) {
@@ -54,6 +55,35 @@ public class NotifUtil {
 	    nm.notify(NETNOTIFID, notif);
 	} else
 	    nm.cancel(NETNOTIFID);
+
+    }
+    
+    public static void addStatNotif(final Context context, final String ssid,
+	    final String status) {
+	NotificationManager nm = (NotificationManager) context
+		.getSystemService(Context.NOTIFICATION_SERVICE);
+
+	Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+		intent, 0);
+
+	Notification notif = new Notification(R.drawable.icon, context.getString(R.string.network_status), System
+		.currentTimeMillis());
+	if (ssid.length() > 0) {
+	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
+		    R.layout.connection_notif_layout);
+	    contentView.setTextViewText(R.id.ssid, ssid);
+	    contentView.setTextViewText(R.id.status, status);
+	    notif.contentView = contentView;
+	    notif.contentIntent = contentIntent;
+	    notif.flags = Notification.FLAG_ONGOING_EVENT;
+	    notif.tickerText = context.getText(R.string.network_status);
+	    /*
+	     * Fire notification, cancel if message empty: means no status info
+	     */
+	    nm.notify(STATNOTIFID, notif);
+	} else
+	    nm.cancel(STATNOTIFID);
 
     }
 
