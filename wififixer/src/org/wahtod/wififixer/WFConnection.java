@@ -76,6 +76,17 @@ public class WFConnection extends Object {
     private static final String INACTIVE = "INACTIVE";
     private static final String COMPLETED = "COMPLETED";
 
+    // For blank SSIDs
+    private static final String NULL_SSID = "None";
+
+    /*
+     * Status Notification Strings
+     */
+
+    private static String notifSSID;
+    private static String notifStatus;
+    private static String notifSignal;
+
     // Wifi Lock tag
     private static final String WFLOCK_TAG = "WFLock";
 
@@ -521,6 +532,9 @@ public class WFConnection extends Object {
 
 	};
 
+	if (prefs.getFlag(Pref.STATENOT_KEY))
+	    setStatNotif(true);
+
 	/*
 	 * Start Main tick
 	 */
@@ -602,6 +616,11 @@ public class WFConnection extends Object {
     private static void checkSignal(final Context context) {
 	int signal = wm.getConnectionInfo().getRssi();
 
+	if (prefs.getFlag(Pref.STATENOT_KEY)) {
+	    notifSignal = context.getString(R.string.current_dbm) + signal;
+	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
+	}
+
 	if (signal < DBM_FLOOR) {
 	    notifyWrap(context, context.getString(R.string.signal_poor));
 	    wm.startScan();
@@ -644,7 +663,7 @@ public class WFConnection extends Object {
 	 */
 	if (knownbysignal.size() == 0)
 	    return NULLVAL;
-	
+
 	int bestnid = NULLVAL;
 	WFConfig best = knownbysignal.get(0);
 	bestnid = best.wificonfig.networkId;
@@ -850,7 +869,10 @@ public class WFConnection extends Object {
     }
 
     private static String getSSID() {
-	return wm.getConnectionInfo().getSSID();
+	if (wm.getConnectionInfo().getSSID() != null)
+	    return wm.getConnectionInfo().getSSID();
+	else
+	    return NULL_SSID;
     }
 
     private static SupplicantState getSupplicantState() {
@@ -1156,6 +1178,11 @@ public class WFConnection extends Object {
 	String sState = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE)
 		.toString();
 
+	if (prefs.getFlag(Pref.STATENOT_KEY)) {
+	    notifSSID = getSSID();
+	    notifStatus = sState;
+	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
+	}
 	/*
 	 * Flush queue if connected
 	 * 
@@ -1299,7 +1326,7 @@ public class WFConnection extends Object {
     }
 
     private void onWifiEnabled() {
-	handlerWrapper(MAIN,LOCKWAIT);
+	handlerWrapper(MAIN, LOCKWAIT);
     }
 
     public static boolean setNetworkState(final Context context,
@@ -1312,6 +1339,15 @@ public class WFConnection extends Object {
 	    response = w.disableNetwork(network);
 
 	return response;
+    }
+
+    protected void setStatNotif(final boolean state) {
+	if (state) {
+	    NotifUtil.addStatNotif(ctxt, getSSID(), EMPTYSTRING, EMPTYSTRING);
+	} else {
+	    NotifUtil.addStatNotif(ctxt, NotifUtil.CANCEL, EMPTYSTRING,
+		    EMPTYSTRING);
+	}
     }
 
     public static boolean getNetworkState(final Context context,

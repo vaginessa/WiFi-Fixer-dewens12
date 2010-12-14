@@ -314,6 +314,15 @@ public class WifiFixerService extends Service implements
 				EMPTYSTRING);
 
 		    break;
+		    
+		case STATENOT_KEY:
+		    /*
+		     * Notify WFConnection instance
+		     * to create/destroy ongoing
+		     * status notification
+		     */
+		    wifi.setStatNotif(getFlag(Pref.STATENOT_KEY));
+		    break;
 		}
 
 		/*
