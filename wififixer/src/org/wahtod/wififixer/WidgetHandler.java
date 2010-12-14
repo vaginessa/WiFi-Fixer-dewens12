@@ -86,7 +86,8 @@ public class WidgetHandler extends BroadcastReceiver {
 			    .sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
 		} else {
 		    NotifUtil.cancel(TOGGLE_ID, ctxt);
-		    PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, false);
+		    PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK,
+			    false);
 		}
 		break;
 
@@ -94,7 +95,8 @@ public class WidgetHandler extends BroadcastReceiver {
 		NotifUtil.show(ctxt, ctxt.getString(R.string.toggling_wifi),
 			ctxt.getString(R.string.toggling_wifi), TOGGLE_ID,
 			PendingIntent.getActivity(ctxt, 0, new Intent(), 0));
-		PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, true);
+		PrefUtil
+			.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, true);
 		hWifiState.sendEmptyMessage(OFF);
 		hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
 		hWifiState.sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);

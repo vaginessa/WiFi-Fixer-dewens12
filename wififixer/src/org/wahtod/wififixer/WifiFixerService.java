@@ -167,12 +167,11 @@ public class WifiFixerService extends Service implements
 	 * Load Preferences
 	 */
 	preferenceInitialize(this);
-	
+
 	/*
 	 * If BG data is off, we should quit.
 	 */
 	WFConnection.checkBackgroundDataSetting(this);
-	
 
 	/*
 	 * Set initial screen state
@@ -331,7 +330,7 @@ public class WifiFixerService extends Service implements
 
 		/*
 		 * Set defaults. Doing here instead of activity because service
-		 * may be started first due to boot intent. 
+		 * may be started first due to boot intent.
 		 */
 		PreferenceManager.setDefaultValues(context, R.xml.preferences,
 			false);

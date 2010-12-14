@@ -119,7 +119,7 @@ public class WFConnection extends Object {
     private static final int NULLVAL = -1;
     private static int lastAP = NULLVAL;
 
-    private static WifiInfo myWifi;
+    private static WifiConfiguration connectee;
     private static WifiManager.WifiLock lock;
     private static DefaultHttpClient httpclient;
     private static HttpParams httpparams;
@@ -614,67 +614,50 @@ public class WFConnection extends Object {
 		    + signal);
     }
 
-    private static boolean connectToAP(final Context context,
-	    final WFConfig best) {
+    private void connectToAP(final Context context, final int network) {
+
+	if (!wm.isWifiEnabled())
+	    return;
 	/*
 	 * New code. Using priority to specify connection AP.
 	 */
-
-	WifiConfiguration connectee = best.wificonfig;
-	connectee.priority = 10001;
+	connectee = wm.getConfiguredNetworks().get(network);
+	int priority = connectee.priority;
+	connectee.priority = OVER9000;
 	wm.updateNetwork(connectee);
+	connectee.priority = priority;
+	/*
+	 * Remove all posts to handler
+	 */
+	clearHandler();
+	wm.disconnect();
 	wm.startScan();
-
 	if (logging)
 	    LogService.log(context, appname, context
 		    .getString(R.string.connecting_to_network)
-		    + best.wificonfig.SSID);
+		    + connectee.SSID);
 
-	// boolean state = wm.enableNetwork(best.wificonfig.networkId, true);
-
-	/*
-	 * if (logging) { if (state) LogService.log(context, appname, context
-	 * .getString(R.string.connect_succeeded)); else LogService.log(context,
-	 * appname, context .getString(R.string.connect_failed)); }
-	 * 
-	 * return state;
-	 */
-
-	return true;
     }
 
-    private static int connectToBest(final Context context) {
+    private int connectToBest(final Context context) {
 	/*
 	 * Make sure knownbysignal is populated first
 	 */
 	if (knownbysignal.size() == 0)
 	    return NULLVAL;
-	/*
-	 * Get nth best network id from scanned by connecting and doing a
-	 * network check
-	 */
+	
 	int bestnid = NULLVAL;
-	for (WFConfig best : knownbysignal) {
-	    bestnid = best.wificonfig.networkId;
-	    wm.updateNetwork(WFConfig.sparseConfig(best.wificonfig));
-	    if (bestnid == lastAP) {
-		if (checkNetwork(context))
-		    return bestnid;
-		else if (knownbysignal.indexOf(best) == knownbysignal.size() - 1)
-		    return NULLVAL;
-	    } else if (connectToAP(context, best))
-		if (checkNetwork(context)) {
-		    if (logging)
-			LogService.log(context, appname, context
-				.getString(R.string.best_signal_ssid)
-				+ best.wificonfig.SSID
-				+ context.getString(R.string.signal_level)
-				+ best.level
-				+ context.getString(R.string.nid)
-				+ bestnid);
-		    return bestnid;
-		}
-	}
+	WFConfig best = knownbysignal.get(0);
+	bestnid = best.wificonfig.networkId;
+	wm.updateNetwork(WFConfig.sparseConfig(best.wificonfig));
+	connectToAP(context, best.wificonfig.networkId);
+	if (logging)
+	    LogService.log(context, appname, context
+		    .getString(R.string.best_signal_ssid)
+		    + best.wificonfig.SSID
+		    + context.getString(R.string.signal_level)
+		    + best.level
+		    + context.getString(R.string.nid) + bestnid);
 	return bestnid;
     }
 
@@ -879,21 +862,25 @@ public class WFConnection extends Object {
 	return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     }
 
-    protected void handleConnectIntent(Context context, Intent intent) {
-	if (!wm.isWifiEnabled())
-	    return;
-	WifiConfiguration connectee = wm.getConfiguredNetworks().get(
-		intent.getIntExtra(NETWORKNUMBER, -1));
-	LogService.log(context, appname, "Previous priority:"
-		+ connectee.priority);
-	connectee.priority = OVER9000;
+    private void handleConnect() {
+	if (connectee.SSID.contains(getSSID())) {
+	    if (logging)
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.connected_to_network)
+			+ connectee.SSID);
+	} else {
+	    if (logging)
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.connect_failed));
+	}
+	handler.sendEmptyMessageDelayed(MAIN, LOCKWAIT);
 	wm.updateNetwork(connectee);
-	wm.disconnect();
-	wm.startScan();
-	if (logging)
-	    LogService.log(context, appname, context
-		    .getString(R.string.connecting_to_network)
-		    + connectee.SSID);
+	connectee = null;
+    }
+
+    protected void handleConnectIntent(Context context, Intent intent) {
+
+	connectToAP(ctxt, intent.getIntExtra(NETWORKNUMBER, -1));
     }
 
     private static void handleNetworkAction(final Context context) {
@@ -1119,7 +1106,7 @@ public class WFConnection extends Object {
     }
 
     private void handleScanResults() {
-	if (!wm.isWifiEnabled())
+	if (!wm.isWifiEnabled() || connectee != null)
 	    return;
 
 	if (!pendingscan) {
@@ -1176,6 +1163,10 @@ public class WFConnection extends Object {
 	 * Also clear any error notifications
 	 */
 	if (sState == COMPLETED) {
+
+	    if (connectee != null) {
+		handleConnect();
+	    }
 	    clearQueue();
 	    NotifUtil.cancel(ERR_NOTIF, ctxt);
 	    NotifUtil.cancel(NETNOTIFID, ctxt);

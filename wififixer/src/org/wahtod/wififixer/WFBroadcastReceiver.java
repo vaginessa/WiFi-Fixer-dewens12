@@ -122,13 +122,13 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	    ServiceAlarm.setLogTS(context, false, 0);
 	    ServiceAlarm.unsetAlarm(context);
 	} else if (action.equals(IntentConstants.ACTION_WIFI_ON)) {
-	    if (PrefUtil.readBoolean(context, PrefConstants.WIFI_STATE_LOCK))
+	    if (!PrefUtil.readBoolean(context, PrefConstants.WIFI_STATE_LOCK))
 		context.sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
 	} else if (action.equals(IntentConstants.ACTION_WIFI_OFF)) {
-	    if (PrefUtil.readBoolean(context, PrefConstants.WIFI_STATE_LOCK))
+	    if (!PrefUtil.readBoolean(context, PrefConstants.WIFI_STATE_LOCK))
 		context.sendBroadcast(new Intent(WidgetHandler.WIFI_OFF));
 	} else if (action.equals(IntentConstants.ACTION_WIFI_TOGGLE)) {
-	    if (PrefUtil.readBoolean(context, PrefConstants.WIFI_STATE_LOCK))
+	    if (!PrefUtil.readBoolean(context, PrefConstants.WIFI_STATE_LOCK))
 		context.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
 	}
 

@@ -81,8 +81,8 @@ public class LogService extends IntentService {
 	     */
 	}
     }
-    
-    public static String getLogTag(final Context context){
+
+    public static String getLogTag(final Context context) {
 	return context.getClass().getSimpleName();
     }
 

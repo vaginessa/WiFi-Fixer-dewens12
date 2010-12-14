@@ -481,7 +481,10 @@ public class WifiFixerActivity extends Activity {
 	menu.setHeaderTitle(clicked);
 	menu.add(0, CONTEXT_ENABLE, 0, R.string.enable);
 	menu.add(0, CONTEXT_DISABLE, 1, R.string.disable);
-	menu.add(0, CONTEXT_CONNECT, 2, R.string.connect_now);
+	menu.add(1, CONTEXT_CONNECT, 2, R.string.connect_now);
+	if (!WFConnection.getNetworkState(ctxt, clicked_position))
+	    menu.setGroupEnabled(1, false);
+
     }
 
     @Override
