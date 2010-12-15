@@ -80,14 +80,6 @@ public class WFConnection extends Object {
     // For blank SSIDs
     private static final String NULL_SSID = "None";
 
-    /*
-     * Status Notification Strings
-     */
-
-    private static String notifSSID;
-    private static String notifStatus;
-    private static String notifSignal;
-
     // Wifi Lock tag
     private static final String WFLOCK_TAG = "WFLock";
 
@@ -101,6 +93,14 @@ public class WFConnection extends Object {
     // Empty string
     private static final String EMPTYSTRING = "";
     private static final String NEWLINE = "\n";
+    
+    /*
+     * Status Notification Strings
+     */
+
+    private static String notifSSID = EMPTYSTRING;
+    private static String notifStatus = EMPTYSTRING;
+    private static String notifSignal = EMPTYSTRING;
 
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
