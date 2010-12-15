@@ -76,6 +76,7 @@ public class WifiFixerActivity extends Activity {
     private static final int CONTEXT_ENABLE = 1;
     private static final int CONTEXT_DISABLE = 2;
     private static final int CONTEXT_CONNECT = 3;
+    private static final int CONTEXT_NONMANAGE = 4;
 
     private String clicked;
     private int clicked_position;
@@ -479,11 +480,16 @@ public class WifiFixerActivity extends Activity {
 	 * Clicked is the ListView selected string, so the SSID
 	 */
 	menu.setHeaderTitle(clicked);
-	menu.add(0, CONTEXT_ENABLE, 0, R.string.enable);
-	menu.add(0, CONTEXT_DISABLE, 1, R.string.disable);
-	menu.add(1, CONTEXT_CONNECT, 2, R.string.connect_now);
-	if (!WFConnection.getNetworkState(ctxt, clicked_position))
+	menu.add(1, CONTEXT_ENABLE, 0, R.string.enable);
+	menu.add(2, CONTEXT_DISABLE, 1, R.string.disable);
+	menu.add(3, CONTEXT_CONNECT, 2, R.string.connect_now);
+	// menu.add(0, CONTEXT_NONMANAGE, 3,"" );
+	if (!WFConnection.getNetworkState(ctxt, clicked_position)) {
+	    menu.setGroupEnabled(3, false);
+	    menu.setGroupEnabled(2, false);
+	} else {
 	    menu.setGroupEnabled(1, false);
+	}
 
     }
 
