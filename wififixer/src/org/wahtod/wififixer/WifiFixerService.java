@@ -231,6 +231,11 @@ public class WifiFixerService extends Service implements
 	PrefUtil.writeBoolean(this, SCREENOFF, false);
 
 	screenstate = true;
+	/*
+	 * Remove wifi state lock
+	 */
+	if (PrefUtil.readBoolean(this, PrefConstants.WIFI_STATE_LOCK))
+	    PrefUtil.writeBoolean(this, PrefConstants.WIFI_STATE_LOCK, false);
     }
 
     @Override
@@ -314,11 +319,10 @@ public class WifiFixerService extends Service implements
 				EMPTYSTRING);
 
 		    break;
-		    
+
 		case STATENOT_KEY:
 		    /*
-		     * Notify WFConnection instance
-		     * to create/destroy ongoing
+		     * Notify WFConnection instance to create/destroy ongoing
 		     * status notification
 		     */
 		    wifi.setStatNotif(getFlag(Pref.STATENOT_KEY));

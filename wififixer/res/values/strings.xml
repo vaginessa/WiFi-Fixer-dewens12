@@ -12,6 +12,7 @@
 		License.
 	-->
 <resources>
+    <string name="dbm">dBm: </string>
     <string name="network_status">Network Status</string>
     <string name="bdata_ticker">Service Disabled</string>
     <string name="bdata_nag">Background Data Disabled</string>

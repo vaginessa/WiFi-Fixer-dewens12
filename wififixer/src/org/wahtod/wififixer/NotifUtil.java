@@ -27,6 +27,7 @@ import android.widget.RemoteViews;
 public class NotifUtil {
     private static final int NETNOTIFID = 8236;
     private static final int STATNOTIFID = 2392;
+    private static final int MAX_SSID_LENGTH = 10;
     public static final String CANCEL = "CANCEL";
 
     public static void addNetNotif(final Context context, final String ssid,
@@ -59,23 +60,30 @@ public class NotifUtil {
 
     }
 
-    public static void addStatNotif(final Context context,
-	    final String ssid, final String status, final String signal) {
+    public static void addStatNotif(final Context context, final String ssid,
+	    final String status, final String signal) {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
-	Intent intent = new Intent(context,WifiFixerActivity.class);
+	Intent intent = new Intent(context, WifiFixerActivity.class);
 	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 		intent, 0);
 
-	Notification notif = new Notification(R.drawable.icon, context
+	Notification notif = new Notification(R.drawable.router, context
 		.getString(R.string.network_status), System.currentTimeMillis());
 	if (!ssid.equals(CANCEL)) {
 	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
 		    R.layout.connection_notif_layout);
+	    /*
+	     * First, truncate ssid if it's bigger than MAX_SSID_LENGTH chars
+	     */
+	    if (ssid.length() < MAX_SSID_LENGTH)
 		contentView.setTextViewText(R.id.ssid, ssid);
-		contentView.setTextViewText(R.id.status, status);
-		contentView.setTextViewText(R.id.signal, signal);
+	    else
+		contentView.setTextViewText(R.id.ssid, ssid.substring(0,
+			MAX_SSID_LENGTH));
+	    contentView.setTextViewText(R.id.status, status);
+	    contentView.setTextViewText(R.id.signal, signal);
 	    notif.contentView = contentView;
 	    notif.contentIntent = contentIntent;
 	    notif.flags = Notification.FLAG_ONGOING_EVENT;

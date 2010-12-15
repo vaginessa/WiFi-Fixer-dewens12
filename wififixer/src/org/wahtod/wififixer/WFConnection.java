@@ -75,6 +75,7 @@ public class WFConnection extends Object {
     private static final String DISCONNECTED = "DISCONNECTED";
     private static final String INACTIVE = "INACTIVE";
     private static final String COMPLETED = "COMPLETED";
+    private static final String CONNECTED = "CONNECTED";
 
     // For blank SSIDs
     private static final String NULL_SSID = "None";
@@ -230,13 +231,8 @@ public class WFConnection extends Object {
 		return;
 	    }
 
-	    if (getKnownAPsBySignal(ctxt) > 0 && connectToBest(ctxt) != NULLVAL
-		    && (getNetworkID() != NULLVAL)) {
+	    if (getKnownAPsBySignal(ctxt) > 0 && connectToBest(ctxt) != NULLVAL) {
 		pendingreconnect = false;
-		if (logging)
-		    LogService.log(ctxt, appname, ctxt
-			    .getString(R.string.connected_to_network)
-			    + getNetworkID());
 	    } else {
 		pendingreconnect = true;
 		toggleWifi();
@@ -261,13 +257,8 @@ public class WFConnection extends Object {
 			    .getString(R.string.wifi_off_aborting_reconnect));
 		return;
 	    }
-	    if (getKnownAPsBySignal(ctxt) > 0 && connectToBest(ctxt) != NULLVAL
-		    && (getNetworkID() != NULLVAL)) {
+	    if (getKnownAPsBySignal(ctxt) > 0 && connectToBest(ctxt) != NULLVAL) {
 		pendingreconnect = false;
-		if (logging)
-		    LogService.log(ctxt, appname, ctxt
-			    .getString(R.string.connected_to_network)
-			    + getNetworkID());
 	    } else {
 		wifirepair = W_REASSOCIATE;
 		startScan(true);
@@ -326,22 +317,24 @@ public class WFConnection extends Object {
 
 	    case W_REASSOCIATE:
 		// Let's try to reassociate first..
+		clearHandler();
 		wm.reassociate();
 		if (logging)
 		    LogService.log(ctxt, appname, ctxt
 			    .getString(R.string.reassociating));
-		tempLock(REACHABLE);
+		handlerWrapper(MAIN, REACHABLE);
 		wifirepair++;
 		notifyWrap(ctxt, ctxt.getString(R.string.reassociating));
 		break;
 
 	    case W_RECONNECT:
 		// Ok, now force reconnect..
+		clearHandler();
 		wm.reconnect();
 		if (logging)
 		    LogService.log(ctxt, appname, ctxt
 			    .getString(R.string.reconnecting));
-		tempLock(REACHABLE);
+		handlerWrapper(MAIN, REACHABLE);
 		wifirepair++;
 		notifyWrap(ctxt, ctxt.getString(R.string.reconnecting));
 		break;
@@ -617,7 +610,7 @@ public class WFConnection extends Object {
 	int signal = wm.getConnectionInfo().getRssi();
 
 	if (prefs.getFlag(Pref.STATENOT_KEY)) {
-	    notifSignal = context.getString(R.string.current_dbm) + signal;
+	    notifSignal = context.getString(R.string.dbm) + signal;
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
 	}
 
@@ -899,7 +892,7 @@ public class WFConnection extends Object {
 	connectee = null;
     }
 
-    protected void handleConnectIntent(Context context, Intent intent) {
+    private void handleConnectIntent(Context context, Intent intent) {
 
 	connectToAP(ctxt, intent.getIntExtra(NETWORKNUMBER, -1));
     }
@@ -1180,7 +1173,10 @@ public class WFConnection extends Object {
 
 	if (prefs.getFlag(Pref.STATENOT_KEY)) {
 	    notifSSID = getSSID();
-	    notifStatus = sState;
+	    if(sState.equals(COMPLETED))
+		notifStatus = CONNECTED;
+	    else
+		notifStatus = sState;
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
 	}
 	/*
@@ -1200,7 +1196,8 @@ public class WFConnection extends Object {
 	    pendingreconnect = false;
 	    lastAP = getNetworkID();
 	    return;
-	}
+	} else if (prefs.getFlag(Pref.STATENOT_KEY))
+	    notifStatus = EMPTYSTRING;
 
 	/*
 	 * New setting disabling supplicant fixes
@@ -1323,10 +1320,14 @@ public class WFConnection extends Object {
 
     private void onWifiDisabled() {
 	clearHandler();
+	if (prefs.getFlag(Pref.STATENOT_KEY))
+	    setStatNotif(false);
     }
 
     private void onWifiEnabled() {
 	handlerWrapper(MAIN, LOCKWAIT);
+	if (prefs.getFlag(Pref.STATENOT_KEY))
+	    setStatNotif(true);
     }
 
     public static boolean setNetworkState(final Context context,
@@ -1471,6 +1472,7 @@ public class WFConnection extends Object {
 	if (logging)
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.toggling_wifi));
+	PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, true);
 	ctxt.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
     }
 
