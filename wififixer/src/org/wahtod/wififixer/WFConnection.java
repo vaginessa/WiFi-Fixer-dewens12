@@ -622,7 +622,7 @@ public class WFConnection extends Object {
     private static void checkSignal(final Context context) {
 	int signal = wm.getConnectionInfo().getRssi();
 
-	if (prefs.getFlag(Pref.STATENOT_KEY)) {
+	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate) {
 	    notifSignal = context.getString(R.string.dbm) + signal;
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
 	}
@@ -1179,7 +1179,7 @@ public class WFConnection extends Object {
 	String sState = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE)
 		.toString();
 
-	if (prefs.getFlag(Pref.STATENOT_KEY)) {
+	if (prefs.getFlag(Pref.STATENOT_KEY)&& screenstate) {
 	    notifSSID = getSSID();
 	    if (sState.equals(COMPLETED))
 		notifStatus = CONNECTED;
@@ -1334,7 +1334,7 @@ public class WFConnection extends Object {
 
     private void onWifiEnabled() {
 	handlerWrapper(MAIN, LOOPWAIT);
-	if (prefs.getFlag(Pref.STATENOT_KEY))
+	if (prefs.getFlag(Pref.STATENOT_KEY)&& screenstate)
 	    setStatNotif(true);
     }
 
