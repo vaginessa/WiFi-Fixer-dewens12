@@ -94,8 +94,8 @@ public class WFConnection extends Object {
     // Wifi Connect Intent
     public static final String CONNECTINTENT = "org.wahtod.wififixer.CONNECT";
     public static final String NETWORKNUMBER = "net#";
-    
-    //User Event Intent
+
+    // User Event Intent
     public static final String USEREVENT = "org.wahtod.wififixer.USEREVENT";
 
     // Empty string
@@ -495,8 +495,8 @@ public class WFConnection extends Object {
 
 	// Connect intent
 	filter.addAction(CONNECTINTENT);
-	
-	//User Event
+
+	// User Event
 	filter.addAction(USEREVENT);
 
 	context.registerReceiver(receiver, filter);
@@ -826,7 +826,8 @@ public class WFConnection extends Object {
 		 */
 		try {
 		    if (wfResult.SSID.contains(sResult.SSID)
-			    && !containsBSSID(sResult.BSSID, knownbysignal)) {
+			    && !containsBSSID(sResult.BSSID, knownbysignal)
+			    && getNetworkState(context, wfResult.networkId)) {
 			if (logging) {
 			    LogService.log(context, appname, context
 				    .getString(R.string.found_ssid)
@@ -921,8 +922,8 @@ public class WFConnection extends Object {
 
 	icmpCache(context);
     }
-    
-    private void handleUserEvent(){
+
+    private void handleUserEvent() {
 	connectee = wm.getConfiguredNetworks().get(lastAP);
 	clearHandler();
     }
@@ -1192,7 +1193,7 @@ public class WFConnection extends Object {
 	 * Also clear any error notifications
 	 */
 	if (sState == COMPLETED) {
-	    
+
 	    if (connectee != null) {
 		handleConnect();
 	    }
@@ -1339,14 +1340,12 @@ public class WFConnection extends Object {
 
     public static boolean setNetworkState(final Context context,
 	    final int network, final boolean state) {
-	boolean response;
 	WifiManager w = getWifiManager(context);
 	if (state)
-	    response = w.enableNetwork(network, false);
+	    w.enableNetwork(network, false);
 	else
-	    response = w.disableNetwork(network);
-
-	return response;
+	    w.disableNetwork(network);
+	return w.saveConfiguration();
     }
 
     protected void setStatNotif(final boolean state) {
@@ -1414,7 +1413,7 @@ public class WFConnection extends Object {
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.signalhop_nonetworks));
 	handlerWrapper(TEMPLOCK_OFF);
-	if(connectee == null) {
+	if (connectee == null) {
 	    shouldrepair = true;
 	    wifiRepair();
 	}
