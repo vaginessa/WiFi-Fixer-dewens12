@@ -157,6 +157,7 @@ public class WidgetHandler extends BroadcastReceiver {
 	else if (action.equals(REASSOCIATE)) {
 	    Toast.makeText(context, context.getString(R.string.reassociating),
 		    Toast.LENGTH_LONG).show();
+	    context.sendBroadcast(new Intent(WFConnection.USEREVENT));
 	    getWifiManager(context).reassociate();
 	}
 

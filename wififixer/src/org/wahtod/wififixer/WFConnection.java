@@ -94,6 +94,9 @@ public class WFConnection extends Object {
     // Wifi Connect Intent
     public static final String CONNECTINTENT = "org.wahtod.wififixer.CONNECT";
     public static final String NETWORKNUMBER = "net#";
+    
+    //User Event Intent
+    public static final String USEREVENT = "org.wahtod.wififixer.USEREVENT";
 
     // Empty string
     private static final String EMPTYSTRING = "";
@@ -450,6 +453,8 @@ public class WFConnection extends Object {
 		checkBackgroundDataSetting(context);
 	    else if (iAction.equals(CONNECTINTENT))
 		handleConnectIntent(context, intent);
+	    else if (iAction.equals(USEREVENT))
+		handleUserEvent();
 	}
 
     };
@@ -490,6 +495,9 @@ public class WFConnection extends Object {
 
 	// Connect intent
 	filter.addAction(CONNECTINTENT);
+	
+	//User Event
+	filter.addAction(USEREVENT);
 
 	context.registerReceiver(receiver, filter);
 	/*
@@ -604,6 +612,11 @@ public class WFConnection extends Object {
 	    handler.removeMessages(N1CHECK);
 	else if (handler.hasMessages(SIGNALHOP))
 	    handler.removeMessages(SIGNALHOP);
+	/*
+	 * Also clear all relevant flags
+	 */
+	shouldrepair = false;
+	pendingreconnect = false;
     }
 
     private static void checkSignal(final Context context) {
@@ -886,8 +899,9 @@ public class WFConnection extends Object {
 	    if (logging)
 		LogService.log(ctxt, appname, ctxt
 			.getString(R.string.connect_failed));
+	    startScan(true);
 	}
-	handlerWrapper(MAIN, LOCKWAIT);
+	handlerWrapper(MAIN, LOOPWAIT);
 	wm.updateNetwork(connectee);
 	connectee = null;
     }
@@ -906,6 +920,11 @@ public class WFConnection extends Object {
 	    return;
 
 	icmpCache(context);
+    }
+    
+    private void handleUserEvent(){
+	connectee = wm.getConfiguredNetworks().get(lastAP);
+	clearHandler();
     }
 
     private static boolean handlerCheck(final int hmain) {
@@ -1004,18 +1023,6 @@ public class WFConnection extends Object {
 	LogService.log(context, appname, context
 		.getString(R.string.supplicant_state)
 		+ state);
-	if (wm.pingSupplicant()) {
-	    LogService.log(context, appname, context
-		    .getString(R.string.supplicant_responded));
-	} else {
-	    LogService.log(context, appname, context
-		    .getString(R.string.supplicant_nonresponsive));
-
-	}
-
-	LogService.log(context, appname, context.getString(R.string.ssid)
-		+ getSSID());
-
     }
 
     private static void networkNotify(final Context context) {
@@ -1173,7 +1180,7 @@ public class WFConnection extends Object {
 
 	if (prefs.getFlag(Pref.STATENOT_KEY)) {
 	    notifSSID = getSSID();
-	    if(sState.equals(COMPLETED))
+	    if (sState.equals(COMPLETED))
 		notifStatus = CONNECTED;
 	    else
 		notifStatus = sState;
@@ -1185,7 +1192,7 @@ public class WFConnection extends Object {
 	 * Also clear any error notifications
 	 */
 	if (sState == COMPLETED) {
-
+	    
 	    if (connectee != null) {
 		handleConnect();
 	    }
@@ -1325,7 +1332,7 @@ public class WFConnection extends Object {
     }
 
     private void onWifiEnabled() {
-	handlerWrapper(MAIN, LOCKWAIT);
+	handlerWrapper(MAIN, LOOPWAIT);
 	if (prefs.getFlag(Pref.STATENOT_KEY))
 	    setStatNotif(true);
     }
@@ -1407,8 +1414,10 @@ public class WFConnection extends Object {
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.signalhop_nonetworks));
 	handlerWrapper(TEMPLOCK_OFF);
-	shouldrepair = true;
-	wifiRepair();
+	if(connectee == null) {
+	    shouldrepair = true;
+	    wifiRepair();
+	}
 
     }
 
