@@ -29,8 +29,10 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -41,6 +43,8 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -84,7 +88,9 @@ public class WifiFixerActivity extends Activity {
     private static final int CONTEXT_NONMANAGE = 4;
 
     private static final String YELLOW = "#FFFF00";
-    private static final String WHITE = "#FFFFFF";
+
+    private static final int MESSAGE = 31337;
+    private static final int SCAN_DELAY = 15000;
 
     private String clicked;
     private int clicked_position;
@@ -92,6 +98,8 @@ public class WifiFixerActivity extends Activity {
     private static View listviewitem;
     private static NetworkListAdapter adapter;
     private static String[] knownnetworks;
+
+    private static List<ScanResult> knownbysignal;
 
     /*
      * As ugly as caching context is, the alternative is uglier.
@@ -141,7 +149,6 @@ public class WifiFixerActivity extends Activity {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 	    ViewHolder holder;
-	    List<ScanResult> knownbysignal = getKnownAPsBySignal(ctxt);
 	    if (convertView == null) {
 		convertView = inflater.inflate(R.layout.list_item_layout, null);
 		holder = new ViewHolder();
@@ -156,9 +163,6 @@ public class WifiFixerActivity extends Activity {
 	    for (ScanResult sResult : knownbysignal) {
 		if (sResult.SSID.contains(ssidArray[position]))
 		    holder.text.setTextColor(Color.parseColor(YELLOW));
-		else if (holder.text.getCurrentTextColor() != Color
-			.parseColor(YELLOW))
-		    holder.text.setTextColor(Color.parseColor(WHITE));
 	    }
 
 	    if (WFConnection.getNetworkState(ctxt, position))
@@ -174,6 +178,26 @@ public class WifiFixerActivity extends Activity {
 	}
 
     }
+
+    private Handler handler = new Handler() {
+	@Override
+	public void handleMessage(Message message) {
+	    WifiManager wm = (WifiManager) getBaseContext().getSystemService(
+		    Context.WIFI_SERVICE);
+	    wm.startScan();
+	}
+
+    };
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+	public void onReceive(final Context context, final Intent intent) {
+	    /*
+	     * we know this is going to be a scan result notification
+	     */
+	    refreshNetworkAdapter();
+	}
+
+    };
 
     void authCheck() {
 	if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
@@ -478,20 +502,6 @@ public class WifiFixerActivity extends Activity {
 		    if (wfResult.SSID.contains(sResult.SSID)
 			    && WFConnection.getNetworkState(context,
 				    wfResult.networkId)) {
-			if (logging) {
-			    LogService.log(context, LogService
-				    .getLogTag(context), context
-				    .getString(R.string.found_ssid)
-				    + sResult.SSID);
-			    LogService.log(context, LogService
-				    .getLogTag(context), context
-				    .getString(R.string.capabilities)
-				    + sResult.capabilities);
-			    LogService.log(context, LogService
-				    .getLogTag(context), context
-				    .getString(R.string.signal_level)
-				    + sResult.level);
-			}
 			/*
 			 * Add result to knownbysignal
 			 */
@@ -555,10 +565,12 @@ public class WifiFixerActivity extends Activity {
     @Override
     public void onStart() {
 	super.onStart();
+	knownbysignal = getKnownAPsBySignal(this);
 	setIcon();
 	loggingmenuFlag = PrefUtil.readBoolean(this, "Logging");
 	loggingFlag = getLogging();
 	startwfService(this);
+	registerReceiver();
     }
 
     @Override
@@ -586,7 +598,6 @@ public class WifiFixerActivity extends Activity {
 	} else {
 	    menu.setGroupEnabled(1, false);
 	}
-
     }
 
     @Override
@@ -667,22 +678,13 @@ public class WifiFixerActivity extends Activity {
     public void onPause() {
 	super.onPause();
 	removeNag(this);
+	unregisterReceiver();
     }
 
     @Override
     public void onResume() {
 	super.onResume();
-	/*
-	 * Check Known Networks list against adapter array and refresh if
-	 * necessary Don't refresh if temp is empty (wifi is off)
-	 */
-	String[] temp = getNetworks(this);
-	if (temp.length != 0 && !temp.equals(knownnetworks)) {
-	    knownnetworks = temp;
-	    adapter = new NetworkListAdapter(this, knownnetworks);
-	    final ListView lv = (ListView) findViewById(R.id.ListView01);
-	    lv.setAdapter(adapter);
-	}
+	registerReceiver();
     }
 
     @Override
@@ -705,6 +707,33 @@ public class WifiFixerActivity extends Activity {
 	final SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.SlidingDrawer);
 	if (!drawer.isOpened())
 	    drawer.animateOpen();
+    }
+
+    private void refreshNetworkAdapter() {
+	/*
+	 * Don't refresh if temp is empty (wifi is off)
+	 */
+	String[] temp = getNetworks(this);
+	if (temp.length != 0) {
+	    knownbysignal = getKnownAPsBySignal(this);
+	    knownnetworks = temp;
+	    adapter = new NetworkListAdapter(this, knownnetworks);
+	    final ListView lv = (ListView) findViewById(R.id.ListView01);
+	    lv.setAdapter(adapter);
+	}
+	handler.sendEmptyMessageDelayed(MESSAGE, SCAN_DELAY);
+    }
+
+    private void registerReceiver() {
+	IntentFilter filter = new IntentFilter(
+		WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+	this.registerReceiver(receiver, filter);
+	handler.sendEmptyMessage(MESSAGE);
+    }
+
+    private void unregisterReceiver() {
+	this.unregisterReceiver(receiver);
+	handler.removeMessages(MESSAGE);
     }
 
 }

@@ -1148,6 +1148,11 @@ public class WFConnection extends Object {
 				.getString(R.string.network_notification_scan));
 		    networkNotify(ctxt);
 		}
+		/*
+		 * Standard Scan
+		 */
+		if(getKnownAPsBySignal(ctxt) > 0)
+		    connectToBest(ctxt);
 	    }
 	} else if (!pendingreconnect) {
 	    /*

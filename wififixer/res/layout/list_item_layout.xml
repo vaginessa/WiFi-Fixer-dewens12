@@ -22,5 +22,5 @@
 	<TextView android:id="@+id/ssid" android:text="default"
 		android:layout_gravity="center_vertical" android:layout_marginLeft="15px"
 		android:layout_width="wrap_content" android:layout_height="fill_parent"
-		android:gravity="left" android:textColor="#FFFF00" android:textSize="18dp"></TextView>
+		android:gravity="left" android:textColor="#FFFFFF" android:textSize="18dp"></TextView>
 </LinearLayout>
