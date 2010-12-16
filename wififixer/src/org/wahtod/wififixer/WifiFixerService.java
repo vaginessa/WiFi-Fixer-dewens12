@@ -208,6 +208,8 @@ public class WifiFixerService extends Service implements
 	super.onDestroy();
 	shouldrun = false;
 	unregisterReceivers();
+	if (prefs.getFlag(Pref.STATENOT_KEY))
+	    wifi.setStatNotif(false);
 	if (logging)
 	    LogService.log(this, APP_NAME, getString(R.string.ondestroy));
 	cleanup();
