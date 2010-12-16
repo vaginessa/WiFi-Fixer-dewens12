@@ -291,9 +291,9 @@ public class WifiFixerActivity extends Activity {
     void setIcon() {
 	ImageButton serviceButton = (ImageButton) findViewById(R.id.ImageButton01);
 	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY)) {
-	    serviceButton.setImageResource(R.drawable.inactive);
+	    serviceButton.setImageResource(R.drawable.service_inactive);
 	} else {
-	    serviceButton.setImageResource(R.drawable.active);
+	    serviceButton.setImageResource(R.drawable.service_active);
 	}
     }
 
