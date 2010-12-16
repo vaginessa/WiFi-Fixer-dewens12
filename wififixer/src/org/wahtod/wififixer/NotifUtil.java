@@ -44,7 +44,7 @@ public class NotifUtil {
 		.currentTimeMillis());
 	if (ssid.length() > 0) {
 	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
-		    R.layout.netnotif_layout);
+		    R.layout.net_notif_layout);
 	    contentView.setTextViewText(R.id.ssid, ssid);
 	    contentView.setTextViewText(R.id.signal, signal);
 	    notif.contentView = contentView;
@@ -73,7 +73,7 @@ public class NotifUtil {
 		.getString(R.string.network_status), System.currentTimeMillis());
 	if (!ssid.equals(CANCEL)) {
 	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
-		    R.layout.connection_notif_layout);
+		    R.layout.status_notif_layout);
 	    /*
 	     * First, truncate ssid if it's bigger than MAX_SSID_LENGTH chars
 	     */
