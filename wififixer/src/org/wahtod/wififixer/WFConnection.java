@@ -1181,7 +1181,7 @@ public class WFConnection extends Object {
 	    notifSSID = getSSID();
 	    if (sState.equals(COMPLETED))
 		notifStatus = CONNECTED;
-	    else{
+	    else {
 		notifStatus = sState;
 		notifSignal = EMPTYSTRING;
 	    }
@@ -1359,9 +1359,7 @@ public class WFConnection extends Object {
 
     public static boolean getNetworkState(final Context context,
 	    final int network) {
-	WifiManager w = getWifiManager(context);
-	int status = w.getConfiguredNetworks().get(network).status;
-	if (status == WifiConfiguration.Status.DISABLED)
+	if (getWifiManager(context).getConfiguredNetworks().get(network).status == WifiConfiguration.Status.DISABLED)
 	    return false;
 	else
 	    return true;
@@ -1369,11 +1367,7 @@ public class WFConnection extends Object {
 
     private void signalHop() {
 	/*
-	 * Walks the list of known APs in the scan results by signal connects,
-	 * network check pass: stay connected network check fail, try next until
-	 * list exhausted
-	 * 
-	 * If there are not alternate APs just does a wifi repair.
+	 * Need to re-implement best-network-by-signal-and-availability
 	 */
 
 	if (getisWifiEnabled(ctxt))
