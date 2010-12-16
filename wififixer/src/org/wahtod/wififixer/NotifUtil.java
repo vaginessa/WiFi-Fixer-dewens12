@@ -61,7 +61,7 @@ public class NotifUtil {
     }
 
     public static void addStatNotif(final Context context, final String ssid,
-	    final String status, final String signal) {
+	    final String status, final int signal) {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -69,7 +69,7 @@ public class NotifUtil {
 	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 		intent, 0);
 
-	Notification notif = new Notification(R.drawable.router, context
+	Notification notif = new Notification(R.drawable.signal4, context
 		.getString(R.string.network_status), System.currentTimeMillis());
 	if (!ssid.equals(CANCEL)) {
 	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
@@ -83,7 +83,7 @@ public class NotifUtil {
 		contentView.setTextViewText(R.id.ssid, ssid.substring(0,
 			MAX_SSID_LENGTH));
 	    contentView.setTextViewText(R.id.status, status);
-	    contentView.setTextViewText(R.id.signal, signal);
+	    contentView.setImageViewResource(R.id.signal, signal);
 	    notif.contentView = contentView;
 	    notif.contentIntent = contentIntent;
 	    notif.flags = Notification.FLAG_ONGOING_EVENT;

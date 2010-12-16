@@ -97,10 +97,12 @@ public class WFConnection extends Object {
     /*
      * Status Notification Strings
      */
-
     private static String notifSSID = EMPTYSTRING;
     private static String notifStatus = EMPTYSTRING;
-    private static String notifSignal = EMPTYSTRING;
+    /*
+     * Int for status notification signal
+     */
+    private static int notifSignal = R.drawable.signal0;
 
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
@@ -623,7 +625,26 @@ public class WFConnection extends Object {
 	int signal = wm.getConnectionInfo().getRssi();
 
 	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate) {
-	    notifSignal = context.getString(R.string.dbm) + signal;
+	    int adjusted = WifiManager.calculateSignalLevel(signal, 5);
+	    switch (adjusted){
+	    case 4:
+		notifSignal = R.drawable.signal4;
+		break;
+	    case 3:
+		notifSignal = R.drawable.signal3;
+		break;
+	    case 2:
+		notifSignal = R.drawable.signal2;
+		break;
+		
+	    case 1:
+		notifSignal = R.drawable.signal1;
+		break;
+		
+	    case 0:
+		notifSignal = R.drawable.signal0;
+		break;
+	    }
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
 	}
 
@@ -1151,7 +1172,7 @@ public class WFConnection extends Object {
 		/*
 		 * Standard Scan
 		 */
-		if(getKnownAPsBySignal(ctxt) > 0)
+		if (getKnownAPsBySignal(ctxt) > 0)
 		    connectToBest(ctxt);
 	    }
 	} else if (!pendingreconnect) {
@@ -1182,13 +1203,16 @@ public class WFConnection extends Object {
 	String sState = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE)
 		.toString();
 
+	if (sState == null)
+	    sState = INACTIVE;
+
 	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate) {
 	    notifSSID = getSSID();
 	    if (sState.equals(COMPLETED))
 		notifStatus = CONNECTED;
 	    else {
 		notifStatus = sState;
-		notifSignal = EMPTYSTRING;
+		notifSignal = 0;
 	    }
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
 	}
@@ -1320,6 +1344,13 @@ public class WFConnection extends Object {
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.screen_on_handler));
 	}
+
+	/*
+	 * Set current state on resume
+	 */
+
+	if (prefs.getFlag(Pref.STATENOT_KEY))
+	    setStatNotif(true);
     }
 
     public void onScreenStateChanged(boolean state) {
@@ -1355,10 +1386,10 @@ public class WFConnection extends Object {
 
     protected void setStatNotif(final boolean state) {
 	if (state) {
-	    NotifUtil.addStatNotif(ctxt, getSSID(), EMPTYSTRING, EMPTYSTRING);
+	    NotifUtil.addStatNotif(ctxt, getSSID(), notifStatus, notifSignal);
 	} else {
 	    NotifUtil.addStatNotif(ctxt, NotifUtil.CANCEL, EMPTYSTRING,
-		    EMPTYSTRING);
+		    0);
 	}
     }
 
