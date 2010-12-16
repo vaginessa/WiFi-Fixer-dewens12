@@ -17,6 +17,7 @@
 package org.wahtod.wififixer;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.wahtod.wififixer.LegacySupport.LegacyLogFile;
@@ -33,7 +34,9 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
 import android.net.Uri;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -64,6 +67,8 @@ public class WifiFixerActivity extends Activity {
     public boolean loggingmenuFlag = false;
     public boolean loggingFlag = false;
 
+    private static boolean logging = true;
+
     // constants
     public static final String NETWORK = "NETWORK_";
     private static final int MENU_LOGGING = 1;
@@ -77,6 +82,9 @@ public class WifiFixerActivity extends Activity {
     private static final int CONTEXT_DISABLE = 2;
     private static final int CONTEXT_CONNECT = 3;
     private static final int CONTEXT_NONMANAGE = 4;
+
+    private static final String WHITE = "#FFFFFF";
+    private static final String YELLOW = "#FFFF00";
 
     private String clicked;
     private int clicked_position;
@@ -133,6 +141,7 @@ public class WifiFixerActivity extends Activity {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 	    ViewHolder holder;
+	    List<ScanResult> knownbysignal = getKnownAPsBySignal(ctxt);
 	    if (convertView == null) {
 		convertView = inflater.inflate(R.layout.list_item_layout, null);
 		holder = new ViewHolder();
@@ -144,6 +153,14 @@ public class WifiFixerActivity extends Activity {
 		holder = (ViewHolder) convertView.getTag();
 	    }
 	    holder.text.setText(ssidArray[position]);
+	    for (ScanResult sResult : knownbysignal) {
+		if (sResult.SSID.contains(ssidArray[position]))
+		    holder.text.setTextColor(Color.parseColor(WHITE));
+		else if (holder.text.getCurrentTextColor() != Color
+			.parseColor(WHITE))
+		    holder.text.setTextColor(Color.parseColor(YELLOW));
+	    }
+
 	    if (WFConnection.getNetworkState(ctxt, position))
 		holder.icon.setImageResource(R.drawable.enabled_ssid);
 	    else
@@ -417,6 +434,85 @@ public class WifiFixerActivity extends Activity {
 	handleIntent(getIntent());
 
     };
+
+    private static List<ScanResult> getKnownAPsBySignal(final Context context) {
+
+	WifiManager wm = (WifiManager) context
+		.getSystemService(Context.WIFI_SERVICE);
+
+	List<ScanResult> knownbysignal = new ArrayList<ScanResult>();
+
+	List<ScanResult> scanResults = wm.getScanResults();
+
+	/*
+	 * Catch null if scan results fires after wifi disabled or while wifi is
+	 * in intermediate state
+	 */
+	if (scanResults == null) {
+	    return null;
+	}
+
+	/*
+	 * Known networks from supplicant.
+	 */
+	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+
+	/*
+	 * Iterate the known networks over the scan results, adding found known
+	 * networks.
+	 */
+
+	if (logging)
+	    LogService.log(context, LogService.getLogTag(context), context
+		    .getString(R.string.parsing_scan_results));
+
+	for (ScanResult sResult : scanResults) {
+	    for (WifiConfiguration wfResult : wifiConfigs) {
+		/*
+		 * Using .contains to find sResult.SSID in doublequoted string
+		 * 
+		 * containsBSSID filters out duplicate MACs in broken scans
+		 * (yes, that happens)
+		 */
+		try {
+		    if (wfResult.SSID.contains(sResult.SSID)
+			    && WFConnection.getNetworkState(context,
+				    wfResult.networkId)) {
+			if (logging) {
+			    LogService.log(context, LogService
+				    .getLogTag(context), context
+				    .getString(R.string.found_ssid)
+				    + sResult.SSID);
+			    LogService.log(context, LogService
+				    .getLogTag(context), context
+				    .getString(R.string.capabilities)
+				    + sResult.capabilities);
+			    LogService.log(context, LogService
+				    .getLogTag(context), context
+				    .getString(R.string.signal_level)
+				    + sResult.level);
+			}
+			/*
+			 * Add result to knownbysignal
+			 */
+			knownbysignal.add(sResult);
+
+		    }
+		} catch (NullPointerException e) {
+
+		    if (wfResult.SSID == null)
+			LogService.log(context, LogService.getLogTag(context),
+				context.getString(R.string.wfresult_null));
+		    else if (sResult.SSID == null)
+			LogService.log(context, LogService.getLogTag(context),
+				context.getString(R.string.sresult_null));
+
+		}
+	    }
+	}
+
+	return knownbysignal;
+    }
 
     /*
      * Note that this WILL return a null String[] if called while wifi is off.
