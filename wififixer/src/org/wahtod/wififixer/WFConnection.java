@@ -626,7 +626,7 @@ public class WFConnection extends Object {
 
 	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate) {
 	    int adjusted = WifiManager.calculateSignalLevel(signal, 5);
-	    switch (adjusted){
+	    switch (adjusted) {
 	    case 4:
 		notifSignal = R.drawable.signal4;
 		break;
@@ -636,11 +636,11 @@ public class WFConnection extends Object {
 	    case 2:
 		notifSignal = R.drawable.signal2;
 		break;
-		
+
 	    case 1:
 		notifSignal = R.drawable.signal1;
 		break;
-		
+
 	    case 0:
 		notifSignal = R.drawable.signal0;
 		break;
@@ -905,6 +905,14 @@ public class WFConnection extends Object {
 
     private static SupplicantState getSupplicantState() {
 	return wm.getConnectionInfo().getSupplicantState();
+    }
+
+    private static String getSupplicantStateString() {
+	SupplicantState sstate = wm.getConnectionInfo().getSupplicantState();
+	if (sstate == SupplicantState.COMPLETED)
+	    return COMPLETED;
+	else
+	    return sstate.name();
     }
 
     private static WifiManager getWifiManager(final Context context) {
@@ -1212,7 +1220,7 @@ public class WFConnection extends Object {
 		notifStatus = CONNECTED;
 	    else {
 		notifStatus = sState;
-		notifSignal = 0;
+		notifSignal = R.drawable.signal0;
 	    }
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
 	}
@@ -1386,10 +1394,10 @@ public class WFConnection extends Object {
 
     protected void setStatNotif(final boolean state) {
 	if (state) {
+	    notifStatus = getSupplicantStateString();
 	    NotifUtil.addStatNotif(ctxt, getSSID(), notifStatus, notifSignal);
 	} else {
-	    NotifUtil.addStatNotif(ctxt, NotifUtil.CANCEL, EMPTYSTRING,
-		    0);
+	    NotifUtil.addStatNotif(ctxt, NotifUtil.CANCEL, EMPTYSTRING, 0);
 	}
     }
 

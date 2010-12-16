@@ -16,7 +16,7 @@
 	android:background="#EEE"
 	android:layout_height="fill_parent">
 	<ImageView android:id="@+id/signal" android:layout_width="wrap_content"
-		android:layout_height="fill_parent"
+		android:layout_height="fill_parent" android:gravity="left"
 		android:src="@drawable/signal0" />
 		<TextView android:id="@+id/ssid" android:layout_width="wrap_content"
 			android:layout_height="fill_parent" android:gravity="center_vertical"
