@@ -900,7 +900,7 @@ public class WFConnection extends Object {
 	    if (logging)
 		LogService.log(ctxt, appname, ctxt
 			.getString(R.string.connect_failed));
-	    startScan(true);
+	    toggleWifi();
 	}
 	handlerWrapper(MAIN, LOOPWAIT);
 	wm.updateNetwork(connectee);

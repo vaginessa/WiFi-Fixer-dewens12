@@ -83,8 +83,8 @@ public class WifiFixerActivity extends Activity {
     private static final int CONTEXT_CONNECT = 3;
     private static final int CONTEXT_NONMANAGE = 4;
 
-    private static final String WHITE = "#FFFFFF";
     private static final String YELLOW = "#FFFF00";
+    private static final String WHITE = "#FFFFFF";
 
     private String clicked;
     private int clicked_position;
@@ -155,10 +155,10 @@ public class WifiFixerActivity extends Activity {
 	    holder.text.setText(ssidArray[position]);
 	    for (ScanResult sResult : knownbysignal) {
 		if (sResult.SSID.contains(ssidArray[position]))
-		    holder.text.setTextColor(Color.parseColor(WHITE));
-		else if (holder.text.getCurrentTextColor() != Color
-			.parseColor(WHITE))
 		    holder.text.setTextColor(Color.parseColor(YELLOW));
+		else if (holder.text.getCurrentTextColor() != Color
+			.parseColor(YELLOW))
+		    holder.text.setTextColor(Color.parseColor(WHITE));
 	    }
 
 	    if (WFConnection.getNetworkState(ctxt, position))
