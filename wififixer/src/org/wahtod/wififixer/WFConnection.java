@@ -93,7 +93,7 @@ public class WFConnection extends Object {
     // Empty string
     private static final String EMPTYSTRING = "";
     private static final String NEWLINE = "\n";
-    
+
     /*
      * Status Notification Strings
      */
@@ -1149,9 +1149,7 @@ public class WFConnection extends Object {
 		    networkNotify(ctxt);
 		}
 	    }
-	}
-
-	if (!pendingreconnect) {
+	} else if (!pendingreconnect) {
 	    /*
 	     * Service called the scan: dispatch appropriate runnable
 	     */
@@ -1179,12 +1177,14 @@ public class WFConnection extends Object {
 	String sState = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE)
 		.toString();
 
-	if (prefs.getFlag(Pref.STATENOT_KEY)&& screenstate) {
+	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate) {
 	    notifSSID = getSSID();
 	    if (sState.equals(COMPLETED))
 		notifStatus = CONNECTED;
-	    else
+	    else{
 		notifStatus = sState;
+		notifSignal = EMPTYSTRING;
+	    }
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
 	}
 	/*
@@ -1334,7 +1334,7 @@ public class WFConnection extends Object {
 
     private void onWifiEnabled() {
 	handlerWrapper(MAIN, LOOPWAIT);
-	if (prefs.getFlag(Pref.STATENOT_KEY)&& screenstate)
+	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate)
 	    setStatNotif(true);
     }
 
