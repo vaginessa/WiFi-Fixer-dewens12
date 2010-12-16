@@ -47,6 +47,7 @@
 			android:summary="Network and status notifications">
 
 			<CheckBoxPreference android:key="StateNotif"
+				android:defaultValue="true"
 				android:title="Status Notification"
 				android:summary="Displays an ongoing notification showing connection state" />
 
