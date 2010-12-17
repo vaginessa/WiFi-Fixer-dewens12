@@ -318,7 +318,7 @@ public class WFConnection extends Object {
 	    /*
 	     * Schedule update of status
 	     */
-	    if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate)
+	    if (statNotifCheck())
 		handlerWrapper(UPDATESTATUS, SHORTWAIT);
 
 	}
@@ -600,7 +600,7 @@ public class WFConnection extends Object {
 	    return false;
 	}
 
-	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate)
+	if (statNotifCheck())
 	    NotifUtil.addStatNotif(context, notifSSID, context
 		    .getString(R.string.network_test), notifSignal);
 
@@ -889,6 +889,11 @@ public class WFConnection extends Object {
 		     * bugged, enable
 		     */
 		    setNetworkState(context, wfResult.networkId, true);
+		    if (logging)
+			LogService.log(context, appname, context
+				.getString(R.string.reenablenetwork)
+				    + wfResult.SSID);
+			
 		}
 
 		/*
@@ -1266,7 +1271,7 @@ public class WFConnection extends Object {
 	if (sState == null)
 	    sState = INACTIVE;
 
-	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate) {
+	if (statNotifCheck()) {
 	    notifSSID = getSSID();
 	    if (sState.equals(COMPLETED))
 		notifStatus = CONNECTED;
@@ -1452,6 +1457,13 @@ public class WFConnection extends Object {
 	} else {
 	    NotifUtil.addStatNotif(ctxt, NotifUtil.CANCEL, EMPTYSTRING, 0);
 	}
+    }
+    
+    private static boolean statNotifCheck(){
+	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate && wm.isWifiEnabled())
+	    return true;
+	else
+	    return false;
     }
 
     public static boolean getNetworkState(final Context context,

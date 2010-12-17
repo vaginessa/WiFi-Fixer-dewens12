@@ -71,7 +71,7 @@ public class WifiFixerActivity extends Activity {
     public boolean loggingmenuFlag = false;
     public boolean loggingFlag = false;
 
-    private static boolean logging = true;
+    private static boolean logging = false;
 
     // constants
     public static final String NETWORK = "NETWORK_";
