@@ -880,8 +880,8 @@ public class WFConnection extends Object {
 	    for (WifiConfiguration wfResult : wifiConfigs) {
 
 		/*
-		 * Check for Android 2.x disabled network bug
-		 * WifiConfiguration state won't match stored state
+		 * Check for Android 2.x disabled network bug WifiConfiguration
+		 * state won't match stored state
 		 */
 		if (!getNetworkState(context, wfResult.networkId)
 			&& readNetworkState(context, wfResult.networkId)) {
@@ -892,8 +892,8 @@ public class WFConnection extends Object {
 		    if (logging)
 			LogService.log(context, appname, context
 				.getString(R.string.reenablenetwork)
-				    + wfResult.SSID);
-			
+				+ wfResult.SSID);
+
 		}
 
 		/*
@@ -986,7 +986,18 @@ public class WFConnection extends Object {
 	    if (logging)
 		LogService.log(ctxt, appname, ctxt
 			.getString(R.string.connect_failed));
-	    toggleWifi();
+	    /*
+	     * First, make sure this won't interrupt anything
+	     */
+	    SupplicantState sstate = getSupplicantState();
+	    if (sstate == SupplicantState.SCANNING
+		    || sstate == SupplicantState.ASSOCIATING
+		    || sstate == SupplicantState.ASSOCIATED
+		    || sstate == SupplicantState.GROUP_HANDSHAKE
+		    || sstate == SupplicantState.FOUR_WAY_HANDSHAKE)
+		return;
+	    else
+		toggleWifi();
 	}
 	handlerWrapper(MAIN, LOOPWAIT);
 	wm.updateNetwork(connectee);
@@ -1431,7 +1442,7 @@ public class WFConnection extends Object {
 	clearHandler();
 	if (prefs.getFlag(Pref.STATENOT_KEY))
 	    setStatNotif(false);
-	
+
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    ServiceAlarm.setLogTS(ctxt, false, 0);
     }
@@ -1440,7 +1451,7 @@ public class WFConnection extends Object {
 	handlerWrapper(MAIN, LOOPWAIT);
 	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate)
 	    setStatNotif(true);
-	
+
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    ServiceAlarm.setLogTS(ctxt, true, SHORTWAIT);
     }
@@ -1464,9 +1475,10 @@ public class WFConnection extends Object {
 	    NotifUtil.addStatNotif(ctxt, NotifUtil.CANCEL, EMPTYSTRING, 0);
 	}
     }
-    
-    private static boolean statNotifCheck(){
-	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate && wm.isWifiEnabled())
+
+    private static boolean statNotifCheck() {
+	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate
+		&& wm.isWifiEnabled())
 	    return true;
 	else
 	    return false;
@@ -1560,6 +1572,18 @@ public class WFConnection extends Object {
     }
 
     private void startScan(final boolean pending) {
+
+	SupplicantState sstate = getSupplicantState();
+	/*
+	 * First, make sure this won't interrupt anything
+	 */
+	if (sstate == SupplicantState.SCANNING
+		|| sstate == SupplicantState.ASSOCIATING
+		|| sstate == SupplicantState.ASSOCIATED
+		|| sstate == SupplicantState.GROUP_HANDSHAKE
+		|| sstate == SupplicantState.FOUR_WAY_HANDSHAKE)
+	    return;
+
 	// We want a lock after a scan
 	pendingscan = pending;
 	wm.startScan();
