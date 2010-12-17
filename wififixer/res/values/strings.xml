@@ -150,4 +150,6 @@
 	<string name="failed">FAILED</string>
 
 	<string name="reenablenetwork">HURK! Disabled network re-enabled:</string>
+
+	<string name="authentication_error">Authentication Error</string>
 </resources>

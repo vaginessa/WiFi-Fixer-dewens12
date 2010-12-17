@@ -144,6 +144,7 @@ public class WFConnection extends Object {
     private static HttpHead head;
     private static HttpResponse response;
     private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
+    private static Intent lastSupplicantIntent;
 
     // deprecated
     static boolean templock = false;
@@ -466,9 +467,12 @@ public class WFConnection extends Object {
 	    if (iAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION))
 		handleWifiState(intent);
 	    else if (iAction
-		    .equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION))
+		    .equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)
+		    && lastSupplicantIntent != intent) {
 		handleSupplicantIntent(intent);
-	    else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+		lastSupplicantIntent = intent;
+	    } else if (iAction
+		    .equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
 		handleScanResults();
 	    else if (iAction
 		    .equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
@@ -1276,8 +1280,15 @@ public class WFConnection extends Object {
 	/*
 	 * Get Supplicant New State
 	 */
-	String sState = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE)
-		.toString();
+	String sState = getSupplicantStateString();
+
+	/*
+	 * Check intent for auth error
+	 */
+
+	if (intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_ERROR))
+	    NotifUtil.show(ctxt, ctxt.getString(R.string.authentication_error),
+		    ctxt.getString(R.string.authentication_error), 2432, null);
 
 	if (sState == null)
 	    sState = INACTIVE;
@@ -1297,7 +1308,7 @@ public class WFConnection extends Object {
 	 * 
 	 * Also clear any error notifications
 	 */
-	if (sState == COMPLETED) {
+	if (sState.equals(COMPLETED) || sState.equals(CONNECTED)) {
 
 	    if (connectee != null) {
 		handleConnect();
