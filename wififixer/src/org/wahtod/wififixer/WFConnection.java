@@ -910,7 +910,7 @@ public class WFConnection extends Object {
     private static String getSupplicantStateString() {
 	SupplicantState sstate = wm.getConnectionInfo().getSupplicantState();
 	if (sstate == SupplicantState.COMPLETED)
-	    return COMPLETED;
+	    return CONNECTED;
 	else
 	    return sstate.name();
     }
