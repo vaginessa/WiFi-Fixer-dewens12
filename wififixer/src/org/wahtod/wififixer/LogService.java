@@ -46,7 +46,7 @@ public class LogService extends IntentService {
     private static final String SPACE = " ";
     private static final String COLON = ":";
     private static final String NEWLINE = "\n";
-    public int VERSION = 0;
+    public static int VERSION = 0;
     private static String vstring = SPACE;
     private static String app_name = SPACE;
     private static String sMessage = SPACE;
@@ -113,42 +113,42 @@ public class LogService extends IntentService {
 
     }
 
-    public boolean processCommands(final String command) {
+    public static boolean processCommands(final Context context, final String command) {
 	/*
 	 * Incoming intents will have a command which we process here
 	 */
 	if (command.equals(TIMESTAMP)) {
-	    timeStamp();
+	    timeStamp(context);
 	    return true;
 	} else if (command.equals(DUMPBUILD)) {
-	    processLogIntent(this, WifiFixerService.APP_NAME, getBuildInfo());
+	    processLogIntent(context, WifiFixerService.APP_NAME, getBuildInfo());
 	    return true;
 	}
 
 	return false;
     }
 
-    void timeStamp() {
+   private static void timeStamp(final Context context) {
 
 	Date time = new Date();
 	String message = BUILD + vstring + COLON + VERSION + SPACE + COLON
 		+ time.toString();
-	processLogIntent(this, WifiFixerService.APP_NAME, message);
+	processLogIntent(context, WifiFixerService.APP_NAME, message);
 
 	/*
 	 * Schedule next timestamp or terminate
 	 */
-	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY))
+	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY))
 	    return;
-	else if (vscreenstate.getScreenState(this))
-	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENON);
+	else if (vscreenstate.getScreenState(context))
+	    ServiceAlarm.setLogTS(context, true, TS_WAIT_SCREENON);
 	else
-	    ServiceAlarm.setLogTS(this, true, TS_WAIT_SCREENOFF);
+	    ServiceAlarm.setLogTS(context, true, TS_WAIT_SCREENOFF);
     }
 
-    void processLogIntent(final Context context, final String APP_NAME,
+    private static void processLogIntent(final Context context, final String APP_NAME,
 	    final String Message) {
-	if (processCommands(APP_NAME))
+	if (processCommands(context, APP_NAME))
 	    return;
 	else {
 	    Log.i(APP_NAME, Message);

@@ -220,6 +220,7 @@ public class WifiFixerService extends Service implements
 
 	/*
 	 * Set shared pref state
+	 * for non-Eclair clients
 	 */
 	PrefUtil.writeBoolean(this, SCREENOFF, true);
 	screenstate = false;
@@ -241,18 +242,6 @@ public class WifiFixerService extends Service implements
     }
 
     @Override
-    public void onScreenStateChanged(boolean state) {
-	if (state)
-	    onScreenOn();
-	else
-	    onScreenOff();
-	/*
-	 * Notify instance of WFConnection
-	 */
-	wifi.onScreenStateChanged(state);
-    }
-
-    @Override
     public void onStart(Intent intent, int startId) {
 	handleStart(intent);
     }
@@ -261,6 +250,18 @@ public class WifiFixerService extends Service implements
     public int onStartCommand(Intent intent, int flags, int startId) {
 	handleStart(intent);
 	return START_STICKY;
+    }
+
+    @Override
+    public void onScreenStateChanged(boolean state) {
+        if (state)
+            onScreenOn();
+        else
+            onScreenOff();
+        /*
+         * Notify instance of WFConnection
+         */
+        wifi.onScreenStateChanged(state);
     }
 
     private void preferenceInitialize(final Context context) {

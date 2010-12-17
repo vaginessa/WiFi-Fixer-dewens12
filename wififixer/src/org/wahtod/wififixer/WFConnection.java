@@ -1431,12 +1431,18 @@ public class WFConnection extends Object {
 	clearHandler();
 	if (prefs.getFlag(Pref.STATENOT_KEY))
 	    setStatNotif(false);
+	
+	if (prefs.getFlag(Pref.LOG_KEY))
+	    ServiceAlarm.setLogTS(ctxt, false, 0);
     }
 
     private void onWifiEnabled() {
 	handlerWrapper(MAIN, LOOPWAIT);
 	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate)
 	    setStatNotif(true);
+	
+	if (prefs.getFlag(Pref.LOG_KEY))
+	    ServiceAlarm.setLogTS(ctxt, true, SHORTWAIT);
     }
 
     public static boolean setNetworkState(final Context context,
