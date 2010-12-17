@@ -144,7 +144,7 @@ public class WFConnection extends Object {
     private static HttpHead head;
     private static HttpResponse response;
     private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
-    private static Intent lastSupplicantIntent;
+    private static String lastSupplicantState;
 
     // deprecated
     static boolean templock = false;
@@ -467,16 +467,13 @@ public class WFConnection extends Object {
 	    if (iAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION))
 		handleWifiState(intent);
 	    else if (iAction
-		    .equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)
-		    && lastSupplicantIntent != intent) {
+		    .equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION))
 		handleSupplicantIntent(intent);
-		lastSupplicantIntent = intent;
-	    } else if (iAction
-		    .equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+	    else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
 		handleScanResults();
 	    else if (iAction
 		    .equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
-		handleNetworkAction(context);
+		handleNetworkAction();
 	    else if (iAction
 		    .equals(android.net.ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED))
 		checkBackgroundDataSetting(context);
@@ -1003,7 +1000,6 @@ public class WFConnection extends Object {
 	    else
 		toggleWifi();
 	}
-	handlerWrapper(MAIN, LOOPWAIT);
 	wm.updateNetwork(connectee);
 	connectee = null;
     }
@@ -1013,15 +1009,20 @@ public class WFConnection extends Object {
 	connectToAP(ctxt, intent.getIntExtra(NETWORKNUMBER, -1));
     }
 
-    private static void handleNetworkAction(final Context context) {
+    private void handleNetworkAction() {
 	/*
 	 * This action means network connectivty has changed but, we only want
 	 * to run this code for wifi
 	 */
-	if (!wm.isWifiEnabled() || !getIsOnWifi(context))
+	if (!wm.isWifiEnabled() || !getIsOnWifi(ctxt))
 	    return;
 
-	icmpCache(context);
+	icmpCache(ctxt);
+
+	/*
+	 * Perfect spot to restart the Main tick
+	 */
+	handlerWrapper(MAIN, REALLYSHORTWAIT);
     }
 
     private void handleUserEvent() {
@@ -1279,8 +1280,12 @@ public class WFConnection extends Object {
 
 	/*
 	 * Get Supplicant New State
+	 * but first make sure it's new
 	 */
 	String sState = getSupplicantStateString();
+	if (sState.equals(lastSupplicantState))
+	    return;
+	lastSupplicantState = sState;
 
 	/*
 	 * Check intent for auth error
