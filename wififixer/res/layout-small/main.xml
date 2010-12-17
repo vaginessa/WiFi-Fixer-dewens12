@@ -17,8 +17,8 @@ android:id="@+id/ImageButton01"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:clickable="false"
-android:layout_y="162px"
-android:layout_x="75px">
+android:layout_y="155px"
+android:layout_x="88px">
 </ImageButton>
 <TextView
 android:id="@+id/version"
@@ -30,7 +30,7 @@ android:layout_y="46px" android:layout_x="145px">
 </TextView>
 <TextView
 android:id="@+id/aboutText"
-android:layout_width="181px"
+android:layout_width="195px"
 android:layout_height="82px"
 android:layout_marginLeft="20px"
 android:layout_marginRight="20px"
