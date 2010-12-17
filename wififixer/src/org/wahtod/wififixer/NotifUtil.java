@@ -65,12 +65,12 @@ public class NotifUtil {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
-	Intent intent = new Intent(context, WifiFixerActivity.class);
 	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		intent, 0);
+		new Intent(context, WifiFixerActivity.class), 0);
 
 	Notification notif = new Notification(R.drawable.signal4, context
 		.getString(R.string.network_status), System.currentTimeMillis());
+
 	if (!ssid.equals(CANCEL)) {
 	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
 		    R.layout.status_notif_layout);

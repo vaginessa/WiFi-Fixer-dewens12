@@ -142,4 +142,10 @@
 		lock option. </string>
 
 	<string name="widget_name">WifiFixerWidget</string>
+
+	<string name="network_test">*PING*</string>
+
+	<string name="passed">PASSED</string>
+
+	<string name="failed">FAILED</string>
 </resources>

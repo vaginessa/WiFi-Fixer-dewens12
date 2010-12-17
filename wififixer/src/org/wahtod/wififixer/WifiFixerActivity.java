@@ -610,10 +610,12 @@ public class WifiFixerActivity extends Activity {
 	case CONTEXT_ENABLE:
 	    iv.setImageResource(R.drawable.enabled_ssid);
 	    WFConnection.setNetworkState(ctxt, clicked_position, true);
+	    WFConnection.writeNetworkState(ctxt, clicked_position, false);
 	    break;
 	case CONTEXT_DISABLE:
 	    iv.setImageResource(R.drawable.disabled_ssid);
 	    WFConnection.setNetworkState(ctxt, clicked_position, false);
+	    WFConnection.writeNetworkState(ctxt, clicked_position, true);
 	    break;
 	case CONTEXT_CONNECT:
 	    Intent intent = new Intent(WFConnection.CONNECTINTENT);

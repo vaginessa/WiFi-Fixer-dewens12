@@ -77,6 +77,8 @@ public class WFConnection extends Object {
     private static final String COMPLETED = "COMPLETED";
     private static final String CONNECTED = "CONNECTED";
 
+    private static final String NETWORK_STRING = "NETWORK_";
+
     // For blank SSIDs
     private static final String NULL_SSID = "None";
 
@@ -167,6 +169,7 @@ public class WFConnection extends Object {
     private static final int SCAN = 9;
     private static final int N1CHECK = 10;
     private static final int SIGNALHOP = 12;
+    private static final int UPDATESTATUS = 13;
 
     private Handler handler = new Handler() {
 	@Override
@@ -217,6 +220,10 @@ public class WFConnection extends Object {
 
 	    case SIGNALHOP:
 		handler.post(rSignalhop);
+		break;
+
+	    case UPDATESTATUS:
+		handler.post(rUpdateStatus);
 		break;
 
 	    }
@@ -308,6 +315,11 @@ public class WFConnection extends Object {
 	    } else
 		// Queue next run of main runnable
 		handlerWrapper(MAIN, LOOPWAIT);
+	    /*
+	     * Schedule update of status
+	     */
+	    if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate)
+		handlerWrapper(UPDATESTATUS, SHORTWAIT);
 
 	}
     };
@@ -427,6 +439,17 @@ public class WFConnection extends Object {
 	     */
 	    handler.sendEmptyMessageDelayed(TEMPLOCK_OFF, SHORTWAIT);
 	    wakelock.lock(false);
+	}
+
+    };
+
+    /*
+     * SignalHop runnable
+     */
+    private Runnable rUpdateStatus = new Runnable() {
+	public void run() {
+	    notifStatus = getSupplicantStateString();
+	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
 	}
 
     };
@@ -577,6 +600,10 @@ public class WFConnection extends Object {
 	    return false;
 	}
 
+	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate)
+	    NotifUtil.addStatNotif(context, notifSSID, context
+		    .getString(R.string.network_test), notifSignal);
+
 	/*
 	 * Failover switch
 	 */
@@ -593,6 +620,19 @@ public class WFConnection extends Object {
 	 */
 
 	checkSignal(context);
+
+	/*
+	 * Notify state
+	 */
+	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate) {
+	    if (isup)
+		notifStatus = context.getString(R.string.passed);
+	    else
+		notifStatus = context.getString(R.string.failed);
+
+	    NotifUtil
+		    .addStatNotif(context, notifSSID, notifStatus, notifSignal);
+	}
 
 	return isup;
     }
@@ -645,7 +685,6 @@ public class WFConnection extends Object {
 		notifSignal = R.drawable.signal0;
 		break;
 	    }
-	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
 	}
 
 	if (signal < DBM_FLOOR) {
@@ -839,6 +878,19 @@ public class WFConnection extends Object {
 
 	for (ScanResult sResult : scanResults) {
 	    for (WifiConfiguration wfResult : wifiConfigs) {
+
+		/*
+		 * Check for Android 2.x disabled network bug
+		 * WifiConfiguration state won't match stored state
+		 */
+		if (!getNetworkState(context, wfResult.networkId)
+			&& readNetworkState(context, wfResult.networkId)) {
+		    /*
+		     * bugged, enable
+		     */
+		    setNetworkState(context, wfResult.networkId, true);
+		}
+
 		/*
 		 * Using .contains to find sResult.SSID in doublequoted string
 		 * 
@@ -1395,7 +1447,8 @@ public class WFConnection extends Object {
     protected void setStatNotif(final boolean state) {
 	if (state) {
 	    notifStatus = getSupplicantStateString();
-	    NotifUtil.addStatNotif(ctxt, getSSID(), notifStatus, notifSignal);
+	    notifSSID = getSSID();
+	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
 	} else {
 	    NotifUtil.addStatNotif(ctxt, NotifUtil.CANCEL, EMPTYSTRING, 0);
 	}
@@ -1407,6 +1460,16 @@ public class WFConnection extends Object {
 	    return false;
 	else
 	    return true;
+    }
+
+    public static void writeNetworkState(final Context context,
+	    final int network, final boolean state) {
+	PrefUtil.writeBoolean(context, NETWORK_STRING + network, state);
+    }
+
+    public static boolean readNetworkState(final Context context,
+	    final int network) {
+	return PrefUtil.readBoolean(context, NETWORK_STRING + network);
     }
 
     private void signalHop() {
