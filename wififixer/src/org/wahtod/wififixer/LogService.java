@@ -113,7 +113,8 @@ public class LogService extends IntentService {
 
     }
 
-    public static boolean processCommands(final Context context, final String command) {
+    public static boolean processCommands(final Context context,
+	    final String command) {
 	/*
 	 * Incoming intents will have a command which we process here
 	 */
@@ -128,7 +129,7 @@ public class LogService extends IntentService {
 	return false;
     }
 
-   private static void timeStamp(final Context context) {
+    private static void timeStamp(final Context context) {
 
 	Date time = new Date();
 	String message = BUILD + vstring + COLON + VERSION + SPACE + COLON
@@ -146,8 +147,8 @@ public class LogService extends IntentService {
 	    ServiceAlarm.setLogTS(context, true, TS_WAIT_SCREENOFF);
     }
 
-    private static void processLogIntent(final Context context, final String APP_NAME,
-	    final String Message) {
+    private static void processLogIntent(final Context context,
+	    final String APP_NAME, final String Message) {
 	if (processCommands(context, APP_NAME))
 	    return;
 	else {

@@ -219,8 +219,7 @@ public class WifiFixerService extends Service implements
     private void onScreenOff() {
 
 	/*
-	 * Set shared pref state
-	 * for non-Eclair clients
+	 * Set shared pref state for non-Eclair clients
 	 */
 	PrefUtil.writeBoolean(this, SCREENOFF, true);
 	screenstate = false;
@@ -254,14 +253,14 @@ public class WifiFixerService extends Service implements
 
     @Override
     public void onScreenStateChanged(boolean state) {
-        if (state)
-            onScreenOn();
-        else
-            onScreenOff();
-        /*
-         * Notify instance of WFConnection
-         */
-        wifi.onScreenStateChanged(state);
+	if (state)
+	    onScreenOn();
+	else
+	    onScreenOff();
+	/*
+	 * Notify instance of WFConnection
+	 */
+	wifi.onScreenStateChanged(state);
     }
 
     private void preferenceInitialize(final Context context) {

@@ -1279,8 +1279,7 @@ public class WFConnection extends Object {
     private void handleSupplicantIntent(final Intent intent) {
 
 	/*
-	 * Get Supplicant New State
-	 * but first make sure it's new
+	 * Get Supplicant New State but first make sure it's new
 	 */
 	String sState = getSupplicantStateString();
 	if (sState.equals(lastSupplicantState))
@@ -1441,7 +1440,7 @@ public class WFConnection extends Object {
 	 * Set current state on resume
 	 */
 
-	if (prefs.getFlag(Pref.STATENOT_KEY))
+	if (statNotifCheck())
 	    setStatNotif(true);
     }
 
