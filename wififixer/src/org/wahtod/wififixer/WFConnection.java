@@ -455,7 +455,8 @@ public class WFConnection extends Object {
     private Runnable rUpdateStatus = new Runnable() {
 	public void run() {
 	    notifStatus = getSupplicantStateString();
-	    NotifUtil.updateStatNotif(ctxt, notifSSID, notifStatus, notifSignal, statnotif, notif);
+	    NotifUtil.updateStatNotif(ctxt, notifSSID, notifStatus,
+		    notifSignal, statnotif, notif);
 	}
 
     };
@@ -608,7 +609,8 @@ public class WFConnection extends Object {
 
 	if (statNotifCheck())
 	    NotifUtil.updateStatNotif(context, notifSSID, context
-		    .getString(R.string.network_test), notifSignal, statnotif, notif);
+		    .getString(R.string.network_test), notifSignal, statnotif,
+		    notif);
 
 	/*
 	 * Failover switch
@@ -636,8 +638,8 @@ public class WFConnection extends Object {
 	    else
 		notifStatus = context.getString(R.string.failed);
 
-	    NotifUtil
-		    .updateStatNotif(context, notifSSID, notifStatus, notifSignal,statnotif, notif);
+	    NotifUtil.updateStatNotif(context, notifSSID, notifStatus,
+		    notifSignal, statnotif, notif);
 	}
 
 	return isup;
@@ -776,7 +778,8 @@ public class WFConnection extends Object {
 
 	if (httpclient == null) {
 	    httpclient = new DefaultHttpClient();
-	    headURI = new URI(H_TARGET);
+	    if (headURI == null)
+		headURI = new URI(H_TARGET);
 	    head = new HttpHead(headURI);
 	    httpparams = new BasicHttpParams();
 	    HttpConnectionParams.setConnectionTimeout(httpparams, HTTPREACH);
@@ -1023,6 +1026,11 @@ public class WFConnection extends Object {
 	    return;
 
 	icmpCache(ctxt);
+
+	/*
+	 * Make sure connectee is null
+	 */
+	connectee = null;
 
 	/*
 	 * Perfect spot to restart the Main tick
@@ -1310,7 +1318,8 @@ public class WFConnection extends Object {
 		notifStatus = sState;
 		notifSignal = R.drawable.signal0;
 	    }
-	    NotifUtil.updateStatNotif(ctxt, notifSSID, notifStatus, notifSignal, statnotif, notif);
+	    NotifUtil.updateStatNotif(ctxt, notifSSID, notifStatus,
+		    notifSignal, statnotif, notif);
 	}
 	/*
 	 * Flush queue if connected
@@ -1494,7 +1503,7 @@ public class WFConnection extends Object {
 		    notifSignal);
 	    notif = NotifUtil.addStatNotif(ctxt, statnotif);
 	} else {
-	    notif = NotifUtil.addStatNotif(ctxt,null);
+	    notif = NotifUtil.addStatNotif(ctxt, null);
 	}
     }
 
