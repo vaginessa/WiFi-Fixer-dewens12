@@ -33,6 +33,8 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.PrefConstants.Pref;
+
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -47,6 +49,7 @@ import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.Message;
 import android.text.format.Formatter;
+import android.widget.RemoteViews;
 
 /*
  * Handles all interaction 
@@ -145,6 +148,8 @@ public class WFConnection extends Object {
     private static HttpResponse response;
     private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
     private static String lastSupplicantState;
+    private static RemoteViews statnotif;
+    private static Notification notif;
 
     // deprecated
     static boolean templock = false;
@@ -450,7 +455,7 @@ public class WFConnection extends Object {
     private Runnable rUpdateStatus = new Runnable() {
 	public void run() {
 	    notifStatus = getSupplicantStateString();
-	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
+	    NotifUtil.updateStatNotif(ctxt, notifSSID, notifStatus, notifSignal, statnotif, notif);
 	}
 
     };
@@ -602,8 +607,8 @@ public class WFConnection extends Object {
 	}
 
 	if (statNotifCheck())
-	    NotifUtil.addStatNotif(context, notifSSID, context
-		    .getString(R.string.network_test), notifSignal);
+	    NotifUtil.updateStatNotif(context, notifSSID, context
+		    .getString(R.string.network_test), notifSignal, statnotif, notif);
 
 	/*
 	 * Failover switch
@@ -632,7 +637,7 @@ public class WFConnection extends Object {
 		notifStatus = context.getString(R.string.failed);
 
 	    NotifUtil
-		    .addStatNotif(context, notifSSID, notifStatus, notifSignal);
+		    .updateStatNotif(context, notifSSID, notifStatus, notifSignal,statnotif, notif);
 	}
 
 	return isup;
@@ -1305,7 +1310,7 @@ public class WFConnection extends Object {
 		notifStatus = sState;
 		notifSignal = R.drawable.signal0;
 	    }
-	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
+	    NotifUtil.updateStatNotif(ctxt, notifSSID, notifStatus, notifSignal, statnotif, notif);
 	}
 	/*
 	 * Flush queue if connected
@@ -1485,9 +1490,11 @@ public class WFConnection extends Object {
 	if (state) {
 	    notifStatus = getSupplicantStateString();
 	    notifSSID = getSSID();
-	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
+	    statnotif = NotifUtil.createStatView(ctxt, notifSSID, notifStatus,
+		    notifSignal);
+	    notif = NotifUtil.addStatNotif(ctxt, statnotif);
 	} else {
-	    NotifUtil.addStatNotif(ctxt, NotifUtil.CANCEL, EMPTYSTRING, 0);
+	    notif = NotifUtil.addStatNotif(ctxt,null);
 	}
     }
 

@@ -60,8 +60,8 @@ public class NotifUtil {
 
     }
 
-    public static void addStatNotif(final Context context, final String ssid,
-	    final String status, final int signal) {
+    public static Notification addStatNotif(final Context context,
+	    RemoteViews contentView) {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -71,19 +71,8 @@ public class NotifUtil {
 	Notification notif = new Notification(R.drawable.signal4, context
 		.getString(R.string.network_status), System.currentTimeMillis());
 
-	if (!ssid.equals(CANCEL)) {
-	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
-		    R.layout.status_notif_layout);
-	    /*
-	     * First, truncate ssid if it's bigger than MAX_SSID_LENGTH chars
-	     */
-	    if (ssid.length() < MAX_SSID_LENGTH)
-		contentView.setTextViewText(R.id.ssid, ssid);
-	    else
-		contentView.setTextViewText(R.id.ssid, ssid.substring(0,
-			MAX_SSID_LENGTH));
-	    contentView.setTextViewText(R.id.status, status);
-	    contentView.setImageViewResource(R.id.signal, signal);
+	if (contentView != null) {
+
 	    notif.contentView = contentView;
 	    notif.contentIntent = contentIntent;
 	    notif.flags = Notification.FLAG_ONGOING_EVENT;
@@ -91,8 +80,58 @@ public class NotifUtil {
 	     * Fire notification, cancel if message empty: means no status info
 	     */
 	    nm.notify(STATNOTIFID, notif);
-	} else
+	    return notif;
+	} else {
 	    nm.cancel(STATNOTIFID);
+	    return null;
+	}
+    }
+
+    public static RemoteViews createStatView(final Context context,
+	    final String ssid, final String status, final int signal) {
+	RemoteViews contentView = new RemoteViews(context.getPackageName(),
+		R.layout.status_notif_layout);
+	/*
+	 * First, truncate ssid if it's bigger than MAX_SSID_LENGTH chars
+	 */
+	if (ssid.length() < MAX_SSID_LENGTH)
+	    contentView.setTextViewText(R.id.ssid, ssid);
+	else
+	    contentView.setTextViewText(R.id.ssid, ssid.substring(0,
+		    MAX_SSID_LENGTH));
+	contentView.setTextViewText(R.id.status, status);
+	contentView.setImageViewResource(R.id.signal, signal);
+
+	return contentView;
+    }
+
+    public static RemoteViews updateStatView(final Context context,
+	    RemoteViews contentView, final String ssid, final String status,
+	    final int signal) {
+	/*
+	 * First, truncate ssid if it's bigger than MAX_SSID_LENGTH chars
+	 */
+	if (ssid.length() < MAX_SSID_LENGTH)
+	    contentView.setTextViewText(R.id.ssid, ssid);
+	else
+	    contentView.setTextViewText(R.id.ssid, ssid.substring(0,
+		    MAX_SSID_LENGTH));
+	contentView.setTextViewText(R.id.status, status);
+	contentView.setImageViewResource(R.id.signal, signal);
+
+	return contentView;
+    }
+
+    public static void updateStatNotif(final Context context,
+	    final String ssid, final String status, final int signal,
+	    RemoteViews contentView, Notification notif) {
+	if (contentView == null || notif == null)
+	    return;
+	updateStatView(context, contentView, ssid, status, signal);
+	notif.contentView = contentView;
+	NotificationManager nm = (NotificationManager) context
+		.getSystemService(Context.NOTIFICATION_SERVICE);
+	nm.notify(STATNOTIFID, notif);
     }
 
     public static void show(final Context context, final String message,
