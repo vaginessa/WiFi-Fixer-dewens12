@@ -128,7 +128,6 @@ public class NotifUtil {
 	if (contentView == null || notif == null)
 	    return;
 	updateStatView(context, contentView, ssid, status, signal);
-	notif.contentView = contentView;
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 	nm.notify(STATNOTIFID, notif);
