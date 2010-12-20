@@ -56,7 +56,7 @@ import android.widget.RemoteViews;
  * with WifiManager
  */
 public class WFConnection extends Object {
-    private static WifiManager wm;
+    // private static WifiManager getWifiManager(Context);
     private static String cachedIP;
     private static String appname;
     private static PrefUtil prefs;
@@ -241,7 +241,7 @@ public class WFConnection extends Object {
      */
     private Runnable rRepair = new Runnable() {
 	public void run() {
-	    if (!wm.isWifiEnabled()) {
+	    if (!getWifiManager(ctxt).isWifiEnabled()) {
 		handlerWrapper(TEMPLOCK_OFF);
 		if (logging)
 		    LogService.log(ctxt, appname, ctxt
@@ -268,7 +268,7 @@ public class WFConnection extends Object {
      */
     private Runnable rReconnect = new Runnable() {
 	public void run() {
-	    if (!wm.isWifiEnabled()) {
+	    if (!getWifiManager(ctxt).isWifiEnabled()) {
 		handlerWrapper(TEMPLOCK_OFF);
 		if (logging)
 		    LogService.log(ctxt, appname, ctxt
@@ -300,7 +300,8 @@ public class WFConnection extends Object {
 	public void run() {
 
 	    // Check Supplicant
-	    if (wm.isWifiEnabled() && !wm.pingSupplicant()) {
+	    if (getWifiManager(ctxt).isWifiEnabled()
+		    && !getWifiManager(ctxt).pingSupplicant()) {
 		if (logging)
 		    LogService
 			    .log(
@@ -341,7 +342,7 @@ public class WFConnection extends Object {
 	    case W_REASSOCIATE:
 		// Let's try to reassociate first..
 		clearHandler();
-		wm.reassociate();
+		getWifiManager(ctxt).reassociate();
 		if (logging)
 		    LogService.log(ctxt, appname, ctxt
 			    .getString(R.string.reassociating));
@@ -353,7 +354,7 @@ public class WFConnection extends Object {
 	    case W_RECONNECT:
 		// Ok, now force reconnect..
 		clearHandler();
-		wm.reconnect();
+		getWifiManager(ctxt).reconnect();
 		if (logging)
 		    LogService.log(ctxt, appname, ctxt
 			    .getString(R.string.reconnecting));
@@ -492,7 +493,6 @@ public class WFConnection extends Object {
     };
 
     public WFConnection(final Context context, PrefUtil p) {
-	wm = getWifiManager(context);
 	prefs = p;
 	appname = LogService.getLogTag(context);
 	screenstate = ScreenStateHandler.getScreenState(context);
@@ -536,7 +536,8 @@ public class WFConnection extends Object {
 	 * Acquire wifi lock WIFI_MODE_FULL should p. much always be used
 	 * acquire lock if pref says we should
 	 */
-	lock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, WFLOCK_TAG);
+	lock = getWifiManager(ctxt).createWifiLock(WifiManager.WIFI_MODE_FULL,
+		WFLOCK_TAG);
 	if (prefs.getFlag(Pref.WIFILOCK_KEY)) {
 	    lock.acquire();
 	    if (logging)
@@ -671,7 +672,7 @@ public class WFConnection extends Object {
     }
 
     private static void checkSignal(final Context context) {
-	int signal = wm.getConnectionInfo().getRssi();
+	int signal = getWifiManager(ctxt).getConnectionInfo().getRssi();
 
 	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate) {
 	    int adjusted = WifiManager.calculateSignalLevel(signal, 5);
@@ -698,7 +699,7 @@ public class WFConnection extends Object {
 
 	if (signal < DBM_FLOOR) {
 	    notifyWrap(context, context.getString(R.string.signal_poor));
-	    wm.startScan();
+	    getWifiManager(ctxt).startScan();
 	}
 
 	if (logging)
@@ -709,22 +710,22 @@ public class WFConnection extends Object {
 
     private void connectToAP(final Context context, final int network) {
 
-	if (!wm.isWifiEnabled())
+	if (!getWifiManager(ctxt).isWifiEnabled())
 	    return;
 	/*
 	 * New code. Using priority to specify connection AP.
 	 */
-	connectee = wm.getConfiguredNetworks().get(network);
+	connectee = getWifiManager(ctxt).getConfiguredNetworks().get(network);
 	int priority = connectee.priority;
 	connectee.priority = OVER9000;
-	wm.updateNetwork(connectee);
+	getWifiManager(ctxt).updateNetwork(connectee);
 	connectee.priority = priority;
 	/*
 	 * Remove all posts to handler
 	 */
 	clearHandler();
-	wm.disconnect();
-	wm.startScan();
+	getWifiManager(ctxt).disconnect();
+	getWifiManager(ctxt).startScan();
 	if (logging)
 	    LogService.log(context, appname, context
 		    .getString(R.string.connecting_to_network)
@@ -741,8 +742,12 @@ public class WFConnection extends Object {
 
 	int bestnid = NULLVAL;
 	WFConfig best = knownbysignal.get(0);
+	/*
+	 * specify bssid and add it to the supplicant's known network entry
+	 */
 	bestnid = best.wificonfig.networkId;
-	wm.updateNetwork(WFConfig.sparseConfig(best.wificonfig));
+	getWifiManager(ctxt).updateNetwork(
+		WFConfig.sparseConfig(best.wificonfig));
 	connectToAP(context, best.wificonfig.networkId);
 	if (logging)
 	    LogService.log(context, appname, context
@@ -833,7 +838,7 @@ public class WFConnection extends Object {
     private static boolean getisWifiEnabled(final Context context) {
 	boolean enabled = false;
 
-	if (wm.isWifiEnabled()) {
+	if (getWifiManager(ctxt).isWifiEnabled()) {
 	    if (logging)
 		LogService.log(context, appname, context
 			.getString(R.string.wifi_is_enabled));
@@ -848,7 +853,7 @@ public class WFConnection extends Object {
     }
 
     private static int getKnownAPsBySignal(final Context context) {
-	List<ScanResult> scanResults = wm.getScanResults();
+	List<ScanResult> scanResults = getWifiManager(ctxt).getScanResults();
 	/*
 	 * Catch null if scan results fires after wifi disabled or while wifi is
 	 * in intermediate state
@@ -875,7 +880,8 @@ public class WFConnection extends Object {
 	/*
 	 * Known networks from supplicant.
 	 */
-	List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+	List<WifiConfiguration> wifiConfigs = getWifiManager(ctxt)
+		.getConfiguredNetworks();
 
 	/*
 	 * Iterate the known networks over the scan results, adding found known
@@ -961,22 +967,23 @@ public class WFConnection extends Object {
     }
 
     private static int getNetworkID() {
-	return wm.getConnectionInfo().getNetworkId();
+	return getWifiManager(ctxt).getConnectionInfo().getNetworkId();
     }
 
     private static String getSSID() {
-	if (wm.getConnectionInfo().getSSID() != null)
-	    return wm.getConnectionInfo().getSSID();
+	if (getWifiManager(ctxt).getConnectionInfo().getSSID() != null)
+	    return getWifiManager(ctxt).getConnectionInfo().getSSID();
 	else
 	    return NULL_SSID;
     }
 
     private static SupplicantState getSupplicantState() {
-	return wm.getConnectionInfo().getSupplicantState();
+	return getWifiManager(ctxt).getConnectionInfo().getSupplicantState();
     }
 
     private static String getSupplicantStateString() {
-	SupplicantState sstate = wm.getConnectionInfo().getSupplicantState();
+	SupplicantState sstate = getWifiManager(ctxt).getConnectionInfo()
+		.getSupplicantState();
 	if (sstate == SupplicantState.COMPLETED)
 	    return CONNECTED;
 	else
@@ -997,20 +1004,13 @@ public class WFConnection extends Object {
 	    if (logging)
 		LogService.log(ctxt, appname, ctxt
 			.getString(R.string.connect_failed));
-	    /*
-	     * First, make sure this won't interrupt anything
-	     */
-	    SupplicantState sstate = getSupplicantState();
-	    if (sstate == SupplicantState.SCANNING
-		    || sstate == SupplicantState.ASSOCIATING
-		    || sstate == SupplicantState.ASSOCIATED
-		    || sstate == SupplicantState.GROUP_HANDSHAKE
-		    || sstate == SupplicantState.FOUR_WAY_HANDSHAKE)
+	    
+	    if (supplicantInterruptCheck(ctxt))
 		return;
 	    else
 		toggleWifi();
 	}
-	wm.updateNetwork(connectee);
+	getWifiManager(ctxt).updateNetwork(connectee);
 	connectee = null;
     }
 
@@ -1024,7 +1024,7 @@ public class WFConnection extends Object {
 	 * This action means network connectivty has changed but, we only want
 	 * to run this code for wifi
 	 */
-	if (!wm.isWifiEnabled() || !getIsOnWifi(ctxt))
+	if (!getWifiManager(ctxt).isWifiEnabled() || !getIsOnWifi(ctxt))
 	    return;
 
 	icmpCache(ctxt);
@@ -1041,7 +1041,7 @@ public class WFConnection extends Object {
     }
 
     private void handleUserEvent() {
-	connectee = wm.getConfiguredNetworks().get(lastAP);
+	connectee = getWifiManager(ctxt).getConfiguredNetworks().get(lastAP);
 	clearHandler();
     }
 
@@ -1096,7 +1096,7 @@ public class WFConnection extends Object {
 	/*
 	 * Caches DHCP gateway IP for ICMP check
 	 */
-	DhcpInfo info = wm.getDhcpInfo();
+	DhcpInfo info = getWifiManager(ctxt).getDhcpInfo();
 	cachedIP = Formatter.formatIpAddress(info.gateway);
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(context, appname, context
@@ -1146,7 +1146,7 @@ public class WFConnection extends Object {
     private static void networkNotify(final Context context) {
 	final int NUM_SSIDS = 3;
 	final int SSID_LENGTH = 10;
-	final List<ScanResult> wifiList = wm.getScanResults();
+	final List<ScanResult> wifiList = getWifiManager(ctxt).getScanResults();
 	String ssid = EMPTYSTRING;
 	String signal = EMPTYSTRING;
 	int n = 0;
@@ -1245,7 +1245,7 @@ public class WFConnection extends Object {
     }
 
     private void handleScanResults() {
-	if (!wm.isWifiEnabled() || connectee != null)
+	if (!getWifiManager(ctxt).isWifiEnabled() || connectee != null)
 	    return;
 
 	if (!pendingscan) {
@@ -1266,10 +1266,12 @@ public class WFConnection extends Object {
 		    networkNotify(ctxt);
 		}
 		/*
-		 * Standard Scan
+		 * Parse scan and connect if any known networks discovered
 		 */
-		if (getKnownAPsBySignal(ctxt) > 0)
-		    connectToBest(ctxt);
+		if (supplicantInterruptCheck(ctxt)) {
+		    if (getKnownAPsBySignal(ctxt) > 0)
+			connectToBest(ctxt);
+		}
 	    }
 	} else if (!pendingreconnect) {
 	    /*
@@ -1362,7 +1364,7 @@ public class WFConnection extends Object {
 	 * Dispatches appropriate supplicant fix
 	 */
 
-	if (!wm.isWifiEnabled()) {
+	if (!getWifiManager(ctxt).isWifiEnabled()) {
 	    return;
 	} else if (!screenstate && !prefs.getFlag(Pref.SCREEN_KEY))
 	    return;
@@ -1417,7 +1419,7 @@ public class WFConnection extends Object {
 	/*
 	 * Nexus One Sleep Fix duplicating widget function
 	 */
-	if (wm.isWifiEnabled() && !screenstate) {
+	if (getWifiManager(ctxt).isWifiEnabled() && !screenstate) {
 	    toggleWifi();
 	}
     }
@@ -1512,7 +1514,7 @@ public class WFConnection extends Object {
 
     private static boolean statNotifCheck() {
 	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate
-		&& wm.isWifiEnabled())
+		&& getWifiManager(ctxt).isWifiEnabled())
 	    return true;
 	else
 	    return false;
@@ -1586,7 +1588,7 @@ public class WFConnection extends Object {
     }
 
     private void sleepCheck(final boolean state) {
-	if (state && wm.isWifiEnabled()) {
+	if (state && getWifiManager(ctxt).isWifiEnabled()) {
 	    /*
 	     * Start sleep check
 	     */
@@ -1607,20 +1609,12 @@ public class WFConnection extends Object {
 
     private void startScan(final boolean pending) {
 
-	SupplicantState sstate = getSupplicantState();
-	/*
-	 * First, make sure this won't interrupt anything
-	 */
-	if (sstate == SupplicantState.SCANNING
-		|| sstate == SupplicantState.ASSOCIATING
-		|| sstate == SupplicantState.ASSOCIATED
-		|| sstate == SupplicantState.GROUP_HANDSHAKE
-		|| sstate == SupplicantState.FOUR_WAY_HANDSHAKE)
+	if (!supplicantInterruptCheck(ctxt))
 	    return;
 
 	// We want a lock after a scan
 	pendingscan = pending;
-	wm.startScan();
+	getWifiManager(ctxt).startScan();
 	if (logging)
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.initiating_scan));
@@ -1629,11 +1623,28 @@ public class WFConnection extends Object {
 
     private void supplicantFix() {
 	// Toggling wifi fixes the supplicant
-	    toggleWifi();
-	
+	toggleWifi();
+
 	if (logging)
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.running_supplicant_fix));
+    }
+
+    private static boolean supplicantInterruptCheck(final Context context) {
+
+	SupplicantState sstate = getSupplicantState();
+	/*
+	 * First, make sure this won't interrupt anything
+	 */
+	if (sstate == SupplicantState.SCANNING
+		|| sstate == SupplicantState.ASSOCIATING
+		|| sstate == SupplicantState.ASSOCIATED
+		|| sstate == SupplicantState.COMPLETED
+		|| sstate == SupplicantState.GROUP_HANDSHAKE
+		|| sstate == SupplicantState.FOUR_WAY_HANDSHAKE)
+	    return false;
+	else
+	    return true;
     }
 
     private void tempLock(final int time) {
