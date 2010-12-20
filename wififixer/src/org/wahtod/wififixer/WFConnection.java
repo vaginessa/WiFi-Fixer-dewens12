@@ -411,10 +411,10 @@ public class WFConnection extends Object {
     private Runnable rScan = new Runnable() {
 	public void run() {
 	    /*
-	     * Start scan if nothing is holding a temp lock
+	     * Start scan if supplicant won't be interrupted
 	     */
-	    if (!templock) {
-		startScan(false);
+	    if (!supplicantInterruptCheck(ctxt)) {
+		startScan(true);
 	    } else
 		handlerWrapper(SCAN, CONNECTWAIT);
 
@@ -715,15 +715,27 @@ public class WFConnection extends Object {
 	/*
 	 * New code. Using priority to specify connection AP.
 	 */
-	connectee = getWifiManager(ctxt).getConfiguredNetworks().get(network);
-	int priority = connectee.priority;
-	connectee.priority = OVER9000;
+
+	WifiConfiguration target = getWifiManager(ctxt).getConfiguredNetworks()
+		.get(network);
+	int priority = target.priority;
+	/*
+	 * Create sparse WifiConfiguration with 
+	 * details of desired connectee
+	 */
+	connectee = WFConfig.sparseConfigPriority(OVER9000, network);
 	getWifiManager(ctxt).updateNetwork(connectee);
+	connectee.SSID = target.SSID;
+	// set priority to normal in temp member
 	connectee.priority = priority;
 	/*
 	 * Remove all posts to handler
 	 */
 	clearHandler();
+	/*
+	 * Disconnect and trigger scan
+	 * which will connect us to high priority network
+	 */
 	getWifiManager(ctxt).disconnect();
 	getWifiManager(ctxt).startScan();
 	if (logging)
@@ -747,7 +759,8 @@ public class WFConnection extends Object {
 	 */
 	bestnid = best.wificonfig.networkId;
 	getWifiManager(ctxt).updateNetwork(
-		WFConfig.sparseConfig(best.wificonfig));
+		WFConfig.sparseConfigBSSID(best.wificonfig.BSSID,
+			best.wificonfig.networkId));
 	connectToAP(context, best.wificonfig.networkId);
 	if (logging)
 	    LogService.log(context, appname, context
@@ -1004,7 +1017,7 @@ public class WFConnection extends Object {
 	    if (logging)
 		LogService.log(ctxt, appname, ctxt
 			.getString(R.string.connect_failed));
-	    
+
 	    if (supplicantInterruptCheck(ctxt))
 		return;
 	    else
