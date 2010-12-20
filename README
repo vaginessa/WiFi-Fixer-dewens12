@@ -4,12 +4,26 @@
 
 Copyright [2010] [David Van de Ven]
 
-
+<License>
 This source code is Apache 2 licensed: 
 http://www.apache.org/licenses/LICENSE-2.0
 
+<Project>
+Intended as a purely functional set of heuristic workarounds for Android wifi. 
+It is also designed to use as few resources on the user's device as possible. 
 
-<WIP>
+<Developers>
+Public Intents: 
+/wififixer/src/org/wahtod/wififixer/IntentConstants.java
+
+<Targets>
+should run on all Android devices 1.5 to 2.3 with wifi and a touchscreen
+
+<Why is it free?>
+Because software which provides utility which should've been in the product it runs on to begin with should be free, I think. 
+
+<Developer>
+Using this project to hone my skills for professional Android development. 
 
 
 Experimental: 0.8.0 Naugahyde Ninja
