@@ -1370,7 +1370,7 @@ public class WFConnection extends Object {
 	    startScan(true);
 	    notifyWrap(ctxt, sState);
 	} else if (sState == INACTIVE) {
-	    supplicantFix(true);
+	    supplicantFix();
 	    notifyWrap(ctxt, sState);
 	}
 
@@ -1627,11 +1627,10 @@ public class WFConnection extends Object {
 	tempLock(LOCKWAIT);
     }
 
-    private void supplicantFix(final boolean wftoggle) {
+    private void supplicantFix() {
 	// Toggling wifi fixes the supplicant
-	if (wftoggle)
 	    toggleWifi();
-	startScan(true);
+	
 	if (logging)
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.running_supplicant_fix));
