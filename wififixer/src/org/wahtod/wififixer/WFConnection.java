@@ -604,6 +604,7 @@ public class WFConnection extends Object {
 	    if (logging)
 		LogService.log(context, appname, context
 			.getString(R.string.wifi_not_current_network));
+	    notifSignal = R.drawable.signal0;
 	    return false;
 	}
 
@@ -892,8 +893,8 @@ public class WFConnection extends Object {
 		 * Check for Android 2.x disabled network bug WifiConfiguration
 		 * state won't match stored state
 		 */
-		if (!getNetworkState(context, wfResult.networkId)
-			&& readNetworkState(context, wfResult.networkId)) {
+		if (wfResult.status == WifiConfiguration.Status.DISABLED
+			&& !readNetworkState(context, wfResult.networkId)) {
 		    /*
 		     * bugged, enable
 		     */
@@ -1504,6 +1505,7 @@ public class WFConnection extends Object {
 	    notif = NotifUtil.addStatNotif(ctxt, statnotif);
 	} else {
 	    notif = NotifUtil.addStatNotif(ctxt, null);
+	    statnotif= null;
 	}
     }
 
