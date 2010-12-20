@@ -1,33 +1,25 @@
-/*Copyright [2010] [David Van de Ven]
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-
-*/
-
-This project began in early 2009 as an exercise in learning java and android.
-I was having wifi problems on my T-Mobile G1, so I wrote a quick and dirty little
-no-Activity app to force a reassociation.   I stopped working on it while I taught
-myself java working on other android projects. 
-
-Somehow, even with my other projects, this one picked up the most steam on the 
-market.    Which is funny, because every hour I put into it will eventually 
-come to naught because the wifi bugs in android will get fixed..
-
-Well, not so much to naught,  I've learned a lot. 
-
-
-Experimental: 0.8.0 Naugahyde Ninja
-
-NOTE: experimental means experimental, i.e. it might not compile, might destroy your device.  
-
-Bleeding edge ahead, use caution!
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title></title></head><body>
+<div style="text-align: center;">
+<h1>Wifi Fixer for Android</h1>
+<h1><br>
+</h1>
+<div style="text-align: left;"><br>
+<small><span style="font-weight: bold;">Developers: For public intents, look in wififixer/src/org/wahod/wififixer/IntentConstants.java</span></small><br>
+<br>
+Wifi Fixer is a low-resource service that maintains an Android devices's wifi connection automatically.<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<small>Experimental: 0.8.0 Naugahyde Ninja<br>
+<br>
+NOTE: <span style="font-style: italic;">experimental means experimental, i.e. it might not compile, might destroy your device.&nbsp; </span><br style="font-style: italic;">
+<br style="font-style: italic;">
+<span style="font-style: italic;">Bleeding edge ahead, use caution!</span><br style="font-style: italic;">
+</small><br>
+</div>
+</div>
+</body></html>

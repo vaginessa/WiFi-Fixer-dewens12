@@ -875,7 +875,7 @@ public class WFConnection extends Object {
 	/*
 	 * Known networks from supplicant.
 	 */
-	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+	List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
 
 	/*
 	 * Iterate the known networks over the scan results, adding found known
@@ -899,6 +899,7 @@ public class WFConnection extends Object {
 		     * bugged, enable
 		     */
 		    setNetworkState(context, wfResult.networkId, true);
+		    wifiConfigs.get(wfResult.networkId).status = WifiConfiguration.Status.ENABLED;
 		    if (logging)
 			LogService.log(context, appname, context
 				.getString(R.string.reenablenetwork)
@@ -1505,7 +1506,7 @@ public class WFConnection extends Object {
 	    notif = NotifUtil.addStatNotif(ctxt, statnotif);
 	} else {
 	    notif = NotifUtil.addStatNotif(ctxt, null);
-	    statnotif= null;
+	    statnotif = null;
 	}
     }
 
