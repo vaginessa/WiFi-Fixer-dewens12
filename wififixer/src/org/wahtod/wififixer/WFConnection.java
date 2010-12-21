@@ -84,6 +84,9 @@ public class WFConnection extends Object {
 
     // For blank SSIDs
     private static final String NULL_SSID = "None";
+    
+    // Enabled state
+    private static final String NETSTATE = "ENABLEDSTATE";
 
     // Wifi Lock tag
     private static final String WFLOCK_TAG = "WFLock";
@@ -177,6 +180,7 @@ public class WFConnection extends Object {
     private static final int N1CHECK = 10;
     private static final int SIGNALHOP = 12;
     private static final int UPDATESTATUS = 13;
+    
 
     private Handler handler = new Handler() {
 	@Override
@@ -1555,12 +1559,18 @@ public class WFConnection extends Object {
 
     public static void writeNetworkState(final Context context,
 	    final int network, final boolean state) {
-	PrefUtil.writeBoolean(context, NETWORK_STRING + network, state);
+	if(state)
+	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(network).SSID, NETSTATE, 1);
+	else
+	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(network).SSID, NETSTATE, 0);
     }
 
     public static boolean readNetworkState(final Context context,
 	    final int network) {
-	return PrefUtil.readBoolean(context, NETWORK_STRING + network);
+	if(PrefUtil.readNetworkPref(ctxt, wm.getConfiguredNetworks().get(network).SSID, NETSTATE) == 1)
+	    return true;
+	else
+	return false;
     }
 
     private void signalHop() {

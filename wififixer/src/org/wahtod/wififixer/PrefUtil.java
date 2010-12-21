@@ -32,6 +32,7 @@ public class PrefUtil extends Object {
      */
     private static final String VALUE_CHANGED_ACTION = "ACTION.PREFS.VALUECHANGED";
     private static final String VALUE_KEY = "VALUEKEY";
+    private static final String NETPREFIX = "n_";
 
     /*
      * Fields
@@ -119,6 +120,22 @@ public class PrefUtil extends Object {
 
     public void postValChanged(final Pref p) {
 
+    }
+
+    public static int readNetworkPref(final Context ctxt, final String network,
+	    final String key) {
+	SharedPreferences settings = ctxt.getSharedPreferences(NETPREFIX
+		+ network, 0);
+	return settings.getInt(key, -1);
+    }
+
+    public static void writeNetworkPref(final Context ctxt,
+	    final String network, final String key, final int value) {
+	SharedPreferences settings = ctxt.getSharedPreferences(NETPREFIX
+		+ network, 0);
+	SharedPreferences.Editor editor = settings.edit();
+	editor.putInt(key, value);
+	editor.commit();
     }
 
     public static boolean readBoolean(final Context ctxt, final Pref pref) {
