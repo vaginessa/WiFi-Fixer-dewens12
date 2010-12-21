@@ -1195,9 +1195,10 @@ public class WFConnection extends Object {
 	if (getisWifiEnabled(ctxt)) {
 	    if (getIsSupplicantConnected(ctxt)) {
 		if (!checkNetwork(ctxt)) {
-		    shouldrepair = true;
 		    handlerWrapper(TEMPLOCK_OFF);
 		    handlerWrapper(SCAN);
+		    shouldrepair = true;
+		    wifiRepair();
 		}
 	    } else {
 		if (!screenstate)
