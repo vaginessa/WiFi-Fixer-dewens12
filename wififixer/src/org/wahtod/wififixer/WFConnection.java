@@ -620,8 +620,9 @@ public class WFConnection extends Object {
 	isup = icmpHostup(context);
 	if (!isup) {
 	    isup = httpHostup(context);
-	    if (isup)
+	    if (isup) {
 		wifirepair = W_REASSOCIATE;
+	    }
 	} else
 	    wifirepair = W_REASSOCIATE;
 
@@ -720,8 +721,7 @@ public class WFConnection extends Object {
 		.get(network);
 	int priority = target.priority;
 	/*
-	 * Create sparse WifiConfiguration with 
-	 * details of desired connectee
+	 * Create sparse WifiConfiguration with details of desired connectee
 	 */
 	connectee = WFConfig.sparseConfigPriority(OVER9000, network);
 	getWifiManager(ctxt).updateNetwork(connectee);
@@ -733,8 +733,8 @@ public class WFConnection extends Object {
 	 */
 	clearHandler();
 	/*
-	 * Disconnect and trigger scan
-	 * which will connect us to high priority network
+	 * Disconnect and trigger scan which will connect us to high priority
+	 * network
 	 */
 	getWifiManager(ctxt).disconnect();
 	getWifiManager(ctxt).startScan();
@@ -1160,22 +1160,25 @@ public class WFConnection extends Object {
 	final int NUM_SSIDS = 3;
 	final int SSID_LENGTH = 10;
 	final List<ScanResult> wifiList = getWifiManager(ctxt).getScanResults();
-	String ssid = EMPTYSTRING;
-	String signal = EMPTYSTRING;
+	StringBuilder ssid = new StringBuilder();
+	StringBuilder signal = new StringBuilder();
 	int n = 0;
 	for (ScanResult sResult : wifiList) {
-	    if (sResult.capabilities.length() == W_REASSOCIATE && n < NUM_SSIDS) {
-		if (sResult.SSID.length() > SSID_LENGTH)
-		    ssid = ssid + sResult.SSID.substring(0, SSID_LENGTH)
-			    + NEWLINE;
-		else
-		    ssid = ssid + sResult.SSID + NEWLINE;
+	    if (sResult.capabilities.length() == 0 && n < NUM_SSIDS) {
+		if (sResult.SSID.length() > SSID_LENGTH) {
+		    ssid.append(sResult.SSID.substring(0, SSID_LENGTH));
+		    ssid.append(NEWLINE);
+		} else {
 
-		signal = signal + sResult.level + NEWLINE;
+		    ssid.append(sResult.SSID);
+		    ssid.append(NEWLINE);
+		}
+		signal.append(sResult.level);
+		ssid.append(NEWLINE);
 		n++;
 	    }
 	}
-	NotifUtil.addNetNotif(context, ssid, signal);
+	NotifUtil.addNetNotif(context, ssid.toString(), signal.toString());
     }
 
     private static void notifyWrap(final Context context, final String message) {
