@@ -140,6 +140,7 @@ public class WFConnection extends Object {
     private static final int NULLVAL = -1;
     private static int lastAP = NULLVAL;
 
+    private static WifiManager wm;
     private static WifiConfiguration connectee;
     private static WifiManager.WifiLock lock;
     private static DefaultHttpClient httpclient;
@@ -1002,7 +1003,13 @@ public class WFConnection extends Object {
     }
 
     private static WifiManager getWifiManager(final Context context) {
-	return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+	/*
+	 * Cache WifiManager
+	 */
+	if (wm == null)
+	    wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+	
+	return wm;
     }
 
     private void handleConnect() {
@@ -1269,9 +1276,9 @@ public class WFConnection extends Object {
 	if (!pendingscan) {
 	    if (getIsOnWifi(ctxt)) {
 		/*
-		 * We're on wifi, so we want to check for better signal
+		 * Signalhop code
+		 * out
 		 */
-		handlerWrapper(SIGNALHOP);
 		return;
 	    } else {
 		/*
