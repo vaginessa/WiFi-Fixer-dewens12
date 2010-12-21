@@ -346,7 +346,6 @@ public class WFConnection extends Object {
 		if (logging)
 		    LogService.log(ctxt, appname, ctxt
 			    .getString(R.string.reassociating));
-		handlerWrapper(MAIN, REACHABLE);
 		wifirepair++;
 		notifyWrap(ctxt, ctxt.getString(R.string.reassociating));
 		break;
@@ -358,7 +357,6 @@ public class WFConnection extends Object {
 		if (logging)
 		    LogService.log(ctxt, appname, ctxt
 			    .getString(R.string.reconnecting));
-		handlerWrapper(MAIN, REACHABLE);
 		wifirepair++;
 		notifyWrap(ctxt, ctxt.getString(R.string.reconnecting));
 		break;
@@ -413,7 +411,7 @@ public class WFConnection extends Object {
 	    /*
 	     * Start scan if supplicant won't be interrupted
 	     */
-	    if (!supplicantInterruptCheck(ctxt)) {
+	    if (supplicantInterruptCheck(ctxt)) {
 		startScan(true);
 	    } else
 		handlerWrapper(SCAN, CONNECTWAIT);
@@ -1019,9 +1017,9 @@ public class WFConnection extends Object {
 			.getString(R.string.connect_failed));
 
 	    if (supplicantInterruptCheck(ctxt))
-		return;
-	    else
 		toggleWifi();
+	    else
+		return;
 	}
 	getWifiManager(ctxt).updateNetwork(connectee);
 	connectee = null;
