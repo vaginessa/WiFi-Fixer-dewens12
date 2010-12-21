@@ -1050,7 +1050,10 @@ public class WFConnection extends Object {
 	/*
 	 * Perfect spot to restart the Main tick
 	 */
-	handlerWrapper(MAIN, REALLYSHORTWAIT);
+	if (screenstate)
+	    handlerWrapper(MAIN, REALLYSHORTWAIT);
+	else
+	    handlerWrapper(SLEEPCHECK, SLEEPWAIT);
     }
 
     private void handleUserEvent() {
