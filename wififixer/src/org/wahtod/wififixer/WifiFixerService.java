@@ -233,11 +233,6 @@ public class WifiFixerService extends Service implements
 	PrefUtil.writeBoolean(this, SCREENOFF, false);
 
 	screenstate = true;
-	/*
-	 * Remove wifi state lock
-	 */
-	if (PrefUtil.readBoolean(this, PrefConstants.WIFI_STATE_LOCK))
-	    PrefUtil.writeBoolean(this, PrefConstants.WIFI_STATE_LOCK, false);
     }
 
     @Override

@@ -1019,10 +1019,11 @@ public class WFConnection extends Object {
 	/*
 	 * Cache WifiManager
 	 */
-	if (wm == null){
+	if (wm == null) {
 	    wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 	    if (logging)
-		LogService.log(ctxt, appname, context.getString(R.string.cachewfinst));
+		LogService.log(ctxt, appname, context
+			.getString(R.string.cachewfinst));
 	}
 
 	return wm;
@@ -1527,6 +1528,12 @@ public class WFConnection extends Object {
 
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    ServiceAlarm.setLogTS(ctxt, true, SHORTWAIT);
+
+	/*
+	 * Remove wifi state lock
+	 */
+	if (PrefUtil.readBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK))
+	    PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, false);
     }
 
     public static boolean setNetworkState(final Context context,
@@ -1539,7 +1546,7 @@ public class WFConnection extends Object {
 	return w.saveConfiguration();
     }
 
-    protected  void setStatNotif(final boolean state) {
+    protected void setStatNotif(final boolean state) {
 	if (state) {
 	    notifStatus = getSupplicantStateString();
 	    notifSSID = getSSID();
@@ -1587,8 +1594,9 @@ public class WFConnection extends Object {
 	else
 	    return false;
     }
-    
-    public static void writeManagedState(final Context context, final int network, final boolean state){
+
+    public static void writeManagedState(final Context context,
+	    final int network, final boolean state) {
 	if (state)
 	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(
 		    network).SSID, PrefConstants.NONMANAGED, 1);
