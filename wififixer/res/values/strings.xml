@@ -152,4 +152,6 @@
 	<string name="reenablenetwork">HURK! Disabled network re-enabled:</string>
 
 	<string name="authentication_error">Authentication Error</string>
+
+	<string name="set_non_managed">Toggle Non-Managed</string>
 </resources>

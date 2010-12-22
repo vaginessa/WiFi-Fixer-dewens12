@@ -594,7 +594,7 @@ public class WifiFixerActivity extends Activity {
 	menu.add(1, CONTEXT_ENABLE, 0, R.string.enable);
 	menu.add(2, CONTEXT_DISABLE, 1, R.string.disable);
 	menu.add(3, CONTEXT_CONNECT, 2, R.string.connect_now);
-	// menu.add(0, CONTEXT_NONMANAGE, 3,"" );
+	menu.add(4, CONTEXT_NONMANAGE, 3, R.string.set_non_managed);
 	if (!WFConnection.getNetworkState(ctxt, clicked_position)) {
 	    menu.setGroupEnabled(3, false);
 	    menu.setGroupEnabled(2, false);
@@ -621,6 +621,19 @@ public class WifiFixerActivity extends Activity {
 	    Intent intent = new Intent(WFConnection.CONNECTINTENT);
 	    intent.putExtra(WFConnection.NETWORKNUMBER, clicked_position);
 	    this.sendBroadcast(intent);
+	    break;
+
+	case CONTEXT_NONMANAGE:
+	    if (WFConnection.readManagedState(this, clicked_position)) {
+		iv.setImageResource(R.drawable.ignore_ssid);
+		WFConnection.writeManagedState(this, clicked_position, true);
+	    } else {
+		if (WFConnection.getNetworkState(this, clicked_position))
+		    iv.setImageResource(R.drawable.enabled_ssid);
+		else
+		    iv.setImageResource(R.drawable.disabled_ssid);
+	    }
+	    WFConnection.writeManagedState(this, clicked_position, false);
 	    break;
 	}
 	return true;

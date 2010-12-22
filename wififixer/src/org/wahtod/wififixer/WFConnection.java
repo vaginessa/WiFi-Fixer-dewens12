@@ -80,11 +80,9 @@ public class WFConnection extends Object {
     private static final String COMPLETED = "COMPLETED";
     private static final String CONNECTED = "CONNECTED";
 
-    private static final String NETWORK_STRING = "NETWORK_";
-
     // For blank SSIDs
     private static final String NULL_SSID = "None";
-    
+
     // Enabled state
     private static final String NETSTATE = "ENABLEDSTATE";
 
@@ -180,7 +178,6 @@ public class WFConnection extends Object {
     private static final int N1CHECK = 10;
     private static final int SIGNALHOP = 12;
     private static final int UPDATESTATUS = 13;
-    
 
     private Handler handler = new Handler() {
 	@Override
@@ -1012,7 +1009,7 @@ public class WFConnection extends Object {
 	 */
 	if (wm == null)
 	    wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-	
+
 	return wm;
     }
 
@@ -1280,8 +1277,7 @@ public class WFConnection extends Object {
 	if (!pendingscan) {
 	    if (getIsOnWifi(ctxt)) {
 		/*
-		 * Signalhop code
-		 * out
+		 * Signalhop code out
 		 */
 		return;
 	    } else {
@@ -1559,18 +1555,40 @@ public class WFConnection extends Object {
 
     public static void writeNetworkState(final Context context,
 	    final int network, final boolean state) {
-	if(state)
-	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(network).SSID, NETSTATE, 1);
+	if (state)
+	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(
+		    network).SSID, NETSTATE, 1);
 	else
-	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(network).SSID, NETSTATE, 0);
+	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(
+		    network).SSID, NETSTATE, 0);
+    }
+
+    public static boolean readManagedState(final Context context,
+	    final int network) {
+
+	if (PrefUtil.readNetworkPref(context, wm.getConfiguredNetworks().get(
+		network).SSID, PrefConstants.NONMANAGED) == 1)
+	    return true;
+	else
+	    return false;
+    }
+    
+    public static void writeManagedState(final Context context, final int network, final boolean state){
+	if (state)
+	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(
+		    network).SSID, PrefConstants.NONMANAGED, 1);
+	else
+	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(
+		    network).SSID, PrefConstants.NONMANAGED, 0);
     }
 
     public static boolean readNetworkState(final Context context,
 	    final int network) {
-	if(PrefUtil.readNetworkPref(ctxt, wm.getConfiguredNetworks().get(network).SSID, NETSTATE) == 1)
+	if (PrefUtil.readNetworkPref(ctxt, wm.getConfiguredNetworks().get(
+		network).SSID, NETSTATE) == 1)
 	    return true;
 	else
-	return false;
+	    return false;
     }
 
     private void signalHop() {
