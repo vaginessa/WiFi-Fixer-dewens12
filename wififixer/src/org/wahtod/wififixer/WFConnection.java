@@ -143,7 +143,7 @@ public class WFConnection extends Object {
 
     private static WifiManager wm;
     private static WifiConfiguration connectee;
-    private static WifiManager.WifiLock lock;
+    private WifiManager.WifiLock lock;
     private static DefaultHttpClient httpclient;
     private static HttpParams httpparams;
     private static HttpHead head;
