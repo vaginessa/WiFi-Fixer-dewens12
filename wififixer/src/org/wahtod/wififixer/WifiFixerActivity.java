@@ -165,10 +165,14 @@ public class WifiFixerActivity extends Activity {
 		    holder.text.setTextColor(Color.parseColor(YELLOW));
 	    }
 
-	    if (WFConnection.getNetworkState(ctxt, position))
-		holder.icon.setImageResource(R.drawable.enabled_ssid);
-	    else
-		holder.icon.setImageResource(R.drawable.disabled_ssid);
+	    if (WFConnection.readManagedState(ctxt, position))
+		holder.icon.setImageResource(R.drawable.ignore_ssid);
+	    else {
+		if (WFConnection.getNetworkState(ctxt, position))
+		    holder.icon.setImageResource(R.drawable.enabled_ssid);
+		else
+		    holder.icon.setImageResource(R.drawable.disabled_ssid);
+	    }
 	    return convertView;
 	}
 
@@ -624,7 +628,7 @@ public class WifiFixerActivity extends Activity {
 	    break;
 
 	case CONTEXT_NONMANAGE:
-	    if (WFConnection.readManagedState(this, clicked_position)) {
+	    if (!WFConnection.readManagedState(this, clicked_position)) {
 		iv.setImageResource(R.drawable.ignore_ssid);
 		WFConnection.writeManagedState(this, clicked_position, true);
 	    } else {
@@ -632,8 +636,10 @@ public class WifiFixerActivity extends Activity {
 		    iv.setImageResource(R.drawable.enabled_ssid);
 		else
 		    iv.setImageResource(R.drawable.disabled_ssid);
+		
+		WFConnection.writeManagedState(this, clicked_position, false);
 	    }
-	    WFConnection.writeManagedState(this, clicked_position, false);
+
 	    break;
 	}
 	return true;

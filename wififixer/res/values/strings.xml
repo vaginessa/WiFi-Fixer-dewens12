@@ -154,4 +154,6 @@
 	<string name="authentication_error">Authentication Error</string>
 
 	<string name="set_non_managed">Toggle Non-Managed</string>
+
+	<string name="cachewfinst">Cacheing WifiManager Instance</string>
 </resources>

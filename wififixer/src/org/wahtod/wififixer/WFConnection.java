@@ -472,14 +472,26 @@ public class WFConnection extends Object {
 	    String iAction = intent.getAction();
 
 	    if (iAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION))
+		/*
+		 * Wifi state, e.g. on/off
+		 */
 		handleWifiState(intent);
 	    else if (iAction
 		    .equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION))
+		/*
+		 * Supplicant events
+		 */
 		handleSupplicantIntent(intent);
 	    else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+		/*
+		 * Scan Results
+		 */
 		handleScanResults();
 	    else if (iAction
 		    .equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
+		/*
+		 * IP connectivity established
+		 */
 		handleNetworkAction();
 	    else if (iAction
 		    .equals(android.net.ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED))
@@ -1007,8 +1019,11 @@ public class WFConnection extends Object {
 	/*
 	 * Cache WifiManager
 	 */
-	if (wm == null)
+	if (wm == null){
 	    wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+	    if (logging)
+		LogService.log(ctxt, appname, context.getString(R.string.cachewfinst));
+	}
 
 	return wm;
     }
