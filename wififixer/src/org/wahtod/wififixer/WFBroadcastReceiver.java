@@ -59,7 +59,7 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
     }
 
     private static boolean isserviceDisabled(final Context context) {
-	boolean state = PrefUtil.readBoolean(context, Pref.DISABLE_KEY);
+	boolean state = PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key());
 	return state;
     }
 

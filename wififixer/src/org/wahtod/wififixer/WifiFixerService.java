@@ -363,7 +363,7 @@ public class WifiFixerService extends Service implements
 				getBaseContext().getString(R.string.version)
 					+ ver);
 		    if (ver < 2) {
-			writeBoolean(context, Pref.SUPFIX_KEY, true);
+			writeBoolean(context, Pref.SUPFIX_KEY.key(), true);
 		    }
 
 		}

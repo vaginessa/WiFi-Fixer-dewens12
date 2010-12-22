@@ -84,7 +84,7 @@ public class PrefActivity extends PreferenceActivity implements
 	     * First handle Service enable case
 	     */
 	    if (key.equals(Pref.DISABLE_KEY.key())) {
-		if (!PrefUtil.readBoolean(this, Pref.DISABLE_KEY)) {
+		if (!PrefUtil.readBoolean(this, Pref.DISABLE_KEY.key())) {
 		    Intent intent = new Intent(
 			    IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
 		    sendBroadcast(intent);
@@ -112,18 +112,18 @@ public class PrefActivity extends PreferenceActivity implements
 
 	    switch (pVal) {
 	    case 1:
-		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY, true);
-		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY, true);
+		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY.key(), true);
+		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY.key(), true);
 		break;
 
 	    case 2:
-		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY, true);
-		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY, false);
+		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY.key(), true);
+		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY.key(), false);
 		break;
 
 	    case 3:
-		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY, false);
-		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY, false);
+		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY.key(), false);
+		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY.key(), false);
 		break;
 	    }
 	    PrefActivity.this.finish();

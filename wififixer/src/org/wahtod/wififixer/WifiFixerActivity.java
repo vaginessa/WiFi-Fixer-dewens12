@@ -231,8 +231,8 @@ public class WifiFixerActivity extends Activity {
 		    .show();
     }
 
-    boolean getLogging() {
-	return PrefUtil.readBoolean(this, Pref.LOG_KEY);
+    private static boolean getLogging(final Context context) {
+	return PrefUtil.readBoolean(context, Pref.LOG_KEY.key());
     }
 
     private void handleIntent(final Intent intent) {
@@ -297,7 +297,7 @@ public class WifiFixerActivity extends Activity {
 	serviceButton.setAdjustViewBounds(true);
 	serviceButton.setMaxHeight(64);
 	serviceButton.setMaxWidth(64);
-	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY)) {
+	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY.key())) {
 	    serviceButton.setImageResource(R.drawable.service_inactive);
 	} else {
 	    serviceButton.setImageResource(R.drawable.service_active);
@@ -306,7 +306,7 @@ public class WifiFixerActivity extends Activity {
 
     void setLogging(boolean state) {
 	loggingFlag = state;
-	PrefUtil.writeBoolean(this, Pref.LOG_KEY, state);
+	PrefUtil.writeBoolean(this, Pref.LOG_KEY.key(), state);
 	PrefUtil.notifyPrefChange(this, Pref.LOG_KEY);
 	if (state) {
 
@@ -403,7 +403,7 @@ public class WifiFixerActivity extends Activity {
 
     void toggleLog() {
 
-	loggingFlag = getLogging();
+	loggingFlag = getLogging(this);
 	if (loggingFlag) {
 	    Toast.makeText(WifiFixerActivity.this, R.string.disabling_logging,
 		    Toast.LENGTH_SHORT).show();
@@ -556,7 +556,7 @@ public class WifiFixerActivity extends Activity {
     private void oncreate_setup() {
 	loggingmenuFlag = PrefUtil
 		.readBoolean(this, PrefConstants.LOGGING_MENU);
-	loggingFlag = getLogging();
+	loggingFlag = getLogging(this);
 	// Fire new About nag
 	if (!PrefUtil.readBoolean(this, sABOUT)) {
 	    showNotification();
@@ -575,7 +575,7 @@ public class WifiFixerActivity extends Activity {
 	knownbysignal = getKnownAPsBySignal(this);
 	setIcon();
 	loggingmenuFlag = PrefUtil.readBoolean(this, "Logging");
-	loggingFlag = getLogging();
+	loggingFlag = getLogging(this);
 	startwfService(this);
 	registerReceiver();
     }
@@ -636,7 +636,7 @@ public class WifiFixerActivity extends Activity {
 		    iv.setImageResource(R.drawable.enabled_ssid);
 		else
 		    iv.setImageResource(R.drawable.disabled_ssid);
-		
+
 		WFConnection.writeManagedState(this, clicked_position, false);
 	    }
 
@@ -741,9 +741,9 @@ public class WifiFixerActivity extends Activity {
 	if (temp.length != 0) {
 	    knownbysignal = getKnownAPsBySignal(this);
 	    knownnetworks = temp;
-	    if(adapter == null)
+	    if (adapter == null)
 		adapter = new NetworkListAdapter(this, knownnetworks);
-	    
+
 	    final ListView lv = (ListView) findViewById(R.id.ListView01);
 	    lv.setAdapter(adapter);
 	}

@@ -139,7 +139,7 @@ public class LogService extends IntentService {
 	/*
 	 * Schedule next timestamp or terminate
 	 */
-	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY))
+	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
 	    return;
 	else if (vscreenstate.getScreenState(context))
 	    ServiceAlarm.setLogTS(context, true, TS_WAIT_SCREENON);

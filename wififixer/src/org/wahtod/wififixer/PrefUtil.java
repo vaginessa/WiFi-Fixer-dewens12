@@ -45,7 +45,7 @@ public class PrefUtil extends Object {
 	    String valuekey = intent.getStringExtra(VALUE_KEY);
 	    Pref p = Pref.get(valuekey);
 	    if (p != null)
-		handlePrefChange(p, readBoolean(context, p));
+		handlePrefChange(p, readBoolean(context, p.key()));
 	}
 
     };
@@ -75,8 +75,8 @@ public class PrefUtil extends Object {
 	specialCase();
     }
 
-    void handleLoadPref(final Pref prefkey) {
-	setFlag(prefkey, readBoolean(context, prefkey));
+    void handleLoadPref(final Pref p) {
+	setFlag(p, readBoolean(context, p.key()));
     }
 
     void handlePrefChange(final Pref p, final boolean flagval) {
@@ -126,7 +126,10 @@ public class PrefUtil extends Object {
 	    final String key) {
 	SharedPreferences settings = ctxt.getSharedPreferences(NETPREFIX
 		+ network, 0);
-	return settings.getInt(key, -1);
+	if (settings.contains(key))
+	    return settings.getInt(key, -1);
+	else
+	    return -1;
     }
 
     public static void writeNetworkPref(final Context ctxt,
@@ -137,26 +140,12 @@ public class PrefUtil extends Object {
 	editor.putInt(key, value);
 	editor.commit();
     }
-
-    public static boolean readBoolean(final Context ctxt, final Pref pref) {
-	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(ctxt.getApplicationContext());
-	return settings.getBoolean(pref.key(), false);
-    }
+    
 
     public static boolean readBoolean(final Context ctxt, final String key) {
 	SharedPreferences settings = PreferenceManager
 		.getDefaultSharedPreferences(ctxt.getApplicationContext());
 	return settings.getBoolean(key, false);
-    }
-
-    public static void writeBoolean(final Context ctxt, final Pref pref,
-	    final boolean value) {
-	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(ctxt.getApplicationContext());
-	SharedPreferences.Editor editor = settings.edit();
-	editor.putBoolean(pref.key(), value);
-	editor.commit();
     }
 
     public static void writeBoolean(final Context ctxt, final String key,
@@ -168,25 +157,10 @@ public class PrefUtil extends Object {
 	editor.commit();
     }
 
-    public static String readString(final Context ctxt, final Pref pref) {
-	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(ctxt.getApplicationContext());
-	return settings.getString(pref.key(), null);
-    }
-
     public static String readString(final Context ctxt, final String key) {
 	SharedPreferences settings = PreferenceManager
 		.getDefaultSharedPreferences(ctxt.getApplicationContext());
 	return settings.getString(key, null);
-    }
-
-    public static void writeString(final Context ctxt, final Pref pref,
-	    final String value) {
-	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(ctxt.getApplicationContext());
-	SharedPreferences.Editor editor = settings.edit();
-	editor.putString(pref.key(), value);
-	editor.commit();
     }
 
     public static void writeString(final Context ctxt, final String key,
@@ -197,26 +171,11 @@ public class PrefUtil extends Object {
 	editor.putString(key, value);
 	editor.commit();
     }
-
-    public static int readInt(final Context ctxt, final Pref pref) {
-	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(ctxt.getApplicationContext());
-	return settings.getInt(pref.key(), -1);
-    }
-
+    
     public static int readInt(final Context ctxt, final String key) {
 	SharedPreferences settings = PreferenceManager
 		.getDefaultSharedPreferences(ctxt.getApplicationContext());
 	return settings.getInt(key, -1);
-    }
-
-    public static void writeInt(final Context ctxt, final Pref pref,
-	    final int value) {
-	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(ctxt.getApplicationContext());
-	SharedPreferences.Editor editor = settings.edit();
-	editor.putInt(pref.key(), value);
-	editor.commit();
     }
 
     public static void writeInt(final Context ctxt, final String key,
@@ -225,14 +184,6 @@ public class PrefUtil extends Object {
 		.getDefaultSharedPreferences(ctxt.getApplicationContext());
 	SharedPreferences.Editor editor = settings.edit();
 	editor.putInt(key, value);
-	editor.commit();
-    }
-
-    public static void removeKey(final Context ctxt, final Pref pref) {
-	SharedPreferences settings = PreferenceManager
-		.getDefaultSharedPreferences(ctxt.getApplicationContext());
-	SharedPreferences.Editor editor = settings.edit();
-	editor.remove(pref.key());
 	editor.commit();
     }
 

@@ -598,7 +598,7 @@ public class WFConnection extends Object {
 	    NotifUtil.show(context, context.getString(R.string.bdata_nag),
 		    context.getString(R.string.bdata_ticker), ERR_NOTIF,
 		    PendingIntent.getActivity(context, 0, new Intent(), 0));
-	    PrefUtil.writeBoolean(context, Pref.DISABLE_KEY, true);
+	    PrefUtil.writeBoolean(context, Pref.DISABLE_KEY.key(), true);
 
 	    context.sendBroadcast(new Intent(
 		    IntentConstants.ACTION_WIFI_SERVICE_DISABLE));
