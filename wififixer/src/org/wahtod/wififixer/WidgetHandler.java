@@ -55,6 +55,8 @@ public class WidgetHandler extends BroadcastReceiver {
      */
     private static final int TOGGLE_DELAY = 8000;
     private static final int WATCHDOG_DELAY = 11000;
+    
+    private static WifiManager wm;
 
     private Handler hWifiState = new Handler() {
 	@Override
@@ -110,18 +112,29 @@ public class WidgetHandler extends BroadcastReceiver {
     };
 
     private static WifiManager getWifiManager(final Context context) {
-	return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+	if (wm == null)
+	    wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+	return wm;
     }
 
-    private static void setWifiState(final Context context, final boolean b) {
-	WifiManager wm = getWifiManager(context);
-	wm.setWifiEnabled(b);
+    private static void setWifiState(final Context context, final boolean state) {
+	getWifiManager(context).setWifiEnabled(state);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
 	if (ctxt == null)
 	    ctxt = context;
+	
+	/*
+	 * If Wifi is disabled, notify
+	 */
+	if (!getWifiManager(context).isWifiEnabled()) {
+	    Toast.makeText(context,
+		    context.getString(R.string.wifi_is_disabled),
+		    Toast.LENGTH_LONG).show();
+	    return;
+	}
 
 	String action = intent.getAction();
 	/*
@@ -132,15 +145,7 @@ public class WidgetHandler extends BroadcastReceiver {
 	 * Turn on WIFI
 	 */
 	if (action.equals(WIFI_ON))
-	    setWifiState(context, true);
-	/*
-	 * If Wifi is disabled, notify
-	 */
-	else if (!getWifiManager(context).isWifiEnabled()) {
-	    Toast.makeText(context,
-		    context.getString(R.string.wifi_is_disabled),
-		    Toast.LENGTH_LONG).show();
-	}
+	    setWifiState(context, true); 
 	/*
 	 * Turn off Wifi
 	 */
