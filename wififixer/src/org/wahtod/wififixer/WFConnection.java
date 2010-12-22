@@ -1539,7 +1539,7 @@ public class WFConnection extends Object {
 	return w.saveConfiguration();
     }
 
-    protected static void setStatNotif(final boolean state) {
+    protected  void setStatNotif(final boolean state) {
 	if (state) {
 	    notifStatus = getSupplicantStateString();
 	    notifSSID = getSSID();
