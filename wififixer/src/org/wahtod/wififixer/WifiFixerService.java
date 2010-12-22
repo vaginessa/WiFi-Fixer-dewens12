@@ -279,21 +279,12 @@ public class WifiFixerService extends Service implements
 		switch (p) {
 
 		case WIFILOCK_KEY:
-		    if (wifi != null && prefs.getFlag(Pref.WIFILOCK_KEY)
-			    && wifi.wifiLockHeld()) {
+		    if (wifi != null && prefs.getFlag(Pref.WIFILOCK_KEY)) {
 			// generate new lock
 			wifi.wifiLock(true);
-			if (logging)
-			    LogService.log(getBaseContext(), APP_NAME,
-				    getBaseContext().getString(
-					    R.string.acquiring_wifi_lock));
-		    } else if (wifi != null && wifi.wifiLockHeld()
+		    } else if (wifi != null
 			    && !prefs.getFlag(Pref.WIFILOCK_KEY)) {
 			wifi.wifiLock(false);
-			if (logging)
-			    LogService.log(getBaseContext(), APP_NAME,
-				    getBaseContext().getString(
-					    R.string.releasing_wifi_lock));
 		    }
 		    break;
 

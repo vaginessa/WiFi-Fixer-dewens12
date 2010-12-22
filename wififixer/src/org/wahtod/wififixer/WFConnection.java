@@ -62,6 +62,7 @@ public class WFConnection extends Object {
     private static PrefUtil prefs;
     private static Context ctxt;
     private WakeLock wakelock;
+    private WifiLock wifilock;
     static boolean screenstate;
 
     // flags
@@ -85,9 +86,6 @@ public class WFConnection extends Object {
 
     // Enabled state
     private static final String NETSTATE = "ENABLEDSTATE";
-
-    // Wifi Lock tag
-    private static final String WFLOCK_TAG = "WFLock";
 
     // Wifi Connect Intent
     public static final String CONNECTINTENT = "org.wahtod.wififixer.CONNECT";
@@ -143,7 +141,6 @@ public class WFConnection extends Object {
 
     private static WifiManager wm;
     private static WifiConfiguration connectee;
-    private WifiManager.WifiLock lock;
     private static DefaultHttpClient httpclient;
     private static HttpParams httpparams;
     private static HttpHead head;
@@ -544,18 +541,6 @@ public class WFConnection extends Object {
 	filter.addAction(USEREVENT);
 
 	context.registerReceiver(receiver, filter);
-	/*
-	 * Acquire wifi lock WIFI_MODE_FULL should p. much always be used
-	 * acquire lock if pref says we should
-	 */
-	lock = getWifiManager(ctxt).createWifiLock(WifiManager.WIFI_MODE_FULL,
-		WFLOCK_TAG);
-	if (prefs.getFlag(Pref.WIFILOCK_KEY)) {
-	    lock.acquire();
-	    if (logging)
-		LogService.log(context, appname, context
-			.getString(R.string.acquiring_wifi_lock));
-	}
 
 	// Initialize WakeLock
 	wakelock = new WakeLock(context) {
@@ -577,7 +562,38 @@ public class WFConnection extends Object {
 	    }
 
 	};
+	
+	// Initialize WifiLock
+	wifilock = new WifiLock(context){
+	    @Override
+	    public void onAcquire() {
+		if (logging)
+		    LogService.log(context, appname, context
+			    .getString(R.string.acquiring_wifi_lock));
+		super.onAcquire();
+	    }
 
+	    @Override
+	    public void onRelease() {
+		if (logging)
+		    LogService.log(context, appname, context
+			    .getString(R.string.releasing_wifi_lock));
+		super.onRelease();
+	    }
+	    
+	};
+	
+	/*
+	 * acquire wifi lock if
+	 * should
+	 */
+	if(prefs.getFlag(Pref.WIFILOCK_KEY))
+	    wifilock.lock(true);
+	
+	/*
+	 * Start status notification
+	 * if should
+	 */
 	if (prefs.getFlag(Pref.STATENOT_KEY))
 	    setStatNotif(true);
 
@@ -1239,7 +1255,8 @@ public class WFConnection extends Object {
     public void cleanup() {
 	ctxt.unregisterReceiver(receiver);
 	clearQueue();
-	handler.removeMessages(MAIN);
+	clearHandler();
+	wifilock.lock(false);
     }
 
     private void cleanupPosts() {
@@ -1773,16 +1790,9 @@ public class WFConnection extends Object {
 	shouldrepair = false;
 
     }
-
-    public void wifiLock(final Boolean state) {
-	if (state)
-	    lock.acquire();
-	else
-	    lock.release();
-    }
-
-    public boolean wifiLockHeld() {
-	return lock.isHeld();
+    
+    public void wifiLock(final boolean state) {
+	wifilock.lock(state);
     }
 
 }
