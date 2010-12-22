@@ -741,7 +741,9 @@ public class WifiFixerActivity extends Activity {
 	if (temp.length != 0) {
 	    knownbysignal = getKnownAPsBySignal(this);
 	    knownnetworks = temp;
-	    adapter = new NetworkListAdapter(this, knownnetworks);
+	    if(adapter == null)
+		adapter = new NetworkListAdapter(this, knownnetworks);
+	    
 	    final ListView lv = (ListView) findViewById(R.id.ListView01);
 	    lv.setAdapter(adapter);
 	}
