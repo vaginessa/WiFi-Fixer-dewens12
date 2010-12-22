@@ -140,7 +140,6 @@ public class PrefUtil extends Object {
 	editor.putInt(key, value);
 	editor.commit();
     }
-    
 
     public static boolean readBoolean(final Context ctxt, final String key) {
 	SharedPreferences settings = PreferenceManager
@@ -171,7 +170,7 @@ public class PrefUtil extends Object {
 	editor.putString(key, value);
 	editor.commit();
     }
-    
+
     public static int readInt(final Context ctxt, final String key) {
 	SharedPreferences settings = PreferenceManager
 		.getDefaultSharedPreferences(ctxt.getApplicationContext());

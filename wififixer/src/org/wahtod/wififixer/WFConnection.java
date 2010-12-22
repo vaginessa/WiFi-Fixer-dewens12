@@ -48,6 +48,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.text.format.Formatter;
 import android.widget.RemoteViews;
 
@@ -80,6 +81,7 @@ public class WFConnection extends Object {
     private static final String INACTIVE = "INACTIVE";
     private static final String COMPLETED = "COMPLETED";
     private static final String CONNECTED = "CONNECTED";
+    private static final String SCANNING = "SCANNING";
 
     // For blank SSIDs
     private static final String NULL_SSID = "None";
@@ -125,6 +127,10 @@ public class WFConnection extends Object {
     private static final int CONNECTWAIT = 8000;
     private static final int SHORTWAIT = 1500;
     private static final int REALLYSHORTWAIT = 200;
+
+    // Last Scan
+    private static long lastscan_time;
+    private static final int SCAN_WATCHDOG_DELAY = 20000;
 
     // for Dbm
     private static final int DBM_FLOOR = -90;
@@ -175,6 +181,7 @@ public class WFConnection extends Object {
     private static final int N1CHECK = 10;
     private static final int SIGNALHOP = 12;
     private static final int UPDATESTATUS = 13;
+    private static final int SCANWATCHDOG = 14;
 
     private Handler handler = new Handler() {
 	@Override
@@ -229,6 +236,15 @@ public class WFConnection extends Object {
 
 	    case UPDATESTATUS:
 		handler.post(rUpdateStatus);
+		break;
+
+	    case SCANWATCHDOG:
+		if (getWifiManager(ctxt).isWifiEnabled()
+			&& lastscan_time < SystemClock.elapsedRealtime()
+				- SCAN_WATCHDOG_DELAY)
+		    startScan(true);
+		handler.sendEmptyMessageDelayed(SCANWATCHDOG,
+			SCAN_WATCHDOG_DELAY);
 		break;
 
 	    }
@@ -562,9 +578,9 @@ public class WFConnection extends Object {
 	    }
 
 	};
-	
+
 	// Initialize WifiLock
-	wifilock = new WifiLock(context){
+	wifilock = new WifiLock(context) {
 	    @Override
 	    public void onAcquire() {
 		if (logging)
@@ -580,19 +596,17 @@ public class WFConnection extends Object {
 			    .getString(R.string.releasing_wifi_lock));
 		super.onRelease();
 	    }
-	    
+
 	};
-	
+
 	/*
-	 * acquire wifi lock if
-	 * should
+	 * acquire wifi lock if should
 	 */
-	if(prefs.getFlag(Pref.WIFILOCK_KEY))
+	if (prefs.getFlag(Pref.WIFILOCK_KEY))
 	    wifilock.lock(true);
-	
+
 	/*
-	 * Start status notification
-	 * if should
+	 * Start status notification if should
 	 */
 	if (prefs.getFlag(Pref.STATENOT_KEY))
 	    setStatNotif(true);
@@ -601,6 +615,7 @@ public class WFConnection extends Object {
 	 * Start Main tick
 	 */
 	handler.sendEmptyMessage(MAIN);
+	handlerWrapper(SCANWATCHDOG, SCAN_WATCHDOG_DELAY);
     }
 
     public static void checkBackgroundDataSetting(final Context context) {
@@ -1384,6 +1399,12 @@ public class WFConnection extends Object {
 		    notifSignal, statnotif, notif);
 	}
 	/*
+	 * store last supplicant scan state
+	 */
+	if (sState.equals(SCANNING))
+	    lastscan_time = SystemClock.elapsedRealtime();
+	else
+	/*
 	 * Flush queue if connected
 	 * 
 	 * Also clear any error notifications
@@ -1595,18 +1616,23 @@ public class WFConnection extends Object {
     public static void writeNetworkState(final Context context,
 	    final int network, final boolean state) {
 	if (state)
-	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(
-		    network).SSID, NETSTATE, 1);
+	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
+		    NETSTATE, 1);
+
 	else
 	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(
 		    network).SSID, NETSTATE, 0);
     }
 
+    public static String getnetworkSSID(final int network) {
+	return wm.getConfiguredNetworks().get(network).SSID.replace("\"", "");
+    }
+
     public static boolean readManagedState(final Context context,
 	    final int network) {
 
-	if (PrefUtil.readNetworkPref(context, wm.getConfiguredNetworks().get(
-		network).SSID, PrefConstants.NONMANAGED) == 1)
+	if (PrefUtil.readNetworkPref(context, getnetworkSSID(network),
+		PrefConstants.NONMANAGED) == 1)
 	    return true;
 	else
 	    return false;
@@ -1615,8 +1641,8 @@ public class WFConnection extends Object {
     public static void writeManagedState(final Context context,
 	    final int network, final boolean state) {
 	if (state)
-	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(
-		    network).SSID, PrefConstants.NONMANAGED, 1);
+	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
+		    PrefConstants.NONMANAGED, 1);
 	else
 	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(
 		    network).SSID, PrefConstants.NONMANAGED, 0);
@@ -1624,8 +1650,8 @@ public class WFConnection extends Object {
 
     public static boolean readNetworkState(final Context context,
 	    final int network) {
-	if (PrefUtil.readNetworkPref(ctxt, wm.getConfiguredNetworks().get(
-		network).SSID, NETSTATE) == 1)
+	if (PrefUtil
+		.readNetworkPref(context, getnetworkSSID(network), NETSTATE) == 1)
 	    return true;
 	else
 	    return false;
@@ -1790,7 +1816,7 @@ public class WFConnection extends Object {
 	shouldrepair = false;
 
     }
-    
+
     public void wifiLock(final boolean state) {
 	wifilock.lock(state);
     }
