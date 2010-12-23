@@ -160,4 +160,6 @@
 	<string name="last_scan">Last scan:</string>
 
 	<string name="scan_interrupt">Scan would interrupt supplicant</string>
+
+	<string name="thanks_google">Thanks, Google!</string>
 </resources>

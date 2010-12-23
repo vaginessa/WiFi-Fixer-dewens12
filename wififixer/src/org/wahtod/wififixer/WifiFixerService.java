@@ -221,7 +221,9 @@ public class WifiFixerService extends Service implements
 	/*
 	 * Set shared pref state for non-Eclair clients
 	 */
-	PrefUtil.writeBoolean(this, SCREENOFF, true);
+	if (Integer.parseInt(Build.VERSION.SDK) >= Build.VERSION_CODES.ECLAIR_MR1)
+	    PrefUtil.writeBoolean(this, SCREENOFF, true);
+	
 	screenstate = false;
     }
 
@@ -230,7 +232,8 @@ public class WifiFixerService extends Service implements
 	/*
 	 * Set shared pref state
 	 */
-	PrefUtil.writeBoolean(this, SCREENOFF, false);
+	if (Integer.parseInt(Build.VERSION.SDK) >= Build.VERSION_CODES.ECLAIR_MR1)
+	    PrefUtil.writeBoolean(this, SCREENOFF, false);
 
 	screenstate = true;
     }

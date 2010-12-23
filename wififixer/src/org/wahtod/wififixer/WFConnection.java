@@ -704,6 +704,8 @@ public class WFConnection extends Object {
 	    handler.removeMessages(N1CHECK);
 	else if (handler.hasMessages(SIGNALHOP))
 	    handler.removeMessages(SIGNALHOP);
+	else if (handler.hasMessages(SCANWATCHDOG))
+	    handler.removeMessages(SCANWATCHDOG);
 	/*
 	 * Also clear all relevant flags
 	 */
@@ -715,7 +717,15 @@ public class WFConnection extends Object {
 	int signal = getWifiManager(ctxt).getConnectionInfo().getRssi();
 
 	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate) {
-	    int adjusted = WifiManager.calculateSignalLevel(signal, 5);
+	    int adjusted;
+	    try {
+		adjusted = WifiManager.calculateSignalLevel(signal, 5);
+	    } catch (Exception e) {
+		
+		LogService.log(ctxt, appname,context.getString(R.string.thanks_google)+e.getStackTrace().toString());
+		adjusted = 0;
+		
+	    }
 	    switch (adjusted) {
 	    case 4:
 		notifSignal = R.drawable.signal4;
@@ -1749,11 +1759,13 @@ public class WFConnection extends Object {
 
 	// We want a lock after a scan
 	pendingscan = pending;
+	wakelock.lock(true);
 	getWifiManager(ctxt).startScan();
 	if (logging)
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.initiating_scan));
 	tempLock(LOCKWAIT);
+	wakelock.lock(false);
     }
 
     private void supplicantFix() {
