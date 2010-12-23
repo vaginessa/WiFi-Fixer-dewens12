@@ -86,12 +86,21 @@
 		<service android:name=".FixerWidget$UpdateService" />
 	</application>
 
+	<!--Documenting permissions here-->
+	<!-- For service start alarm (2 mins from boot_completed) -->
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<!-- For wifi state -->
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<!-- For detecting ip connectivity and cacheing IP of router-->
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<!-- For switching wifi off/on, doing reassociate/reconnect, requesting connections, etc. -->
 	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+	<!-- For http head check as backup for icmp echo/ping to AP -->
 	<uses-permission android:name="android.permission.INTERNET" />
+	<!-- For waking the phone/radio up -->
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<!-- For storing the log so user can send it to me -->
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<!-- For setting Wifi Sleep Policy -->
 	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
 </manifest>
