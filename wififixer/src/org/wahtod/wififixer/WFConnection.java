@@ -351,7 +351,7 @@ public class WFConnection extends Object {
 
 	    case W_REASSOCIATE:
 		// Let's try to reassociate first..
-		clearHandler();
+		tempLock(SHORTWAIT);
 		getWifiManager(ctxt).reassociate();
 		if (logging)
 		    LogService.log(ctxt, appname, ctxt
@@ -362,7 +362,7 @@ public class WFConnection extends Object {
 
 	    case W_RECONNECT:
 		// Ok, now force reconnect..
-		clearHandler();
+		tempLock(SHORTWAIT);
 		getWifiManager(ctxt).reconnect();
 		if (logging)
 		    LogService.log(ctxt, appname, ctxt
@@ -373,6 +373,7 @@ public class WFConnection extends Object {
 
 	    case W_REPAIR:
 		// Start Scan
+		tempLock(SHORTWAIT);
 		startScan(true);
 		wifirepair = W_REASSOCIATE;
 		if (logging)
@@ -403,7 +404,8 @@ public class WFConnection extends Object {
 	     * This is all we want to do.
 	     */
 	    wakelock.lock(true);
-	    checkWifi();
+	    if (!templock)
+		checkWifi();
 	    /*
 	     * Post next run
 	     */
@@ -721,10 +723,12 @@ public class WFConnection extends Object {
 	    try {
 		adjusted = WifiManager.calculateSignalLevel(signal, 5);
 	    } catch (Exception e) {
-		
-		LogService.log(ctxt, appname,context.getString(R.string.thanks_google)+e.getStackTrace().toString());
+
+		LogService.log(ctxt, appname, context
+			.getString(R.string.thanks_google)
+			+ e.getStackTrace().toString());
 		adjusted = 0;
-		
+
 	    }
 	    switch (adjusted) {
 	    case 4:
