@@ -239,12 +239,7 @@ public class WFConnection extends Object {
 		break;
 
 	    case SCANWATCHDOG:
-		if (getWifiManager(ctxt).isWifiEnabled()
-			&& lastscan_time < SystemClock.elapsedRealtime()
-				- SCAN_WATCHDOG_DELAY)
-		    startScan(true);
-		handler.sendEmptyMessageDelayed(SCANWATCHDOG,
-			SCAN_WATCHDOG_DELAY);
+		scanwatchdog();
 		break;
 
 	    }
@@ -1572,6 +1567,31 @@ public class WFConnection extends Object {
 	 */
 	if (PrefUtil.readBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK))
 	    PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, false);
+    }
+
+    public void scanwatchdog() {
+	if (getWifiManager(ctxt).isWifiEnabled()
+		&& !getIsOnWifi(ctxt)
+		&& lastscan_time < SystemClock.elapsedRealtime()
+			- SCAN_WATCHDOG_DELAY) {
+	    /*
+	     * Force the scan
+	     */
+	    getWifiManager(ctxt).startScan();
+	    if (logging)
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.initiating_scan)
+			+ ctxt.getString(R.string.colon)
+			+ String.valueOf(SystemClock.elapsedRealtime()));
+	}
+
+	if (logging)
+	    LogService.log(ctxt, appname, ctxt.getString(R.string.last_scan)
+		    + String.valueOf(lastscan_time));
+	if(screenstate)
+	    handler.sendEmptyMessageDelayed(SCANWATCHDOG, SCAN_WATCHDOG_DELAY);
+	else
+	    handler.sendEmptyMessageDelayed(SCANWATCHDOG, SLEEPWAIT);
     }
 
     public static boolean setNetworkState(final Context context,
