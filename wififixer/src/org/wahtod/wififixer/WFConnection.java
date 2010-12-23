@@ -130,7 +130,7 @@ public class WFConnection extends Object {
 
     // Last Scan
     private static long lastscan_time;
-    private static final int SCAN_WATCHDOG_DELAY = 20000;
+    private static final int SCAN_WATCHDOG_DELAY = 5000;
 
     // for Dbm
     private static final int DBM_FLOOR = -90;
@@ -423,11 +423,13 @@ public class WFConnection extends Object {
 	     */
 	    if (supplicantInterruptCheck(ctxt)) {
 		startScan(true);
-	    } else
-		handlerWrapper(SCAN, CONNECTWAIT);
-
+		handlerWrapper(SCANWATCHDOG, SCAN_WATCHDOG_DELAY);
+	    } else {
+		if (logging)
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.scan_interrupt));
+	    }
 	}
-
     };
 
     /*
@@ -610,7 +612,6 @@ public class WFConnection extends Object {
 	 * Start Main tick
 	 */
 	handler.sendEmptyMessage(MAIN);
-	handlerWrapper(SCANWATCHDOG, SCAN_WATCHDOG_DELAY);
     }
 
     public static void checkBackgroundDataSetting(final Context context) {
@@ -1575,20 +1576,15 @@ public class WFConnection extends Object {
 		&& lastscan_time < SystemClock.elapsedRealtime()
 			- SCAN_WATCHDOG_DELAY) {
 	    /*
-	     * Force the scan
+	     * Reset Wifi, scan didn't succeed.
 	     */
-	    getWifiManager(ctxt).startScan();
-	    if (logging)
-		LogService.log(ctxt, appname, ctxt
-			.getString(R.string.initiating_scan)
-			+ ctxt.getString(R.string.colon)
-			+ String.valueOf(SystemClock.elapsedRealtime()));
+	    toggleWifi();
 	}
 
 	if (logging)
 	    LogService.log(ctxt, appname, ctxt.getString(R.string.last_scan)
 		    + String.valueOf(lastscan_time));
-	if(screenstate)
+	if (screenstate)
 	    handler.sendEmptyMessageDelayed(SCANWATCHDOG, SCAN_WATCHDOG_DELAY);
 	else
 	    handler.sendEmptyMessageDelayed(SCANWATCHDOG, SLEEPWAIT);

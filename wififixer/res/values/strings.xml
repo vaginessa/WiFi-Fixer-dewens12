@@ -158,4 +158,6 @@
 	<string name="cachewfinst">Cacheing WifiManager Instance</string>
 
 	<string name="last_scan">Last scan:</string>
+
+	<string name="scan_interrupt">Scan would interrupt supplicant</string>
 </resources>
