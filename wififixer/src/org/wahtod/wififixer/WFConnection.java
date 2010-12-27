@@ -327,7 +327,6 @@ public class WFConnection extends Object {
 		if (logging) {
 		    LogService.log(ctxt, appname, ctxt
 			    .getString(R.string.shouldrun_false_dying));
-		    // stopSelf();
 		}
 	    } else
 		// Queue next run of main runnable

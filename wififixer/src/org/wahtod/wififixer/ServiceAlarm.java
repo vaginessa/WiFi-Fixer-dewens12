@@ -24,7 +24,7 @@ import android.os.SystemClock;
 
 public final class ServiceAlarm extends Object {
     public static final long PERIOD = 300000;
-    public static final long STARTDELAY = 120000;
+    public static final long STARTDELAY = 30000;
     private static final long NODELAY = 0;
 
     public static boolean alarmExists(final Context c) {
