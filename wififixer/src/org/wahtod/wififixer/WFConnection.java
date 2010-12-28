@@ -81,6 +81,7 @@ public class WFConnection extends Object {
     private static final String INACTIVE = "INACTIVE";
     private static final String COMPLETED = "COMPLETED";
     private static final String CONNECTED = "CONNECTED";
+    private static final String SLEEPING = "SLEEPING";
     private static final String SCANNING = "SCANNING";
 
     // For blank SSIDs
@@ -1052,6 +1053,9 @@ public class WFConnection extends Object {
 	if (sstate == SupplicantState.COMPLETED)
 	    return CONNECTED;
 	else
+	   if(sstate == SupplicantState.DORMANT)
+	       return SLEEPING;
+	   else
 	    return sstate.name();
     }
 
