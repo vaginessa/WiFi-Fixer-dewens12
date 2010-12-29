@@ -162,4 +162,8 @@
 	<string name="scan_interrupt">Scan would interrupt supplicant</string>
 
 	<string name="thanks_google">Thanks, Google!</string>
+
+	<string name="service_onscreenoff">Service:OnScreenOff</string>
+
+	<string name="service_onscreenon">Service:OnScreenOn</string>
 </resources>

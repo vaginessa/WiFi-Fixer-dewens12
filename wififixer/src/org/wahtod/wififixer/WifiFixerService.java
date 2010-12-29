@@ -225,7 +225,7 @@ public class WifiFixerService extends Service implements
 	    PrefUtil.writeBoolean(this, SCREENOFF, true);
 	
 	if (logging)
-	    LogService.log(this, APP_NAME, "Service:OnScreenOff");
+	    LogService.log(this, APP_NAME, getString(R.string.service_onscreenoff));
 	
 	screenstate = false;
     }
@@ -239,7 +239,7 @@ public class WifiFixerService extends Service implements
 	    PrefUtil.writeBoolean(this, SCREENOFF, false);
 	
 	if (logging)
-	    LogService.log(this, APP_NAME, "Service:OnScreenOn");
+	    LogService.log(this, APP_NAME, getString(R.string.service_onscreenon));
 
 	screenstate = true;
     }
