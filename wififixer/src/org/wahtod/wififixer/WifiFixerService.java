@@ -224,6 +224,9 @@ public class WifiFixerService extends Service implements
 	if (Integer.parseInt(Build.VERSION.SDK) >= Build.VERSION_CODES.ECLAIR_MR1)
 	    PrefUtil.writeBoolean(this, SCREENOFF, true);
 	
+	if (logging)
+	    LogService.log(this, APP_NAME, "Service:OnScreenOff");
+	
 	screenstate = false;
     }
 
@@ -234,6 +237,9 @@ public class WifiFixerService extends Service implements
 	 */
 	if (Integer.parseInt(Build.VERSION.SDK) >= Build.VERSION_CODES.ECLAIR_MR1)
 	    PrefUtil.writeBoolean(this, SCREENOFF, false);
+	
+	if (logging)
+	    LogService.log(this, APP_NAME, "Service:OnScreenOn");
 
 	screenstate = true;
     }
@@ -255,10 +261,6 @@ public class WifiFixerService extends Service implements
 	    onScreenOn();
 	else
 	    onScreenOff();
-	/*
-	 * Notify instance of WFConnection
-	 */
-	wifi.onScreenStateChanged(state);
     }
 
     private void preferenceInitialize(final Context context) {
@@ -380,7 +382,7 @@ public class WifiFixerService extends Service implements
     private void setInitialScreenState(final Context context) {
 	screenstateHandler = new ScreenStateHandler(this);
 	screenstate = ScreenStateHandler.getScreenState(context);
-	ScreenStateHandler.setOnScreenStateChangedListener(this);
+	screenstateHandler.setOnScreenStateChangedListener(this);
     }
 
     private void unregisterReceivers() {

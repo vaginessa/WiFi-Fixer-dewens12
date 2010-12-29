@@ -29,7 +29,7 @@ public class ScreenStateHandler {
 	public abstract void onScreenStateChanged(boolean state);
     }
 
-    private static ArrayList<OnScreenStateChangedListener> onScreenStateChangedListener;
+    private static ArrayList<OnScreenStateChangedListener> onScreenStateChangedListener = new ArrayList<OnScreenStateChangedListener>();
     private static boolean registered;
 
     public static boolean getScreenState(final Context context) {
@@ -44,7 +44,7 @@ public class ScreenStateHandler {
 	}
     }
 
-    public static void setOnScreenStateChangedListener(
+    public void setOnScreenStateChangedListener(
 	    OnScreenStateChangedListener listener) {
 	onScreenStateChangedListener.add(listener);
     }
@@ -63,14 +63,15 @@ public class ScreenStateHandler {
     };
 
     public ScreenStateHandler(final Context context) {
-	/*
-	 * Register for screen state events
-	 */
-	IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
-	filter.addAction(Intent.ACTION_SCREEN_ON);
-	context.registerReceiver(receiver, filter);
-	onScreenStateChangedListener = new ArrayList<OnScreenStateChangedListener>();
-	registered = true;
+	if (!registered) {
+	    /*
+	     * Register for screen state events
+	     */
+	    IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+	    filter.addAction(Intent.ACTION_SCREEN_ON);
+	    context.registerReceiver(receiver, filter);
+	    registered = true;
+	}
     }
 
     public void unregister(final Context context) {

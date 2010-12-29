@@ -33,6 +33,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.PrefConstants.Pref;
+import org.wahtod.wififixer.ScreenStateHandler.OnScreenStateChangedListener;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -56,7 +57,7 @@ import android.widget.RemoteViews;
  * Handles all interaction 
  * with WifiManager
  */
-public class WFConnection extends Object {
+public class WFConnection extends Object implements OnScreenStateChangedListener {
     // private static WifiManager getWifiManager(Context);
     private static String cachedIP;
     private static String appname;
@@ -65,6 +66,7 @@ public class WFConnection extends Object {
     private WakeLock wakelock;
     private WifiLock wifilock;
     static boolean screenstate;
+    
 
     // flags
     private static boolean pendingwifitoggle = false;
@@ -156,6 +158,7 @@ public class WFConnection extends Object {
     private static String lastSupplicantState;
     private static RemoteViews statnotif;
     private static Notification notif;
+    private static ScreenStateHandler screenstateH;
 
     // deprecated
     static boolean templock = false;
@@ -517,6 +520,8 @@ public class WFConnection extends Object {
     };
 
     public WFConnection(final Context context, PrefUtil p) {
+	screenstateH = new ScreenStateHandler(context);
+	screenstateH.setOnScreenStateChangedListener(this);
 	prefs = p;
 	appname = LogService.getLogTag(context);
 	screenstate = ScreenStateHandler.getScreenState(context);
