@@ -15,6 +15,8 @@
  */
 package org.wahtod.wififixer;
 
+import java.util.ArrayList;
+
 import org.wahtod.wififixer.LegacySupport.VersionedScreenState;
 
 import android.content.BroadcastReceiver;
@@ -27,7 +29,7 @@ public class ScreenStateHandler {
 	public abstract void onScreenStateChanged(boolean state);
     }
 
-    private static OnScreenStateChangedListener onScreenStateChangedListener;
+    private static ArrayList<OnScreenStateChangedListener> onScreenStateChangedListener; 
     private static boolean registered;
 
     public static boolean getScreenState(final Context context) {
@@ -36,13 +38,15 @@ public class ScreenStateHandler {
     }
 
     private static void onScreenEvent(final boolean state) {
-	if (onScreenStateChangedListener != null)
-	    onScreenStateChangedListener.onScreenStateChanged(state);
+	for(OnScreenStateChangedListener listener:onScreenStateChangedListener){
+	if (listener != null)
+	    listener.onScreenStateChanged(state);
+	}
     }
 
     public static void setOnScreenStateChangedListener(
 	    OnScreenStateChangedListener listener) {
-	onScreenStateChangedListener = listener;
+	onScreenStateChangedListener.add(listener);
     }
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -65,6 +69,7 @@ public class ScreenStateHandler {
 	IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
 	filter.addAction(Intent.ACTION_SCREEN_ON);
 	context.registerReceiver(receiver, filter);
+	onScreenStateChangedListener = new ArrayList<OnScreenStateChangedListener>();
 	registered = true;
     }
 
