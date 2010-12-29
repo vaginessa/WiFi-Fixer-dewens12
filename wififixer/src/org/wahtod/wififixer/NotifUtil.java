@@ -21,6 +21,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.widget.RemoteViews;
 
@@ -100,6 +101,8 @@ public class NotifUtil {
 	    contentView.setTextViewText(R.id.ssid, ssid.substring(0,
 		    MAX_SSID_LENGTH));
 	contentView.setTextViewText(R.id.status, status);
+	contentView.setTextColor(R.id.status, Color.BLACK);
+	contentView.setTextColor(R.id.ssid, Color.BLACK);
 	contentView.setImageViewResource(R.id.signal, signal);
 
 	return contentView;

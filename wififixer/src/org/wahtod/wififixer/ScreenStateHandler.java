@@ -29,7 +29,7 @@ public class ScreenStateHandler {
 	public abstract void onScreenStateChanged(boolean state);
     }
 
-    private static ArrayList<OnScreenStateChangedListener> onScreenStateChangedListener; 
+    private static ArrayList<OnScreenStateChangedListener> onScreenStateChangedListener;
     private static boolean registered;
 
     public static boolean getScreenState(final Context context) {
@@ -38,9 +38,9 @@ public class ScreenStateHandler {
     }
 
     private static void onScreenEvent(final boolean state) {
-	for(OnScreenStateChangedListener listener:onScreenStateChangedListener){
-	if (listener != null)
-	    listener.onScreenStateChanged(state);
+	for (OnScreenStateChangedListener listener : onScreenStateChangedListener) {
+	    if (listener != null)
+		listener.onScreenStateChanged(state);
 	}
     }
 
