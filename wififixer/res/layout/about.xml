@@ -60,7 +60,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dip"
-                        android:text="Privacy Disclosure: The Logging feature stores some personal information, specifically timezone and SSID of configured access points.  It is not enabled by default. The log may manually be sent to the developer."
+                        android:text="Privacy Disclosure:\nLogging is not enabled by default.\nThe log will only be enabled and sent to the developer when requested.\nLogging stores some personal information, specifically current timezone and SSID of configured access points and scanned SSIDs during connection."
                         
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         />
