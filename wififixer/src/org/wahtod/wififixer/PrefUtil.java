@@ -127,9 +127,9 @@ public class PrefUtil extends Object {
 	SharedPreferences settings = ctxt.getSharedPreferences(NETPREFIX
 		+ network, 0);
 	if (settings.contains(key))
-	    return settings.getInt(key, -1);
+	    return settings.getInt(key,0);
 	else
-	    return -1;
+	    return 0;
     }
 
     public static void writeNetworkPref(final Context ctxt,

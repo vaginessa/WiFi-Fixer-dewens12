@@ -1655,8 +1655,8 @@ public class WFConnection extends Object implements
 		    NETSTATE, 1);
 
 	else
-	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(
-		    network).SSID, NETSTATE, 0);
+	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
+		    NETSTATE, 0);
     }
 
     public static String getnetworkSSID(final int network) {
@@ -1679,8 +1679,8 @@ public class WFConnection extends Object implements
 	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
 		    PrefConstants.NONMANAGED, 1);
 	else
-	    PrefUtil.writeNetworkPref(context, wm.getConfiguredNetworks().get(
-		    network).SSID, PrefConstants.NONMANAGED, 0);
+	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
+		    PrefConstants.NONMANAGED, 0);
     }
 
     public static boolean readNetworkState(final Context context,
