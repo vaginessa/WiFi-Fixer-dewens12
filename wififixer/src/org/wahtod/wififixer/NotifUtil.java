@@ -69,7 +69,7 @@ public class NotifUtil {
 	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 		new Intent(context, WifiFixerActivity.class), 0);
 
-	Notification notif = new Notification(R.drawable.signal4, context
+	Notification notif = new Notification(R.drawable.router32, context
 		.getString(R.string.network_status), System.currentTimeMillis());
 
 	if (contentView != null) {
@@ -145,7 +145,7 @@ public class NotifUtil {
 
 	CharSequence from = context.getText(R.string.app_name);
 
-	Notification notif = new Notification(R.drawable.icon, tickerText,
+	Notification notif = new Notification(R.drawable.statusicon, tickerText,
 		System.currentTimeMillis());
 
 	notif.setLatestEventInfo(context, from, message, contentIntent);

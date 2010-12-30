@@ -46,7 +46,8 @@ public class ScreenStateHandler {
 
     public void setOnScreenStateChangedListener(
 	    OnScreenStateChangedListener listener) {
-	onScreenStateChangedListener.add(listener);
+	if (!onScreenStateChangedListener.contains(listener))
+	    onScreenStateChangedListener.add(listener);
     }
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
