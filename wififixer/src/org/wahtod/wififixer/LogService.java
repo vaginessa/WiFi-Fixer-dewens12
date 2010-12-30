@@ -16,8 +16,10 @@
 
 package org.wahtod.wififixer;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Date;
 
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
@@ -50,7 +52,7 @@ public class LogService extends IntentService {
     private static String vstring = SPACE;
     private static String app_name = SPACE;
     private static String sMessage = SPACE;
-    private static FileWriter fWriter;
+    private static BufferedWriter bwriter;
     public static final String TIMESTAMP = "TIMESTAMP";
     public static final String DUMPBUILD = "DUMPBUILD";
     public static final String LOG = "LOG";
@@ -58,6 +60,9 @@ public class LogService extends IntentService {
     // Log Timestamp
     private static final long TS_WAIT_SCREENON = 10000;
     private static final long TS_WAIT_SCREENOFF = 60000;
+
+    // Buffer Size
+    private static final int WRITE_BUFFER_SIZE = 4096;
 
     private static VersionedScreenState vscreenstate;
     private static VersionedLogFile vlogfile;
@@ -174,15 +179,32 @@ public class LogService extends IntentService {
 	    if (!file.exists()) {
 		file.createNewFile();
 	    }
-
-	    fWriter = new FileWriter(file.getAbsolutePath(), true);
-	    fWriter.write(message + NEWLINE);
-	    fWriter.flush();
-	    fWriter.close();
+	    if (bwriter == null)
+		bwriter = new BufferedWriter(new FileWriter(file
+			.getAbsolutePath()), WRITE_BUFFER_SIZE);
+	    bwriter.write(message + NEWLINE);
 	} catch (Exception e) {
-
 	    e.printStackTrace();
 	}
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.IntentService#onDestroy()
+     */
+    @Override
+    public void onDestroy() {
+	/*
+	 * Opt for FileWriter use flushing only as intentservice destroyed
+	 */
+	try {
+	    bwriter.close();
+	    bwriter = null;
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+	super.onDestroy();
     }
 
     @Override
