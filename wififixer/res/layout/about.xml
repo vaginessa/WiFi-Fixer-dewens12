@@ -55,16 +55,8 @@
                         android:textSize="16dp"
                         android:textColor="#bebebe"
                         android:autoLink="web"/>
-
-                <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dip"
-                        android:text="This program is distributed in the hope that it will be useful, but without any warranty; without even the implied warranty of merchantability or fitness for a purpose."
                         
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        />
-                <TextView
+                         <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dip"
@@ -72,6 +64,16 @@
                         
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="License: see\n http://www.apache.org/licenses/LICENSE-2.0\n\n\n"
+                        android:autoLink="web"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        />
+               
 
         </LinearLayout>
 
