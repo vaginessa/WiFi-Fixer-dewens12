@@ -69,7 +69,7 @@ public class WidgetHandler extends BroadcastReceiver {
 	    wlock.lock(true);
 
 	    /*
-	     * Process Message
+	     * Process MESSAGE
 	     */
 	    switch (message.what) {
 

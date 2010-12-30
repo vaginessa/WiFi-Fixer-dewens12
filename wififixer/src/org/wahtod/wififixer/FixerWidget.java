@@ -47,9 +47,9 @@ public class FixerWidget extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-	if(PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
+	if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
 	    LogService.log(context, LogService.getLogTag(context), intent
-		.toString());
+		    .toString());
 	super.onReceive(context, intent);
 
     }
@@ -61,9 +61,9 @@ public class FixerWidget extends AppWidgetProvider {
 	/*
 	 * Send Update To Widgets
 	 */
-	if(PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
+	if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
 	    LogService.log(context, LogService.getLogTag(context), context
-		.getString(R.string.widget_update_called));
+		    .getString(R.string.widget_update_called));
 	context.startService(new Intent(context, UpdateService.class));
 	super.onUpdate(context, appWidgetManager, appWidgetIds);
     }

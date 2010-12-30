@@ -20,10 +20,8 @@ import org.wahtod.wififixer.PrefConstants.Pref;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -63,21 +61,6 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	return state;
     }
 
-    private static void setServiceEnabled(final Context context,
-	    final Boolean state) {
-	PackageManager pm = context.getPackageManager();
-	ComponentName service = new ComponentName(context,
-		WifiFixerService.class);
-	if (state)
-	    pm.setComponentEnabledSetting(service,
-		    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-		    PackageManager.DONT_KILL_APP);
-	else
-	    pm.setComponentEnabledSetting(service,
-		    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-		    PackageManager.DONT_KILL_APP);
-    }
-
     private Handler tHandler = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
@@ -109,7 +92,8 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	 */
 	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)
 		&& !isserviceDisabled(context)) {
-	    setServiceEnabled(context, true);
+	    ServiceAlarm.setServiceEnabled(context, WifiFixerService.class,
+		    true);
 	    context.startService(new Intent(context, WifiFixerService.class));
 	}
 	/*
@@ -118,8 +102,9 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	 */
 	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_DISABLE)) {
 	    context.stopService(new Intent(context, WifiFixerService.class));
-	    setServiceEnabled(context, false);
-	    ServiceAlarm.setLogTS(context, false, 0);
+	    ServiceAlarm.setServiceEnabled(context, WifiFixerService.class,
+		    false);
+	    context.stopService(new Intent(context, LogService.class));
 	    ServiceAlarm.unsetAlarm(context);
 	} else if (action.equals(IntentConstants.ACTION_WIFI_ON)) {
 	    if (!PrefUtil.readBoolean(context, PrefConstants.WIFI_STATE_LOCK))

@@ -166,4 +166,5 @@
 	<string name="service_onscreenoff">Service:OnScreenOff</string>
 
 	<string name="service_onscreenon">Service:OnScreenOn</string>
+
 </resources>

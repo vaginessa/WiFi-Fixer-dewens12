@@ -20,7 +20,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.wahtod.wififixer.LegacySupport.LegacyLogFile;
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
 import org.wahtod.wififixer.PrefConstants.Pref;
 import org.wahtod.wififixer.R.id;
@@ -215,11 +214,6 @@ public class WifiFixerActivity extends Activity {
 	/*
 	 * Delete old log
 	 */
-	if (vlogfile != null) {
-
-	} else
-	    vlogfile = new LegacyLogFile();
-
 	File file = vlogfile.getLogFile(this);
 
 	if (file.delete())
@@ -308,14 +302,6 @@ public class WifiFixerActivity extends Activity {
 	loggingFlag = state;
 	PrefUtil.writeBoolean(this, Pref.LOG_KEY.key(), state);
 	PrefUtil.notifyPrefChange(this, Pref.LOG_KEY);
-	if (state) {
-
-	    if (vlogfile != null) {
-
-	    } else
-		vlogfile = new LegacyLogFile();
-
-	}
     }
 
     void setText() {

@@ -26,7 +26,7 @@ import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
 import org.wahtod.wififixer.LegacySupport.VersionedScreenState;
 import org.wahtod.wififixer.PrefConstants.Pref;
 
-import android.app.IntentService;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -34,38 +34,74 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 
-public class LogService extends IntentService {
-
-    public LogService() {
-	super(LogService.class.getName());
-    }
+public class LogService extends Service {
 
     public static final String APPNAME = "APPNAME";
-    public static final String Message = "Message";
+    public static final String MESSAGE = "MESSAGE";
+    public static final String TS_DISABLE = "DISABLE";
     private static final String BUILD = "Build:";
     private static final String SPACE = " ";
     private static final String COLON = ":";
     private static final String NEWLINE = "\n";
     public static int VERSION = 0;
     private static String vstring = SPACE;
-    private static String app_name = SPACE;
-    private static String sMessage = SPACE;
     private static BufferedWriter bwriter;
-    public static final String TIMESTAMP = "TIMESTAMP";
     public static final String DUMPBUILD = "DUMPBUILD";
     public static final String LOG = "LOG";
+
+    public static final String TIMESTAMP = "TS";
+    public static final String TS_DELAY = "TSDELAY";
 
     // Log Timestamp
     private static final long TS_WAIT_SCREENON = 10000;
     private static final long TS_WAIT_SCREENOFF = 60000;
 
-    // Buffer Size
+    // Write buffer constants
     private static final int WRITE_BUFFER_SIZE = 4096;
+    private static final int BUFFER_FLUSH_DELAY = 30000;
 
     private static VersionedScreenState vscreenstate;
     private static VersionedLogFile vlogfile;
+    private static File file;
+    private static Context ctxt;
+
+    /*
+     * Handler constants
+     */
+
+    private static final int TS_MESSAGE = 1;
+    private static final int FLUSH_MESSAGE = 2;
+
+    private Handler handler = new Handler() {
+	@Override
+	public void handleMessage(Message message) {
+	    switch (message.what) {
+
+	    case TS_MESSAGE:
+		timeStamp(ctxt);
+		break;
+
+	    case FLUSH_MESSAGE:
+		flushBwriter();
+		break;
+
+	    }
+	}
+    };
+
+    private void flushBwriter() {
+	try {
+	    bwriter.flush();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+	handler.sendEmptyMessageDelayed(FLUSH_MESSAGE, BUFFER_FLUSH_DELAY);
+    }
 
     static String getBuildInfo() {
 
@@ -88,62 +124,125 @@ public class LogService extends IntentService {
     }
 
     public static String getLogTag(final Context context) {
+	if (context == null)
+	    return WifiFixerService.class.getSimpleName();
 	return context.getClass().getSimpleName();
     }
 
-    void handleStart(Intent intent) {
-
-	if (intent.hasExtra(APPNAME) && intent.hasExtra(Message)) {
-	    app_name = intent.getStringExtra(APPNAME);
-	    sMessage = intent.getStringExtra(Message);
-	    processLogIntent(this, app_name, sMessage);
+    private void handleIntent(Intent intent) {
+	try {
+	    handleStart(intent);
+	} catch (NullPointerException e) {
+	    /*
+	     * Ignore null intents: system uses them to stop after processing
+	     */
 	}
     }
 
+    private void handleStart(final Intent intent) {
+
+	if (intent.hasExtra(APPNAME) && intent.hasExtra(MESSAGE)) {
+	    String app_name = intent.getStringExtra(APPNAME);
+	    String sMessage = intent.getStringExtra(MESSAGE);
+	    if (app_name.equals(TIMESTAMP)) {
+		handleTSCommand(intent);
+	    } else
+		processLogIntent(this, app_name, sMessage);
+	}
+    }
+
+    private void handleTSCommand(final Intent intent) {
+	if (intent.getStringExtra(MESSAGE).equals(TS_DISABLE))
+	    handler.removeMessages(TS_MESSAGE);
+	else {
+	    handler.removeMessages(TS_MESSAGE);
+	    handler.sendEmptyMessageDelayed(TS_MESSAGE, Long.valueOf(intent
+		    .getStringExtra(MESSAGE)));
+	}
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.Service#onStart(android.content.Intent, int)
+     */
+    @Override
+    public void onStart(Intent intent, int startId) {
+	handleIntent(intent);
+	super.onStart(intent, startId);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.Service#onStartCommand(android.content.Intent, int, int)
+     */
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+	handleIntent(intent);
+	return START_STICKY;
+    }
+
     public static void log(final Context context, final String APP_NAME,
-	    final String Message) {
+	    final String message) {
 	Intent sendIntent = new Intent(context, LogService.class);
 	sendIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
-	sendIntent.putExtra(LogService.APPNAME, APP_NAME);
-	sendIntent.putExtra(LogService.Message, Message);
+	sendIntent.putExtra(APPNAME, APP_NAME);
+	sendIntent.putExtra(MESSAGE, message);
 	context.startService(sendIntent);
     }
 
     @Override
     public void onCreate() {
 	super.onCreate();
+	ctxt = this;
 
 	if (vscreenstate == null)
 	    vscreenstate = VersionedScreenState.newInstance(this);
-	if (vlogfile == null)
+	if (vlogfile == null) {
 	    vlogfile = VersionedLogFile.newInstance(this);
+	    file = vlogfile.getLogFile(this);
+	}
 	if (VERSION == 0)
 	    getPackageInfo();
+
+	handler.sendEmptyMessageDelayed(FLUSH_MESSAGE, BUFFER_FLUSH_DELAY);
+	handler.sendEmptyMessageDelayed(TS_MESSAGE, WRITE_BUFFER_SIZE);
 
     }
 
     public static boolean processCommands(final Context context,
 	    final String command) {
 	/*
-	 * Incoming intents will have a command which we process here
+	 * Incoming intents might have a command process or pass to add to log
 	 */
-	if (command.equals(TIMESTAMP)) {
-	    timeStamp(context);
+	if (command.equals(DUMPBUILD)) {
+	    processLogIntent(context, getLogTag(context), getBuildInfo());
 	    return true;
-	} else if (command.equals(DUMPBUILD)) {
-	    processLogIntent(context, WifiFixerService.APP_NAME, getBuildInfo());
-	    return true;
-	}
-
-	return false;
+	} else
+	    return false;
     }
 
-    private static void timeStamp(final Context context) {
+    public static void setLogTS(final Context context, final boolean state,
+	    final long delay) {
+	Intent intent = new Intent(context, LogService.class);
+	intent.putExtra(APPNAME, TIMESTAMP);
+	if (state) {
+	    intent.putExtra(MESSAGE, String.valueOf(delay));
+	} else {
+	    intent.putExtra(MESSAGE, TS_DISABLE);
+	}
+
+	context.startService(intent);
+    }
+
+    private void timeStamp(final Context context) {
 
 	Date time = new Date();
 	String message = BUILD + vstring + COLON + VERSION + SPACE + COLON
 		+ time.toString();
-	processLogIntent(context, WifiFixerService.APP_NAME, message);
+	processLogIntent(context, WifiFixerService.class.getSimpleName(),
+		message);
 
 	/*
 	 * Schedule next timestamp or terminate
@@ -151,9 +250,9 @@ public class LogService extends IntentService {
 	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
 	    return;
 	else if (vscreenstate.getScreenState(context))
-	    ServiceAlarm.setLogTS(context, true, TS_WAIT_SCREENON);
+	    handler.sendEmptyMessageDelayed(TS_MESSAGE, TS_WAIT_SCREENON);
 	else
-	    ServiceAlarm.setLogTS(context, true, TS_WAIT_SCREENOFF);
+	    handler.sendEmptyMessageDelayed(TS_MESSAGE, TS_WAIT_SCREENOFF);
     }
 
     private static void processLogIntent(final Context context,
@@ -173,7 +272,8 @@ public class LogService extends IntentService {
 	    return;
 	}
 
-	File file = vlogfile.getLogFile(context);
+	if (file == null)
+	    file = vlogfile.getLogFile(ctxt);
 
 	try {
 	    if (!file.exists()) {
@@ -181,7 +281,7 @@ public class LogService extends IntentService {
 	    }
 	    if (bwriter == null)
 		bwriter = new BufferedWriter(new FileWriter(file
-			.getAbsolutePath()), WRITE_BUFFER_SIZE);
+			.getAbsolutePath(), true), WRITE_BUFFER_SIZE);
 	    bwriter.write(message + NEWLINE);
 	} catch (Exception e) {
 	    e.printStackTrace();
@@ -198,6 +298,8 @@ public class LogService extends IntentService {
 	/*
 	 * Opt for FileWriter use flushing only as intentservice destroyed
 	 */
+	handler.removeMessages(TS_MESSAGE);
+	handler.removeMessages(FLUSH_MESSAGE);
 	try {
 	    bwriter.close();
 	    bwriter = null;
@@ -209,13 +311,7 @@ public class LogService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-	try {
-	    handleStart(intent);
-	} catch (NullPointerException e) {
-	    /*
-	     * Ignore null intents: system uses them to stop after processing
-	     */
-	}
+    public IBinder onBind(Intent intent) {
+	return null;
     }
 }

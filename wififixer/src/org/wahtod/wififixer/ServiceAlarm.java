@@ -18,8 +18,10 @@ package org.wahtod.wififixer;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.SystemClock;
 
 public final class ServiceAlarm extends Object {
@@ -32,6 +34,22 @@ public final class ServiceAlarm extends Object {
 	return (PendingIntent.getBroadcast(c, 0, intent,
 		PendingIntent.FLAG_NO_CREATE) != null);
 
+    }
+
+    public static void setServiceEnabled(final Context context,
+	    final Class<?> cls, final Boolean state) {
+	PackageManager pm = context.getPackageManager();
+	ComponentName service = new ComponentName(context, cls);
+	if (state)
+	    pm.setComponentEnabledSetting(service,
+		    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+		    PackageManager.DONT_KILL_APP);
+	else {
+	    pm.setComponentEnabledSetting(service,
+		    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+		    PackageManager.DONT_KILL_APP);
+	    context.stopService(new Intent(context, cls));
+	}
     }
 
     public static void setAlarm(final Context c, final boolean initialdelay) {
@@ -62,22 +80,5 @@ public final class ServiceAlarm extends Object {
 		0);
 
 	mgr.cancel(pendingintent);
-    }
-
-    public static void setLogTS(final Context c, final boolean state,
-	    final long delay) {
-	Intent intent = new Intent(c, LogService.class);
-	intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
-	intent.putExtra(LogService.APPNAME, LogService.TIMESTAMP);
-	intent.putExtra(LogService.Message, " ");
-	AlarmManager mgr = (AlarmManager) c
-		.getSystemService(Context.ALARM_SERVICE);
-	PendingIntent pendingintent = PendingIntent.getService(c, 0, intent, 0);
-	if (state)
-	    mgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock
-		    .elapsedRealtime()
-		    + delay, pendingintent);
-	else
-	    mgr.cancel(pendingintent);
     }
 }
