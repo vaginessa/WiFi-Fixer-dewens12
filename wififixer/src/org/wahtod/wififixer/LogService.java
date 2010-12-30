@@ -203,6 +203,7 @@ public class LogService extends IntentService {
 	    bwriter = null;
 	} catch (IOException e) {
 	    e.printStackTrace();
+	    bwriter = null;
 	}
 	super.onDestroy();
     }
