@@ -602,9 +602,11 @@ public class WifiFixerActivity extends Activity {
 	if (!WFConnection.getNetworkState(ctxt, clicked_position)) {
 	    menu.setGroupEnabled(3, false);
 	    menu.setGroupEnabled(2, false);
-	} else {
+	} else
 	    menu.setGroupEnabled(1, false);
-	}
+
+	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY.key()))
+	    menu.setGroupEnabled(3, false);
     }
 
     @Override
