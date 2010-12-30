@@ -145,8 +145,8 @@ public class NotifUtil {
 
 	CharSequence from = context.getText(R.string.app_name);
 
-	Notification notif = new Notification(R.drawable.statusicon, tickerText,
-		System.currentTimeMillis());
+	Notification notif = new Notification(R.drawable.statusicon,
+		tickerText, System.currentTimeMillis());
 
 	notif.setLatestEventInfo(context, from, message, contentIntent);
 	notif.flags = Notification.FLAG_AUTO_CANCEL;

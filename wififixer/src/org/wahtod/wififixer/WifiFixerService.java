@@ -223,10 +223,11 @@ public class WifiFixerService extends Service implements
 	 */
 	if (Integer.parseInt(Build.VERSION.SDK) >= Build.VERSION_CODES.ECLAIR_MR1)
 	    PrefUtil.writeBoolean(this, SCREENOFF, true);
-	
+
 	if (logging)
-	    LogService.log(this, APP_NAME, getString(R.string.service_onscreenoff));
-	
+	    LogService.log(this, APP_NAME,
+		    getString(R.string.service_onscreenoff));
+
 	screenstate = false;
     }
 
@@ -237,9 +238,10 @@ public class WifiFixerService extends Service implements
 	 */
 	if (Integer.parseInt(Build.VERSION.SDK) >= Build.VERSION_CODES.ECLAIR_MR1)
 	    PrefUtil.writeBoolean(this, SCREENOFF, false);
-	
+
 	if (logging)
-	    LogService.log(this, APP_NAME, getString(R.string.service_onscreenon));
+	    LogService.log(this, APP_NAME,
+		    getString(R.string.service_onscreenon));
 
 	screenstate = true;
     }

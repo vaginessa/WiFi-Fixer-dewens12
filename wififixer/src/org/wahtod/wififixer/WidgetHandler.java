@@ -55,7 +55,7 @@ public class WidgetHandler extends BroadcastReceiver {
      */
     private static final int TOGGLE_DELAY = 8000;
     private static final int WATCHDOG_DELAY = 11000;
-    
+
     private static WifiManager wm;
 
     private Handler hWifiState = new Handler() {
@@ -125,7 +125,7 @@ public class WidgetHandler extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 	if (ctxt == null)
 	    ctxt = context;
-	
+
 	/*
 	 * If Wifi is disabled, notify
 	 */
@@ -145,7 +145,7 @@ public class WidgetHandler extends BroadcastReceiver {
 	 * Turn on WIFI
 	 */
 	if (action.equals(WIFI_ON))
-	    setWifiState(context, true); 
+	    setWifiState(context, true);
 	/*
 	 * Turn off Wifi
 	 */

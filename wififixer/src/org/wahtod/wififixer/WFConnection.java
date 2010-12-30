@@ -57,7 +57,8 @@ import android.widget.RemoteViews;
  * Handles all interaction 
  * with WifiManager
  */
-public class WFConnection extends Object implements OnScreenStateChangedListener {
+public class WFConnection extends Object implements
+	OnScreenStateChangedListener {
     // private static WifiManager getWifiManager(Context);
     private static String cachedIP;
     private static String appname;
@@ -66,7 +67,6 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
     private WakeLock wakelock;
     private WifiLock wifilock;
     static boolean screenstate;
-    
 
     // flags
     private static boolean pendingwifitoggle = false;
@@ -1057,10 +1057,9 @@ public class WFConnection extends Object implements OnScreenStateChangedListener
 		.getSupplicantState();
 	if (sstate == SupplicantState.COMPLETED)
 	    return CONNECTED;
+	else if (sstate == SupplicantState.DORMANT)
+	    return SLEEPING;
 	else
-	   if(sstate == SupplicantState.DORMANT)
-	       return SLEEPING;
-	   else
 	    return sstate.name();
     }
 

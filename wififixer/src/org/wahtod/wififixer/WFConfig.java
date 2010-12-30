@@ -39,15 +39,15 @@ public class WFConfig extends Object {
 	wificonfig.BSSID = sResult.BSSID;
     }
 
-    public static WifiConfiguration sparseConfigBSSID(
-	    final String bssid, final int networkid) {
+    public static WifiConfiguration sparseConfigBSSID(final String bssid,
+	    final int networkid) {
 	WifiConfiguration config = new WifiConfiguration();
 	config.networkId = networkid;
 	config.BSSID = bssid;
 
 	return config;
     }
-    
+
     public static WifiConfiguration sparseConfigPriority(final int priority,
 	    final int networkid) {
 	WifiConfiguration config = new WifiConfiguration();

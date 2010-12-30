@@ -24,13 +24,12 @@ public class WifiLock {
     private static final String WIFILOCK_TAG = "WFWIFILOCK";
 
     public WifiLock(final Context context) {
-	 WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+	WifiManager wm = (WifiManager) context
+		.getSystemService(Context.WIFI_SERVICE);
 	/*
-	 * We want WifiManager.WIFI_MODE_FULL as we're
-	 * not just scanning
+	 * We want WifiManager.WIFI_MODE_FULL as we're not just scanning
 	 */
-	wifilock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL,
-		WIFILOCK_TAG);
+	wifilock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, WIFILOCK_TAG);
     }
 
     public void lock(final boolean state) {

@@ -107,10 +107,10 @@ public class LogService extends IntentService {
     @Override
     public void onCreate() {
 	super.onCreate();
-	
+
 	if (vscreenstate == null)
 	    vscreenstate = VersionedScreenState.newInstance(this);
-	if(vlogfile == null)
+	if (vlogfile == null)
 	    vlogfile = VersionedLogFile.newInstance(this);
 	if (VERSION == 0)
 	    getPackageInfo();
