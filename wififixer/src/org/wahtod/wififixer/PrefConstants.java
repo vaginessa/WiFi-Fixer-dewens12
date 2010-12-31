@@ -33,6 +33,7 @@ public class PrefConstants {
     static final String WIFI_STATE_LOCK = "WFSTATELOCK";
     static final String LOGGING_MENU = "Logging";
     public static final String NONMANAGED = "NONMANAGED";
+    public static final String NETSTATE = "ENABLEDSTATE";
 
     /*
      * PrefsList enum
@@ -61,6 +62,34 @@ public class PrefConstants {
 	}
 
 	public static Pref get(final String pstring) {
+
+	    return lookup.get(pstring);
+	}
+
+    }
+
+    public static final int NETPREFS = 2;
+
+    static enum NetPref {
+	DISABLED_KEY("ENABLEDSTATE"), NONMANAGED_KEY("NONMANAGED");
+
+	private final String key;
+	private static final Map<String, NetPref> lookup = new HashMap<String, NetPref>();
+
+	static {
+	    for (NetPref p : EnumSet.allOf(NetPref.class))
+		lookup.put(p.key(), p);
+	}
+
+	NetPref(String key) {
+	    this.key = key;
+	}
+
+	public String key() {
+	    return key;
+	}
+
+	public static NetPref get(final String pstring) {
 
 	    return lookup.get(pstring);
 	}

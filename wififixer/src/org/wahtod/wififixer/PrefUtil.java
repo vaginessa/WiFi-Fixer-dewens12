@@ -16,6 +16,9 @@
 
 package org.wahtod.wififixer;
 
+import java.util.HashMap;
+
+import org.wahtod.wififixer.PrefConstants.NetPref;
 import org.wahtod.wififixer.PrefConstants.Pref;
 
 import android.content.BroadcastReceiver;
@@ -39,6 +42,7 @@ public class PrefUtil extends Object {
      */
     private boolean[] keyVals;
     private Context context;
+    private static HashMap<String, int[]> netprefs;
 
     private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
 	public void onReceive(final Context context, final Intent intent) {
@@ -55,6 +59,32 @@ public class PrefUtil extends Object {
 	keyVals = new boolean[Pref.values().length];
 	context.registerReceiver(changeReceiver, new IntentFilter(
 		VALUE_CHANGED_ACTION));
+	netprefs = new HashMap<String, int[]>();
+    }
+
+    public static void putnetPref(final NetPref pref, final String network,
+	    final int value,HashMap<String, int[]> netprefs) {
+	if (netprefs == null)
+	    return;
+	int[] intTemp = netprefs.get(network);
+	if (intTemp.length == 0) {
+	    intTemp[pref.ordinal()] = value;
+	}
+	netprefs.put(network, intTemp);
+    }
+
+    public static int getnetPref(final Context context,final NetPref pref, final String network, HashMap<String, int[]> netprefs) {
+	int ordinal = pref.ordinal();
+	if (netprefs == null)
+	    return 0;
+	
+	if (!netprefs.containsKey(network)) {
+	    int[] intarray = new int[PrefConstants.NETPREFS];
+	    intarray[ordinal] = readNetworkPref(context, network, pref);
+	    netprefs.put(network, intarray);
+	    return intarray[ordinal];
+	} else
+	    return netprefs.get(network)[ordinal];
     }
 
     public void loadPrefs() {
@@ -123,22 +153,35 @@ public class PrefUtil extends Object {
     }
 
     public static int readNetworkPref(final Context ctxt, final String network,
-	    final String key) {
+	    final NetPref pref) {
 	SharedPreferences settings = ctxt.getSharedPreferences(NETPREFIX
 		+ network, 0);
-	if (settings.contains(key))
-	    return settings.getInt(key,0);
-	else
+	String key = pref.key();
+
+	if (settings.contains(key)) {
+	    /*
+	     * Logic for read cacheing in netprefs
+	     */
+	    int value = settings.getInt(key, 0);
+	    if (getnetPref(ctxt, pref, network, netprefs) != value)
+		putnetPref(pref, network, value, netprefs);
+	    return value;
+	} else
 	    return 0;
     }
 
-    public static void writeNetworkPref(final Context ctxt,
-	    final String network, final String key, final int value) {
+    public static  void writeNetworkPref(final Context ctxt, final String network,
+	    final NetPref pref, final int value) {
 	SharedPreferences settings = ctxt.getSharedPreferences(NETPREFIX
 		+ network, 0);
 	SharedPreferences.Editor editor = settings.edit();
-	editor.putInt(key, value);
+	editor.putInt(pref.key(), value);
 	editor.commit();
+	/*
+	 * Logic for write cacheing in netprefs
+	 */
+	if (getnetPref(ctxt, pref, network, netprefs) != value)
+		putnetPref(pref, network, value, netprefs);
     }
 
     public static boolean readBoolean(final Context ctxt, final String key) {

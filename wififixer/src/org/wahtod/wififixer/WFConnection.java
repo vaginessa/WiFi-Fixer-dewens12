@@ -32,6 +32,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.PrefConstants.NetPref;
 import org.wahtod.wififixer.PrefConstants.Pref;
 import org.wahtod.wififixer.ScreenStateHandler.OnScreenStateChangedListener;
 
@@ -88,9 +89,6 @@ public class WFConnection extends Object implements
 
     // For blank SSIDs
     private static final String NULL_SSID = "None";
-
-    // Enabled state
-    private static final String NETSTATE = "ENABLEDSTATE";
 
     // Wifi Connect Intent
     public static final String CONNECTINTENT = "org.wahtod.wififixer.CONNECT";
@@ -1075,6 +1073,58 @@ public class WFConnection extends Object implements
 	return wm;
     }
 
+    public static boolean getNetworkState(final Context context,
+	    final int network) {
+	if (getWifiManager(context).getConfiguredNetworks().get(network).status == WifiConfiguration.Status.DISABLED)
+	    return false;
+	else
+	    return true;
+    }
+
+    public static void writeNetworkState(final Context context,
+	    final int network, final boolean state) {
+	if (state)
+	    prefs.writeNetworkPref(context, getnetworkSSID(network),
+		    NetPref.DISABLED_KEY, 1);
+
+	else
+	    prefs.writeNetworkPref(context, getnetworkSSID(network),
+		    NetPref.DISABLED_KEY, 0);
+    }
+
+    public static String getnetworkSSID(final int network) {
+	return wm.getConfiguredNetworks().get(network).SSID.replace("\"", "");
+    }
+
+    public static boolean readManagedState(final Context context,
+	    final int network) {
+
+	if (prefs.readNetworkPref(context, getnetworkSSID(network),
+		NetPref.NONMANAGED_KEY) == 1)
+	    return true;
+	else
+	    return false;
+    }
+
+    public static void writeManagedState(final Context context,
+	    final int network, final boolean state) {
+	if (state)
+	    prefs.writeNetworkPref(context, getnetworkSSID(network),
+		    NetPref.NONMANAGED_KEY, 1);
+	else
+	    prefs.writeNetworkPref(context, getnetworkSSID(network),
+		    NetPref.NONMANAGED_KEY, 0);
+    }
+
+    public static boolean readNetworkState(final Context context,
+	    final int network) {
+	if (prefs.readNetworkPref(context, getnetworkSSID(network),
+		NetPref.DISABLED_KEY) == 1)
+	    return true;
+	else
+	    return false;
+    }
+
     private void handleConnect() {
 	if (connectee.SSID.contains(getSSID())) {
 	    if (prefs.getFlag(Pref.LOG_KEY))
@@ -1640,58 +1690,6 @@ public class WFConnection extends Object implements
 	    return false;
     }
 
-    public static boolean getNetworkState(final Context context,
-	    final int network) {
-	if (getWifiManager(context).getConfiguredNetworks().get(network).status == WifiConfiguration.Status.DISABLED)
-	    return false;
-	else
-	    return true;
-    }
-
-    public static void writeNetworkState(final Context context,
-	    final int network, final boolean state) {
-	if (state)
-	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
-		    NETSTATE, 1);
-
-	else
-	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
-		    NETSTATE, 0);
-    }
-
-    public static String getnetworkSSID(final int network) {
-	return wm.getConfiguredNetworks().get(network).SSID.replace("\"", "");
-    }
-
-    public static boolean readManagedState(final Context context,
-	    final int network) {
-
-	if (PrefUtil.readNetworkPref(context, getnetworkSSID(network),
-		PrefConstants.NONMANAGED) == 1)
-	    return true;
-	else
-	    return false;
-    }
-
-    public static void writeManagedState(final Context context,
-	    final int network, final boolean state) {
-	if (state)
-	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
-		    PrefConstants.NONMANAGED, 1);
-	else
-	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
-		    PrefConstants.NONMANAGED, 0);
-    }
-
-    public static boolean readNetworkState(final Context context,
-	    final int network) {
-	if (PrefUtil
-		.readNetworkPref(context, getnetworkSSID(network), NETSTATE) == 1)
-	    return true;
-	else
-	    return false;
-    }
-
     private void signalHop() {
 	/*
 	 * Need to re-implement best-network-by-signal-and-availability
@@ -1778,7 +1776,7 @@ public class WFConnection extends Object implements
     }
 
     private void supplicantFix() {
-	// Toggling wifi fixes the supplicant
+	// Toggling wifi resets the supplicant
 	toggleWifi();
 
 	if (prefs.getFlag(Pref.LOG_KEY))
