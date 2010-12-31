@@ -37,6 +37,7 @@ public class PrefUtil extends Object {
     private static final String NETVALUE_CHANGED_ACTION = "ACTION.NETPREFS.VALUECHANGED";
     private static final String NET_KEY = "NETKEY";
     private static final String VALUE_KEY = "VALUEKEY";
+    private static final String INT_KEY = "INTKEY";
     private static final String NETPREFIX = "n_";
 
     /*
@@ -58,9 +59,8 @@ public class PrefUtil extends Object {
 		valuekey = intent.getStringExtra(VALUE_KEY);
 		NetPref np = NetPref.get(valuekey);
 		if (np != null) {
-		    String network = intent.getStringExtra(NET_KEY);
-		    handleNetPrefChange(np, network, readNetworkPref(context,
-			    network, np));
+		    handleNetPrefChange(np, intent.getStringExtra(NET_KEY),
+			    intent.getIntExtra(INT_KEY, 0));
 		}
 	    }
 	}
@@ -79,9 +79,11 @@ public class PrefUtil extends Object {
 	    final int value) {
 	int[] intTemp = netprefs.get(network);
 	if (intTemp == null) {
-	    intTemp = new int[PrefConstants.NETPREFS];
-	    intTemp[pref.ordinal()] = value;
+	    intTemp = new int[PrefConstants.NUMNETPREFS];
 	}
+	intTemp[pref.ordinal()] = value;
+	LogService.log(context, LogService.getLogTag(context), pref.key() + ":"
+		+ network + ":" + intTemp[pref.ordinal()]);
 	netprefs.put(network, intTemp);
     }
 
@@ -89,7 +91,7 @@ public class PrefUtil extends Object {
 	    final String network) {
 	int ordinal = pref.ordinal();
 	if (!netprefs.containsKey(network)) {
-	    int[] intarray = new int[PrefConstants.NETPREFS];
+	    int[] intarray = new int[PrefConstants.NUMNETPREFS];
 	    intarray[ordinal] = readNetworkPref(context, network, pref);
 	    netprefs.put(network, intarray);
 	    return intarray[ordinal];
@@ -138,8 +140,6 @@ public class PrefUtil extends Object {
     void handleNetPrefChange(final NetPref np, final String network,
 	    final int newvalue) {
 	putnetPref(np, network, newvalue);
-	LogService.log(context, LogService.getLogTag(context),
-		"Successful Netpref Write:" + netprefs.toString());
     }
 
     public static void notifyPrefChange(final Context c, final Pref pref) {
@@ -149,10 +149,11 @@ public class PrefUtil extends Object {
     }
 
     public static void notifyNetPrefChange(final Context c,
-	    final NetPref netpref, final String network) {
+	    final NetPref netpref, final String network, final int value) {
 	Intent intent = new Intent(NETVALUE_CHANGED_ACTION);
 	intent.putExtra(VALUE_KEY, netpref.key());
 	intent.putExtra(NET_KEY, network);
+	intent.putExtra(INT_KEY, value);
 	c.sendBroadcast(intent);
     }
 
@@ -197,13 +198,16 @@ public class PrefUtil extends Object {
 	 * Check for actual changed value if changed, notify
 	 */
 	if (value != readNetworkPref(ctxt, network, pref)) {
-	    notifyNetPrefChange(ctxt, pref, network);
 	    /*
 	     * commit changes
 	     */
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.putInt(pref.key(), value);
 	    editor.commit();
+	    /*
+	     * notify
+	     */
+	    notifyNetPrefChange(ctxt, pref, network, value);
 	}
     }
 

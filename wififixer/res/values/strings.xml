@@ -167,4 +167,6 @@
 
 	<string name="service_onscreenon">Service:OnScreenOn</string>
 
+	<string name="not_managing_network">Not managing network:</string>
+
 </resources>

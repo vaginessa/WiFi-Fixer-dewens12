@@ -32,7 +32,7 @@ public class PrefConstants {
     static final String WIDGET_KEY = "WIDGET";
     static final String WIFI_STATE_LOCK = "WFSTATELOCK";
     static final String LOGGING_MENU = "Logging";
-    
+
     /*
      * PrefsList enum
      */
@@ -66,7 +66,7 @@ public class PrefConstants {
 
     }
 
-    public static final int NETPREFS = 2;
+    public static final int NUMNETPREFS = 2;
 
     static enum NetPref {
 	DISABLED_KEY("ENABLEDSTATE"), NONMANAGED_KEY("NONMANAGED");

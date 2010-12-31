@@ -309,6 +309,8 @@ public class WFConnection extends Object implements
      */
     private Runnable rMain = new Runnable() {
 	public void run() {
+	    if (!shouldManage(ctxt))
+		return;
 
 	    // Check Supplicant
 	    if (getWifiManager(ctxt).isWifiEnabled()
@@ -400,6 +402,8 @@ public class WFConnection extends Object implements
      */
     private Runnable rSleepcheck = new Runnable() {
 	public void run() {
+	    if (!shouldManage(ctxt))
+		return;
 	    /*
 	     * This is all we want to do.
 	     */
@@ -482,7 +486,6 @@ public class WFConnection extends Object implements
 	     */
 
 	    String iAction = intent.getAction();
-
 	    if (iAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION))
 		/*
 		 * Wifi state, e.g. on/off
@@ -494,7 +497,8 @@ public class WFConnection extends Object implements
 		 * Supplicant events
 		 */
 		handleSupplicantIntent(intent);
-	    else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+	    else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+		    && shouldManage(ctxt))
 		/*
 		 * Scan Results
 		 */
@@ -1157,21 +1161,8 @@ public class WFConnection extends Object implements
 	 */
 	if (!getWifiManager(ctxt).isWifiEnabled() || !getIsOnWifi(ctxt))
 	    return;
-
-	icmpCache(ctxt);
-
-	/*
-	 * Make sure connectee is null
-	 */
-	connectee = null;
-
-	/*
-	 * Perfect spot to restart the Main tick
-	 */
-	if (screenstate)
-	    handlerWrapper(MAIN, REALLYSHORTWAIT);
 	else
-	    handlerWrapper(SLEEPCHECK, SLEEPWAIT);
+	    onNetworkConnected();
     }
 
     private void handleUserEvent() {
@@ -1492,7 +1483,7 @@ public class WFConnection extends Object implements
 	/*
 	 * New setting disabling supplicant fixes
 	 */
-	if (prefs.getFlag(Pref.SUPFIX_KEY))
+	if (prefs.getFlag(Pref.SUPFIX_KEY) || !shouldManage(ctxt))
 	    return;
 
 	/*
@@ -1566,6 +1557,29 @@ public class WFConnection extends Object implements
 	if (getWifiManager(ctxt).isWifiEnabled() && !screenstate) {
 	    toggleWifi();
 	}
+    }
+
+    private void onNetworkConnected() {
+	icmpCache(ctxt);
+
+	/*
+	 * Make sure connectee is null
+	 */
+	connectee = null;
+
+	/*
+	 * Should Wifi Fixer manage?
+	 */
+	if (!shouldManage(ctxt))
+	    return;
+	else
+	/*
+	 * restart the Main tick
+	 */
+	if (screenstate)
+	    handlerWrapper(MAIN, REALLYSHORTWAIT);
+	else
+	    handlerWrapper(SLEEPCHECK, SLEEPWAIT);
     }
 
     private void onScreenOff() {
@@ -1680,6 +1694,20 @@ public class WFConnection extends Object implements
 	    notif = NotifUtil.addStatNotif(ctxt, null);
 	    statnotif = null;
 	}
+    }
+
+    private static boolean shouldManage(final Context ctx) {
+	String ssid = getSSID();
+	if (ssid == NULL_SSID)
+	    return true;
+	else if (prefs.getnetPref(ctxt, NetPref.NONMANAGED_KEY, ssid) == 1) {
+	    if (prefs.getFlag(Pref.LOG_KEY))
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.not_managing_network)
+			+ ssid);
+	    return false;
+	} else
+	    return true;
     }
 
     private static boolean statNotifCheck() {
