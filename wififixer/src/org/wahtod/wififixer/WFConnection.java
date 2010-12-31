@@ -1084,11 +1084,11 @@ public class WFConnection extends Object implements
     public static void writeNetworkState(final Context context,
 	    final int network, final boolean state) {
 	if (state)
-	    prefs.writeNetworkPref(context, getnetworkSSID(network),
+	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
 		    NetPref.DISABLED_KEY, 1);
 
 	else
-	    prefs.writeNetworkPref(context, getnetworkSSID(network),
+	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
 		    NetPref.DISABLED_KEY, 0);
     }
 
@@ -1099,7 +1099,7 @@ public class WFConnection extends Object implements
     public static boolean readManagedState(final Context context,
 	    final int network) {
 
-	if (prefs.readNetworkPref(context, getnetworkSSID(network),
+	if (PrefUtil.readNetworkPref(context, getnetworkSSID(network),
 		NetPref.NONMANAGED_KEY) == 1)
 	    return true;
 	else
@@ -1109,16 +1109,16 @@ public class WFConnection extends Object implements
     public static void writeManagedState(final Context context,
 	    final int network, final boolean state) {
 	if (state)
-	    prefs.writeNetworkPref(context, getnetworkSSID(network),
+	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
 		    NetPref.NONMANAGED_KEY, 1);
 	else
-	    prefs.writeNetworkPref(context, getnetworkSSID(network),
+	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
 		    NetPref.NONMANAGED_KEY, 0);
     }
 
     public static boolean readNetworkState(final Context context,
 	    final int network) {
-	if (prefs.readNetworkPref(context, getnetworkSSID(network),
+	if (PrefUtil.readNetworkPref(context, getnetworkSSID(network),
 		NetPref.DISABLED_KEY) == 1)
 	    return true;
 	else

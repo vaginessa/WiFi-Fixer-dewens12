@@ -34,6 +34,8 @@ public class PrefUtil extends Object {
      * Intent Constants
      */
     private static final String VALUE_CHANGED_ACTION = "ACTION.PREFS.VALUECHANGED";
+    private static final String NETVALUE_CHANGED_ACTION = "ACTION.NETPREFS.VALUECHANGED";
+    private static final String NET_KEY = "NETKEY";
     private static final String VALUE_KEY = "VALUEKEY";
     private static final String NETPREFIX = "n_";
 
@@ -41,43 +43,51 @@ public class PrefUtil extends Object {
      * Fields
      */
     private boolean[] keyVals;
-    private Context context;
-    private static HashMap<String, int[]> netprefs;
+    private static Context context;
+    private HashMap<String, int[]> netprefs;
 
     private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
 	public void onReceive(final Context context, final Intent intent) {
-	    String valuekey = intent.getStringExtra(VALUE_KEY);
-	    Pref p = Pref.get(valuekey);
-	    if (p != null)
-		handlePrefChange(p, readBoolean(context, p.key()));
+	    String valuekey;
+	    if (intent.getAction().equals(VALUE_CHANGED_ACTION)) {
+		valuekey = intent.getStringExtra(VALUE_KEY);
+		Pref p = Pref.get(valuekey);
+		if (p != null)
+		    handlePrefChange(p, readBoolean(context, p.key()));
+	    } else {
+		valuekey = intent.getStringExtra(VALUE_KEY);
+		NetPref np = NetPref.get(valuekey);
+		if (np != null) {
+		    String network = intent.getStringExtra(NET_KEY);
+		    handleNetPrefChange(np, network, readNetworkPref(context,
+			    network, np));
+		}
+	    }
 	}
-
     };
 
     public PrefUtil(final Context c) {
 	context = c;
 	keyVals = new boolean[Pref.values().length];
-	context.registerReceiver(changeReceiver, new IntentFilter(
-		VALUE_CHANGED_ACTION));
+	IntentFilter filter = new IntentFilter(VALUE_CHANGED_ACTION);
+	filter.addAction(NETVALUE_CHANGED_ACTION);
+	context.registerReceiver(changeReceiver, filter);
 	netprefs = new HashMap<String, int[]>();
     }
 
-    public static void putnetPref(final NetPref pref, final String network,
-	    final int value,HashMap<String, int[]> netprefs) {
-	if (netprefs == null)
-	    return;
+    public void putnetPref(final NetPref pref, final String network,
+	    final int value) {
 	int[] intTemp = netprefs.get(network);
-	if (intTemp.length == 0) {
+	if (intTemp == null) {
+	    intTemp = new int[PrefConstants.NETPREFS];
 	    intTemp[pref.ordinal()] = value;
 	}
 	netprefs.put(network, intTemp);
     }
 
-    public static int getnetPref(final Context context,final NetPref pref, final String network, HashMap<String, int[]> netprefs) {
+    public int getnetPref(final Context context, final NetPref pref,
+	    final String network) {
 	int ordinal = pref.ordinal();
-	if (netprefs == null)
-	    return 0;
-	
 	if (!netprefs.containsKey(network)) {
 	    int[] intarray = new int[PrefConstants.NETPREFS];
 	    intarray[ordinal] = readNetworkPref(context, network, pref);
@@ -125,9 +135,24 @@ public class PrefUtil extends Object {
 	postValChanged(p);
     }
 
-    public static void notifyPrefChange(final Context c, final Pref logKey) {
+    void handleNetPrefChange(final NetPref np, final String network,
+	    final int newvalue) {
+	putnetPref(np, network, newvalue);
+	LogService.log(context, LogService.getLogTag(context),
+		"Successful Netpref Write:" + netprefs.toString());
+    }
+
+    public static void notifyPrefChange(final Context c, final Pref pref) {
 	Intent intent = new Intent(VALUE_CHANGED_ACTION);
-	intent.putExtra(VALUE_KEY, logKey.key());
+	intent.putExtra(VALUE_KEY, pref.key());
+	c.sendBroadcast(intent);
+    }
+
+    public static void notifyNetPrefChange(final Context c,
+	    final NetPref netpref, final String network) {
+	Intent intent = new Intent(NETVALUE_CHANGED_ACTION);
+	intent.putExtra(VALUE_KEY, netpref.key());
+	intent.putExtra(NET_KEY, network);
 	c.sendBroadcast(intent);
     }
 
@@ -158,30 +183,28 @@ public class PrefUtil extends Object {
 		+ network, 0);
 	String key = pref.key();
 
-	if (settings.contains(key)) {
-	    /*
-	     * Logic for read cacheing in netprefs
-	     */
-	    int value = settings.getInt(key, 0);
-	    if (getnetPref(ctxt, pref, network, netprefs) != value)
-		putnetPref(pref, network, value, netprefs);
-	    return value;
-	} else
+	if (settings.contains(key))
+	    return settings.getInt(key, 0);
+	else
 	    return 0;
     }
 
-    public static  void writeNetworkPref(final Context ctxt, final String network,
-	    final NetPref pref, final int value) {
+    public static void writeNetworkPref(final Context ctxt,
+	    final String network, final NetPref pref, final int value) {
 	SharedPreferences settings = ctxt.getSharedPreferences(NETPREFIX
 		+ network, 0);
-	SharedPreferences.Editor editor = settings.edit();
-	editor.putInt(pref.key(), value);
-	editor.commit();
 	/*
-	 * Logic for write cacheing in netprefs
+	 * Check for actual changed value if changed, notify
 	 */
-	if (getnetPref(ctxt, pref, network, netprefs) != value)
-		putnetPref(pref, network, value, netprefs);
+	if (value != readNetworkPref(ctxt, network, pref)) {
+	    notifyNetPrefChange(ctxt, pref, network);
+	    /*
+	     * commit changes
+	     */
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putInt(pref.key(), value);
+	    editor.commit();
+	}
     }
 
     public static boolean readBoolean(final Context ctxt, final String key) {
