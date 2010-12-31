@@ -42,6 +42,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
 import android.net.wifi.ScanResult;
@@ -309,37 +310,46 @@ public class WFConnection extends Object implements
      */
     private Runnable rMain = new Runnable() {
 	public void run() {
-	    if (!shouldManage(ctxt))
-		return;
-
-	    // Check Supplicant
-	    if (getWifiManager(ctxt).isWifiEnabled()
-		    && !getWifiManager(ctxt).pingSupplicant()) {
-		if (prefs.getFlag(Pref.LOG_KEY))
-		    LogService
-			    .log(
-				    ctxt,
-				    appname,
-				    ctxt
-					    .getString(R.string.supplicant_nonresponsive_toggling_wifi));
-		toggleWifi();
-	    } else if (!templock && screenstate)
-		checkWifi();
-
+	    /*
+	     * Check for disabled state
+	     */
 	    if (prefs.getFlag(Pref.DISABLE_KEY)) {
 		if (prefs.getFlag(Pref.LOG_KEY)) {
 		    LogService.log(ctxt, appname, ctxt
 			    .getString(R.string.shouldrun_false_dying));
 		}
-	    } else
+	    } else {
 		// Queue next run of main runnable
 		handlerWrapper(MAIN, LOOPWAIT);
-	    /*
-	     * Schedule update of status
-	     */
-	    if (statNotifCheck())
-		handlerWrapper(UPDATESTATUS, SHORTWAIT);
+		/*
+		 * Schedule update of status
+		 */
+		if (statNotifCheck())
+		    handlerWrapper(UPDATESTATUS, SHORTWAIT);
 
+		/*
+		 * First check if we should manage then do wifi checks
+		 */
+		if (shouldManage(ctxt)) {
+		    // Check Supplicant
+		    if (getWifiManager(ctxt).isWifiEnabled()
+			    && !getWifiManager(ctxt).pingSupplicant()) {
+			if (prefs.getFlag(Pref.LOG_KEY))
+			    LogService
+				    .log(
+					    ctxt,
+					    appname,
+					    ctxt
+						    .getString(R.string.supplicant_nonresponsive_toggling_wifi));
+			toggleWifi();
+		    } else if (!templock && screenstate)
+			/*
+			 * Check wifi
+			 */
+			checkWifi();
+
+		}
+	    }
 	}
     };
 
@@ -402,17 +412,17 @@ public class WFConnection extends Object implements
      */
     private Runnable rSleepcheck = new Runnable() {
 	public void run() {
-	    if (!shouldManage(ctxt))
-		return;
-	    /*
-	     * This is all we want to do.
-	     */
-	    wakelock.lock(true);
-	    if (!templock)
-		checkWifi();
-	    /*
-	     * Post next run
-	     */
+	    if (shouldManage(ctxt)) {
+		/*
+		 * This is all we want to do.
+		 */
+		wakelock.lock(true);
+		if (!templock)
+		    checkWifi();
+		/*
+		 * Post next run
+		 */
+	    }
 	    handlerWrapper(SLEEPCHECK, SLEEPWAIT);
 	    wakelock.lock(false);
 	}
@@ -472,6 +482,15 @@ public class WFConnection extends Object implements
     private Runnable rUpdateStatus = new Runnable() {
 	public void run() {
 	    notifStatus = getSupplicantStateString();
+
+	    /*
+	     * Indicate managed status by changing ssid text color
+	     */
+	    if (shouldManage(ctxt))
+		statnotif.setTextColor(R.id.ssid, Color.BLACK);
+	    else
+		statnotif.setTextColor(R.id.ssid, Color.RED);
+
 	    NotifUtil.updateStatNotif(ctxt, notifSSID, notifStatus,
 		    notifSignal, statnotif, notif);
 	}
@@ -521,9 +540,9 @@ public class WFConnection extends Object implements
     };
 
     public WFConnection(final Context context, PrefUtil p) {
+	prefs = p;
 	screenstateH = new ScreenStateHandler(context);
 	screenstateH.setOnScreenStateChangedListener(this);
-	prefs = p;
 	appname = LogService.getLogTag(context);
 	screenstate = ScreenStateHandler.getScreenState(context);
 	/*
@@ -1568,18 +1587,20 @@ public class WFConnection extends Object implements
 	connectee = null;
 
 	/*
-	 * Should Wifi Fixer manage?
-	 */
-	if (!shouldManage(ctxt))
-	    return;
-	else
-	/*
 	 * restart the Main tick
 	 */
 	if (screenstate)
 	    handlerWrapper(MAIN, REALLYSHORTWAIT);
 	else
 	    handlerWrapper(SLEEPCHECK, SLEEPWAIT);
+	
+	/*
+	 * Log Non-Managed network
+	 */
+	if (!shouldManage(ctxt) && prefs.getFlag(Pref.LOG_KEY))
+	    LogService.log(ctxt, appname, ctxt
+		    .getString(R.string.not_managing_network)
+		    + getSSID());
     }
 
     private void onScreenOff() {
@@ -1700,19 +1721,15 @@ public class WFConnection extends Object implements
 	String ssid = getSSID();
 	if (ssid == NULL_SSID)
 	    return true;
-	else if (prefs.getnetPref(ctxt, NetPref.NONMANAGED_KEY, ssid) == 1) {
-	    if (prefs.getFlag(Pref.LOG_KEY))
-		LogService.log(ctxt, appname, ctxt
-			.getString(R.string.not_managing_network)
-			+ ssid);
+	else if (prefs.getnetPref(ctxt, NetPref.NONMANAGED_KEY, ssid) == 1)
 	    return false;
-	} else
+	else
 	    return true;
     }
 
     private static boolean statNotifCheck() {
-	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate
-		&& getWifiManager(ctxt).isWifiEnabled())
+	if (screenstate && getWifiManager(ctxt).isWifiEnabled()
+		&& prefs.getFlag(Pref.STATENOT_KEY))
 	    return true;
 	else
 	    return false;
