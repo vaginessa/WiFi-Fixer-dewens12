@@ -157,7 +157,6 @@ public class WFConnection extends Object implements
     private static String lastSupplicantState;
     private static RemoteViews statnotif;
     private static Notification notif;
-    private static ScreenStateHandler screenstateH;
 
     // deprecated
     static boolean templock = false;
@@ -541,8 +540,7 @@ public class WFConnection extends Object implements
 
     public WFConnection(final Context context, PrefUtil p) {
 	prefs = p;
-	screenstateH = new ScreenStateHandler(context);
-	screenstateH.setOnScreenStateChangedListener(this);
+	ScreenStateHandler.setOnScreenStateChangedListener(this);
 	appname = LogService.getLogTag(context);
 	screenstate = ScreenStateHandler.getScreenState(context);
 	/*

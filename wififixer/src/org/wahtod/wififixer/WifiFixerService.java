@@ -387,7 +387,7 @@ public class WifiFixerService extends Service implements
     private void setInitialScreenState(final Context context) {
 	screenstateHandler = new ScreenStateHandler(this);
 	screenstate = ScreenStateHandler.getScreenState(context);
-	screenstateHandler.setOnScreenStateChangedListener(this);
+	ScreenStateHandler.setOnScreenStateChangedListener(this);
     }
 
     private void unregisterReceivers() {
