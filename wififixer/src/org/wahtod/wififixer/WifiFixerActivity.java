@@ -294,6 +294,9 @@ public class WifiFixerActivity extends Activity {
 	serviceButton.setAdjustViewBounds(true);
 	serviceButton.setMaxHeight(64);
 	serviceButton.setMaxWidth(64);
+	serviceButton.setClickable(false);
+	serviceButton.setFocusable(false);
+	serviceButton.setFocusableInTouchMode(false);
 	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY.key())) {
 	    serviceButton.setImageResource(R.drawable.service_inactive);
 	} else {

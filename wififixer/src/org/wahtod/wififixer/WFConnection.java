@@ -61,7 +61,6 @@ import android.widget.RemoteViews;
  */
 public class WFConnection extends Object implements
 	OnScreenStateChangedListener {
-    // private static WifiManager getWifiManager(Context);
     private static String cachedIP;
     private static String appname;
     private static PrefUtil prefs;
@@ -386,6 +385,9 @@ public class WFConnection extends Object implements
 		// Start Scan
 		tempLock(SHORTWAIT);
 		startScan(true);
+		/*
+		 * Reset state
+		 */
 		wifirepair = W_REASSOCIATE;
 		if (prefs.getFlag(Pref.LOG_KEY))
 		    LogService.log(ctxt, appname, ctxt
