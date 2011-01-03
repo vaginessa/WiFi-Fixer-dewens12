@@ -903,13 +903,13 @@ public class WFConnection extends Object implements
     }
 
     private static boolean getIsOnWifi(final Context context) {
-	boolean wifi = false;
 	ConnectivityManager cm = (ConnectivityManager) context
 		.getSystemService(Context.CONNECTIVITY_SERVICE);
 	if (cm.getActiveNetworkInfo() != null
 		&& cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI)
-	    wifi = true;
-	return wifi;
+	    return true;
+	else
+	    return false;
     }
 
     private static boolean getIsSupplicantConnected(final Context context) {
