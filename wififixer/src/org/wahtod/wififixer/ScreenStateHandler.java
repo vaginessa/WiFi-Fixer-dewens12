@@ -34,7 +34,8 @@ public class ScreenStateHandler {
     private static VersionedScreenState sstate;
 
     public static boolean getScreenState(final Context context) {
-	 
+	if (sstate == null)
+	    sstate = VersionedScreenState.newInstance(context);
 	return sstate.getScreenState(context);
     }
 

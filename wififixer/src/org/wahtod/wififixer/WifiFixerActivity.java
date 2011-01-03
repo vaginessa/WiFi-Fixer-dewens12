@@ -70,8 +70,6 @@ public class WifiFixerActivity extends Activity {
     public boolean loggingmenuFlag = false;
     public boolean loggingFlag = false;
 
-    private static boolean logging = false;
-
     // constants
     public static final String NETWORK = "NETWORK_";
     private static final int MENU_LOGGING = 1;
@@ -86,8 +84,6 @@ public class WifiFixerActivity extends Activity {
     private static final int CONTEXT_CONNECT = 3;
     private static final int CONTEXT_NONMANAGE = 4;
 
-    private static final String YELLOW = "#FFFF00";
-
     private static final int MESSAGE = 31337;
     private static final int SCAN_DELAY = 15000;
 
@@ -98,7 +94,7 @@ public class WifiFixerActivity extends Activity {
     private static NetworkListAdapter adapter;
     private static String[] knownnetworks;
 
-    private static List<ScanResult> knownbysignal;
+    private static List<String> knownbysignal;
 
     /*
      * As ugly as caching context is, the alternative is uglier.
@@ -125,7 +121,7 @@ public class WifiFixerActivity extends Activity {
      * custom adapter for Network List ListView
      */
     private static class NetworkListAdapter extends BaseAdapter {
-	private static String[] ssidArray;
+	private String[] ssidArray;
 	private static LayoutInflater inflater;
 
 	public NetworkListAdapter(Context context, String[] ssids) {
@@ -158,12 +154,19 @@ public class WifiFixerActivity extends Activity {
 	    } else {
 		holder = (ViewHolder) convertView.getTag();
 	    }
+	    /*
+	     * Set SSID text and color
+	     */
 	    holder.text.setText(ssidArray[position]);
-	    for (ScanResult sResult : knownbysignal) {
-		if (sResult.SSID.contains(ssidArray[position]))
-		    holder.text.setTextColor(Color.parseColor(YELLOW));
-	    }
 
+	    if (knownbysignal.contains(ssidArray[position]))
+		holder.text.setTextColor(Color.YELLOW);
+	    else
+		holder.text.setTextColor(Color.WHITE);
+
+	    /*
+	     * Set State icon
+	     */
 	    if (WFConnection.readManagedState(ctxt, position))
 		holder.icon.setImageResource(R.drawable.ignore_ssid);
 	    else {
@@ -416,7 +419,7 @@ public class WifiFixerActivity extends Activity {
 	super.onCreate(savedInstanceState);
 	setTitle(R.string.app_name);
 	setContentView(R.layout.main);
-
+	knownbysignal = getKnownAPsBySignal(this);
 	/*
 	 * Grab and set up ListView in sliding drawer for network list UI
 	 */
@@ -452,12 +455,14 @@ public class WifiFixerActivity extends Activity {
 
     };
 
-    private static List<ScanResult> getKnownAPsBySignal(final Context context) {
+    private static List<String> getKnownAPsBySignal(final Context context) {
 
 	WifiManager wm = (WifiManager) context
 		.getSystemService(Context.WIFI_SERVICE);
-
-	List<ScanResult> knownbysignal = new ArrayList<ScanResult>();
+	if (knownbysignal == null)
+	    knownbysignal = new ArrayList<String>();
+	else
+	    knownbysignal.clear();
 
 	List<ScanResult> scanResults = wm.getScanResults();
 
@@ -479,10 +484,6 @@ public class WifiFixerActivity extends Activity {
 	 * networks.
 	 */
 
-	if (logging)
-	    LogService.log(context, LogService.getLogTag(context), context
-		    .getString(R.string.parsing_scan_results));
-
 	for (ScanResult sResult : scanResults) {
 	    for (WifiConfiguration wfResult : wifiConfigs) {
 		/*
@@ -492,13 +493,11 @@ public class WifiFixerActivity extends Activity {
 		 * (yes, that happens)
 		 */
 		try {
-		    if (wfResult.SSID.contains(sResult.SSID)
-			    && WFConnection.getNetworkState(context,
-				    wfResult.networkId)) {
+		    if (wfResult.SSID.contains(sResult.SSID)) {
 			/*
 			 * Add result to knownbysignal
 			 */
-			knownbysignal.add(sResult);
+			knownbysignal.add(sResult.SSID);
 
 		    }
 		} catch (NullPointerException e) {
@@ -530,9 +529,6 @@ public class WifiFixerActivity extends Activity {
 
 	    ssid = wfResult.SSID.replace("\"", "");
 
-	    if (ssid.length() > 25)
-		ssid = ssid.substring(0, 25);
-
 	    networks[wfResult.networkId] = ssid;
 	}
 
@@ -558,7 +554,6 @@ public class WifiFixerActivity extends Activity {
     @Override
     public void onStart() {
 	super.onStart();
-	knownbysignal = getKnownAPsBySignal(this);
 	setIcon();
 	loggingmenuFlag = PrefUtil.readBoolean(this, "Logging");
 	loggingFlag = getLogging(this);
@@ -729,11 +724,15 @@ public class WifiFixerActivity extends Activity {
 	if (temp.length != 0) {
 	    knownbysignal = getKnownAPsBySignal(this);
 	    knownnetworks = temp;
-	    if (adapter == null)
+	    if (adapter == null) {
 		adapter = new NetworkListAdapter(this, knownnetworks);
+		final ListView lv = (ListView) findViewById(R.id.ListView01);
+		lv.setAdapter(adapter);
+	    } else {
+		adapter.ssidArray = knownnetworks;
+		adapter.notifyDataSetInvalidated();
+	    }
 
-	    final ListView lv = (ListView) findViewById(R.id.ListView01);
-	    lv.setAdapter(adapter);
 	}
 	handler.sendEmptyMessageDelayed(MESSAGE, SCAN_DELAY);
     }

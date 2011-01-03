@@ -284,7 +284,8 @@ public class LogService extends Service {
 			.getAbsolutePath(), true), WRITE_BUFFER_SIZE);
 	    bwriter.write(message + NEWLINE);
 	} catch (Exception e) {
-	    e.printStackTrace();
+	    if (e.getMessage() != null)
+		log(context, LogService.class.getSimpleName(), e.getMessage());
 	}
     }
 

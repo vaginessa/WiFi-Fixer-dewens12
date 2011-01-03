@@ -1086,8 +1086,8 @@ public class WFConnection extends Object implements
 	 */
 	if (wm == null) {
 	    wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-	    if (prefs.getFlag(Pref.LOG_KEY))
-		LogService.log(ctxt, appname, context
+	    if (prefs != null && prefs.getFlag(Pref.LOG_KEY))
+		LogService.log(context, LogService.getLogTag(context), context
 			.getString(R.string.cachewfinst));
 	}
 
@@ -1105,22 +1105,23 @@ public class WFConnection extends Object implements
     public static void writeNetworkState(final Context context,
 	    final int network, final boolean state) {
 	if (state)
-	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
-		    NetPref.DISABLED_KEY, 1);
+	    PrefUtil.writeNetworkPref(context,
+		    getnetworkSSID(context, network), NetPref.DISABLED_KEY, 1);
 
 	else
-	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
-		    NetPref.DISABLED_KEY, 0);
+	    PrefUtil.writeNetworkPref(context,
+		    getnetworkSSID(context, network), NetPref.DISABLED_KEY, 0);
     }
 
-    public static String getnetworkSSID(final int network) {
-	return wm.getConfiguredNetworks().get(network).SSID.replace("\"", "");
+    public static String getnetworkSSID(final Context context, final int network) {
+	return getWifiManager(context).getConfiguredNetworks().get(network).SSID
+		.replace("\"", "");
     }
 
     public static boolean readManagedState(final Context context,
 	    final int network) {
 
-	if (PrefUtil.readNetworkPref(context, getnetworkSSID(network),
+	if (PrefUtil.readNetworkPref(context, getnetworkSSID(context, network),
 		NetPref.NONMANAGED_KEY) == 1)
 	    return true;
 	else
@@ -1130,16 +1131,20 @@ public class WFConnection extends Object implements
     public static void writeManagedState(final Context context,
 	    final int network, final boolean state) {
 	if (state)
-	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
-		    NetPref.NONMANAGED_KEY, 1);
+	    PrefUtil
+		    .writeNetworkPref(context,
+			    getnetworkSSID(context, network),
+			    NetPref.NONMANAGED_KEY, 1);
 	else
-	    PrefUtil.writeNetworkPref(context, getnetworkSSID(network),
-		    NetPref.NONMANAGED_KEY, 0);
+	    PrefUtil
+		    .writeNetworkPref(context,
+			    getnetworkSSID(context, network),
+			    NetPref.NONMANAGED_KEY, 0);
     }
 
     public static boolean readNetworkState(final Context context,
 	    final int network) {
-	if (PrefUtil.readNetworkPref(context, getnetworkSSID(network),
+	if (PrefUtil.readNetworkPref(context, getnetworkSSID(context, network),
 		NetPref.DISABLED_KEY) == 1)
 	    return true;
 	else
@@ -1591,7 +1596,7 @@ public class WFConnection extends Object implements
 	    handlerWrapper(MAIN, REALLYSHORTWAIT);
 	else
 	    handlerWrapper(SLEEPCHECK, SLEEPWAIT);
-	
+
 	/*
 	 * Log Non-Managed network
 	 */
