@@ -86,6 +86,7 @@ public class WFConnection extends Object implements
     private static final String CONNECTED = "CONNECTED";
     private static final String SLEEPING = "SLEEPING";
     private static final String SCANNING = "SCANNING";
+    private static final String ASSOCIATING = "ASSOCIATING";
 
     // For blank SSIDs
     private static final String NULL_SSID = "None";
@@ -168,6 +169,13 @@ public class WFConnection extends Object implements
     private static final int W_REPAIR = 2;
 
     private static int wifirepair = W_REASSOCIATE;
+
+    /*
+     * For Supplicant ASSOCIATE stickage
+     */
+
+    private static int supplicant_associate = 0;
+    private static final int SUPPLICANT_ASSOC_THRESHOLD = 3;
 
     // Runnable Constants for handler
     private static final int MAIN = 0;
@@ -1478,6 +1486,27 @@ public class WFConnection extends Object implements
 	    NotifUtil.updateStatNotif(ctxt, notifSSID, notifStatus,
 		    notifSignal, statnotif, notif);
 	}
+
+	/*
+	 * Check for ASSOCIATING bug
+	 */
+	if (sState.equals(ASSOCIATING)) {
+	    supplicant_associate++;
+	    if (supplicant_associate > SUPPLICANT_ASSOC_THRESHOLD) {
+		/*
+		 * Reset supplicant, it's stuck
+		 */
+		toggleWifi();
+		supplicant_associate = 0;
+		if (prefs.getFlag(Pref.LOG_KEY))
+		    LogService
+			    .log(
+				    ctxt,
+				    appname,
+				    ctxt
+					    .getString(R.string.supplicant_associate_threshold_exceeded));
+	    }
+	} else
 	/*
 	 * store last supplicant scan state
 	 */
@@ -1590,6 +1619,11 @@ public class WFConnection extends Object implements
 	 * Make sure connectee is null
 	 */
 	connectee = null;
+
+	/*
+	 * Reset supplicant associate check
+	 */
+	supplicant_associate = 0;
 
 	/*
 	 * restart the Main tick

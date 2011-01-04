@@ -169,4 +169,6 @@
 
 	<string name="not_managing_network">Not managing network:</string>
 
+	<string name="supplicant_associate_threshold_exceeded">Supplicant Associate Threshold Exceeded: resetting wifi</string>
+
 </resources>
