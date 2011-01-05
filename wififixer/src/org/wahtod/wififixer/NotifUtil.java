@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.wifi.WifiManager;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 public class NotifUtil {
@@ -30,6 +31,8 @@ public class NotifUtil {
     private static final int STATNOTIFID = 2392;
     private static final int MAX_SSID_LENGTH = 10;
     public static final String CANCEL = "CANCEL";
+    private RemoteViews statnotif;
+    private Notification notif;
 
     public static void addNetNotif(final Context context, final String ssid,
 	    final String signal) {
@@ -40,7 +43,7 @@ public class NotifUtil {
 	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 		intent, 0);
 
-	Notification notif = new Notification(R.drawable.wifi_ap, context
+	Notification netnotif = new Notification(R.drawable.wifi_ap, context
 		.getString(R.string.open_network_found), System
 		.currentTimeMillis());
 	if (ssid.length() > 0) {
@@ -48,92 +51,93 @@ public class NotifUtil {
 		    R.layout.net_notif_layout);
 	    contentView.setTextViewText(R.id.ssid, ssid);
 	    contentView.setTextViewText(R.id.signal, signal);
-	    notif.contentView = contentView;
-	    notif.contentIntent = contentIntent;
-	    notif.flags = Notification.FLAG_ONGOING_EVENT;
-	    notif.tickerText = context.getText(R.string.open_network_found);
+	    netnotif.contentView = contentView;
+	    netnotif.contentIntent = contentIntent;
+	    netnotif.flags = Notification.FLAG_ONGOING_EVENT;
+	    netnotif.tickerText = context.getText(R.string.open_network_found);
 	    /*
 	     * Fire notification, cancel if message empty: means no open APs
 	     */
-	    nm.notify(NETNOTIFID, notif);
+	    nm.notify(NETNOTIFID, netnotif);
 	} else
 	    nm.cancel(NETNOTIFID);
 
     }
 
-    public static Notification addStatNotif(final Context context,
-	    RemoteViews contentView) {
+    public RemoteViews getStatusPane(final Context context, final String ssid,
+	    final String status, final int signal) {
+
+	if (statnotif == null) {
+	    statnotif = createStatView(context, ssid, status, signal);
+	}
+
+	return statnotif;
+    }
+
+    public void addStatNotif(final Context context, final String ssid,
+	    final String status, final int signal, final boolean flag) {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
 	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 		new Intent(context, WifiFixerActivity.class), 0);
 
-	Notification notif = new Notification(R.drawable.router32, context
+	notif = new Notification(R.drawable.router32, context
 		.getString(R.string.network_status), System.currentTimeMillis());
 
-	if (contentView != null) {
-
-	    notif.contentView = contentView;
+	if (flag) {
+	    notif.contentView = getStatusPane(context, ssid, status, signal);
 	    notif.contentIntent = contentIntent;
 	    notif.flags = Notification.FLAG_ONGOING_EVENT;
 	    /*
 	     * Fire notification, cancel if message empty: means no status info
 	     */
 	    nm.notify(STATNOTIFID, notif);
-	    return notif;
 	} else {
 	    nm.cancel(STATNOTIFID);
-	    return null;
 	}
     }
 
     public static RemoteViews createStatView(final Context context,
 	    final String ssid, final String status, final int signal) {
+
 	RemoteViews contentView = new RemoteViews(context.getPackageName(),
 		R.layout.status_notif_layout);
-	/*
-	 * First, truncate ssid if it's bigger than MAX_SSID_LENGTH chars
-	 */
-	if (ssid.length() < MAX_SSID_LENGTH)
-	    contentView.setTextViewText(R.id.ssid, ssid);
-	else
-	    contentView.setTextViewText(R.id.ssid, ssid.substring(0,
-		    MAX_SSID_LENGTH));
+
+	contentView.setTextViewText(R.id.ssid, truncateSSID(ssid));
 	contentView.setTextViewText(R.id.status, status);
 	contentView.setTextColor(R.id.status, Color.BLACK);
 	contentView.setTextColor(R.id.ssid, Color.BLACK);
 	contentView.setImageViewResource(R.id.signal, signal);
+	Log.d(WifiFixerService.class.getSimpleName(), "Instantiating StatView");
 
 	return contentView;
     }
 
-    public static RemoteViews updateStatView(final Context context,
-	    RemoteViews contentView, final String ssid, final String status,
-	    final int signal) {
-	/*
-	 * First, truncate ssid if it's bigger than MAX_SSID_LENGTH chars
-	 */
-	if (ssid.length() < MAX_SSID_LENGTH)
-	    contentView.setTextViewText(R.id.ssid, ssid);
-	else
-	    contentView.setTextViewText(R.id.ssid, ssid.substring(0,
-		    MAX_SSID_LENGTH));
-	contentView.setTextViewText(R.id.status, status);
-	contentView.setImageViewResource(R.id.signal, signal);
+    public void updateStatView(final Context context, final String ssid,
+	    final String status, final int signal) {
+	if (statnotif == null)
+	    statnotif = getStatusPane(context, ssid, status, signal);
 
-	return contentView;
+	statnotif.setTextViewText(R.id.ssid, truncateSSID(ssid));
+	statnotif.setTextViewText(R.id.status, status);
+	statnotif.setImageViewResource(R.id.signal, signal);
+
     }
 
-    public static void updateStatNotif(final Context context,
-	    final String ssid, final String status, final int signal,
-	    RemoteViews contentView, Notification notif) {
-	if (contentView == null || notif == null)
+    public void updateStatNotif(final Context context, final String ssid,
+	    final String status, final int signal) {
+	if (statnotif == null || notif == null) {
 	    return;
-	updateStatView(context, contentView, ssid, status, signal);
+	}
+	updateStatView(context, ssid, status, signal);
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 	nm.notify(STATNOTIFID, notif);
+    }
+
+    public void setSSIDColor(final Context context, final int color) {
+	statnotif.setTextColor(R.id.ssid, color);
     }
 
     public static void show(final Context context, final String message,
@@ -152,6 +156,14 @@ public class NotifUtil {
 	notif.flags = Notification.FLAG_AUTO_CANCEL;
 	// unique ID
 	nm.notify(id, notif);
+
+    }
+
+    public static String truncateSSID(String ssid) {
+	if (ssid.length() < MAX_SSID_LENGTH)
+	    return ssid;
+	else
+	    return ssid.substring(0, MAX_SSID_LENGTH);
 
     }
 

@@ -31,12 +31,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.PrefConstants.NetPref;
 import org.wahtod.wififixer.PrefConstants.Pref;
 import org.wahtod.wififixer.ScreenStateHandler.OnScreenStateChangedListener;
 
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -53,7 +51,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.text.format.Formatter;
-import android.widget.RemoteViews;
 
 /*
  * Handles all interaction 
@@ -155,8 +152,7 @@ public class WFConnection extends Object implements
     private static HttpResponse response;
     private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
     private static String lastSupplicantState;
-    private static RemoteViews statnotif;
-    private static Notification notif;
+    private static NotifUtil notifutil;
 
     // deprecated
     static boolean templock = false;
@@ -496,12 +492,12 @@ public class WFConnection extends Object implements
 	     * Indicate managed status by changing ssid text color
 	     */
 	    if (shouldManage(ctxt))
-		statnotif.setTextColor(R.id.ssid, Color.BLACK);
+		notifutil.setSSIDColor(ctxt, Color.BLACK);
 	    else
-		statnotif.setTextColor(R.id.ssid, Color.RED);
+		notifutil.setSSIDColor(ctxt, Color.RED);
 
-	    NotifUtil.updateStatNotif(ctxt, notifSSID, notifStatus,
-		    notifSignal, statnotif, notif);
+	    notifutil.updateStatNotif(ctxt, notifSSID, notifStatus,
+		    notifSignal);
 	}
 
     };
@@ -551,6 +547,7 @@ public class WFConnection extends Object implements
     public WFConnection(final Context context, PrefUtil p) {
 	prefs = p;
 	ScreenStateHandler.setOnScreenStateChangedListener(this);
+	notifutil = new NotifUtil();
 	appname = LogService.getLogTag(context);
 	screenstate = ScreenStateHandler.getScreenState(context);
 	/*
@@ -683,9 +680,8 @@ public class WFConnection extends Object implements
 	}
 
 	if (statNotifCheck())
-	    NotifUtil.updateStatNotif(context, notifSSID, context
-		    .getString(R.string.network_test), notifSignal, statnotif,
-		    notif);
+	    notifutil.updateStatNotif(context, notifSSID, context
+		    .getString(R.string.network_test), notifSignal);
 
 	/*
 	 * Failover switch
@@ -714,8 +710,8 @@ public class WFConnection extends Object implements
 	    else
 		notifStatus = context.getString(R.string.failed);
 
-	    NotifUtil.updateStatNotif(context, notifSSID, notifStatus,
-		    notifSignal, statnotif, notif);
+	    notifutil.updateStatNotif(context, notifSSID, notifStatus,
+		    notifSignal);
 	}
 
 	return isup;
@@ -1483,8 +1479,8 @@ public class WFConnection extends Object implements
 		notifStatus = sState;
 		notifSignal = R.drawable.signal0;
 	    }
-	    NotifUtil.updateStatNotif(ctxt, notifSSID, notifStatus,
-		    notifSignal, statnotif, notif);
+	    notifutil.updateStatNotif(ctxt, notifSSID, notifStatus,
+		    notifSignal);
 	}
 
 	/*
@@ -1747,12 +1743,10 @@ public class WFConnection extends Object implements
 	if (state) {
 	    notifStatus = getSupplicantStateString();
 	    notifSSID = getSSID();
-	    statnotif = NotifUtil.createStatView(ctxt, notifSSID, notifStatus,
-		    notifSignal);
-	    notif = NotifUtil.addStatNotif(ctxt, statnotif);
+	    notifutil.addStatNotif(ctxt, notifSSID, notifStatus,
+		    notifSignal,true);
 	} else {
-	    notif = NotifUtil.addStatNotif(ctxt, null);
-	    statnotif = null;
+	    notifutil.addStatNotif(ctxt, null,null,0,false);
 	}
     }
 
