@@ -152,7 +152,6 @@ public class WFConnection extends Object implements
     private static HttpResponse response;
     private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
     private static String lastSupplicantState;
-    private static NotifUtil notifutil;
 
     // deprecated
     static boolean templock = false;
@@ -492,11 +491,11 @@ public class WFConnection extends Object implements
 	     * Indicate managed status by changing ssid text color
 	     */
 	    if (shouldManage(ctxt))
-		notifutil.setSSIDColor(ctxt, Color.BLACK);
+		NotifUtil.setSSIDColor(ctxt, Color.BLACK);
 	    else
-		notifutil.setSSIDColor(ctxt, Color.RED);
+		NotifUtil.setSSIDColor(ctxt, Color.RED);
 
-	    notifutil
+	    NotifUtil
 		    .updateStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
 	}
 
@@ -547,7 +546,6 @@ public class WFConnection extends Object implements
     public WFConnection(final Context context, PrefUtil p) {
 	prefs = p;
 	ScreenStateHandler.setOnScreenStateChangedListener(this);
-	notifutil = new NotifUtil();
 	appname = LogService.getLogTag(context);
 	screenstate = ScreenStateHandler.getScreenState(context);
 	/*
@@ -680,7 +678,7 @@ public class WFConnection extends Object implements
 	}
 
 	if (statNotifCheck())
-	    notifutil.updateStatNotif(context, notifSSID, context
+	    NotifUtil.updateStatNotif(context, notifSSID, context
 		    .getString(R.string.network_test), notifSignal);
 
 	/*
@@ -710,7 +708,7 @@ public class WFConnection extends Object implements
 	    else
 		notifStatus = context.getString(R.string.failed);
 
-	    notifutil.updateStatNotif(context, notifSSID, notifStatus,
+	    NotifUtil.updateStatNotif(context, notifSSID, notifStatus,
 		    notifSignal);
 	}
 
@@ -1470,7 +1468,7 @@ public class WFConnection extends Object implements
 		notifStatus = sState;
 		notifSignal = R.drawable.signal0;
 	    }
-	    notifutil
+	    NotifUtil
 		    .updateStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
 	}
 
@@ -1734,15 +1732,15 @@ public class WFConnection extends Object implements
 	if (state) {
 	    notifStatus = getSupplicantStateString();
 	    notifSSID = getSSID();
-	    notifutil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
+	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
 		    true);
 	} else {
-	    notifutil.addStatNotif(ctxt, null, null, 0, false);
+	    NotifUtil.addStatNotif(ctxt, null, null, 0, false);
 	}
     }
 
     private static boolean shouldManage(final Context ctx) {
-	String ssid = getSSID();
+	String ssid = PrefUtil.getFileName(ctx, getSSID());
 	if (ssid == NULL_SSID)
 	    return true;
 	else if (prefs.getnetPref(ctxt, NetPref.NONMANAGED_KEY, ssid) == 1)

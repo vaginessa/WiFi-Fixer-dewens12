@@ -31,8 +31,12 @@ public class NotifUtil {
     private static final int STATNOTIFID = 2392;
     private static final int MAX_SSID_LENGTH = 10;
     public static final String CANCEL = "CANCEL";
-    private RemoteViews statnotif;
-    private Notification notif;
+    private static RemoteViews statnotif;
+    private static Notification notif;
+    
+    private NotifUtil() {
+	
+    }
 
     public static void addNetNotif(final Context context, final String ssid,
 	    final String signal) {
@@ -64,7 +68,7 @@ public class NotifUtil {
 
     }
 
-    public RemoteViews getStatusPane(final Context context, final String ssid,
+    public static RemoteViews getStatusPane(final Context context, final String ssid,
 	    final String status, final int signal) {
 
 	if (statnotif == null) {
@@ -74,7 +78,7 @@ public class NotifUtil {
 	return statnotif;
     }
 
-    public void addStatNotif(final Context context, final String ssid,
+    public static void addStatNotif(final Context context, final String ssid,
 	    final String status, final int signal, final boolean flag) {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -114,7 +118,7 @@ public class NotifUtil {
 	return contentView;
     }
 
-    public void updateStatView(final Context context, final String ssid,
+    public static void updateStatView(final Context context, final String ssid,
 	    final String status, final int signal) {
 	if (statnotif == null)
 	    statnotif = getStatusPane(context, ssid, status, signal);
@@ -125,18 +129,19 @@ public class NotifUtil {
 
     }
 
-    public void updateStatNotif(final Context context, final String ssid,
+    public static void updateStatNotif(final Context context, final String ssid,
 	    final String status, final int signal) {
 	if (statnotif == null || notif == null) {
 	    return;
 	}
 	updateStatView(context, ssid, status, signal);
+	
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 	nm.notify(STATNOTIFID, notif);
     }
 
-    public void setSSIDColor(final Context context, final int color) {
+    public static void setSSIDColor(final Context context, final int color) {
 	statnotif.setTextColor(R.id.ssid, color);
     }
 
