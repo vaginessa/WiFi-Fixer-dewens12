@@ -171,4 +171,6 @@
 
 	<string name="supplicant_associate_threshold_exceeded">Supplicant Associate Threshold Exceeded: resetting wifi</string>
 
+	<string name="none">none</string>
+
 </resources>

@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 
 public class PrefUtil extends Object {
@@ -82,11 +83,11 @@ public class PrefUtil extends Object {
 	    intTemp = new int[PrefConstants.NUMNETPREFS];
 	}
 	intTemp[pref.ordinal()] = value;
-	
+
 	if (getFlag(Pref.LOG_KEY))
 	    LogService.log(context, LogService.getLogTag(context), pref.key()
 		    + ":" + network + ":" + intTemp[pref.ordinal()]);
-	
+
 	netprefs.put(network, intTemp);
     }
 
@@ -180,11 +181,23 @@ public class PrefUtil extends Object {
     public void postValChanged(final Pref p) {
 
     }
+    
+    public static String getnetworkSSID(final Context context, final int network) {
+	WifiManager  wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+	return getFileName(context,wm.getConfiguredNetworks().get(network).SSID);
+    }
+
+    public static String getFileName(final Context ctxt, String filename) {
+	if (filename == null)
+	    filename = context.getString(R.string.none);
+
+	return filename.replaceAll("[^a-zA-Z0-9]", "");
+    }
 
     public static int readNetworkPref(final Context ctxt, final String network,
 	    final NetPref pref) {
 	SharedPreferences settings = ctxt.getSharedPreferences(NETPREFIX
-		+ network, 0);
+		+  network, 0);
 	String key = pref.key();
 
 	if (settings.contains(key))
@@ -196,7 +209,7 @@ public class PrefUtil extends Object {
     public static void writeNetworkPref(final Context ctxt,
 	    final String network, final NetPref pref, final int value) {
 	SharedPreferences settings = ctxt.getSharedPreferences(NETPREFIX
-		+ network, 0);
+		+  network,0);
 	/*
 	 * Check for actual changed value if changed, notify
 	 */

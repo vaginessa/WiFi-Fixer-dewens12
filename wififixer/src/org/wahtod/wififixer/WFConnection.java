@@ -496,8 +496,8 @@ public class WFConnection extends Object implements
 	    else
 		notifutil.setSSIDColor(ctxt, Color.RED);
 
-	    notifutil.updateStatNotif(ctxt, notifSSID, notifStatus,
-		    notifSignal);
+	    notifutil
+		    .updateStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
 	}
 
     };
@@ -1110,25 +1110,20 @@ public class WFConnection extends Object implements
 
     public static void writeNetworkState(final Context context,
 	    final int network, final boolean state) {
+	String netstring = PrefUtil.getnetworkSSID(context,
+		    network);
 	if (state)
-	    PrefUtil.writeNetworkPref(context,
-		    getnetworkSSID(context, network), NetPref.DISABLED_KEY, 1);
+	    PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY, 1);
 
 	else
-	    PrefUtil.writeNetworkPref(context,
-		    getnetworkSSID(context, network), NetPref.DISABLED_KEY, 0);
-    }
-
-    public static String getnetworkSSID(final Context context, final int network) {
-	return getWifiManager(context).getConfiguredNetworks().get(network).SSID
-		.replace("\"", "");
+	    PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY, 0);
     }
 
     public static boolean readManagedState(final Context context,
 	    final int network) {
 
-	if (PrefUtil.readNetworkPref(context, getnetworkSSID(context, network),
-		NetPref.NONMANAGED_KEY) == 1)
+	if (PrefUtil.readNetworkPref(context, PrefUtil.getnetworkSSID(context,
+		network), NetPref.NONMANAGED_KEY) == 1)
 	    return true;
 	else
 	    return false;
@@ -1136,22 +1131,18 @@ public class WFConnection extends Object implements
 
     public static void writeManagedState(final Context context,
 	    final int network, final boolean state) {
+	String netstring = PrefUtil.getnetworkSSID(context,
+		    network);
 	if (state)
-	    PrefUtil
-		    .writeNetworkPref(context,
-			    getnetworkSSID(context, network),
-			    NetPref.NONMANAGED_KEY, 1);
+	    PrefUtil.writeNetworkPref(context, netstring, NetPref.NONMANAGED_KEY, 1);
 	else
-	    PrefUtil
-		    .writeNetworkPref(context,
-			    getnetworkSSID(context, network),
-			    NetPref.NONMANAGED_KEY, 0);
+	    PrefUtil.writeNetworkPref(context, netstring, NetPref.NONMANAGED_KEY, 0);
     }
 
     public static boolean readNetworkState(final Context context,
 	    final int network) {
-	if (PrefUtil.readNetworkPref(context, getnetworkSSID(context, network),
-		NetPref.DISABLED_KEY) == 1)
+	if (PrefUtil.readNetworkPref(context, PrefUtil.getnetworkSSID(context,
+		network), NetPref.DISABLED_KEY) == 1)
 	    return true;
 	else
 	    return false;
@@ -1479,8 +1470,8 @@ public class WFConnection extends Object implements
 		notifStatus = sState;
 		notifSignal = R.drawable.signal0;
 	    }
-	    notifutil.updateStatNotif(ctxt, notifSSID, notifStatus,
-		    notifSignal);
+	    notifutil
+		    .updateStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
 	}
 
 	/*
@@ -1743,10 +1734,10 @@ public class WFConnection extends Object implements
 	if (state) {
 	    notifStatus = getSupplicantStateString();
 	    notifSSID = getSSID();
-	    notifutil.addStatNotif(ctxt, notifSSID, notifStatus,
-		    notifSignal,true);
+	    notifutil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
+		    true);
 	} else {
-	    notifutil.addStatNotif(ctxt, null,null,0,false);
+	    notifutil.addStatNotif(ctxt, null, null, 0, false);
 	}
     }
 

@@ -70,9 +70,9 @@ public class ScreenStateHandler {
 	    /*
 	     * Register for screen state events
 	     * 
-	     * Note: this Initializer must be used if you want to receive the 
-	     * intent broadcast: also you want to use the unregister method
-	     * from where you instantiated it
+	     * Note: this Initializer must be used if you want to receive the
+	     * intent broadcast: also you want to use the unregister method from
+	     * where you instantiated it
 	     */
 	    IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
 	    filter.addAction(Intent.ACTION_SCREEN_ON);
