@@ -35,6 +35,7 @@ import org.wahtod.wififixer.PrefConstants.NetPref;
 import org.wahtod.wififixer.PrefConstants.Pref;
 import org.wahtod.wififixer.ScreenStateHandler.OnScreenStateChangedListener;
 
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -51,6 +52,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.text.format.Formatter;
+import android.widget.RemoteViews;
 
 /*
  * Handles all interaction 
@@ -152,6 +154,8 @@ public class WFConnection extends Object implements
     private static HttpResponse response;
     private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
     private static String lastSupplicantState;
+    private static RemoteViews statnotif;
+    private static Notification notif;
 
     // deprecated
     static boolean templock = false;
@@ -491,12 +495,12 @@ public class WFConnection extends Object implements
 	     * Indicate managed status by changing ssid text color
 	     */
 	    if (shouldManage(ctxt))
-		NotifUtil.setSSIDColor(ctxt, Color.BLACK);
+		NotifUtil.setSSIDColor(ctxt, Color.BLACK, statnotif);
 	    else
-		NotifUtil.setSSIDColor(ctxt, Color.RED);
+		NotifUtil.setSSIDColor(ctxt, Color.RED, statnotif);
 
-	    NotifUtil
-		    .updateStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
+	    NotifUtil.updateStatNotif(ctxt, notifSSID, notifStatus,
+		    notifSignal, notif, statnotif);
 	}
 
     };
@@ -679,7 +683,8 @@ public class WFConnection extends Object implements
 
 	if (statNotifCheck())
 	    NotifUtil.updateStatNotif(context, notifSSID, context
-		    .getString(R.string.network_test), notifSignal);
+		    .getString(R.string.network_test), notifSignal, notif,
+		    statnotif);
 
 	/*
 	 * Failover switch
@@ -709,7 +714,7 @@ public class WFConnection extends Object implements
 		notifStatus = context.getString(R.string.failed);
 
 	    NotifUtil.updateStatNotif(context, notifSSID, notifStatus,
-		    notifSignal);
+		    notifSignal, notif, statnotif);
 	}
 
 	return isup;
@@ -1108,13 +1113,14 @@ public class WFConnection extends Object implements
 
     public static void writeNetworkState(final Context context,
 	    final int network, final boolean state) {
-	String netstring = PrefUtil.getnetworkSSID(context,
-		    network);
+	String netstring = PrefUtil.getnetworkSSID(context, network);
 	if (state)
-	    PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY, 1);
+	    PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY,
+		    1);
 
 	else
-	    PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY, 0);
+	    PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY,
+		    0);
     }
 
     public static boolean readManagedState(final Context context,
@@ -1129,12 +1135,13 @@ public class WFConnection extends Object implements
 
     public static void writeManagedState(final Context context,
 	    final int network, final boolean state) {
-	String netstring = PrefUtil.getnetworkSSID(context,
-		    network);
+	String netstring = PrefUtil.getnetworkSSID(context, network);
 	if (state)
-	    PrefUtil.writeNetworkPref(context, netstring, NetPref.NONMANAGED_KEY, 1);
+	    PrefUtil.writeNetworkPref(context, netstring,
+		    NetPref.NONMANAGED_KEY, 1);
 	else
-	    PrefUtil.writeNetworkPref(context, netstring, NetPref.NONMANAGED_KEY, 0);
+	    PrefUtil.writeNetworkPref(context, netstring,
+		    NetPref.NONMANAGED_KEY, 0);
     }
 
     public static boolean readNetworkState(final Context context,
@@ -1468,8 +1475,8 @@ public class WFConnection extends Object implements
 		notifStatus = sState;
 		notifSignal = R.drawable.signal0;
 	    }
-	    NotifUtil
-		    .updateStatNotif(ctxt, notifSSID, notifStatus, notifSignal);
+	    NotifUtil.updateStatNotif(ctxt, notifSSID, notifStatus,
+		    notifSignal, notif, statnotif);
 	}
 
 	/*
@@ -1732,10 +1739,12 @@ public class WFConnection extends Object implements
 	if (state) {
 	    notifStatus = getSupplicantStateString();
 	    notifSSID = getSSID();
+	    statnotif = NotifUtil.getStatusPane(ctxt, notifSSID, notifStatus, notifSignal, statnotif);
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
-		    true);
+		    true, notif, statnotif);
 	} else {
-	    NotifUtil.addStatNotif(ctxt, null, null, 0, false);
+	    NotifUtil
+		    .addStatNotif(ctxt, null, null, 0, false, notif, statnotif);
 	}
     }
 
