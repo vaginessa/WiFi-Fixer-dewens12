@@ -99,6 +99,7 @@ public class WFConnection extends Object implements
 
     // Empty string
     private static final String EMPTYSTRING = "";
+    private static final String COLON = ":";
     private static final String NEWLINE = "\n";
 
     /*
@@ -147,7 +148,7 @@ public class WFConnection extends Object implements
     private static int lastAP = NULLVAL;
 
     private static WifiManager wm;
-    private static WifiConfiguration connectee;
+    private static WFConfig connectee;
     private static DefaultHttpClient httpclient;
     private static HttpParams httpparams;
     private static HttpHead head;
@@ -524,8 +525,7 @@ public class WFConnection extends Object implements
 		 * Supplicant events
 		 */
 		handleSupplicantIntent(intent);
-	    else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-		    && shouldManage(ctxt))
+	    else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
 		/*
 		 * Scan Results
 		 */
@@ -807,11 +807,12 @@ public class WFConnection extends Object implements
 	/*
 	 * Create sparse WifiConfiguration with details of desired connectee
 	 */
-	connectee = WFConfig.sparseConfigPriority(OVER9000, network);
-	getWifiManager(ctxt).updateNetwork(connectee);
-	connectee.SSID = target.SSID;
+	connectee = new WFConfig();
+	connectee.wificonfig = WFConfig.sparseConfigPriority(OVER9000, network);
+	getWifiManager(ctxt).updateNetwork(connectee.wificonfig);
+	connectee.wificonfig.SSID = target.SSID;
 	// set priority to normal in temp member
-	connectee.priority = priority;
+	connectee.wificonfig.priority = priority;
 	/*
 	 * Remove all posts to handler
 	 */
@@ -825,7 +826,7 @@ public class WFConnection extends Object implements
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(context, appname, context
 		    .getString(R.string.connecting_to_network)
-		    + connectee.SSID);
+		    + connectee.wificonfig.SSID);
 
     }
 
@@ -835,6 +836,19 @@ public class WFConnection extends Object implements
 	 */
 	if (knownbysignal.size() == 0)
 	    return NULLVAL;
+
+	/*
+	 * Check for pending connection if connectee is in range return, else
+	 * continue
+	 */
+	if (connectee != null) {
+	    for (WFConfig network : knownbysignal) {
+		if (network.wificonfig.SSID.equals(connectee.wificonfig.SSID)) {
+		    logBestNetwork(context, network);
+		    return network.wificonfig.networkId;
+		}
+	    }
+	}
 
 	int bestnid = NULLVAL;
 	WFConfig best = knownbysignal.get(0);
@@ -846,13 +860,7 @@ public class WFConnection extends Object implements
 		WFConfig.sparseConfigBSSID(best.wificonfig.BSSID,
 			best.wificonfig.networkId));
 	connectToAP(context, best.wificonfig.networkId);
-	if (prefs.getFlag(Pref.LOG_KEY))
-	    LogService.log(context, appname, context
-		    .getString(R.string.best_signal_ssid)
-		    + best.wificonfig.SSID
-		    + context.getString(R.string.signal_level)
-		    + best.level
-		    + context.getString(R.string.nid) + bestnid);
+	logBestNetwork(context, best);
 	return bestnid;
     }
 
@@ -1154,11 +1162,11 @@ public class WFConnection extends Object implements
     }
 
     private void handleConnect() {
-	if (connectee.SSID.contains(getSSID())) {
+	if (connectee.wificonfig.SSID.contains(getSSID())) {
 	    if (prefs.getFlag(Pref.LOG_KEY))
 		LogService.log(ctxt, appname, ctxt
 			.getString(R.string.connected_to_network)
-			+ connectee.SSID);
+			+ connectee.wificonfig.SSID);
 	} else {
 	    if (prefs.getFlag(Pref.LOG_KEY))
 		LogService.log(ctxt, appname, ctxt
@@ -1169,7 +1177,7 @@ public class WFConnection extends Object implements
 	    else
 		return;
 	}
-	getWifiManager(ctxt).updateNetwork(connectee);
+	getWifiManager(ctxt).updateNetwork(connectee.wificonfig);
 	connectee = null;
     }
 
@@ -1190,7 +1198,9 @@ public class WFConnection extends Object implements
     }
 
     private void handleUserEvent() {
-	connectee = getWifiManager(ctxt).getConfiguredNetworks().get(lastAP);
+	connectee = new WFConfig();
+	connectee.wificonfig = getWifiManager(ctxt).getConfiguredNetworks()
+		.get(lastAP);
 	clearHandler();
     }
 
@@ -1283,6 +1293,24 @@ public class WFConnection extends Object implements
 			.getString(R.string.ioexception));
 	}
 	return isUp;
+    }
+    
+    private static void logBestNetwork(final Context context,
+	    final WFConfig best) {
+	if (prefs.getFlag(Pref.LOG_KEY)) {
+	    StringBuilder output = new StringBuilder();
+	    output.append(context.getString(R.string.best_signal_ssid));
+	    output.append(best.wificonfig.SSID);
+	    output.append(COLON);
+	    output.append(best.wificonfig.BSSID);
+	    output.append(NEWLINE);
+	    output.append(context.getString(R.string.signal_level));
+	    output.append(best.level);
+	    output.append(NEWLINE);
+	    output.append(context.getString(R.string.nid));
+	    output.append(best.wificonfig.networkId);
+	    LogService.log(context, appname, output.toString());
+	}
     }
 
     private static void logSupplicant(final Context context, final String state) {
@@ -1399,7 +1427,7 @@ public class WFConnection extends Object implements
     }
 
     private void handleScanResults() {
-	if (!getWifiManager(ctxt).isWifiEnabled() || connectee != null)
+	if (!getWifiManager(ctxt).isWifiEnabled())
 	    return;
 
 	if (!pendingscan) {
@@ -1739,7 +1767,8 @@ public class WFConnection extends Object implements
 	if (state) {
 	    notifStatus = getSupplicantStateString();
 	    notifSSID = getSSID();
-	    statnotif = NotifUtil.getStatusPane(ctxt, notifSSID, notifStatus, notifSignal, statnotif);
+	    statnotif = NotifUtil.getStatusPane(ctxt, notifSSID, notifStatus,
+		    notifSignal, statnotif);
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
 		    true, notif, statnotif);
 	} else {
