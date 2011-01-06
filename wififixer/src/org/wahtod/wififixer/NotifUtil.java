@@ -115,8 +115,6 @@ public class NotifUtil {
 	contentView.setTextColor(R.id.status, Color.BLACK);
 	contentView.setTextColor(R.id.ssid, Color.BLACK);
 	contentView.setImageViewResource(R.id.signal, signal);
-	Log.d(WifiFixerService.class.getSimpleName(), "Instantiating StatView");
-
 	return contentView;
     }
 
