@@ -69,10 +69,9 @@ public class NotifUtil {
 	    final String ssid, final String status, final int signal,
 	    RemoteViews statnotif) {
 
-	if (statnotif == null) {
+	if (statnotif == null) 
 	    statnotif = createStatView(context, ssid, status, signal);
-	}
-
+	
 	return statnotif;
     }
 
@@ -119,8 +118,8 @@ public class NotifUtil {
 
     public static void updateStatView(final Context context, final String ssid,
 	    final String status, final int signal, RemoteViews statnotif) {
-	if (statnotif == null)
-	    statnotif = getStatusPane(context, ssid, status, signal, statnotif);
+
+	statnotif = getStatusPane(context, ssid, status, signal, statnotif);
 
 	statnotif.setTextViewText(R.id.ssid, truncateSSID(ssid));
 	statnotif.setTextViewText(R.id.status, status);
@@ -129,18 +128,21 @@ public class NotifUtil {
     }
 
     public static void updateStatNotif(final Context context,
-	    final String ssid, final String status, final int signal, Notification notif, RemoteViews statnotif) {
+	    final String ssid, final String status, final int signal,
+	    Notification notif, RemoteViews statnotif) {
 	updateStatView(context, ssid, status, signal, statnotif);
-	
+
 	if (notif == null)
-	    notif = addStatNotif(context, status, status, signal, true, notif, statnotif);
-	
+	    notif = addStatNotif(context, status, status, signal, true, notif,
+		    statnotif);
+
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 	nm.notify(STATNOTIFID, notif);
     }
 
-    public static void setSSIDColor(final Context context, final int color, RemoteViews statnotif) {
+    public static void setSSIDColor(final Context context, final int color,
+	    RemoteViews statnotif) {
 	statnotif.setTextColor(R.id.ssid, color);
     }
 

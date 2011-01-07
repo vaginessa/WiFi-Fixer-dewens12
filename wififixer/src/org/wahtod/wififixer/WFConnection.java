@@ -1294,7 +1294,7 @@ public class WFConnection extends Object implements
 	}
 	return isUp;
     }
-    
+
     private static void logBestNetwork(final Context context,
 	    final WFConfig best) {
 	if (prefs.getFlag(Pref.LOG_KEY)) {
@@ -1769,11 +1769,11 @@ public class WFConnection extends Object implements
 	    notifSSID = getSSID();
 	    statnotif = NotifUtil.getStatusPane(ctxt, notifSSID, notifStatus,
 		    notifSignal, statnotif);
-	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
-		    true, notif, statnotif);
+	    notif = NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus,
+		    notifSignal, true, notif, statnotif);
 	} else {
-	    NotifUtil
-		    .addStatNotif(ctxt, null, null, 0, false, notif, statnotif);
+	    notif = NotifUtil.addStatNotif(ctxt, null, null, 0, false, notif,
+		    statnotif);
 	}
     }
 
