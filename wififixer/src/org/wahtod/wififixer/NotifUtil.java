@@ -30,6 +30,7 @@ public class NotifUtil {
     private static final int STATNOTIFID = 2392;
     private static final int MAX_SSID_LENGTH = 10;
     public static final String CANCEL = "CANCEL";
+    private static int ssidColor = Color.BLACK;
 
     private NotifUtil() {
 
@@ -65,30 +66,19 @@ public class NotifUtil {
 
     }
 
-    public static RemoteViews getStatusPane(final Context context,
-	    final String ssid, final String status, final int signal,
-	    RemoteViews statnotif) {
-
-	if (statnotif == null) 
-	    statnotif = createStatView(context, ssid, status, signal);
-	
-	return statnotif;
-    }
-
-    public static Notification addStatNotif(final Context context,
-	    final String ssid, final String status, final int signal,
-	    final boolean flag, Notification notif, RemoteViews sview) {
+    public static void addStatNotif(final Context context, final String ssid,
+	    final String status, final int signal, final boolean flag) {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
 	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 		new Intent(context, WifiFixerActivity.class), 0);
 
-	notif = new Notification(R.drawable.router32, context
+	Notification notif = new Notification(R.drawable.router32, context
 		.getString(R.string.network_status), System.currentTimeMillis());
 
 	if (flag) {
-	    notif.contentView = sview;
+	    notif.contentView = createStatView(context, ssid, status, signal);
 	    notif.contentIntent = contentIntent;
 	    notif.flags = Notification.FLAG_ONGOING_EVENT;
 	    /*
@@ -97,9 +87,8 @@ public class NotifUtil {
 	    nm.notify(STATNOTIFID, notif);
 	} else {
 	    nm.cancel(STATNOTIFID);
-	    return null;
+
 	}
-	return notif;
     }
 
     public static RemoteViews createStatView(final Context context,
@@ -111,39 +100,13 @@ public class NotifUtil {
 	contentView.setTextViewText(R.id.ssid, truncateSSID(ssid));
 	contentView.setTextViewText(R.id.status, status);
 	contentView.setTextColor(R.id.status, Color.BLACK);
-	contentView.setTextColor(R.id.ssid, Color.BLACK);
+	contentView.setTextColor(R.id.ssid, ssidColor);
 	contentView.setImageViewResource(R.id.signal, signal);
 	return contentView;
     }
 
-    public static void updateStatView(final Context context, final String ssid,
-	    final String status, final int signal, RemoteViews statnotif) {
-
-	statnotif = getStatusPane(context, ssid, status, signal, statnotif);
-
-	statnotif.setTextViewText(R.id.ssid, truncateSSID(ssid));
-	statnotif.setTextViewText(R.id.status, status);
-	statnotif.setImageViewResource(R.id.signal, signal);
-
-    }
-
-    public static void updateStatNotif(final Context context,
-	    final String ssid, final String status, final int signal,
-	    Notification notif, RemoteViews statnotif) {
-	updateStatView(context, ssid, status, signal, statnotif);
-
-	if (notif == null)
-	    notif = addStatNotif(context, status, status, signal, true, notif,
-		    statnotif);
-
-	NotificationManager nm = (NotificationManager) context
-		.getSystemService(Context.NOTIFICATION_SERVICE);
-	nm.notify(STATNOTIFID, notif);
-    }
-
-    public static void setSSIDColor(final Context context, final int color,
-	    RemoteViews statnotif) {
-	statnotif.setTextColor(R.id.ssid, color);
+    public static void setSSIDColor(final int color) {
+	ssidColor = color;
     }
 
     public static void show(final Context context, final String message,
