@@ -16,6 +16,7 @@
 package org.wahtod.wififixer;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -873,15 +874,11 @@ public class WFConnection extends Object implements
 	return false;
     }
 
+    /*
+     * Performs HTTP HEAD request and returns boolean success or failure
+     */
     private static boolean getHttpHeaders(final Context context)
 	    throws IOException, URISyntaxException {
-
-	/*
-	 * Performs HTTP HEAD request and returns boolean success or failure
-	 */
-
-	boolean isup = false;
-	int status = NULLVAL;
 
 	/*
 	 * Reusing our Httpclient, only initializing first time
@@ -907,16 +904,18 @@ public class WFConnection extends Object implements
 	 * same, can re-use.
 	 */
 	response = httpclient.execute(head);
-	status = response.getStatusLine().getStatusCode();
-	if (status != NULLVAL)
-	    isup = true;
+	int status = response.getStatusLine().getStatusCode();
+
 	if (prefs.getFlag(Pref.LOG_KEY)) {
 	    LogService.log(context, appname, context
 		    .getString(R.string.http_status)
 		    + status);
 	}
 
-	return isup;
+	if (status == HttpURLConnection.HTTP_OK)
+	    return true;
+	else
+	    return false;
     }
 
     private static boolean getIsOnWifi(final Context context) {
