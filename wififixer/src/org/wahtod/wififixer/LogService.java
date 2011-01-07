@@ -239,10 +239,16 @@ public class LogService extends Service {
     private void timeStamp(final Context context) {
 
 	Date time = new Date();
-	String message = BUILD + vstring + COLON + VERSION + SPACE + COLON
-		+ time.toString();
+	StringBuilder message = new StringBuilder();
+	message.append(BUILD);
+	message.append(vstring);
+	message.append(COLON);
+	message.append(VERSION);
+	message.append(SPACE);
+	message.append(COLON);
+	message.append(time.toString());
 	processLogIntent(context, WifiFixerService.class.getSimpleName(),
-		message);
+		message.toString());
 
 	/*
 	 * Schedule next timestamp or terminate
