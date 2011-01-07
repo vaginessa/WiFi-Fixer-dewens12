@@ -635,7 +635,7 @@ public class WFConnection extends Object implements
 	/*
 	 * Start status notification if should
 	 */
-	if (prefs.getFlag(Pref.STATENOT_KEY))
+	if (statNotifCheck())
 	    setStatNotif(true);
 
 	/*
