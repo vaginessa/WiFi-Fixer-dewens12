@@ -50,6 +50,12 @@
 				android:defaultValue="true"
 				android:title="Status Notification"
 				android:summary="Displays an ongoing notification showing connection state" />
+				
+				<CheckBoxPreference android:key="StatNotifBlack"
+				android:defaultValue="false"
+				android:title="Status Theme: black"
+				android:summary="Sets Status Notification to a dark theme with white text" />
+				
 
 			<CheckBoxPreference android:key="Notifications"
 				android:title="Fix Notifications"

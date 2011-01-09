@@ -33,6 +33,11 @@ import android.preference.PreferenceManager;
 public class WifiFixerService extends Service implements
 	OnScreenStateChangedListener {
 
+    /*
+     * Those not familiar with Android: there can only ever be one Service instance. 
+     * Yeah, so practice sound. 
+     */
+    
     // IDs For notifications
     private static final int NOTIFID = 31337;
     // Screen State SharedPref key

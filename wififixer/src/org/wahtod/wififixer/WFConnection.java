@@ -493,12 +493,15 @@ public class WFConnection extends Object implements
 	     * Indicate managed status by changing ssid text color
 	     */
 	    if (shouldManage(ctxt))
-		NotifUtil.setSSIDColor(Color.BLACK);
+		if (prefs.getFlag(Pref.STATTHEME_KEY))
+		    NotifUtil.setSSIDColor(Color.WHITE);
+		else
+		    NotifUtil.setSSIDColor(Color.BLACK);
 	    else
 		NotifUtil.setSSIDColor(Color.RED);
 
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
-		    true);
+		    true, getStatNotifLayout());
 	}
 
     };
@@ -680,7 +683,8 @@ public class WFConnection extends Object implements
 
 	if (statNotifCheck())
 	    NotifUtil.addStatNotif(context, notifSSID, context
-		    .getString(R.string.network_test), notifSignal, true);
+		    .getString(R.string.network_test), notifSignal, true,
+		    getStatNotifLayout());
 
 	/*
 	 * Failover switch
@@ -710,7 +714,7 @@ public class WFConnection extends Object implements
 		notifStatus = context.getString(R.string.failed);
 
 	    NotifUtil.addStatNotif(context, notifSSID, notifStatus,
-		    notifSignal, true);
+		    notifSignal, true, getStatNotifLayout());
 	}
 
 	return isup;
@@ -1063,6 +1067,13 @@ public class WFConnection extends Object implements
 	Collections.sort(knownbysignal, new SortBySignal());
 
 	return knownbysignal.size();
+    }
+
+    private static int getStatNotifLayout() {
+	if (prefs.getFlag(Pref.STATTHEME_KEY))
+	    return R.layout.status_notif_layout_black;
+	else
+	    return R.layout.status_notif_layout;
     }
 
     private static int getNetworkID() {
@@ -1498,7 +1509,7 @@ public class WFConnection extends Object implements
 		notifSignal = R.drawable.signal0;
 	    }
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
-		    true);
+		    true, getStatNotifLayout());
 	}
 
 	/*
@@ -1761,10 +1772,11 @@ public class WFConnection extends Object implements
 	if (state) {
 	    notifStatus = getSupplicantStateString();
 	    notifSSID = getSSID();
+
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
-		    true);
+		    true, getStatNotifLayout());
 	} else {
-	    NotifUtil.addStatNotif(ctxt, null, null, 0, false);
+	    NotifUtil.addStatNotif(ctxt, null, null, 0, false, 0);
 	}
     }
 

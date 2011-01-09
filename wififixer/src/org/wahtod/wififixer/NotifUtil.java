@@ -67,18 +67,18 @@ public class NotifUtil {
     }
 
     public static void addStatNotif(final Context context, final String ssid,
-	    final String status, final int signal, final boolean flag) {
+	    final String status, final int signal, final boolean flag, final int layout) {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
 	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 		new Intent(context, WifiFixerActivity.class), 0);
-
-	Notification notif = new Notification(R.drawable.router32, context
+	
+	Notification  notif = new Notification(R.drawable.router32, context
 		.getString(R.string.network_status), System.currentTimeMillis());
 
 	if (flag) {
-	    notif.contentView = createStatView(context, ssid, status, signal);
+	    notif.contentView = createStatView(context, ssid, status, signal, layout);
 	    notif.contentIntent = contentIntent;
 	    notif.flags = Notification.FLAG_ONGOING_EVENT;
 	    /*
@@ -92,14 +92,13 @@ public class NotifUtil {
     }
 
     public static RemoteViews createStatView(final Context context,
-	    final String ssid, final String status, final int signal) {
+	    final String ssid, final String status, final int signal, final int layout) {
 
 	RemoteViews contentView = new RemoteViews(context.getPackageName(),
-		R.layout.status_notif_layout);
+		layout);
 
 	contentView.setTextViewText(R.id.ssid, truncateSSID(ssid));
 	contentView.setTextViewText(R.id.status, status);
-	contentView.setTextColor(R.id.status, Color.BLACK);
 	contentView.setTextColor(R.id.ssid, ssidColor);
 	contentView.setImageViewResource(R.id.signal, signal);
 	return contentView;
