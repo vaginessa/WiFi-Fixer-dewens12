@@ -171,7 +171,7 @@ public class WFConnection extends Object implements
      * For Supplicant ASSOCIATE stickage
      */
 
-    private static int supplicant_associate = 0;
+    private static int supplicant_associating = 0;
     private static final int SUPPLICANT_ASSOC_THRESHOLD = 3;
 
     // Runnable Constants for handler
@@ -187,6 +187,7 @@ public class WFConnection extends Object implements
     private static final int SIGNALHOP = 12;
     private static final int UPDATESTATUS = 13;
     private static final int SCANWATCHDOG = 14;
+    private static final int ASSOCWATCHDOG = 15;
 
     private Handler handler = new Handler() {
 	@Override
@@ -245,6 +246,10 @@ public class WFConnection extends Object implements
 
 	    case SCANWATCHDOG:
 		scanwatchdog();
+		break;
+
+	    case ASSOCWATCHDOG:
+		checkAssociateState();
 		break;
 
 	    }
@@ -1360,6 +1365,25 @@ public class WFConnection extends Object implements
 
     }
 
+    private void checkAssociateState() {
+	supplicant_associating++;
+	if (supplicant_associating > SUPPLICANT_ASSOC_THRESHOLD) {
+	    /*
+	     * Reset supplicant, it's stuck
+	     */
+	    toggleWifi();
+	    supplicant_associating = 0;
+	    if (prefs.getFlag(Pref.LOG_KEY))
+		LogService
+			.log(
+				ctxt,
+				appname,
+				ctxt
+					.getString(R.string.supplicant_associate_threshold_exceeded));
+	} else
+	    handlerWrapper(ASSOCWATCHDOG, SHORTWAIT);
+    }
+
     private void checkWifi() {
 	if (getisWifiEnabled(ctxt)) {
 	    if (getIsSupplicantConnected(ctxt)) {
@@ -1513,24 +1537,14 @@ public class WFConnection extends Object implements
 	}
 
 	/*
-	 * Check for ASSOCIATING bug
+	 * Check for ASSOCIATING bug but first clear check if not ASSOCIATING
 	 */
-	if (sState.equals(ASSOCIATING)) {
-	    supplicant_associate++;
-	    if (supplicant_associate > SUPPLICANT_ASSOC_THRESHOLD) {
-		/*
-		 * Reset supplicant, it's stuck
-		 */
-		toggleWifi();
-		supplicant_associate = 0;
-		if (prefs.getFlag(Pref.LOG_KEY))
-		    LogService
-			    .log(
-				    ctxt,
-				    appname,
-				    ctxt
-					    .getString(R.string.supplicant_associate_threshold_exceeded));
-	    }
+	if (!sState.equals(ASSOCIATING)) {
+	    supplicant_associating = 0;
+	    handler.removeMessages(ASSOCWATCHDOG);
+	} else if (sState.equals(ASSOCIATING)) {
+	    handlerWrapper(ASSOCWATCHDOG, SHORTWAIT);
+
 	} else
 	/*
 	 * store last supplicant scan state
@@ -1648,7 +1662,7 @@ public class WFConnection extends Object implements
 	/*
 	 * Reset supplicant associate check
 	 */
-	supplicant_associate = 0;
+	supplicant_associating = 0;
 
 	/*
 	 * restart the Main tick
