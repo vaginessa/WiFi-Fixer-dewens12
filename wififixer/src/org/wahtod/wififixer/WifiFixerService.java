@@ -221,6 +221,17 @@ public class WifiFixerService extends Service implements
 
     }
 
+    /* (non-Javadoc)
+     * @see android.app.Service#onLowMemory()
+     */
+    @Override
+    public void onLowMemory() {
+	if(logging)
+	    LogService.log(this, APP_NAME, getString(R.string.low_memory));
+	super.onLowMemory();
+    }
+    
+    
     private void onScreenOff() {
 
 	/*

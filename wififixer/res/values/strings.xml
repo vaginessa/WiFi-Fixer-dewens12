@@ -173,4 +173,6 @@
 
 	<string name="none">none</string>
 
+	<string name="low_memory">Low Memory</string>
+
 </resources>
