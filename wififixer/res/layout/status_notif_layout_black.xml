@@ -17,7 +17,7 @@
 	android:layout_height="fill_parent">
 	<ImageView android:id="@+id/signal" android:layout_width="128px"
 		android:layout_height="fill_parent" android:layout_gravity="left"
-		android:src="@drawable/signal0" android:tint="#EEEEEE"/>
+		android:src="@drawable/signal0" android:tint="#44EEEEEE"/>
 		<TextView android:id="@+id/ssid" android:layout_width="wrap_content"
 			android:layout_height="fill_parent" android:gravity="center_vertical"
 			android:textColor="#EEEEEE" android:layout_marginLeft="5dp"

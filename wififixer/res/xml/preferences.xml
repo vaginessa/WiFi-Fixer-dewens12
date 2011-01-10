@@ -45,25 +45,25 @@
 
 		<PreferenceScreen android:title="Notifications"
 			android:summary="Network and status notifications">
+			<PreferenceCategory android:title="Status Notification">
+				<CheckBoxPreference android:key="StateNotif"
+					android:defaultValue="true" android:title="Status Notification"
+					android:summary="Displays an ongoing notification showing connection state" />
 
-			<CheckBoxPreference android:key="StateNotif"
-				android:defaultValue="true"
-				android:title="Status Notification"
-				android:summary="Displays an ongoing notification showing connection state" />
-				
 				<CheckBoxPreference android:key="StatNotifBlack"
-				android:defaultValue="false"
-				android:title="Status Theme: black"
-				android:summary="Sets Status Notification to a dark theme with white text" />
-				
+					android:defaultValue="false" android:title="Black Theme"
+					android:summary="Sets Status Notification to a dark theme with white text" />
+			</PreferenceCategory>
 
+			<PreferenceCategory android:title="Notifications">
 			<CheckBoxPreference android:key="Notifications"
-				android:title="Fix Notifications"
+				android:title="Repair Notifications"
 				android:summary="Displays a notification when Wifi Fixer fixes a problem" />
 
 			<CheckBoxPreference android:key="NetNotif"
 				android:title="Network Notifications"
 				android:summary="Displays a notification when a new open network is detected" />
+				</PreferenceCategory>
 
 
 		</PreferenceScreen>
