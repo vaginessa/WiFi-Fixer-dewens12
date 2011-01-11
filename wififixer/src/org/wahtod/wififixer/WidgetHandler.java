@@ -55,6 +55,7 @@ public class WidgetHandler extends BroadcastReceiver {
      */
     private static final int TOGGLE_DELAY = 8000;
     private static final int WATCHDOG_DELAY = 11000;
+    private static final int SHORT = 300;
 
     private static WifiManager wm;
 
@@ -99,7 +100,7 @@ public class WidgetHandler extends BroadcastReceiver {
 			PendingIntent.getActivity(ctxt, 0, new Intent(), 0));
 		PrefUtil
 			.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, true);
-		hWifiState.sendEmptyMessage(OFF);
+		hWifiState.sendEmptyMessageDelayed(OFF, SHORT);
 		hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
 		hWifiState.sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
 		break;
@@ -155,7 +156,7 @@ public class WidgetHandler extends BroadcastReceiver {
 	 * Toggle Wifi
 	 */
 	else if (action.equals(TOGGLE_WIFI))
-	    hWifiState.sendEmptyMessage(TOGGLE);
+	    hWifiState.sendEmptyMessageDelayed(TOGGLE,SHORT);
 	/*
 	 * Reassociate
 	 */

@@ -68,7 +68,6 @@ public class WFConnection extends Object implements
     static boolean screenstate;
 
     // flags
-    private static boolean pendingwifitoggle = false;
     private static boolean shouldrepair = false;
     private static boolean pendingscan = false;
     private static boolean pendingreconnect = false;
@@ -649,7 +648,7 @@ public class WFConnection extends Object implements
 	/*
 	 * Start Main tick
 	 */
-	handler.sendEmptyMessage(MAIN);
+	handlerWrapper(MAIN);
     }
 
     public static void checkBackgroundDataSetting(final Context context) {
@@ -1931,10 +1930,6 @@ public class WFConnection extends Object implements
     }
 
     private void toggleWifi() {
-	if (pendingwifitoggle)
-	    return;
-
-	pendingwifitoggle = true;
 	cleanupPosts();
 	tempLock(CONNECTWAIT);
 	/*
@@ -1943,6 +1938,7 @@ public class WFConnection extends Object implements
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.toggling_wifi));
+	
 	PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, true);
 	ctxt.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
     }
