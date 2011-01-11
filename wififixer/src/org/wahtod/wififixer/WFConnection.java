@@ -845,8 +845,7 @@ public class WFConnection extends Object implements
 	    return NULLVAL;
 	}
 	/*
-	 * Check for connectee (explicit connection)
-	 * if not, operate normally
+	 * Check for connectee (explicit connection) if not, operate normally
 	 */
 	if (connectee != null) {
 	    for (WFConfig network : knownbysignal) {
@@ -855,27 +854,21 @@ public class WFConnection extends Object implements
 		    return network.wificonfig.networkId;
 		}
 	    }
-	} else {
-	    /*
-	     * We're supposed to be connecting
-	     * to this network
-	     */
-	    logBestNetwork(context, connectee);
-	    return connectee.wificonfig.networkId;
-	}
+	} 
 
-	int bestnid = NULLVAL;
-	WFConfig best = knownbysignal.get(0);
-	/*
-	 * specify bssid and add it to the supplicant's known network entry
-	 */
-	bestnid = best.wificonfig.networkId;
-	getWifiManager(ctxt).updateNetwork(
-		WFConfig.sparseConfigBSSID(best.wificonfig.BSSID,
-			best.wificonfig.networkId));
-	connectToAP(context, best.wificonfig.networkId);
-	logBestNetwork(context, best);
-	return bestnid;
+	    int bestnid = NULLVAL;
+	    WFConfig best = knownbysignal.get(0);
+	    /*
+	     * specify bssid and add it to the supplicant's known network entry
+	     */
+	    bestnid = best.wificonfig.networkId;
+	    getWifiManager(ctxt).updateNetwork(
+		    WFConfig.sparseConfigBSSID(best.wificonfig.BSSID,
+			    bestnid));
+	    connectToAP(context, bestnid);
+	    logBestNetwork(context, best);
+	    return bestnid;
+	
     }
 
     private static boolean containsBSSID(final String bssid,
