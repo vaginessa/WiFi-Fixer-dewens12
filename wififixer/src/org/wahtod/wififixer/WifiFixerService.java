@@ -34,10 +34,10 @@ public class WifiFixerService extends Service implements
 	OnScreenStateChangedListener {
 
     /*
-     * Those not familiar with Android: there can only ever be one Service instance. 
-     * Yeah, so practice sound. 
+     * Those not familiar with Android: there can only ever be one Service
+     * instance. Yeah, so practice sound.
      */
-    
+
     // IDs For notifications
     private static final int NOTIFID = 31337;
     // Screen State SharedPref key
@@ -221,17 +221,18 @@ public class WifiFixerService extends Service implements
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see android.app.Service#onLowMemory()
      */
     @Override
     public void onLowMemory() {
-	if(logging)
+	if (logging)
 	    LogService.log(this, APP_NAME, getString(R.string.low_memory));
 	super.onLowMemory();
     }
-    
-    
+
     private void onScreenOff() {
 
 	/*

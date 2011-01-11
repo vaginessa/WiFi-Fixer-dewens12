@@ -181,10 +181,12 @@ public class PrefUtil extends Object {
     public void postValChanged(final Pref p) {
 
     }
-    
+
     public static String getnetworkSSID(final Context context, final int network) {
-	WifiManager  wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-	return getFileName(context,wm.getConfiguredNetworks().get(network).SSID);
+	WifiManager wm = (WifiManager) context
+		.getSystemService(Context.WIFI_SERVICE);
+	return getFileName(context,
+		wm.getConfiguredNetworks().get(network).SSID);
     }
 
     public static String getFileName(final Context ctxt, String filename) {
@@ -197,7 +199,7 @@ public class PrefUtil extends Object {
     public static int readNetworkPref(final Context ctxt, final String network,
 	    final NetPref pref) {
 	SharedPreferences settings = ctxt.getSharedPreferences(NETPREFIX
-		+  network, 0);
+		+ network, 0);
 	String key = pref.key();
 
 	if (settings.contains(key))
@@ -209,7 +211,7 @@ public class PrefUtil extends Object {
     public static void writeNetworkPref(final Context ctxt,
 	    final String network, final NetPref pref, final int value) {
 	SharedPreferences settings = ctxt.getSharedPreferences(NETPREFIX
-		+  network,0);
+		+ network, 0);
 	/*
 	 * Check for actual changed value if changed, notify
 	 */

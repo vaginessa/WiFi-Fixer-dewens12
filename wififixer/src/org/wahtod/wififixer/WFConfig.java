@@ -38,8 +38,9 @@ public class WFConfig extends Object {
 	wificonfig = wConfig;
 	wificonfig.BSSID = sResult.BSSID;
     }
-    public WFConfig(){
-	
+
+    public WFConfig() {
+
     }
 
     public static WifiConfiguration sparseConfigBSSID(final String bssid,

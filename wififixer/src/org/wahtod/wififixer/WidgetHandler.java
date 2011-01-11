@@ -156,7 +156,7 @@ public class WidgetHandler extends BroadcastReceiver {
 	 * Toggle Wifi
 	 */
 	else if (action.equals(TOGGLE_WIFI))
-	    hWifiState.sendEmptyMessageDelayed(TOGGLE,SHORT);
+	    hWifiState.sendEmptyMessageDelayed(TOGGLE, SHORT);
 	/*
 	 * Reassociate
 	 */
