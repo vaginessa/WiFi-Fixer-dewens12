@@ -838,12 +838,15 @@ public class WFConnection extends Object implements
 	/*
 	 * Make sure knownbysignal is populated first
 	 */
-	if (knownbysignal.size() == 0)
+	if (knownbysignal.size() == 0) {
+	    if (prefs.getFlag(Pref.LOG_KEY))
+		LogService.log(context, appname, context
+			.getString(R.string.knownbysignal_empty_exiting));
 	    return NULLVAL;
-
+	}
 	/*
-	 * Check for pending connection if connectee is in range return, else
-	 * continue
+	 * Check for connectee (explicit connection)
+	 * if not, operate normally
 	 */
 	if (connectee != null) {
 	    for (WFConfig network : knownbysignal) {
@@ -852,6 +855,13 @@ public class WFConnection extends Object implements
 		    return network.wificonfig.networkId;
 		}
 	    }
+	} else {
+	    /*
+	     * We're supposed to be connecting
+	     * to this network
+	     */
+	    logBestNetwork(context, connectee);
+	    return connectee.wificonfig.networkId;
 	}
 
 	int bestnid = NULLVAL;
@@ -1938,7 +1948,7 @@ public class WFConnection extends Object implements
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.toggling_wifi));
-	
+
 	PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, true);
 	ctxt.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
     }
