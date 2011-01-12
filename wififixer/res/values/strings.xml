@@ -177,4 +177,6 @@
 
 	<string name="knownbysignal_empty_exiting">KnownbySignal Empty, Exiting</string>
 
+	<string name="wmconnect_to">WMConnect to :</string>
+
 </resources>

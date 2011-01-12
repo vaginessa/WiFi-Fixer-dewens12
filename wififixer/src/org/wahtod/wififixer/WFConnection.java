@@ -123,9 +123,8 @@ public class WFConnection extends Object implements
     private final static long SLEEPWAIT = 60000;
     // ms for lock delays
     private final static int LOCKWAIT = 5000;
-    // ms to wait after trying to connect
-    private static final int CONNECTWAIT = 8000;
     private static final int SHORTWAIT = 1500;
+    // just long enough to avoid sleep bug with handler posts
     private static final int REALLYSHORTWAIT = 200;
 
     // Last Scan
@@ -167,11 +166,17 @@ public class WFConnection extends Object implements
     private static int wifirepair = W_REASSOCIATE;
 
     /*
-     * For Supplicant ASSOCIATE stickage
+     * For Supplicant ASSOCIATING bug
      */
-
     private static int supplicant_associating = 0;
     private static final int SUPPLICANT_ASSOC_THRESHOLD = 3;
+
+    /*
+     * For connectToAP sticking
+     */
+
+    private static int connecting = 0;
+    private static final int CONNECTING_THRESHOLD = 2;
 
     // Runnable Constants for handler
     private static final int MAIN = 0;
@@ -851,6 +856,9 @@ public class WFConnection extends Object implements
 	    for (WFConfig network : knownbysignal) {
 		if (network.wificonfig.SSID.equals(connectee.wificonfig.SSID)) {
 		    logBestNetwork(context, network);
+		    connecting++;
+		    if (connecting > CONNECTING_THRESHOLD)
+			wmConnect(context, network);
 		    return network.wificonfig.networkId;
 		}
 	    }
@@ -1033,15 +1041,20 @@ public class WFConnection extends Object implements
 			    && !containsBSSID(sResult.BSSID, knownbysignal)
 			    && getNetworkState(context, wfResult.networkId)) {
 			if (prefs.getFlag(Pref.LOG_KEY)) {
-			    LogService.log(context, appname, context
-				    .getString(R.string.found_ssid)
-				    + sResult.SSID);
-			    LogService.log(context, appname, context
-				    .getString(R.string.capabilities)
-				    + sResult.capabilities);
-			    LogService.log(context, appname, context
-				    .getString(R.string.signal_level)
-				    + sResult.level);
+			    StringBuilder out = new StringBuilder();
+			    out.append(context.getString(R.string.found_ssid));
+			    out.append(sResult.SSID);
+			    out.append(NEWLINE);
+			    out
+				    .append(context
+					    .getString(R.string.capabilities));
+			    out.append(sResult.capabilities);
+			    out.append(NEWLINE);
+			    out
+				    .append(context
+					    .getString(R.string.signal_level));
+			    out.append(sResult.level);
+			    LogService.log(context, appname, out.toString());
 			}
 			/*
 			 * Add result to knownbysignal
@@ -1410,13 +1423,6 @@ public class WFConnection extends Object implements
 	clearQueue();
 	clearHandler();
 	wifilock.lock(false);
-    }
-
-    private void cleanupPosts() {
-	handler.removeMessages(RECONNECT);
-	handler.removeMessages(REPAIR);
-	handler.removeMessages(WIFITASK);
-	handler.removeMessages(TEMPLOCK_ON);
     }
 
     private void clearQueue() {
@@ -1931,9 +1937,7 @@ public class WFConnection extends Object implements
 	handlerWrapper(TEMPLOCK_OFF, time);
     }
 
-    private void toggleWifi() {
-	cleanupPosts();
-	tempLock(CONNECTWAIT);
+    private static void toggleWifi() {
 	/*
 	 * Send Toggle request to broadcastreceiver
 	 */
@@ -1974,6 +1978,21 @@ public class WFConnection extends Object implements
 
     public void wifiLock(final boolean state) {
 	wifilock.lock(state);
+    }
+
+    private static void wmConnect(final Context context, final WFConfig network) {
+	/*
+	 * If explicit WifiManager connect fails, toggle wifi
+	 */
+	if (!getWifiManager(context).enableNetwork(
+		network.wificonfig.networkId, true))
+	    toggleWifi();
+
+	connecting = 0;
+	if (prefs.getFlag(Pref.LOG_KEY))
+	    LogService.log(context, appname, context
+		    .getString(R.string.wmconnect_to)
+		    + network.wificonfig.SSID);
     }
 
 }
