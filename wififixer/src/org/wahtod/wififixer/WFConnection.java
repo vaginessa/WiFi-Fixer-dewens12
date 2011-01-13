@@ -817,7 +817,10 @@ public class WFConnection extends Object implements
 	 * Create sparse WifiConfiguration with details of desired connectee
 	 */
 	connectee = new WFConfig();
-	connectee.wificonfig = WFConfig.sparseConfigPriority(OVER9000, network);
+	WifiConfiguration cfg = new WifiConfiguration();
+	cfg.priority = OVER9000;
+	cfg.networkId = network;
+	connectee.wificonfig = cfg;
 	getWifiManager(ctxt).updateNetwork(connectee.wificonfig);
 	connectee.wificonfig.SSID = target.SSID;
 	// set priority to normal in temp member
@@ -870,8 +873,10 @@ public class WFConnection extends Object implements
 	 * specify bssid and add it to the supplicant's known network entry
 	 */
 	bestnid = best.wificonfig.networkId;
-	getWifiManager(ctxt).updateNetwork(
-		WFConfig.sparseConfigBSSID(best.wificonfig.BSSID, bestnid));
+	WifiConfiguration cfg = new WifiConfiguration();
+	cfg.BSSID = best.wificonfig.BSSID;
+	cfg.networkId = bestnid;
+	getWifiManager(ctxt).updateNetwork(cfg);
 	connectToAP(context, bestnid);
 	logBestNetwork(context, best);
 	return bestnid;
@@ -1984,7 +1989,10 @@ public class WFConnection extends Object implements
 	/*
 	 * First restore normal priority before we try manual connect
 	 */
-	connectee.wificonfig = WFConfig.sparseConfigPriority(connectee.wificonfig.priority, connectee.wificonfig.networkId);
+	WifiConfiguration cfg = new WifiConfiguration();
+	cfg.priority = connectee.wificonfig.priority;
+	cfg.networkId=connectee.wificonfig.networkId;
+	connectee.wificonfig = cfg;
 	getWifiManager(ctxt).updateNetwork(connectee.wificonfig);
 	/*
 	 * If explicit WifiManager connect fails, toggle wifi
