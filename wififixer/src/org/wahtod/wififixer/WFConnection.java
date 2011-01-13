@@ -1982,6 +1982,11 @@ public class WFConnection extends Object implements
 
     private static void wmConnect(final Context context, final WFConfig network) {
 	/*
+	 * First restore normal priority before we try manual connect
+	 */
+	connectee.wificonfig = WFConfig.sparseConfigPriority(connectee.wificonfig.priority, connectee.wificonfig.networkId);
+	getWifiManager(ctxt).updateNetwork(connectee.wificonfig);
+	/*
 	 * If explicit WifiManager connect fails, toggle wifi
 	 */
 	if (!getWifiManager(context).enableNetwork(
