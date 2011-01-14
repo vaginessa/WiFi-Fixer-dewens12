@@ -861,7 +861,7 @@ public class WFConnection extends Object implements
 		    logBestNetwork(context, network);
 		    connecting++;
 		    if (connecting > CONNECTING_THRESHOLD)
-			wmConnect(context, network);
+			restoreNetworkAndReset(context, network);
 		    return network.wificonfig.networkId;
 		}
 	    }
@@ -1743,7 +1743,9 @@ public class WFConnection extends Object implements
     private void onWifiDisabled() {
 	clearHandler();
 	if (prefs.getFlag(Pref.STATENOT_KEY))
-	    setStatNotif(false);
+	    NotifUtil.addStatNotif(ctxt, NULL_SSID, ctxt
+		    .getString(R.string.wifi_is_disabled), R.drawable.signal0,
+		    true, getStatNotifLayout());
 
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.setLogTS(ctxt, false, 0);
@@ -1952,6 +1954,10 @@ public class WFConnection extends Object implements
 
 	PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, true);
 	ctxt.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
+	if (prefs.getFlag(Pref.STATENOT_KEY))
+	    NotifUtil.addStatNotif(ctxt, NULL_SSID, ctxt
+		    .getString(R.string.toggling_wifi), R.drawable.signal0,
+		    true, getStatNotifLayout());
     }
 
     private void wifiRepair() {
@@ -1985,27 +1991,21 @@ public class WFConnection extends Object implements
 	wifilock.lock(state);
     }
 
-    private static void wmConnect(final Context context, final WFConfig network) {
+    private static void restoreNetworkAndReset(final Context context,
+	    final WFConfig network) {
 	/*
 	 * First restore normal priority before we try manual connect
 	 */
 	WifiConfiguration cfg = new WifiConfiguration();
 	cfg.priority = connectee.wificonfig.priority;
-	cfg.networkId=connectee.wificonfig.networkId;
+	cfg.networkId = connectee.wificonfig.networkId;
 	connectee.wificonfig = cfg;
 	getWifiManager(ctxt).updateNetwork(connectee.wificonfig);
 	/*
-	 * If explicit WifiManager connect fails, toggle wifi
+	 * Turns out we just want to toggle wifi
 	 */
-	if (!getWifiManager(context).enableNetwork(
-		network.wificonfig.networkId, true))
-	    toggleWifi();
-
+	toggleWifi();
 	connecting = 0;
-	if (prefs.getFlag(Pref.LOG_KEY))
-	    LogService.log(context, appname, context
-		    .getString(R.string.wmconnect_to)
-		    + network.wificonfig.SSID);
     }
 
 }

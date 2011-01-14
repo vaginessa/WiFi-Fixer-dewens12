@@ -95,9 +95,12 @@ public class WidgetHandler extends BroadcastReceiver {
 		break;
 
 	    case TOGGLE:
-		NotifUtil.show(ctxt, ctxt.getString(R.string.toggling_wifi),
-			ctxt.getString(R.string.toggling_wifi), TOGGLE_ID,
-			PendingIntent.getActivity(ctxt, 0, new Intent(), 0));
+		if (!PrefUtil.readBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK))
+		    NotifUtil.show(ctxt,
+			    ctxt.getString(R.string.toggling_wifi), ctxt
+				    .getString(R.string.toggling_wifi),
+			    TOGGLE_ID, PendingIntent.getActivity(ctxt, 0,
+				    new Intent(), 0));
 		PrefUtil
 			.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, true);
 		hWifiState.sendEmptyMessageDelayed(OFF, SHORT);
