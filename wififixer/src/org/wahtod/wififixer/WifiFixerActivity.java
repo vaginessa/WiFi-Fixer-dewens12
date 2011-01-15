@@ -740,7 +740,7 @@ public class WifiFixerActivity extends Activity {
     }
 
     private static void refreshArray() {
-	if (knownnetworks == adapter.ssidArray)
+	if (knownnetworks.equals(adapter.ssidArray))
 	    return;
 
 	for (String ssid : knownnetworks) {
