@@ -92,7 +92,7 @@ public class WifiFixerActivity extends Activity {
     VersionedLogFile vlogfile;
     private static View listviewitem;
     private static NetworkListAdapter adapter;
-    private static String[] knownnetworks;
+    private static List<String> knownnetworks;
 
     private static List<String> knownbysignal;
 
@@ -121,21 +121,21 @@ public class WifiFixerActivity extends Activity {
      * custom adapter for Network List ListView
      */
     private static class NetworkListAdapter extends BaseAdapter {
-	private String[] ssidArray;
+	private List<String> ssidArray;
 	private static LayoutInflater inflater;
 
-	public NetworkListAdapter(Context context, String[] ssids) {
+	public NetworkListAdapter(Context context, List<String> knownnetworks) {
 	    inflater = (LayoutInflater) context
 		    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	    ssidArray = ssids;
+	    ssidArray = knownnetworks;
 	}
 
 	public int getCount() {
-	    return ssidArray.length;
+	    return ssidArray.size();
 	}
 
 	public Object getItem(int position) {
-	    return ssidArray[position];
+	    return ssidArray.get(position);
 	}
 
 	public long getItemId(int position) {
@@ -157,9 +157,9 @@ public class WifiFixerActivity extends Activity {
 	    /*
 	     * Set SSID text and color
 	     */
-	    holder.text.setText(ssidArray[position]);
+	    holder.text.setText(ssidArray.get(position));
 
-	    if (knownbysignal.contains(ssidArray[position]))
+	    if (knownbysignal.contains(ssidArray.get(position)))
 		holder.text.setTextColor(Color.YELLOW);
 	    else
 		holder.text.setTextColor(Color.WHITE);
@@ -522,17 +522,17 @@ public class WifiFixerActivity extends Activity {
     /*
      * Note that this WILL return a null String[] if called while wifi is off.
      */
-    private static final String[] getNetworks(final Context context) {
+    private static final List<String> getNetworks(final Context context) {
 	WifiManager wm = (WifiManager) context
 		.getSystemService(Context.WIFI_SERVICE);
 	List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
-	String[] networks = new String[wifiConfigs.size()];
+	List<String> networks = new ArrayList<String>();
 	String ssid;
 	for (WifiConfiguration wfResult : wifiConfigs) {
 
 	    ssid = wfResult.SSID.replace("\"", "");
 
-	    networks[wfResult.networkId] = ssid;
+	    networks.add(wfResult.networkId, ssid);
 	}
 
 	return networks;
@@ -723,21 +723,35 @@ public class WifiFixerActivity extends Activity {
 	/*
 	 * Don't refresh if temp is empty (wifi is off)
 	 */
-	String[] temp = getNetworks(this);
-	if (temp.length != 0) {
+	knownnetworks = getNetworks(this);
+	if (knownnetworks.size() != 0) {
 	    knownbysignal = getKnownAPsBySignal(this);
-	    knownnetworks = temp;
 	    if (adapter == null) {
 		adapter = new NetworkListAdapter(this, knownnetworks);
 		final ListView lv = (ListView) findViewById(R.id.ListView01);
 		lv.setAdapter(adapter);
 	    } else {
-		adapter.ssidArray = knownnetworks;
+		refreshArray();
 		adapter.notifyDataSetInvalidated();
 	    }
 
 	}
 	handler.sendEmptyMessageDelayed(MESSAGE, SCAN_DELAY);
+    }
+
+    private static void refreshArray() {
+	if (knownnetworks == adapter.ssidArray)
+	    return;
+
+	for (String ssid : knownnetworks) {
+	    if (!adapter.ssidArray.contains(ssid))
+		adapter.ssidArray.add(ssid);
+	}
+
+	for (String ssid : adapter.ssidArray) {
+	    if (!knownnetworks.contains(ssid))
+		adapter.ssidArray.remove(ssid);
+	}
     }
 
     private void registerReceiver() {
