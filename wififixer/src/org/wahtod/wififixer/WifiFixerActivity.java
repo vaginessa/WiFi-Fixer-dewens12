@@ -601,11 +601,13 @@ public class WifiFixerActivity extends Activity {
 	    iv.setImageResource(R.drawable.enabled_ssid);
 	    WFConnection.setNetworkState(ctxt, clicked_position, true);
 	    WFConnection.writeNetworkState(ctxt, clicked_position, false);
+	    adapter.notifyDataSetChanged();
 	    break;
 	case CONTEXT_DISABLE:
 	    iv.setImageResource(R.drawable.disabled_ssid);
 	    WFConnection.setNetworkState(ctxt, clicked_position, false);
 	    WFConnection.writeNetworkState(ctxt, clicked_position, true);
+	    adapter.notifyDataSetChanged();
 	    break;
 	case CONTEXT_CONNECT:
 	    Intent intent = new Intent(WFConnection.CONNECTINTENT);
@@ -625,7 +627,7 @@ public class WifiFixerActivity extends Activity {
 
 		WFConnection.writeManagedState(this, clicked_position, false);
 	    }
-
+	    adapter.notifyDataSetChanged();
 	    break;
 	}
 	return true;

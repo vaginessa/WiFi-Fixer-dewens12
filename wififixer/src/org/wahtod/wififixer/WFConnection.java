@@ -1144,6 +1144,7 @@ public class WFConnection extends Object implements
 	    final int network) {
 	if(!getWifiManager(context).isWifiEnabled())
 	    return readNetworkState(context, network);
+        else
 	if (getWifiManager(context).getConfiguredNetworks().get(network).status == WifiConfiguration.Status.DISABLED)
 	    return false;
 	else
