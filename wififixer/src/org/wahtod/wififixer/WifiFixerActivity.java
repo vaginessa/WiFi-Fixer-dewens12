@@ -732,7 +732,7 @@ public class WifiFixerActivity extends Activity {
 		lv.setAdapter(adapter);
 	    } else {
 		refreshArray();
-		adapter.notifyDataSetInvalidated();
+		adapter.notifyDataSetChanged();
 	    }
 
 	}
