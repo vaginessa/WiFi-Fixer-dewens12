@@ -93,8 +93,7 @@ public class WifiFixerActivity extends Activity {
     private static View listviewitem;
     private static NetworkListAdapter adapter;
     private static List<String> knownnetworks;
-
-    private static List<String> knownbysignal;
+    private static List<String> known_in_range;
 
     /*
      * As ugly as caching context is, the alternative is uglier.
@@ -159,7 +158,7 @@ public class WifiFixerActivity extends Activity {
 	     */
 	    holder.text.setText(ssidArray.get(position));
 
-	    if (knownbysignal.contains(ssidArray.get(position)))
+	    if (known_in_range.contains(ssidArray.get(position)))
 		holder.text.setTextColor(Color.YELLOW);
 	    else
 		holder.text.setTextColor(Color.WHITE);
@@ -422,7 +421,7 @@ public class WifiFixerActivity extends Activity {
 	super.onCreate(savedInstanceState);
 	setTitle(R.string.app_name);
 	setContentView(R.layout.main);
-	knownbysignal = getKnownAPsBySignal(this);
+	known_in_range = getKnownAPsBySignal(this);
 	/*
 	 * Grab and set up ListView in sliding drawer for network list UI
 	 */
@@ -462,10 +461,10 @@ public class WifiFixerActivity extends Activity {
 
 	WifiManager wm = (WifiManager) context
 		.getSystemService(Context.WIFI_SERVICE);
-	if (knownbysignal == null)
-	    knownbysignal = new ArrayList<String>();
+	if (known_in_range == null)
+	    known_in_range = new ArrayList<String>();
 	else
-	    knownbysignal.clear();
+	    known_in_range.clear();
 
 	List<ScanResult> scanResults = wm.getScanResults();
 
@@ -498,9 +497,9 @@ public class WifiFixerActivity extends Activity {
 		try {
 		    if (wfResult.SSID.contains(sResult.SSID)) {
 			/*
-			 * Add result to knownbysignal
+			 * Add result to known_in_range
 			 */
-			knownbysignal.add(sResult.SSID);
+			known_in_range.add(sResult.SSID);
 
 		    }
 		} catch (NullPointerException e) {
@@ -516,7 +515,7 @@ public class WifiFixerActivity extends Activity {
 	    }
 	}
 
-	return knownbysignal;
+	return known_in_range;
     }
 
     /*
@@ -727,7 +726,7 @@ public class WifiFixerActivity extends Activity {
 	 */
 	knownnetworks = getNetworks(this);
 	if (knownnetworks.size() != 0) {
-	    knownbysignal = getKnownAPsBySignal(this);
+	    known_in_range = getKnownAPsBySignal(this);
 	    if (adapter == null) {
 		adapter = new NetworkListAdapter(this, knownnetworks);
 		final ListView lv = (ListView) findViewById(R.id.ListView01);

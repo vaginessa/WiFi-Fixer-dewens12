@@ -185,8 +185,11 @@ public class PrefUtil extends Object {
     public static String getnetworkSSID(final Context context, final int network) {
 	WifiManager wm = (WifiManager) context
 		.getSystemService(Context.WIFI_SERVICE);
-	return getFileName(context,
-		wm.getConfiguredNetworks().get(network).SSID);
+	if (!wm.isWifiEnabled())
+	    return context.getString(R.string.none);
+	else
+	    return getFileName(context,
+		    wm.getConfiguredNetworks().get(network).SSID);
     }
 
     public static String getFileName(final Context ctxt, String filename) {
