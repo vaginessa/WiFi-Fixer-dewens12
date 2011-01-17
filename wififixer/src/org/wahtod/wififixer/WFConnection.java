@@ -1281,7 +1281,7 @@ public class WFConnection extends Object implements
 	    if (isup) {
 		wifirepair = W_REASSOCIATE;
 	    } else
-		incrementbssidfail();
+		incrementBSSIDfail();
 	} else
 	    wifirepair = W_REASSOCIATE;
 
@@ -1368,7 +1368,7 @@ public class WFConnection extends Object implements
 	return isUp;
     }
 
-    private static void incrementbssidfail() {
+    private static void incrementBSSIDfail() {
 	int netid = findknownByNetworkId(getNetworkID());
 	WFConfig network = knownbysignal.get(netid);
 	network.failcount++;
