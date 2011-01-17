@@ -143,7 +143,6 @@ public class WFConnection extends Object implements
     // various
     private static final int NULLVAL = -1;
     private static int lastAP = NULLVAL;
-    private static final int BSSID_FAIL_THRESHOLD = 5;
 
     private static WifiManager wm;
     private static WFConfig connectee;
@@ -153,7 +152,6 @@ public class WFConnection extends Object implements
     private static HttpResponse response;
     private static List<WFConfig> knownbysignal;
     private static String lastSupplicantState;
-    private static List<String> bssidBlacklist;
 
     // deprecated
     static boolean templock = false;
@@ -176,9 +174,14 @@ public class WFConnection extends Object implements
     /*
      * For connectToAP sticking
      */
-
     private static int connecting = 0;
     private static final int CONNECTING_THRESHOLD = 2;
+
+    /*
+     * For BSSID blacklisting
+     */
+    private static final int BSSID_FAIL_THRESHOLD = 3;
+    private static List<String> bssidBlacklist;
 
     // Runnable Constants for handler
     private static final int MAIN = 0;
@@ -698,18 +701,10 @@ public class WFConnection extends Object implements
 	    NotifUtil.addStatNotif(context, notifSSID, context
 		    .getString(R.string.network_test), notifSignal, true,
 		    getStatNotifLayout());
-
 	/*
-	 * Failover switch
+	 * Check for network connectivity
 	 */
-	isup = icmpHostup(context);
-	if (!isup) {
-	    isup = httpHostup(context);
-	    if (isup) {
-		wifirepair = W_REASSOCIATE;
-	    }
-	} else
-	    wifirepair = W_REASSOCIATE;
+	isup = hostup(context);
 
 	/*
 	 * Signal check
@@ -851,7 +846,7 @@ public class WFConnection extends Object implements
 	/*
 	 * Make sure knownbysignal is populated first
 	 */
-	if (knownbysignal.size() == 0) {
+	if (knownbysignal.isEmpty()) {
 	    if (prefs.getFlag(Pref.LOG_KEY))
 		LogService.log(context, appname, context
 			.getString(R.string.knownbysignal_empty_exiting));
@@ -912,13 +907,13 @@ public class WFConnection extends Object implements
 	return false;
     }
 
-    private static boolean scancontainsBSSID(final String bssid,
-	    final List<ScanResult> results) {
-	for (ScanResult sResult : results) {
-	    if (sResult.BSSID.equals(bssid))
-		return true;
+    private static int findknownByNetworkId(final int network) {
+	for (WFConfig known : knownbysignal) {
+	    if (known.wificonfig.networkId == network) {
+		return knownbysignal.indexOf(known);
+	    }
 	}
-	return false;
+	return NULLVAL;
     }
 
     /*
@@ -1064,44 +1059,38 @@ public class WFConnection extends Object implements
 
 		/*
 		 * Using .contains to find sResult.SSID in doublequoted string
-		 * 
-		 * containsBSSID filters out duplicate MACs in broken scans
-		 * (yes, that happens)
 		 */
-		try {
-		    if (wfResult.SSID.contains(sResult.SSID)
-			    && !containsBSSID(sResult.BSSID, knownbysignal)
-			    && getNetworkState(context, wfResult.networkId)) {
-			if (prefs.getFlag(Pref.LOG_KEY)) {
-			    StringBuilder out = new StringBuilder();
-			    out.append(context.getString(R.string.found_ssid));
-			    out.append(sResult.SSID);
-			    out.append(NEWLINE);
-			    out
-				    .append(context
-					    .getString(R.string.capabilities));
-			    out.append(sResult.capabilities);
-			    out.append(NEWLINE);
-			    out
-				    .append(context
-					    .getString(R.string.signal_level));
-			    out.append(sResult.level);
-			    LogService.log(context, appname, out.toString());
-			}
-			/*
-			 * Add result to knownbysignal
-			 */
-			knownbysignal.add(new WFConfig(sResult, wfResult));
-
-		    }
-		} catch (NullPointerException e) {
+		if (wfResult.SSID.contains(sResult.SSID)
+			&& getNetworkState(context, wfResult.networkId)) {
 		    if (prefs.getFlag(Pref.LOG_KEY)) {
-			if (wfResult.SSID == null)
-			    LogService.log(context, appname, context
-				    .getString(R.string.wfresult_null));
-			else if (sResult.SSID == null)
-			    LogService.log(context, appname, context
-				    .getString(R.string.sresult_null));
+			StringBuilder out = new StringBuilder();
+			out.append(context.getString(R.string.found_ssid));
+			out.append(sResult.SSID);
+			out.append(NEWLINE);
+			out.append(context.getString(R.string.capabilities));
+			out.append(sResult.capabilities);
+			out.append(NEWLINE);
+			out.append(context.getString(R.string.signal_level));
+			out.append(sResult.level);
+			LogService.log(context, appname, out.toString());
+		    }
+		    /*
+		     * Add result to knownbysignal containsBSSID to avoid dupes
+		     */
+		    if (!containsBSSID(sResult.BSSID, knownbysignal))
+			knownbysignal.add(new WFConfig(sResult, wfResult));
+		    else {
+			/*
+			 * Update signal level
+			 */
+			for (WFConfig config : knownbysignal) {
+			    if (config.wificonfig.BSSID.equals(sResult.BSSID)) {
+				knownbysignal
+					.get(knownbysignal.indexOf(config)).level = sResult.level;
+				break;
+			    }
+
+			}
 		    }
 		}
 	    }
@@ -1282,6 +1271,23 @@ public class WFConnection extends Object implements
 	return true;
     }
 
+    private static boolean hostup(final Context context) {
+	/*
+	 * Failover switch
+	 */
+	boolean isup = icmpHostup(context);
+	if (!isup) {
+	    isup = httpHostup(context);
+	    if (isup) {
+		wifirepair = W_REASSOCIATE;
+	    } else
+		incrementbssidfail();
+	} else
+	    wifirepair = W_REASSOCIATE;
+
+	return isup;
+    }
+
     private static boolean httpHostup(final Context context) {
 	boolean isUp = false;
 	/*
@@ -1360,6 +1366,19 @@ public class WFConnection extends Object implements
 			.getString(R.string.ioexception));
 	}
 	return isUp;
+    }
+
+    private static void incrementbssidfail() {
+	int netid = findknownByNetworkId(getNetworkID());
+	WFConfig network = knownbysignal.get(netid);
+	network.failcount++;
+	if (network.failcount >= BSSID_FAIL_THRESHOLD) {
+	    bssidBlacklist.add(network.wificonfig.BSSID);
+	    if(prefs.getFlag(Pref.LOG_KEY))
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.blacklisting)+network.wificonfig.BSSID);
+	}
+	knownbysignal.set(netid, network);
     }
 
     private static void logBestNetwork(final Context context,
@@ -1802,6 +1821,15 @@ public class WFConnection extends Object implements
 	 */
 	if (PrefUtil.readBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK))
 	    PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, false);
+    }
+
+    private static boolean scancontainsBSSID(final String bssid,
+	    final List<ScanResult> results) {
+	for (ScanResult sResult : results) {
+	    if (sResult.BSSID.equals(bssid))
+		return true;
+	}
+	return false;
     }
 
     public void scanwatchdog() {

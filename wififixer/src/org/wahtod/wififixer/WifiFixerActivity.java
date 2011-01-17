@@ -494,22 +494,12 @@ public class WifiFixerActivity extends Activity {
 		 * containsBSSID filters out duplicate MACs in broken scans
 		 * (yes, that happens)
 		 */
-		try {
-		    if (wfResult.SSID.contains(sResult.SSID)) {
-			/*
-			 * Add result to known_in_range
-			 */
-			known_in_range.add(sResult.SSID);
 
-		    }
-		} catch (NullPointerException e) {
-
-		    if (wfResult.SSID == null)
-			LogService.log(context, LogService.getLogTag(context),
-				context.getString(R.string.wfresult_null));
-		    else if (sResult.SSID == null)
-			LogService.log(context, LogService.getLogTag(context),
-				context.getString(R.string.sresult_null));
+		if (wfResult.SSID.contains(sResult.SSID)) {
+		    /*
+		     * Add result to known_in_range
+		     */
+		    known_in_range.add(sResult.SSID);
 
 		}
 	    }

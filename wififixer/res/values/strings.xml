@@ -45,8 +45,6 @@
 	<string name="prefs_change">Prefs Change:</string>
 	<string name="connect_failed">Connect Failed</string>
 	<string name="connect_succeeded">Connect Succeeded</string>
-	<string name="sresult_null">sResult null</string>
-	<string name="wfresult_null">WFResult null</string>
 	<string name="initiating_scan">Initiating Scan</string>
 	<string name="instantiating_httpclient">Instantiating httpclient</string>
 	<string name="signalhop_no_result">Signalhop: No best network result</string>
@@ -178,5 +176,7 @@
 	<string name="knownbysignal_empty_exiting">KnownbySignal Empty, Exiting</string>
 
 	<string name="wmconnect_to">WMConnect to :</string>
+
+	<string name="blacklisting">HURK! Blacklisting:</string>
 
 </resources>
