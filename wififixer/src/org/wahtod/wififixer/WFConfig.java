@@ -26,9 +26,10 @@ public class WFConfig extends Object {
      * Why isn't this an extension of WifiConfiguration? Because WFConfig is
      * only downclassed. More efficient than copying all fields individually.
      */
-
+    
     public WifiConfiguration wificonfig;
     public int level;
+    public int failcount;
 
     public WFConfig(final ScanResult sResult, final WifiConfiguration wConfig) {
 	/*
@@ -37,10 +38,11 @@ public class WFConfig extends Object {
 	level = sResult.level;
 	wificonfig = wConfig;
 	wificonfig.BSSID = sResult.BSSID;
+	failcount = 0;
     }
 
     public WFConfig() {
-
+	failcount = 0;
     }
 
     @Override

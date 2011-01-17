@@ -143,6 +143,7 @@ public class WFConnection extends Object implements
     // various
     private static final int NULLVAL = -1;
     private static int lastAP = NULLVAL;
+    private static final int BSSID_FAIL_THRESHOLD = 5;
 
     private static WifiManager wm;
     private static WFConfig connectee;
@@ -150,8 +151,9 @@ public class WFConnection extends Object implements
     private static HttpParams httpparams;
     private static HttpHead head;
     private static HttpResponse response;
-    private static List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
+    private static List<WFConfig> knownbysignal;
     private static String lastSupplicantState;
+    private static List<String> bssidBlacklist;
 
     // deprecated
     static boolean templock = false;
@@ -561,6 +563,8 @@ public class WFConnection extends Object implements
 	ScreenStateHandler.setOnScreenStateChangedListener(this);
 	appname = LogService.getLogTag(context);
 	screenstate = ScreenStateHandler.getScreenState(context);
+	knownbysignal = new ArrayList<WFConfig>();
+	bssidBlacklist = new ArrayList<String>();
 	/*
 	 * Cache Context from consumer
 	 */
@@ -825,6 +829,7 @@ public class WFConnection extends Object implements
 	connectee.wificonfig.SSID = target.SSID;
 	// set priority to normal in temp member
 	connectee.wificonfig.priority = priority;
+
 	/*
 	 * Remove all posts to handler
 	 */
@@ -853,7 +858,7 @@ public class WFConnection extends Object implements
 	    return NULLVAL;
 	}
 	/*
-	 * Check for connectee (explicit connection) if not, operate normally
+	 * Check for connectee (explicit connection)
 	 */
 	if (connectee != null) {
 	    for (WFConfig network : knownbysignal) {
@@ -866,19 +871,34 @@ public class WFConnection extends Object implements
 		}
 	    }
 	}
-
-	int bestnid = NULLVAL;
-	WFConfig best = knownbysignal.get(0);
 	/*
-	 * specify bssid and add it to the supplicant's known network entry
+	 * Select by best available
 	 */
-	bestnid = best.wificonfig.networkId;
-	WifiConfiguration cfg = new WifiConfiguration();
-	cfg.BSSID = best.wificonfig.BSSID;
-	cfg.networkId = bestnid;
-	getWifiManager(ctxt).updateNetwork(cfg);
-	connectToAP(context, bestnid);
-	logBestNetwork(context, best);
+	int bestnid = NULLVAL;
+	/*
+	 * Iterate till we find a non-blacklisted BSSID
+	 */
+	for (WFConfig network : knownbysignal) {
+	    if (!bssidBlacklist.contains(network.wificonfig.BSSID)) {
+		bestnid = network.wificonfig.networkId;
+		break;
+	    }
+	}
+
+	if (bestnid != NULLVAL) {
+	    WFConfig best = knownbysignal.get(bestnid);
+	    /*
+	     * specify bssid and add it to the supplicant's known network entry
+	     */
+	    bestnid = best.wificonfig.networkId;
+	    WifiConfiguration cfg = new WifiConfiguration();
+	    cfg.BSSID = best.wificonfig.BSSID;
+	    cfg.networkId = bestnid;
+	    getWifiManager(ctxt).updateNetwork(cfg);
+	    connectToAP(context, bestnid);
+	    logBestNetwork(context, best);
+	}
+
 	return bestnid;
 
     }
@@ -887,6 +907,15 @@ public class WFConnection extends Object implements
 	    final List<WFConfig> results) {
 	for (WFConfig sResult : results) {
 	    if (sResult.wificonfig.BSSID.equals(bssid))
+		return true;
+	}
+	return false;
+    }
+
+    private static boolean scancontainsBSSID(final String bssid,
+	    final List<ScanResult> results) {
+	for (ScanResult sResult : results) {
+	    if (sResult.BSSID.equals(bssid))
 		return true;
 	}
 	return false;
@@ -987,8 +1016,6 @@ public class WFConnection extends Object implements
 	    return NULLVAL;
 	}
 
-	knownbysignal.clear();
-
 	class SortBySignal implements Comparator<WFConfig> {
 	    @Override
 	    public int compare(WFConfig o2, WFConfig o1) {
@@ -1080,6 +1107,15 @@ public class WFConnection extends Object implements
 	    }
 	}
 
+	/*
+	 * Prune non-scanned BSSIDs
+	 */
+	for (WFConfig network : knownbysignal) {
+	    if (network != null
+		    && !scancontainsBSSID(network.wificonfig.BSSID, scanResults))
+		knownbysignal.remove(network);
+	}
+
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(context, appname, context
 		    .getString(R.string.number_of_known)
@@ -1142,10 +1178,9 @@ public class WFConnection extends Object implements
 
     public static boolean getNetworkState(final Context context,
 	    final int network) {
-	if(!getWifiManager(context).isWifiEnabled())
+	if (!getWifiManager(context).isWifiEnabled())
 	    return readNetworkState(context, network);
-        else
-	if (getWifiManager(context).getConfiguredNetworks().get(network).status == WifiConfiguration.Status.DISABLED)
+	else if (getWifiManager(context).getConfiguredNetworks().get(network).status == WifiConfiguration.Status.DISABLED)
 	    return false;
 	else
 	    return true;
@@ -1831,7 +1866,7 @@ public class WFConnection extends Object implements
 
     private void signalHop() {
 	/*
-	 * Need to re-implement best-network-by-signal-and-availability
+	 * Connect To best will always find best signal/availability
 	 */
 
 	if (getisWifiEnabled(ctxt))
@@ -1842,10 +1877,11 @@ public class WFConnection extends Object implements
 		     */
 		    return;
 		}
-
+	/*
+	 * Switch to best
+	 */
 	int bestap = NULLVAL;
-	int numKnownAPs = getKnownAPsBySignal(ctxt);
-	if (numKnownAPs > 1) {
+	if (getKnownAPsBySignal(ctxt) > 1) {
 	    bestap = connectToBest(ctxt);
 
 	    if (bestap == NULLVAL) {

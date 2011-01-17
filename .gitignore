@@ -7,5 +7,6 @@ proguard/
 proguard.cfg
 wififixer/build.properties
 wififixer/local.properties
+wififixer/default.properties
 wififixer/build.xml
 
