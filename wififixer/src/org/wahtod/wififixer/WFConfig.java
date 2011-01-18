@@ -26,7 +26,7 @@ public class WFConfig extends Object {
      * Why isn't this an extension of WifiConfiguration? Because WFConfig is
      * only downclassed. More efficient than copying all fields individually.
      */
-    
+
     public WifiConfiguration wificonfig;
     public int level;
     public int failcount;

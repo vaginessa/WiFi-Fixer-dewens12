@@ -164,7 +164,7 @@ public class WFConnection extends Object implements
     private static final int W_REPAIR = 2;
 
     private static int wifirepair = W_REASSOCIATE;
-    
+
     /*
      * For Status Notification layout
      */
@@ -1122,7 +1122,7 @@ public class WFConnection extends Object implements
 
 	return knownbysignal.size();
     }
-    
+
     private static int getNetworkID() {
 	return getWifiManager(ctxt).getConnectionInfo().getNetworkId();
     }
@@ -1372,9 +1372,10 @@ public class WFConnection extends Object implements
 	network.failcount++;
 	if (network.failcount >= BSSID_FAIL_THRESHOLD) {
 	    bssidBlacklist.add(network.wificonfig.BSSID);
-	    if(prefs.getFlag(Pref.LOG_KEY))
+	    if (prefs.getFlag(Pref.LOG_KEY))
 		LogService.log(ctxt, appname, ctxt
-			.getString(R.string.blacklisting)+network.wificonfig.BSSID);
+			.getString(R.string.blacklisting)
+			+ network.wificonfig.BSSID);
 	}
 	knownbysignal.set(netid, network);
     }
@@ -1864,7 +1865,10 @@ public class WFConnection extends Object implements
 	if (state) {
 	    notifStatus = getSupplicantStateString();
 	    notifSSID = getSSID();
-
+	    if (prefs.getFlag(Pref.STATTHEME_KEY))
+		WFConnection.statnotiflayout = R.layout.status_notif_layout_black;
+	    else
+		WFConnection.statnotiflayout = R.layout.status_notif_layout;
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
 		    true, statnotiflayout);
 	} else {
