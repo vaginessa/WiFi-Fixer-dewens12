@@ -28,8 +28,7 @@ import android.widget.RemoteViews;
 public class NotifUtil {
     private static final int NETNOTIFID = 8236;
     private static final int STATNOTIFID = 2392;
-    private static final int MAX_SSID_LENGTH = 10;
-    public static final String CANCEL = "CANCEL";
+    private static final int MAX_SSID_LENGTH = 16;
     private static int ssidColor = Color.BLACK;
     private static int lastbitmap;
 
