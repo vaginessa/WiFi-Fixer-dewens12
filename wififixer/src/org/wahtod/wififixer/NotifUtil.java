@@ -32,6 +32,9 @@ public class NotifUtil {
     public static final String CANCEL = "CANCEL";
     private static int ssidColor = Color.BLACK;
 
+    private static volatile Notification statnotif;
+    private static volatile RemoteViews statview;
+
     private NotifUtil() {
 
     }
@@ -74,22 +77,31 @@ public class NotifUtil {
 
 	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 		new Intent(context, WifiFixerActivity.class), 0);
-
-	Notification notif = new Notification(R.drawable.router32, context
-		.getString(R.string.network_status), System.currentTimeMillis());
+	if(statnotif == null){
+	    statnotif = new Notification(R.drawable.router32, context.getString(R.string.network_status), System.currentTimeMillis());  
+	}
 
 	if (flag) {
-	    notif.contentView = createStatView(context, ssid, status, signal,
-		    layout);
-	    notif.contentIntent = contentIntent;
-	    notif.flags = Notification.FLAG_ONGOING_EVENT;
+	    if(statview == null){
+		statview = createStatView(context, ssid, status, signal, layout);
+		statnotif.contentView = statview;
+		statnotif.contentIntent = contentIntent;
+		statnotif.flags = Notification.FLAG_ONGOING_EVENT;
+	    }
+	    else {
+		statview.setTextViewText(R.id.ssid, truncateSSID(ssid));
+		statview.setTextViewText(R.id.status, status);
+		statview.setTextColor(R.id.ssid, ssidColor);
+		statview.setImageViewResource(R.id.signal, signal);
+	    }
 	    /*
 	     * Fire notification, cancel if message empty: means no status info
 	     */
-	    nm.notify(STATNOTIFID, notif);
+	    nm.notify(STATNOTIFID, statnotif);
 	} else {
 	    nm.cancel(STATNOTIFID);
-
+	    statnotif= null;
+	    statview = null;
 	}
     }
 

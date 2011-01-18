@@ -342,6 +342,19 @@ public class WifiFixerService extends Service implements
 		     */
 		    wifi.setStatNotif(getFlag(Pref.STATENOT_KEY));
 		    break;
+		    
+		    
+		case STATTHEME_KEY:
+		if (prefs.getFlag(Pref.STATTHEME_KEY))
+		    WFConnection.statnotiflayout=R.layout.status_notif_layout_black;
+		else
+		    WFConnection.statnotiflayout= R.layout.status_notif_layout;
+		
+		if(prefs.getFlag(Pref.STATENOT_KEY)){
+		    wifi.setStatNotif(false);
+		    wifi.setStatNotif(true);
+		}
+		break;
 		}
 
 		/*

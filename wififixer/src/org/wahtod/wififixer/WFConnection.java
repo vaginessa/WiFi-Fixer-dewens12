@@ -164,6 +164,11 @@ public class WFConnection extends Object implements
     private static final int W_REPAIR = 2;
 
     private static int wifirepair = W_REASSOCIATE;
+    
+    /*
+     * For Status Notification layout
+     */
+    protected static int statnotiflayout = R.layout.status_notif_layout;
 
     /*
      * For Supplicant ASSOCIATING bug
@@ -515,7 +520,7 @@ public class WFConnection extends Object implements
 		NotifUtil.setSSIDColor(Color.RED);
 
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
-		    true, getStatNotifLayout());
+		    true, statnotiflayout);
 	}
 
     };
@@ -700,7 +705,7 @@ public class WFConnection extends Object implements
 	if (statNotifCheck())
 	    NotifUtil.addStatNotif(context, notifSSID, context
 		    .getString(R.string.network_test), notifSignal, true,
-		    getStatNotifLayout());
+		    statnotiflayout);
 	/*
 	 * Check for network connectivity
 	 */
@@ -722,7 +727,7 @@ public class WFConnection extends Object implements
 		notifStatus = context.getString(R.string.failed);
 
 	    NotifUtil.addStatNotif(context, notifSSID, notifStatus,
-		    notifSignal, true, getStatNotifLayout());
+		    notifSignal, true, statnotiflayout);
 	}
 
 	return isup;
@@ -1117,14 +1122,7 @@ public class WFConnection extends Object implements
 
 	return knownbysignal.size();
     }
-
-    private static int getStatNotifLayout() {
-	if (prefs.getFlag(Pref.STATTHEME_KEY))
-	    return R.layout.status_notif_layout_black;
-	else
-	    return R.layout.status_notif_layout;
-    }
-
+    
     private static int getNetworkID() {
 	return getWifiManager(ctxt).getConnectionInfo().getNetworkId();
     }
@@ -1602,7 +1600,7 @@ public class WFConnection extends Object implements
 		notifSignal = R.drawable.signal0;
 	    }
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
-		    true, getStatNotifLayout());
+		    true, statnotiflayout);
 	}
 
 	/*
@@ -1802,7 +1800,7 @@ public class WFConnection extends Object implements
 	if (prefs.getFlag(Pref.STATENOT_KEY))
 	    NotifUtil.addStatNotif(ctxt, NULL_SSID, ctxt
 		    .getString(R.string.wifi_is_disabled), R.drawable.signal0,
-		    true, getStatNotifLayout());
+		    true, statnotiflayout);
 
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.setLogTS(ctxt, false, 0);
@@ -1868,7 +1866,7 @@ public class WFConnection extends Object implements
 	    notifSSID = getSSID();
 
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
-		    true, getStatNotifLayout());
+		    true, statnotiflayout);
 	} else {
 	    NotifUtil.addStatNotif(ctxt, null, null, 0, false, 0);
 	}
@@ -2024,7 +2022,7 @@ public class WFConnection extends Object implements
 	if (prefs.getFlag(Pref.STATENOT_KEY))
 	    NotifUtil.addStatNotif(ctxt, NULL_SSID, ctxt
 		    .getString(R.string.toggling_wifi), R.drawable.signal0,
-		    true, getStatNotifLayout());
+		    true, statnotiflayout);
     }
 
     private void wifiRepair() {
