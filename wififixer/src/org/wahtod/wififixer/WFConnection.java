@@ -1104,10 +1104,20 @@ public class WFConnection extends Object implements
 	/*
 	 * Prune non-scanned BSSIDs
 	 */
+	List<WFConfig> toremove = new ArrayList<WFConfig>();
 	for (WFConfig network : knownbysignal) {
 	    if (network != null
 		    && !scancontainsBSSID(network.wificonfig.BSSID, scanResults))
-		knownbysignal.remove(network);
+		/*
+		 * Mark for removal
+		 */
+		toremove.add(network);
+	}
+	
+	if (!toremove.isEmpty()) {
+	    for (WFConfig marked : toremove) {
+		knownbysignal.remove(marked);
+	    }
 	}
 
 	if (prefs.getFlag(Pref.LOG_KEY))
