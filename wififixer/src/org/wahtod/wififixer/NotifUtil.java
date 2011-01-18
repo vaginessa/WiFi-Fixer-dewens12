@@ -31,6 +31,7 @@ public class NotifUtil {
     private static final int MAX_SSID_LENGTH = 10;
     public static final String CANCEL = "CANCEL";
     private static int ssidColor = Color.BLACK;
+    private static int lastbitmap;
 
     private static volatile Notification statnotif;
     private static volatile RemoteViews statview;
@@ -75,24 +76,27 @@ public class NotifUtil {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
-	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		new Intent(context, WifiFixerActivity.class), 0);
-	if(statnotif == null){
-	    statnotif = new Notification(R.drawable.router32, context.getString(R.string.network_status), System.currentTimeMillis());  
+	if (statnotif == null) {
+	    statnotif = new Notification(R.drawable.router32, context
+		    .getString(R.string.network_status), System
+		    .currentTimeMillis());
 	}
 
 	if (flag) {
-	    if(statview == null){
+	    if (statview == null) {
 		statview = createStatView(context, ssid, status, signal, layout);
 		statnotif.contentView = statview;
+		PendingIntent contentIntent = PendingIntent.getActivity(
+			context, 0,
+			new Intent(context, WifiFixerActivity.class), 0);
 		statnotif.contentIntent = contentIntent;
 		statnotif.flags = Notification.FLAG_ONGOING_EVENT;
-	    }
-	    else {
+	    } else {
 		statview.setTextViewText(R.id.ssid, truncateSSID(ssid));
 		statview.setTextViewText(R.id.status, status);
 		statview.setTextColor(R.id.ssid, ssidColor);
-		statview.setImageViewResource(R.id.signal, signal);
+		if (lastbitmap != signal)
+		    statview.setImageViewResource(R.id.signal, signal);
 	    }
 	    /*
 	     * Fire notification, cancel if message empty: means no status info
@@ -100,7 +104,7 @@ public class NotifUtil {
 	    nm.notify(STATNOTIFID, statnotif);
 	} else {
 	    nm.cancel(STATNOTIFID);
-	    statnotif= null;
+	    statnotif = null;
 	    statview = null;
 	}
     }
@@ -116,6 +120,7 @@ public class NotifUtil {
 	contentView.setTextViewText(R.id.status, status);
 	contentView.setTextColor(R.id.ssid, ssidColor);
 	contentView.setImageViewResource(R.id.signal, signal);
+	lastbitmap = signal;
 	return contentView;
     }
 
