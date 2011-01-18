@@ -880,7 +880,7 @@ public class WFConnection extends Object implements
 	 */
 	for (WFConfig network : knownbysignal) {
 	    if (!bssidBlacklist.contains(network.wificonfig.BSSID)) {
-		bestnid = network.wificonfig.networkId;
+		bestnid = knownbysignal.indexOf(network);
 		break;
 	    }
 	}
