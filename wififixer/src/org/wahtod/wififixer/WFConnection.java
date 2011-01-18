@@ -1368,16 +1368,20 @@ public class WFConnection extends Object implements
 
     private static void incrementBSSIDfail() {
 	int netid = findknownByNetworkId(getNetworkID());
-	WFConfig network = knownbysignal.get(netid);
-	network.failcount++;
-	if (network.failcount >= BSSID_FAIL_THRESHOLD) {
-	    bssidBlacklist.add(network.wificonfig.BSSID);
-	    if (prefs.getFlag(Pref.LOG_KEY))
-		LogService.log(ctxt, appname, ctxt
-			.getString(R.string.blacklisting)
-			+ network.wificonfig.BSSID);
-	}
-	knownbysignal.set(netid, network);
+	if (netid != NULLVAL) {
+	    WFConfig network = knownbysignal.get(netid);
+	    network.failcount++;
+	    if (network.failcount >= BSSID_FAIL_THRESHOLD) {
+		bssidBlacklist.add(network.wificonfig.BSSID);
+		if (prefs.getFlag(Pref.LOG_KEY))
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.blacklisting)
+			    + network.wificonfig.BSSID);
+	    }
+	    knownbysignal.set(netid, network);
+	} else if (prefs.getFlag(Pref.LOG_KEY))
+	    LogService
+		    .log(ctxt, appname, ctxt.getString(R.string.no_blacklist));
     }
 
     private static void logBestNetwork(final Context context,
