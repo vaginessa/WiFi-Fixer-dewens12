@@ -26,23 +26,6 @@
 			android:key="Perf_Mode" android:entries="@array/entries"
 			android:entryValues="@array/entryValues" />
 
-		<PreferenceScreen android:title="Logging"
-			android:summary="Logging Preferences">
-			<PreferenceCategory android:title="Logging">
-				<CheckBoxPreference android:key="Logging"
-					android:title="Enable Log Menu" android:summary="Enables logging menu options in main activity" />
-				<PreferenceScreen android:title="Delete Log"
-					android:summary="Deletes Existing Log">
-					<intent android:targetPackage="org.wahtod.wififixer"
-						android:targetClass="org.wahtod.wififixer.WifiFixerActivity">
-						<extra android:name="DELETE_LOG" android:value="pi">
-						</extra>
-					</intent>
-
-				</PreferenceScreen>
-			</PreferenceCategory>
-		</PreferenceScreen>
-
 		<PreferenceScreen android:title="Notifications"
 			android:summary="Network and status notifications">
 			<PreferenceCategory android:title="Status Notification">
@@ -64,8 +47,22 @@
 				android:title="Network Notifications"
 				android:summary="Displays a notification when a new open network is detected" />
 				</PreferenceCategory>
+		</PreferenceScreen>
+		<PreferenceScreen android:title="Logging"
+			android:summary="Logging Preferences">
+			<PreferenceCategory android:title="Logging">
+				<CheckBoxPreference android:key="Logging"
+					android:title="Enable Log Menu" android:summary="Enables logging menu options in main activity" />
+				<PreferenceScreen android:title="Delete Log"
+					android:summary="Deletes Existing Log">
+					<intent android:targetPackage="org.wahtod.wififixer"
+						android:targetClass="org.wahtod.wififixer.WifiFixerActivity">
+						<extra android:name="DELETE_LOG" android:value="pi">
+						</extra>
+					</intent>
 
-
+				</PreferenceScreen>
+			</PreferenceCategory>
 		</PreferenceScreen>
 
 		<ListPreference android:title="Widget Behavior"

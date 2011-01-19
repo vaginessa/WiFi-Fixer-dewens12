@@ -31,8 +31,8 @@ public class NotifUtil {
     private static final int MAX_SSID_LENGTH = 16;
     private static int ssidColor = Color.BLACK;
     private static int lastbitmap;
-    private static int choke; 
-    private static final int CHOKE_THRESHOLD = 10;
+    private static int choke;
+    private static final int CHOKE_THRESHOLD = 5;
 
     private static volatile Notification statnotif;
     private static volatile RemoteViews statview;
@@ -76,22 +76,24 @@ public class NotifUtil {
 	    final int layout) {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
-	/*
-	 * Choke to avoid memory leak
-	 */
-	if(choke>CHOKE_THRESHOLD){
-	    statnotif=null;
-	    statview =null;
-	}
-
-	if (statnotif == null) {
-	    choke = 0;
-	    statnotif = new Notification(R.drawable.router32, context
-		    .getString(R.string.network_status), System
-		    .currentTimeMillis());
-	}
 
 	if (flag) {
+
+	    /*
+	     * Choke to avoid memory leak
+	     */
+	    if (choke > CHOKE_THRESHOLD) {
+		statnotif = null;
+		statview = null;
+	    }
+
+	    if (statnotif == null) {
+		choke = 0;
+		statnotif = new Notification(R.drawable.router32, context
+			.getString(R.string.network_status), System
+			.currentTimeMillis());
+	    }
+
 	    if (statview == null) {
 		statview = createStatView(context, ssid, status, signal, layout);
 		statnotif.contentView = statview;

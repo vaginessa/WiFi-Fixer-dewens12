@@ -344,7 +344,8 @@ public class WifiFixerService extends Service implements
 		    break;
 
 		case STATTHEME_KEY:
-		    if (prefs.getFlag(Pref.STATENOT_KEY)) {
+		    if (prefs.getFlag(Pref.STATENOT_KEY)
+			    && prefs.getFlag(Pref.STATENOT_KEY)) {
 			wifi.setStatNotif(false);
 			wifi.setStatNotif(true);
 		    }
