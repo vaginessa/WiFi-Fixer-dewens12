@@ -175,10 +175,4 @@
 
 	<string name="knownbysignal_empty_exiting">KnownbySignal Empty, Exiting</string>
 
-	<string name="wmconnect_to">WMConnect to :</string>
-
-	<string name="blacklisting">HURK! Blacklisting:</string>
-
-	<string name="no_blacklist">no network to blacklist</string>
-
 </resources>

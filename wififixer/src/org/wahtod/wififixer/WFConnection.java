@@ -185,7 +185,6 @@ public class WFConnection extends Object implements
     /*
      * For BSSID blacklisting
      */
-    private static final int BSSID_FAIL_THRESHOLD = 3;
     private static List<String> bssidBlacklist;
 
     // Runnable Constants for handler
@@ -912,15 +911,6 @@ public class WFConnection extends Object implements
 	return false;
     }
 
-    private static int findknownByNetworkId(final int network) {
-	for (WFConfig known : knownbysignal) {
-	    if (known.wificonfig.networkId == network) {
-		return knownbysignal.indexOf(known);
-	    }
-	}
-	return NULLVAL;
-    }
-
     /*
      * Performs HTTP HEAD request and returns boolean success or failure
      */
@@ -928,7 +918,7 @@ public class WFConnection extends Object implements
 	    throws IOException, URISyntaxException {
 
 	/*
-	 * Reusing our Httpclient, only initializing first time
+	 * Reusing Httpclient, only initializing first time
 	 */
 
 	if (httpclient == null) {
@@ -1288,8 +1278,8 @@ public class WFConnection extends Object implements
 	    isup = httpHostup(context);
 	    if (isup) {
 		wifirepair = W_REASSOCIATE;
-	    } else
-		incrementBSSIDfail();
+	    } //else
+		//incrementBSSIDfail();
 	} else
 	    wifirepair = W_REASSOCIATE;
 
@@ -1374,24 +1364,6 @@ public class WFConnection extends Object implements
 			.getString(R.string.ioexception));
 	}
 	return isUp;
-    }
-
-    private static void incrementBSSIDfail() {
-	int netid = findknownByNetworkId(getNetworkID());
-	if (netid != NULLVAL) {
-	    WFConfig network = knownbysignal.get(netid);
-	    network.failcount++;
-	    if (network.failcount >= BSSID_FAIL_THRESHOLD) {
-		bssidBlacklist.add(network.wificonfig.BSSID);
-		if (prefs.getFlag(Pref.LOG_KEY))
-		    LogService.log(ctxt, appname, ctxt
-			    .getString(R.string.blacklisting)
-			    + network.wificonfig.BSSID);
-	    }
-	    knownbysignal.set(netid, network);
-	} else if (prefs.getFlag(Pref.LOG_KEY))
-	    LogService
-		    .log(ctxt, appname, ctxt.getString(R.string.no_blacklist));
     }
 
     private static void logBestNetwork(final Context context,
