@@ -89,6 +89,7 @@ public class WifiFixerService extends Service implements
 
     private void cleanup() {
 	wakelock.lock(false);
+	wifi.wifiLock(false);
 	screenstateHandler.unregister(this);
     }
 
