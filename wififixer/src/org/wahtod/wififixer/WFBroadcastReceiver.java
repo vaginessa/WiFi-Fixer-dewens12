@@ -37,17 +37,20 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 
     private static final int AUTH_NOTIF_ID = 2934;
 
-    private static void handleWidgetAction(final Context context, final Intent intent) {
-	
+    private static void handleWidgetAction(final Context context,
+	    final Intent intent) {
+	int command;
 	/*
-	 * Handle null value possible if prefs
-	 * not initialized yet
+	 * Handle null value possible if prefs not initialized yet
 	 */
-	if(!intent.hasExtra(PrefConstants.WIDGET_KEY))
-	    return;
-	
-	int command=Integer.valueOf(PrefUtil.readString(
-		    context, PrefConstants.WIDGET_KEY));
+	if (!intent.hasExtra(PrefConstants.WIDGET_KEY)) {
+	    /*
+	     * Default: reassociate for cases when
+	     */
+	    command = 0;
+	}
+	command = Integer.valueOf(PrefUtil.readString(context,
+		PrefConstants.WIDGET_KEY));
 	switch (command) {
 	case 0:
 	    context.sendBroadcast(new Intent(WidgetHandler.REASSOCIATE));
