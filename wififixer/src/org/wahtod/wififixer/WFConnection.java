@@ -152,6 +152,7 @@ public class WFConnection extends Object implements
     private static HttpResponse response;
     private static List<WFConfig> knownbysignal;
     private static String lastSupplicantState;
+    private static int signalcache;
 
     // deprecated
     static boolean templock = false;
@@ -700,11 +701,7 @@ public class WFConnection extends Object implements
 	    notifSignal = R.drawable.signal0;
 	    return false;
 	}
-
-	if (statNotifCheck())
-	    NotifUtil.addStatNotif(context, notifSSID, context
-		    .getString(R.string.network_test), notifSignal, true,
-		    statnotiflayout);
+	
 	/*
 	 * Check for network connectivity
 	 */
@@ -792,6 +789,20 @@ public class WFConnection extends Object implements
 		notifSignal = R.drawable.signal0;
 		break;
 	    }
+	    
+	    if (signalcache == 0)
+		signalcache = adjusted;
+	    else
+	    if(signalcache != adjusted){
+		/*
+		 * Update status notification with new signal value
+		 */
+		if (statNotifCheck())
+		    NotifUtil.addStatNotif(context, notifSSID, context
+			    .getString(R.string.network_test), notifSignal, true,
+			    statnotiflayout);
+	    }
+	    
 	}
 
 	if (signal < DBM_FLOOR) {
