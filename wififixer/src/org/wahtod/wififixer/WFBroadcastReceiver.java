@@ -37,8 +37,18 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 
     private static final int AUTH_NOTIF_ID = 2934;
 
-    private static void handleWidgetAction(final Context context, int i) {
-	switch (i) {
+    private static void handleWidgetAction(final Context context, final Intent intent) {
+	
+	/*
+	 * Handle null value possible if prefs
+	 * not initialized yet
+	 */
+	if(!intent.hasExtra(PrefConstants.WIDGET_KEY))
+	    return;
+	
+	int command=Integer.valueOf(PrefUtil.readString(
+		    context, PrefConstants.WIDGET_KEY));
+	switch (command) {
 	case 0:
 	    context.sendBroadcast(new Intent(WidgetHandler.REASSOCIATE));
 	    break;
@@ -48,10 +58,10 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	    break;
 
 	case 2:
-	    Intent intent = new Intent(context, WifiFixerActivity.class);
-	    intent.putExtra(WifiFixerActivity.OPEN_NETWORK_LIST, true);
-	    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	    context.startActivity(intent);
+	    Intent widgetintent = new Intent(context, WifiFixerActivity.class);
+	    widgetintent.putExtra(WifiFixerActivity.OPEN_NETWORK_LIST, true);
+	    widgetintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    context.startActivity(widgetintent);
 	    break;
 	}
     }
@@ -121,8 +131,7 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 	 * Handle Widget intent
 	 */
 	else if (action.equals(FixerWidget.W_INTENT)) {
-	    handleWidgetAction(context, Integer.valueOf(PrefUtil.readString(
-		    context, PrefConstants.WIDGET_KEY)));
+	    handleWidgetAction(context, intent);
 	}
 	/*
 	 * Authorization code
