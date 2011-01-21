@@ -762,8 +762,11 @@ public class WFConnection extends Object implements
 	    int adjusted;
 	    try {
 		adjusted = WifiManager.calculateSignalLevel(signal, 5);
-	    } catch (Exception e) {
-
+	    } catch (ArithmeticException e) {
+		/*
+		 * WifiManager.calculateSignalLevel can cause
+		 * divide by zero in some API revisions
+		 */
 		LogService.log(ctxt, appname, context
 			.getString(R.string.thanks_google)
 			+ e.getStackTrace().toString());

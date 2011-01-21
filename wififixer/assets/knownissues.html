@@ -11,6 +11,11 @@
 <font color="white">
 <div><h2>Known Issues:</h2></div>
 
+<h4>Task Killers</h4>
+Important: Wifi Fixer's service can be rendered inoperable by task managers and auto task killers.<br><br>
+It is strongly recommended that you do not use Wifi Fixer with this kind of software, but if you must, add WifiFixerService and LogService to the allowed list.<br><br>
+<br>
+
 <h4>Samsung Galaxy</h4>
 <br>
 Wifi may become unable to turn on without the message &quot Unable To Scan For Networks &quot displaying.<br><br>
@@ -25,8 +30,8 @@ On some devices, Wifi Sleep Policy appears to be ignored when the screen is off.
 This is caused by wifi power save mode, which is not compatible with some wifi access points/routers.<br><br>
 There is a workaround in Advanced Options which may help.<br><br>
 Note: The workaround may take 15-30 seconds for full network function.<br><br>
-Turn on Wifi Lock and Disable Sleep before enabling the workaround, and set Wifi Sleep Policy to Never<br><br>
-Cyanogen Mod 6, which is now released, has a driver fix for this issue: <br>
+Set Wifi Usability to Max Wifi before enabling the workaround, and set Wifi Sleep Policy to Never<br><br>
+Cyanogen Mod 6 and above have a driver fix for this issue: <br>
 <a href="http://cyanogenmod.com">Cyanogen Mod Homepage</a><br><br>
 <br>
 
@@ -34,24 +39,20 @@ Cyanogen Mod 6, which is now released, has a driver fix for this issue: <br>
 Because Wifi Fixer intercepts Wifi scans, it causes Network Notifications in wifi settings not to function.<br><br>
 Wifi Fixer has its own Network Notifications as an option in its preferences.<br><br>
 <br>
-<h4>Slower Reconnection</h4>
-The main network check was reduced from every 5 seconds to every 10 seconds. In testing, it was found that the perceived responsiveness was nearly as high as 5 seconds, but the battery savings were substantial. 
+
+<h4>Known Networks</h4>
+The new Known Networks slide-up panel may not show any networks when wifi is disabled.<br><br>
+The network list cannot be queried when wifi is off.<br><br>
 <br>
-<br>
+
 <h4>Other Wifi Apps</h4>
 Wifi Fixer essentially takes full control of wifi, which may conflict with other apps that talk directly to the Android wifi manager.
-It is likely not possible to minimize possible conflict while retaining full usefulness of Wifi Fixer.  
+Conflicts have been minimized, but may still exist.  
 <br>
 <br>
 <H4>Hidden SSIDs</H4>
 Android is not able to work properly with wifi networks using hidden SSIDs.<br><br>
-If your network is set to non-broadcast SSID, you will have to change it to broadcast.<br>
-<br>
-<br>
-<h4>Task Killers</h4>
-Important: Wifi Fixer's service can be rendered inoperable by task managers and auto task killers.<br><br>
-It is strongly recommended that you do not use Wifi Fixer with this kind of software, but if you must, add WifiFixerService and LogService to the allowed list.<br><br>
-
+If your network is set to non-broadcast SSID, you will have to change it to broadcast.<br><br>
 <br><br>
 <div align="center"><a href="index.html">Index</a></div>
 <br><br>
