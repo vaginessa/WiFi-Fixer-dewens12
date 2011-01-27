@@ -27,7 +27,7 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 	if (broadcasthandler == null)
 	    broadcasthandler = new BroadcastHandler(context);
-	
+
 	broadcasthandler.handleIntent(context, intent);
     }
 

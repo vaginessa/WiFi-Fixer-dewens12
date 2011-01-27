@@ -701,7 +701,7 @@ public class WFConnection extends Object implements
 	    notifSignal = R.drawable.signal0;
 	    return false;
 	}
-	
+
 	/*
 	 * Check for network connectivity
 	 */
@@ -764,8 +764,8 @@ public class WFConnection extends Object implements
 		adjusted = WifiManager.calculateSignalLevel(signal, 5);
 	    } catch (ArithmeticException e) {
 		/*
-		 * WifiManager.calculateSignalLevel can cause
-		 * divide by zero in some API revisions
+		 * WifiManager.calculateSignalLevel can cause divide by zero in
+		 * some API revisions
 		 */
 		LogService.log(ctxt, appname, context
 			.getString(R.string.thanks_google)
@@ -792,20 +792,19 @@ public class WFConnection extends Object implements
 		notifSignal = R.drawable.signal0;
 		break;
 	    }
-	    
+
 	    if (signalcache == 0)
 		signalcache = adjusted;
-	    else
-	    if(signalcache != adjusted){
+	    else if (signalcache != adjusted) {
 		/*
 		 * Update status notification with new signal value
 		 */
 		if (statNotifCheck())
 		    NotifUtil.addStatNotif(context, notifSSID, context
-			    .getString(R.string.network_test), notifSignal, true,
-			    statnotiflayout);
+			    .getString(R.string.network_test), notifSignal,
+			    true, statnotiflayout);
 	    }
-	    
+
 	}
 
 	if (signal < DBM_FLOOR) {
@@ -957,7 +956,7 @@ public class WFConnection extends Object implements
 	response = httpclient.execute(head);
 	int status = response.getStatusLine().getStatusCode();
 
-	if (prefs.getFlag(Pref.LOG_KEY)) {
+	if (prefs.getFlag(Pref.LOG_KEY) && status != HttpURLConnection.HTTP_OK) {
 	    LogService.log(context, appname, context
 		    .getString(R.string.http_status)
 		    + status);
@@ -1117,7 +1116,7 @@ public class WFConnection extends Object implements
 		 */
 		toremove.add(network);
 	}
-	
+
 	if (!toremove.isEmpty()) {
 	    for (WFConfig marked : toremove) {
 		knownbysignal.remove(marked);
@@ -1285,15 +1284,17 @@ public class WFConnection extends Object implements
 
     private static boolean hostup(final Context context) {
 	/*
-	 * Failover switch
+	 * No longer a failover,
+	 * always icmp first,
+	 * then http
 	 */
 	boolean isup = icmpHostup(context);
 	if (!isup) {
 	    isup = httpHostup(context);
 	    if (isup) {
 		wifirepair = W_REASSOCIATE;
-	    } //else
-		//incrementBSSIDfail();
+	    } // else
+	    // incrementBSSIDfail();
 	} else
 	    wifirepair = W_REASSOCIATE;
 
@@ -1311,22 +1312,13 @@ public class WFConnection extends Object implements
 
 	try {
 	    isUp = getHttpHeaders(context);
+	    if (prefs.getFlag(Pref.LOG_KEY))
+		LogService.log(context, appname, context
+			.getString(R.string.http_method));
 	} catch (IOException e) {
-	    try {
-		/*
-		 * Second try
-		 */
-		isUp = getHttpHeaders(context);
-	    } catch (IOException e1) {
-		if (prefs.getFlag(Pref.LOG_KEY))
-		    LogService.log(context, appname, context
-			    .getString(R.string.httpexception));
-	    } catch (URISyntaxException e1) {
-		if (prefs.getFlag(Pref.LOG_KEY))
-		    LogService.log(context, appname, context
-			    .getString(R.string.http_method));
-	    }
-
+	    if (prefs.getFlag(Pref.LOG_KEY))
+		LogService.log(context, appname, context
+			.getString(R.string.httpexception));
 	} catch (URISyntaxException e) {
 	    if (prefs.getFlag(Pref.LOG_KEY))
 		LogService.log(context, appname, context
