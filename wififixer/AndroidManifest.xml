@@ -69,6 +69,8 @@
 		<service android:name=".LogService" class="LogService"
 			android:process=":LogService">>
 		</service>
+		
+		<service android:name=".FixerWidget$UpdateService" />
 
 		<receiver android:name=".WidgetHandler" class="WidgetHandler"
 			android:process=":WidgetHandler" android:exported="false">
@@ -79,8 +81,7 @@
 				<action android:name="org.wahtod.wififixer.WidgetHandler.WIFI_REASSOCIATE" />
 			</intent-filter>
 		</receiver>
-
-		<service android:name=".FixerWidget$UpdateService" />
+		
 	</application>
 
 	<!--Documenting permissions here-->
