@@ -30,13 +30,7 @@
 			android:launchMode="singleTop" android:screenOrientation="portrait"
 			android:configChanges="keyboardHidden">
 			<intent-filter>
-				<!--
-					The MAIN action describes a main entry point into an activity,
-					without any associated data.
-				-->
 				<action android:name="android.intent.action.MAIN" />
-
-				<!-- This places this activity into the main app list. -->
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 
