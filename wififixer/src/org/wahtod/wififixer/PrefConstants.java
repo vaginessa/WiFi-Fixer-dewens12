@@ -27,6 +27,7 @@ public class PrefConstants {
      */
 
     static final String SUPFIX_DEFAULT = "SPFDEF";
+    static final String STATNOTIF_DEFAULT = "STATNOTIFD";
     static final String SLPOLICY_KEY = "SLEEP_POLICY";
     static final String PERF_KEY = "Perf_Mode";
     static final String WIDGET_KEY = "WIDGET";

@@ -373,9 +373,16 @@ public class WifiFixerService extends Service implements
 			false);
 
 		/*
+		 * Set default: Status Notification on
+		 */
+		if (!readBoolean(context, PrefConstants.STATNOTIF_DEFAULT)) {
+		    writeBoolean(context, PrefConstants.STATNOTIF_DEFAULT, true);
+		    writeBoolean(context, Pref.STATENOT_KEY.key(), true);
+		}
+
+		/*
 		 * Sets default for Supplicant Fix pref on < 2.0 to true
 		 */
-
 		if (!readBoolean(context, PrefConstants.SUPFIX_DEFAULT)) {
 		    writeBoolean(context, PrefConstants.SUPFIX_DEFAULT, true);
 		    int ver;
