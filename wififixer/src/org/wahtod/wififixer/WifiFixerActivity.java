@@ -187,9 +187,24 @@ public class WifiFixerActivity extends Activity {
     private Handler handler = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
+	    /*
+	     * If wifi is on, scan
+	     * if not, make sure no networks
+	     * shown in range
+	     */
 	    WifiManager wm = (WifiManager) getBaseContext().getSystemService(
 		    Context.WIFI_SERVICE);
-	    wm.startScan();
+	    
+	    if(wm.isWifiEnabled())
+		wm.startScan();
+	    else
+	    {
+		if(known_in_range.size() >=1){
+		    known_in_range.clear();
+		    if(adapter != null)
+			adapter.notifyDataSetChanged();
+		}
+	    }
 	}
 
     };
@@ -712,7 +727,7 @@ public class WifiFixerActivity extends Activity {
 
     private void refreshNetworkAdapter() {
 	/*
-	 * Don't refresh if temp is empty (wifi is off)
+	 * Don't refresh if knownnetworks is empty (wifi is off)
 	 */
 	knownnetworks = getNetworks(this);
 	if (knownnetworks.size() != 0) {
