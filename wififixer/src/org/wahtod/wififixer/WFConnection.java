@@ -175,7 +175,7 @@ public class WFConnection extends Object implements
      * For Supplicant ASSOCIATING bug
      */
     private static int supplicant_associating = 0;
-    private static final int SUPPLICANT_ASSOC_THRESHOLD = 3;
+    private static final int SUPPLICANT_ASSOC_THRESHOLD = 5;
 
     /*
      * For connectToAP sticking
