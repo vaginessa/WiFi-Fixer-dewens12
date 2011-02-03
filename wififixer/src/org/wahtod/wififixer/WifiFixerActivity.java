@@ -502,9 +502,6 @@ public class WifiFixerActivity extends Activity {
 	    for (WifiConfiguration wfResult : wifiConfigs) {
 		/*
 		 * Using .contains to find sResult.SSID in doublequoted string
-		 * 
-		 * containsBSSID filters out duplicate MACs in broken scans
-		 * (yes, that happens)
 		 */
 
 		if (wfResult.SSID.contains(sResult.SSID)) {
