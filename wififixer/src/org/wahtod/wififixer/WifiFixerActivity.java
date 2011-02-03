@@ -188,20 +188,17 @@ public class WifiFixerActivity extends Activity {
 	@Override
 	public void handleMessage(Message message) {
 	    /*
-	     * If wifi is on, scan
-	     * if not, make sure no networks
-	     * shown in range
+	     * If wifi is on, scan if not, make sure no networks shown in range
 	     */
 	    WifiManager wm = (WifiManager) getBaseContext().getSystemService(
 		    Context.WIFI_SERVICE);
-	    
-	    if(wm.isWifiEnabled())
+
+	    if (wm.isWifiEnabled())
 		wm.startScan();
-	    else
-	    {
-		if(known_in_range.size() >=1){
+	    else {
+		if (known_in_range != null && known_in_range.size() >= 1) {
 		    known_in_range.clear();
-		    if(adapter != null)
+		    if (adapter != null)
 			adapter.notifyDataSetChanged();
 		}
 	    }
