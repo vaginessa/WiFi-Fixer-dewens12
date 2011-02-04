@@ -1179,7 +1179,7 @@ public class WFConnection extends Object implements
     public static boolean getNetworkState(final Context context,
 	    final int network) {
 	if (!getWifiManager(context).isWifiEnabled())
-	    return readNetworkState(context, network);
+	    return !readNetworkState(context, network);
 	else if (getWifiManager(context).getConfiguredNetworks().get(network).status == WifiConfiguration.Status.DISABLED)
 	    return false;
 	else
@@ -1284,9 +1284,7 @@ public class WFConnection extends Object implements
 
     private static boolean hostup(final Context context) {
 	/*
-	 * No longer a failover,
-	 * always icmp first,
-	 * then http
+	 * No longer a failover, always icmp first, then http
 	 */
 	boolean isup = icmpHostup(context);
 	if (!isup) {
