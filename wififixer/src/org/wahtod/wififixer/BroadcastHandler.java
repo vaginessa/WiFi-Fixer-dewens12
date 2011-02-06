@@ -77,7 +77,6 @@ public class BroadcastHandler {
 	public void handleMessage(Message message) {
 	    ServiceAlarm.setAlarm(ctxt, false);
 	}
-
     };
 
     public void handleIntent(final Context context, final Intent intent) {

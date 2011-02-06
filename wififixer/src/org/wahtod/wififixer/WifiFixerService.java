@@ -78,8 +78,8 @@ public class WifiFixerService extends Service implements
     private static void refreshWidget(final Context context) {
 	Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 	/*
-	 * Why would anyone possibly want more than 3? Hell, why would anyone
-	 * want 3?
+	 * Why would anyone possibly want more than 3? 
+	 * It only does one thing. 
 	 */
 	int[] widgetids = { 0, 1, 2 };
 	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetids);
@@ -413,7 +413,6 @@ public class WifiFixerService extends Service implements
 	prefs.loadPrefs();
 	NotifUtil.cancel(NOTIFID, notifcontext);
 	wakelock.lock(false);
-
     }
 
     private void setInitialScreenState(final Context context) {
