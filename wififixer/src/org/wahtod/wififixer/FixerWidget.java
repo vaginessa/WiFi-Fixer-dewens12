@@ -29,22 +29,7 @@ import android.widget.RemoteViews;
 
 public class FixerWidget extends AppWidgetProvider {
     public static final String W_INTENT = "org.wahtod.wififixer.WIDGET";
-
-    @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-	super.onDeleted(context, appWidgetIds);
-    }
-
-    @Override
-    public void onDisabled(Context context) {
-	super.onDisabled(context);
-    }
-
-    @Override
-    public void onEnabled(Context context) {
-	super.onEnabled(context);
-    }
-
+    
     @Override
     public void onReceive(Context context, Intent intent) {
 	if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))

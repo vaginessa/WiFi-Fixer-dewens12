@@ -43,7 +43,7 @@ public class BroadcastHandler {
 	 */
 	if (!intent.hasExtra(PrefConstants.WIDGET_KEY)) {
 	    /*
-	     * Default: reassociate for cases when
+	     * Default: REASSOCIATE
 	     */
 	    command = 0;
 	}
