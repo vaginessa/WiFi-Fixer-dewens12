@@ -85,7 +85,7 @@ public class NotifUtil {
 	if (flag) {
 
 	    /*
-	     * Choke to avoid memory leak
+	     * Choke to avoid memory leak in NotificationManager
 	     */
 	    if (choke > CHOKE_THRESHOLD) {
 		statnotif = null;

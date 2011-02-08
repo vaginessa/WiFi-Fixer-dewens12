@@ -183,11 +183,6 @@ public class WFConnection extends Object implements
     private static int connecting = 0;
     private static final int CONNECTING_THRESHOLD = 2;
 
-    /*
-     * For BSSID blacklisting
-     */
-    private static List<String> bssidBlacklist;
-
     // Runnable Constants for handler
     private static final int MAIN = 0;
     private static final int REPAIR = 1;
@@ -572,7 +567,6 @@ public class WFConnection extends Object implements
 	appname = LogService.getLogTag(context);
 	screenstate = ScreenStateHandler.getScreenState(context);
 	knownbysignal = new ArrayList<WFConfig>();
-	bssidBlacklist = new ArrayList<String>();
 	/*
 	 * Cache Context from consumer
 	 */
@@ -886,30 +880,18 @@ public class WFConnection extends Object implements
 	/*
 	 * Select by best available
 	 */
-	int bestnid = NULLVAL;
-	/*
-	 * Iterate till we find a non-blacklisted BSSID
-	 */
-	for (WFConfig network : knownbysignal) {
-	    if (!bssidBlacklist.contains(network.wificonfig.BSSID)) {
-		bestnid = knownbysignal.indexOf(network);
-		break;
-	    }
-	}
 
-	if (bestnid != NULLVAL) {
-	    WFConfig best = knownbysignal.get(bestnid);
-	    /*
-	     * specify bssid and add it to the supplicant's known network entry
-	     */
-	    bestnid = best.wificonfig.networkId;
-	    WifiConfiguration cfg = new WifiConfiguration();
-	    cfg.BSSID = best.wificonfig.BSSID;
-	    cfg.networkId = bestnid;
-	    getWifiManager(ctxt).updateNetwork(cfg);
-	    connectToAP(context, bestnid);
-	    logBestNetwork(context, best);
-	}
+	WFConfig best = knownbysignal.get(0);
+	/*
+	 * specify bssid and add it to the supplicant's known network entry
+	 */
+	int bestnid = best.wificonfig.networkId;
+	WifiConfiguration cfg = new WifiConfiguration();
+	cfg.BSSID = best.wificonfig.BSSID;
+	cfg.networkId = bestnid;
+	getWifiManager(ctxt).updateNetwork(cfg);
+	connectToAP(context, bestnid);
+	logBestNetwork(context, best);
 
 	return bestnid;
 
@@ -1960,8 +1942,9 @@ public class WFConnection extends Object implements
 	if (!supplicantInterruptCheck(ctxt))
 	    return;
 
-	// We want a lock after a scan
 	pendingscan = pending;
+	// We want a wakelock during scan, broadcastreceiver for results
+	// gets its own wake lock
 	wakelock.lock(true);
 	getWifiManager(ctxt).startScan();
 	if (prefs.getFlag(Pref.LOG_KEY))
