@@ -1862,7 +1862,8 @@ public class WFConnection extends Object implements
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
 		    true, statnotiflayout);
 	} else {
-	    NotifUtil.addStatNotif(ctxt, null, null, R.drawable.signal0, false, 0);
+	    NotifUtil.addStatNotif(ctxt, null, null, R.drawable.signal0, false,
+		    0);
 	}
     }
 

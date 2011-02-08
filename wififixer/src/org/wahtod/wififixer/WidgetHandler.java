@@ -17,7 +17,6 @@
 package org.wahtod.wififixer;
 
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
@@ -25,7 +24,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
-public class WidgetHandler extends BroadcastReceiver {
+public class WidgetHandler {
     private static WakeLock wlock;
     private static Context ctxt;
 
@@ -61,7 +60,7 @@ public class WidgetHandler extends BroadcastReceiver {
 
     private Handler hWifiState = new Handler() {
 	@Override
-	public void handleMessage(Message message) {
+	public void handleMessage(Message msg) {
 	    /*
 	     * Acquire Wake Lock
 	     */
@@ -72,7 +71,7 @@ public class WidgetHandler extends BroadcastReceiver {
 	    /*
 	     * Process MESSAGE
 	     */
-	    switch (message.what) {
+	    switch (msg.what) {
 
 	    case ON:
 		setWifiState(ctxt, true);
@@ -112,7 +111,9 @@ public class WidgetHandler extends BroadcastReceiver {
 	     * Release Wake Lock
 	     */
 	    wlock.lock(false);
+	    super.handleMessage(msg);
 	}
+
     };
 
     private static WifiManager getWifiManager(final Context context) {
@@ -125,17 +126,13 @@ public class WidgetHandler extends BroadcastReceiver {
 	getWifiManager(context).setWifiEnabled(state);
     }
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-	if (ctxt == null)
-	    ctxt = context;
-
+    public void handleIntent(final Context context, final Intent intent) {
+	ctxt = context;
 	/*
 	 * If Wifi is disabled, notify
 	 */
-	if (!getWifiManager(context).isWifiEnabled()) {
-	    Toast.makeText(context,
-		    context.getString(R.string.wifi_is_disabled),
+	if (!getWifiManager(ctxt).isWifiEnabled()) {
+	    Toast.makeText(ctxt, ctxt.getString(R.string.wifi_is_disabled),
 		    Toast.LENGTH_LONG).show();
 	    return;
 	}
@@ -149,12 +146,12 @@ public class WidgetHandler extends BroadcastReceiver {
 	 * Turn on WIFI
 	 */
 	if (action.equals(WIFI_ON))
-	    setWifiState(context, true);
+	    setWifiState(ctxt, true);
 	/*
 	 * Turn off Wifi
 	 */
 	else if (action.equals(WIFI_OFF))
-	    setWifiState(context, false);
+	    setWifiState(ctxt, false);
 	/*
 	 * Toggle Wifi
 	 */
@@ -164,12 +161,16 @@ public class WidgetHandler extends BroadcastReceiver {
 	 * Reassociate
 	 */
 	else if (action.equals(REASSOCIATE)) {
-	    Toast.makeText(context, context.getString(R.string.reassociating),
+	    Toast.makeText(ctxt, ctxt.getString(R.string.reassociating),
 		    Toast.LENGTH_LONG).show();
-	    context.sendBroadcast(new Intent(WFConnection.USEREVENT));
-	    getWifiManager(context).reassociate();
+	    ctxt.sendBroadcast(new Intent(WFConnection.USEREVENT));
+	    getWifiManager(ctxt).reassociate();
 	}
 
+    }
+
+    public WidgetHandler(final Context context) {
+	ctxt = context;
     }
 
 }

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<!--
-		Copyright [2010-2011] [David Van de Ven] Licensed under the Apache License,
-		Version 2.0 (the "License"); you may not use this file except in
-		compliance with the License. You may obtain a copy of the License at
-
-		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		Copyright [2010-2011] [David Van de Ven] Licensed under the Apache
+		License, Version 2.0 (the "License"); you may not use this file except
+		in compliance with the License. You may obtain a copy of the License
+		at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
 		applicable law or agreed to in writing, software distributed under the
 		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 		CONDITIONS OF ANY KIND, either express or implied. See the License for
@@ -13,8 +12,8 @@
 	-->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.wahtod.wififixer" android:versionName="0.8.0RC2"
-	android:versionCode="755" android:installLocation="internalOnly">
+	package="org.wahtod.wififixer" android:versionName="0.8.0RC3"
+	android:versionCode="756" android:installLocation="internalOnly">
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
 	<uses-feature android:name="android.hardware.wifi"
 		android:required="true" />
@@ -69,10 +68,10 @@
 		<service android:name=".LogService" class="LogService"
 			android:process=":LogService">>
 		</service>
-		
+
 		<service android:name=".FixerWidget$UpdateService" />
 
-		<receiver android:name=".WidgetHandler" class="WidgetHandler"
+		<receiver android:name="WidgetReceiver" class="WidgetHandler"
 			android:process=":WidgetHandler" android:exported="false">
 			<intent-filter>
 				<action android:name="org.wahtod.wififixer.WidgetHandler.WIFI_ON" />
@@ -81,7 +80,7 @@
 				<action android:name="org.wahtod.wififixer.WidgetHandler.WIFI_REASSOCIATE" />
 			</intent-filter>
 		</receiver>
-		
+
 	</application>
 
 	<!--Documenting permissions here-->

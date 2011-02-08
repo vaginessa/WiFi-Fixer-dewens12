@@ -33,10 +33,9 @@ public class NotifUtil {
     private static int lastbitmap;
     private static int choke;
     /*
-     * To clarify what I'm doing here: NotificationManager has a memory leak
-     * so to preserve some semblance of battery life I'm limiting 
-     * cached writes to the CHOKE_THRESHOLD then
-     * resetting the object 
+     * To clarify what I'm doing here: NotificationManager has a memory leak so
+     * to preserve some semblance of battery life I'm limiting cached writes to
+     * the CHOKE_THRESHOLD then resetting the object
      */
     private static final int CHOKE_THRESHOLD = 5;
 

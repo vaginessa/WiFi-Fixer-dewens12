@@ -29,7 +29,7 @@ import android.widget.RemoteViews;
 
 public class FixerWidget extends AppWidgetProvider {
     public static final String W_INTENT = "org.wahtod.wififixer.WIDGET";
-    
+
     @Override
     public void onReceive(Context context, Intent intent) {
 	if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
