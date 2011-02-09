@@ -1,4 +1,4 @@
-/*Copyright [2010] [David Van de Ven]
+/*Copyright [2010-2011] [David Van de Ven]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ public class WFConfig extends Object {
 
     public WifiConfiguration wificonfig;
     public int level;
+    public int failcount;
 
     public WFConfig(final ScanResult sResult, final WifiConfiguration wConfig) {
 	/*
@@ -37,14 +38,11 @@ public class WFConfig extends Object {
 	level = sResult.level;
 	wificonfig = wConfig;
 	wificonfig.BSSID = sResult.BSSID;
+	failcount = 0;
     }
 
-    public static WifiConfiguration sparseConfig(final WifiConfiguration wificonfig) {
-	WifiConfiguration config = new WifiConfiguration();
-	config.networkId = wificonfig.networkId;
-	config.BSSID = wificonfig.BSSID;
-
-	return config;
+    public WFConfig() {
+	failcount = 0;
     }
 
     @Override

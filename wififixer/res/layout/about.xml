@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Copyright [2010] [David Van de Ven]
+<!--Copyright [2010-2011] [David Van de Ven]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -29,30 +29,21 @@
                 android:layout_height="wrap_content"
                 android:padding="10dip"
                 >
-
                 <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dip"
-                        android:text="This program is distributed in the hope that it will be useful, but without any warranty; without even the implied warranty of merchantability or fitness for a purpose."
+                        android:text="Wifi Fixer is a low-resource service that works around several problems with Android wifi.   Wifi Fixer should help immediately, but may need preferences adjusted to work optimally.  Please read the documentation for specifics."
                         
-                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
                         />
+                
                 <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dip"
-                        android:text="Logging stores some personal information: timezone and SSID of configured access points.  It is not enabled by default. The log may manually be sent to the developer."
-                        
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        />
-
-                <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dip"
-                        android:text="For problems or comments:\n email zanshin.g1@gmail.com\nwith specific details.\n\nVisit the development log\n at http://wififixer.wordpress.com"
-                        android:textSize="12sp"
+                        android:text="For problems or comments:\n email zanshin.g1@gmail.com\nwith specific details, or use the in-app logging feature.\n\nVisit the development blog\n at http://wififixer.wordpress.com"
+                        android:textSize="16dp"
                         android:textColor="#bebebe"
                         android:autoLink="web|email"/>
                         
@@ -61,10 +52,28 @@
                         android:layout_height="wrap_content"
                         android:paddingTop="10dip"
                         android:text="Wifi Fixer is an Open Source project.\n Visit the git repository at\n http://github.com/Zanshinmu/Wifi-Fixer "
-                        android:textSize="12sp"
+                        android:textSize="16dp"
                         android:textColor="#bebebe"
                         android:autoLink="web"/>
+                        
+                         <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="Privacy Disclosure:\nLogging is not enabled by default.\nThe log will only be enabled and sent to the developer when requested.\nLogging stores some personal information, specifically current timezone and SSID of configured access points and scanned SSIDs during connection."
+                        
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        />
 
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dip"
+                        android:text="License: see\n http://www.apache.org/licenses/LICENSE-2.0\n\n\n"
+                        android:autoLink="web"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        />
+               
 
         </LinearLayout>
 

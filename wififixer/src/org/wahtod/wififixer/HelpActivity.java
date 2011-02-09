@@ -1,4 +1,4 @@
-/*Copyright [2010] [David Van de Ven]
+/*Copyright [2010-2011] [David Van de Ven]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -67,9 +67,9 @@ public class HelpActivity extends Activity {
 			new String[] { "zanshin.g1@gmail.com" });
 		startActivity(Intent.createChooser(sendIntent, "Email:"));
 		return true;
-	    } else if (url.contains("http://wififixer.wordpress.com")) {
+	    } else if (url.contains("http://WFBroadcastReceiver.wordpress.com")) {
 		Intent i = new Intent(Intent.ACTION_VIEW);
-		Uri u = Uri.parse("http://wififixer.wordpress.com");
+		Uri u = Uri.parse("http://WFBroadcastReceiver.wordpress.com");
 		i.setData(u);
 		startActivity(i);
 		return true;

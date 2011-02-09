@@ -1,4 +1,4 @@
-/*Copyright [2010] [David Van de Ven]
+/*Copyright [2010-2011] [David Van de Ven]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer;
 
+import org.wahtod.wififixer.PrefConstants.Pref;
+
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -23,31 +25,16 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 public class FixerWidget extends AppWidgetProvider {
-    public static final String W_INTENT = "org.wahtod.wifixer.WififixerService.WIDGET";
-
-    @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-	super.onDeleted(context, appWidgetIds);
-    }
-
-    @Override
-    public void onDisabled(Context context) {
-	super.onDisabled(context);
-    }
-
-    @Override
-    public void onEnabled(Context context) {
-	super.onEnabled(context);
-    }
+    public static final String W_INTENT = "org.wahtod.wififixer.WIDGET";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-	Log.i(this.getClass().getName(), intent.toString());
+	if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
+	    LogService.log(context, LogService.getLogTag(context), intent
+		    .toString());
 	super.onReceive(context, intent);
 
     }
@@ -57,9 +44,11 @@ public class FixerWidget extends AppWidgetProvider {
 	    int[] appWidgetIds) {
 
 	/*
-	 * Service seems like a better idea
+	 * Send Update To Widgets
 	 */
-	Log.i(this.getClass().getName(), "Widget Update Called");
+	if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
+	    LogService.log(context, LogService.getLogTag(context), context
+		    .getString(R.string.widget_update_called));
 	context.startService(new Intent(context, UpdateService.class));
 	super.onUpdate(context, appWidgetManager, appWidgetIds);
     }

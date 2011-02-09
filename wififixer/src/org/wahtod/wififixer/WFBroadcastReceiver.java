@@ -1,4 +1,4 @@
-/*Copyright [2010] [David Van de Ven]
+/*Copyright [2010-2011] [David Van de Ven]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -19,27 +19,16 @@ package org.wahtod.wififixer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 
-public class wififixer extends BroadcastReceiver {
-
-    private Context ctxt;
-
-    private Handler tHandler = new Handler() {
-	@Override
-	public void handleMessage(Message message) {
-	    ServiceAlarm.setAlarm(ctxt, false);
-	}
-
-    };
+public class WFBroadcastReceiver extends BroadcastReceiver {
+    private static BroadcastHandler broadcasthandler;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-	// Create intent which will start the Service.
-	ctxt = context;
-	tHandler.sendEmptyMessageDelayed(0, ServiceAlarm.STARTDELAY);
+	if (broadcasthandler == null)
+	    broadcasthandler = new BroadcastHandler(context);
 
+	broadcasthandler.handleIntent(context, intent);
     }
 
 }

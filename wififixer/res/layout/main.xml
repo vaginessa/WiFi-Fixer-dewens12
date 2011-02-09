@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Copyright [2010] [David Van de Ven]
+<!--Copyright [2010-2011][David Van de Ven]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:clickable="false"
 android:layout_y="287px"
-android:layout_x="112px">
+android:layout_x="125px">
 </ImageButton>
 <TextView
 android:id="@+id/version"
@@ -80,5 +80,28 @@ android:layout_x="64px"
 android:layout_y="353px"
 >
 </TextView>
+<SlidingDrawer android:layout_width="wrap_content"
+		android:id="@+id/SlidingDrawer" android:handle="@+id/handlebutton"
+		android:content="@+id/content" android:orientation="vertical"
+		android:layout_height="fill_parent" android:layout_alignParentBottom="true">
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/handlebutton"
+			android:background="@drawable/handle"></Button>
+		<RelativeLayout android:id="@+id/content"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:orientation="vertical" android:background="#000000">
+
+			<TextView android:id="@+id/TextView01" android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerHorizontal="true" android:text="Known Networks"
+				android:paddingBottom="10px" android:textColor="#FFFFFF"
+				android:textSize="20dp"></TextView>
+
+			<ListView android:layout_centerHorizontal="true"
+				android:layout_below="@+id/TextView01" android:layout_width="fill_parent"
+				android:layout_height="fill_parent" android:id="@+id/ListView01"
+				android:dividerHeight="1dip" android:divider="#545454"></ListView>
+		</RelativeLayout>
+	</SlidingDrawer>
 
 </AbsoluteLayout>

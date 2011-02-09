@@ -1,4 +1,4 @@
-/*Copyright [2010] [David Van de Ven]
+/*Copyright [2010-2011] [David Van de Ven]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer;
 
+import org.wahtod.wififixer.PrefConstants.Pref;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,11 +25,9 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 import android.provider.Settings.SettingNotFoundException;
-import android.util.Log;
 
-public class WifiFixerPreferences extends PreferenceActivity implements
+public class PrefActivity extends PreferenceActivity implements
 	OnSharedPreferenceChangeListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class WifiFixerPreferences extends PreferenceActivity implements
     protected void onResume() {
 	super.onResume();
 
-	// Set up a listener whenever a key changes
+	// Set up a listener for when key changes
 	getPreferenceScreen().getSharedPreferences()
 		.registerOnSharedPreferenceChangeListener(this);
 	setWifiSleepPolicy(this);
@@ -51,7 +51,7 @@ public class WifiFixerPreferences extends PreferenceActivity implements
     protected void onPause() {
 	super.onPause();
 
-	// Unregister the listener whenever a key changes
+	// Unregister the listener when paused
 	getPreferenceScreen().getSharedPreferences()
 		.unregisterOnSharedPreferenceChangeListener(this);
     }
@@ -60,16 +60,12 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	/*
 	 * Handle Wifi Sleep Policy
 	 */
-	SharedPreferences prefs = PreferenceManager
-		.getDefaultSharedPreferences(context);
 	ContentResolver cr = context.getContentResolver();
-	SharedPreferences.Editor edit = prefs.edit();
 	try {
-	    String wfsleep = String
-		    .valueOf(android.provider.Settings.System.getInt(cr,
-			    android.provider.Settings.System.WIFI_SLEEP_POLICY));
-	    edit.putString("WFSLEEP", wfsleep);
-	    edit.commit();
+	    int wfsleep = android.provider.Settings.System.getInt(cr,
+		    android.provider.Settings.System.WIFI_SLEEP_POLICY);
+	    PrefUtil.writeString(context, PrefConstants.SLPOLICY_KEY, String
+		    .valueOf(wfsleep));
 	} catch (SettingNotFoundException e) {
 	    /*
 	     * Don't need a catch, all clients are >= 1.5 per manifest market
@@ -78,66 +74,82 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 	}
     }
 
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+	/*
+	 * Dispatch intent if this is a pref service is interested in
+	 */
+	if (Pref.get(key) != null) {
+	    /*
+	     * First handle Service enable case
+	     */
+	    if (key.equals(Pref.DISABLE_KEY.key())) {
+		if (!PrefUtil.readBoolean(this, Pref.DISABLE_KEY.key())) {
+		    Intent intent = new Intent(
+			    IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
+		    sendBroadcast(intent);
+		}
 
-	SharedPreferences.Editor edit = prefs.edit();
+		else {
+		    Intent intent = new Intent(
+			    IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
+		    sendBroadcast(intent);
+		}
 
-	if (key.contains("Performance")) {
+		return;
+	    }
+	    /*
+	     * We want to notify for these, since they're prefs the service is
+	     * interested in.
+	     */
 
-	    String sPerf = prefs.getString("Performance", "2");
-	    int pVal = Integer.parseInt(sPerf);
+	    PrefUtil.notifyPrefChange(this, Pref.get(key));
+
+	} else if (key.contains(PrefConstants.PERF_KEY)) {
+
+	    int pVal = Integer.valueOf(PrefUtil.readString(this,
+		    PrefConstants.PERF_KEY));
 
 	    switch (pVal) {
 	    case 1:
-		edit.putBoolean("WiFiLock", true);
-		edit.putBoolean("SCREEN", true);
-		if (!edit.commit())
-		    Log.i("Preferences", "Commit failed");
+		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY.key(), true);
+		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY.key(), true);
 		break;
 
 	    case 2:
-		edit.putBoolean("WiFiLock", true);
-		edit.putBoolean("SCREEN", false);
-		if (!edit.commit())
-		    Log.i("Preferences", "Commit failed");
+		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY.key(), true);
+		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY.key(), false);
 		break;
 
 	    case 3:
-		edit.putBoolean("WiFiLock", false);
-		edit.putBoolean("SCREEN", false);
-		if (!edit.commit())
-		    Log.i("Preferences", "Commit failed");
+		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY.key(), false);
+		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY.key(), false);
 		break;
 	    }
-	    WifiFixerPreferences.this.finish();
+	    PrefActivity.this.finish();
 
-	} else if (key.contains("Disable")) {
-	    stopService(new Intent(this, WifiFixerService.class));
-	    edit.putBoolean("SLOG", false);
-	    edit.commit();
-	} else if (key.contains("WFSLEEP")) {
+	} else if (key.contains(PrefConstants.SLPOLICY_KEY)) {
 	    /*
 	     * Setting Wifi Sleep Policy
 	     */
 	    ContentResolver cr = getContentResolver();
-	    String wfsleep = prefs.getString("WFSLEEP", "3");
-	    if (wfsleep != "3") {
+	    int wfsleep = Integer.valueOf(PrefUtil.readString(this,
+		    PrefConstants.SLPOLICY_KEY));
+	    if (wfsleep != 3) {
 
 		android.provider.Settings.System.putInt(cr,
 			android.provider.Settings.System.WIFI_SLEEP_POLICY,
-			Integer.valueOf(wfsleep));
+			wfsleep);
 	    } else {
 		/*
 		 * Set to system state
 		 */
 		try {
-		    wfsleep = String
-			    .valueOf(android.provider.Settings.System
-				    .getInt(
-					    cr,
-					    android.provider.Settings.System.WIFI_SLEEP_POLICY));
-		    edit.putString("WFSLEEP", wfsleep);
-		    edit.commit();
+		    wfsleep = android.provider.Settings.System.getInt(cr,
+			    android.provider.Settings.System.WIFI_SLEEP_POLICY);
+		    PrefUtil.writeString(this, PrefConstants.SLPOLICY_KEY,
+			    String.valueOf(wfsleep));
+
 		} catch (SettingNotFoundException e) {
 		    /*
 		     * Should always be found since our clients are > SDK2
@@ -145,10 +157,5 @@ public class WifiFixerPreferences extends PreferenceActivity implements
 		}
 	    }
 	}
-
-	// Send reload intent to WifiFixerService when a preference value
-	// changes
-	Intent sendIntent = new Intent(WifiFixerService.class.getName());
-	startService(sendIntent);
     }
 }

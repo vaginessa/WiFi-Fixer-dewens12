@@ -1,6 +1,12 @@
 .settings
 bin/
 gen/
+proguard/
 .classpath
 .project
+proguard.cfg
+wififixer/build.properties
+wififixer/local.properties
+wififixer/default.properties
+wififixer/build.xml
 

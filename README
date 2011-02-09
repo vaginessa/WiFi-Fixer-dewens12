@@ -1,30 +1,31 @@
-/*Copyright [2010] [David Van de Ven]
+================================
+    Wifi Fixer for Android
+================================
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+Copyright [2010-2011] [David Van de Ven]
 
-       http://www.apache.org/licenses/LICENSE-2.0
+<License>
+This source code is Apache 2 licensed: 
+http://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+<Project>
+Purely functional set of heuristic workarounds for Android wifi. 
+Designed to use as few resources on the user's device as possible. 
 
-*/
+<Developers>
+Public Intents: 
+/wififixer/src/org/wahtod/wififixer/IntentConstants.java
 
-This project began in early 2009 as an exercise in learning java and android.
-I was having wifi problems on my T-Mobile G1, so I wrote a quick and dirty little
-no-Activity app to force a reassociation.   I stopped working on it while I taught
-myself java working on other android projects. 
+<Targets>
+should run on all Android devices 1.5 to 2.3 with wifi and a touchscreen
 
-Somehow, even with my other projects, this one picked up the most steam on the 
-market.    Which is funny, because every hour I put into it will eventually 
-come to naught because the wifi bugs in android will get fixed..
+<Why is it free?>
+Because software which provides utility which should've been in the product it runs on to begin with should be free!
 
-Well, not so much to naught,  I've learned a lot. 
+<Developer>
+I like developing for Android.  Hope it shows.   
 
 
-Release: 0.7.0.3.3 Ziggurat Vertigo
+Release: 0.8.0 Naugahyde Ninja
+
 
