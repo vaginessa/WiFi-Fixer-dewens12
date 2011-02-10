@@ -529,8 +529,8 @@ public class WifiFixerActivity extends Activity {
 	for (WifiConfiguration wfResult : wifiConfigs) {
 
 	    ssid = wfResult.SSID.replace("\"", "");
-
-	    networks.add(wfResult.networkId, ssid);
+	    if (ssid != null && ssid.length() > 0)
+		networks.add(ssid);
 	}
 
 	return networks;
