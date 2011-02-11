@@ -41,14 +41,16 @@ public class BroadcastHandler {
 	/*
 	 * Handle null value possible if prefs not initialized yet
 	 */
-	if (!intent.hasExtra(PrefConstants.WIDGET_KEY)) {
+	if (!intent.hasExtra(PrefConstants.WIDGET_KEY)
+		|| PrefUtil.readString(context, PrefConstants.WIDGET_KEY) == null) {
 	    /*
 	     * Default: REASSOCIATE
 	     */
 	    command = 0;
-	}
-	command = Integer.valueOf(PrefUtil.readString(context,
-		PrefConstants.WIDGET_KEY));
+	} else
+	    command = Integer.valueOf(PrefUtil.readString(context,
+		    PrefConstants.WIDGET_KEY));
+
 	switch (command) {
 	case 0:
 	    context.sendBroadcast(new Intent(WidgetHandler.REASSOCIATE));
