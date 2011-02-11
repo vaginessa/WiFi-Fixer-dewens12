@@ -97,16 +97,16 @@ public class NotifUtil {
 		statnotif = new Notification(R.drawable.router32, context
 			.getString(R.string.network_status), System
 			.currentTimeMillis());
-	    }
-
-	    if (statview == null) {
-		statview = createStatView(context, ssid, status, signal, layout);
-		statnotif.contentView = statview;
 		PendingIntent contentIntent = PendingIntent.getActivity(
 			context, 0,
 			new Intent(context, WifiFixerActivity.class), 0);
 		statnotif.contentIntent = contentIntent;
 		statnotif.flags = Notification.FLAG_ONGOING_EVENT;
+	    }
+
+	    if (statview == null) {
+		statview = createStatView(context, ssid, status, signal, layout);
+		statnotif.contentView = statview;
 	    } else {
 		choke++;
 		statview.setTextViewText(R.id.ssid, truncateSSID(ssid));
