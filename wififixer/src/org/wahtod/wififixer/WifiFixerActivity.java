@@ -86,6 +86,8 @@ public class WifiFixerActivity extends Activity {
 
     private static final int MESSAGE = 31337;
     private static final int SCAN_DELAY = 15000;
+    
+    private static final String EMPTY_SSID = "None";
 
     private String clicked;
     private int clicked_position;
@@ -527,10 +529,16 @@ public class WifiFixerActivity extends Activity {
 	List<String> networks = new ArrayList<String>();
 	String ssid;
 	for (WifiConfiguration wfResult : wifiConfigs) {
-
+	    /*
+	     * Make sure there's a 1:1 correlation 
+	     * between getConfiguredNetworks()
+	     * and the array
+	     */
 	    ssid = wfResult.SSID.replace("\"", "");
 	    if (ssid != null && ssid.length() > 0)
 		networks.add(ssid);
+	    else
+		networks.add(EMPTY_SSID);
 	}
 
 	return networks;
