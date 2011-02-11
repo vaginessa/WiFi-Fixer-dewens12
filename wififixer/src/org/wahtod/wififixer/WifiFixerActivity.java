@@ -556,7 +556,8 @@ public class WifiFixerActivity extends Activity {
     public void onStart() {
 	super.onStart();
 	setIcon();
-	loggingmenuFlag = PrefUtil.readBoolean(this, "Logging");
+	loggingmenuFlag = PrefUtil
+		.readBoolean(this, PrefConstants.LOGGING_MENU);
 	loggingFlag = getLogging(this);
 	startwfService(this);
 	registerReceiver();

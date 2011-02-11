@@ -84,6 +84,7 @@ public class WFConnection extends Object implements
     private static final String SLEEPING = "SLEEPING";
     private static final String SCANNING = "SCANNING";
     private static final String ASSOCIATING = "ASSOCIATING";
+    private static final String INVALID = "INVALID";
 
     // For blank SSIDs
     private static final String NULL_SSID = "None";
@@ -1140,8 +1141,10 @@ public class WFConnection extends Object implements
 	    return CONNECTED;
 	else if (sstate == SupplicantState.DORMANT)
 	    return SLEEPING;
-	else
+	else if (SupplicantState.isValidState(sstate))
 	    return sstate.name();
+	else
+	    return INVALID;
     }
 
     private static WifiManager getWifiManager(final Context context) {
