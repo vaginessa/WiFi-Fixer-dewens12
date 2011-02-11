@@ -53,10 +53,6 @@ public class WifiFixerService extends Service implements
     // logging flag, local for performance
     private static boolean logging = false;
 
-    // Locks and such
-
-    private static boolean shouldrun = true;
-
     // Version
     private static int version = 0;
 
@@ -109,16 +105,6 @@ public class WifiFixerService extends Service implements
 
     private void handleStart(final Intent intent) {
 
-	/*
-	 * If shouldrun is false we're being restarted so also start main tick
-	 */
-	if (!shouldrun) {
-	    shouldrun = true;
-	    /*
-	     * Start Main tick
-	     */
-	    // hMain.sendEmptyMessage(MAIN);
-	}
 	if (intent != null && logging)
 	    LogService.log(this, APP_NAME,
 		    getString(R.string.normal_startup_or_reload));
@@ -211,7 +197,6 @@ public class WifiFixerService extends Service implements
     @Override
     public void onDestroy() {
 	super.onDestroy();
-	shouldrun = false;
 	unregisterReceivers();
 	if (prefs.getFlag(Pref.STATENOT_KEY))
 	    wifi.setStatNotif(false);
