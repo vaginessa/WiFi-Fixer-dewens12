@@ -84,9 +84,16 @@ public class PrefUtil extends Object {
 	}
 	intTemp[pref.ordinal()] = value;
 
-	if (getFlag(Pref.LOG_KEY))
-	    LogService.log(context, LogService.getLogTag(context), pref.key()
-		    + ":" + network + ":" + intTemp[pref.ordinal()]);
+	if (getFlag(Pref.LOG_KEY)) {
+	    StringBuilder logstring = new StringBuilder();
+	    logstring.append(pref.key());
+	    logstring.append(":");
+	    logstring.append(network);
+	    logstring.append(":");
+	    logstring.append(intTemp[pref.ordinal()]);
+	    LogService.log(context, LogService.getLogTag(context), logstring
+		    .toString());
+	}
 
 	netprefs.put(network, intTemp);
     }
