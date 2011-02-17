@@ -16,6 +16,7 @@
 
 package org.wahtod.wififixer;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -37,7 +38,7 @@ public class NotifUtil {
      * to preserve some semblance of battery life I'm limiting cached writes to
      * the CHOKE_THRESHOLD then resetting the object
      */
-    private static final int CHOKE_THRESHOLD = 5;
+    private static int choke_max;
 
     private static volatile Notification statnotif;
     private static volatile RemoteViews statview;
@@ -79,6 +80,10 @@ public class NotifUtil {
     public static void addStatNotif(final Context context, final String ssid,
 	    final String status, final int signal, final boolean flag,
 	    final int layout) {
+	int choke_threshold = getLimiter(context);
+	if (choke_threshold != choke_max)
+	    choke_max = choke_threshold;
+
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -87,12 +92,19 @@ public class NotifUtil {
 	    /*
 	     * Choke to avoid memory leak in NotificationManager
 	     */
-	    if (choke > CHOKE_THRESHOLD) {
+	    if (choke > choke_max) {
+		/*
+		 * Reclaim the objects
+		 */
 		statnotif = null;
 		statview = null;
 	    }
 
 	    if (statnotif == null) {
+		/*
+		 * Reset Choke
+		 * Recreate Notification
+		 */
 		choke = 0;
 		statnotif = new Notification(R.drawable.router32, context
 			.getString(R.string.network_status), System
@@ -105,9 +117,15 @@ public class NotifUtil {
 	    }
 
 	    if (statview == null) {
+		/*
+		 * Recreate status view
+		 */
 		statview = createStatView(context, ssid, status, signal, layout);
 		statnotif.contentView = statview;
 	    } else {
+		/*
+		 * Cached and setting object values in RemoteView
+		 */
 		choke++;
 		statview.setTextViewText(R.id.ssid, truncateSSID(ssid));
 		statview.setTextViewText(R.id.status, status);
@@ -177,5 +195,14 @@ public class NotifUtil {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 	nm.cancel(notif);
+    }
+
+    public static int getLimiter(final Context context) {
+	ActivityManager am = (ActivityManager) context
+		.getSystemService(Context.ACTIVITY_SERVICE);
+	ActivityManager.MemoryInfo mInfo = new ActivityManager.MemoryInfo();
+	am.getMemoryInfo(mInfo);
+	return (int) (mInfo.availMem / 20000000);
+
     }
 }

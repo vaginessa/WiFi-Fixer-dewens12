@@ -12,8 +12,8 @@
 	-->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.wahtod.wififixer" android:versionName="0.8.0.2"
-	android:versionCode="760" android:installLocation="internalOnly">
+	package="org.wahtod.wififixer" android:versionName="0.8.0.3"
+	android:versionCode="761" android:installLocation="internalOnly">
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
 	<uses-feature android:name="android.hardware.wifi"
 		android:required="true" />
