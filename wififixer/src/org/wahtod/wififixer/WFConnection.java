@@ -115,9 +115,8 @@ public class WFConnection extends Object implements
 	private static final String H_TARGET = "http://www.google.com";
 	private static URI headURI;
 
-	// ms for IsReachable
+	// ms for network checks
 	private final static int REACHABLE = 4000;
-	private final static int HTTPREACH = 8000;
 	// ms for main loop sleep
 	private final static int LOOPWAIT = 10000;
 	// ms for sleep loop check
@@ -921,8 +920,8 @@ public class WFConnection extends Object implements
 				headURI = new URI(H_TARGET);
 			head = new HttpHead(headURI);
 			httpparams = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpparams, HTTPREACH);
-			HttpConnectionParams.setSoTimeout(httpparams, HTTPREACH);
+			HttpConnectionParams.setConnectionTimeout(httpparams, REACHABLE);
+			HttpConnectionParams.setSoTimeout(httpparams, REACHABLE);
 			HttpConnectionParams.setLinger(httpparams, REPAIR);
 			HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
 			httpclient.setParams(httpparams);
