@@ -33,12 +33,13 @@ public class NotifUtil {
     private static int ssidColor = Color.BLACK;
     private static int lastbitmap;
     private static int choke;
+   
     /*
      * To clarify what I'm doing here: NotificationManager has a memory leak so
      * to preserve some semblance of battery life I'm limiting cached writes to
-     * the CHOKE_THRESHOLD then resetting the object
+     * the choke threshold set by the limiter method based on available memory
+     * then resetting the objects
      */
-    private static int choke_max;
 
     private static volatile Notification statnotif;
     private static volatile RemoteViews statview;
@@ -81,8 +82,6 @@ public class NotifUtil {
 	    final String status, final int signal, final boolean flag,
 	    final int layout) {
 	int choke_threshold = getLimiter(context);
-	if (choke_threshold != choke_max)
-	    choke_max = choke_threshold;
 
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -92,7 +91,7 @@ public class NotifUtil {
 	    /*
 	     * Choke to avoid memory leak in NotificationManager
 	     */
-	    if (choke > choke_max) {
+	    if (choke > choke_threshold) {
 		/*
 		 * Reclaim the objects
 		 */
@@ -134,7 +133,7 @@ public class NotifUtil {
 		    statview.setImageViewResource(R.id.signal, signal);
 	    }
 	    /*
-	     * Fire notification, cancel if message empty: means no status info
+	     * false is cancel
 	     */
 	    nm.notify(STATNOTIFID, statnotif);
 	} else {
