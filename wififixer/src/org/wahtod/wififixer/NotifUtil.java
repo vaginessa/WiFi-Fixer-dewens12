@@ -33,7 +33,9 @@ public class NotifUtil {
     private static int ssidColor = Color.BLACK;
     private static int lastbitmap;
     private static int choke;
-   
+    private static ActivityManager am;
+    private static ActivityManager.MemoryInfo mInfo;
+
     /*
      * To clarify what I'm doing here: NotificationManager has a memory leak so
      * to preserve some semblance of battery life I'm limiting cached writes to
@@ -101,8 +103,7 @@ public class NotifUtil {
 
 	    if (statnotif == null) {
 		/*
-		 * Reset Choke
-		 * Recreate Notification
+		 * Reset Choke Recreate Notification
 		 */
 		choke = 0;
 		statnotif = new Notification(R.drawable.router32, context
@@ -197,9 +198,11 @@ public class NotifUtil {
     }
 
     public static int getLimiter(final Context context) {
-	ActivityManager am = (ActivityManager) context
-		.getSystemService(Context.ACTIVITY_SERVICE);
-	ActivityManager.MemoryInfo mInfo = new ActivityManager.MemoryInfo();
+	if (am == null) {
+	    am = (ActivityManager) context
+		    .getSystemService(Context.ACTIVITY_SERVICE);
+	    mInfo = new ActivityManager.MemoryInfo();
+	}
 	am.getMemoryInfo(mInfo);
 	return (int) (mInfo.availMem / 20000000);
 
