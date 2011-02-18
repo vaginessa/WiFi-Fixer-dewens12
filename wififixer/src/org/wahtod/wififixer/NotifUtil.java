@@ -108,9 +108,13 @@ public class NotifUtil {
 		statnotif = new Notification(R.drawable.router32, context
 			.getString(R.string.network_status), System
 			.currentTimeMillis());
+
+		Intent intent = new Intent(context, WifiFixerActivity.class)
+			.setAction(Intent.ACTION_MAIN).setFlags(
+				Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
 		PendingIntent contentIntent = PendingIntent.getActivity(
-			context, 0,
-			new Intent(context, WifiFixerActivity.class), 0);
+			context, 0, intent, 0);
 		statnotif.contentIntent = contentIntent;
 		statnotif.flags = Notification.FLAG_ONGOING_EVENT;
 	    }
