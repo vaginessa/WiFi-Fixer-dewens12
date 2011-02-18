@@ -55,14 +55,14 @@ public class NotifUtil {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
-	Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
-	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		intent, 0);
-
-	Notification netnotif = new Notification(R.drawable.wifi_ap, context
-		.getString(R.string.open_network_found), System
-		.currentTimeMillis());
 	if (ssid.length() > 0) {
+	    Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+	    PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+		    intent, 0);
+
+	    Notification netnotif = new Notification(R.drawable.wifi_ap,
+		    context.getString(R.string.open_network_found), System
+			    .currentTimeMillis());
 	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
 		    R.layout.net_notif_layout);
 	    contentView.setTextViewText(R.id.ssid, ssid);
@@ -83,16 +83,15 @@ public class NotifUtil {
     public static void addStatNotif(final Context context, final String ssid,
 	    final String status, final int signal, final boolean flag,
 	    final int layout) {
-	int choke_threshold = getLimiter(context);
 
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
 	if (flag) {
-
 	    /*
 	     * Choke to avoid memory leak in NotificationManager
 	     */
+	    int choke_threshold = getLimiter(context);
 	    if (choke > choke_threshold) {
 		/*
 		 * Reclaim the objects
