@@ -102,7 +102,8 @@ public class NotifUtil {
 
 	    if (statnotif == null) {
 		/*
-		 * Reset Choke Recreate Notification
+		 * Reset Choke 
+		 * Recreate Notification
 		 */
 		choke = 0;
 		statnotif = new Notification(R.drawable.router32, context
@@ -207,6 +208,9 @@ public class NotifUtil {
 	    mInfo = new ActivityManager.MemoryInfo();
 	}
 	am.getMemoryInfo(mInfo);
+	/*
+	 * Limit choke threshold based on amount of free memory
+	 */
 	return (int) (mInfo.availMem / 20000000);
 
     }
