@@ -41,15 +41,14 @@ public class BroadcastHandler {
 	/*
 	 * Handle null value possible if prefs not initialized yet
 	 */
-	if (!intent.hasExtra(PrefConstants.WIDGET_KEY)
-		|| PrefUtil.readString(context, PrefConstants.WIDGET_KEY) == null) {
+	String action = PrefUtil.readString(context, PrefConstants.WIDGET_KEY);
+	if (action == null) {
 	    /*
 	     * Default: REASSOCIATE
 	     */
 	    command = 0;
 	} else
-	    command = Integer.valueOf(PrefUtil.readString(context,
-		    PrefConstants.WIDGET_KEY));
+	    command = Integer.valueOf(action);
 
 	switch (command) {
 	case 0:
