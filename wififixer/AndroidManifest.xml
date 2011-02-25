@@ -12,9 +12,9 @@
 	-->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.wahtod.wififixer" android:versionName="0.8.0.3RC1"
-	android:versionCode="766" android:installLocation="internalOnly">
-	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
+	package="org.wahtod.wififixer" android:versionName="0.8.0.3"
+	android:versionCode="767" android:installLocation="internalOnly">
+	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="10" />
 	<uses-feature android:name="android.hardware.wifi"
 		android:required="true" />
 	<uses-feature android:name="android.hardware.touchscreen"

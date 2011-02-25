@@ -310,7 +310,7 @@ public class LogService extends Service {
     @Override
     public void onDestroy() {
 	/*
-	 * Opt for FileWriter use flushing only as intentservice destroyed
+	 * Opt for FileWriter use flushing only as service destroyed
 	 */
 	handler.removeMessages(TS_MESSAGE);
 	handler.removeMessages(FLUSH_MESSAGE);
