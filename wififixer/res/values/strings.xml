@@ -175,4 +175,6 @@
 
 	<string name="knownbysignal_empty_exiting">KnownbySignal Empty, Exiting</string>
 
+	<string name="error_allocating_buffered_writer">Error allocating buffered writer:</string>
+
 </resources>

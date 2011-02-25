@@ -95,12 +95,14 @@ public class LogService extends Service {
     };
 
     private void flushBwriter() {
-	try {
-	    bwriter.flush();
-	} catch (IOException e) {
-	    e.printStackTrace();
+	if (bwriter != null) {
+	    try {
+		bwriter.flush();
+	    } catch (IOException e) {
+		e.printStackTrace();
+	    }
+	    handler.sendEmptyMessageDelayed(FLUSH_MESSAGE, BUFFER_FLUSH_DELAY);
 	}
-	handler.sendEmptyMessageDelayed(FLUSH_MESSAGE, BUFFER_FLUSH_DELAY);
     }
 
     static String getBuildInfo() {
@@ -291,7 +293,12 @@ public class LogService extends Service {
 	    bwriter.write(message + NEWLINE);
 	} catch (Exception e) {
 	    if (e.getMessage() != null)
-		log(context, LogService.class.getSimpleName(), e.getMessage());
+		Log.i(LogService.class.getSimpleName(), context
+			.getString(R.string.error_allocating_buffered_writer)+e.getMessage());
+	    /*
+	     * Error means we need to release and recreate the file handle
+	     */
+	    file = null;
 	}
     }
 
