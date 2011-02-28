@@ -102,8 +102,7 @@ public class NotifUtil {
 
 	    if (statnotif == null) {
 		/*
-		 * Reset Choke 
-		 * Recreate Notification
+		 * Reset Choke Recreate Notification
 		 */
 		choke = 0;
 		statnotif = new Notification(R.drawable.router32, context
@@ -169,8 +168,14 @@ public class NotifUtil {
     }
 
     public static void show(final Context context, final String message,
-	    final String tickerText, final int id,
-	    final PendingIntent contentIntent) {
+	    final String tickerText, final int id, PendingIntent contentIntent) {
+
+	/*
+	 * If contentIntent is NULL, create valid contentIntent
+	 */
+	if (contentIntent == null)
+	    contentIntent = PendingIntent.getActivity(context, 0, new Intent(),
+		    0);
 
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
