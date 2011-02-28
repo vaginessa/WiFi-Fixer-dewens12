@@ -148,7 +148,7 @@ public class NotifUtil {
 	}
     }
 
-    public static RemoteViews createStatView(final Context context,
+    private static RemoteViews createStatView(final Context context,
 	    final String ssid, final String status, final int signal,
 	    final int layout) {
 
