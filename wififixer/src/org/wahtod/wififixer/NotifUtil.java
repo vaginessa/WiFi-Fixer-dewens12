@@ -207,11 +207,15 @@ public class NotifUtil {
     }
 
     public static int getLimiter(final Context context) {
-	if (am == null) {
+	if (am == null)
 	    am = (ActivityManager) context
 		    .getSystemService(Context.ACTIVITY_SERVICE);
+
+	if (mInfo == null)
 	    mInfo = new ActivityManager.MemoryInfo();
-	}
+	/*
+	 * Grab current memory info
+	 */
 	am.getMemoryInfo(mInfo);
 	/*
 	 * Limit choke threshold based on amount of free memory
