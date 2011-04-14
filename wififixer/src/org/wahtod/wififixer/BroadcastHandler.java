@@ -21,8 +21,6 @@ import org.wahtod.wififixer.PrefConstants.Pref;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 public class BroadcastHandler {
@@ -34,6 +32,25 @@ public class BroadcastHandler {
     private static final String AUTHSTRING = "31415927";
 
     private static final int AUTH_NOTIF_ID = 2934;
+
+    /*
+     * Thread for boot service start
+     */
+    private Thread tStartService = new Thread() {
+	public void run() {
+	    try {
+		Thread.sleep(ServiceAlarm.STARTDELAY);
+	    } catch (InterruptedException e) {
+		Log.i("BroadCastHandler", "Startup Thread Interrupted");
+		return;
+	    }
+
+	    /**
+	     * Start Service
+	     */
+	    ServiceAlarm.setAlarm(ctxt, false);
+	}
+    };
 
     private static void handleWidgetAction(final Context context,
 	    final Intent intent) {
@@ -73,13 +90,6 @@ public class BroadcastHandler {
 	return state;
     }
 
-    private Handler tHandler = new Handler() {
-	@Override
-	public void handleMessage(Message message) {
-	    ServiceAlarm.setAlarm(ctxt, false);
-	}
-    };
-
     public void handleIntent(final Context context, final Intent intent) {
 	/*
 	 * Respond to manifest intents
@@ -92,7 +102,7 @@ public class BroadcastHandler {
 	 */
 	if (action.equals(Intent.ACTION_BOOT_COMPLETED)
 		&& !isserviceDisabled(context))
-	    tHandler.sendEmptyMessageDelayed(0, ServiceAlarm.STARTDELAY);
+	    tStartService.start();
 	/*
 	 * For WIFI_SERVICE_ENABLE intent, run the service if not disabled by
 	 * pref
