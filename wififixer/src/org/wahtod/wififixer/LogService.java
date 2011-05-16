@@ -48,7 +48,7 @@ public class LogService extends Service {
     private static final String SPACE = " ";
     private static final String COLON = ":";
     private static final String NEWLINE = "\n";
-    public static int VERSION = 0;
+    public static int version = 0;
     private static String vstring = SPACE;
     private static BufferedWriter bwriter;
     public static final String DUMPBUILD = "DUMPBUILD";
@@ -116,7 +116,7 @@ public class LogService extends Service {
 	    // ---get the package info---
 	    PackageInfo pi = pm.getPackageInfo(this.getPackageName(), 0);
 	    // ---display the versioncode--
-	    VERSION = pi.versionCode;
+	    version = pi.versionCode;
 	    vstring = pi.versionName;
 	} catch (NameNotFoundException e) {
 	    /*
@@ -205,7 +205,7 @@ public class LogService extends Service {
 	    vlogfile = VersionedLogFile.newInstance(this);
 	    file = vlogfile.getLogFile(this);
 	}
-	if (VERSION == 0)
+	if (version == 0)
 	    getPackageInfo();
 
 	handler.sendEmptyMessageDelayed(FLUSH_MESSAGE, BUFFER_FLUSH_DELAY);
@@ -245,7 +245,7 @@ public class LogService extends Service {
 	message.append(BUILD);
 	message.append(vstring);
 	message.append(COLON);
-	message.append(VERSION);
+	message.append(version);
 	message.append(SPACE);
 	message.append(COLON);
 	message.append(time.toString());
@@ -310,7 +310,8 @@ public class LogService extends Service {
     @Override
     public void onDestroy() {
 	/*
-	 * Opt for FileWriter use flushing only as service destroyed
+	 * Opt for FileWriter:
+	 * use flushing only as service destroyed
 	 */
 	handler.removeMessages(TS_MESSAGE);
 	handler.removeMessages(FLUSH_MESSAGE);
