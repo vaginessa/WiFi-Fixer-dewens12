@@ -1211,8 +1211,7 @@ public class WFConnection extends Object implements
 	 * No longer a failover, always icmp first, then http
 	 */
 
-	// boolean isup = icmpHostup(context);
-	boolean isup = httpHostup(context);
+	boolean isup = icmpHostup(context);
 	if (!isup) {
 	    isup = httpHostup(context);
 	    if (isup) {
