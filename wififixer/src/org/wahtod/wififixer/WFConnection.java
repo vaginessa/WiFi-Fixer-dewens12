@@ -87,6 +87,16 @@ public class WFConnection extends Object implements
     // User Event Intent
     public static final String USEREVENT = "org.wahtod.wififixer.USEREVENT";
 
+    // Scan list request Intents
+    public static final String ACTION_REQUEST_SCAN = "org.wahtod.wififixer.REQUEST_SCAN";
+    public static final String ACTION_SCAN_RESULTS = "org.wahtod.wififixer.SCAN_RESULTS";
+    public static final String SCAN_RESULTS_ARRAY = "SCAN_RESULTS_ARRAY";
+
+    /*
+     * Flag for scan result request
+     */
+    public static boolean scan_request = false;
+
     // Empty string
     private static final String EMPTYSTRING = "";
     private static final String COLON = ":";
@@ -541,6 +551,8 @@ public class WFConnection extends Object implements
 		handleConnectIntent(context, intent);
 	    else if (iAction.equals(USEREVENT))
 		handleUserEvent();
+	    else if (iAction.equals(ACTION_REQUEST_SCAN))
+		handleScanResultRequest(context);
 	}
 
     };
@@ -1188,6 +1200,14 @@ public class WFConnection extends Object implements
 	    onNetworkConnected();
     }
 
+    private void handleScanResultRequest(Context context) {
+	/*
+	 * Request scan and set scan request true
+	 */
+	wm.startScan();
+	scan_request = true;
+    }
+
     private void handleUserEvent() {
 	connectee = new WFConfig();
 	connectee.wificonfig = getWifiManager(ctxt).getConfiguredNetworks()
@@ -1441,7 +1461,9 @@ public class WFConnection extends Object implements
     private void handleScanResults() {
 	if (!getWifiManager(ctxt).isWifiEnabled())
 	    return;
-
+	if(scan_request)
+	    doscanrequest(ctxt);
+	
 	if (!pendingscan) {
 	    if (getIsOnWifi(ctxt)) {
 		/*
@@ -1484,6 +1506,11 @@ public class WFConnection extends Object implements
 			.getString(R.string.reconnecthandler));
 	}
 
+    }
+
+    private void doscanrequest(Context context) {
+	// TODO Auto-generated method stub
+	
     }
 
     private void handleSupplicantIntent(final Intent intent) {
