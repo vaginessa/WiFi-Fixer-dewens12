@@ -85,7 +85,7 @@ public class WifiFixerActivity extends Activity {
 
     private static final int MESSAGE = 31337;
     private static final int SCAN_DELAY = 15000;
-    
+
     private static final String EMPTY_SSID = "None";
 
     private String clicked;
@@ -195,7 +195,9 @@ public class WifiFixerActivity extends Activity {
 		    Context.WIFI_SERVICE);
 
 	    if (wm.isWifiEnabled())
-		wm.startScan();
+		ctxt
+			.sendBroadcast(new Intent(
+				WFConnection.ACTION_REQUEST_SCAN));
 	    else {
 		if (known_in_range != null && known_in_range.size() >= 1) {
 		    known_in_range.clear();
@@ -529,9 +531,8 @@ public class WifiFixerActivity extends Activity {
 	String ssid;
 	for (WifiConfiguration wfResult : wifiConfigs) {
 	    /*
-	     * Make sure there's a 1:1 correlation 
-	     * between getConfiguredNetworks()
-	     * and the array
+	     * Make sure there's a 1:1 correlation between
+	     * getConfiguredNetworks() and the array
 	     */
 	    ssid = wfResult.SSID.replace("\"", "");
 	    if (ssid != null && ssid.length() > 0)
@@ -763,8 +764,7 @@ public class WifiFixerActivity extends Activity {
     }
 
     private void registerReceiver() {
-	IntentFilter filter = new IntentFilter(
-		WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+	IntentFilter filter = new IntentFilter(WFConnection.ACTION_SCAN_RESULTS);
 	this.registerReceiver(receiver, filter);
 	handler.sendEmptyMessage(MESSAGE);
     }
