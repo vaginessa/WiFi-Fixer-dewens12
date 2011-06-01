@@ -597,6 +597,9 @@ public class WFConnection extends Object implements
 	// User Event
 	filter.addAction(USEREVENT);
 
+	// Scan Result Request
+	filter.addAction(ACTION_REQUEST_SCAN);
+
 	context.registerReceiver(receiver, filter);
 
 	// Initialize WakeLock
@@ -902,6 +905,15 @@ public class WFConnection extends Object implements
 	return false;
     }
 
+    private void doscanrequest(Context context) {
+	scan_request = false;
+	Intent scanresults = new Intent(ACTION_SCAN_RESULTS);
+	scanresults.putStringArrayListExtra(SCAN_RESULTS_ARRAY,
+		getKnownAPArray(context));
+	context.sendBroadcast(scanresults);
+	LogService.log(context, appname, "Scan Results Sent to Activity");
+    }
+
     private static boolean getIsOnWifi(final Context context) {
 	ConnectivityManager cm = (ConnectivityManager) context
 		.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -1072,6 +1084,51 @@ public class WFConnection extends Object implements
 
     private static int getNetworkID() {
 	return getWifiManager(ctxt).getConnectionInfo().getNetworkId();
+    }
+
+    private static ArrayList<String> getKnownAPArray(final Context context) {
+
+	WifiManager wm = (WifiManager) context
+		.getSystemService(Context.WIFI_SERVICE);
+
+	ArrayList<String> known_in_range = new ArrayList<String>();
+	List<ScanResult> scanResults = wm.getScanResults();
+
+	/*
+	 * Catch null if scan results fires after wifi disabled or while wifi is
+	 * in intermediate state
+	 */
+	if (scanResults == null) {
+	    return null;
+	}
+
+	/*
+	 * Known networks from supplicant.
+	 */
+	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+
+	/*
+	 * Iterate the known networks over the scan results, adding found known
+	 * networks.
+	 */
+
+	for (ScanResult sResult : scanResults) {
+	    for (WifiConfiguration wfResult : wifiConfigs) {
+		/*
+		 * Using .contains to find sResult.SSID in doublequoted string
+		 */
+
+		if (wfResult.SSID.contains(sResult.SSID)) {
+		    /*
+		     * Add result to known_in_range
+		     */
+		    known_in_range.add(sResult.SSID);
+
+		}
+	    }
+	}
+
+	return known_in_range;
     }
 
     private static String getSSID() {
@@ -1461,9 +1518,9 @@ public class WFConnection extends Object implements
     private void handleScanResults() {
 	if (!getWifiManager(ctxt).isWifiEnabled())
 	    return;
-	if(scan_request)
+	if (scan_request)
 	    doscanrequest(ctxt);
-	
+
 	if (!pendingscan) {
 	    if (getIsOnWifi(ctxt)) {
 		/*
@@ -1506,11 +1563,6 @@ public class WFConnection extends Object implements
 			.getString(R.string.reconnecthandler));
 	}
 
-    }
-
-    private void doscanrequest(Context context) {
-	// TODO Auto-generated method stub
-	
     }
 
     private void handleSupplicantIntent(final Intent intent) {

@@ -179,4 +179,6 @@
 
 	<string name="unknown_host_exception">Unknown Host Exception</string>
 
+	<string name="mimetype_text_plain">text/plain</string>
+
 </resources>

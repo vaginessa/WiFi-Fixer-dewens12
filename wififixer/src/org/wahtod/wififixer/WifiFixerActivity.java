@@ -37,7 +37,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.net.Uri;
-import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -205,6 +204,7 @@ public class WifiFixerActivity extends Activity {
 			adapter.notifyDataSetChanged();
 		}
 	    }
+	    handler.sendEmptyMessageDelayed(MESSAGE, SCAN_DELAY);
 	}
 
     };
@@ -214,7 +214,7 @@ public class WifiFixerActivity extends Activity {
 	    /*
 	     * we know this is going to be a scan result notification
 	     */
-	    refreshNetworkAdapter();
+	    refreshNetworkAdapter(intent);
 	}
 
     };
@@ -289,7 +289,7 @@ public class WifiFixerActivity extends Activity {
 	}
 	setLogging(false);
 	Intent sendIntent = new Intent(Intent.ACTION_SEND);
-	sendIntent.setType("text/plain");
+	sendIntent.setType(getString(R.string.mimetype_text_plain));
 	sendIntent.putExtra(Intent.EXTRA_EMAIL,
 		new String[] { getString(R.string.email) });
 	sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject));
@@ -436,12 +436,12 @@ public class WifiFixerActivity extends Activity {
 	super.onCreate(savedInstanceState);
 	setTitle(R.string.app_name);
 	setContentView(R.layout.main);
-	known_in_range = getKnownAPsBySignal(this);
 	/*
 	 * Grab and set up ListView in sliding drawer for network list UI
 	 */
 	final ListView lv = (ListView) findViewById(R.id.ListView01);
 	knownnetworks = getNetworks(this);
+	known_in_range = new ArrayList<String>();
 	adapter = new NetworkListAdapter(this, knownnetworks);
 	lv.setAdapter(adapter);
 	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -471,54 +471,6 @@ public class WifiFixerActivity extends Activity {
 	handleIntent(getIntent());
 
     };
-
-    private static List<String> getKnownAPsBySignal(final Context context) {
-
-	WifiManager wm = (WifiManager) context
-		.getSystemService(Context.WIFI_SERVICE);
-	if (known_in_range == null)
-	    known_in_range = new ArrayList<String>();
-	else
-	    known_in_range.clear();
-
-	List<ScanResult> scanResults = wm.getScanResults();
-
-	/*
-	 * Catch null if scan results fires after wifi disabled or while wifi is
-	 * in intermediate state
-	 */
-	if (scanResults == null) {
-	    return null;
-	}
-
-	/*
-	 * Known networks from supplicant.
-	 */
-	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
-
-	/*
-	 * Iterate the known networks over the scan results, adding found known
-	 * networks.
-	 */
-
-	for (ScanResult sResult : scanResults) {
-	    for (WifiConfiguration wfResult : wifiConfigs) {
-		/*
-		 * Using .contains to find sResult.SSID in doublequoted string
-		 */
-
-		if (wfResult.SSID.contains(sResult.SSID)) {
-		    /*
-		     * Add result to known_in_range
-		     */
-		    known_in_range.add(sResult.SSID);
-
-		}
-	    }
-	}
-
-	return known_in_range;
-    }
 
     /*
      * Note that this WILL return a null String[] if called while wifi is off.
@@ -728,13 +680,14 @@ public class WifiFixerActivity extends Activity {
 	    drawer.animateOpen();
     }
 
-    private void refreshNetworkAdapter() {
+    private void refreshNetworkAdapter(final Intent intent) {
 	/*
 	 * Don't refresh if knownnetworks is empty (wifi is off)
 	 */
 	knownnetworks = getNetworks(this);
-	if (knownnetworks.size() != 0) {
-	    known_in_range = getKnownAPsBySignal(this);
+	if (knownnetworks.size() > 0) {
+	    known_in_range = intent
+		    .getStringArrayListExtra(WFConnection.SCAN_RESULTS_ARRAY);
 	    if (adapter == null) {
 		adapter = new NetworkListAdapter(this, knownnetworks);
 		final ListView lv = (ListView) findViewById(R.id.ListView01);
@@ -745,7 +698,6 @@ public class WifiFixerActivity extends Activity {
 	    }
 
 	}
-	handler.sendEmptyMessageDelayed(MESSAGE, SCAN_DELAY);
     }
 
     private static void refreshArray() {
