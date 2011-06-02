@@ -310,8 +310,8 @@ public class LogService extends Service {
     @Override
     public void onDestroy() {
 	/*
-	 * Opt for FileWriter:
-	 * use flushing only as service destroyed
+	 * Close out the buffered writer
+	 * stack trace if it barfs
 	 */
 	handler.removeMessages(TS_MESSAGE);
 	handler.removeMessages(FLUSH_MESSAGE);
