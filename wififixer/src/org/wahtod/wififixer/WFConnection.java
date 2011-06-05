@@ -32,7 +32,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
 import android.net.wifi.ScanResult;
@@ -500,13 +499,8 @@ public class WFConnection extends Object implements
 	    /*
 	     * Indicate managed status by changing ssid text color
 	     */
-	    if (shouldManage(ctxt))
-		if (prefs.getFlag(Pref.STATTHEME_KEY))
-		    NotifUtil.setSSIDColor(Color.WHITE);
-		else
-		    NotifUtil.setSSIDColor(Color.BLACK);
-	    else
-		NotifUtil.setSSIDColor(Color.RED);
+	    if (!shouldManage(ctxt))
+		NotifUtil.setSsidStatus(NotifUtil.SSID_STATUS_UNMANAGED);
 
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
 		    true, statnotiflayout);

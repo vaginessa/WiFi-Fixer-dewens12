@@ -16,13 +16,11 @@
 
 package org.wahtod.wififixer;
 
-import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.widget.RemoteViews;
 
@@ -30,21 +28,17 @@ public class NotifUtil {
     private static final int NETNOTIFID = 8236;
     private static final int STATNOTIFID = 2392;
     private static final int MAX_SSID_LENGTH = 16;
-    private static int ssidColor = Color.BLACK;
-    private static int lastbitmap;
-    private static int choke;
-    private static ActivityManager am;
-    private static ActivityManager.MemoryInfo mInfo;
+    private static int ssidStatus = 0;
 
     /*
-     * To clarify what I'm doing here: NotificationManager has a memory leak so
-     * to preserve some semblance of battery life I'm limiting cached writes to
-     * the choke threshold set by the limiter method based on available memory
-     * then resetting the objects
+     * for SSID status in status notification
      */
+    public static final int SSID_STATUS_UNMANAGED = 333;
 
+    /*
+     * Cache of Notification
+     */
     private static volatile Notification statnotif;
-    private static volatile RemoteViews statview;
 
     private NotifUtil() {
 
@@ -81,17 +75,17 @@ public class NotifUtil {
     }
 
     public static void addStatNotif(final Context context, final String ssid,
-	    final String status, final int signal, final boolean flag,
+	    String status, final int signal, final boolean flag,
 	    final int layout) {
 
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
-	if(!flag){
-		    nm.cancel(STATNOTIFID);
-		    return;
+	if (!flag) {
+	    nm.cancel(STATNOTIFID);
+	    return;
 	}
-	
+
 	if (statnotif == null)
 	    statnotif = new Notification(R.drawable.signal_level, context
 		    .getString(R.string.network_status), System
@@ -106,11 +100,15 @@ public class NotifUtil {
 	statnotif.contentIntent = contentIntent;
 	statnotif.flags = Notification.FLAG_ONGOING_EVENT;
 
-	statnotif.setLatestEventInfo(context, ssid, status, contentIntent);
+	if (ssidStatus == SSID_STATUS_UNMANAGED) {
+	    status = status + "  -U-";
+	}
+	statnotif.setLatestEventInfo(context, ssid, truncateSSID(status),
+		contentIntent);
 	statnotif.iconLevel = signal;
-	
+
 	int icon = 0;
-	switch (signal){
+	switch (signal) {
 	case 0:
 	    icon = R.drawable.signal0;
 	    break;
@@ -128,15 +126,17 @@ public class NotifUtil {
 	    break;
 	}
 	statnotif.icon = icon;
+
 	/*
 	 * Fire the notification
 	 */
-	nm.notify(STATNOTIFID, statnotif);	
+	nm.notify(STATNOTIFID, statnotif);
 
     }
 
-    public static void setSSIDColor(final int color) {
-	ssidColor = color;
+    public static void setSsidStatus(final int color) {
+
+	ssidStatus = color;
     }
 
     public static void show(final Context context, final String message,
@@ -178,21 +178,4 @@ public class NotifUtil {
 	nm.cancel(notif);
     }
 
-    public static int getLimiter(final Context context) {
-	if (am == null)
-	    am = (ActivityManager) context
-		    .getSystemService(Context.ACTIVITY_SERVICE);
-
-	if (mInfo == null)
-	    mInfo = new ActivityManager.MemoryInfo();
-	/*
-	 * Grab current memory info
-	 */
-	am.getMemoryInfo(mInfo);
-	/*
-	 * Limit choke threshold based on amount of free memory
-	 */
-	return (int) (mInfo.availMem / 20000000);
-
-    }
 }
