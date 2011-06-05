@@ -328,9 +328,13 @@ public class WifiFixerActivity extends Activity {
 	PackageManager pm = getPackageManager();
 	String vers = "";
 	try {
-	    // ---get the package info---
+	   /*
+	    * Get PackageInfo object
+	    */
 	    PackageInfo pi = pm.getPackageInfo(this.getPackageName(), 0);
-	    // ---display the versioncode--
+	   /*
+	    * get version code string
+	    */
 	    vers = pi.versionName;
 	} catch (NameNotFoundException e) {
 	    /*

@@ -766,25 +766,8 @@ public class WFConnection extends Object implements
 		adjusted = 0;
 
 	    }
-	    switch (adjusted) {
-	    case 4:
-		notifSignal = R.drawable.signal4;
-		break;
-	    case 3:
-		notifSignal = R.drawable.signal3;
-		break;
-	    case 2:
-		notifSignal = R.drawable.signal2;
-		break;
 
-	    case 1:
-		notifSignal = R.drawable.signal1;
-		break;
-
-	    case 0:
-		notifSignal = R.drawable.signal0;
-		break;
-	    }
+	    notifSignal = adjusted;
 
 	    if (signalcache == 0)
 		signalcache = adjusted;

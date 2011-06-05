@@ -87,80 +87,52 @@ public class NotifUtil {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
-	if (flag) {
-	    /*
-	     * Choke to avoid memory leak in NotificationManager
-	     */
-	    int choke_threshold = getLimiter(context);
-	    if (choke > choke_threshold) {
-		/*
-		 * Reclaim the objects
-		 */
-		statnotif = null;
-		statview = null;
-	    }
-
-	    if (statnotif == null) {
-		/*
-		 * Reset Choke Recreate Notification
-		 */
-		choke = 0;
-		statnotif = new Notification(R.drawable.router32, context
-			.getString(R.string.network_status), System
-			.currentTimeMillis());
-
-		Intent intent = new Intent(context, WifiFixerActivity.class)
-			.setAction(Intent.ACTION_MAIN).setFlags(
-				Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-
-		PendingIntent contentIntent = PendingIntent.getActivity(
-			context, 0, intent, 0);
-		statnotif.contentIntent = contentIntent;
-		statnotif.flags = Notification.FLAG_ONGOING_EVENT;
-	    }
-
-	    if (statview == null) {
-		/*
-		 * Recreate status view
-		 */
-		statview = createStatView(context, ssid, status, signal, layout);
-		statnotif.contentView = statview;
-	    } else {
-		/*
-		 * Cached and setting object values in RemoteView
-		 */
-		choke++;
-		statview.setTextViewText(R.id.ssid, truncateSSID(ssid));
-		statview.setTextViewText(R.id.status, status);
-		statview.setTextColor(R.id.ssid, ssidColor);
-		if (lastbitmap != signal)
-		    statview.setImageViewResource(R.id.signal, signal);
-	    }
-	    /*
-	     * false is cancel
-	     */
-	    nm.notify(STATNOTIFID, statnotif);
-	} else {
-	    nm.cancel(STATNOTIFID);
-	    statnotif = null;
-	    statview = null;
-	    choke = 0;
+	if(!flag){
+		    nm.cancel(STATNOTIFID);
+		    return;
 	}
-    }
+	
+	if (statnotif == null)
+	    statnotif = new Notification(R.drawable.signal_level, context
+		    .getString(R.string.network_status), System
+		    .currentTimeMillis());
 
-    private static RemoteViews createStatView(final Context context,
-	    final String ssid, final String status, final int signal,
-	    final int layout) {
+	Intent intent = new Intent(context, WifiFixerActivity.class).setAction(
+		Intent.ACTION_MAIN).setFlags(
+		Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 
-	RemoteViews contentView = new RemoteViews(context.getPackageName(),
-		layout);
+	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+		intent, 0);
+	statnotif.contentIntent = contentIntent;
+	statnotif.flags = Notification.FLAG_ONGOING_EVENT;
 
-	contentView.setTextViewText(R.id.ssid, truncateSSID(ssid));
-	contentView.setTextViewText(R.id.status, status);
-	contentView.setTextColor(R.id.ssid, ssidColor);
-	contentView.setImageViewResource(R.id.signal, signal);
-	lastbitmap = signal;
-	return contentView;
+	statnotif.setLatestEventInfo(context, ssid, status, contentIntent);
+	statnotif.iconLevel = signal;
+	
+	int icon = 0;
+	switch (signal){
+	case 0:
+	    icon = R.drawable.signal0;
+	    break;
+	case 1:
+	    icon = R.drawable.signal1;
+	    break;
+	case 2:
+	    icon = R.drawable.signal2;
+	    break;
+	case 3:
+	    icon = R.drawable.signal3;
+	    break;
+	case 4:
+	    icon = R.drawable.signal4;
+	    break;
+	}
+	statnotif.icon = icon;
+	/*
+	 * Fire the notification
+	 */
+	nm.notify(STATNOTIFID, statnotif);	
+
     }
 
     public static void setSSIDColor(final int color) {
