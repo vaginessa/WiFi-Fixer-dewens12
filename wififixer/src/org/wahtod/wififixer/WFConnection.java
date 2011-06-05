@@ -499,8 +499,11 @@ public class WFConnection extends Object implements
 	    /*
 	     * Indicate managed status by changing ssid text color
 	     */
-	    if (!shouldManage(ctxt))
+	    boolean should = shouldManage(ctxt);
+	    if (!should)
 		NotifUtil.setSsidStatus(NotifUtil.SSID_STATUS_UNMANAGED);
+	    else
+		NotifUtil.setSsidStatus(NotifUtil.SSID_STATUS_MANAGED);
 
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
 		    true, statnotiflayout);

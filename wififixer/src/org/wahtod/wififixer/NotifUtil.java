@@ -33,7 +33,8 @@ public class NotifUtil {
     /*
      * for SSID status in status notification
      */
-    public static final int SSID_STATUS_UNMANAGED = 333;
+    public static final int SSID_STATUS_UNMANAGED = 3;
+    protected static final int SSID_STATUS_MANAGED = 7;
 
     /*
      * Cache of Notification
