@@ -34,12 +34,7 @@ public class NotifUtil {
      * for SSID status in status notification
      */
     public static final int SSID_STATUS_UNMANAGED = 3;
-    protected static final int SSID_STATUS_MANAGED = 7;
-
-    /*
-     * Cache of Notification
-     */
-    private static volatile Notification statnotif;
+    public static final int SSID_STATUS_MANAGED = 7;
 
     private NotifUtil() {
 
@@ -76,8 +71,7 @@ public class NotifUtil {
     }
 
     public static void addStatNotif(final Context context, final String ssid,
-	    String status, final int signal, final boolean flag,
-	    final int layout) {
+	    String status, final int signal, final boolean flag) {
 
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -86,28 +80,7 @@ public class NotifUtil {
 	    nm.cancel(STATNOTIFID);
 	    return;
 	}
-
-	if (statnotif == null)
-	    statnotif = new Notification(R.drawable.signal_level, context
-		    .getString(R.string.network_status), System
-		    .currentTimeMillis());
-
-	Intent intent = new Intent(context, WifiFixerActivity.class).setAction(
-		Intent.ACTION_MAIN).setFlags(
-		Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-
-	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		intent, 0);
-	statnotif.contentIntent = contentIntent;
-	statnotif.flags = Notification.FLAG_ONGOING_EVENT;
-
-	if (ssidStatus == SSID_STATUS_UNMANAGED) {
-	    status = status + "  -U-";
-	}
-	statnotif.setLatestEventInfo(context, ssid, truncateSSID(status),
-		contentIntent);
-	statnotif.iconLevel = signal;
-
+	
 	int icon = 0;
 	switch (signal) {
 	case 0:
@@ -126,7 +99,26 @@ public class NotifUtil {
 	    icon = R.drawable.signal4;
 	    break;
 	}
-	statnotif.icon = icon;
+
+	Notification statnotif = new Notification(icon,
+		context.getString(R.string.network_status), System
+			.currentTimeMillis());
+
+	Intent intent = new Intent(context, WifiFixerActivity.class).setAction(
+		Intent.ACTION_MAIN).setFlags(
+		Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
+	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+		intent, 0);
+	statnotif.contentIntent = contentIntent;
+	statnotif.flags = Notification.FLAG_ONGOING_EVENT;
+
+	if (ssidStatus == SSID_STATUS_UNMANAGED) {
+	    status = status + "  -U-";
+	}
+	statnotif.setLatestEventInfo(context, truncateSSID(ssid), status,
+		contentIntent);
+	statnotif.iconLevel = signal;
 
 	/*
 	 * Fire the notification

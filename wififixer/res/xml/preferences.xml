@@ -32,13 +32,9 @@
 				<CheckBoxPreference android:key="StateNotif"
 					android:defaultValue="true" android:title="Status Notification"
 					android:summary="Displays an ongoing notification showing connection state" />
-
-				<CheckBoxPreference android:key="StatNotifBlack"
-					android:defaultValue="false" android:title="Black Theme"
-					android:summary="Sets Status Notification to a black theme with white text" />
 			</PreferenceCategory>
 
-			<PreferenceCategory android:title="Notifications">
+			<PreferenceCategory android:title="Repair Notifications">
 			<CheckBoxPreference android:key="Notifications"
 				android:title="Repair Notifications"
 				android:summary="Displays a notification when Wifi Fixer repairs a problem" />

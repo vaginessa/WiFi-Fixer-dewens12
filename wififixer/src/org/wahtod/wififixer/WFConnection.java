@@ -160,11 +160,6 @@ public class WFConnection extends Object implements
     private static int wifirepair = W_REASSOCIATE;
 
     /*
-     * For Status Notification layout
-     */
-    protected static int statnotiflayout = R.layout.status_notif_layout;
-
-    /*
      * For Supplicant ASSOCIATING bug
      */
     private static int supplicant_associating = 0;
@@ -506,7 +501,7 @@ public class WFConnection extends Object implements
 		NotifUtil.setSsidStatus(NotifUtil.SSID_STATUS_MANAGED);
 
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
-		    true, statnotiflayout);
+		    true);
 	}
 
     };
@@ -688,7 +683,7 @@ public class WFConnection extends Object implements
 	    if (prefs.getFlag(Pref.LOG_KEY))
 		LogService.log(context, appname, context
 			.getString(R.string.wifi_not_current_network));
-	    notifSignal = R.drawable.signal0;
+	    notifSignal = 0;
 	    return false;
 	}
 
@@ -713,7 +708,7 @@ public class WFConnection extends Object implements
 		notifStatus = context.getString(R.string.failed);
 
 	    NotifUtil.addStatNotif(context, notifSSID, notifStatus,
-		    notifSignal, true, statnotiflayout);
+		    notifSignal, true);
 	}
 
 	return isup;
@@ -748,7 +743,7 @@ public class WFConnection extends Object implements
     private static void checkSignal(final Context context) {
 	int signal = getWifiManager(ctxt).getConnectionInfo().getRssi();
 
-	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate) {
+	if (statNotifCheck()) {
 	    int adjusted;
 	    try {
 		adjusted = WifiManager.calculateSignalLevel(signal, 5);
@@ -772,10 +767,8 @@ public class WFConnection extends Object implements
 		/*
 		 * Update status notification with new signal value
 		 */
-		if (statNotifCheck())
-		    NotifUtil.addStatNotif(context, notifSSID, context
-			    .getString(R.string.network_test), notifSignal,
-			    true, statnotiflayout);
+		NotifUtil.addStatNotif(context, notifSSID, context
+			.getString(R.string.network_test), notifSignal, true);
 	    }
 
 	}
@@ -1569,10 +1562,10 @@ public class WFConnection extends Object implements
 		notifStatus = CONNECTED;
 	    else {
 		notifStatus = sState;
-		notifSignal = R.drawable.signal0;
+		notifSignal = 0;
 	    }
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
-		    true, statnotiflayout);
+		    true);
 	}
 
 	/*
@@ -1692,6 +1685,7 @@ public class WFConnection extends Object implements
 
     private void onNetworkConnected() {
 	icmpCache(ctxt);
+	notifSSID = getSSID();
 
 	/*
 	 * Make sure connectee is null
@@ -1771,8 +1765,7 @@ public class WFConnection extends Object implements
 	clearHandler();
 	if (prefs.getFlag(Pref.STATENOT_KEY))
 	    NotifUtil.addStatNotif(ctxt, NULL_SSID, ctxt
-		    .getString(R.string.wifi_is_disabled), R.drawable.signal0,
-		    true, statnotiflayout);
+		    .getString(R.string.wifi_is_disabled), 0, true);
 
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.setLogTS(ctxt, false, 0);
@@ -1836,15 +1829,11 @@ public class WFConnection extends Object implements
 	if (state) {
 	    notifStatus = getSupplicantStateString();
 	    notifSSID = getSSID();
-	    if (prefs.getFlag(Pref.STATTHEME_KEY))
-		WFConnection.statnotiflayout = R.layout.status_notif_layout_black;
-	    else
-		WFConnection.statnotiflayout = R.layout.status_notif_layout;
+
 	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
-		    true, statnotiflayout);
+		    true);
 	} else {
-	    NotifUtil.addStatNotif(ctxt, null, null, R.drawable.signal0, false,
-		    0);
+	    NotifUtil.addStatNotif(ctxt, null, null, 0, false);
 	}
     }
 
@@ -1859,8 +1848,8 @@ public class WFConnection extends Object implements
     }
 
     private static boolean statNotifCheck() {
-	if (screenstate && getWifiManager(ctxt).isWifiEnabled()
-		&& prefs.getFlag(Pref.STATENOT_KEY))
+	if (screenstate && prefs.getFlag(Pref.STATENOT_KEY)
+		&& getWifiManager(ctxt).isWifiEnabled())
 	    return true;
 	else
 	    return false;
@@ -1998,8 +1987,8 @@ public class WFConnection extends Object implements
 	ctxt.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
 	if (prefs.getFlag(Pref.STATENOT_KEY))
 	    NotifUtil.addStatNotif(ctxt, NULL_SSID, ctxt
-		    .getString(R.string.toggling_wifi), R.drawable.signal0,
-		    true, statnotiflayout);
+		    .getString(R.string.toggling_wifi), 0,
+		    true);
     }
 
     private void wifiRepair() {
