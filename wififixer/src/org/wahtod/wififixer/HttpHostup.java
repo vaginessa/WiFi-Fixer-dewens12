@@ -27,7 +27,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import android.content.Context;
-import android.util.Log;
 
 public class HttpHostup {
 
@@ -87,7 +86,6 @@ public class HttpHostup {
 	     * Oh no, looks like rHttpHead has timed out longer than it should
 	     * have, reset it
 	     */
-	    Log.d("HttpHostup", "Timeout");
 	    httpclient = null;
 	    tgetHeaders.stop();
 	    return false;

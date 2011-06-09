@@ -1264,10 +1264,8 @@ public class WFConnection extends Object implements
 	boolean isup = icmpHostup(context);
 	if (!isup) {
 	    isup = httpHostup(context);
-	    if (isup) {
+	    if (isup)
 		wifirepair = W_REASSOCIATE;
-	    } // else
-	    // incrementBSSIDfail();
 	} else
 	    wifirepair = W_REASSOCIATE;
 
@@ -1987,8 +1985,7 @@ public class WFConnection extends Object implements
 	ctxt.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
 	if (prefs.getFlag(Pref.STATENOT_KEY))
 	    NotifUtil.addStatNotif(ctxt, NULL_SSID, ctxt
-		    .getString(R.string.toggling_wifi), 0,
-		    true);
+		    .getString(R.string.toggling_wifi), 0, true);
     }
 
     private void wifiRepair() {
