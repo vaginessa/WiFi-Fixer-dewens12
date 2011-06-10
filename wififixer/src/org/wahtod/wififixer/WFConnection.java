@@ -1158,7 +1158,6 @@ public class WFConnection extends Object implements
 	if (state)
 	    PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY,
 		    1);
-
 	else
 	    PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY,
 		    0);
