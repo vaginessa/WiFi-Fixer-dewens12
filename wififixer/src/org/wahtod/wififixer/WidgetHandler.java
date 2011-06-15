@@ -58,17 +58,10 @@ public class WidgetHandler {
 
     private static WifiManager wm;
 
-    public class rWidgetRunnable implements Runnable {
+    public class RToggleRunnable implements Runnable {
 	private Handler hWifiState = new Handler() {
 	    @Override
 	    public void handleMessage(Message msg) {
-		/*
-		 * Acquire Wake Lock
-		 */
-		if (wlock == null)
-		    wlock = new WakeLock(ctxt);
-		wlock.lock(true);
-
 		/*
 		 * Process MESSAGE
 		 */
@@ -91,6 +84,9 @@ public class WidgetHandler {
 			NotifUtil.cancel(TOGGLE_ID, ctxt);
 			PrefUtil.writeBoolean(ctxt,
 				PrefConstants.WIFI_STATE_LOCK, false);
+			/*
+			 * Release Wake Lock
+			 */
 			wlock.lock(false);
 		    }
 		    break;
@@ -98,11 +94,17 @@ public class WidgetHandler {
 		case TOGGLE:
 		    if (!PrefUtil.readBoolean(ctxt,
 			    PrefConstants.WIFI_STATE_LOCK))
-			NotifUtil.show(ctxt, ctxt
-				.getString(R.string.toggling_wifi), ctxt
-				.getString(R.string.toggling_wifi), TOGGLE_ID,
-				PendingIntent.getActivity(ctxt, 0,
-					new Intent(), 0));
+			/*
+			 * Acquire Wake Lock
+			 */
+			if (wlock == null)
+			    wlock = new WakeLock(ctxt);
+		    wlock.lock(true);
+		    NotifUtil.show(ctxt,
+			    ctxt.getString(R.string.toggling_wifi), ctxt
+				    .getString(R.string.toggling_wifi),
+			    TOGGLE_ID, PendingIntent.getActivity(ctxt, 0,
+				    new Intent(), 0));
 		    PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK,
 			    true);
 		    hWifiState.sendEmptyMessageDelayed(OFF, SHORT);
@@ -111,10 +113,6 @@ public class WidgetHandler {
 			    .sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
 		    break;
 		}
-		/*
-		 * Release Wake Lock
-		 */
-		wlock.lock(false);
 		super.handleMessage(msg);
 	    }
 
@@ -166,7 +164,7 @@ public class WidgetHandler {
 	 * Toggle Wifi
 	 */
 	else if (action.equals(TOGGLE_WIFI)) {
-	    Thread toggleThread = new Thread(new rWidgetRunnable());
+	    Thread toggleThread = new Thread(new RToggleRunnable());
 	    toggleThread.start();
 	}
 	/*
