@@ -86,6 +86,7 @@ public class HttpHostup {
 	     * Oh no, looks like rHttpHead has timed out longer than it should
 	     * have, reset it
 	     */
+	    httpclient.getConnectionManager().shutdown();
 	    httpclient = null;
 	    tgetHeaders.stop();
 	    return false;
@@ -121,6 +122,7 @@ public class HttpHostup {
 	    HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
 	    httpclient.setParams(httpparams);
 	}
+	
 	/*
 	 * The next two lines actually perform the connection since it's the
 	 * same, can re-use.
