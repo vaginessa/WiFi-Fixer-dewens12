@@ -25,7 +25,7 @@ import android.net.wifi.WifiManager;
 import android.widget.RemoteViews;
 
 public class NotifUtil {
-    private static final int NETNOTIFID = 8236;
+    public static final int NETNOTIFID = 8236;
     private static final int STATNOTIFID = 2392;
     private static final int MAX_SSID_LENGTH = 16;
     private static int ssidStatus = 0;

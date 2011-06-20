@@ -63,7 +63,6 @@ public class WFConnection extends Object implements
     private static boolean pendingreconnect = false;
 
     // IDs For notifications
-    private static final int NETNOTIFID = 8236;
     private static final int ERR_NOTIF = 7972;
 
     // Supplicant Constants
@@ -1592,8 +1591,6 @@ public class WFConnection extends Object implements
 		handleConnect();
 	    }
 	    clearQueue();
-	    NotifUtil.cancel(ERR_NOTIF, ctxt);
-	    NotifUtil.cancel(NETNOTIFID, ctxt);
 	    pendingscan = false;
 	    pendingreconnect = false;
 	    lastAP = getNetworkID();
@@ -1701,6 +1698,12 @@ public class WFConnection extends Object implements
 	    handlerWrapper(MAIN, REALLYSHORTWAIT);
 	else
 	    handlerWrapper(SLEEPCHECK, SLEEPWAIT);
+
+	/*
+	 * Clear any error/new network notifications
+	 */
+	NotifUtil.cancel(ERR_NOTIF, ctxt);
+	NotifUtil.cancel(NotifUtil.NETNOTIFID, ctxt);
 
 	/*
 	 * Log Non-Managed network
