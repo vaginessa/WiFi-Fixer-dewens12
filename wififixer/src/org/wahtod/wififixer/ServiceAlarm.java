@@ -25,6 +25,12 @@ import android.content.pm.PackageManager;
 import android.os.SystemClock;
 
 public final class ServiceAlarm extends Object {
+
+    /*
+     * Notifies Service that start intent comes from ServiceAlarm
+     */
+    public static final String ALARM_START = "ALARM_SERVICE_START";
+
     public static final long PERIOD = 300000;
     public static final long STARTDELAY = 30000;
     private static final long NODELAY = 0;
@@ -61,6 +67,7 @@ public final class ServiceAlarm extends Object {
 
 	Intent intent = new Intent(IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
 	intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
+	intent.putExtra(ALARM_START, ALARM_START);
 	AlarmManager mgr = (AlarmManager) c
 		.getSystemService(Context.ALARM_SERVICE);
 	PendingIntent pendingintent = PendingIntent.getBroadcast(c, 0, intent,

@@ -105,9 +105,14 @@ public class WifiFixerService extends Service implements
 
     private void handleStart(final Intent intent) {
 
-	if (intent != null && logging)
-	    LogService.log(this, APP_NAME,
-		    getString(R.string.normal_startup_or_reload));
+	if (intent != null && logging) {
+	    if (intent.hasExtra(ServiceAlarm.ALARM_START))
+		LogService
+			.log(this, APP_NAME, getString(R.string.alarm_intent));
+	    else
+		LogService.log(this, APP_NAME,
+			getString(R.string.normal_startup_or_reload));
+	}
     }
 
     @Override

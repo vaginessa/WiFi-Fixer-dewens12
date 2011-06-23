@@ -99,7 +99,6 @@
 	</string>
 	<string name="nopendingscan">No Pending Scan.</string>
 	<string name="widgetaction">***Widget Action***</string>
-	<string name="tickled">Tickled:</string>
 	<string name="normal_startup_or_reload">Normal Startup or reload</string>
 	<string name="alarm_intent">Alarm Intent</string>
 	<string name="screen_on_handler">SCREEN_ON handler</string>
