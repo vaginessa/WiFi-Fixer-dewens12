@@ -104,14 +104,17 @@ public class BroadcastHandler {
 		&& !isserviceDisabled(context))
 	    tStartService.start();
 	/*
-	 * For WIFI_SERVICE_ENABLE intent, run the service if not disabled by
-	 * pref
+	 * For WIFI_SERVICE_ENABLE intent, set service enabled and run
+	 * 
 	 */
-	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)
-		&& !isserviceDisabled(context)) {
-	    ServiceAlarm.setServiceEnabled(context, WifiFixerService.class,
-		    true);
-	    context.startService(new Intent(context, WifiFixerService.class));
+	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)) {
+	    if (isserviceDisabled(context)) {
+		ServiceAlarm.setServiceEnabled(context, WifiFixerService.class,
+			true);
+		context
+			.startService(new Intent(context,
+				WifiFixerService.class));
+	    }
 	}
 	/*
 	 * For WIFI_SERVICE_DISABLE intent, send stop to service and unset

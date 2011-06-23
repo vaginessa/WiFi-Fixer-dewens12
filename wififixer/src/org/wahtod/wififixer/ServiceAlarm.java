@@ -36,10 +36,18 @@ public final class ServiceAlarm extends Object {
     private static final long NODELAY = 0;
 
     public static boolean alarmExists(final Context c) {
-	Intent intent = new Intent(IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
-	return (PendingIntent.getBroadcast(c, 0, intent,
-		PendingIntent.FLAG_NO_CREATE) != null);
+	return (createPendingIntent(c, PendingIntent.FLAG_NO_CREATE) != null);
+    }
 
+    public static PendingIntent createPendingIntent(final Context context,
+	    final int flag) {
+	Intent intent = new Intent(context,
+		WifiFixerService.class);
+	intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
+	intent.putExtra(ALARM_START, ALARM_START);
+	PendingIntent pendingintent = PendingIntent.getService(context, 0,
+		intent, flag);
+	return pendingintent;
     }
 
     public static void setServiceEnabled(final Context context,
@@ -60,32 +68,23 @@ public final class ServiceAlarm extends Object {
 
     public static void setAlarm(final Context c, final boolean initialdelay) {
 	Long delay;
+
 	if (initialdelay)
 	    delay = PERIOD;
 	else
 	    delay = NODELAY;
 
-	Intent intent = new Intent(IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
-	intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
-	intent.putExtra(ALARM_START, ALARM_START);
 	AlarmManager mgr = (AlarmManager) c
 		.getSystemService(Context.ALARM_SERVICE);
-	PendingIntent pendingintent = PendingIntent.getBroadcast(c, 0, intent,
-		0);
 
 	mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock
 		.elapsedRealtime()
-		+ delay, PERIOD, pendingintent);
+		+ delay, PERIOD, createPendingIntent(c, 0));
     }
 
     public static void unsetAlarm(final Context c) {
-	Intent intent = new Intent(IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
-	intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 	AlarmManager mgr = (AlarmManager) c
 		.getSystemService(Context.ALARM_SERVICE);
-	PendingIntent pendingintent = PendingIntent.getBroadcast(c, 0, intent,
-		0);
-
-	mgr.cancel(pendingintent);
+	mgr.cancel(createPendingIntent(c, 0));
     }
 }
