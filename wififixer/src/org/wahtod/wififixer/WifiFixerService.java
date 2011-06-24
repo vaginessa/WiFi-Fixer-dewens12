@@ -125,6 +125,12 @@ public class WifiFixerService extends Service implements
 
     @Override
     public void onCreate() {
+	
+	/*
+	 * Make sure service settings are enforced. 
+	 */
+	ServiceAlarm.enforceServicePrefs(this);
+	
 	super.onCreate();
 	/*
 	 * Cache context for notifications
@@ -211,11 +217,6 @@ public class WifiFixerService extends Service implements
 
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Service#onLowMemory()
-     */
     @Override
     public void onLowMemory() {
 	if (logging)
@@ -304,10 +305,9 @@ public class WifiFixerService extends Service implements
 
 		case LOG_KEY:
 		    logging = getFlag(Pref.LOG_KEY);
+		    LogService.setLogTS(getBaseContext(), logging, 0);
 		    ServiceAlarm.setServiceEnabled(getBaseContext(),
 			    LogService.class, logging);
-		    LogService.setLogTS(getBaseContext(), logging, 0);
-
 		    if (logging) {
 			LogService.log(getBaseContext(), LogService.DUMPBUILD,
 				EMPTYSTRING);

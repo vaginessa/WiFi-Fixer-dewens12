@@ -321,20 +321,24 @@ public class WifiFixerActivity extends Activity {
     void setLogging(boolean state) {
 	loggingFlag = state;
 	PrefUtil.writeBoolean(this, Pref.LOG_KEY.key(), state);
-	PrefUtil.notifyPrefChange(this, Pref.LOG_KEY);
+	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY.key()))
+	    ServiceAlarm.setServiceEnabled(this, LogService.class, state);
+	else
+	    PrefUtil.notifyPrefChange(this, Pref.LOG_KEY);
+
     }
 
     void setText() {
 	PackageManager pm = getPackageManager();
 	String vers = "";
 	try {
-	   /*
-	    * Get PackageInfo object
-	    */
+	    /*
+	     * Get PackageInfo object
+	     */
 	    PackageInfo pi = pm.getPackageInfo(this.getPackageName(), 0);
-	   /*
-	    * get version code string
-	    */
+	    /*
+	     * get version code string
+	     */
 	    vers = pi.versionName;
 	} catch (NameNotFoundException e) {
 	    /*
@@ -474,6 +478,10 @@ public class WifiFixerActivity extends Activity {
 	 */
 	handleIntent(getIntent());
 
+	/*
+	 * Make sure service settings are enforced.
+	 */
+	ServiceAlarm.enforceServicePrefs(this);
     };
 
     /*

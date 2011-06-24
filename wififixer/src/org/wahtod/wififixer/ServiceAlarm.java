@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer;
 
+import org.wahtod.wififixer.PrefConstants.Pref;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -48,6 +50,24 @@ public final class ServiceAlarm extends Object {
 	PendingIntent pendingintent = PendingIntent.getService(context, 0,
 		intent, flag);
 	return pendingintent;
+    }
+    
+    /*
+     * Makes sure that if package is updated 
+     * LogService and WifiFixerService respect 
+     * disabled state
+     */
+    public static void enforceServicePrefs(final Context context){
+	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
+	    setServiceEnabled(context, WifiFixerService.class, false);
+	else
+	    setServiceEnabled(context, WifiFixerService.class,true);
+	
+	if (!PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
+	    setServiceEnabled(context, WifiFixerService.class, false);
+	else
+	    setServiceEnabled(context, WifiFixerService.class, true);
+
     }
 
     public static void setServiceEnabled(final Context context,

@@ -105,16 +105,12 @@ public class BroadcastHandler {
 	    tStartService.start();
 	/*
 	 * For WIFI_SERVICE_ENABLE intent, set service enabled and run
-	 * 
 	 */
 	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)) {
-	    if (isserviceDisabled(context)) {
-		ServiceAlarm.setServiceEnabled(context, WifiFixerService.class,
-			true);
-		context
-			.startService(new Intent(context,
-				WifiFixerService.class));
-	    }
+	    ServiceAlarm.setServiceEnabled(context, WifiFixerService.class,
+		    true);
+	    PrefUtil.writeBoolean(context, Pref.DISABLE_KEY.key(), false);
+	    context.startService(new Intent(context, WifiFixerService.class));
 	}
 	/*
 	 * For WIFI_SERVICE_DISABLE intent, send stop to service and unset
@@ -124,8 +120,9 @@ public class BroadcastHandler {
 	    context.stopService(new Intent(context, WifiFixerService.class));
 	    ServiceAlarm.setServiceEnabled(context, WifiFixerService.class,
 		    false);
-	    context.stopService(new Intent(context, LogService.class));
+	    PrefUtil.writeBoolean(context, Pref.DISABLE_KEY.key(), true);
 	    ServiceAlarm.unsetAlarm(context);
+	    context.stopService(new Intent(context, LogService.class));
 	} else if (action.equals(IntentConstants.ACTION_WIFI_ON)) {
 	    if (!PrefUtil.readBoolean(context, PrefConstants.WIFI_STATE_LOCK))
 		context.sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
