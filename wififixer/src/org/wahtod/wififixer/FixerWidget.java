@@ -80,8 +80,10 @@ public class FixerWidget extends AppWidgetProvider {
 	PendingIntent pendingIntent = PendingIntent.getBroadcast(context
 		.getApplicationContext(), 0, intent, 0);
 
-	// Get the layout for the App Widget and attach an on-click listener
-	// to the button
+	/*
+	 * Don't have to worry about pre-cupcake clients because they won't run the widget code
+	 * setting onclick on the view directly
+	 */
 	RemoteViews views = new RemoteViews(context.getPackageName(),
 		R.layout.widget);
 	views.setOnClickPendingIntent(R.id.Button, pendingIntent);
