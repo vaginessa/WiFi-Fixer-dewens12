@@ -64,9 +64,9 @@ public final class ServiceAlarm extends Object {
 	    setServiceEnabled(context, WifiFixerService.class,true);
 	
 	if (!PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
-	    setServiceEnabled(context, WifiFixerService.class, false);
+	    setServiceEnabled(context, LogService.class, false);
 	else
-	    setServiceEnabled(context, WifiFixerService.class, true);
+	    setServiceEnabled(context, LogService.class, true);
 
     }
 
