@@ -122,7 +122,7 @@ public class HttpHostup {
 	    HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
 	    httpclient.setParams(httpparams);
 	}
-	
+
 	/*
 	 * The next two lines actually perform the connection since it's the
 	 * same, can re-use.

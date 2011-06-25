@@ -80,7 +80,7 @@ public class NotifUtil {
 	    nm.cancel(STATNOTIFID);
 	    return;
 	}
-	
+
 	int icon = 0;
 	switch (signal) {
 	case 0:
@@ -100,9 +100,8 @@ public class NotifUtil {
 	    break;
 	}
 
-	Notification statnotif = new Notification(icon,
-		context.getString(R.string.network_status), System
-			.currentTimeMillis());
+	Notification statnotif = new Notification(icon, context
+		.getString(R.string.network_status), System.currentTimeMillis());
 
 	Intent intent = new Intent(context, WifiFixerActivity.class).setAction(
 		Intent.ACTION_MAIN).setFlags(

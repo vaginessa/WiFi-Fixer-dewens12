@@ -81,8 +81,8 @@ public class FixerWidget extends AppWidgetProvider {
 		.getApplicationContext(), 0, intent, 0);
 
 	/*
-	 * Don't have to worry about pre-cupcake clients because they won't run the widget code
-	 * setting onclick on the view directly
+	 * Don't have to worry about pre-cupcake clients because they won't run
+	 * the widget code setting onclick on the view directly
 	 */
 	RemoteViews views = new RemoteViews(context.getPackageName(),
 		R.layout.widget);

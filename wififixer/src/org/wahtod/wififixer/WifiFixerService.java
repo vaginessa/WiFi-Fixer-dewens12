@@ -125,12 +125,12 @@ public class WifiFixerService extends Service implements
 
     @Override
     public void onCreate() {
-	
+
 	/*
-	 * Make sure service settings are enforced. 
+	 * Make sure service settings are enforced.
 	 */
 	ServiceAlarm.enforceServicePrefs(this);
-	
+
 	super.onCreate();
 	/*
 	 * Cache context for notifications

@@ -43,26 +43,24 @@ public final class ServiceAlarm extends Object {
 
     public static PendingIntent createPendingIntent(final Context context,
 	    final int flag) {
-	Intent intent = new Intent(context,
-		WifiFixerService.class);
+	Intent intent = new Intent(context, WifiFixerService.class);
 	intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 	intent.putExtra(ALARM_START, ALARM_START);
 	PendingIntent pendingintent = PendingIntent.getService(context, 0,
 		intent, flag);
 	return pendingintent;
     }
-    
+
     /*
-     * Makes sure that if package is updated 
-     * LogService and WifiFixerService respect 
-     * disabled state
+     * Makes sure that if package is updated LogService and WifiFixerService
+     * respect disabled state
      */
-    public static void enforceServicePrefs(final Context context){
+    public static void enforceServicePrefs(final Context context) {
 	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
 	    setServiceEnabled(context, WifiFixerService.class, false);
 	else
-	    setServiceEnabled(context, WifiFixerService.class,true);
-	
+	    setServiceEnabled(context, WifiFixerService.class, true);
+
 	if (!PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
 	    setServiceEnabled(context, LogService.class, false);
 	else

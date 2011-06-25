@@ -50,6 +50,7 @@ public class LogService extends Service {
     private static final String NEWLINE = "\n";
     public static int version = 0;
     private static String vstring = SPACE;
+    private static String tsheader;
     private static BufferedWriter bwriter;
     public static final String DUMPBUILD = "DUMPBUILD";
     public static final String LOG = "LOG";
@@ -241,16 +242,21 @@ public class LogService extends Service {
     private void timeStamp(final Context context) {
 
 	Date time = new Date();
-	StringBuilder message = new StringBuilder();
-	message.append(BUILD);
-	message.append(vstring);
-	message.append(COLON);
-	message.append(version);
-	message.append(SPACE);
-	message.append(COLON);
-	message.append(time.toString());
+	/*
+	 * Construct timestamp header if null
+	 */
+	if (tsheader == null) {
+	    StringBuilder message = new StringBuilder();
+	    message.append(BUILD);
+	    message.append(vstring);
+	    message.append(COLON);
+	    message.append(version);
+	    message.append(SPACE);
+	    message.append(COLON);
+	    tsheader = message.toString();
+	}
 	processLogIntent(context, WifiFixerService.class.getSimpleName(),
-		message.toString());
+		tsheader + time.toString());
 
 	/*
 	 * Schedule next timestamp or terminate
@@ -294,7 +300,8 @@ public class LogService extends Service {
 	} catch (Exception e) {
 	    if (e.getMessage() != null)
 		Log.i(LogService.class.getSimpleName(), context
-			.getString(R.string.error_allocating_buffered_writer)+e.getMessage());
+			.getString(R.string.error_allocating_buffered_writer)
+			+ e.getMessage());
 	    /*
 	     * Error means we need to release and recreate the file handle
 	     */
@@ -310,8 +317,7 @@ public class LogService extends Service {
     @Override
     public void onDestroy() {
 	/*
-	 * Close out the buffered writer
-	 * stack trace if it barfs
+	 * Close out the buffered writer stack trace if it barfs
 	 */
 	handler.removeMessages(TS_MESSAGE);
 	handler.removeMessages(FLUSH_MESSAGE);
