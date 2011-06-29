@@ -25,7 +25,7 @@ import android.os.Message;
 import android.widget.Toast;
 
 public class WidgetHandler {
-    private static WakeLock wlock;
+    private static volatile WakeLock wlock;
     private static Context ctxt;
 
     /*

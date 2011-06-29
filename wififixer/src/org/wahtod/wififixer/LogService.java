@@ -317,7 +317,8 @@ public class LogService extends Service {
     @Override
     public void onDestroy() {
 	/*
-	 * Close out the buffered writer stack trace if it barfs
+	 * Close out the buffered writer 
+	 * stack trace if it barfs
 	 */
 	handler.removeMessages(TS_MESSAGE);
 	handler.removeMessages(FLUSH_MESSAGE);
