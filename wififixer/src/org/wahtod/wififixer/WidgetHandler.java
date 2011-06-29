@@ -135,7 +135,7 @@ public class WidgetHandler {
     }
 
     public void handleIntent(final Context context, final Intent intent) {
-	ctxt = context;
+	ctxt = context.getApplicationContext();
 	/*
 	 * If Wifi is disabled, notify
 	 */
@@ -180,7 +180,7 @@ public class WidgetHandler {
     }
 
     public WidgetHandler(final Context context) {
-	ctxt = context;
+	ctxt = context.getApplicationContext();
     }
 
 }
