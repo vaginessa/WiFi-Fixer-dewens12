@@ -1718,6 +1718,14 @@ public class WFConnection extends Object implements
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.not_managing_network)
 		    + getSSID());
+	
+	/*
+	 * Log connection
+	 */
+	if(prefs.getFlag(Pref.LOG_KEY))
+	    LogService.log(ctxt, appname, ctxt
+		    .getString(R.string.connected_to_network)
+		    + getSSID());
     }
 
     private void onScreenOff() {
