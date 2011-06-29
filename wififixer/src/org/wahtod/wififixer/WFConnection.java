@@ -889,7 +889,7 @@ public class WFConnection extends Object implements
     private static boolean getIsOnWifi(final Context context) {
 	ConnectivityManager cm = (ConnectivityManager) context
 		.getSystemService(Context.CONNECTIVITY_SERVICE);
-	if (cm.getActiveNetworkInfo() != null
+	if (cm.getActiveNetworkInfo().isConnectedOrConnecting()
 		&& cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI)
 	    return true;
 	else
