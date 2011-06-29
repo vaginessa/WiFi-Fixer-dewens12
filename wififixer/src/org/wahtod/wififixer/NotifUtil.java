@@ -160,8 +160,7 @@ public class NotifUtil {
     public static String truncateSSID(String ssid) {
 	if (ssid == null || ssid.length() < 1)
 	    return NULL_SSID;
-	else
-	if (ssid.length() < MAX_SSID_LENGTH)
+	else if (ssid.length() < MAX_SSID_LENGTH)
 	    return ssid;
 	else
 	    return ssid.substring(0, MAX_SSID_LENGTH);
