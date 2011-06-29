@@ -1370,6 +1370,12 @@ public class WFConnection extends Object implements
 	final int NUM_SSIDS = 3;
 	final int SSID_LENGTH = 10;
 	final List<ScanResult> wifiList = getWifiManager(ctxt).getScanResults();
+	/*
+	 * Hurk, this can be null!
+	 */
+	if (wifiList == null)
+	    return;
+	
 	StringBuilder ssid = new StringBuilder();
 	StringBuilder signal = new StringBuilder();
 	int n = 0;
