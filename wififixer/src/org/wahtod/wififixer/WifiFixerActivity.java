@@ -492,6 +492,9 @@ public class WifiFixerActivity extends Activity {
 		.getSystemService(Context.WIFI_SERVICE);
 	List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
 	List<String> networks = new ArrayList<String>();
+	if (wifiConfigs == null)
+	    return networks;
+	
 	String ssid;
 	for (WifiConfiguration wfResult : wifiConfigs) {
 	    /*
