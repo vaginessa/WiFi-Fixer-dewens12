@@ -180,4 +180,6 @@
 
 	<string name="mimetype_text_plain">text/plain</string>
 
+	<string name="unmanaged">  -U-</string>
+
 </resources>

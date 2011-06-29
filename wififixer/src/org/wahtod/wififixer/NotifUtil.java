@@ -35,6 +35,7 @@ public class NotifUtil {
      */
     public static final int SSID_STATUS_UNMANAGED = 3;
     public static final int SSID_STATUS_MANAGED = 7;
+    private static final String NULL_SSID = "empty";
 
     private NotifUtil() {
 
@@ -113,7 +114,7 @@ public class NotifUtil {
 	statnotif.flags = Notification.FLAG_ONGOING_EVENT;
 
 	if (ssidStatus == SSID_STATUS_UNMANAGED) {
-	    status = status + "  -U-";
+	    status = status + context.getString(R.string.unmanaged);
 	}
 	statnotif.setLatestEventInfo(context, truncateSSID(ssid), status,
 		contentIntent);
@@ -157,6 +158,9 @@ public class NotifUtil {
     }
 
     public static String truncateSSID(String ssid) {
+	if (ssid == null || ssid.length() < 1)
+	    return NULL_SSID;
+	else
 	if (ssid.length() < MAX_SSID_LENGTH)
 	    return ssid;
 	else
