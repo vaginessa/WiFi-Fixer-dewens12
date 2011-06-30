@@ -324,7 +324,7 @@ public class WifiFixerActivity extends Activity {
 	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY.key()))
 	    ServiceAlarm.setServiceEnabled(this, LogService.class, state);
 	else
-	    PrefUtil.notifyPrefChange(this, Pref.LOG_KEY);
+	    PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key());
 
     }
 

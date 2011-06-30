@@ -153,9 +153,9 @@ public class PrefUtil extends Object {
 	putnetPref(np, network, newvalue);
     }
 
-    public static void notifyPrefChange(final Context c, final Pref pref) {
+    public static void notifyPrefChange(final Context c, final String pref) {
 	Intent intent = new Intent(VALUE_CHANGED_ACTION);
-	intent.putExtra(VALUE_KEY, pref.key());
+	intent.putExtra(VALUE_KEY, pref);
 	c.sendBroadcast(intent);
     }
 
