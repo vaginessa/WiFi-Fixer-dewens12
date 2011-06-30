@@ -883,17 +883,17 @@ public class WFConnection extends Object implements
 	scanresults.putStringArrayListExtra(SCAN_RESULTS_ARRAY,
 		getKnownAPArray(context));
 	context.sendBroadcast(scanresults);
-	LogService.log(context, appname, "Scan Results Sent to Activity");
     }
 
     private static boolean getIsOnWifi(final Context context) {
 	ConnectivityManager cm = (ConnectivityManager) context
 		.getSystemService(Context.CONNECTIVITY_SERVICE);
-	if (cm.getActiveNetworkInfo().isConnectedOrConnecting()
-		&& cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI)
-	    return true;
-	else
-	    return false;
+	if (cm.getActiveNetworkInfo() != null)
+	    if (cm.getActiveNetworkInfo().isConnectedOrConnecting())
+		if (cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI)
+		    return true;
+
+	return false;
     }
 
     private static boolean getIsSupplicantConnected(final Context context) {
@@ -1375,7 +1375,7 @@ public class WFConnection extends Object implements
 	 */
 	if (wifiList == null)
 	    return;
-	
+
 	StringBuilder ssid = new StringBuilder();
 	StringBuilder signal = new StringBuilder();
 	int n = 0;
@@ -1718,11 +1718,11 @@ public class WFConnection extends Object implements
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.not_managing_network)
 		    + getSSID());
-	
+
 	/*
 	 * Log connection
 	 */
-	if(prefs.getFlag(Pref.LOG_KEY))
+	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.connected_to_network)
 		    + getSSID());

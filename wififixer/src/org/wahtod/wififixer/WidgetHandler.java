@@ -104,7 +104,8 @@ public class WidgetHandler {
 			    ctxt.getString(R.string.toggling_wifi), ctxt
 				    .getString(R.string.toggling_wifi),
 			    TOGGLE_ID, PendingIntent.getActivity(ctxt, 0,
-				    new Intent(), 0));
+				    new Intent(ctxt, WifiFixerActivity.class),
+				    0));
 		    PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK,
 			    true);
 		    hWifiState.sendEmptyMessageDelayed(OFF, SHORT);
@@ -135,7 +136,7 @@ public class WidgetHandler {
     }
 
     public void handleIntent(final Context context, final Intent intent) {
-	ctxt = context.getApplicationContext();
+	ctxt = context;
 	/*
 	 * If Wifi is disabled, notify
 	 */
@@ -180,7 +181,7 @@ public class WidgetHandler {
     }
 
     public WidgetHandler(final Context context) {
-	ctxt = context.getApplicationContext();
+	ctxt = context;
     }
 
 }
