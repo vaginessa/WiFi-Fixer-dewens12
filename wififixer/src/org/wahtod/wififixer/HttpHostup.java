@@ -88,7 +88,6 @@ public class HttpHostup {
 	     */
 	    httpclient.getConnectionManager().shutdown();
 	    httpclient = null;
-	    tgetHeaders.stop();
 	    return false;
 	} catch (InterruptedException e) {
 	    /*
