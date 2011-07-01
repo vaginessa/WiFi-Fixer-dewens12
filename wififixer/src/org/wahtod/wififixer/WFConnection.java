@@ -124,7 +124,7 @@ public class WFConnection extends Object implements
 
     // Last Scan
     private static long lastscan_time;
-    private static final int SCAN_WATCHDOG_DELAY = 5000;
+    private static final int SCAN_WATCHDOG_DELAY = 10000;
 
     // for Dbm
     private static final int DBM_FLOOR = -90;
@@ -1812,8 +1812,7 @@ public class WFConnection extends Object implements
     public void scanwatchdog() {
 	if (getWifiManager(ctxt).isWifiEnabled()
 		&& !getIsOnWifi(ctxt)
-		&& lastscan_time < SystemClock.elapsedRealtime()
-			- SCAN_WATCHDOG_DELAY) {
+		&& lastscan_time < (SystemClock.elapsedRealtime() - SCAN_WATCHDOG_DELAY)) {
 	    /*
 	     * Reset Wifi, scan didn't succeed.
 	     */
