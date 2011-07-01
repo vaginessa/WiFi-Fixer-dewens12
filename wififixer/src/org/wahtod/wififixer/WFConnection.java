@@ -1996,8 +1996,6 @@ public class WFConnection extends Object implements
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.toggling_wifi));
-
-	PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, true);
 	ctxt.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
 	if (prefs.getFlag(Pref.STATENOT_KEY))
 	    NotifUtil.addStatNotif(ctxt, NULL_SSID, ctxt
