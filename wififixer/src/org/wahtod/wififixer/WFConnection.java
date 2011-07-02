@@ -67,7 +67,6 @@ public class WFConnection extends Object implements
 
     // Supplicant Constants
     private static final String DISCONNECTED = "DISCONNECTED";
-    private static final String INACTIVE = "INACTIVE";
     private static final String COMPLETED = "COMPLETED";
     private static final String CONNECTED = "CONNECTED";
     private static final String SLEEPING = "SLEEPING";
@@ -125,6 +124,7 @@ public class WFConnection extends Object implements
     // Last Scan
     private static long lastscan_time;
     private static final int SCAN_WATCHDOG_DELAY = 10000;
+    private static final int NORMAL_SCAN_DELAY = 15000;
 
     // for Dbm
     private static final int DBM_FLOOR = -90;
@@ -484,7 +484,7 @@ public class WFConnection extends Object implements
     };
 
     /*
-     * SignalHop runnable
+     * Status update runnable
      */
     private Runnable rUpdateStatus = new Runnable() {
 	public void run() {
@@ -1630,7 +1630,7 @@ public class WFConnection extends Object implements
 	else if (sState == DISCONNECTED) {
 	    startScan(true);
 	    notifyWrap(ctxt, sState);
-	} else if (sState == INACTIVE) {
+	} else if (sState == INVALID) {
 	    supplicantFix();
 	    notifyWrap(ctxt, sState);
 	}
@@ -1823,9 +1823,9 @@ public class WFConnection extends Object implements
 	    LogService.log(ctxt, appname, ctxt.getString(R.string.last_scan)
 		    + String.valueOf(lastscan_time));
 	if (screenstate)
-	    handler.sendEmptyMessageDelayed(SCANWATCHDOG, SCAN_WATCHDOG_DELAY);
+	    handlerWrapper(SCAN, NORMAL_SCAN_DELAY);
 	else
-	    handler.sendEmptyMessageDelayed(SCANWATCHDOG, SLEEPWAIT);
+	    handlerWrapper(SCAN, SLEEPWAIT);
     }
 
     public static boolean setNetworkState(final Context context,
