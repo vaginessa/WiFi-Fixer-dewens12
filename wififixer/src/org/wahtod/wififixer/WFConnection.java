@@ -61,6 +61,7 @@ public class WFConnection extends Object implements
     private static boolean shouldrepair = false;
     private static boolean pendingscan = false;
     private static boolean pendingreconnect = false;
+    private static boolean repair_reset = false;
 
     // IDs For notifications
     private static final int ERR_NOTIF = 7972;
@@ -253,33 +254,6 @@ public class WFConnection extends Object implements
     };
 
     /*
-     * Runs second time supplicant nonresponsive
-     */
-    private Runnable rRepair = new Runnable() {
-	public void run() {
-	    if (!getWifiManager(ctxt).isWifiEnabled()) {
-		handlerWrapper(TEMPLOCK_OFF);
-		if (prefs.getFlag(Pref.LOG_KEY))
-		    LogService.log(ctxt, appname, ctxt
-			    .getString(R.string.wifi_off_aborting_repair));
-		return;
-	    }
-
-	    if (getKnownAPsBySignal(ctxt) > 0 && connectToBest(ctxt) != NULLVAL) {
-		pendingreconnect = false;
-	    } else {
-		pendingreconnect = true;
-		toggleWifi();
-		if (prefs.getFlag(Pref.LOG_KEY))
-		    LogService.log(ctxt, appname, ctxt
-			    .getString(R.string.toggling_wifi));
-
-	    }
-	}
-
-    };
-
-    /*
      * Runs first time supplicant nonresponsive
      */
     private Runnable rReconnect = new Runnable() {
@@ -305,6 +279,43 @@ public class WFConnection extends Object implements
 					    .getString(R.string.exiting_supplicant_fix_thread_starting_scan));
 	    }
 
+	}
+
+    };
+    
+    /*
+     * Runs second time supplicant nonresponsive
+     */
+    private Runnable rRepair = new Runnable() {
+	public void run() {
+	    if (!getWifiManager(ctxt).isWifiEnabled()) {
+		handlerWrapper(TEMPLOCK_OFF);
+		if (prefs.getFlag(Pref.LOG_KEY))
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.wifi_off_aborting_repair));
+		return;
+	    }
+
+	    if (getKnownAPsBySignal(ctxt) > 0 && connectToBest(ctxt) != NULLVAL) {
+		pendingreconnect = false;
+	    } else if (!repair_reset) {
+		pendingreconnect = true;
+		toggleWifi();
+		repair_reset = true;
+		if (prefs.getFlag(Pref.LOG_KEY))
+		    LogService.log(ctxt, appname, ctxt
+			    .getString(R.string.toggling_wifi));
+
+	    }
+	    /*
+	     * If repair_reset is true
+	     * we should be in normal scan mode
+	     * until connected
+	     */
+	    else
+		if (prefs.getFlag(Pref.LOG_KEY))
+		    LogService.log(ctxt, appname, ctxt.getString(R.string.scan_mode));
+		
 	}
 
     };
@@ -1696,6 +1707,11 @@ public class WFConnection extends Object implements
 	 * Reset supplicant associate check
 	 */
 	supplicant_associating = 0;
+
+	/*
+	 * Reset repair_reset flag to false
+	 */
+	repair_reset = false;
 
 	/*
 	 * restart the Main tick

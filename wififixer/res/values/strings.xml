@@ -182,4 +182,6 @@
 
 	<string name="unmanaged">  -U-</string>
 
+	<string name="scan_mode">Should be in normal scan mode</string>
+
 </resources>
