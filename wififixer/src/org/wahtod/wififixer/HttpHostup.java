@@ -35,10 +35,10 @@ public class HttpHostup {
      * HttpClient ignores its timeouts and must be nulled
      */
 
-    private static DefaultHttpClient httpclient;
-    private static HttpParams httpparams;
-    private static HttpHead head;
-    private static HttpResponse response;
+    private static volatile DefaultHttpClient httpclient;
+    private static volatile HttpParams httpparams;
+    private static volatile HttpHead head;
+    private static volatile HttpResponse response;
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
     private static final int TIMEOUT_EXTRA = 2000;
@@ -86,7 +86,6 @@ public class HttpHostup {
 	     * Oh no, looks like rHttpHead has timed out longer than it should
 	     * have, reset it
 	     */
-	    httpclient.getConnectionManager().shutdown();
 	    httpclient = null;
 	    return false;
 	} catch (InterruptedException e) {
