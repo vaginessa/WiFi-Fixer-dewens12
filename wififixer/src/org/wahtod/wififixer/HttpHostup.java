@@ -120,20 +120,19 @@ public class HttpHostup {
 	    HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
 	    httpclient.setParams(httpparams);
 	}
-
-	/*
-	 * The next two lines actually perform the connection since it's the
-	 * same, can re-use.
-	 */
 	int status;
 	try {
+	    /*
+	     * The next two lines actually perform the connection since it's the
+	     * same, can re-use.
+	     */
 	    response = httpclient.execute(head);
 	    status = response.getStatusLine().getStatusCode();
 	} catch (IllegalStateException e) {
 	    // httpclient in bad state, reset
 	    status = -1;
 	    httpclient = null;
-	    e.printStackTrace();
+	    return false;
 	}
 
 	if (status == HttpURLConnection.HTTP_OK)
