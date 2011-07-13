@@ -125,8 +125,16 @@ public class HttpHostup {
 	 * The next two lines actually perform the connection since it's the
 	 * same, can re-use.
 	 */
-	response = httpclient.execute(head);
-	int status = response.getStatusLine().getStatusCode();
+	int status;
+	try {
+	    response = httpclient.execute(head);
+	    status = response.getStatusLine().getStatusCode();
+	} catch (IllegalStateException e) {
+	    // httpclient in bad state, reset
+	    status = -1;
+	    httpclient = null;
+	    e.printStackTrace();
+	}
 
 	if (status == HttpURLConnection.HTTP_OK)
 	    return true;
