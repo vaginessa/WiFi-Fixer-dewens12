@@ -29,7 +29,7 @@
     <string name="aboutnag">Tap Here to Read About Page</string>
     <string name="please_read">Please Read</string>
     <string name="emailintent">Email:</string>
-	<string name="email_footer">Please include time at which issue occurred and description of the issue:\n\n</string>
+	<string name="email_footer">What time did the issue occur? :\n\nWhat did you see?\n\nPlease include any other details. :</string>
 	<string name="subject">WifiFixer Log</string>
 	<string name="email">zanshin.g1@gmail.com</string>
 	<string name="log_doesn_t_exist">Log doesn\'t exist</string>
@@ -183,5 +183,13 @@
 	<string name="unmanaged">  -U-</string>
 
 	<string name="scan_mode">Should be in normal scan mode</string>
+
+	<string name="alert_message">Preparing email to developer:
+
+Please be sure you have collected at least 10 minutes of data.</string>
+
+	<string name="ok_button">OK</string>
+
+	<string name="cancel_button">Cancel</string>
 
 </resources>

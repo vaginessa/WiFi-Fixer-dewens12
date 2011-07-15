@@ -25,11 +25,13 @@ import org.wahtod.wififixer.PrefConstants.Pref;
 import org.wahtod.wififixer.R.id;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
@@ -272,7 +274,7 @@ public class WifiFixerActivity extends Activity {
 	/*
 	 * Gets appropriate dir and filename on sdcard across API versions.
 	 */
-	File file = vlogfile.getLogFile(getBaseContext());
+	final File file = vlogfile.getLogFile(getBaseContext());
 
 	if (Environment.getExternalStorageState() != null
 		&& !(Environment.getExternalStorageState()
@@ -287,19 +289,45 @@ public class WifiFixerActivity extends Activity {
 		    Toast.LENGTH_LONG).show();
 	    return;
 	}
-	setLogging(false);
-	Intent sendIntent = new Intent(Intent.ACTION_SEND);
-	sendIntent.setType(getString(R.string.mimetype_text_plain));
-	sendIntent.putExtra(Intent.EXTRA_EMAIL,
-		new String[] { getString(R.string.email) });
-	sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject));
-	sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.toURI()
-		.toString()));
-	sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.email_footer)
-		+ LogService.getBuildInfo());
+	
 
-	startActivity(Intent.createChooser(sendIntent,
-		getString(R.string.emailintent)));
+	    AlertDialog dialog = new AlertDialog.Builder(this).create();
+
+	    dialog.setTitle(getString(R.string.send_log));
+
+	    dialog.setMessage(getString(R.string.alert_message));
+
+	    dialog.setIcon(R.drawable.icon);
+
+	    dialog.setButton(getString(R.string.ok_button), new DialogInterface.OnClickListener() {
+
+	      public void onClick(DialogInterface dialog, int which) {
+
+		  setLogging(false);
+			Intent sendIntent = new Intent(Intent.ACTION_SEND);
+			sendIntent.setType(getString(R.string.mimetype_text_plain));
+			sendIntent.putExtra(Intent.EXTRA_EMAIL,
+				new String[] { getString(R.string.email) });
+			sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject));
+			sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.toURI()
+				.toString()));
+			sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.email_footer)
+				+ LogService.getBuildInfo());
+
+			startActivity(Intent.createChooser(sendIntent,
+				getString(R.string.emailintent)));
+
+	    } }); 
+
+	dialog.setButton2(getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+
+	      public void onClick(DialogInterface dialog, int which) {
+
+	        return;
+
+	    }}); 
+	
+	    dialog.show();
 
     }
 
