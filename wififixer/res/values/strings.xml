@@ -29,7 +29,7 @@
     <string name="aboutnag">Tap Here to Read About Page</string>
     <string name="please_read">Please Read</string>
     <string name="emailintent">Email:</string>
-	<string name="email_footer">What time did the issue occur? :\n\nWhat did you see?\n\nPlease include any other details. :</string>
+	<string name="email_footer">What time did the issue occur? :\n\nWhat did you see?\n\nPlease include any other details. :\n\n\n</string>
 	<string name="subject">WifiFixer Log</string>
 	<string name="email">zanshin.g1@gmail.com</string>
 	<string name="log_doesn_t_exist">Log doesn\'t exist</string>
