@@ -45,6 +45,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -289,53 +290,62 @@ public class WifiFixerActivity extends Activity {
 		    Toast.LENGTH_LONG).show();
 	    return;
 	}
-	
 
-	    AlertDialog dialog = new AlertDialog.Builder(this).create();
+	AlertDialog dialog = new AlertDialog.Builder(this).create();
 
-	    dialog.setTitle(getString(R.string.send_log));
+	dialog.setTitle(getString(R.string.send_log));
 
-	    dialog.setMessage(getString(R.string.alert_message));
+	dialog.setMessage(getString(R.string.alert_message));
 
-	    dialog.setIcon(R.drawable.icon);
+	dialog.setIcon(R.drawable.icon);
 
-	    dialog.setButton(getString(R.string.ok_button), new DialogInterface.OnClickListener() {
+	dialog.setButton(getString(R.string.ok_button),
+		new DialogInterface.OnClickListener() {
 
-	      public void onClick(DialogInterface dialog, int which) {
+		    public void onClick(DialogInterface dialog, int which) {
 
-		  setLogging(false);
+			setLogging(false);
 			Intent sendIntent = new Intent(Intent.ACTION_SEND);
-			sendIntent.setType(getString(R.string.mimetype_text_plain));
+			sendIntent
+				.setType(getString(R.string.mimetype_text_plain));
 			sendIntent.putExtra(Intent.EXTRA_EMAIL,
 				new String[] { getString(R.string.email) });
-			sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject));
-			sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.toURI()
-				.toString()));
-			sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.email_footer)
-				+ LogService.getBuildInfo());
+			sendIntent.putExtra(Intent.EXTRA_SUBJECT,
+				getString(R.string.subject));
+			sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file
+				.toURI().toString()));
+			sendIntent.putExtra(Intent.EXTRA_TEXT,
+				getString(R.string.email_footer)
+					+ LogService.getBuildInfo());
 
 			startActivity(Intent.createChooser(sendIntent,
 				getString(R.string.emailintent)));
 
-	    } }); 
+		    }
+		});
 
-	dialog.setButton2(getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+	dialog.setButton2(getString(R.string.cancel_button),
+		new DialogInterface.OnClickListener() {
 
-	      public void onClick(DialogInterface dialog, int which) {
+		    public void onClick(DialogInterface dialog, int which) {
 
-	        return;
+			return;
 
-	    }}); 
-	
-	    dialog.show();
+		    }
+		});
+
+	dialog.show();
 
     }
 
     void setIcon() {
+	DisplayMetrics metrics = new DisplayMetrics();
+	getWindowManager().getDefaultDisplay().getMetrics(metrics);
+	int scale = metrics.widthPixels / 7;
 	ImageButton serviceButton = (ImageButton) findViewById(R.id.ImageButton01);
 	serviceButton.setAdjustViewBounds(true);
-	serviceButton.setMaxHeight(64);
-	serviceButton.setMaxWidth(64);
+	serviceButton.setMaxHeight(scale);
+	serviceButton.setMaxWidth(scale);
 	serviceButton.setClickable(false);
 	serviceButton.setFocusable(false);
 	serviceButton.setFocusableInTouchMode(false);
@@ -522,7 +532,7 @@ public class WifiFixerActivity extends Activity {
 	List<String> networks = new ArrayList<String>();
 	if (wifiConfigs == null)
 	    return networks;
-	
+
 	String ssid;
 	for (WifiConfiguration wfResult : wifiConfigs) {
 	    /*
