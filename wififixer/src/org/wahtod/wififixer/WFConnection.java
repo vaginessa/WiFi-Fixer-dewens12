@@ -401,6 +401,7 @@ public class WFConnection extends Object implements
 	    case W_REPAIR:
 		// Start Scan
 		tempLock(SHORTWAIT);
+		getWifiManager(ctxt).disconnect();
 		startScan(true);
 		/*
 		 * Reset state
