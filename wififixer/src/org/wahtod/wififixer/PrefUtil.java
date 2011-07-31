@@ -251,8 +251,7 @@ public class PrefUtil extends Object {
 
     public static void writeBoolean(final Context ctxt, final String key,
 	    final boolean value) {
-	getSharedPreferences(ctxt);
-	SharedPreferences.Editor editor = settings.edit();
+	SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
 	editor.putBoolean(key, value);
 	editor.commit();
     }
@@ -264,8 +263,7 @@ public class PrefUtil extends Object {
 
     public static void writeString(final Context ctxt, final String key,
 	    final String value) {
-	getSharedPreferences(ctxt);
-	SharedPreferences.Editor editor = settings.edit();
+	SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
 	editor.putString(key, value);
 	editor.commit();
     }
@@ -277,15 +275,13 @@ public class PrefUtil extends Object {
 
     public static void writeInt(final Context ctxt, final String key,
 	    final int value) {
-	getSharedPreferences(ctxt);
-	SharedPreferences.Editor editor = settings.edit();
+	SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
 	editor.putInt(key, value);
 	editor.commit();
     }
 
     public static void removeKey(final Context ctxt, final String key) {
-	getSharedPreferences(ctxt);
-	SharedPreferences.Editor editor = settings.edit();
+	SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
 	editor.remove(key);
 	editor.commit();
     }
