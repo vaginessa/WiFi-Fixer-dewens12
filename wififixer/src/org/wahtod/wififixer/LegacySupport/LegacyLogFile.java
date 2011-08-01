@@ -16,6 +16,7 @@
 package org.wahtod.wififixer.LegacySupport;
 
 import java.io.File;
+import org.wahtod.wififixer.R;
 
 import android.content.Context;
 import android.os.Environment;

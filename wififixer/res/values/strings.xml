@@ -192,4 +192,6 @@ Please be sure you have collected at least 10 minutes of data.</string>
 
 	<string name="cancel_button">Cancel</string>
 
+	<string name="broadcasthandler">BroadCastHandler</string>
+
 </resources>

@@ -18,6 +18,7 @@ package org.wahtod.wififixer.LegacySupport;
 
 import android.content.Context;
 import android.os.PowerManager;
+import org.wahtod.wififixer.R;
 
 public class EclairScreenState extends VersionedScreenState {
 

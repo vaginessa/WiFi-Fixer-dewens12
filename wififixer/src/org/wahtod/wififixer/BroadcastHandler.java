@@ -33,25 +33,6 @@ public class BroadcastHandler {
 
     private static final int AUTH_NOTIF_ID = 2934;
 
-    /*
-     * Thread for boot service start
-     */
-    private Thread tStartService = new Thread() {
-	public void run() {
-	    try {
-		Thread.sleep(ServiceAlarm.STARTDELAY);
-	    } catch (InterruptedException e) {
-		Log.i("BroadCastHandler", "Startup Thread Interrupted");
-		return;
-	    }
-
-	    /**
-	     * Start Service
-	     */
-	    ServiceAlarm.setAlarm(ctxt, false);
-	}
-    };
-
     private static void handleWidgetAction(final Context context,
 	    final Intent intent) {
 	int command;
@@ -85,28 +66,15 @@ public class BroadcastHandler {
 	}
     }
 
-    private static boolean isserviceDisabled(final Context context) {
-	boolean state = PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key());
-	return state;
-    }
-
     public void handleIntent(final Context context, final Intent intent) {
 	/*
 	 * Respond to manifest intents
 	 */
 	String action = intent.getAction();
-
-	/*
-	 * For boot completed, check DISABLE_KEY if false, schedule the service
-	 * run
-	 */
-	if (action.equals(Intent.ACTION_BOOT_COMPLETED)
-		&& !isserviceDisabled(context))
-	    tStartService.start();
 	/*
 	 * For WIFI_SERVICE_ENABLE intent, set service enabled and run
 	 */
-	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)) {
+	 if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)) {
 	    ServiceAlarm.setServiceEnabled(context, WifiFixerService.class,
 		    true);
 	    PrefUtil.writeBoolean(context, Pref.DISABLE_KEY.key(), false);
