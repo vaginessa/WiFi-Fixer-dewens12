@@ -52,13 +52,12 @@ public class PrefUtil extends Object {
     private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
 	public void onReceive(final Context context, final Intent intent) {
 	    String valuekey;
+	    valuekey = intent.getStringExtra(VALUE_KEY);
 	    if (intent.getAction().equals(VALUE_CHANGED_ACTION)) {
-		valuekey = intent.getStringExtra(VALUE_KEY);
 		Pref p = Pref.get(valuekey);
 		if (p != null)
 		    handlePrefChange(p, readBoolean(context, p.key()));
 	    } else {
-		valuekey = intent.getStringExtra(VALUE_KEY);
 		NetPref np = NetPref.get(valuekey);
 		if (np != null) {
 		    handleNetPrefChange(np, intent.getStringExtra(NET_KEY),

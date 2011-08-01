@@ -17,7 +17,6 @@ package org.wahtod.wififixer.LegacySupport;
 
 import android.content.Context;
 import android.os.Build;
-import org.wahtod.wififixer.R;
 
 public abstract class VersionedScreenState {
     public abstract boolean getScreenState(Context context);

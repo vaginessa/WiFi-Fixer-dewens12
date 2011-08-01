@@ -17,7 +17,6 @@
 package org.wahtod.wififixer.LegacySupport;
 
 import org.wahtod.wififixer.PrefUtil;
-import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WifiFixerService;
 
 import android.content.Context;
