@@ -16,16 +16,13 @@
 
 package org.wahtod.wififixer;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
-import android.os.Handler;
-import android.os.Message;
 import android.widget.Toast;
 
 public class WidgetHandler {
-    private static volatile WakeLock wlock;
+   
     private static Context ctxt;
 
     /*
@@ -36,97 +33,15 @@ public class WidgetHandler {
     protected static final String TOGGLE_WIFI = "org.wahtod.wififixer.WidgetHandler.WIFI_TOGGLE";
     protected static final String REASSOCIATE = "org.wahtod.wififixer.WidgetHandler.WIFI_REASSOCIATE";
 
-    /*
-     * Handler Constants
-     */
-    private static final int ON = 0;
-    private static final int OFF = 1;
-    private static final int WATCHDOG = 2;
-    private static final int TOGGLE = 3;
-
-    /*
-     * Notification ID
-     */
-    private static final int TOGGLE_ID = 23497;
-
-    /*
-     * Delay Constants
-     */
-    private static final int TOGGLE_DELAY = 8000;
-    private static final int WATCHDOG_DELAY = 11000;
-    private static final int SHORT = 300;
-
     private static WifiManager wm;
 
-    public class RToggleRunnable implements Runnable {
-	private Handler hWifiState = new Handler() {
-	    @Override
-	    public void handleMessage(Message msg) {
-		/*
-		 * Process MESSAGE
-		 */
-		switch (msg.what) {
-
-		case ON:
-		    setWifiState(ctxt, true);
-		    break;
-
-		case OFF:
-		    setWifiState(ctxt, false);
-		    break;
-
-		case WATCHDOG:
-		    if (!getWifiManager(ctxt).isWifiEnabled()) {
-			hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
-			hWifiState.sendEmptyMessageDelayed(WATCHDOG,
-				WATCHDOG_DELAY);
-		    } else {
-			NotifUtil.cancel(TOGGLE_ID, ctxt);
-			PrefUtil.writeBoolean(ctxt,
-				PrefConstants.WIFI_STATE_LOCK, false);
-			/*
-			 * Release Wake Lock
-			 */
-			wlock.lock(false);
-		    }
-		    break;
-
-		case TOGGLE:
-		    if (!PrefUtil.readBoolean(ctxt,
-			    PrefConstants.WIFI_STATE_LOCK)) {
-			wlock.lock(true);
-			NotifUtil.show(ctxt, ctxt
-				.getString(R.string.toggling_wifi), ctxt
-				.getString(R.string.toggling_wifi), TOGGLE_ID,
-				PendingIntent.getActivity(ctxt, 0, new Intent(
-					ctxt, WifiFixerActivity.class), 0));
-			PrefUtil.writeBoolean(ctxt,
-				PrefConstants.WIFI_STATE_LOCK, true);
-			hWifiState.sendEmptyMessageDelayed(OFF, SHORT);
-			hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
-			hWifiState.sendEmptyMessageDelayed(WATCHDOG,
-				WATCHDOG_DELAY);
-		    }
-		    break;
-		}
-		super.handleMessage(msg);
-	    }
-
-	};
-
-	@Override
-	public void run() {
-	    hWifiState.sendEmptyMessage(TOGGLE);
-	}
-    };
-
-    private static WifiManager getWifiManager(final Context context) {
+    static WifiManager getWifiManager(final Context context) {
 	if (wm == null)
 	    wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 	return wm;
     }
 
-    private static void setWifiState(final Context context, final boolean state) {
+    static void setWifiState(final Context context, final boolean state) {
 	getWifiManager(context).setWifiEnabled(state);
     }
 
@@ -160,8 +75,7 @@ public class WidgetHandler {
 	 * Toggle Wifi
 	 */
 	else if (action.equals(TOGGLE_WIFI)) {
-	    Thread toggleThread = new Thread(new RToggleRunnable());
-	    toggleThread.start();
+	    ctxt.startService(new Intent(ctxt, ToggleService.class));
 	}
 	/*
 	 * Reassociate
@@ -177,11 +91,6 @@ public class WidgetHandler {
 
     public WidgetHandler(final Context context) {
 	ctxt = context;
-	/*
-	 * Acquire Wake Lock
-	 */
-	if (wlock == null)
-	    wlock = new WakeLock(ctxt);
     }
 
 }

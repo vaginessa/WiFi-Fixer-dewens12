@@ -75,11 +75,15 @@
 		
 		<service android:name=".BootService" class="BootService">
 		</service>
+		
+		<service android:name=".ToggleService" class="ToggleService">
+		</service>
 
-		<service android:name=".FixerWidget$UpdateService" />
+		<service android:name=".FixerWidget$UpdateService">
+		</service>
 
-		<receiver android:name="WidgetReceiver" class="WidgetHandler"
-			android:process=":WidgetHandler" android:exported="false">
+		<receiver android:name="WidgetReceiver" class="WidgetReceiver"
+			android:process=":WidgetReceiver" android:exported="false">
 			<intent-filter>
 				<action android:name="org.wahtod.wififixer.WidgetHandler.WIFI_ON" />
 				<action android:name="org.wahtod.wififixer.WidgetHandler.WIFI_OFF" />
