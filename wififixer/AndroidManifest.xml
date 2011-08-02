@@ -72,6 +72,9 @@
 		<service android:name=".LogService" class="LogService"
 			android:process=":LogService">>
 		</service>
+		
+		<service android:name=".BootService" class="BootService">
+		</service>
 
 		<service android:name=".FixerWidget$UpdateService" />
 
