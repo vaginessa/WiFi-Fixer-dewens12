@@ -21,7 +21,6 @@ import org.wahtod.wififixer.PrefConstants.Pref;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 public class BootReceiver extends BroadcastReceiver {
 
@@ -35,35 +34,12 @@ public class BootReceiver extends BroadcastReceiver {
 	 * run
 	 */
 	if (!isserviceDisabled(context)){
-	   Thread serviceStart = new Thread(new tStartService());
-	   serviceStart.start();
+	    ctxt.startService(new Intent(ctxt, BootService.class));  
 	}
-	
     }
     
     private static boolean isserviceDisabled(final Context context) {
 	return PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key());
     }
-    
-    /*
-     * Runnable for boot service start
-     */
-    private class tStartService implements Runnable {
-	@Override
-	public void run() {
-	    try {
-		Thread.sleep(ServiceAlarm.STARTDELAY);
-	    } catch (InterruptedException e) {
-		Log.i("BroadCastHandler", "Startup Thread Interrupted");
-		return;
-	    }
-
-	    /**
-	     * Start Service
-	     */
-	    ctxt.startService(new Intent(ctxt, WifiFixerService.class));
-	    ServiceAlarm.setAlarm(ctxt, false);
-	}
-    };
 
 }
