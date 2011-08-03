@@ -329,6 +329,10 @@ public class LogService extends Service {
 	    e.printStackTrace();
 	    bwriter = null;
 	}
+	catch (NullPointerException e) {
+	    e.printStackTrace();
+	    bwriter = null;
+	}
 	super.onDestroy();
     }
 

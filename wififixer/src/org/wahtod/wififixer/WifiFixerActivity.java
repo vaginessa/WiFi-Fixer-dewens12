@@ -359,11 +359,9 @@ public class WifiFixerActivity extends Activity {
     void setLogging(boolean state) {
 	loggingFlag = state;
 	PrefUtil.writeBoolean(this, Pref.LOG_KEY.key(), state);
-	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY.key()))
-	    ServiceAlarm.setServiceEnabled(this, LogService.class, state);
-	else
-	    PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key());
-
+	if (!state)
+	    ServiceAlarm.setServiceEnabled(this, LogService.class, false);
+	PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key());
     }
 
     void setText() {
@@ -454,8 +452,6 @@ public class WifiFixerActivity extends Activity {
     }
 
     void toggleLog() {
-
-	loggingFlag = getLogging(this);
 	if (loggingFlag) {
 	    Toast.makeText(WifiFixerActivity.this, R.string.disabling_logging,
 		    Toast.LENGTH_SHORT).show();
@@ -463,13 +459,13 @@ public class WifiFixerActivity extends Activity {
 	} else {
 	    if (Environment.getExternalStorageState() != null
 		    && !(Environment.getExternalStorageState()
-			    .contains("mounted"))) {
+			    .contains(Environment.MEDIA_MOUNTED))) {
 		Toast.makeText(WifiFixerActivity.this,
 			R.string.sd_card_unavailable, Toast.LENGTH_SHORT)
 			.show();
 		return;
 	    }
-
+	    
 	    Toast.makeText(WifiFixerActivity.this, R.string.enabling_logging,
 		    Toast.LENGTH_SHORT).show();
 	    setLogging(true);

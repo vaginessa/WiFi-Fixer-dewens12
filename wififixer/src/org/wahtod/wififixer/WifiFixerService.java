@@ -305,10 +305,10 @@ public class WifiFixerService extends Service implements
 
 		case LOG_KEY:
 		    logging = getFlag(Pref.LOG_KEY);
-		    LogService.setLogTS(getBaseContext(), logging, 0);
-		    ServiceAlarm.setServiceEnabled(getBaseContext(),
-			    LogService.class, logging);
 		    if (logging) {
+			ServiceAlarm.setServiceEnabled(getBaseContext(),
+				LogService.class, true);
+			LogService.setLogTS(getBaseContext(), logging, 0);
 			LogService.log(getBaseContext(), LogService.DUMPBUILD,
 				EMPTYSTRING);
 			log();

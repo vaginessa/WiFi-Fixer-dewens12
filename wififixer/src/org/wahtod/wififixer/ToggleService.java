@@ -27,8 +27,7 @@ import android.os.Message;
 public class ToggleService extends Service {
     private static volatile WakeLock wlock;
     private Context ctxt;
-    private Service toggleservice;
-    
+
     /*
      * Notification ID
      */
@@ -40,7 +39,7 @@ public class ToggleService extends Service {
     private static final int TOGGLE_DELAY = 8000;
     private static final int WATCHDOG_DELAY = 11000;
     private static final int SHORT = 300;
-    
+
     /*
      * Handler Constants
      */
@@ -48,7 +47,7 @@ public class ToggleService extends Service {
     private static final int OFF = 1;
     private static final int WATCHDOG = 2;
     private static final int TOGGLE = 3;
-    
+
     public class RToggleRunnable implements Runnable {
 	private Handler hWifiState = new Handler() {
 	    @Override
@@ -82,7 +81,7 @@ public class ToggleService extends Service {
 			/*
 			 * Stop service: toggle done
 			 */
-			toggleservice.stopSelf();
+			((Service) ctxt).stopSelf();
 		    }
 		    break;
 
@@ -117,17 +116,19 @@ public class ToggleService extends Service {
 
     @Override
     public void onCreate() {
-	ctxt=this;
-	
+	ctxt = this;
 	/*
-	 * Acquire wake lock
+	 * initialize wake lock
 	 */
 	if (wlock == null)
 	    wlock = new WakeLock(this);
-	
-	toggleservice = this;
+
+	/*
+	 * Start toggle thread
+	 */
 	Thread toggleThread = new Thread(new RToggleRunnable());
-	   toggleThread.start();
+	toggleThread.start();
+
 	super.onCreate();
     }
 
@@ -139,5 +140,4 @@ public class ToggleService extends Service {
 	return null;
     }
 
-   
 }

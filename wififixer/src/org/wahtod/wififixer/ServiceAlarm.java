@@ -33,6 +33,8 @@ public final class ServiceAlarm extends Object {
      */
     public static final String ALARM_START = "ALARM_SERVICE_START";
 
+    public static final String FIRST_RUN = "FIRST_RUN";
+
     public static final long PERIOD = 300000;
     public static final long STARTDELAY = 30000;
     private static final long NODELAY = 0;
@@ -56,15 +58,18 @@ public final class ServiceAlarm extends Object {
      * respect disabled state
      */
     public static void enforceServicePrefs(final Context context) {
-	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
+	if (PrefUtil.readBoolean(context, FIRST_RUN)) {
+	    PrefUtil.writeBoolean(context, FIRST_RUN, true);
+	    return;
+	} else if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
 	    setServiceEnabled(context, WifiFixerService.class, false);
 	else
 	    setServiceEnabled(context, WifiFixerService.class, true);
 
-	if (!PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
-	    setServiceEnabled(context, LogService.class, false);
-	else
+	if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
 	    setServiceEnabled(context, LogService.class, true);
+	else
+	    setServiceEnabled(context, LogService.class, false);
 
     }
 

@@ -24,7 +24,7 @@ import android.util.Log;
 
 public class BootService extends Service {
     private Context ctxt;
-    private Service bootservice;
+
     /*
      * Runnable for boot service start
      */
@@ -34,23 +34,23 @@ public class BootService extends Service {
 	    try {
 		Thread.sleep(ServiceAlarm.STARTDELAY);
 	    } catch (InterruptedException e) {
-		Log.i("BroadCastHandler", "Startup Thread Interrupted");
+		Log.i(ctxt.getString(R.string.broadcasthandler), ctxt
+			.getString(R.string.t_interrupt));
 	    }
 
 	    /**
 	     * Start Service
 	     */
 	    ctxt.startService(new Intent(ctxt, WifiFixerService.class));
-	    bootservice.stopSelf();
+	    ((Service) ctxt).stopSelf();
 	}
     };
 
     @Override
     public void onCreate() {
-	ctxt=this.getApplicationContext();
-	bootservice = this;
+	ctxt = this;
 	Thread serviceStart = new Thread(new tStartService());
-	   serviceStart.start();
+	serviceStart.start();
 	super.onCreate();
     }
 
@@ -62,5 +62,4 @@ public class BootService extends Service {
 	return null;
     }
 
-   
 }
