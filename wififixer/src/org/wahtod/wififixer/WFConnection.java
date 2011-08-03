@@ -1448,9 +1448,10 @@ public class WFConnection extends Object implements
 		    wifiRepair();
 		}
 	    } else {
-		if (!screenstate)
+		    /*
+		     * Directly start scan, we know we're disconnected. 
+		     */
 		    startScan(true);
-		else
 		    pendingscan = true;
 	    }
 
