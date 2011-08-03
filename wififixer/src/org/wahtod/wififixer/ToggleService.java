@@ -27,6 +27,7 @@ import android.os.Message;
 public class ToggleService extends Service {
     private static volatile WakeLock wlock;
     private Context ctxt;
+    private ToggleService toggleservice;
 
     /*
      * Notification ID
@@ -81,7 +82,7 @@ public class ToggleService extends Service {
 			/*
 			 * Stop service: toggle done
 			 */
-			((Service) ctxt).stopSelf();
+			toggleservice.stopSelf();
 		    }
 		    break;
 
@@ -116,7 +117,8 @@ public class ToggleService extends Service {
 
     @Override
     public void onCreate() {
-	ctxt = getBaseContext();
+	toggleservice=this;
+	ctxt = getApplicationContext();
 	/*
 	 * initialize wake lock
 	 */

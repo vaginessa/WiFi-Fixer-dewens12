@@ -20,26 +20,26 @@ public class IntentConstants {
     /*
      * Causes Wifi Fixer to turn Wifi on.
      */
-    public static final String ACTION_WIFI_ON = "org.wahtod.wififixer.WIFI_ACTION_ON";
+    public static final String ACTION_WIFI_ON = "org.wahtod.wififixer.ACTION_WIFI_ON";
 
     /*
      * Causes Wifi Fixer to turn Wifi off.
      */
-    public static final String ACTION_WIFI_OFF = "org.wahtod.wififixer.WIFI_ACTION_OFF";
+    public static final String ACTION_WIFI_OFF = "org.wahtod.wififixer.ACTION_WIFI_OFF";
 
     /*
      * Causes Wifi Fixer to toggle wifi off, then on, i.e. reset wifi.
      */
-    public static final String ACTION_WIFI_TOGGLE = "org.wahtod.wififixer.WIFI_ACTION_TOGGLE";
+    public static final String ACTION_WIFI_TOGGLE = "org.wahtod.wififixer.ACTION_WIFI_TOGGLE";
 
     /*
      * Disables WifiFixerService (Broadcastreceiver will still process intents)
      */
-    public static final String ACTION_WIFI_SERVICE_DISABLE = "org.wahtod.wififixer.WIFI_ACTION_SERVICE_DISABLE";
+    public static final String ACTION_WIFI_SERVICE_DISABLE = "org.wahtod.wififixer.ACTION_WIFI_SERVICE_DISABLE";
 
     /*
      * Enables WifiFixerService
      */
-    public static final String ACTION_WIFI_SERVICE_ENABLE = "org.wahtod.wififixer.WIFI_ACTION_SERVICE_ENABLE";
+    public static final String ACTION_WIFI_SERVICE_ENABLE = "org.wahtod.wififixer.ACTION_WIFI_SERVICE_ENABLE";
 
 }

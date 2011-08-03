@@ -19,6 +19,7 @@ package org.wahtod.wififixer;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
+import android.util.Log;
 import android.widget.Toast;
 
 public class WidgetHandler {
@@ -28,10 +29,10 @@ public class WidgetHandler {
     /*
      * Intent Constants
      */
-    protected static final String WIFI_ON = "org.wahtod.wififixer.WidgetHandler.WIFI_ON";
-    protected static final String WIFI_OFF = "org.wahtod.wififixer.WidgetHandler.WIFI_OFF";
-    protected static final String TOGGLE_WIFI = "org.wahtod.wififixer.WidgetHandler.WIFI_TOGGLE";
-    protected static final String REASSOCIATE = "org.wahtod.wififixer.WidgetHandler.WIFI_REASSOCIATE";
+    protected static final String WIFI_ON = "org.wahtod.wififixer.WidgetReceiver.WIFI_ON";
+    protected static final String WIFI_OFF = "org.wahtod.wififixer.WidgetReceiver.WIFI_OFF";
+    protected static final String TOGGLE_WIFI = "org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE";
+    protected static final String REASSOCIATE = "org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE";
 
     private static WifiManager wm;
 
@@ -46,7 +47,9 @@ public class WidgetHandler {
     }
 
     public void handleIntent(final Context context, final Intent intent) {
-	ctxt = context;
+	
+	Log.i("WifiFixerService",intent.toString());
+	
 	/*
 	 * If Wifi is disabled, notify
 	 */

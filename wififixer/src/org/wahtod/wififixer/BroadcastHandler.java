@@ -50,11 +50,13 @@ public class BroadcastHandler {
 
 	switch (command) {
 	case 0:
-	    context.sendBroadcast(new Intent(WidgetHandler.REASSOCIATE));
+	    context.sendBroadcast(
+		    new Intent(WidgetHandler.REASSOCIATE));
 	    break;
 
 	case 1:
-	    context.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
+	    context.sendBroadcast(
+		    new Intent(WidgetHandler.TOGGLE_WIFI));
 	    break;
 
 	case 2:
@@ -91,14 +93,6 @@ public class BroadcastHandler {
 	    PrefUtil.writeBoolean(context, Pref.DISABLE_KEY.key(), true);
 	    ServiceAlarm.unsetAlarm(context);
 	    context.stopService(new Intent(context, LogService.class));
-	} else if (!PrefUtil
-		.readBoolean(context, PrefConstants.WIFI_STATE_LOCK)) {
-	    if (action.equals(IntentConstants.ACTION_WIFI_ON))
-		context.sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
-	    else if (action.equals(IntentConstants.ACTION_WIFI_OFF))
-		context.sendBroadcast(new Intent(WidgetHandler.WIFI_OFF));
-	    else if (action.equals(IntentConstants.ACTION_WIFI_TOGGLE))
-		context.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
 	}
 	/*
 	 * Handle Widget intent
@@ -138,11 +132,22 @@ public class BroadcastHandler {
 		}
 
 	    }
-	}
+	} else if (PrefUtil.readBoolean(context.getApplicationContext(),
+		PrefConstants.WIFI_STATE_LOCK))
+	    return;
+	else if (action.equals(IntentConstants.ACTION_WIFI_ON))
+	    context.getApplicationContext().sendBroadcast(
+		    new Intent(WidgetHandler.WIFI_ON));
+	else if (action.equals(IntentConstants.ACTION_WIFI_OFF))
+	    context.getApplicationContext().sendBroadcast(
+		    new Intent(WidgetHandler.WIFI_OFF));
+	else if (action.equals(IntentConstants.ACTION_WIFI_TOGGLE))
+	    context.getApplicationContext().sendBroadcast(
+		    new Intent(WidgetHandler.TOGGLE_WIFI));
     }
 
     public BroadcastHandler(Context context) {
-	ctxt = context.getApplicationContext();
+	ctxt = context;
     }
 
 }

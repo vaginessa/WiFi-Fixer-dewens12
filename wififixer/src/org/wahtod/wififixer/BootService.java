@@ -24,6 +24,7 @@ import android.util.Log;
 
 public class BootService extends Service {
     private Context ctxt;
+    private BootService bootservice;
 
     /*
      * Runnable for boot service start
@@ -42,12 +43,13 @@ public class BootService extends Service {
 	     * Start Service
 	     */
 	    ctxt.startService(new Intent(ctxt, WifiFixerService.class));
-	    ((Service) ctxt).stopSelf();
+	    bootservice.stopSelf();
 	}
     };
 
     @Override
     public void onCreate() {
+	bootservice = this;
 	ctxt = this;
 	Thread serviceStart = new Thread(new tStartService());
 	serviceStart.start();
