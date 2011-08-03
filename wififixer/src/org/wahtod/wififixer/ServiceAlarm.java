@@ -58,10 +58,7 @@ public final class ServiceAlarm extends Object {
      * respect disabled state
      */
     public static void enforceServicePrefs(final Context context) {
-	if (PrefUtil.readBoolean(context, FIRST_RUN)) {
-	    PrefUtil.writeBoolean(context, FIRST_RUN, true);
-	    return;
-	} else if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
+	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
 	    setServiceEnabled(context, WifiFixerService.class, false);
 	else
 	    setServiceEnabled(context, WifiFixerService.class, true);

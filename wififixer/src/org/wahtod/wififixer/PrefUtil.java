@@ -47,12 +47,10 @@ public class PrefUtil extends Object {
     private boolean[] keyVals;
     private static Context context;
     private HashMap<String, int[]> netprefs;
-    private static SharedPreferences settings;
 
     private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
 	public void onReceive(final Context context, final Intent intent) {
-	    String valuekey;
-	    valuekey = intent.getStringExtra(VALUE_KEY);
+	    String valuekey = intent.getStringExtra(VALUE_KEY);
 	    if (intent.getAction().equals(VALUE_CHANGED_ACTION)) {
 		Pref p = Pref.get(valuekey);
 		if (p != null)
@@ -68,10 +66,8 @@ public class PrefUtil extends Object {
     };
 
     public static SharedPreferences getSharedPreferences(final Context c) {
-	if (settings == null)
-	    settings = PreferenceManager.getDefaultSharedPreferences(c
-		    .getApplicationContext());
-	return settings;
+	return PreferenceManager.getDefaultSharedPreferences(c
+		.getApplicationContext());
     }
 
     public PrefUtil(final Context c) {
@@ -217,8 +213,8 @@ public class PrefUtil extends Object {
 	    final NetPref pref) {
 	getSharedPreferences(ctxt);
 	String key = NETPREFIX + network + pref.key();
-	if (settings.contains(key))
-	    return settings.getInt(key, 0);
+	if (getSharedPreferences(ctxt).contains(key))
+	    return getSharedPreferences(ctxt).getInt(key, 0);
 	else
 	    return 0;
     }
@@ -233,7 +229,7 @@ public class PrefUtil extends Object {
 	    /*
 	     * commit changes
 	     */
-	    SharedPreferences.Editor editor = settings.edit();
+	    SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
 	    editor.putInt(NETPREFIX + network + pref.key(), value);
 	    editor.commit();
 	    /*
@@ -244,8 +240,7 @@ public class PrefUtil extends Object {
     }
 
     public static boolean readBoolean(final Context ctxt, final String key) {
-	getSharedPreferences(ctxt);
-	return settings.getBoolean(key, false);
+	return getSharedPreferences(ctxt).getBoolean(key, false);
     }
 
     public static void writeBoolean(final Context ctxt, final String key,
@@ -256,8 +251,7 @@ public class PrefUtil extends Object {
     }
 
     public static String readString(final Context ctxt, final String key) {
-	getSharedPreferences(ctxt);
-	return settings.getString(key, null);
+	return getSharedPreferences(ctxt).getString(key, null);
     }
 
     public static void writeString(final Context ctxt, final String key,
@@ -268,8 +262,7 @@ public class PrefUtil extends Object {
     }
 
     public static int readInt(final Context ctxt, final String key) {
-	getSharedPreferences(ctxt);
-	return settings.getInt(key, -1);
+	return getSharedPreferences(ctxt).getInt(key, -1);
     }
 
     public static void writeInt(final Context ctxt, final String key,

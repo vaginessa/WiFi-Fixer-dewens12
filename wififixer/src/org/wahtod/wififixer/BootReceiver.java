@@ -23,18 +23,15 @@ import android.content.Context;
 import android.content.Intent;
 
 public class BootReceiver extends BroadcastReceiver {
-
-    private static Context ctxt;
     
     @Override
     public void onReceive(Context context, Intent intent) {
-	ctxt = context.getApplicationContext();
 	/*
 	 * For boot completed, check DISABLE_KEY if false, schedule the service
 	 * run
 	 */
 	if (!isserviceDisabled(context)){
-	    ctxt.startService(new Intent(ctxt, BootService.class));  
+	    context.startService(new Intent(context, BootService.class));  
 	}
     }
     

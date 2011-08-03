@@ -116,7 +116,7 @@ public class ToggleService extends Service {
 
     @Override
     public void onCreate() {
-	ctxt = this;
+	ctxt = getBaseContext();
 	/*
 	 * initialize wake lock
 	 */
