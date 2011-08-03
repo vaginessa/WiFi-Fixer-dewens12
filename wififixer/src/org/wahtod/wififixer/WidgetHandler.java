@@ -19,7 +19,6 @@ package org.wahtod.wififixer;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
-import android.util.Log;
 import android.widget.Toast;
 
 public class WidgetHandler {
@@ -47,9 +46,6 @@ public class WidgetHandler {
     }
 
     public void handleIntent(final Context context, final Intent intent) {
-	
-	Log.i("WifiFixerService",intent.toString());
-	
 	/*
 	 * If Wifi is disabled, notify
 	 */
