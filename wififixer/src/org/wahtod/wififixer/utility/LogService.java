@@ -14,7 +14,7 @@
 
  */
 
-package org.wahtod.wififixer;
+package org.wahtod.wififixer.utility;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,9 +22,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.WifiFixerService;
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
 import org.wahtod.wififixer.LegacySupport.VersionedScreenState;
-import org.wahtod.wififixer.PrefConstants.Pref;
+import org.wahtod.wififixer.SharedPrefs.PrefUtil;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
 
 import android.app.Service;
 import android.content.Context;
@@ -106,7 +109,7 @@ public class LogService extends Service {
 	}
     }
 
-    static String getBuildInfo() {
+    public static String getBuildInfo() {
 
 	return Build.MODEL + NEWLINE + Build.VERSION.RELEASE + NEWLINE;
     }

@@ -14,12 +14,14 @@
 
  */
 
-package org.wahtod.wififixer;
+package org.wahtod.wififixer.SharedPrefs;
 
 import java.util.HashMap;
 
-import org.wahtod.wififixer.PrefConstants.NetPref;
-import org.wahtod.wififixer.PrefConstants.Pref;
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants.NetPref;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.utility.LogService;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

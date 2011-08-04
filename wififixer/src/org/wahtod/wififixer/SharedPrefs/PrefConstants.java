@@ -14,7 +14,7 @@
 
  */
 
-package org.wahtod.wififixer;
+package org.wahtod.wififixer.SharedPrefs;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -26,19 +26,19 @@ public class PrefConstants {
      * Constants
      */
 
-    static final String SUPFIX_DEFAULT = "SPFDEF";
-    static final String STATNOTIF_DEFAULT = "STATNOTIFD";
-    static final String SLPOLICY_KEY = "SLEEP_POLICY";
-    static final String PERF_KEY = "Perf_Mode";
-    static final String WIDGET_KEY = "WIDGET";
-    static final String WIFI_STATE_LOCK = "WFSTATELOCK";
-    static final String LOGGING_MENU = "Logging";
+    public static final String SUPFIX_DEFAULT = "SPFDEF";
+    public static final String STATNOTIF_DEFAULT = "STATNOTIFD";
+    public static final String SLPOLICY_KEY = "SLEEP_POLICY";
+    public static final String PERF_KEY = "Perf_Mode";
+    public static final String WIDGET_KEY = "WIDGET";
+    public static final String WIFI_STATE_LOCK = "WFSTATELOCK";
+    public static final String LOGGING_MENU = "Logging";
 
     /*
      * PrefsList enum
      */
 
-    static enum Pref {
+    public static enum Pref {
 	WIFILOCK_KEY("WiFiLock"), NOTIF_KEY("Notifications"), DISABLE_KEY(
 		"Disable"), LOG_KEY("SLOG"), SUPFIX_KEY("SUPFIX"), N1FIX2_KEY(
 		"N1FIX2"), NETNOT_KEY("NetNotif"), SCREEN_KEY("SCREEN"), STATENOT_KEY(
@@ -69,7 +69,7 @@ public class PrefConstants {
 
     public static final int NUMNETPREFS = 2;
 
-    static enum NetPref {
+    public static enum NetPref {
 	DISABLED_KEY("ENABLEDSTATE"), NONMANAGED_KEY("NONMANAGED");
 
 	private final String key;

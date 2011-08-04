@@ -14,29 +14,20 @@
 
  */
 
-package org.wahtod.wififixer;
-
-import org.wahtod.wififixer.PrefConstants.Pref;
+package org.wahtod.wififixer.widget;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-public class BootReceiver extends BroadcastReceiver {
-    
+public class WidgetReceiver extends BroadcastReceiver {
+    WidgetHandler widgethandler;
+
     @Override
     public void onReceive(Context context, Intent intent) {
-	/*
-	 * For boot completed, check DISABLE_KEY if false, schedule the service
-	 * run
-	 */
-	if (!isserviceDisabled(context)){
-	    context.startService(new Intent(context, BootService.class));  
-	}
-    }
-    
-    private static boolean isserviceDisabled(final Context context) {
-	return PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key());
+	if (widgethandler == null)
+	    widgethandler = new WidgetHandler(context);
+	widgethandler.handleIntent(context, intent);
     }
 
 }

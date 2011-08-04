@@ -14,7 +14,7 @@
 
  */
 
-package org.wahtod.wififixer;
+package org.wahtod.wififixer.utility;
 
 import android.content.Context;
 import android.os.PowerManager;

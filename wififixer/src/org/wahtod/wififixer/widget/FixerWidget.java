@@ -14,9 +14,12 @@
 
  */
 
-package org.wahtod.wififixer;
+package org.wahtod.wififixer.widget;
 
-import org.wahtod.wififixer.PrefConstants.Pref;
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.SharedPrefs.PrefUtil;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.utility.LogService;
 
 import android.app.IntentService;
 import android.app.PendingIntent;

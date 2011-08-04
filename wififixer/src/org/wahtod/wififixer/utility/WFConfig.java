@@ -14,7 +14,7 @@
 
  */
 
-package org.wahtod.wififixer;
+package org.wahtod.wififixer.utility;
 
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;

@@ -52,7 +52,7 @@
 				<PreferenceScreen android:title="Delete Log"
 					android:summary="Deletes Existing Log">
 					<intent android:targetPackage="org.wahtod.wififixer"
-						android:targetClass="org.wahtod.wififixer.WifiFixerActivity">
+						android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity">
 						<extra android:name="DELETE_LOG" android:value="pi">
 						</extra>
 					</intent>

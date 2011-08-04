@@ -14,7 +14,11 @@
 
  */
 
-package org.wahtod.wififixer;
+package org.wahtod.wififixer.Boot;
+
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.WifiFixerService;
+import org.wahtod.wififixer.utility.ServiceAlarm;
 
 import android.app.Service;
 import android.content.Context;

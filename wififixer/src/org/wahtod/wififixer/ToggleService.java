@@ -16,6 +16,13 @@
 
 package org.wahtod.wififixer;
 
+import org.wahtod.wififixer.SharedPrefs.PrefConstants;
+import org.wahtod.wififixer.SharedPrefs.PrefUtil;
+import org.wahtod.wififixer.ui.WifiFixerActivity;
+import org.wahtod.wififixer.utility.NotifUtil;
+import org.wahtod.wififixer.utility.WakeLock;
+import org.wahtod.wififixer.widget.WidgetHandler;
+
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;

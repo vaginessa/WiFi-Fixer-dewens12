@@ -14,9 +14,13 @@
 
  */
 
-package org.wahtod.wififixer;
+package org.wahtod.wififixer.ui;
 
-import org.wahtod.wififixer.PrefConstants.Pref;
+import org.wahtod.wififixer.IntentConstants;
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants;
+import org.wahtod.wififixer.SharedPrefs.PrefUtil;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
 
 import android.content.ContentResolver;
 import android.content.Context;

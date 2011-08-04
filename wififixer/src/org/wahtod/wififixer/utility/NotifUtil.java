@@ -14,7 +14,10 @@
 
  */
 
-package org.wahtod.wififixer;
+package org.wahtod.wififixer.utility;
+
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.ui.WifiFixerActivity;
 
 import android.app.Notification;
 import android.app.NotificationManager;

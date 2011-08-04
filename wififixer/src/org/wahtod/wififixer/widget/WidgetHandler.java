@@ -14,8 +14,11 @@
 
  */
 
-package org.wahtod.wififixer;
+package org.wahtod.wififixer.widget;
 
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.ToggleService;
+import org.wahtod.wififixer.WFConnection;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
@@ -28,20 +31,20 @@ public class WidgetHandler {
     /*
      * Intent Constants
      */
-    protected static final String WIFI_ON = "org.wahtod.wififixer.WidgetReceiver.WIFI_ON";
-    protected static final String WIFI_OFF = "org.wahtod.wififixer.WidgetReceiver.WIFI_OFF";
-    protected static final String TOGGLE_WIFI = "org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE";
-    protected static final String REASSOCIATE = "org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE";
+    public static final String WIFI_ON = "org.wahtod.wififixer.WidgetReceiver.WIFI_ON";
+    public static final String WIFI_OFF = "org.wahtod.wififixer.WidgetReceiver.WIFI_OFF";
+    public static final String TOGGLE_WIFI = "org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE";
+    public static final String REASSOCIATE = "org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE";
 
     private static WifiManager wm;
 
-    static WifiManager getWifiManager(final Context context) {
+    public static WifiManager getWifiManager(final Context context) {
 	if (wm == null)
 	    wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 	return wm;
     }
 
-    static void setWifiState(final Context context, final boolean state) {
+    public static void setWifiState(final Context context, final boolean state) {
 	getWifiManager(context).setWifiEnabled(state);
     }
 

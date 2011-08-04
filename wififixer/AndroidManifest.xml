@@ -12,7 +12,7 @@
 	-->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.wahtod.wififixer" android:installLocation="internalOnly" android:versionName="0.8.0.5rc1" android:versionCode="818">
+	package="org.wahtod.wififixer" android:installLocation="internalOnly" android:versionName="0.8.0.5rc2" android:versionCode="819">
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
 	<uses-feature android:name="android.hardware.wifi"
 		android:required="true" />
@@ -24,7 +24,7 @@
 		<meta-data android:name="com.google.android.backup.api_key"
 			android:value="AEdPqrEAAAAIAGomq--y98O0VHARd55VOdh8CoEphVxKfVXAHw" />
 
-		<activity android:name=".WifiFixerActivity"
+		<activity android:name=".ui.WifiFixerActivity"
 			android:launchMode="singleTask" android:screenOrientation="portrait"
 			android:configChanges="keyboardHidden">
 			<intent-filter>
@@ -33,11 +33,11 @@
 			</intent-filter>
 
 		</activity>
-		<activity android:name=".About" />
-		<activity android:name=".PrefActivity" />
-		<activity android:name=".HelpActivity" />
+		<activity android:name=".ui.About" />
+		<activity android:name=".ui.PrefActivity" />
+		<activity android:name=".ui.HelpActivity" />
 		
-		<receiver android:name=".BootReceiver">
+		<receiver android:name=".Boot.BootReceiver">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
@@ -46,10 +46,10 @@
 		<receiver android:name=".WidgetReceiver" class="WidgetReceiver"
 			android:process=":WidgetHandler" android:exported="false">
 			<intent-filter>
-				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_ON" />
-				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_OFF" />
-				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE" />
-				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE" />
+				<action android:name="org.wahtod.wififixer.widget.WidgetReceiver.WIFI_ON" />
+				<action android:name="org.wahtod.wififixer.widget.WidgetReceiver.WIFI_OFF" />
+				<action android:name="org.wahtod.wififixer.widget.WidgetReceiver.WIFI_TOGGLE" />
+				<action android:name="org.wahtod.wififixer.widget.WidgetReceiver.WIFI_REASSOCIATE" />
 			</intent-filter>
 		</receiver>
 
@@ -66,7 +66,7 @@
 			</intent-filter>
 		</receiver>
 
-		<receiver android:name=".FixerWidget">
+		<receiver android:name=".widget.FixerWidget">
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
 			</intent-filter>
@@ -82,11 +82,11 @@
 			android:process=":WifiFixerService">
 		</service>
 
-		<service android:name=".LogService" class="LogService"
+		<service android:name=".utility.LogService" class="LogService"
 			android:process=":LogService">>
 		</service>
 		
-		<service android:name=".BootService" class="BootService">
+		<service android:name=".Boot.BootService" class="BootService">
 		</service>
 		
 		<service android:name=".ToggleService" class="ToggleService">

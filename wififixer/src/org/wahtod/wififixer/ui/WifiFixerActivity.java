@@ -14,15 +14,22 @@
 
  */
 
-package org.wahtod.wififixer;
+package org.wahtod.wififixer.ui;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.WFConnection;
+import org.wahtod.wififixer.WifiFixerService;
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
-import org.wahtod.wififixer.PrefConstants.Pref;
 import org.wahtod.wififixer.R.id;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants;
+import org.wahtod.wififixer.SharedPrefs.PrefUtil;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.utility.LogService;
+import org.wahtod.wififixer.utility.ServiceAlarm;
 
 import android.app.Activity;
 import android.app.AlertDialog;

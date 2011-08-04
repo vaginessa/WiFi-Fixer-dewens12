@@ -16,8 +16,16 @@
 
 package org.wahtod.wififixer;
 
-import org.wahtod.wififixer.PrefConstants.Pref;
-import org.wahtod.wififixer.ScreenStateHandler.OnScreenStateChangedListener;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants;
+import org.wahtod.wififixer.SharedPrefs.PrefUtil;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.utility.LogService;
+import org.wahtod.wififixer.utility.NotifUtil;
+import org.wahtod.wififixer.utility.ScreenStateHandler;
+import org.wahtod.wififixer.utility.ServiceAlarm;
+import org.wahtod.wififixer.utility.WakeLock;
+import org.wahtod.wififixer.utility.ScreenStateHandler.OnScreenStateChangedListener;
+import org.wahtod.wififixer.widget.FixerWidget;
 
 import android.app.Service;
 import android.appwidget.AppWidgetManager;

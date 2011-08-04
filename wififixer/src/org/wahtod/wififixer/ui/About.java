@@ -14,7 +14,10 @@
 
  */
 
-package org.wahtod.wififixer;
+package org.wahtod.wififixer.ui;
+
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.SharedPrefs.PrefUtil;
 
 import android.app.Activity;
 import android.os.Bundle;

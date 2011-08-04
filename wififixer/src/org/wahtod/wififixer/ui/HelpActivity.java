@@ -14,7 +14,9 @@
 
  */
 
-package org.wahtod.wififixer;
+package org.wahtod.wififixer.ui;
+
+import org.wahtod.wififixer.R;
 
 import android.app.Activity;
 import android.content.Intent;

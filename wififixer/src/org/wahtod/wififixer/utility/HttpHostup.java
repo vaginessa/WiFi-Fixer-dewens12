@@ -13,7 +13,7 @@
    limitations under the License.
 
  */
-package org.wahtod.wififixer;
+package org.wahtod.wififixer.utility;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

@@ -23,9 +23,19 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.wahtod.wififixer.PrefConstants.NetPref;
-import org.wahtod.wififixer.PrefConstants.Pref;
-import org.wahtod.wififixer.ScreenStateHandler.OnScreenStateChangedListener;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants;
+import org.wahtod.wififixer.SharedPrefs.PrefUtil;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants.NetPref;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.utility.HttpHostup;
+import org.wahtod.wififixer.utility.LogService;
+import org.wahtod.wififixer.utility.NotifUtil;
+import org.wahtod.wififixer.utility.ScreenStateHandler;
+import org.wahtod.wififixer.utility.WFConfig;
+import org.wahtod.wififixer.utility.WakeLock;
+import org.wahtod.wififixer.utility.WifiLock;
+import org.wahtod.wififixer.utility.ScreenStateHandler.OnScreenStateChangedListener;
+import org.wahtod.wififixer.widget.WidgetHandler;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
