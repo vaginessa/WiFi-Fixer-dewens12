@@ -12,7 +12,7 @@
 	-->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.wahtod.wififixer" android:installLocation="internalOnly" android:versionName="0.8.0.5rc2" android:versionCode="819">
+	package="org.wahtod.wififixer" android:installLocation="internalOnly" android:versionName="0.8.0.5rc2" android:versionCode="820">
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
 	<uses-feature android:name="android.hardware.wifi"
 		android:required="true" />
@@ -43,13 +43,13 @@
 			</intent-filter>
 		</receiver>
 		
-		<receiver android:name=".WidgetReceiver" class="WidgetReceiver"
+		<receiver android:name=".widget.WidgetReceiver"
 			android:process=":WidgetHandler" android:exported="false">
 			<intent-filter>
-				<action android:name="org.wahtod.wififixer.widget.WidgetReceiver.WIFI_ON" />
-				<action android:name="org.wahtod.wififixer.widget.WidgetReceiver.WIFI_OFF" />
-				<action android:name="org.wahtod.wififixer.widget.WidgetReceiver.WIFI_TOGGLE" />
-				<action android:name="org.wahtod.wififixer.widget.WidgetReceiver.WIFI_REASSOCIATE" />
+				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_ON" />
+				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_OFF" />
+				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE" />
+				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE" />
 			</intent-filter>
 		</receiver>
 
@@ -74,7 +74,7 @@
 				android:resource="@xml/widget_provider" />
 		</receiver>
 		
-		<service android:name=".FixerWidget$UpdateService">
+		<service android:name=".widget.FixerWidget$UpdateService">
 		</service>
 
 		<service android:persistent="true" android:exported="false"
