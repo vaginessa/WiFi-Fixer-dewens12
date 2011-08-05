@@ -947,6 +947,24 @@ public class WFConnection extends Object implements
     }
 
     private static int getKnownAPsBySignal(final Context context) {
+	
+	/*
+	 * Comparator class for sorting results
+	 */
+	class SortBySignal implements Comparator<WFConfig> {
+	    @Override
+	    public int compare(WFConfig o2, WFConfig o1) {
+		/*
+		 * Sort by signal
+		 */
+		return (o1.level < o2.level ? -1 : (o1.level == o2.level ? 0
+			: 1));
+	    }
+	}
+	
+	/*
+	 * Acquire scan results
+	 */
 	List<ScanResult> scanResults = getWifiManager(ctxt).getScanResults();
 	/*
 	 * Catch null if scan results fires after wifi disabled or while wifi is
@@ -957,17 +975,6 @@ public class WFConnection extends Object implements
 		LogService.log(context, appname, context
 			.getString(R.string.null_scan_results));
 	    return NULLVAL;
-	}
-
-	class SortBySignal implements Comparator<WFConfig> {
-	    @Override
-	    public int compare(WFConfig o2, WFConfig o1) {
-		/*
-		 * Sort by signal
-		 */
-		return (o1.level < o2.level ? -1 : (o1.level == o2.level ? 0
-			: 1));
-	    }
 	}
 	/*
 	 * Known networks from supplicant.
@@ -1004,6 +1011,16 @@ public class WFConnection extends Object implements
 				+ wfResult.SSID);
 
 		}
+		
+		/*
+		 * Check for null SSIDs
+		 * replace with null_ssid string
+		 */
+		if (wfResult.SSID == null)
+		    wfResult.SSID = context.getString(R.string.null_ssid);
+		
+		if (sResult.SSID == null)
+		    sResult.SSID = context.getString(R.string.null_ssid);
 
 		/*
 		 * Using .contains to find sResult.SSID in doublequoted string

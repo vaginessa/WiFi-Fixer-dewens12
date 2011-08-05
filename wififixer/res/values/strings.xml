@@ -196,4 +196,6 @@ Please be sure you have collected at least 10 minutes of data.</string>
 
 	<string name="t_interrupt">Startup Thread Interrupted</string>
 
+	<string name="null_ssid">NULL_SSID</string>
+
 </resources>
