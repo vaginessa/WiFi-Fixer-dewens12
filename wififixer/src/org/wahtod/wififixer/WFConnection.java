@@ -59,7 +59,7 @@ import android.text.format.Formatter;
  */
 public class WFConnection extends Object implements
 	OnScreenStateChangedListener {
-    private static String cachedIP;
+    private static String accesspointIP;
     private static String appname;
     private static PrefUtil prefs;
     private static Context ctxt;
@@ -292,7 +292,7 @@ public class WFConnection extends Object implements
 	}
 
     };
-    
+
     /*
      * Runs second time supplicant nonresponsive
      */
@@ -318,14 +318,13 @@ public class WFConnection extends Object implements
 
 	    }
 	    /*
-	     * If repair_reset is true
-	     * we should be in normal scan mode
-	     * until connected
+	     * If repair_reset is true we should be in normal scan mode until
+	     * connected
 	     */
-	    else
-		if (prefs.getFlag(Pref.LOG_KEY))
-		    LogService.log(ctxt, appname, ctxt.getString(R.string.scan_mode));
-		
+	    else if (prefs.getFlag(Pref.LOG_KEY))
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.scan_mode));
+
 	}
 
     };
@@ -710,7 +709,10 @@ public class WFConnection extends Object implements
 
 	/*
 	 * Check for network connectivity
+	 * 
+	 * First with router, then with google
 	 */
+
 	isup = hostup(context);
 
 	/*
@@ -947,7 +949,7 @@ public class WFConnection extends Object implements
     }
 
     private static int getKnownAPsBySignal(final Context context) {
-	
+
 	/*
 	 * Comparator class for sorting results
 	 */
@@ -961,7 +963,7 @@ public class WFConnection extends Object implements
 			: 1));
 	    }
 	}
-	
+
 	/*
 	 * Acquire scan results
 	 */
@@ -1011,14 +1013,13 @@ public class WFConnection extends Object implements
 				+ wfResult.SSID);
 
 		}
-		
+
 		/*
-		 * Check for null SSIDs
-		 * replace with null_ssid string
+		 * Check for null SSIDs replace with null_ssid string
 		 */
 		if (wfResult.SSID == null)
 		    wfResult.SSID = context.getString(R.string.null_ssid);
-		
+
 		if (sResult.SSID == null)
 		    sResult.SSID = context.getString(R.string.null_ssid);
 
@@ -1298,7 +1299,7 @@ public class WFConnection extends Object implements
 	 * No longer a failover, always icmp first, then http
 	 */
 
-	boolean isup = icmpHostup(context);
+	boolean isup = false;// icmpHostup(context);
 	if (!isup) {
 	    isup = httpHostup(context);
 	    if (isup)
@@ -1310,7 +1311,7 @@ public class WFConnection extends Object implements
     }
 
     private static boolean httpHostup(final Context context) {
-	boolean isUp = false;
+	String isUp = null;
 	/*
 	 * Instantiate httphostup if it's not already instantiated
 	 */
@@ -1323,17 +1324,24 @@ public class WFConnection extends Object implements
 	    LogService.log(context, appname, context
 		    .getString(R.string.http_method));
 
-	isUp = httphostup.getHostup(REACHABLE, context);
+	isUp = httphostup.getHostup(REACHABLE, context, null);
+	if (isUp == null)
+	    isUp = httphostup.getHostup(REACHABLE, context, context
+		    .getString(R.string.http)+accesspointIP);
+
 	if (prefs.getFlag(Pref.LOG_KEY)) {
-	    if (isUp)
-		LogService.log(context, appname, context
-			.getString(R.string.http_success));
+	    if (isUp != null)
+		LogService.log(context, appname, isUp
+			+ context.getString(R.string.responded));
 	    else
 		LogService.log(context, appname, context
 			.getString(R.string.http_failure));
 	}
 
-	return isUp;
+	if (isUp == null)
+	    return false;
+	else
+	    return true;
     }
 
     private static void icmpCache(final Context context) {
@@ -1341,11 +1349,11 @@ public class WFConnection extends Object implements
 	 * Caches DHCP gateway IP for ICMP check
 	 */
 	DhcpInfo info = getWifiManager(ctxt).getDhcpInfo();
-	cachedIP = Formatter.formatIpAddress(info.gateway);
+	accesspointIP = Formatter.formatIpAddress(info.gateway);
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(context, appname, context
 		    .getString(R.string.cached_ip)
-		    + cachedIP);
+		    + accesspointIP);
     }
 
     private static boolean icmpHostup(final Context context) {
@@ -1353,16 +1361,16 @@ public class WFConnection extends Object implements
 	/*
 	 * If IP hasn't been cached yet cache it
 	 */
-	if (cachedIP == null)
+	if (accesspointIP == null)
 	    icmpCache(context);
 
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(context, appname, context
 		    .getString(R.string.icmp_method)
-		    + cachedIP);
+		    + accesspointIP);
 
 	try {
-	    if (InetAddress.getByName(cachedIP).isReachable(REACHABLE)) {
+	    if (InetAddress.getByName(accesspointIP).isReachable(REACHABLE)) {
 		isUp = true;
 		if (prefs.getFlag(Pref.LOG_KEY))
 		    LogService.log(context, appname, context
@@ -1475,11 +1483,11 @@ public class WFConnection extends Object implements
 		    wifiRepair();
 		}
 	    } else {
-		    /*
-		     * Directly start scan, we know we're disconnected. 
-		     */
-		    startScan(true);
-		    pendingscan = true;
+		/*
+		 * Directly start scan, we know we're disconnected.
+		 */
+		startScan(true);
+		pendingscan = true;
 	    }
 
 	}

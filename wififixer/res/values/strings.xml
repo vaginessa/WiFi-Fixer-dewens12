@@ -198,4 +198,8 @@ Please be sure you have collected at least 10 minutes of data.</string>
 
 	<string name="null_ssid">NULL_SSID</string>
 
+	<string name="http">http://</string>
+
+	<string name="responded"> RESPONDED</string>
+
 </resources>

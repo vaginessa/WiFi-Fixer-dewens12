@@ -27,6 +27,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import android.content.Context;
+import android.util.Log;
 
 public class HttpHostup {
 
@@ -41,6 +42,7 @@ public class HttpHostup {
     private static volatile HttpResponse response;
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
+    private static String target = H_TARGET;
     private static final int TIMEOUT_EXTRA = 2000;
     private static URI headURI;
     private static int reachable;
@@ -70,8 +72,26 @@ public class HttpHostup {
 	}
     };
 
-    public synchronized boolean getHostup(final int timeout, final Context ctxt) {
-	context = ctxt;
+    public synchronized String getHostup(final int timeout, final Context ctxt, final String router) {
+	
+	
+	if (router == null)
+	    target = H_TARGET;
+	else {
+	    target = router;
+	    Log.i("WifiFixerService",router);
+	}
+	   
+	
+	/*
+	 * get URI
+	 */
+	try {
+	    headURI = new URI(target);
+	} catch (URISyntaxException e1) {
+	   return null;
+	}
+	
 	reachable = timeout + TIMEOUT_EXTRA;
 	/*
 	 * Header Check Thread
@@ -87,12 +107,16 @@ public class HttpHostup {
 	     * have, reset it
 	     */
 	    httpclient = null;
-	    return false;
+	    
+	    if(state)
+		return target;
+	    else 
+		return null;
 	} catch (InterruptedException e) {
 	    /*
 	     * rHttpHead interrupted this is desired behavior
 	     */
-	    return state;
+	    return target;
 	}
 
     }
@@ -106,11 +130,8 @@ public class HttpHostup {
 	/*
 	 * Reusing Httpclient, only initializing first time
 	 */
-
 	if (httpclient == null) {
 	    httpclient = new DefaultHttpClient();
-	    if (headURI == null)
-		headURI = new URI(H_TARGET);
 	    head = new HttpHead(headURI);
 	    httpparams = new BasicHttpParams();
 	    HttpConnectionParams.setConnectionTimeout(httpparams, Integer
