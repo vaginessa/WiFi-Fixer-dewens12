@@ -27,7 +27,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import android.content.Context;
-import android.util.Log;
 
 public class HttpHostup {
 
@@ -79,7 +78,6 @@ public class HttpHostup {
 	    target = H_TARGET;
 	else {
 	    target = router;
-	    Log.i("WifiFixerService",router);
 	}
 	   
 	

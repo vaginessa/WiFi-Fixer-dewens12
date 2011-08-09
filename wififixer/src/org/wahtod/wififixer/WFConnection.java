@@ -1324,10 +1324,14 @@ public class WFConnection extends Object implements
 	    LogService.log(context, appname, context
 		    .getString(R.string.http_method));
 
-	isUp = httphostup.getHostup(REACHABLE, context, null);
-	if (isUp == null)
-	    isUp = httphostup.getHostup(REACHABLE, context, context
+	/*
+	 * Try HTTP HEAD to access point first
+	 */
+	isUp = httphostup.getHostup(REACHABLE, context, context
 		    .getString(R.string.http)+accesspointIP);
+	if (isUp == null)
+	   isUp = httphostup.getHostup(REACHABLE, context, null);
+	   
 
 	if (prefs.getFlag(Pref.LOG_KEY)) {
 	    if (isUp != null)
