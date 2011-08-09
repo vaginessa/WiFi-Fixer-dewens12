@@ -37,7 +37,7 @@ public class HttpHostup {
 
     private static volatile DefaultHttpClient httpclient;
     private static volatile HttpParams httpparams;
-    private static volatile HttpHead head;
+    private static HttpHead head;
     private static volatile HttpResponse response;
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
@@ -86,6 +86,7 @@ public class HttpHostup {
 	 */
 	try {
 	    headURI = new URI(target);
+	    head = new HttpHead(headURI);
 	} catch (URISyntaxException e1) {
 	   return null;
 	}
@@ -130,7 +131,6 @@ public class HttpHostup {
 	 */
 	if (httpclient == null) {
 	    httpclient = new DefaultHttpClient();
-	    head = new HttpHead(headURI);
 	    httpparams = new BasicHttpParams();
 	    HttpConnectionParams.setConnectionTimeout(httpparams, Integer
 		    .valueOf(reachable));
