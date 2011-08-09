@@ -73,7 +73,11 @@ public class HttpHostup {
 
     public synchronized String getHostup(final int timeout, final Context ctxt, final String router) {
 	
-	
+	/*
+	 * If null, use H_TARGET
+	 * else try to construct URL
+	 * from router string
+	 */
 	if (router == null)
 	    target = H_TARGET;
 	else {
@@ -86,10 +90,16 @@ public class HttpHostup {
 	 */
 	try {
 	    headURI = new URI(target);
-	    head = new HttpHead(headURI);
 	} catch (URISyntaxException e1) {
-	   return null;
+	    try {
+		headURI = new URI(H_TARGET);
+	    } catch (URISyntaxException e) {
+		//Should not ever happen since H_TARGET is a valid URL
+		e.printStackTrace();
+	    }
 	}
+	
+	head = new HttpHead(headURI);
 	
 	reachable = timeout + TIMEOUT_EXTRA;
 	/*
