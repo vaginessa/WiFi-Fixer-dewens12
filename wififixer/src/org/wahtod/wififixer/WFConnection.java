@@ -1299,7 +1299,7 @@ public class WFConnection extends Object implements
 	 * No longer a failover, always icmp first, then http
 	 */
 
-	boolean isup = false;// icmpHostup(context);
+	boolean isup = icmpHostup(context);
 	if (!isup) {
 	    isup = httpHostup(context);
 	    if (isup)
@@ -1328,10 +1328,10 @@ public class WFConnection extends Object implements
 	 * Try HTTP HEAD to access point first
 	 */
 	isUp = httphostup.getHostup(REACHABLE, context, context
-		    .getString(R.string.http)+accesspointIP);
+		.getString(R.string.http)
+		+ accesspointIP);
 	if (isUp == null)
-	   isUp = httphostup.getHostup(REACHABLE, context, null);
-	   
+	    isUp = httphostup.getHostup(REACHABLE, context, null);
 
 	if (prefs.getFlag(Pref.LOG_KEY)) {
 	    if (isUp != null)
