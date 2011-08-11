@@ -28,8 +28,8 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 	/*
-	 * For boot completed, check DISABLE_KEY if false, schedule the service
-	 * run
+	 * For boot completed, check DISABLE_KEY 
+	 * if false, start the service loader run
 	 */
 	if (!isserviceDisabled(context)){
 	    context.startService(new Intent(context, BootService.class));  

@@ -33,7 +33,7 @@ public class BootService extends Service {
     /*
      * Runnable for boot service start
      */
-    private class tStartService implements Runnable {
+    private class TStartService implements Runnable {
 	@Override
 	public void run() {
 	    try {
@@ -55,7 +55,7 @@ public class BootService extends Service {
     public void onCreate() {
 	bootservice = this;
 	ctxt = this;
-	Thread serviceStart = new Thread(new tStartService());
+	Thread serviceStart = new Thread(new TStartService());
 	serviceStart.start();
 	super.onCreate();
     }
