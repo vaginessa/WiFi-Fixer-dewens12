@@ -44,6 +44,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
+import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
@@ -912,10 +913,14 @@ public class WFConnection extends Object implements
     private static boolean getIsOnWifi(final Context context) {
 	ConnectivityManager cm = (ConnectivityManager) context
 		.getSystemService(Context.CONNECTIVITY_SERVICE);
-	if (cm.getActiveNetworkInfo() != null)
-	    if (cm.getActiveNetworkInfo().isConnectedOrConnecting())
-		if (cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI)
-		    return true;
+	try {
+	    	NetworkInfo ni = cm.getActiveNetworkInfo();
+	        if (ni.isConnectedOrConnecting())
+	    	if (ni.getType() == ConnectivityManager.TYPE_WIFI)
+	    	    return true;
+	} catch (NullPointerException e) {
+	   return false;
+	}
 
 	return false;
     }
