@@ -42,8 +42,8 @@ public class WifiFixerService extends Service implements
 	OnScreenStateChangedListener {
 
     /*
-     * Those not familiar with Android: there can only ever be one Service
-     * instance. Yeah, so practice sound.
+     * Loads WFConnection class, Prefs
+     * 
      */
 
     // IDs For notifications
