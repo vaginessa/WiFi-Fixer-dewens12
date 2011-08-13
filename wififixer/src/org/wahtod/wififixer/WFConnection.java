@@ -366,7 +366,8 @@ public class WFConnection extends Object implements
 			/*
 			 * Check wifi
 			 */
-			checkWifi();
+			if (getisWifiEnabled(ctxt, false))
+			    checkWifi();
 
 		}
 	    }
@@ -1991,7 +1992,7 @@ public class WFConnection extends Object implements
     }
 
     private void sleepCheck(final boolean state) {
-	if (state && getisWifiEnabled(ctxt,false)) {
+	if (state && getisWifiEnabled(ctxt, false)) {
 	    /*
 	     * Start sleep check
 	     */
