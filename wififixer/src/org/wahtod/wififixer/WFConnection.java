@@ -351,7 +351,7 @@ public class WFConnection extends Object implements
 		 */
 		if (shouldManage(ctxt)) {
 		    // Check Supplicant
-		    if (getWifiManager(ctxt).isWifiEnabled()
+		    if (getisWifiEnabled(ctxt)
 			    && !getWifiManager(ctxt).pingSupplicant()) {
 			if (prefs.getFlag(Pref.LOG_KEY))
 			    LogService
@@ -439,9 +439,11 @@ public class WFConnection extends Object implements
 		/*
 		 * This is all we want to do.
 		 */
-		wakelock.lock(true);
-		if (!templock)
+
+		if (!templock && getisWifiEnabled(ctxt)) {
+		    wakelock.lock(true);
 		    checkWifi();
+		}
 		/*
 		 * Post next run
 		 */
@@ -905,27 +907,26 @@ public class WFConnection extends Object implements
 
     private static void fixDisabledNetwork(final Context context,
 	    List<WifiConfiguration> wflist) {
-	
-	for (WifiConfiguration wfresult: wflist){
-	/*
-	 * Check for Android 2.x disabled network bug 
-	 * WifiConfiguration state
-	 * won't match stored state
-	 */
-	if (wfresult.status == WifiConfiguration.Status.DISABLED
-		&& !readNetworkState(context, wfresult.networkId)) {
-	    /*
-	     * bugged, enable
-	     */
-	    setNetworkState(context, wfresult.networkId, true);
-	    getWifiManager(context).getConfiguredNetworks().get(
-		    wfresult.networkId).status = WifiConfiguration.Status.ENABLED;
-	    if (prefs.getFlag(Pref.LOG_KEY))
-		LogService.log(context, appname, context
-			.getString(R.string.reenablenetwork)
-			+ wfresult.SSID);
 
-	}
+	for (WifiConfiguration wfresult : wflist) {
+	    /*
+	     * Check for Android 2.x disabled network bug WifiConfiguration
+	     * state won't match stored state
+	     */
+	    if (wfresult.status == WifiConfiguration.Status.DISABLED
+		    && !readNetworkState(context, wfresult.networkId)) {
+		/*
+		 * bugged, enable
+		 */
+		setNetworkState(context, wfresult.networkId, true);
+		getWifiManager(context).getConfiguredNetworks().get(
+			wfresult.networkId).status = WifiConfiguration.Status.ENABLED;
+		if (prefs.getFlag(Pref.LOG_KEY))
+		    LogService.log(context, appname, context
+			    .getString(R.string.reenablenetwork)
+			    + wfresult.SSID);
+
+	    }
 	}
     }
 
@@ -1019,7 +1020,7 @@ public class WFConnection extends Object implements
 
 	for (ScanResult sResult : scanResults) {
 	    for (WifiConfiguration wfResult : wifiConfigs) {
-		
+
 		/*
 		 * Check for null SSIDs replace with null_ssid string
 		 */
@@ -1484,7 +1485,6 @@ public class WFConnection extends Object implements
     }
 
     private void checkWifi() {
-	if (getisWifiEnabled(ctxt)) {
 	    if (getIsSupplicantConnected(ctxt)) {
 		if (!checkNetwork(ctxt)) {
 		    handlerWrapper(TEMPLOCK_OFF);
@@ -1499,9 +1499,6 @@ public class WFConnection extends Object implements
 		startScan(true);
 		pendingscan = true;
 	    }
-
-	}
-
     }
 
     public void cleanup() {
@@ -1760,14 +1757,12 @@ public class WFConnection extends Object implements
 	 */
 	repair_reset = false;
 
-	
 	/*
-	 * Check for Android 2.x disabled network bug WifiConfiguration
-	 * state won't match stored state
+	 * Check for Android 2.x disabled network bug WifiConfiguration state
+	 * won't match stored state
 	 */
 	fixDisabledNetwork(ctxt, getWifiManager(ctxt).getConfiguredNetworks());
 
-	
 	/*
 	 * restart the Main tick
 	 */
