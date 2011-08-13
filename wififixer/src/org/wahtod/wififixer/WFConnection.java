@@ -141,12 +141,6 @@ public class WFConnection extends Object implements
     // for Dbm
     private static final int DBM_FLOOR = -90;
 
-    // For priority
-    /*
-     * WHAT DOES THE SCOUT SAY?
-     */
-    private static final int OVER9000 = 100001;
-
     // various
     private static final int NULLVAL = -1;
     private static int lastAP = NULLVAL;
@@ -180,7 +174,7 @@ public class WFConnection extends Object implements
      * For connectToAP sticking
      */
     private static int connecting = 0;
-    private static final int CONNECTING_THRESHOLD = 2;
+    private static final int CONNECTING_THRESHOLD = 3;
 
     // Runnable Constants for handler
     private static final int MAIN = 0;
@@ -813,35 +807,34 @@ public class WFConnection extends Object implements
 	if (!getWifiManager(ctxt).isWifiEnabled())
 	    return;
 	/*
-	 * New code. Using priority to specify connection AP.
+	 * Back to explicit connection
 	 */
 
 	WifiConfiguration target = getWifiManager(ctxt).getConfiguredNetworks()
 		.get(network);
-	int priority = target.priority;
 	/*
 	 * Create sparse WifiConfiguration with details of desired connectee
 	 */
 	connectee = new WFConfig();
 	WifiConfiguration cfg = new WifiConfiguration();
-	cfg.priority = OVER9000;
+	cfg.status = WifiConfiguration.Status.ENABLED;
 	cfg.networkId = network;
 	connectee.wificonfig = cfg;
 	getWifiManager(ctxt).updateNetwork(connectee.wificonfig);
 	connectee.wificonfig.SSID = target.SSID;
-	// set priority to normal in temp member
-	connectee.wificonfig.priority = priority;
 
 	/*
 	 * Remove all posts to handler
 	 */
 	clearHandler();
 	/*
-	 * Disconnect and trigger scan which will connect us to high priority
-	 * network
+	 * Disconnect and explicitly connect will handle re-enabling other
+	 * networks next scan
 	 */
 	getWifiManager(ctxt).disconnect();
-	getWifiManager(ctxt).startScan();
+	getWifiManager(ctxt)
+		.enableNetwork(connectee.wificonfig.networkId, true);
+
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(context, appname, context
 		    .getString(R.string.connecting_to_network)
@@ -910,16 +903,42 @@ public class WFConnection extends Object implements
 	context.sendBroadcast(scanresults);
     }
 
+    private static void fixDisabledNetwork(final Context context,
+	    List<WifiConfiguration> wflist) {
+	
+	for (WifiConfiguration wfresult: wflist){
+	/*
+	 * Check for Android 2.x disabled network bug 
+	 * WifiConfiguration state
+	 * won't match stored state
+	 */
+	if (wfresult.status == WifiConfiguration.Status.DISABLED
+		&& !readNetworkState(context, wfresult.networkId)) {
+	    /*
+	     * bugged, enable
+	     */
+	    setNetworkState(context, wfresult.networkId, true);
+	    getWifiManager(context).getConfiguredNetworks().get(
+		    wfresult.networkId).status = WifiConfiguration.Status.ENABLED;
+	    if (prefs.getFlag(Pref.LOG_KEY))
+		LogService.log(context, appname, context
+			.getString(R.string.reenablenetwork)
+			+ wfresult.SSID);
+
+	}
+	}
+    }
+
     private static boolean getIsOnWifi(final Context context) {
 	ConnectivityManager cm = (ConnectivityManager) context
 		.getSystemService(Context.CONNECTIVITY_SERVICE);
 	try {
-	    	NetworkInfo ni = cm.getActiveNetworkInfo();
-	        if (ni.isConnectedOrConnecting())
-	    	if (ni.getType() == ConnectivityManager.TYPE_WIFI)
-	    	    return true;
+	    NetworkInfo ni = cm.getActiveNetworkInfo();
+	    if (ni.isConnectedOrConnecting())
+		if (ni.getType() == ConnectivityManager.TYPE_WIFI)
+		    return true;
 	} catch (NullPointerException e) {
-	   return false;
+	    return false;
 	}
 
 	return false;
@@ -1000,25 +1019,7 @@ public class WFConnection extends Object implements
 
 	for (ScanResult sResult : scanResults) {
 	    for (WifiConfiguration wfResult : wifiConfigs) {
-
-		/*
-		 * Check for Android 2.x disabled network bug WifiConfiguration
-		 * state won't match stored state
-		 */
-		if (wfResult.status == WifiConfiguration.Status.DISABLED
-			&& !readNetworkState(context, wfResult.networkId)) {
-		    /*
-		     * bugged, enable
-		     */
-		    setNetworkState(context, wfResult.networkId, true);
-		    wifiConfigs.get(wfResult.networkId).status = WifiConfiguration.Status.ENABLED;
-		    if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(context, appname, context
-				.getString(R.string.reenablenetwork)
-				+ wfResult.SSID);
-
-		}
-
+		
 		/*
 		 * Check for null SSIDs replace with null_ssid string
 		 */
@@ -1759,6 +1760,14 @@ public class WFConnection extends Object implements
 	 */
 	repair_reset = false;
 
+	
+	/*
+	 * Check for Android 2.x disabled network bug WifiConfiguration
+	 * state won't match stored state
+	 */
+	fixDisabledNetwork(ctxt, getWifiManager(ctxt).getConfiguredNetworks());
+
+	
 	/*
 	 * restart the Main tick
 	 */
@@ -1913,7 +1922,7 @@ public class WFConnection extends Object implements
     }
 
     private static boolean shouldManage(final Context ctx) {
-	String ssid = PrefUtil.getFileName(ctx, getSSID());
+	String ssid = PrefUtil.getSafeFileName(ctx, getSSID());
 	if (ssid == NULL_SSID)
 	    return true;
 	else if (prefs.getnetPref(ctxt, NetPref.NONMANAGED_KEY, ssid) == 1)
