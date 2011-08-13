@@ -21,7 +21,7 @@
 
 
 		<ListPreference android:title="Set Wifi Usablity"
-			android:defaultValue="2"
+			android:defaultValue="1"
 			android:summary="Allows setting from max wifi usability to minimal battery use"
 			android:key="Perf_Mode" android:entries="@array/entries"
 			android:entryValues="@array/entryValues" />
@@ -74,6 +74,7 @@
 					android:summary="Enables Wifi Lock, which will increase battery use" />
 				<CheckBoxPreference android:key="SCREEN"
 					android:title="Disable Sleep"
+					android:defaultValue="true"
 					android:summary="Disables sleep on Screen Off, which will increase battery use moderately" />
 			</PreferenceCategory>
 			<PreferenceCategory android:title="Specialized Fixes">

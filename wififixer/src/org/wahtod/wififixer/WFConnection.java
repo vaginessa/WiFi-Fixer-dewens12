@@ -1991,11 +1991,12 @@ public class WFConnection extends Object implements
     }
 
     private void sleepCheck(final boolean state) {
-	if (state && getWifiManager(ctxt).isWifiEnabled()) {
+	if (state && getisWifiEnabled(ctxt,false)) {
 	    /*
 	     * Start sleep check
 	     */
 	    handlerWrapper(SLEEPCHECK, SLEEPWAIT);
+	    handler.removeMessages(MAIN);
 
 	} else {
 	    /*
