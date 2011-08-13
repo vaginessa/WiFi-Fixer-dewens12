@@ -151,6 +151,7 @@ public class WFConnection extends Object implements
     private static List<WFConfig> knownbysignal;
     private static String lastSupplicantState;
     private static int signalcache;
+    private static boolean wifistate;
 
     // deprecated
     static boolean templock = false;
@@ -351,7 +352,7 @@ public class WFConnection extends Object implements
 		 */
 		if (shouldManage(ctxt)) {
 		    // Check Supplicant
-		    if (getisWifiEnabled(ctxt)
+		    if (getisWifiEnabled(ctxt, false)
 			    && !getWifiManager(ctxt).pingSupplicant()) {
 			if (prefs.getFlag(Pref.LOG_KEY))
 			    LogService
@@ -440,7 +441,7 @@ public class WFConnection extends Object implements
 		 * This is all we want to do.
 		 */
 
-		if (!templock && getisWifiEnabled(ctxt)) {
+		if (!templock && getisWifiEnabled(ctxt, true)) {
 		    wakelock.lock(true);
 		    checkWifi();
 		}
@@ -581,6 +582,11 @@ public class WFConnection extends Object implements
 	 * Set current AP int
 	 */
 	lastAP = getNetworkID();
+
+	/*
+	 * Set current wifi radio state
+	 */
+	wifistate = getWifiManager(context).isWifiEnabled();
 
 	/*
 	 * Set up Intent filters
@@ -956,21 +962,19 @@ public class WFConnection extends Object implements
 	    return false;
     }
 
-    private static boolean getisWifiEnabled(final Context context) {
-	boolean enabled = false;
+    private static boolean getisWifiEnabled(final Context context, boolean log) {
 
-	if (getWifiManager(ctxt).isWifiEnabled()) {
-	    if (prefs.getFlag(Pref.LOG_KEY))
+	if (wifistate) {
+	    if (log && prefs.getFlag(Pref.LOG_KEY))
 		LogService.log(context, appname, context
 			.getString(R.string.wifi_is_enabled));
-	    enabled = true;
 	} else {
-	    if (prefs.getFlag(Pref.LOG_KEY))
+	    if (log && prefs.getFlag(Pref.LOG_KEY))
 		LogService.log(context, appname, context
 			.getString(R.string.wifi_is_disabled));
 	}
 
-	return enabled;
+	return wifistate;
     }
 
     private static int getKnownAPsBySignal(final Context context) {
@@ -1485,20 +1489,20 @@ public class WFConnection extends Object implements
     }
 
     private void checkWifi() {
-	    if (getIsSupplicantConnected(ctxt)) {
-		if (!checkNetwork(ctxt)) {
-		    handlerWrapper(TEMPLOCK_OFF);
-		    handlerWrapper(SCAN);
-		    shouldrepair = true;
-		    wifiRepair();
-		}
-	    } else {
-		/*
-		 * Directly start scan, we know we're disconnected.
-		 */
-		startScan(true);
-		pendingscan = true;
+	if (getIsSupplicantConnected(ctxt)) {
+	    if (!checkNetwork(ctxt)) {
+		handlerWrapper(TEMPLOCK_OFF);
+		handlerWrapper(SCAN);
+		shouldrepair = true;
+		wifiRepair();
 	    }
+	} else {
+	    /*
+	     * Directly start scan, we know we're disconnected.
+	     */
+	    startScan(true);
+	    pendingscan = true;
+	}
     }
 
     public void cleanup() {
@@ -1842,6 +1846,7 @@ public class WFConnection extends Object implements
     }
 
     private void onWifiDisabled() {
+	wifistate = false;
 	clearHandler();
 	if (prefs.getFlag(Pref.STATENOT_KEY))
 	    NotifUtil.addStatNotif(ctxt, NULL_SSID, ctxt
@@ -1852,6 +1857,7 @@ public class WFConnection extends Object implements
     }
 
     private void onWifiEnabled() {
+	wifistate = true;
 	handlerWrapper(MAIN, LOOPWAIT);
 	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate)
 	    setStatNotif(true);
@@ -1939,7 +1945,7 @@ public class WFConnection extends Object implements
 	 * Connect To best will always find best signal/availability
 	 */
 
-	if (getisWifiEnabled(ctxt))
+	if (getisWifiEnabled(ctxt, false))
 	    if (getIsSupplicantConnected(ctxt))
 		if (checkNetwork(ctxt)) {
 		    /*
