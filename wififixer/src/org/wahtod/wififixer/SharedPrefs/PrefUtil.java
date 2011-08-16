@@ -200,8 +200,8 @@ public class PrefUtil extends Object {
 	if (!wm.isWifiEnabled())
 	    return context.getString(R.string.none);
 	else
-	    return getSafeFileName(context,
-		    wm.getConfiguredNetworks().get(network).SSID);
+	    return getSafeFileName(context, wm.getConfiguredNetworks().get(
+		    network).SSID);
     }
 
     public static String getSafeFileName(final Context ctxt, String filename) {

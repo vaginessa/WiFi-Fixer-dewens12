@@ -472,7 +472,7 @@ public class WifiFixerActivity extends Activity {
 			.show();
 		return;
 	    }
-	    
+
 	    Toast.makeText(WifiFixerActivity.this, R.string.enabling_logging,
 		    Toast.LENGTH_SHORT).show();
 	    setLogging(true);

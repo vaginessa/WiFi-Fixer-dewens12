@@ -24,18 +24,18 @@ import android.content.Context;
 import android.content.Intent;
 
 public class BootReceiver extends BroadcastReceiver {
-    
+
     @Override
     public void onReceive(Context context, Intent intent) {
 	/*
-	 * For boot completed, check DISABLE_KEY 
-	 * if false, start the service loader run
+	 * For boot completed, check DISABLE_KEY if false, start the service
+	 * loader run
 	 */
-	if (!isserviceDisabled(context)){
-	    context.startService(new Intent(context, BootService.class));  
+	if (!isserviceDisabled(context)) {
+	    context.startService(new Intent(context, BootService.class));
 	}
     }
-    
+
     private static boolean isserviceDisabled(final Context context) {
 	return PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key());
     }

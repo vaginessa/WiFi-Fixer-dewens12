@@ -150,10 +150,11 @@ public class NotifUtil {
 		Intent.ACTION_MAIN).setFlags(
 		Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 
-	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,intent, 0);
-	
+	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+		intent, 0);
+
 	lognotif.contentIntent = contentIntent;
-	
+
 	lognotif.setLatestEventInfo(context, context
 		.getString(R.string.currently_logging), context
 		.getString(R.string.currently_logging), contentIntent);

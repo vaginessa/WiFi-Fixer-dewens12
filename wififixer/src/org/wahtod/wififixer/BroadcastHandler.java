@@ -58,13 +58,11 @@ public class BroadcastHandler {
 
 	switch (command) {
 	case 0:
-	    context.sendBroadcast(
-		    new Intent(WidgetHandler.REASSOCIATE));
+	    context.sendBroadcast(new Intent(WidgetHandler.REASSOCIATE));
 	    break;
 
 	case 1:
-	    context.sendBroadcast(
-		    new Intent(WidgetHandler.TOGGLE_WIFI));
+	    context.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
 	    break;
 
 	case 2:

@@ -49,13 +49,11 @@ public class PrefActivity extends PreferenceActivity implements
     private Handler handler = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
-	    what=message.what;
+	    what = message.what;
 	    PrefUtil.notifyPrefChange(ctxt, message.getData().getString(
 		    NOTIFICATION_DATA));
 	}
     };
-
-   
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

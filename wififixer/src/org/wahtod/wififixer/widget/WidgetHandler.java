@@ -25,7 +25,7 @@ import android.net.wifi.WifiManager;
 import android.widget.Toast;
 
 public class WidgetHandler {
-   
+
     private static Context ctxt;
 
     /*

@@ -43,7 +43,6 @@ public class WifiFixerService extends Service implements
 
     /*
      * Loads WFConnection class, Prefs
-     * 
      */
 
     // IDs For notifications
