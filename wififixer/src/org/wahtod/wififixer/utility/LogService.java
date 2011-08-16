@@ -215,6 +215,11 @@ public class LogService extends Service {
 	handler.sendEmptyMessageDelayed(FLUSH_MESSAGE, BUFFER_FLUSH_DELAY);
 	handler.sendEmptyMessageDelayed(TS_MESSAGE, WRITE_BUFFER_SIZE);
 
+	/*
+	 * Add ongoing notification
+	 */
+	NotifUtil.addLogNotif(this, true);
+
     }
 
     public static boolean processCommands(final Context context,
@@ -332,6 +337,7 @@ public class LogService extends Service {
 	    e.printStackTrace();
 	}
 	bwriter = null;
+	NotifUtil.addLogNotif(this, false);
 	super.onDestroy();
     }
 

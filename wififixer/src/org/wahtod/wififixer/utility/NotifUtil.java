@@ -31,6 +31,7 @@ public class NotifUtil {
     public static final int NETNOTIFID = 8236;
     private static final int STATNOTIFID = 2392;
     private static final int MAX_SSID_LENGTH = 16;
+    private static final int LOGNOTIFID = 2494;
     private static int ssidStatus = 0;
 
     /*
@@ -127,6 +128,40 @@ public class NotifUtil {
 	 * Fire the notification
 	 */
 	nm.notify(STATNOTIFID, statnotif);
+
+    }
+
+    public static void addLogNotif(final Context context, final boolean flag) {
+
+	NotificationManager nm = (NotificationManager) context
+		.getSystemService(Context.NOTIFICATION_SERVICE);
+
+	if (!flag) {
+	    nm.cancel(LOGNOTIFID);
+	    return;
+	}
+
+	Notification lognotif = new Notification(R.drawable.logging_enabled,
+		context.getString(R.string.currently_logging), System
+			.currentTimeMillis());
+	lognotif.flags = Notification.FLAG_ONGOING_EVENT;
+
+	Intent intent = new Intent(context, WifiFixerActivity.class).setAction(
+		Intent.ACTION_MAIN).setFlags(
+		Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
+	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,intent, 0);
+	
+	lognotif.contentIntent = contentIntent;
+	
+	lognotif.setLatestEventInfo(context, context
+		.getString(R.string.currently_logging), context
+		.getString(R.string.currently_logging), contentIntent);
+
+	/*
+	 * Fire the notification
+	 */
+	nm.notify(LOGNOTIFID, lognotif);
 
     }
 
