@@ -99,7 +99,6 @@ public class WifiFixerActivity extends Activity {
 
     private String clicked;
     private int clicked_position;
-    VersionedLogFile vlogfile;
     private static View listviewitem;
     private static NetworkListAdapter adapter;
     private static List<String> knownnetworks;
@@ -241,7 +240,7 @@ public class WifiFixerActivity extends Activity {
 	/*
 	 * Delete old log
 	 */
-	File file = vlogfile.getLogFile(this);
+	File file = VersionedLogFile.getVersionedLogFile(this);
 
 	if (file.delete())
 	    Toast.makeText(WifiFixerActivity.this,
@@ -282,7 +281,7 @@ public class WifiFixerActivity extends Activity {
 	/*
 	 * Gets appropriate dir and filename on sdcard across API versions.
 	 */
-	final File file = vlogfile.getLogFile(getBaseContext());
+	final File file = VersionedLogFile.getVersionedLogFile(this);
 
 	if (Environment.getExternalStorageState() != null
 		&& !(Environment.getExternalStorageState()
@@ -564,8 +563,6 @@ public class WifiFixerActivity extends Activity {
 
 	// Here's where we fire the nag
 	authCheck();
-	vlogfile = VersionedLogFile.newInstance(this);
-
     }
 
     @Override

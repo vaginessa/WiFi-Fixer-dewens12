@@ -68,9 +68,6 @@ public class LogService extends Service {
     // Write buffer constants
     private static final int WRITE_BUFFER_SIZE = 32768;
     private static final int BUFFER_FLUSH_DELAY = 300000;
-
-    private static VersionedScreenState vscreenstate;
-    private static VersionedLogFile vlogfile;
     private static File file;
     private static Context ctxt;
 
@@ -202,13 +199,7 @@ public class LogService extends Service {
     public void onCreate() {
 	super.onCreate();
 	ctxt = this;
-
-	if (vscreenstate == null)
-	    vscreenstate = VersionedScreenState.newInstance(this);
-	if (vlogfile == null) {
-	    vlogfile = VersionedLogFile.newInstance(this);
-	    file = vlogfile.getLogFile(this);
-	}
+	file = VersionedLogFile.getVersionedLogFile(ctxt);
 	if (version == 0)
 	    getPackageInfo();
 
@@ -271,7 +262,7 @@ public class LogService extends Service {
 	 */
 	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
 	    return;
-	else if (vscreenstate.getScreenState(context))
+	else if (VersionedScreenState.getVersionedScreenState(context))
 	    handler.sendEmptyMessageDelayed(TS_MESSAGE, TS_WAIT_SCREENON);
 	else
 	    handler.sendEmptyMessageDelayed(TS_MESSAGE, TS_WAIT_SCREENOFF);
@@ -295,7 +286,7 @@ public class LogService extends Service {
 	}
 
 	if (file == null)
-	    file = vlogfile.getLogFile(ctxt);
+	    file = VersionedLogFile.getVersionedLogFile(ctxt);
 
 	try {
 	    if (!file.exists()) {

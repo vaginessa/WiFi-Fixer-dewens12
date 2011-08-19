@@ -20,16 +20,22 @@ import android.content.Context;
 import android.os.Build;
 
 public abstract class VersionedLogFile {
+    private static VersionedLogFile selector;
+
     public abstract File getLogFile(Context context);
 
-    public static VersionedLogFile newInstance(Context context) {
-	final int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
-	VersionedLogFile logfile = null;
-	if (sdkVersion < 8) {
-	    logfile = new LegacyLogFile();
-	} else
-	    logfile = new API8LogFile();
+    public static File getVersionedLogFile(Context context) {
+	/*
+	 * Instantiate appropriate VersionedLogFile
+	 */
+	if (selector == null) {
+	    final int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
+	    if (sdkVersion < 8) {
+		selector = new LegacyLogFile();
+	    } else
+		selector = new API8LogFile();
+	}
 
-	return logfile;
+	return selector.getLogFile(context);
     }
 }

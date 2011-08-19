@@ -31,12 +31,9 @@ public class ScreenStateHandler {
 
     private static ArrayList<OnScreenStateChangedListener> onScreenStateChangedListener = new ArrayList<OnScreenStateChangedListener>();
     private static boolean registered;
-    private static VersionedScreenState sstate;
 
     public static boolean getScreenState(final Context context) {
-	if (sstate == null)
-	    sstate = VersionedScreenState.newInstance(context);
-	return sstate.getScreenState(context);
+	return VersionedScreenState.getVersionedScreenState(context);
     }
 
     private static void onScreenEvent(final boolean state) {
@@ -78,7 +75,6 @@ public class ScreenStateHandler {
 	    filter.addAction(Intent.ACTION_SCREEN_ON);
 	    context.registerReceiver(receiver, filter);
 	    registered = true;
-	    sstate = VersionedScreenState.newInstance(context);
 	}
     }
 
