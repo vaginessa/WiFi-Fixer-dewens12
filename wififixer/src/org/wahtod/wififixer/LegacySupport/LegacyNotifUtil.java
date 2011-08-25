@@ -106,7 +106,7 @@ public class LegacyNotifUtil extends NotifUtil {
 	}
 
 	if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
-	    status = status + ctxt.getString(R.string.unmanaged);
+	    status = ctxt.getString(R.string.unmanaged)+ status;
 	}
 	NotifUtil.statnotif.icon = icon;
 	NotifUtil.statnotif.iconLevel = signal;

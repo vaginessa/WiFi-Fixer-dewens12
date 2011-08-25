@@ -113,7 +113,7 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	}
 
 	if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
-	    status = status + ctxt.getString(R.string.unmanaged);
+	    status =  ctxt.getString(R.string.unmanaged) + status;
 	}
 	NotifUtil.statnotif.iconLevel = signal;
 	NotifUtil.statnotif.contentView.setImageViewResource(R.id.signal, icon);

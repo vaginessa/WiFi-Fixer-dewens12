@@ -66,8 +66,8 @@ public class LogService extends Service {
     private static final long TS_WAIT_SCREENOFF = 60000;
 
     // Write buffer constants
-    private static final int WRITE_BUFFER_SIZE = 32768;
-    private static final int BUFFER_FLUSH_DELAY = 300000;
+    private static final int WRITE_BUFFER_SIZE = 8192;
+    private static final int BUFFER_FLUSH_DELAY = 30000;
     private static File file;
     private static Context ctxt;
 
