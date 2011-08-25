@@ -17,6 +17,7 @@
 package org.wahtod.wififixer.utility;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
 import org.wahtod.wififixer.ui.WifiFixerActivity;
 
 import android.app.Notification;
@@ -33,7 +34,8 @@ public class NotifUtil {
     private static final int MAX_SSID_LENGTH = 16;
     private static final int LOGNOTIFID = 2494;
     private static int ssidStatus = 0;
-    public static Notification statnotif = null;
+    public static Notification statnotif;
+    public static Notification lognotif;
     public static PendingIntent contentIntent;
 
     /*
@@ -146,30 +148,38 @@ public class NotifUtil {
 	    nm.cancel(LOGNOTIFID);
 	    return;
 	}
+	if (lognotif == null) {
+	    lognotif = new Notification(R.drawable.logging_enabled, context
+		    .getString(R.string.app_name), System.currentTimeMillis());
+	    lognotif.flags = Notification.FLAG_ONGOING_EVENT;
 
-	Notification lognotif = new Notification(R.drawable.logging_enabled,
-		context.getString(R.string.app_name), System
-			.currentTimeMillis());
-	lognotif.flags = Notification.FLAG_ONGOING_EVENT;
+	    Intent intent = new Intent(context, WifiFixerActivity.class)
+		    .setAction(Intent.ACTION_MAIN).setFlags(
+			    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 
-	Intent intent = new Intent(context, WifiFixerActivity.class).setAction(
-		Intent.ACTION_MAIN).setFlags(
-		Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+	    contentIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		intent, 0);
+	}
 
 	lognotif.contentIntent = contentIntent;
-
 	lognotif.setLatestEventInfo(context, context
-		.getString(R.string.app_name), context
-		.getString(R.string.writing_to_log), contentIntent);
+		.getString(R.string.app_name),
+		getLogString(context).toString(), contentIntent);
 
 	/*
 	 * Fire the notification
 	 */
 	nm.notify(LOGNOTIFID, lognotif);
 
+    }
+
+    public static StringBuilder getLogString(final Context context) {
+	StringBuilder logstring = new StringBuilder(context
+		.getString(R.string.writing_to_log));
+	logstring.append(SEPARATOR);
+	logstring.append(VersionedLogFile.getLogFile(context).length() / 1024);
+	logstring.append(context.getString(R.string.k));
+	return logstring;
     }
 
     public static void setSsidStatus(final int color) {

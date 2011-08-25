@@ -262,9 +262,14 @@ public class LogService extends Service {
 	 */
 	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
 	    return;
-	else if (VersionedScreenState.getScreenState(context))
+	else if (VersionedScreenState.getScreenState(context)) {
+	    /*
+	     * Also, refresh ongoing notification
+	     */
+
+	    NotifUtil.addLogNotif(context, true);
 	    handler.sendEmptyMessageDelayed(TS_MESSAGE, TS_WAIT_SCREENON);
-	else
+	} else
 	    handler.sendEmptyMessageDelayed(TS_MESSAGE, TS_WAIT_SCREENOFF);
     }
 
