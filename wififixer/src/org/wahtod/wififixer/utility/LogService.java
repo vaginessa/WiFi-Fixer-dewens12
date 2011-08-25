@@ -240,6 +240,12 @@ public class LogService extends Service {
 
     private void timeStamp(final Context context) {
 
+	/*
+	 * Also, refresh ongoing notification
+	 */
+	if (VersionedScreenState.getScreenState(context))
+	    NotifUtil.addLogNotif(context, true);
+
 	Date time = new Date();
 	/*
 	 * Construct timestamp header if null
@@ -263,11 +269,6 @@ public class LogService extends Service {
 	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
 	    return;
 	else if (VersionedScreenState.getScreenState(context)) {
-	    /*
-	     * Also, refresh ongoing notification
-	     */
-
-	    NotifUtil.addLogNotif(context, true);
 	    handler.sendEmptyMessageDelayed(TS_MESSAGE, TS_WAIT_SCREENON);
 	} else
 	    handler.sendEmptyMessageDelayed(TS_MESSAGE, TS_WAIT_SCREENOFF);
