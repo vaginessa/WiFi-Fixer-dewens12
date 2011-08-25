@@ -202,6 +202,7 @@ Please be sure you have collected at least 10 minutes of data.</string>
 
 	<string name="responded">:RESPONDED</string>
 
-	<string name="currently_logging">Wifi Fixer: Logging</string>
+	<string name="writing_to_log">Writing to Log</string>
+
 
 </resources>

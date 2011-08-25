@@ -42,6 +42,7 @@ public class NotifUtil {
     public static final int SSID_STATUS_UNMANAGED = 3;
     public static final int SSID_STATUS_MANAGED = 7;
     private static final String NULL_SSID = "empty";
+    private static final String SEPARATOR = " : ";
 
     private NotifUtil() {
 
@@ -110,8 +111,7 @@ public class NotifUtil {
 
 	if (statnotif == null) {
 	    statnotif = new Notification(icon, ctxt
-		    .getString(R.string.network_status), System
-		    .currentTimeMillis());
+		    .getString(R.string.network_status), 0);
 
 	    Intent intent = new Intent(ctxt, WifiFixerActivity.class)
 		    .setAction(Intent.ACTION_MAIN).setFlags(
@@ -127,8 +127,8 @@ public class NotifUtil {
 	}
 	statnotif.icon = icon;
 	statnotif.iconLevel = signal;
-	statnotif.setLatestEventInfo(ctxt, truncateSSID(ssid), status,
-		contentIntent);
+	statnotif.setLatestEventInfo(ctxt, ctxt.getString(R.string.app_name),
+		truncateSSID(ssid) + SEPARATOR + status, contentIntent);
 
 	/*
 	 * Fire the notification
@@ -148,7 +148,7 @@ public class NotifUtil {
 	}
 
 	Notification lognotif = new Notification(R.drawable.logging_enabled,
-		context.getString(R.string.currently_logging), System
+		context.getString(R.string.app_name), System
 			.currentTimeMillis());
 	lognotif.flags = Notification.FLAG_ONGOING_EVENT;
 
@@ -162,8 +162,8 @@ public class NotifUtil {
 	lognotif.contentIntent = contentIntent;
 
 	lognotif.setLatestEventInfo(context, context
-		.getString(R.string.currently_logging), context
-		.getString(R.string.currently_logging), contentIntent);
+		.getString(R.string.app_name), context
+		.getString(R.string.writing_to_log), contentIntent);
 
 	/*
 	 * Fire the notification
