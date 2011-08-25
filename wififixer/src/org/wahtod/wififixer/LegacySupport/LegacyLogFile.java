@@ -24,7 +24,7 @@ public class LegacyLogFile extends VersionedLogFile {
     static final String DIRNAME = "/data/org.wahtod.wififixer";
 
     @Override
-    public File getLogFile(Context context) {
+    public File vgetLogFile(Context context) {
 	File dir = new File(Environment.getExternalStorageDirectory() + DIRNAME);
 	if (!dir.exists()) {
 	    dir.mkdirs();

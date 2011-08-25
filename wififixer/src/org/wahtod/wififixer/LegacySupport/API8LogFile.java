@@ -22,7 +22,7 @@ public class API8LogFile extends VersionedLogFile {
 
     final static String FILENAME = "wififixer_log.txt";
 
-    public File getLogFile(Context context) {
+    public File vgetLogFile(Context context) {
 	/*
 	 * Whee
 	 */

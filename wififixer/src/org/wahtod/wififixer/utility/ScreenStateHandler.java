@@ -33,7 +33,7 @@ public class ScreenStateHandler {
     private static boolean registered;
 
     public static boolean getScreenState(final Context context) {
-	return VersionedScreenState.getVersionedScreenState(context);
+	return VersionedScreenState.getScreenState(context);
     }
 
     private static void onScreenEvent(final boolean state) {

@@ -199,7 +199,7 @@ public class LogService extends Service {
     public void onCreate() {
 	super.onCreate();
 	ctxt = this;
-	file = VersionedLogFile.getVersionedLogFile(ctxt);
+	file = VersionedLogFile.getLogFile(ctxt);
 	if (version == 0)
 	    getPackageInfo();
 
@@ -262,7 +262,7 @@ public class LogService extends Service {
 	 */
 	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
 	    return;
-	else if (VersionedScreenState.getVersionedScreenState(context))
+	else if (VersionedScreenState.getScreenState(context))
 	    handler.sendEmptyMessageDelayed(TS_MESSAGE, TS_WAIT_SCREENON);
 	else
 	    handler.sendEmptyMessageDelayed(TS_MESSAGE, TS_WAIT_SCREENOFF);
@@ -286,7 +286,7 @@ public class LogService extends Service {
 	}
 
 	if (file == null)
-	    file = VersionedLogFile.getVersionedLogFile(ctxt);
+	    file = VersionedLogFile.getLogFile(ctxt);
 
 	try {
 	    if (!file.exists()) {

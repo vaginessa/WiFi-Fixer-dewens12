@@ -240,7 +240,7 @@ public class WifiFixerActivity extends Activity {
 	/*
 	 * Delete old log
 	 */
-	File file = VersionedLogFile.getVersionedLogFile(this);
+	File file = VersionedLogFile.getLogFile(this);
 
 	if (file.delete())
 	    Toast.makeText(WifiFixerActivity.this,
@@ -281,7 +281,7 @@ public class WifiFixerActivity extends Activity {
 	/*
 	 * Gets appropriate dir and filename on sdcard across API versions.
 	 */
-	final File file = VersionedLogFile.getVersionedLogFile(this);
+	final File file = VersionedLogFile.getLogFile(this);
 
 	if (Environment.getExternalStorageState() != null
 		&& !(Environment.getExternalStorageState()

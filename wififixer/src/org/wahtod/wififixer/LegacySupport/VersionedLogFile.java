@@ -22,20 +22,19 @@ import android.os.Build;
 public abstract class VersionedLogFile {
     private static VersionedLogFile selector;
 
-    public abstract File getLogFile(Context context);
+    public abstract File vgetLogFile(Context context);
 
-    public static File getVersionedLogFile(Context context) {
+    public static File getLogFile(Context context) {
 	/*
 	 * Instantiate appropriate VersionedLogFile
 	 */
 	if (selector == null) {
-	    final int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
-	    if (sdkVersion < 8) {
+	    if (Build.VERSION.SDK_INT < 8) {
 		selector = new LegacyLogFile();
 	    } else
 		selector = new API8LogFile();
 	}
 
-	return selector.getLogFile(context);
+	return selector.vgetLogFile(context);
     }
 }

@@ -22,7 +22,7 @@ import android.os.PowerManager;
 public class EclairScreenState extends VersionedScreenState {
 
     @Override
-    public boolean getScreenState(Context context) {
+    public boolean vgetScreenState(Context context) {
 	PowerManager pm = (PowerManager) context
 		.getSystemService(Context.POWER_SERVICE);
 	return pm.isScreenOn();
