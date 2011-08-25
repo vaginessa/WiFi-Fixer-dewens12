@@ -33,6 +33,8 @@ public class NotifUtil {
     private static final int MAX_SSID_LENGTH = 16;
     private static final int LOGNOTIFID = 2494;
     private static int ssidStatus = 0;
+    public static Notification statnotif = null;
+    public static PendingIntent contentIntent;
 
     /*
      * for SSID status in status notification
@@ -75,14 +77,15 @@ public class NotifUtil {
 
     }
 
-    public static void addStatNotif(final Context context, final String ssid,
+    public static void addStatNotif(Context ctxt, final String ssid,
 	    String status, final int signal, final boolean flag) {
-
-	NotificationManager nm = (NotificationManager) context
+	ctxt = ctxt.getApplicationContext();
+	NotificationManager nm = (NotificationManager) ctxt
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
 	if (!flag) {
 	    nm.cancel(STATNOTIFID);
+	    statnotif = null;
 	    return;
 	}
 
@@ -105,24 +108,27 @@ public class NotifUtil {
 	    break;
 	}
 
-	Notification statnotif = new Notification(icon, context
-		.getString(R.string.network_status), System.currentTimeMillis());
+	if (statnotif == null) {
+	    statnotif = new Notification(icon, ctxt
+		    .getString(R.string.network_status), System
+		    .currentTimeMillis());
 
-	Intent intent = new Intent(context, WifiFixerActivity.class).setAction(
-		Intent.ACTION_MAIN).setFlags(
-		Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+	    Intent intent = new Intent(ctxt, WifiFixerActivity.class)
+		    .setAction(Intent.ACTION_MAIN).setFlags(
+			    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 
-	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		intent, 0);
-	statnotif.contentIntent = contentIntent;
-	statnotif.flags = Notification.FLAG_ONGOING_EVENT;
+	    contentIntent = PendingIntent.getActivity(ctxt, 0, intent, 0);
+	    statnotif.contentIntent = contentIntent;
+	    statnotif.flags = Notification.FLAG_ONGOING_EVENT;
+	}
 
 	if (ssidStatus == SSID_STATUS_UNMANAGED) {
-	    status = status + context.getString(R.string.unmanaged);
+	    status = status + ctxt.getString(R.string.unmanaged);
 	}
-	statnotif.setLatestEventInfo(context, truncateSSID(ssid), status,
-		contentIntent);
+	statnotif.icon = icon;
 	statnotif.iconLevel = signal;
+	statnotif.setLatestEventInfo(ctxt, truncateSSID(ssid), status,
+		contentIntent);
 
 	/*
 	 * Fire the notification

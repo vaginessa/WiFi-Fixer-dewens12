@@ -19,16 +19,17 @@ import android.content.Context;
 import android.os.Build;
 
 public abstract class VersionedScreenState {
-    private static VersionedScreenState selector; 
+    private static VersionedScreenState selector;
+
     public abstract boolean getScreenState(Context context);
-    
+
     public static boolean getVersionedScreenState(Context context) {
-	if (selector == null){
-	final int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
-	if (sdkVersion < Build.VERSION_CODES.ECLAIR_MR1) {
-	    selector = new LegacyScreenState();
-	} else
-	    selector = new EclairScreenState();
+	if (selector == null) {
+	    final int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
+	    if (sdkVersion < Build.VERSION_CODES.ECLAIR_MR1) {
+		selector = new LegacyScreenState();
+	    } else
+		selector = new EclairScreenState();
 	}
 
 	return selector.getScreenState(context);
