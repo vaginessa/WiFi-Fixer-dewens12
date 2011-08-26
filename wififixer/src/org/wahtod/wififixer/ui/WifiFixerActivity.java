@@ -408,8 +408,8 @@ public class WifiFixerActivity extends Activity {
 	 */
 	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 		new Intent(context, About.class), 0);
-	NotifUtil.show(context, context.getString(R.string.aboutnag),
-		context.getString(R.string.please_read), 4145, contentIntent);
+	NotifUtil.show(context, context.getString(R.string.aboutnag), context
+		.getString(R.string.please_read), 4145, contentIntent);
     }
 
     private static void startwfService(final Context context) {
@@ -422,8 +422,8 @@ public class WifiFixerActivity extends Activity {
 	 */
 	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 		new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI)), 0);
-	NotifUtil.show(context, context.getString(R.string.donatenag),
-		context.getString(R.string.thank_you), 3337, contentIntent);
+	NotifUtil.show(context, context.getString(R.string.donatenag), context
+		.getString(R.string.thank_you), 3337, contentIntent);
     }
 
     private static void removeNag(final Context context) {
@@ -508,15 +508,13 @@ public class WifiFixerActivity extends Activity {
 	if (wifiConfigs == null)
 	    return networks;
 
-	String ssid;
 	for (WifiConfiguration wfResult : wifiConfigs) {
 	    /*
 	     * Make sure there's a 1:1 correlation between
 	     * getConfiguredNetworks() and the array
 	     */
-	    ssid = wfResult.SSID.replace("\"", "");
-	    if (ssid != null && ssid.length() > 0)
-		networks.add(ssid);
+	    if (wfResult.SSID != null && wfResult.SSID.length() > 0)
+		networks.add(wfResult.SSID.replace("\"", ""));
 	    else
 		networks.add(EMPTY_SSID);
 	}
