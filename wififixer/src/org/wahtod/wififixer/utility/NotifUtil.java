@@ -45,8 +45,14 @@ public abstract class NotifUtil {
     public static final String NULL_SSID = "empty";
     public static final String SEPARATOR = " : ";
 
+    /*
+     * Cache appropriate NotifUtil
+     */
     private static NotifUtil selector;
 
+    /*
+     * API
+     */
     public abstract void vaddNetNotif(final Context context, final String ssid,
 	    final String signal);
 
@@ -67,7 +73,9 @@ public abstract class NotifUtil {
 	cacheSelector();
 	selector.vaddNetNotif(context, ssid, signal);
     }
-
+    /*
+     * Exposed API and utility methods
+     */
     public static void addStatNotif(Context ctxt, final String ssid,
 	    String status, final int signal, final boolean flag) {
 	cacheSelector();
@@ -87,7 +95,9 @@ public abstract class NotifUtil {
 
     private static void cacheSelector() {
 	/*
-	 * Instantiate appropriate VersionedLogFile
+	 * Instantiate and cache
+	 * appropriate NotifUtil
+	 * class
 	 */
 	if (selector == null) {
 	    if (Build.VERSION.SDK_INT > 10) {

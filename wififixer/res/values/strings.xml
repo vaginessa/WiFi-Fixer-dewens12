@@ -24,8 +24,8 @@
     <string name="enable">Enable</string>
     <string name="enabling_logging">Enabling Logging</string>
     <string name="disabling_logging">Disabling Logging</string>
-    <string name="donatenag">Thank you for using Wifi Fixer. If you find this software useful, please tap here to donate.</string>
-    <string name="thank_you">Thank You</string>
+    <string name="donatenag">If you use this software, donate!</string>
+    <string name="thank_you">Thank You for using Wifi Fixer</string>
     <string name="aboutnag">Tap Here to Read About Page</string>
     <string name="please_read">Please Read</string>
     <string name="emailintent">Email:</string>

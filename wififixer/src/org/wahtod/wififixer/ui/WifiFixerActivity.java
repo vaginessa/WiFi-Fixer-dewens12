@@ -29,12 +29,11 @@ import org.wahtod.wififixer.SharedPrefs.PrefConstants;
 import org.wahtod.wififixer.SharedPrefs.PrefUtil;
 import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
+import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -65,7 +64,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RemoteViews;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -232,7 +230,7 @@ public class WifiFixerActivity extends Activity {
 	if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
 	    // Handle Donate Auth
 	    startService(new Intent(getString(R.string.donateservice)));
-	    nagNotification();
+	    nagNotification(this);
 	}
     }
 
@@ -404,57 +402,32 @@ public class WifiFixerActivity extends Activity {
 
     }
 
-    void showNotification() {
-
-	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-	// The details of our message
-	CharSequence from = getString(R.string.app_name);
-	PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-		new Intent(this, About.class), 0);
-	// construct the NotifUtil object.
-	Notification notif = new Notification(R.drawable.icon,
-		getString(R.string.please_read), System.currentTimeMillis());
-
-	// Set the info for the views that show in the notification panel.
-	notif.setLatestEventInfo(this, from, getString(R.string.aboutnag),
-		contentIntent);
-	notif.flags = Notification.FLAG_AUTO_CANCEL;
-	nm.notify(4145, notif);
-
+    private static void aboutNotification(final Context context) {
+	/*
+	 * Fire About nag
+	 */
+	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+		new Intent(context, About.class), 0);
+	NotifUtil.show(context, context.getString(R.string.aboutnag),
+		context.getString(R.string.please_read), 4145, contentIntent);
     }
 
     private static void startwfService(final Context context) {
 	context.startService(new Intent(context, WifiFixerService.class));
     }
 
-    void nagNotification() {
-
-	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-	PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+    private static void nagNotification(final Context context) {
+	/*
+	 * Nag for donation
+	 */
+	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 		new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI)), 0);
-	Notification notif = new Notification(R.drawable.icon,
-		getString(R.string.thank_you), System.currentTimeMillis());
-
-	RemoteViews contentView = new RemoteViews(getPackageName(),
-		R.layout.nag_layout);
-	contentView.setImageViewResource(R.id.image, R.drawable.icon);
-	contentView.setTextViewText(R.id.text, getString(R.string.donatenag));
-	notif.contentView = contentView;
-	notif.contentIntent = contentIntent;
-
-	notif.flags = Notification.FLAG_AUTO_CANCEL;
-
-	// hax
-	nm.notify(31337, notif);
-
+	NotifUtil.show(context, context.getString(R.string.donatenag),
+		context.getString(R.string.thank_you), 3337, contentIntent);
     }
 
     private static void removeNag(final Context context) {
-	NotificationManager nm = (NotificationManager) context
-		.getSystemService(NOTIFICATION_SERVICE);
-	nm.cancel(31337);
+	NotifUtil.cancel(3337, context);
     }
 
     void toggleLog() {
@@ -557,10 +530,8 @@ public class WifiFixerActivity extends Activity {
 	loggingFlag = getLogging(this);
 	// Fire new About nag
 	if (!PrefUtil.readBoolean(this, sABOUT)) {
-	    showNotification();
-
+	    aboutNotification(this);
 	}
-
 	// Here's where we fire the nag
 	authCheck();
     }
