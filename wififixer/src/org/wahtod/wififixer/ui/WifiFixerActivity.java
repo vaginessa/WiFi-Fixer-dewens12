@@ -536,15 +536,13 @@ public class WifiFixerActivity extends Activity {
 	if (wifiConfigs == null)
 	    return networks;
 
-	String ssid;
 	for (WifiConfiguration wfResult : wifiConfigs) {
 	    /*
 	     * Make sure there's a 1:1 correlation between
 	     * getConfiguredNetworks() and the array
 	     */
-	    ssid = wfResult.SSID.replace("\"", "");
-	    if (ssid != null && ssid.length() > 0)
-		networks.add(ssid);
+	    if (wfResult.SSID != null && wfResult.SSID.length() > 0)
+		networks.add(wfResult.SSID.replace("\"", ""));
 	    else
 		networks.add(EMPTY_SSID);
 	}
