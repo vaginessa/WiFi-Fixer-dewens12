@@ -59,6 +59,7 @@ public class LegacyNotifUtil extends NotifUtil {
 	    nm.cancel(NotifUtil.NETNOTIFID);
 
     }
+
     @Override
     public void vaddStatNotif(Context ctxt, final String ssid, String status,
 	    final int signal, final boolean flag) {
@@ -106,7 +107,7 @@ public class LegacyNotifUtil extends NotifUtil {
 	}
 
 	if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
-	    status = ctxt.getString(R.string.unmanaged)+ status;
+	    status = ctxt.getString(R.string.unmanaged) + status;
 	}
 	NotifUtil.statnotif.icon = icon;
 	NotifUtil.statnotif.iconLevel = signal;
@@ -120,6 +121,7 @@ public class LegacyNotifUtil extends NotifUtil {
 	nm.notify(NotifUtil.STATNOTIFID, NotifUtil.statnotif);
 
     }
+
     @Override
     public void vaddLogNotif(final Context context, final boolean flag) {
 
@@ -156,6 +158,7 @@ public class LegacyNotifUtil extends NotifUtil {
 	nm.notify(NotifUtil.LOGNOTIFID, NotifUtil.lognotif);
 
     }
+
     @Override
     public void vshow(final Context context, final String message,
 	    final String tickerText, final int id, PendingIntent contentIntent) {

@@ -692,7 +692,7 @@ public class WFConnection extends Object implements
 
 	    context.sendBroadcast(new Intent(
 		    IntentConstants.ACTION_WIFI_SERVICE_DISABLE));
-	    PrefUtil.notifyPrefChange(context, Pref.DISABLE_KEY.key());
+	    PrefUtil.notifyPrefChange(context, Pref.DISABLE_KEY.key(), true);
 	}
     }
 

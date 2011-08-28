@@ -39,7 +39,8 @@ public class PrefUtil extends Object {
     private static final String VALUE_CHANGED_ACTION = "ACTION.PREFS.VALUECHANGED";
     private static final String NETVALUE_CHANGED_ACTION = "ACTION.NETPREFS.VALUECHANGED";
     private static final String NET_KEY = "NETKEY";
-    private static final String VALUE_KEY = "VALUEKEY";
+    private static final String DATA_KEY = "DATA_KEY";
+    private static final String VALUE_KEY = "VALUE_KEY";
     private static final String INT_KEY = "INTKEY";
     private static final String NETPREFIX = "n_";
 
@@ -56,7 +57,7 @@ public class PrefUtil extends Object {
 	    if (intent.getAction().equals(VALUE_CHANGED_ACTION)) {
 		Pref p = Pref.get(valuekey);
 		if (p != null)
-		    handlePrefChange(p, readBoolean(context, p.key()));
+		    handlePrefChange(p, intent.getBooleanExtra(DATA_KEY, false));
 	    } else {
 		NetPref np = NetPref.get(valuekey);
 		if (np != null) {
@@ -158,9 +159,11 @@ public class PrefUtil extends Object {
 	putnetPref(np, network, newvalue);
     }
 
-    public static void notifyPrefChange(final Context c, final String pref) {
+    public static void notifyPrefChange(final Context c, final String pref,
+	    boolean b) {
 	Intent intent = new Intent(VALUE_CHANGED_ACTION);
 	intent.putExtra(VALUE_KEY, pref);
+	intent.putExtra(DATA_KEY, b);
 	c.sendBroadcast(intent);
     }
 

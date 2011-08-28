@@ -73,6 +73,7 @@ public abstract class NotifUtil {
 	cacheSelector();
 	selector.vaddNetNotif(context, ssid, signal);
     }
+
     /*
      * Exposed API and utility methods
      */
@@ -95,9 +96,7 @@ public abstract class NotifUtil {
 
     private static void cacheSelector() {
 	/*
-	 * Instantiate and cache
-	 * appropriate NotifUtil
-	 * class
+	 * Instantiate and cache appropriate NotifUtil class
 	 */
 	if (selector == null) {
 	    if (Build.VERSION.SDK_INT > 10) {

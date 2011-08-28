@@ -28,40 +28,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceActivity;
 import android.provider.Settings.SettingNotFoundException;
 
 public class PrefActivity extends PreferenceActivity implements
 	OnSharedPreferenceChangeListener {
 
-    private static Context ctxt;
-    private int what;
-
-    /*
-     * Yuck: due to write cacheing in the PrefsManager we have to delay the
-     * notification so its clients pick up the right value
-     */
-    private static final long NOTIFY_DELAY = 5000;
-    private static final String NOTIFICATION_DATA = "fnord";
-
-    private Handler handler = new Handler() {
-	@Override
-	public void handleMessage(Message message) {
-	    what = message.what;
-	    PrefUtil.notifyPrefChange(ctxt, message.getData().getString(
-		    NOTIFICATION_DATA));
-	}
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setWifiSleepPolicy(this);
 	addPreferencesFromResource(R.xml.preferences);
-	ctxt = this;
-
     }
 
     @Override
@@ -129,12 +106,8 @@ public class PrefActivity extends PreferenceActivity implements
 	     * We want to notify for these, since they're prefs the service is
 	     * interested in.
 	     */
-	    Message msg = Message.obtain();
-	    Bundle bundle = new Bundle();
-	    bundle.putString(NOTIFICATION_DATA, key);
-	    msg.setData(bundle);
-	    handler.removeMessages(what, msg);
-	    handler.sendMessageDelayed(msg, NOTIFY_DELAY);
+
+	    PrefUtil.notifyPrefChange(this, key, prefs.getBoolean(key, false));
 
 	} else if (key.contains(PrefConstants.PERF_KEY)) {
 

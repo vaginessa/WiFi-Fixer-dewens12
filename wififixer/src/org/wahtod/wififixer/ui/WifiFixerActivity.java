@@ -365,7 +365,7 @@ public class WifiFixerActivity extends Activity {
 	PrefUtil.writeBoolean(this, Pref.LOG_KEY.key(), state);
 	if (!state)
 	    ServiceAlarm.setServiceEnabled(this, LogService.class, false);
-	PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key());
+	PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), state);
     }
 
     void setText() {
