@@ -64,8 +64,8 @@ public abstract class NotifUtil {
     public abstract void vshow(final Context context, final String message,
 	    final String tickerText, final int id, PendingIntent contentIntent);
 
-    public static void setSsidStatus(final int color) {
-	ssidStatus = color;
+    public static void setSsidStatus(final int status) {
+	ssidStatus = status;
     }
 
     public static void addNetNotif(final Context context, final String ssid,
@@ -96,7 +96,7 @@ public abstract class NotifUtil {
 
     private static void cacheSelector() {
 	/*
-	 * Instantiate and cache appropriate NotifUtil class
+	 * Instantiate and cache appropriate NotifUtil implementation
 	 */
 	if (selector == null) {
 	    if (Build.VERSION.SDK_INT > 10) {
