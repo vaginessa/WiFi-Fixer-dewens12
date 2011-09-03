@@ -19,8 +19,7 @@
 	<uses-feature android:name="android.hardware.touchscreen"
 		android:required="true"></uses-feature>
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
-		android:description="@string/app_desc" android:backupAgent=".PrefsBackupAgent"
-		android:restoreAnyVersion="true">
+		android:description="@string/app_desc" android:restoreAnyVersion="true" android:backupAgent=".SharedPrefs.PrefsBackupAgent">
 		<meta-data android:name="com.google.android.backup.api_key"
 			android:value="AEdPqrEAAAAIAGomq--y98O0VHARd55VOdh8CoEphVxKfVXAHw" />
 
