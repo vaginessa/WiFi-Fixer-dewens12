@@ -104,7 +104,7 @@ public class HoneyCombNotifUtil extends NotifUtil {
 		    intent, 0);
 	    builder.setContentIntent(NotifUtil.contentIntent);
 	    builder.setContent(new RemoteViews(ctxt.getPackageName(),
-		    R.layout.status_notif_layout_black));
+		    R.layout.statnotif));
 	    builder.setOngoing(true);
 	    builder.setOnlyAlertOnce(true);
 	    builder.setSmallIcon(R.drawable.signal_level, signal);
@@ -147,7 +147,7 @@ public class HoneyCombNotifUtil extends NotifUtil {
 		    intent, 0);
 	    builder.setContentIntent(NotifUtil.contentIntent);
 	    builder.setContent(new RemoteViews(ctxt.getPackageName(),
-		    R.layout.status_notif_layout_black));
+		    R.layout.statnotif));
 	    builder.setOngoing(true);
 	    builder.setOnlyAlertOnce(true);
 	    builder.setSmallIcon(R.drawable.logging_enabled);
