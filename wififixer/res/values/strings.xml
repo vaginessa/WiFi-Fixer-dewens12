@@ -210,5 +210,9 @@ Please be sure you have collected at least 10 minutes of data.</string>
 
 	<string name="strict_mode_unavailable">Strict Mode Unavailable</string>
 
+	<string name="blurb">Wifi Fixer is a low-resource service that maintains your wifi connection.</string>
+
+	<string name="service_status">Service Status</string>
+
 
 </resources>
