@@ -31,8 +31,8 @@
 	</TextView>
 
 	<ImageButton android:id="@+id/ImageButton01"
-		android:layout_below="@+id/aboutText" android:layout_height="32dp"
-		android:clickable="false" android:layout_width="32dp"
+		android:layout_below="@+id/aboutText" android:layout_height="40dp"
+		android:clickable="false" android:layout_width="40dp"
 		android:paddingBottom="10dp" android:paddingTop="10dp"
 		android:layout_centerHorizontal="true"></ImageButton>
 

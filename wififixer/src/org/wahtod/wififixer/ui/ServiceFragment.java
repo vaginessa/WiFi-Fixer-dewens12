@@ -26,7 +26,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,53 +61,22 @@ public class ServiceFragment extends Fragment {
     
     void setIcon() {
 	
-	/*
-	 * Draw icon
-	 */
-	if (PrefUtil.readBoolean(getContext(), Pref.DISABLE_KEY.key())) {
-	    servicebutton.setImageResource(R.drawable.service_inactive);
-	} else {
-	    servicebutton.setImageResource(R.drawable.service_active);
-	}
-	
-	
-	
-	DisplayMetrics metrics = new DisplayMetrics();
-	getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-	int scale = metrics.densityDpi;
-	
-	switch (scale){
-	 
-	case DisplayMetrics.DENSITY_LOW:
-	    scale = 16;
-	    break;
-	    
-	case DisplayMetrics.DENSITY_MEDIUM:
-	    scale = 32;
-	    break;
-	    
-	case DisplayMetrics.DENSITY_HIGH:
-	    scale = 40;
-	    break;
-	    
-	case 320: //DisplayMetrics.DENSITY_XHIGH
-	    scale = 64;
-	    break;
-	    
-	case 213: //DisplayMetrics.DENSITY_TV:
-	    scale = 64;
-	    break;
-	
-	}
-	
 	servicebutton.setAdjustViewBounds(true);
-	servicebutton.setMaxHeight(scale);
-	servicebutton.setMaxWidth(scale);
-	servicebutton.setMinimumHeight(scale);
-	servicebutton.setMinimumWidth(scale);
+	servicebutton.setMaxHeight(40);
+	servicebutton.setMaxWidth(40);
 	servicebutton.setClickable(false);
 	servicebutton.setFocusable(false);
 	servicebutton.setFocusableInTouchMode(false);
+	
+	/*
+	 * Draw icon
+	 */
+	
+	if (PrefUtil.readBoolean(getContext(), Pref.DISABLE_KEY.key())) {
+	    servicebutton.setBackgroundResource(R.drawable.service_inactive);
+	} else {
+	    servicebutton.setBackgroundResource(R.drawable.service_active);
+	}
 	
 	
     }
