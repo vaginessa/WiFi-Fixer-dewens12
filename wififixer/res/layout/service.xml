@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  
+  <TextView android:id="@+id/widget39" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="Wifi Fixer"
+		android:textSize="24sp" android:typeface="serif" android:textStyle="bold"
+		android:layout_alignParentTop="true" android:layout_centerHorizontal="true">
+	</TextView>
+	<ImageView android:id="@+id/wficon" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:layout_below="@+id/widget39"
+		android:layout_centerHorizontal="true" android:src="@drawable/icon">
+	</ImageView>
+
+	<TextView android:id="@+id/version" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="@+id/TextView02"
+		android:layout_toRightOf="@+id/wficon" android:layout_alignBottom="@+id/wficon"
+		android:layout_marginLeft="20px" android:layout_marginBottom="15px">
+	</TextView>
+
+	<ImageButton android:id="@+id/ImageButton01"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true" android:layout_above="@+id/TextView01"
+		android:layout_marginBottom="10px" android:clickable="false">
+	</ImageButton>
+
+
+	<TextView android:id="@+id/aboutText" android:layout_width="271px"
+		android:layout_height="131px" android:layout_marginLeft="20px"
+		android:layout_marginRight="20px"
+		android:text="Wifi Fixer is a low-resource service that maintains your wifi connection."
+		android:layout_centerVertical="true" android:layout_centerHorizontal="true"
+		android:typeface="serif" android:textStyle="normal" android:textSize="20px">
+	</TextView>
+	<TextView android:id="@+id/TextView01" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="Use Menu Button for Options"
+		android:layout_above="@+id/aboutButton"
+		android:layout_centerHorizontal="true">
+	</TextView>
+	<Button android:id="@+id/aboutButton" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="About"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true" android:visibility="invisible">
+	</Button>
+    
+</RelativeLayout>

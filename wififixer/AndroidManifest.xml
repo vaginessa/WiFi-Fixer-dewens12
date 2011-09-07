@@ -12,8 +12,8 @@
 	-->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.wahtod.wififixer" android:installLocation="internalOnly" android:versionName="0.9.0p8" android:versionCode="850">
-	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="8" />
+	package="org.wahtod.wififixer" android:installLocation="internalOnly" android:versionName="0.9.0p9" android:versionCode="851">
+	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="11" />
 	<uses-feature android:name="android.hardware.wifi"
 		android:required="true" />
 	<uses-feature android:name="android.hardware.touchscreen"
@@ -24,8 +24,7 @@
 			android:value="AEdPqrEAAAAIAGomq--y98O0VHARd55VOdh8CoEphVxKfVXAHw" />
 
 		<activity android:name=".ui.WifiFixerActivity"
-			android:launchMode="singleTask" android:screenOrientation="portrait"
-			android:configChanges="keyboardHidden">
+			android:launchMode="singleTask">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -98,7 +97,7 @@
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<!-- For wifi state -->
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<!-- For detecting ip connectivity and cacheing IP of router-->
+	<!-- For detecting ip connectivity and caching IP of router-->
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<!--
 		For switching wifi off/on, doing reassociate/reconnect, requesting

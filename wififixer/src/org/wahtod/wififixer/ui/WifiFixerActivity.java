@@ -17,14 +17,10 @@
 package org.wahtod.wififixer.ui;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.WifiFixerService;
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
-import org.wahtod.wififixer.R.id;
 import org.wahtod.wififixer.SharedPrefs.PrefConstants;
 import org.wahtod.wififixer.SharedPrefs.PrefUtil;
 import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
@@ -32,44 +28,20 @@ import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Color;
 import android.net.Uri;
-import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
-import android.util.DisplayMetrics;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SlidingDrawer;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemLongClickListener;
 
-public class WifiFixerActivity extends Activity {
+public class WifiFixerActivity extends FragmentActivity {
     // Is this the paid version?
     public boolean isfreeFlag = true;
     public boolean isauthedFlag = false;
@@ -84,23 +56,6 @@ public class WifiFixerActivity extends Activity {
     private static final int MENU_HELP = 4;
     private static final int MENU_ABOUT = 5;
     private static final int LOGGING_GROUP = 42;
-
-    private static final int CONTEXT_ENABLE = 1;
-    private static final int CONTEXT_DISABLE = 2;
-    private static final int CONTEXT_CONNECT = 3;
-    private static final int CONTEXT_NONMANAGE = 4;
-
-    private static final int MESSAGE = 31337;
-    private static final int SCAN_DELAY = 15000;
-
-    private static final String EMPTY_SSID = "None";
-
-    private String clicked;
-    private int clicked_position;
-    private static View listviewitem;
-    private static NetworkListAdapter adapter;
-    private static List<String> knownnetworks;
-    private static List<String> known_in_range;
 
     /*
      * As ugly as caching context is, the alternative is uglier.
@@ -123,109 +78,7 @@ public class WifiFixerActivity extends Activity {
      */
     private static final String DELETE_LOG = "DELETE_LOG";
 
-    /*
-     * custom adapter for Network List ListView
-     */
-    private static class NetworkListAdapter extends BaseAdapter {
-	private List<String> ssidArray;
-	private static LayoutInflater inflater;
-
-	public NetworkListAdapter(Context context, List<String> knownnetworks) {
-	    inflater = (LayoutInflater) context
-		    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	    ssidArray = knownnetworks;
-	}
-
-	public int getCount() {
-	    return ssidArray.size();
-	}
-
-	public Object getItem(int position) {
-	    return ssidArray.get(position);
-	}
-
-	public long getItemId(int position) {
-	    return position;
-	}
-
-	public View getView(int position, View convertView, ViewGroup parent) {
-	    ViewHolder holder;
-	    if (convertView == null) {
-		convertView = inflater.inflate(R.layout.list_item_layout, null);
-		holder = new ViewHolder();
-		holder.text = (TextView) convertView.findViewById(R.id.ssid);
-		holder.icon = (ImageView) convertView
-			.findViewById(R.id.NETWORK_ICON);
-		convertView.setTag(holder);
-	    } else {
-		holder = (ViewHolder) convertView.getTag();
-	    }
-	    /*
-	     * Set SSID text and color
-	     */
-	    holder.text.setText(ssidArray.get(position));
-
-	    if (known_in_range.contains(ssidArray.get(position)))
-		holder.text.setTextColor(Color.YELLOW);
-	    else
-		holder.text.setTextColor(Color.WHITE);
-
-	    /*
-	     * Set State icon
-	     */
-	    if (WFConnection.readManagedState(ctxt, position))
-		holder.icon.setImageResource(R.drawable.ignore_ssid);
-	    else {
-		if (WFConnection.getNetworkState(ctxt, position))
-		    holder.icon.setImageResource(R.drawable.enabled_ssid);
-		else
-		    holder.icon.setImageResource(R.drawable.disabled_ssid);
-	    }
-	    return convertView;
-	}
-
-	static class ViewHolder {
-	    TextView text;
-	    ImageView icon;
-	}
-
-    }
-
-    private Handler handler = new Handler() {
-	@Override
-	public void handleMessage(Message message) {
-	    /*
-	     * If wifi is on, scan if not, make sure no networks shown in range
-	     */
-	    WifiManager wm = (WifiManager) getBaseContext().getSystemService(
-		    Context.WIFI_SERVICE);
-
-	    if (wm.isWifiEnabled())
-		ctxt
-			.sendBroadcast(new Intent(
-				WFConnection.ACTION_REQUEST_SCAN));
-	    else {
-		if (known_in_range != null && known_in_range.size() >= 1) {
-		    known_in_range.clear();
-		    if (adapter != null)
-			adapter.notifyDataSetChanged();
-		}
-	    }
-	    handler.sendEmptyMessageDelayed(MESSAGE, SCAN_DELAY);
-	}
-
-    };
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-	public void onReceive(final Context context, final Intent intent) {
-	    /*
-	     * we know this is going to be a scan result notification
-	     */
-	    refreshNetworkAdapter(intent);
-	}
-
-    };
-
+   
     void authCheck() {
 	if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
 	    // Handle Donate Auth
@@ -342,24 +195,6 @@ public class WifiFixerActivity extends Activity {
 
     }
 
-    void setIcon() {
-	DisplayMetrics metrics = new DisplayMetrics();
-	getWindowManager().getDefaultDisplay().getMetrics(metrics);
-	int scale = metrics.widthPixels / 7;
-	ImageButton serviceButton = (ImageButton) findViewById(R.id.ImageButton01);
-	serviceButton.setAdjustViewBounds(true);
-	serviceButton.setMaxHeight(scale);
-	serviceButton.setMaxWidth(scale);
-	serviceButton.setClickable(false);
-	serviceButton.setFocusable(false);
-	serviceButton.setFocusableInTouchMode(false);
-	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY.key())) {
-	    serviceButton.setImageResource(R.drawable.service_inactive);
-	} else {
-	    serviceButton.setImageResource(R.drawable.service_active);
-	}
-    }
-
     void setLogging(boolean state) {
 	loggingFlag = state;
 	PrefUtil.writeBoolean(this, Pref.LOG_KEY.key(), state);
@@ -368,27 +203,7 @@ public class WifiFixerActivity extends Activity {
 	PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), state);
     }
 
-    void setText() {
-	PackageManager pm = getPackageManager();
-	String vers = "";
-	try {
-	    /*
-	     * Get PackageInfo object
-	     */
-	    PackageInfo pi = pm.getPackageInfo(this.getPackageName(), 0);
-	    /*
-	     * get version code string
-	     */
-	    vers = pi.versionName;
-	} catch (NameNotFoundException e) {
-	    /*
-	     * shouldn't ever be not found
-	     */
-	    e.printStackTrace();
-	}
-	TextView vButton = (TextView) findViewById(R.id.version);
-	vButton.setText(vers.toCharArray(), 0, vers.length());
-    }
+    
 
     void setToggleIcon(Menu menu) {
 	MenuItem logging = menu.getItem(MENU_LOGGING - 1);
@@ -454,32 +269,19 @@ public class WifiFixerActivity extends Activity {
     // On Create
     @Override
     public void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
 	setTitle(R.string.app_name);
 	setContentView(R.layout.main);
-	/*
-	 * Grab and set up ListView in sliding drawer for network list UI
-	 */
-	final ListView lv = (ListView) findViewById(R.id.ListView01);
-	knownnetworks = getNetworks(this);
-	known_in_range = new ArrayList<String>();
-	adapter = new NetworkListAdapter(this, knownnetworks);
-	lv.setAdapter(adapter);
-	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
-	    @Override
-	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
-		    int position, long id) {
-		clicked = lv.getItemAtPosition(position).toString();
-		clicked_position = position;
-		listviewitem = v;
-		return false;
-	    }
+	super.onCreate(savedInstanceState);
+	if ( null == savedInstanceState ) {
+		android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+		KnownNetworksFragment knf = new KnownNetworksFragment();
+		ServiceFragment sf = new ServiceFragment();
+		android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+		ft.replace(R.id.servicefragment,sf , "SERVICE_FRAGMENT");
+		ft.replace(R.id.knownnetworksfragment, knf, "KNOWNNETWORKS_FRAGMENT");
+		ft.commit();
+		}
 
-	});
-	registerForContextMenu(lv);
-
-	// Set layout version code
-	setText();
 	oncreate_setup();
 	/*
 	 * For ContextMenu handler
@@ -497,30 +299,6 @@ public class WifiFixerActivity extends Activity {
 	ServiceAlarm.enforceServicePrefs(this);
     };
 
-    /*
-     * Note that this WILL return a null String[] if called while wifi is off.
-     */
-    private static final List<String> getNetworks(final Context context) {
-	WifiManager wm = (WifiManager) context
-		.getSystemService(Context.WIFI_SERVICE);
-	List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
-	List<String> networks = new ArrayList<String>();
-	if (wifiConfigs == null)
-	    return networks;
-
-	for (WifiConfiguration wfResult : wifiConfigs) {
-	    /*
-	     * Make sure there's a 1:1 correlation between
-	     * getConfiguredNetworks() and the array
-	     */
-	    if (wfResult.SSID != null && wfResult.SSID.length() > 0)
-		networks.add(wfResult.SSID.replace("\"", ""));
-	    else
-		networks.add(EMPTY_SSID);
-	}
-
-	return networks;
-    }
 
     private void oncreate_setup() {
 	loggingmenuFlag = PrefUtil
@@ -537,12 +315,10 @@ public class WifiFixerActivity extends Activity {
     @Override
     public void onStart() {
 	super.onStart();
-	setIcon();
 	loggingmenuFlag = PrefUtil
 		.readBoolean(this, PrefConstants.LOGGING_MENU);
 	loggingFlag = getLogging(this);
 	startwfService(this);
-	registerReceiver();
     }
 
     @Override
@@ -552,68 +328,7 @@ public class WifiFixerActivity extends Activity {
 	super.onNewIntent(intent);
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-	    ContextMenuInfo menuInfo) {
-	super.onCreateContextMenu(menu, v, menuInfo);
-	/*
-	 * Clicked is the ListView selected string, so the SSID
-	 */
-	menu.setHeaderTitle(clicked);
-	menu.add(1, CONTEXT_ENABLE, 0, R.string.enable);
-	menu.add(2, CONTEXT_DISABLE, 1, R.string.disable);
-	menu.add(3, CONTEXT_CONNECT, 2, R.string.connect_now);
-	menu.add(4, CONTEXT_NONMANAGE, 3, R.string.set_non_managed);
-	if (!WFConnection.getNetworkState(ctxt, clicked_position)) {
-	    menu.setGroupEnabled(3, false);
-	    menu.setGroupEnabled(2, false);
-	} else
-	    menu.setGroupEnabled(1, false);
-
-	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY.key()))
-	    menu.setGroupEnabled(3, false);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-	ImageView iv = (ImageView) listviewitem.findViewById(id.NETWORK_ICON);
-	switch (item.getItemId()) {
-	case CONTEXT_ENABLE:
-	    iv.setImageResource(R.drawable.enabled_ssid);
-	    WFConnection.setNetworkState(ctxt, clicked_position, true);
-	    WFConnection.writeNetworkState(ctxt, clicked_position, false);
-	    adapter.notifyDataSetChanged();
-	    break;
-	case CONTEXT_DISABLE:
-	    iv.setImageResource(R.drawable.disabled_ssid);
-	    WFConnection.setNetworkState(ctxt, clicked_position, false);
-	    WFConnection.writeNetworkState(ctxt, clicked_position, true);
-	    adapter.notifyDataSetChanged();
-	    break;
-	case CONTEXT_CONNECT:
-	    Intent intent = new Intent(WFConnection.CONNECTINTENT);
-	    intent.putExtra(WFConnection.NETWORKNUMBER, clicked_position);
-	    this.sendBroadcast(intent);
-	    break;
-
-	case CONTEXT_NONMANAGE:
-	    if (!WFConnection.readManagedState(this, clicked_position)) {
-		iv.setImageResource(R.drawable.ignore_ssid);
-		WFConnection.writeManagedState(this, clicked_position, true);
-	    } else {
-		if (WFConnection.getNetworkState(this, clicked_position))
-		    iv.setImageResource(R.drawable.enabled_ssid);
-		else
-		    iv.setImageResource(R.drawable.disabled_ssid);
-
-		WFConnection.writeManagedState(this, clicked_position, false);
-	    }
-	    adapter.notifyDataSetChanged();
-	    break;
-	}
-	return true;
-    }
-
+   
     // Create menus
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -671,13 +386,11 @@ public class WifiFixerActivity extends Activity {
     public void onPause() {
 	super.onPause();
 	removeNag(this);
-	unregisterReceiver();
     }
 
     @Override
     public void onResume() {
 	super.onResume();
-	registerReceiver();
     }
 
     @Override
@@ -697,55 +410,10 @@ public class WifiFixerActivity extends Activity {
     }
 
     private void openNetworkList() {
-	final SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.SlidingDrawer);
+	/*final SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.SlidingDrawer);
 	if (!drawer.isOpened())
-	    drawer.animateOpen();
+	    drawer.animateOpen();*/
     }
 
-    private void refreshNetworkAdapter(final Intent intent) {
-	/*
-	 * Don't refresh if knownnetworks is empty (wifi is off)
-	 */
-	knownnetworks = getNetworks(this);
-	if (knownnetworks.size() > 0) {
-	    known_in_range = intent
-		    .getStringArrayListExtra(WFConnection.SCAN_RESULTS_ARRAY);
-	    if (adapter == null) {
-		adapter = new NetworkListAdapter(this, knownnetworks);
-		final ListView lv = (ListView) findViewById(R.id.ListView01);
-		lv.setAdapter(adapter);
-	    } else {
-		refreshArray();
-		adapter.notifyDataSetChanged();
-	    }
-
-	}
-    }
-
-    private static void refreshArray() {
-	if (knownnetworks.equals(adapter.ssidArray))
-	    return;
-
-	for (String ssid : knownnetworks) {
-	    if (!adapter.ssidArray.contains(ssid))
-		adapter.ssidArray.add(ssid);
-	}
-
-	for (String ssid : adapter.ssidArray) {
-	    if (!knownnetworks.contains(ssid))
-		adapter.ssidArray.remove(ssid);
-	}
-    }
-
-    private void registerReceiver() {
-	IntentFilter filter = new IntentFilter(WFConnection.ACTION_SCAN_RESULTS);
-	this.registerReceiver(receiver, filter);
-	handler.sendEmptyMessage(MESSAGE);
-    }
-
-    private void unregisterReceiver() {
-	this.unregisterReceiver(receiver);
-	handler.removeMessages(MESSAGE);
-    }
 
 }
