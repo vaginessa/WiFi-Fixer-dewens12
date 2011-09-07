@@ -206,5 +206,9 @@ Please be sure you have collected at least 10 minutes of data.</string>
 
 	<string name="k"> KB</string>
 
+	<string name="strict_mode_extant">Strict Mode Extant</string>
+
+	<string name="strict_mode_unavailable">Strict Mode Unavailable</string>
+
 
 </resources>

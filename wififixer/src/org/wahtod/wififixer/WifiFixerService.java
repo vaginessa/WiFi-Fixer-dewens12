@@ -16,6 +16,7 @@
 
 package org.wahtod.wififixer;
 
+import org.wahtod.wififixer.LegacySupport.StrictModeDetector;
 import org.wahtod.wififixer.SharedPrefs.PrefConstants;
 import org.wahtod.wififixer.SharedPrefs.PrefUtil;
 import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
@@ -132,6 +133,16 @@ public class WifiFixerService extends Service implements
 
     @Override
     public void onCreate() {
+	/*
+	 * Strict Mode check
+	 */
+
+	if (StrictModeDetector.setPolicy(false))
+	    LogService.log(this, APP_NAME,
+		    getString(R.string.strict_mode_extant));
+	else
+	    LogService.log(this, APP_NAME,
+		    getString(R.string.strict_mode_unavailable));
 
 	/*
 	 * Make sure service settings are enforced.
