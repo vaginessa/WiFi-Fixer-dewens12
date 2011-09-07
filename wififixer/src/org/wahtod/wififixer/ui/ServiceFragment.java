@@ -37,7 +37,13 @@ public class ServiceFragment extends Fragment {
     
     private TextView version;
     private ImageButton servicebutton;
-
+    
+    @Override
+    public void onResume() {
+	super.onResume();
+	setIcon();
+    }
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
@@ -57,7 +63,13 @@ public class ServiceFragment extends Fragment {
     void setIcon() {
 	DisplayMetrics metrics = new DisplayMetrics();
 	getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-	int scale = metrics.widthPixels / 7;
+	int scale = metrics.densityDpi / 3;
+	/*
+	 * Set Bounds
+	 */
+	if (scale > 64)
+	    scale = 64;
+	
 	servicebutton.setAdjustViewBounds(true);
 	servicebutton.setMaxHeight(scale);
 	servicebutton.setMaxWidth(scale);
