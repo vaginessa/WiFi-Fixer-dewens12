@@ -18,6 +18,7 @@ package org.wahtod.wififixer.ui;
 
 import java.io.File;
 
+import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WifiFixerService;
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
@@ -252,13 +253,15 @@ public class WifiFixerActivity extends FragmentActivity {
     public void serviceToggle(View view) {
 	if (PrefUtil.readBoolean(getApplicationContext(), Pref.DISABLE_KEY
 		.key())) {
-	    PrefUtil.writeBoolean(getApplicationContext(), Pref.DISABLE_KEY
-		    .key(), false);
+	    Intent intent = new Intent(
+		    IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
+	    sendBroadcast(intent);
 	    Toast.makeText(this, R.string.enabling_wififixerservice,
 		    Toast.LENGTH_LONG).show();
 	} else {
-	    PrefUtil.writeBoolean(getApplicationContext(), Pref.DISABLE_KEY
-		    .key(), true);
+	    Intent intent = new Intent(
+		    IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
+	    sendBroadcast(intent);
 	    Toast.makeText(this, R.string.disabling_wififixerservice,
 		    Toast.LENGTH_LONG).show();
 	}
