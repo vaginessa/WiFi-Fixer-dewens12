@@ -153,7 +153,7 @@ public class BroadcastHandler {
     }
 
     public BroadcastHandler(Context context) {
-	ctxt = context;
+	ctxt = context.getApplicationContext();
     }
 
 }
