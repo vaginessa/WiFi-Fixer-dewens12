@@ -18,9 +18,12 @@ public class StrictModeDetector {
 
     private static void enableDefaults(final boolean flag) {
 	if (flag) {
-	    /*
-	     * Set for max debugging
-	     */
+	    StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+            .detectDiskReads()
+            .detectDiskWrites()
+            .detectNetwork()   // or .detectAll() for all detectable problems
+            .penaltyLog()
+            .build());
 	    
 	} else {
 	    /*
