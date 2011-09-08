@@ -224,7 +224,7 @@ public class KnownNetworksFragment extends Fragment {
 	    holder.text.setText(ssidArray.get(position));
 
 	    if (known_in_range.contains(ssidArray.get(position)))
-		holder.text.setTextColor(Color.YELLOW);
+		holder.text.setTextColor(Color.GREEN);
 	    else
 		holder.text.setTextColor(Color.WHITE);
 

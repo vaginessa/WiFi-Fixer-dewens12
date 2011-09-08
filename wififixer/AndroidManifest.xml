@@ -12,7 +12,7 @@
 	-->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.wahtod.wififixer" android:installLocation="internalOnly" android:versionName="0.9.0p9" android:versionCode="852">
+	package="org.wahtod.wififixer" android:installLocation="internalOnly" android:versionName="0.9.0p10" android:versionCode="853">
 	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="11" />
 	<uses-feature android:name="android.hardware.wifi"
 		android:required="true" />
@@ -93,7 +93,7 @@
 	</application>
 
 	<!--Documenting permissions here-->
-	<!-- For service start alarm (2 mins from boot_completed) -->
+	<!-- For service start (30 seconds from boot_completed) -->
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<!-- For wifi state -->
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />

@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer.ui;
 
+import java.util.List;
+
 import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.SharedPrefs.PrefConstants;
@@ -33,6 +35,12 @@ import android.provider.Settings.SettingNotFoundException;
 
 public class PrefActivity extends PreferenceActivity implements
 	OnSharedPreferenceChangeListener {
+
+    @Override
+    public void onBuildHeaders(List<Header> target) {
+	// TODO Auto-generated method stub
+	super.onBuildHeaders(target);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
