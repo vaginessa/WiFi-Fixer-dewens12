@@ -41,7 +41,7 @@ public class BootReceiver extends BroadcastReceiver {
 	 * For boot completed, check DISABLE_KEY if false, start the service
 	 * loader run
 	 */
-	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key())) {
+	if (!PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key())) {
 	    context.startService(new Intent(context, BootService.class));
 	}
     }
