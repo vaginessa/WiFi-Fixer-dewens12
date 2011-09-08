@@ -216,7 +216,10 @@ public class WifiFixerService extends Service implements
 	/*
 	 * Set registered flag true so unregister code runs later
 	 */
-	registered = true;
+	if (registered)
+	    stopSelf();
+	else
+	    registered = true;
 
 	if (logging)
 	    LogService.log(this, APP_NAME, getString(R.string.oncreate));

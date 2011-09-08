@@ -249,7 +249,7 @@ public class KnownNetworksFragment extends Fragment {
 
     }
 
-    private Handler handler = new Handler() {
+    private Handler scanhandler = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
 	    /*
@@ -268,7 +268,7 @@ public class KnownNetworksFragment extends Fragment {
 			adapter.notifyDataSetChanged();
 		}
 	    }
-	    handler.sendEmptyMessageDelayed(MESSAGE, SCAN_DELAY);
+	    scanhandler.sendEmptyMessageDelayed(MESSAGE, SCAN_DELAY);
 	}
 
     };
@@ -348,12 +348,12 @@ public class KnownNetworksFragment extends Fragment {
     private void registerReceiver() {
 	IntentFilter filter = new IntentFilter(WFConnection.ACTION_SCAN_RESULTS);
 	getContext().registerReceiver(receiver, filter);
-	handler.sendEmptyMessage(MESSAGE);
+	scanhandler.sendEmptyMessage(MESSAGE);
     }
 
     private void unregisterReceiver() {
 	getContext().unregisterReceiver(receiver);
-	handler.removeMessages(MESSAGE);
+	scanhandler.removeMessages(MESSAGE);
     }
 
 }
