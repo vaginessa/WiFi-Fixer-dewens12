@@ -32,14 +32,15 @@
 
 	<ImageButton android:id="@+id/ImageButton01"
 		android:layout_below="@+id/aboutText" android:layout_height="40dp"
-		android:clickable="false" android:layout_width="40dp"
+	    android:layout_width="40dp"
 		android:paddingBottom="10dp" android:paddingTop="10dp"
-		android:layout_centerHorizontal="true"></ImageButton>
+		android:layout_centerHorizontal="true" android:clickable="true"
+		android:onClick="serviceToggle"></ImageButton>
 
 	<TextView android:id="@+id/TextView01" android:layout_below="@+id/ImageButton01"
-		android:paddingBottom="10dp"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:text="@string/service_status" android:layout_centerHorizontal="true">
+		android:paddingBottom="10dp" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="@string/service_status"
+		android:layout_centerHorizontal="true">
 	</TextView>
 
 </RelativeLayout>

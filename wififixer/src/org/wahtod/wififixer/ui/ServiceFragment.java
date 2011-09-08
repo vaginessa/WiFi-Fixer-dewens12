@@ -64,7 +64,7 @@ public class ServiceFragment extends Fragment {
 	servicebutton.setAdjustViewBounds(true);
 	servicebutton.setMaxHeight(40);
 	servicebutton.setMaxWidth(40);
-	servicebutton.setClickable(false);
+	servicebutton.setClickable(true);
 	servicebutton.setFocusable(false);
 	servicebutton.setFocusableInTouchMode(false);
 	
@@ -102,4 +102,5 @@ public class ServiceFragment extends Fragment {
 
 	version.setText(vers.toCharArray(), 0, vers.length());
     }
+   
 }

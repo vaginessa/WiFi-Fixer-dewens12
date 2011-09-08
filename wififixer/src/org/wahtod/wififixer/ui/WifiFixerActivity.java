@@ -39,6 +39,7 @@ import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 public class WifiFixerActivity extends FragmentActivity {
@@ -78,7 +79,12 @@ public class WifiFixerActivity extends FragmentActivity {
      */
     private static final String DELETE_LOG = "DELETE_LOG";
 
-   
+    /*
+     * Fragment Tags
+     */
+    private static final String SERVICEFRAG_TAG = "SERVICE_FRAGMENT";
+    private static final String KNOWNNETWORKSFRAG_TAG = "KNOWNNETWORKS_FRAGMENT";
+
     void authCheck() {
 	if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
 	    // Handle Donate Auth
@@ -203,8 +209,6 @@ public class WifiFixerActivity extends FragmentActivity {
 	PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), state);
     }
 
-    
-
     void setToggleIcon(Menu menu) {
 	MenuItem logging = menu.getItem(MENU_LOGGING - 1);
 	if (loggingFlag) {
@@ -245,6 +249,29 @@ public class WifiFixerActivity extends FragmentActivity {
 	NotifUtil.cancel(3337, context);
     }
 
+    public void serviceToggle(View view) {
+	if (PrefUtil.readBoolean(getApplicationContext(), Pref.DISABLE_KEY
+		.key())) {
+	    PrefUtil.writeBoolean(getApplicationContext(), Pref.DISABLE_KEY
+		    .key(), false);
+	    Toast.makeText(this, R.string.enabling_wififixerservice,
+		    Toast.LENGTH_LONG).show();
+	} else {
+	    PrefUtil.writeBoolean(getApplicationContext(), Pref.DISABLE_KEY
+		    .key(), true);
+	    Toast.makeText(this, R.string.disabling_wififixerservice,
+		    Toast.LENGTH_LONG).show();
+	}
+	/*
+	 * Invalidate Service fragment
+	 */
+	android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+	ServiceFragment sf = new ServiceFragment();
+	android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+	ft.replace(R.id.servicefragment, sf, SERVICEFRAG_TAG);
+	ft.commit();
+    }
+
     void toggleLog() {
 	if (loggingFlag) {
 	    Toast.makeText(WifiFixerActivity.this, R.string.disabling_logging,
@@ -272,15 +299,16 @@ public class WifiFixerActivity extends FragmentActivity {
 	setTitle(R.string.app_name);
 	setContentView(R.layout.main);
 	super.onCreate(savedInstanceState);
-	if ( null == savedInstanceState ) {
-		android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-		KnownNetworksFragment knf = new KnownNetworksFragment();
-		ServiceFragment sf = new ServiceFragment();
-		android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
-		ft.replace(R.id.servicefragment,sf , "SERVICE_FRAGMENT");
-		ft.replace(R.id.knownnetworksfragment, knf, "KNOWNNETWORKS_FRAGMENT");
-		ft.commit();
-		}
+	if (null == savedInstanceState) {
+	    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+	    KnownNetworksFragment knf = new KnownNetworksFragment();
+	    ServiceFragment sf = new ServiceFragment();
+	    android.support.v4.app.FragmentTransaction ft = fm
+		    .beginTransaction();
+	    ft.replace(R.id.servicefragment, sf, SERVICEFRAG_TAG);
+	    ft.replace(R.id.knownnetworksfragment, knf, KNOWNNETWORKSFRAG_TAG);
+	    ft.commit();
+	}
 
 	oncreate_setup();
 	/*
@@ -298,7 +326,6 @@ public class WifiFixerActivity extends FragmentActivity {
 	 */
 	ServiceAlarm.enforceServicePrefs(this);
     };
-
 
     private void oncreate_setup() {
 	loggingmenuFlag = PrefUtil
@@ -328,7 +355,6 @@ public class WifiFixerActivity extends FragmentActivity {
 	super.onNewIntent(intent);
     }
 
-   
     // Create menus
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -410,10 +436,11 @@ public class WifiFixerActivity extends FragmentActivity {
     }
 
     private void openNetworkList() {
-	/*final SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.SlidingDrawer);
-	if (!drawer.isOpened())
-	    drawer.animateOpen();*/
+	/*
+	 * final SlidingDrawer drawer = (SlidingDrawer)
+	 * findViewById(R.id.SlidingDrawer); if (!drawer.isOpened())
+	 * drawer.animateOpen();
+	 */
     }
-
 
 }

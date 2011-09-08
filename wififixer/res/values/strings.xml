@@ -214,5 +214,9 @@ Please be sure you have collected at least 10 minutes of data.</string>
 
 	<string name="service_status">Service Status</string>
 
+	<string name="enabling_wififixerservice">Enabling WifiFixerService</string>
+
+	<string name="disabling_wififixerservice">Disabling WifiFixerService</string>
+
 
 </resources>
