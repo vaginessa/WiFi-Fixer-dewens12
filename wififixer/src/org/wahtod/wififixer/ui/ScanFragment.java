@@ -16,6 +16,9 @@
 
 package org.wahtod.wififixer.ui;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.wahtod.wififixer.R;
@@ -23,7 +26,6 @@ import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.R.id;
 import org.wahtod.wififixer.SharedPrefs.PrefUtil;
 import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -53,7 +55,7 @@ public class ScanFragment extends Fragment {
     private ListView listview01;
     private View listviewitem;
     private ScanListAdapter adapter;
-    private List<ScanResult> knownnetworks;
+    private List<ScanResult> scannednetworks;
     private static final int CONTEXT_ENABLE = 1;
     private static final int CONTEXT_DISABLE = 2;
     private static final int CONTEXT_CONNECT = 3;
@@ -64,9 +66,9 @@ public class ScanFragment extends Fragment {
 	    Bundle savedInstanceState) {
 	View v = inflater.inflate(R.layout.scannetworks, null);
 	listview01 = (ListView) v.findViewById(R.id.ListView02);
-	if(knownnetworks == null)
+	if (scannednetworks == null)
 	    return v;
-	adapter = new ScanListAdapter(knownnetworks);
+	adapter = new ScanListAdapter(scannednetworks);
 	listview01.setAdapter(adapter);
 	listview01.setOnItemLongClickListener(new OnItemLongClickListener() {
 	    @Override
@@ -88,7 +90,7 @@ public class ScanFragment extends Fragment {
 	/*
 	 * Grab and set up ListView
 	 */
-	knownnetworks = getNetworks(getContext());
+	scannednetworks = getNetworks(getContext());
 	super.onAttach(activity);
     }
 
@@ -177,21 +179,21 @@ public class ScanFragment extends Fragment {
      * custom adapter for Network List ListView
      */
     private class ScanListAdapter extends BaseAdapter {
-	private List<ScanResult> ssidArray;
+	private List<ScanResult> scanresultArray;
 	private LayoutInflater inflater;
 
 	public ScanListAdapter(List<ScanResult> knownnetworks) {
 	    inflater = (LayoutInflater) getContext().getSystemService(
 		    Context.LAYOUT_INFLATER_SERVICE);
-	    ssidArray = knownnetworks;
+	    scanresultArray = knownnetworks;
 	}
 
 	public int getCount() {
-	    return ssidArray.size();
+	    return scanresultArray.size();
 	}
 
 	public Object getItem(int position) {
-	    return ssidArray.get(position);
+	    return scanresultArray.get(position);
 	}
 
 	public long getItemId(int position) {
@@ -213,13 +215,13 @@ public class ScanFragment extends Fragment {
 	    /*
 	     * Set SSID text and color
 	     */
-	    holder.text.setText(ssidArray.get(position).SSID);
+	    holder.text.setText(scanresultArray.get(position).SSID);
 
 	    /*
 	     * Set State icon
 	     */
 
-	    int adjusted = WifiManager.calculateSignalLevel(ssidArray
+	    int adjusted = WifiManager.calculateSignalLevel(scanresultArray
 		    .get(position).level, 5);
 
 	    switch (adjusted) {
@@ -255,7 +257,7 @@ public class ScanFragment extends Fragment {
 	    /*
 	     * we know this is going to be a scan result notification
 	     */
-	    refreshNetworkAdapter(intent);
+	    refreshScanListAdapter(intent);
 	}
 
     };
@@ -276,19 +278,59 @@ public class ScanFragment extends Fragment {
 	return wm.getScanResults();
     }
 
-    private void refreshNetworkAdapter(final Intent intent) {
+    private void refreshScanListAdapter(final Intent intent) {
 	/*
-	 * Don't refresh if knownnetworks is empty (wifi is off)
+	 * Don't refresh if scannednetworks is empty (wifi is off)
 	 */
-	knownnetworks = getNetworks(getContext());
-	if (knownnetworks.size() > 0) {
+	scannednetworks = getNetworks(getContext());
+	if (scannednetworks.size() > 0) {
 	    if (adapter == null) {
-		adapter = new ScanListAdapter(knownnetworks);
+		adapter = new ScanListAdapter(scannednetworks);
 		listview01.setAdapter(adapter);
 	    } else {
+		refreshArray();
 		adapter.notifyDataSetChanged();
 	    }
 	}
+    }
+
+    private void refreshArray() {
+
+	/*
+	 * Comparator for sorting results by signal level
+	 */
+	class SortBySignal implements Comparator<ScanResult> {
+	    @Override
+	    public int compare(ScanResult o2, ScanResult o1) {
+		/*
+		 * Sort by signal
+		 */
+		return (o1.level < o2.level ? -1 : (o1.level == o2.level ? 0
+			: 1));
+	    }
+	}
+
+	if (scannednetworks.equals(adapter.scanresultArray))
+	    return;
+
+	for (ScanResult result : scannednetworks) {
+	    if (!adapter.scanresultArray.contains(result))
+		adapter.scanresultArray.add(result);
+	}
+
+	ArrayList<ScanResult> remove = new ArrayList<ScanResult>();
+
+	for (ScanResult result : adapter.scanresultArray) {
+	    if (!scannednetworks.contains(result))
+		remove.add(result);
+	}
+
+	for (ScanResult result : remove) {
+	    adapter.scanresultArray.remove(result);
+	}
+
+	Collections.sort(adapter.scanresultArray, new SortBySignal());
+
     }
 
     private Context getContext() {

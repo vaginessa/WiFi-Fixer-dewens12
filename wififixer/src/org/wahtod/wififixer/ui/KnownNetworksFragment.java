@@ -333,6 +333,8 @@ public class KnownNetworksFragment extends Fragment {
     private void refreshArray() {
 	if (knownnetworks.equals(adapter.ssidArray))
 	    return;
+	
+	ArrayList <String> remove = new ArrayList<String>(); 
 
 	for (String ssid : knownnetworks) {
 	    if (!adapter.ssidArray.contains(ssid))
@@ -341,7 +343,11 @@ public class KnownNetworksFragment extends Fragment {
 
 	for (String ssid : adapter.ssidArray) {
 	    if (!knownnetworks.contains(ssid))
-		adapter.ssidArray.remove(ssid);
+		remove.add(ssid);
+	}
+
+	for (String ssid : remove) {
+	    adapter.ssidArray.remove(ssid);
 	}
     }
 
