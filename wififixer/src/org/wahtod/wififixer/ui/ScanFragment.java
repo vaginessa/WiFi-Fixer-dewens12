@@ -50,6 +50,9 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 public class ScanFragment extends Fragment {
 
+    private static final String WPA = "WPA";
+    private static final String WPA2 = "WPA2";
+    private static final String WEP = "WEP";
     private String clicked;
     private int clicked_position;
     private ListView listview01;
@@ -203,11 +206,15 @@ public class ScanFragment extends Fragment {
 	public View getView(int position, View convertView, ViewGroup parent) {
 	    ViewHolder holder;
 	    if (convertView == null) {
-		convertView = inflater.inflate(R.layout.list_item_layout, null);
+		convertView = inflater.inflate(R.layout.scan_list_layout, null);
 		holder = new ViewHolder();
 		holder.text = (TextView) convertView.findViewById(R.id.ssid);
 		holder.icon = (ImageView) convertView
 			.findViewById(R.id.NETWORK_ICON);
+		holder.encryption = (TextView) convertView
+			.findViewById(R.id.encryption);
+		holder.security = (ImageView) convertView
+			.findViewById(R.id.SECURE_ICON);
 		convertView.setTag(holder);
 	    } else {
 		holder = (ViewHolder) convertView.getTag();
@@ -218,9 +225,8 @@ public class ScanFragment extends Fragment {
 	    holder.text.setText(scanresultArray.get(position).SSID);
 
 	    /*
-	     * Set State icon
+	     * Set signal icon
 	     */
-
 	    int adjusted = WifiManager.calculateSignalLevel(scanresultArray
 		    .get(position).level, 5);
 
@@ -242,12 +248,27 @@ public class ScanFragment extends Fragment {
 		break;
 	    }
 
+	    /*
+	     * Set security icon and encryption text
+	     */
+	    if (scanresultArray.get(position).capabilities.length() == 0) {
+		holder.security.setImageResource(R.drawable.wifi_ap);
+		holder.encryption.setText("");
+	    } else {
+		holder.security.setImageResource(R.drawable.secure);
+		holder.encryption.setText(getCapabilitiesString(scanresultArray
+			.get(position).capabilities));
+
+	    }
+
 	    return convertView;
 	}
 
 	private class ViewHolder {
 	    TextView text;
+	    TextView encryption;
 	    ImageView icon;
+	    ImageView security;
 	}
 
     }
@@ -292,6 +313,18 @@ public class ScanFragment extends Fragment {
 		adapter.notifyDataSetChanged();
 	    }
 	}
+    }
+
+    private static String getCapabilitiesString(String capabilities) {
+
+	if (capabilities.contains(WEP))
+	    capabilities = WEP;
+	else if (capabilities.contains(WPA2))
+	    capabilities = WPA2;
+	else if (capabilities.contains(WPA))
+	    capabilities = WPA;
+
+	return capabilities;
     }
 
     private void refreshArray() {

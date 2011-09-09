@@ -209,7 +209,7 @@ public class KnownNetworksFragment extends Fragment {
 	public View getView(int position, View convertView, ViewGroup parent) {
 	    ViewHolder holder;
 	    if (convertView == null) {
-		convertView = inflater.inflate(R.layout.list_item_layout, null);
+		convertView = inflater.inflate(R.layout.known_list_layout, null);
 		holder = new ViewHolder();
 		holder.text = (TextView) convertView.findViewById(R.id.ssid);
 		holder.icon = (ImageView) convertView

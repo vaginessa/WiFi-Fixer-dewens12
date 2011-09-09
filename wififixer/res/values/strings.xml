@@ -224,5 +224,9 @@ Please be sure you have collected at least 10 minutes of data.</string>
 
 	<string name="disabling_wifi">Disabling Wifi</string>
 
+	<string name="knownnetworks_fragment_header">Known Networks</string>
+
+	<string name="scanfragment_header">Scanned Networks</string>
+
 
 </resources>
