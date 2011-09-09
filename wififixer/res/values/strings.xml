@@ -220,5 +220,9 @@ Please be sure you have collected at least 10 minutes of data.</string>
 
 	<string name="wifi">Wifi</string>
 
+	<string name="enabling_wifi">Enabling Wifi</string>
+
+	<string name="disabling_wifi">Disabling Wifi</string>
+
 
 </resources>

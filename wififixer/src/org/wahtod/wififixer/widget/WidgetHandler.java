@@ -49,14 +49,6 @@ public class WidgetHandler {
     }
 
     public void handleIntent(final Context context, final Intent intent) {
-	/*
-	 * If Wifi is disabled, notify
-	 */
-	if (!getWifiManager(ctxt).isWifiEnabled()) {
-	    Toast.makeText(ctxt, ctxt.getString(R.string.wifi_is_disabled),
-		    Toast.LENGTH_LONG).show();
-	    return;
-	}
 
 	String action = intent.getAction();
 	/*
@@ -68,6 +60,15 @@ public class WidgetHandler {
 	 */
 	if (action.equals(WIFI_ON))
 	    setWifiState(ctxt, true);
+	else
+	/*
+	 * If Wifi is disabled, notify
+	 */
+	if (!getWifiManager(ctxt).isWifiEnabled()) {
+	    Toast.makeText(ctxt, ctxt.getString(R.string.wifi_is_disabled),
+		    Toast.LENGTH_LONG).show();
+	    return;
+	}
 	/*
 	 * Turn off Wifi
 	 */

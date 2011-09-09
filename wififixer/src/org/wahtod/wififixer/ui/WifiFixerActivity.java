@@ -28,6 +28,7 @@ import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
+import org.wahtod.wififixer.widget.WidgetHandler;
 
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -279,15 +280,15 @@ public class WifiFixerActivity extends FragmentActivity {
     public void wifiToggle(View view) {
 	if (!getIsWifiOn(this)) {
 	    Intent intent = new Intent(
-		    IntentConstants.ACTION_WIFI_ON);
+		    WidgetHandler.WIFI_ON);
 	    sendBroadcast(intent);
-	    Toast.makeText(this, "Enabling Wifi",
+	    Toast.makeText(this, R.string.enabling_wifi,
 		    Toast.LENGTH_LONG).show();
 	} else {
 	    Intent intent = new Intent(
-		    IntentConstants.ACTION_WIFI_OFF);
+		    WidgetHandler.WIFI_OFF);
 	    sendBroadcast(intent);
-	    Toast.makeText(this, "Disabling Wifi",
+	    Toast.makeText(this, R.string.disabling_wifi,
 		    Toast.LENGTH_LONG).show();
 	}
 	
