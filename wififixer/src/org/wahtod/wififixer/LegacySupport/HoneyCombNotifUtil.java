@@ -18,6 +18,7 @@ package org.wahtod.wififixer.LegacySupport;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ui.WifiFixerActivity;
+import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 
 import android.app.Notification;
@@ -155,9 +156,12 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	    NotifUtil.lognotif = builder.getNotification();
 	    NotifUtil.lognotif.contentView.setImageViewResource(R.id.signal,
 		    R.drawable.logging_enabled);
+	    
+	    NotifUtil.lognotif.contentView.setTextViewText(R.id.ssid,
+			LogService.class.getName());
 
 	}
-
+	
 	NotifUtil.lognotif.contentView.setTextViewText(R.id.status,
 		getLogString(ctxt).toString());
 

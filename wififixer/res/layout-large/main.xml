@@ -15,11 +15,18 @@
 	android:layout_height="fill_parent" android:orientation="horizontal">
 
 	<FrameLayout android:id="@+id/servicefragment"
-		android:layout_weight="1" android:layout_width="match_parent"
-		android:paddingRight="15dp" android:layout_height="wrap_content"></FrameLayout>
+		android:layout_gravity="center_vertical" android:layout_weight="1"
+		android:layout_width="200dp" android:paddingRight="15dp"
+		android:layout_height="wrap_content"></FrameLayout>
 
 	<FrameLayout android:id="@+id/knownnetworksfragment"
-		android:layout_weight="1" android:layout_width="match_parent"
+		android:layout_weight="1" android:layout_width="300dp"
+		android:paddingRight="50dp" android:paddingBottom="50dp"
 		android:layout_height="wrap_content"></FrameLayout>
+
+	<FrameLayout android:id="@+id/scanfragment"
+		android:layout_width="500dp" android:paddingRight="50dp"
+		android:paddingBottom="50dp" android:layout_height="wrap_content"></FrameLayout>
+
 
 </LinearLayout>

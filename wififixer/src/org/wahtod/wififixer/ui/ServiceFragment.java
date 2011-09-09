@@ -20,10 +20,14 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.SharedPrefs.PrefUtil;
 import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -33,16 +37,46 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class ServiceFragment extends Fragment {
-    
+
     private TextView version;
     private ImageButton servicebutton;
-    
+    private ImageButton wifibutton;
+
+    private BroadcastReceiver wifireceiver = new BroadcastReceiver() {
+	public void onReceive(final Context context, final Intent intent) {
+	    /*
+	     * we know this is going to be a wifi state change notification
+	     */
+	    if (intent.getExtras().getInt(WifiManager.EXTRA_WIFI_STATE) == WifiManager.WIFI_STATE_DISABLED
+		    || intent.getExtras().getInt(WifiManager.EXTRA_WIFI_STATE) == WifiManager.WIFI_STATE_ENABLED)
+		setIcon();
+	}
+
+    };
+
+    @Override
+    public void onPause() {
+	super.onPause();
+	unregisterReceiver();
+    }
+
+    private void unregisterReceiver() {
+	getContext().unregisterReceiver(wifireceiver);
+    }
+
+    private void registerReceiver() {
+	IntentFilter filter = new IntentFilter(
+		WifiManager.WIFI_STATE_CHANGED_ACTION);
+	getContext().registerReceiver(wifireceiver, filter);
+    }
+
     @Override
     public void onResume() {
 	super.onResume();
+	registerReceiver();
 	setIcon();
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
@@ -50,37 +84,52 @@ public class ServiceFragment extends Fragment {
 	// Set layout version code
 	version = (TextView) v.findViewById(R.id.version);
 	servicebutton = (ImageButton) v.findViewById(R.id.ImageButton01);
+	wifibutton = (ImageButton) v.findViewById(R.id.ImageButton02);
 	setText();
 	setIcon();
+	registerReceiver();
 	return v;
     }
-    
+
     private Context getContext() {
 	return getActivity().getApplicationContext();
     }
-    
+
     void setIcon() {
-	
+
 	servicebutton.setAdjustViewBounds(true);
 	servicebutton.setMaxHeight(40);
 	servicebutton.setMaxWidth(40);
 	servicebutton.setClickable(true);
 	servicebutton.setFocusable(false);
 	servicebutton.setFocusableInTouchMode(false);
-	
+
+	wifibutton.setAdjustViewBounds(true);
+	wifibutton.setMaxHeight(40);
+	wifibutton.setMaxWidth(40);
+	wifibutton.setClickable(true);
+	wifibutton.setFocusable(false);
+	wifibutton.setFocusableInTouchMode(false);
+
 	/*
 	 * Draw icon
 	 */
-	
+
 	if (PrefUtil.readBoolean(getContext(), Pref.DISABLE_KEY.key())) {
 	    servicebutton.setBackgroundResource(R.drawable.service_inactive);
 	} else {
 	    servicebutton.setBackgroundResource(R.drawable.service_active);
 	}
-	
-	
+
+	if (!WifiFixerActivity.getIsWifiOn(getActivity()
+		.getApplicationContext())) {
+	    wifibutton.setBackgroundResource(R.drawable.service_inactive);
+	} else {
+	    wifibutton.setBackgroundResource(R.drawable.service_active);
+	}
+
     }
-    
+
     void setText() {
 	PackageManager pm = getContext().getPackageManager();
 	String vers = "";
@@ -88,7 +137,8 @@ public class ServiceFragment extends Fragment {
 	    /*
 	     * Get PackageInfo object
 	     */
-	    PackageInfo pi = pm.getPackageInfo(getContext().getPackageName(), 0);
+	    PackageInfo pi = pm
+		    .getPackageInfo(getContext().getPackageName(), 0);
 	    /*
 	     * get version code string
 	     */
@@ -102,5 +152,5 @@ public class ServiceFragment extends Fragment {
 
 	version.setText(vers.toCharArray(), 0, vers.length());
     }
-   
+
 }

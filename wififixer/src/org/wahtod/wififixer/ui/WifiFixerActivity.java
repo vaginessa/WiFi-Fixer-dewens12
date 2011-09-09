@@ -35,6 +35,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
@@ -85,6 +86,7 @@ public class WifiFixerActivity extends FragmentActivity {
      */
     private static final String SERVICEFRAG_TAG = "SERVICE_FRAGMENT";
     private static final String KNOWNNETWORKSFRAG_TAG = "KNOWNNETWORKS_FRAGMENT";
+    private static final String SCANFRAG_TAG = "SCAN_FRAGMENT";
 
     void authCheck() {
 	if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
@@ -265,6 +267,36 @@ public class WifiFixerActivity extends FragmentActivity {
 	    Toast.makeText(this, R.string.disabling_wififixerservice,
 		    Toast.LENGTH_LONG).show();
 	}
+	
+	invalidateServiceFragment();
+    }
+    
+    public static boolean getIsWifiOn(final Context context){
+	WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+	return wm.isWifiEnabled();
+    }
+    
+    public void wifiToggle(View view) {
+	if (!getIsWifiOn(this)) {
+	    Intent intent = new Intent(
+		    IntentConstants.ACTION_WIFI_ON);
+	    sendBroadcast(intent);
+	    Toast.makeText(this, "Enabling Wifi",
+		    Toast.LENGTH_LONG).show();
+	} else {
+	    Intent intent = new Intent(
+		    IntentConstants.ACTION_WIFI_OFF);
+	    sendBroadcast(intent);
+	    Toast.makeText(this, "Disabling Wifi",
+		    Toast.LENGTH_LONG).show();
+	}
+	
+	invalidateServiceFragment();
+    }
+    
+    
+    
+    public void invalidateServiceFragment(){
 	/*
 	 * Invalidate Service fragment
 	 */
@@ -310,6 +342,10 @@ public class WifiFixerActivity extends FragmentActivity {
 		    .beginTransaction();
 	    ft.replace(R.id.servicefragment, sf, SERVICEFRAG_TAG);
 	    ft.replace(R.id.knownnetworksfragment, knf, KNOWNNETWORKSFRAG_TAG);
+	    if(null != findViewById(R.id.scanfragment)){
+		ScanFragment sc = new ScanFragment();
+		ft.replace(R.id.scanfragment, sc, SCANFRAG_TAG);
+	    }
 	    ft.commit();
 	}
 

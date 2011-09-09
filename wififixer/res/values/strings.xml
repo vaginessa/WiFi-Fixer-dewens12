@@ -212,11 +212,13 @@ Please be sure you have collected at least 10 minutes of data.</string>
 
 	<string name="blurb">Wifi Fixer is a low-resource service that maintains your wifi connection.</string>
 
-	<string name="service_status">Service Status</string>
+	<string name="service_status">Service</string>
 
 	<string name="enabling_wififixerservice">Enabling WifiFixerService</string>
 
 	<string name="disabling_wififixerservice">Disabling WifiFixerService</string>
+
+	<string name="wifi">Wifi</string>
 
 
 </resources>

@@ -12,14 +12,16 @@
 	-->
 <LinearLayout android:id="@+id/widget46"
 	android:layout_width="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="fill_parent" android:orientation="horizontal">
+	android:layout_height="fill_parent" android:orientation="vertical">
 
 	<FrameLayout android:id="@+id/servicefragment"
-		android:layout_weight="1" android:layout_width="match_parent"
-		android:paddingRight="15dp" android:layout_height="wrap_content"></FrameLayout>
+		android:layout_width="match_parent" android:layout_height="wrap_content"
+		android:paddingBottom="20dp"></FrameLayout>
 
 	<FrameLayout android:id="@+id/knownnetworksfragment"
-		android:layout_weight="1" android:layout_width="match_parent"
-		android:layout_height="wrap_content"></FrameLayout>
+		android:layout_width="match_parent" android:layout_height="wrap_content"></FrameLayout>
+		
+	<FrameLayout android:id="@+id/scanfragment"
+		android:layout_width="match_parent" android:layout_height="wrap_content"></FrameLayout>
 
 </LinearLayout>
