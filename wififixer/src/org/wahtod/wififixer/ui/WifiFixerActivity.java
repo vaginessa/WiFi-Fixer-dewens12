@@ -56,9 +56,6 @@ public class WifiFixerActivity extends FragmentActivity {
     // constants
     private static final int MENU_LOGGING = 1;
     private static final int MENU_SEND = 2;
-    private static final int MENU_PREFS = 3;
-    private static final int MENU_HELP = 4;
-    private static final int MENU_ABOUT = 5;
     private static final int LOGGING_GROUP = 42;
 
     /*
@@ -268,36 +265,33 @@ public class WifiFixerActivity extends FragmentActivity {
 	    Toast.makeText(this, R.string.disabling_wififixerservice,
 		    Toast.LENGTH_LONG).show();
 	}
-	
+
 	invalidateServiceFragment();
     }
-    
-    public static boolean getIsWifiOn(final Context context){
-	WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+    public static boolean getIsWifiOn(final Context context) {
+	WifiManager wm = (WifiManager) context
+		.getSystemService(Context.WIFI_SERVICE);
 	return wm.isWifiEnabled();
     }
-    
+
     public void wifiToggle(View view) {
 	if (!getIsWifiOn(this)) {
-	    Intent intent = new Intent(
-		    WidgetHandler.WIFI_ON);
+	    Intent intent = new Intent(WidgetHandler.WIFI_ON);
 	    sendBroadcast(intent);
-	    Toast.makeText(this, R.string.enabling_wifi,
-		    Toast.LENGTH_LONG).show();
+	    Toast.makeText(this, R.string.enabling_wifi, Toast.LENGTH_LONG)
+		    .show();
 	} else {
-	    Intent intent = new Intent(
-		    WidgetHandler.WIFI_OFF);
+	    Intent intent = new Intent(WidgetHandler.WIFI_OFF);
 	    sendBroadcast(intent);
-	    Toast.makeText(this, R.string.disabling_wifi,
-		    Toast.LENGTH_LONG).show();
+	    Toast.makeText(this, R.string.disabling_wifi, Toast.LENGTH_LONG)
+		    .show();
 	}
-	
+
 	invalidateServiceFragment();
     }
-    
-    
-    
-    public void invalidateServiceFragment(){
+
+    public void invalidateServiceFragment() {
 	/*
 	 * Invalidate Service fragment
 	 */
@@ -343,7 +337,7 @@ public class WifiFixerActivity extends FragmentActivity {
 		    .beginTransaction();
 	    ft.replace(R.id.servicefragment, sf, SERVICEFRAG_TAG);
 	    ft.replace(R.id.knownnetworksfragment, knf, KNOWNNETWORKSFRAG_TAG);
-	    if(null != findViewById(R.id.scanfragment)){
+	    if (null != findViewById(R.id.scanfragment)) {
 		ScanFragment sc = new ScanFragment();
 		ft.replace(R.id.scanfragment, sc, SCANFRAG_TAG);
 	    }
@@ -404,16 +398,9 @@ public class WifiFixerActivity extends FragmentActivity {
 
 	menu.add(LOGGING_GROUP, MENU_SEND, 1, R.string.send_log).setIcon(
 		R.drawable.ic_menu_send);
-
-	menu.add(Menu.NONE, MENU_PREFS, 2, R.string.preferences).setIcon(
-		R.drawable.ic_prefs);
-
-	menu.add(Menu.NONE, MENU_HELP, 3, R.string.documentation).setIcon(
-		R.drawable.ic_menu_help);
-
-	menu.add(Menu.NONE, MENU_ABOUT, 4, R.string.about).setIcon(
-		R.drawable.ic_menu_info);
-
+	getMenuInflater().inflate(R.menu.prefs, menu);
+	getMenuInflater().inflate(R.menu.help, menu);
+	getMenuInflater().inflate(R.menu.about, menu);
 	return true;
     }
 
@@ -432,18 +419,18 @@ public class WifiFixerActivity extends FragmentActivity {
 	    sendLog();
 	    return true;
 
-	case MENU_PREFS:
+	case R.id.menu_prefs:
 	    launchPrefs();
 	    return true;
 
-	case MENU_HELP:
+	case R.id.menu_help:
 	    launchHelp();
 	    return true;
-	case MENU_ABOUT:
+
+	case R.id.menu_about:
 	    Intent myIntent = new Intent(this, About.class);
 	    startActivity(myIntent);
 	    return true;
-
 	}
 	return false;
     }

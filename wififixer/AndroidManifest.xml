@@ -13,7 +13,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.wahtod.wififixer" android:installLocation="internalOnly"
-	android:versionName="0.9.0p12" android:versionCode="857">
+	android:versionName="0.9.0p13" android:versionCode="858">
 	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="11" />
 	<uses-feature android:name="android.hardware.wifi"
 		android:required="true" />

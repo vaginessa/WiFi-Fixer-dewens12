@@ -18,17 +18,17 @@ package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class HelpActivity extends Activity {
-
+public class HelpActivity extends FragmentActivity {
+    
     WebView webview;
 
     @Override
