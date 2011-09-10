@@ -226,7 +226,7 @@ Please be sure you have collected at least 10 minutes of data.</string>
 
 	<string name="knownnetworks_fragment_header">Known Networks</string>
 
-	<string name="scanfragment_header">Scanned Networks</string>
+	<string name="scanfragment_header">Local Networks</string>
 
 	<string name="open_network">Open</string>
 
