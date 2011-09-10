@@ -19,8 +19,8 @@
 		android:gravity="left" android:maxWidth="32dp" android:maxHeight="34dp"
 		android:src="@drawable/icon"></ImageView>
 	<ImageView android:id="@+id/SECURE_ICON"
-		android:layout_width="32dp" android:layout_height="34dp"
-		android:gravity="left" android:maxWidth="32dp" android:maxHeight="33dp"
+		android:layout_width="16dp" android:layout_height="20dp"
+		android:gravity="left" android:maxWidth="16dp" android:maxHeight="20dp"
 		android:src="@drawable/icon"></ImageView>
 	<TextView android:id="@+id/ssid" android:text="default"
 		android:layout_gravity="center_vertical" android:layout_marginLeft="15dp"

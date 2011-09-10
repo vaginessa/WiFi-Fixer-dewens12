@@ -252,8 +252,8 @@ public class ScanFragment extends Fragment {
 	     * Set security icon and encryption text
 	     */
 	    if (scanresultArray.get(position).capabilities.length() == 0) {
-		holder.security.setImageResource(R.drawable.wifi_ap);
-		holder.encryption.setText("");
+		holder.security.setImageResource(R.drawable.service_active);
+		holder.encryption.setText(R.string.open_network);
 	    } else {
 		holder.security.setImageResource(R.drawable.secure);
 		holder.encryption.setText(getCapabilitiesString(scanresultArray
