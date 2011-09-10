@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <style name="Theme"></style>
-    <style name="Theme.WifiFixerAnimation" parent="android:style/Animation.Activity">
-    <item name="android:windowAnimationStyle">@style/Animation.WifiFixerAnimation</item>
+    <style name="WifiFixer" parent="android:style/Animation.Activity">
+    <item name="android:windowAnimationStyle">@style/WifiFixerAnimation</item>
 </style>
 </resources>

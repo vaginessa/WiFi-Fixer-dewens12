@@ -2,7 +2,7 @@
 <resources>
 	<!-- Defined in anim folder -->
 	<style name="Animation"></style>
-	<style name="WifiFixerAnimation" parent="android:style/Animation.Activity">
+	<style name="WifiFixer" parent="android:style/Animation.Activity">
 		<item name="android:activityOpenEnterAnimation">@anim/wf_enter</item>
 		<item name="android:activityOpenExitAnimation">@anim/wf_exit</item>
 		<item name="android:activityCloseEnterAnimation">@anim/wf_enter</item>
@@ -15,9 +15,5 @@
 		<item name="android:taskToFrontExitAnimation">@anim/wf_exit</item>
 		<item name="android:taskToBackEnterAnimation">@anim/wf_enter</item>
 		<item name="android:taskToBackExitAnimation">@anim/wf_exit</item>
-	</style>
-
-	<style name="WifiFixer" parent="WifiFixerAnimation">
-		<item name="android:windowNoTitle">true</item>
 	</style>
 </resources>
