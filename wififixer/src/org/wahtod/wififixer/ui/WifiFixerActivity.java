@@ -53,6 +53,8 @@ public class WifiFixerActivity extends FragmentActivity {
     public boolean loggingmenuFlag = false;
     public boolean loggingFlag = false;
 
+    private Menu optionsmenu;
+
     /*
      * As ugly as caching context is, the alternative is uglier.
      */
@@ -199,6 +201,7 @@ public class WifiFixerActivity extends FragmentActivity {
 
     void setLogging(boolean state) {
 	loggingFlag = state;
+	setToggleIcon(optionsmenu);
 	PrefUtil.writeBoolean(this, Pref.LOG_KEY.key(), state);
 	if (!state)
 	    ServiceAlarm.setServiceEnabled(this, LogService.class, false);
@@ -388,12 +391,12 @@ public class WifiFixerActivity extends FragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 	super.onCreateOptionsMenu(menu);
-	getMenuInflater().inflate(R.menu.prefs, menu);
 	getMenuInflater().inflate(R.menu.logging, menu);
 	getMenuInflater().inflate(R.menu.sendlog, menu);
 	getMenuInflater().inflate(R.menu.help, menu);
 	getMenuInflater().inflate(R.menu.about, menu);
-
+	getMenuInflater().inflate(R.menu.prefs, menu);
+	optionsmenu = menu;
 	return true;
     }
 
@@ -437,6 +440,8 @@ public class WifiFixerActivity extends FragmentActivity {
     @Override
     public void onResume() {
 	super.onResume();
+	if(optionsmenu != null)
+	    onPrepareOptionsMenu(optionsmenu);
     }
 
     @Override
