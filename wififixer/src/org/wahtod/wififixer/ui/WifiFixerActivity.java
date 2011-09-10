@@ -53,11 +53,6 @@ public class WifiFixerActivity extends FragmentActivity {
     public boolean loggingmenuFlag = false;
     public boolean loggingFlag = false;
 
-    // constants
-    private static final int MENU_LOGGING = 1;
-    private static final int MENU_SEND = 2;
-    private static final int LOGGING_GROUP = 42;
-
     /*
      * As ugly as caching context is, the alternative is uglier.
      */
@@ -211,7 +206,7 @@ public class WifiFixerActivity extends FragmentActivity {
     }
 
     void setToggleIcon(Menu menu) {
-	MenuItem logging = menu.getItem(MENU_LOGGING - 1);
+	MenuItem logging = menu.findItem(R.id.menu_logging);
 	if (loggingFlag) {
 	    logging.setIcon(R.drawable.logging_enabled);
 	    logging.setTitle(R.string.turn_logging_off);
@@ -393,14 +388,12 @@ public class WifiFixerActivity extends FragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 	super.onCreateOptionsMenu(menu);
-	menu.add(LOGGING_GROUP, MENU_LOGGING, 0, R.string.toggle_logging)
-		.setIcon(R.drawable.logging_enabled);
-
-	menu.add(LOGGING_GROUP, MENU_SEND, 1, R.string.send_log).setIcon(
-		R.drawable.ic_menu_send);
 	getMenuInflater().inflate(R.menu.prefs, menu);
+	getMenuInflater().inflate(R.menu.logging, menu);
+	getMenuInflater().inflate(R.menu.sendlog, menu);
 	getMenuInflater().inflate(R.menu.help, menu);
 	getMenuInflater().inflate(R.menu.about, menu);
+
 	return true;
     }
 
@@ -411,11 +404,11 @@ public class WifiFixerActivity extends FragmentActivity {
 
 	switch (item.getItemId()) {
 
-	case MENU_LOGGING:
+	case R.id.menu_logging:
 	    toggleLog();
 	    return true;
 
-	case MENU_SEND:
+	case R.id.menu_send:
 	    sendLog();
 	    return true;
 
@@ -452,11 +445,13 @@ public class WifiFixerActivity extends FragmentActivity {
 	// Menu drawing stuffs
 
 	if (loggingmenuFlag) {
-	    menu.setGroupVisible(LOGGING_GROUP, true);
+	    menu.findItem(R.id.menu_logging).setVisible(true);
+	    menu.findItem(R.id.menu_send).setVisible(true);
 	    setToggleIcon(menu);
 
 	} else {
-	    menu.setGroupVisible(LOGGING_GROUP, false);
+	    menu.findItem(R.id.menu_logging).setVisible(false);
+	    menu.findItem(R.id.menu_send).setVisible(false);
 	}
 
 	return true;
