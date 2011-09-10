@@ -54,7 +54,7 @@ public class KnownNetworksFragment extends Fragment {
 
     private String clicked;
     private int clicked_position;
-    private ListView listview01;
+    private ListView lv;
     private View listviewitem;
     private NetworkListAdapter adapter;
     private List<String> knownnetworks;
@@ -71,21 +71,20 @@ public class KnownNetworksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
 	View v = inflater.inflate(R.layout.knownnetworks, null);
-	listview01 = (ListView) v.findViewById(R.id.ListView01);
-	adapter = new NetworkListAdapter(knownnetworks);
-	listview01.setAdapter(adapter);
-	listview01.setOnItemLongClickListener(new OnItemLongClickListener() {
+	lv = (ListView) v.findViewById(R.id.ListView01);
+	createAdapter();
+	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	    @Override
 	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 		    int position, long id) {
-		clicked = listview01.getItemAtPosition(position).toString();
+		clicked = lv.getItemAtPosition(position).toString();
 		clicked_position = position;
 		listviewitem = v;
 		return false;
 	    }
 
 	});
-	registerForContextMenu(listview01);
+	registerForContextMenu(lv);
 	return v;
     }
 
@@ -169,14 +168,12 @@ public class KnownNetworksFragment extends Fragment {
 
     @Override
     public void onPause() {
-	// TODO Auto-generated method stub
 	super.onPause();
 	unregisterReceiver();
     }
 
     @Override
     public void onResume() {
-	// TODO Auto-generated method stub
 	super.onResume();
 	registerReceiver();
     }
@@ -282,7 +279,16 @@ public class KnownNetworksFragment extends Fragment {
 	}
 
     };
-
+    
+    /*
+     * Create adapter
+     * Add Header view
+     */
+    private void createAdapter(){
+	adapter = new NetworkListAdapter(knownnetworks);
+	lv.setAdapter(adapter);
+    }
+    
     /*
      * Note that this WILL return a null String[] if called while wifi is off.
      */
@@ -317,8 +323,7 @@ public class KnownNetworksFragment extends Fragment {
 	    known_in_range = intent
 		    .getStringArrayListExtra(WFConnection.SCAN_RESULTS_ARRAY);
 	    if (adapter == null) {
-		adapter = new NetworkListAdapter(knownnetworks);
-		listview01.setAdapter(adapter);
+		createAdapter();
 	    } else {
 		refreshArray();
 		adapter.notifyDataSetChanged();

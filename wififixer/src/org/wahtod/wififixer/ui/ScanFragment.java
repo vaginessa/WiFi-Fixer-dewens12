@@ -26,6 +26,7 @@ import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.R.id;
 import org.wahtod.wififixer.SharedPrefs.PrefUtil;
 import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -55,7 +56,7 @@ public class ScanFragment extends Fragment {
     private static final String WEP = "WEP";
     private String clicked;
     private int clicked_position;
-    private ListView listview01;
+    private ListView lv;
     private View listviewitem;
     private ScanListAdapter adapter;
     private List<ScanResult> scannednetworks;
@@ -68,23 +69,22 @@ public class ScanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
 	View v = inflater.inflate(R.layout.scannetworks, null);
-	listview01 = (ListView) v.findViewById(R.id.ListView02);
+	lv = (ListView) v.findViewById(R.id.ListView02);
 	if (scannednetworks == null)
 	    return v;
-	adapter = new ScanListAdapter(scannednetworks);
-	listview01.setAdapter(adapter);
-	listview01.setOnItemLongClickListener(new OnItemLongClickListener() {
+	createAdapter();
+	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	    @Override
 	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 		    int position, long id) {
-		clicked = listview01.getItemAtPosition(position).toString();
+		clicked = lv.getItemAtPosition(position).toString();
 		clicked_position = position;
 		listviewitem = v;
 		return false;
 	    }
 
 	});
-	registerForContextMenu(listview01);
+	registerForContextMenu(lv);
 	return v;
     }
 
@@ -282,6 +282,15 @@ public class ScanFragment extends Fragment {
 	}
 
     };
+    
+    /*
+     * Create adapter
+     * Add Header view
+     */
+    private void createAdapter(){
+	adapter = new ScanListAdapter(scannednetworks);
+	lv.setAdapter(adapter);
+    }
 
     /*
      * Note that this WILL return a null String[] if called while wifi is off.
@@ -306,8 +315,7 @@ public class ScanFragment extends Fragment {
 	scannednetworks = getNetworks(getContext());
 	if (scannednetworks.size() > 0) {
 	    if (adapter == null) {
-		adapter = new ScanListAdapter(scannednetworks);
-		listview01.setAdapter(adapter);
+		createAdapter();
 	    } else {
 		refreshArray();
 		adapter.notifyDataSetChanged();

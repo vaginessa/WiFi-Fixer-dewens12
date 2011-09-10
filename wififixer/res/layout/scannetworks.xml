@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout android:id="@+id/content"
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@drawable/listbg"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:orientation="vertical">
-
 	<TextView android:id="@+id/TextView01" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:layout_centerHorizontal="true"
 		android:text="@string/scanfragment_header" 
@@ -11,9 +11,9 @@
 		android:paddingLeft="30dp"
 		android:paddingTop ="10dp"
 		android:background="@drawable/listheader" android:textSize="20dp"></TextView>
-
 	<ListView android:layout_centerHorizontal="true"
-		android:background="@drawable/listbg" android:cacheColorHint="#00000000"
+		android:headerDividersEnabled="false" android:animateLayoutChanges="true"
+		 android:cacheColorHint="#00000000"
 		android:paddingLeft="5dp" android:paddingRight="20dp"
 		android:paddingTop="5dp" android:paddingBottom="10dp"
 		android:layout_below="@+id/TextView01" android:layout_width="fill_parent"
