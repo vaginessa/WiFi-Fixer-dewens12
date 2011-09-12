@@ -26,15 +26,17 @@ import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.R.id;
 import org.wahtod.wififixer.SharedPrefs.PrefUtil;
 import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.utility.LogService;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -59,25 +61,38 @@ public class ScanFragment extends Fragment {
     private ListView lv;
     private View listviewitem;
     private ScanListAdapter adapter;
-    private List<ScanResult> scannednetworks;
     private static final int CONTEXT_ENABLE = 1;
     private static final int CONTEXT_DISABLE = 2;
     private static final int CONTEXT_CONNECT = 3;
     private static final int CONTEXT_NONMANAGE = 4;
+
+    private Handler drawhandler = new Handler() {
+	@Override
+	public void handleMessage(Message message) {
+	    /*
+	     * handle SCAN_RESULTS_AVAILABLE intents to refresh ListView
+	     * asynchronously (to avoid ANR)
+	     */
+	    refreshScanListAdapter();
+	}
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
 	View v = inflater.inflate(R.layout.scannetworks, null);
 	lv = (ListView) v.findViewById(R.id.ListView02);
-	if (scannednetworks == null)
+	List<WFScanResult> scan = getNetworks(getContext());
+	if (scan == null)
 	    return v;
-	createAdapter();
+	createAdapter(scan);
 	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	    @Override
 	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 		    int position, long id) {
-		clicked = lv.getItemAtPosition(position).toString();
+		WFScanResult item = (WFScanResult) lv
+			.getItemAtPosition(position);
+		clicked = item.SSID;
 		clicked_position = position;
 		listviewitem = v;
 		return false;
@@ -93,7 +108,6 @@ public class ScanFragment extends Fragment {
 	/*
 	 * Grab and set up ListView
 	 */
-	scannednetworks = getNetworks(getContext());
 	super.onAttach(activity);
     }
 
@@ -166,14 +180,12 @@ public class ScanFragment extends Fragment {
 
     @Override
     public void onPause() {
-	// TODO Auto-generated method stub
 	super.onPause();
 	unregisterReceiver();
     }
 
     @Override
     public void onResume() {
-	// TODO Auto-generated method stub
 	super.onResume();
 	registerReceiver();
     }
@@ -182,17 +194,20 @@ public class ScanFragment extends Fragment {
      * custom adapter for Network List ListView
      */
     private class ScanListAdapter extends BaseAdapter {
-	private List<ScanResult> scanresultArray;
+	private List<WFScanResult> scanresultArray;
 	private LayoutInflater inflater;
 
-	public ScanListAdapter(List<ScanResult> knownnetworks) {
+	public ScanListAdapter(List<WFScanResult> scan) {
 	    inflater = (LayoutInflater) getContext().getSystemService(
 		    Context.LAYOUT_INFLATER_SERVICE);
-	    scanresultArray = knownnetworks;
+	    scanresultArray = scan;
 	}
 
 	public int getCount() {
-	    return scanresultArray.size();
+	    if (scanresultArray == null)
+		return 0;
+	    else
+		return scanresultArray.size();
 	}
 
 	public Object getItem(int position) {
@@ -276,51 +291,58 @@ public class ScanFragment extends Fragment {
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 	public void onReceive(final Context context, final Intent intent) {
 	    /*
-	     * we know this is going to be a scan result notification
+	     * On Scan result intent refresh ListView
 	     */
-	    refreshScanListAdapter(intent);
+	    if (intent.getAction().equals(
+		    WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+		drawhandler.sendEmptyMessage(0);
+	    else if (intent.getExtras().getInt(WifiManager.EXTRA_WIFI_STATE) == WifiManager.WIFI_STATE_DISABLED) {
+		/*
+		 * Wifi disabled clear arrays refresh
+		 */
+		if (!(adapter == null)) {
+		   adapter.scanresultArray.clear();
+		    getView().invalidate();
+		}
+	    }
+
 	}
 
     };
-    
+
     /*
-     * Create adapter
-     * Add Header view
+     * Create adapter Add Header view
      */
-    private void createAdapter(){
-	adapter = new ScanListAdapter(scannednetworks);
+    private void createAdapter(List<WFScanResult> scan) {
+	adapter = new ScanListAdapter(scan);
 	lv.setAdapter(adapter);
     }
 
     /*
      * Note that this WILL return a null String[] if called while wifi is off.
      */
-    private static final List<ScanResult> getNetworks(final Context context) {
+    private static List<WFScanResult> getNetworks(final Context context) {
+	/*
+	 * Can't return null
+	 */
 	WifiManager wm = (WifiManager) context
 		.getSystemService(Context.WIFI_SERVICE);
 
-	/*
-	 * if (wfResult.SSID != null && wfResult.SSID.length() > 0)
-	 * networks.add(wfResult.SSID.replace("\"", "")); else
-	 * networks.add(EMPTY_SSID); }
-	 */
-
-	return wm.getScanResults();
+	return WFScanResult.fromScanResultArray(wm.getScanResults());
     }
 
-    private void refreshScanListAdapter(final Intent intent) {
+    private void refreshScanListAdapter() {
 	/*
-	 * Don't refresh if scannednetworks is empty (wifi is off)
+	 * Firing this from a handler In case of ANR
 	 */
-	scannednetworks = getNetworks(getContext());
-	if (scannednetworks.size() > 0) {
-	    if (adapter == null) {
-		createAdapter();
-	    } else {
-		refreshArray();
-		adapter.notifyDataSetChanged();
-	    }
-	}
+
+	List<WFScanResult> scan = getNetworks(getContext());
+
+	if (adapter == null)
+	    createAdapter(scan);
+
+	refreshArray(scan);
+	adapter.notifyDataSetChanged();
     }
 
     private static String getCapabilitiesString(String capabilities) {
@@ -335,14 +357,13 @@ public class ScanFragment extends Fragment {
 	return capabilities;
     }
 
-    private void refreshArray() {
+    private void refreshArray(List<WFScanResult> scan) {
 
 	/*
 	 * Comparator for sorting results by signal level
 	 */
-	class SortBySignal implements Comparator<ScanResult> {
-	    @Override
-	    public int compare(ScanResult o2, ScanResult o1) {
+	class SortBySignal implements Comparator<WFScanResult> {
+	    public int compare(WFScanResult o2, WFScanResult o1) {
 		/*
 		 * Sort by signal
 		 */
@@ -351,23 +372,33 @@ public class ScanFragment extends Fragment {
 	    }
 	}
 
-	if (scannednetworks.equals(adapter.scanresultArray))
-	    return;
-
-	for (ScanResult result : scannednetworks) {
-	    if (!adapter.scanresultArray.contains(result))
-		adapter.scanresultArray.add(result);
+	List<WFScanResult> toremove = new ArrayList<WFScanResult>();
+	for (WFScanResult result : adapter.scanresultArray) {
+	    if (!scan.contains(result))
+		toremove.add(result);
 	}
 
-	ArrayList<ScanResult> remove = new ArrayList<ScanResult>();
-
-	for (ScanResult result : adapter.scanresultArray) {
-	    if (!scannednetworks.contains(result))
-		remove.add(result);
-	}
-
-	for (ScanResult result : remove) {
+	for (WFScanResult result : toremove) {
 	    adapter.scanresultArray.remove(result);
+	    LogService.log(getContext(), this.getClass().getName(), "Removing:"
+		    + result.SSID);
+	}
+
+	for (WFScanResult result : scan) {
+
+	    if (!scan.contains(result)) {
+		LogService.log(getContext(), this.getClass().getName(),
+			"Adding:" + result.SSID);
+		adapter.scanresultArray.add(result);
+	    } else {
+		int index = adapter.scanresultArray.indexOf(result);
+		if (index != -1) {
+		    if (result.level != adapter.scanresultArray.get(index).level)
+			adapter.scanresultArray.get(index).level = result.level;
+		    LogService.log(getContext(), this.getClass().getName(),
+			    "Updating signal for:" + result.SSID);
+		}
+	    }
 	}
 
 	Collections.sort(adapter.scanresultArray, new SortBySignal());
@@ -381,6 +412,7 @@ public class ScanFragment extends Fragment {
     private void registerReceiver() {
 	IntentFilter filter = new IntentFilter(
 		WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+	filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 	getContext().registerReceiver(receiver, filter);
     }
 
