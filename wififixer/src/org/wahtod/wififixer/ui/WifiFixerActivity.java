@@ -40,6 +40,8 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -79,9 +81,9 @@ public class WifiFixerActivity extends FragmentActivity {
     /*
      * Fragment Tags
      */
-    private static final String SERVICEFRAG_TAG = "SERVICE_FRAGMENT";
-    private static final String KNOWNNETWORKSFRAG_TAG = "KNOWNNETWORKS_FRAGMENT";
-    private static final String SCANFRAG_TAG = "SCAN_FRAGMENT";
+    public static final String SERVICEFRAG_TAG = "SERVICE_FRAGMENT";
+    public static final String KNOWNNETWORKSFRAG_TAG = "KNOWNNETWORKS_FRAGMENT";
+    public static final String SCANFRAG_TAG = "SCAN_FRAGMENT";
 
     void authCheck() {
 	if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
@@ -293,9 +295,9 @@ public class WifiFixerActivity extends FragmentActivity {
 	/*
 	 * Invalidate Service fragment
 	 */
-	android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+	FragmentManager fm = getSupportFragmentManager();
 	ServiceFragment sf = new ServiceFragment();
-	android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+	FragmentTransaction ft = fm.beginTransaction();
 	ft.replace(R.id.servicefragment, sf, SERVICEFRAG_TAG);
 	ft.commit();
     }

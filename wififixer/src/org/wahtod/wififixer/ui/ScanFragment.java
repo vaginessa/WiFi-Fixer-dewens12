@@ -29,6 +29,8 @@ import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
 
 import android.app.Activity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -58,7 +60,6 @@ public class ScanFragment extends Fragment {
     private static final String WEP = "WEP";
     private String clicked;
     private int clicked_position;
-    private ListView lv;
     private View listviewitem;
     private ScanListAdapter adapter;
     private static final int CONTEXT_ENABLE = 1;
@@ -81,15 +82,13 @@ public class ScanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
 	View v = inflater.inflate(R.layout.scannetworks, null);
-	lv = (ListView) v.findViewById(R.id.ListView02);
+	ListView lv = (ListView) v.findViewById(R.id.ListView02);
 	List<WFScanResult> scan = getNetworks(getContext());
-	if (scan == null)
-	    return v;
-	createAdapter(scan);
 	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	    @Override
 	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 		    int position, long id) {
+		ListView lv = (ListView) v.findViewById(R.id.ListView02);
 		WFScanResult item = (WFScanResult) lv
 			.getItemAtPosition(position);
 		clicked = item.SSID;
@@ -100,7 +99,12 @@ public class ScanFragment extends Fragment {
 
 	});
 	registerForContextMenu(lv);
-	return v;
+	if (scan == null)
+	    return v;
+	else {
+	    createAdapter(v, scan);
+	    return v;
+	}
     }
 
     @Override
@@ -298,23 +302,25 @@ public class ScanFragment extends Fragment {
 		drawhandler.sendEmptyMessage(0);
 	    else if (intent.getExtras().getInt(WifiManager.EXTRA_WIFI_STATE) == WifiManager.WIFI_STATE_DISABLED) {
 		/*
-		 * Wifi disabled clear arrays refresh
+		 * Request refresh from activity
 		 */
 		if (!(adapter == null)) {
-		   adapter.scanresultArray.clear();
-		    getView().invalidate();
+		    FragmentManager fm = getActivity().getSupportFragmentManager();
+			ScanFragment sf = new ScanFragment();
+		FragmentTransaction ft = fm.beginTransaction();
+			ft.replace(R.id.scanfragment, sf, WifiFixerActivity.SCANFRAG_TAG);
+			ft.commit();
 		}
 	    }
-
 	}
-
     };
 
     /*
      * Create adapter Add Header view
      */
-    private void createAdapter(List<WFScanResult> scan) {
+    private void createAdapter(View v, List<WFScanResult> scan) {
 	adapter = new ScanListAdapter(scan);
+	ListView lv = (ListView) v.findViewById(R.id.ListView02);
 	lv.setAdapter(adapter);
     }
 
@@ -339,7 +345,7 @@ public class ScanFragment extends Fragment {
 	List<WFScanResult> scan = getNetworks(getContext());
 
 	if (adapter == null)
-	    createAdapter(scan);
+	    createAdapter(getView(), scan);
 
 	refreshArray(scan);
 	adapter.notifyDataSetChanged();
