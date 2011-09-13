@@ -20,6 +20,7 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.SharedPrefs.PrefUtil;
 import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
+import org.wahtod.wififixer.utility.NotifUtil;
 
 import android.app.IntentService;
 import android.app.PendingIntent;
@@ -28,24 +29,56 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 
 public class FixerWidget extends AppWidgetProvider {
+
     public static final String W_INTENT = "org.wahtod.wififixer.WIDGET";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-	if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
-	    LogService.log(context, LogService.getLogTag(context), intent
-		    .toString());
+	if (intent.getAction().equals(NotifUtil.ACTION_STATUS_NOTIFICATION))
+	    doStatusUpdate(context, intent);
 	super.onReceive(context, intent);
+    }
 
+    private void doStatusUpdate(final Context context, Intent intent) {
+	Intent start = new Intent(context, StatusUpdateService.class);
+	start.fillIn(intent, Intent.FILL_IN_DATA);
+	context.startService(start);
+    }
+
+    public static class StatusUpdateService extends IntentService {
+	public StatusUpdateService() {
+	    super("FixerWidget$StatusUpdateService");
+	}
+
+	@Override
+	protected void onHandleIntent(Intent intent) {
+	    if (intent != null) {
+		Bundle data = intent.getBundleExtra(NotifUtil.STATUS_DATA_KEY);
+		AppWidgetManager appWidgetManager = AppWidgetManager
+			.getInstance(this.getApplicationContext());
+		RemoteViews remoteViews = new RemoteViews(getPackageName(),
+			R.layout.widget);
+		remoteViews.setTextViewText(R.id.ssid, data
+			.getString(NotifUtil.SSID_KEY));
+		remoteViews.setTextViewText(R.id.status, data
+			.getString(NotifUtil.STATUS_KEY));
+		remoteViews.setImageViewResource(R.id.signal,
+			getIcon((int) data.getLong(NotifUtil.SIGNAL_KEY)));
+		int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
+			this, FixerWidget.class));
+		for (int n = 0; n < ids.length; n++)
+		    appWidgetManager.updateAppWidget(ids[n], remoteViews);
+	    }
+	}
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 	    int[] appWidgetIds) {
-
 	/*
 	 * Send Update To Widgets
 	 */
@@ -76,6 +109,28 @@ public class FixerWidget extends AppWidgetProvider {
 
     }
 
+    public static int getIcon(final int signal) {
+	switch (signal) {
+	case 0:
+	    return R.drawable.signal0;
+
+	case 1:
+	    return R.drawable.signal1;
+
+	case 2:
+	    return R.drawable.signal2;
+
+	case 3:
+	    return R.drawable.signal3;
+
+	case 4:
+	    return R.drawable.signal4;
+
+	}
+
+	return 0;
+    }
+
     public static RemoteViews doUpdate(Context context) {
 
 	// Create an Intent to launch the service
@@ -89,8 +144,9 @@ public class FixerWidget extends AppWidgetProvider {
 	 */
 	RemoteViews views = new RemoteViews(context.getPackageName(),
 		R.layout.widget);
-	views.setOnClickPendingIntent(R.id.Button, pendingIntent);
+	;
+	views.setOnClickPendingIntent(R.id.widget_target, pendingIntent);
 
 	return views;
     }
-}
+};

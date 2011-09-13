@@ -13,7 +13,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.wahtod.wififixer" android:installLocation="internalOnly"
-	android:versionName="0.9.0p15" android:versionCode="861">
+	android:versionName="0.9.0p16" android:versionCode="862">
 	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="11" />
 	<uses-feature android:name="android.hardware.wifi"
 		android:required="true" />
@@ -70,12 +70,15 @@
 		<receiver android:name=".widget.FixerWidget">
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+				<action android:name="org.wahtod.wififixer.STATNOTIF"></action>
 			</intent-filter>
 			<meta-data android:name="android.appwidget.provider"
 				android:resource="@xml/widget_provider" />
 		</receiver>
 
 		<service android:name=".widget.FixerWidget$UpdateService">
+		</service>
+		<service android:name=".widget.FixerWidget$StatusUpdateService">
 		</service>
 
 		<service android:persistent="true" android:exported="false"

@@ -50,13 +50,12 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 public class ScanFragment extends Fragment {
-
     private static final String WPA = "WPA";
     private static final String WPA2 = "WPA2";
     private static final String WEP = "WEP";
     private String clicked;
     private ScanListAdapter adapter;
-    
+
     private static final int CONTEXT_CONNECT = 3;
     private static final int CONTEXT_INFO = 5;
 
@@ -75,19 +74,7 @@ public class ScanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
 	View v = inflater.inflate(R.layout.scannetworks, null);
-	ListView lv = (ListView) v.findViewById(R.id.ListView02);
 	List<WFScanResult> scan = getNetworks(getContext());
-	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
-	    @Override
-	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
-		    int position, long id) {
-		WFScanResult item = adapter.scanresultArray.get(position);
-		clicked = item.SSID;
-		return false;
-	    }
-
-	});
-	registerForContextMenu(lv);
 	if (scan == null)
 	    return v;
 	else {
@@ -126,7 +113,7 @@ public class ScanFragment extends Fragment {
 	    break;
 
 	case CONTEXT_INFO:
-	    
+
 	    break;
 	}
 	return true;
@@ -134,14 +121,16 @@ public class ScanFragment extends Fragment {
 
     @Override
     public void onPause() {
-	super.onPause();
 	unregisterReceiver();
+	this.unregisterForContextMenu((ListView) getView().findViewById(R.id.ListView02));
+	super.onPause();
     }
 
     @Override
     public void onResume() {
 	super.onResume();
 	registerReceiver();
+	registerContextMenu();
     }
 
     /*
@@ -277,6 +266,21 @@ public class ScanFragment extends Fragment {
 	    }
 	}
     };
+    
+    private void registerContextMenu(){
+	ListView lv = (ListView) getView().findViewById(R.id.ListView02);
+	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
+	    @Override
+	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
+		    int position, long id) {
+		WFScanResult item = adapter.scanresultArray.get(position);
+		clicked = item.SSID;
+		return false;
+	    }
+
+	});
+	registerForContextMenu(lv);
+    }
 
     /*
      * Create adapter Add Header view
@@ -363,9 +367,7 @@ public class ScanFragment extends Fragment {
 		}
 	    }
 	}
-
 	Collections.sort(adapter.scanresultArray, new SortBySignal());
-
     }
 
     private Context getContext() {

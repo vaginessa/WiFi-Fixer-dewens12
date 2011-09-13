@@ -129,6 +129,10 @@ public class ServiceFragment extends Fragment {
 	}
 
     }
+    
+    void serviceToggle(){
+	
+    }
 
     void setText() {
 	PackageManager pm = getContext().getPackageManager();

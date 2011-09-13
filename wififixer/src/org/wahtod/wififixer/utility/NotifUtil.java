@@ -25,7 +25,9 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 
 public abstract class NotifUtil {
     public static final int NETNOTIFID = 8236;
@@ -44,6 +46,16 @@ public abstract class NotifUtil {
     public static final int SSID_STATUS_MANAGED = 7;
     public static final String NULL_SSID = "empty";
     public static final String SEPARATOR = " : ";
+    
+    public static final String ACTION_STATUS_NOTIFICATION="org.wahtod.wififixer.STATNOTIF";
+    public static final String STATUS_DATA_KEY = "STATUS_DATA_KEY";
+    
+    /*
+     * Field keys for status bundle
+     */
+    public static final String SSID_KEY = "SSID";
+    public static final String STATUS_KEY ="STATUS";
+    public static final String SIGNAL_KEY = "SIGNAL";
 
     /*
      * Cache appropriate NotifUtil
@@ -77,10 +89,31 @@ public abstract class NotifUtil {
     /*
      * Exposed API and utility methods
      */
-    public static void addStatNotif(Context ctxt, final String ssid,
+    public static void addStatNotif(final Context ctxt, final String ssid,
 	    String status, final int signal, final boolean flag) {
 	cacheSelector();
 	selector.vaddStatNotif(ctxt, ssid, status, signal, flag);
+	if(flag)
+	    broadcastStatNotif(ctxt, ssid, status, signal);
+    }
+
+    private static void broadcastStatNotif(final Context ctxt,
+	    final String ssid, final String status, final int signal) {
+	Intent intent = new Intent(ACTION_STATUS_NOTIFICATION);
+	Bundle message = new Bundle();
+	if(ssid != null)
+	    message.putString(SSID_KEY, ssid);
+	else 
+	    message.putString(SSID_KEY,"empty" );
+
+	if(ssid != null)
+	    message.putString(STATUS_KEY, status);
+	else 
+	    message.putString(STATUS_KEY,"empty" );
+	message.putLong(SIGNAL_KEY, signal);
+	
+	intent.putExtra(STATUS_DATA_KEY, message);
+	ctxt.sendBroadcast(intent);
     }
 
     public static void addLogNotif(final Context context, final boolean flag) {

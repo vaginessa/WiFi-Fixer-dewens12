@@ -18,6 +18,7 @@ package org.wahtod.wififixer.ui;
 
 import java.io.File;
 
+import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WifiFixerService;
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
@@ -27,6 +28,7 @@ import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
+import org.wahtod.wififixer.widget.WidgetHandler;
 
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -45,6 +47,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 public class WifiFixerActivity extends FragmentActivity {
@@ -117,6 +120,16 @@ public class WifiFixerActivity extends FragmentActivity {
 	}
     }
 
+    private static void aboutNotification(final Context context) {
+        /*
+         * Fire About nag
+         */
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+        	new Intent(context, About.class), 0);
+        NotifUtil.show(context, context.getString(R.string.aboutnag), context
+        	.getString(R.string.please_read), 4145, contentIntent);
+    }
+
     private void deleteLog() {
 	/*
 	 * Delete old log
@@ -147,6 +160,17 @@ public class WifiFixerActivity extends FragmentActivity {
 	 */
 	else if (intent.hasExtra(DELETE_LOG))
 	    deleteLog();
+    }
+    
+    public void invalidateServiceFragment(){
+	/*
+	 * Invalidate Service fragment
+	 */
+	android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+	ServiceFragment sf = new ServiceFragment();
+	android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+	ft.replace(R.id.servicefragment, sf, SERVICEFRAG_TAG);
+	ft.commit();
     }
 
     void launchHelp() {
@@ -224,6 +248,25 @@ public class WifiFixerActivity extends FragmentActivity {
 	dialog.show();
 
     }
+    
+    public void serviceToggle(View view) {
+	if (PrefUtil.readBoolean(getApplicationContext(), Pref.DISABLE_KEY
+		.key())) {
+	    Intent intent = new Intent(
+		    IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
+	    sendBroadcast(intent);
+	    Toast.makeText(this, R.string.enabling_wififixerservice,
+		    Toast.LENGTH_LONG).show();
+	} else {
+	    Intent intent = new Intent(
+		    IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
+	    sendBroadcast(intent);
+	    Toast.makeText(this, R.string.disabling_wififixerservice,
+		    Toast.LENGTH_LONG).show();
+	}
+
+	invalidateServiceFragment();
+    }
 
     void setLogging(boolean state) {
 	loggingFlag = state;
@@ -244,16 +287,6 @@ public class WifiFixerActivity extends FragmentActivity {
 	    logging.setTitle(R.string.turn_logging_on);
 	}
 
-    }
-
-    private static void aboutNotification(final Context context) {
-	/*
-	 * Fire About nag
-	 */
-	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		new Intent(context, About.class), 0);
-	NotifUtil.show(context, context.getString(R.string.aboutnag), context
-		.getString(R.string.please_read), 4145, contentIntent);
     }
 
     private static void startwfService(final Context context) {
@@ -461,6 +494,24 @@ public class WifiFixerActivity extends FragmentActivity {
 
     private void openNetworkList() {
 
+    }
+    
+    public void wifiToggle(View view) {
+	if (!getIsWifiOn(this)) {
+	    Intent intent = new Intent(
+		    WidgetHandler.WIFI_ON);
+	    sendBroadcast(intent);
+	    Toast.makeText(this, R.string.enabling_wifi,
+		    Toast.LENGTH_LONG).show();
+	} else {
+	    Intent intent = new Intent(
+		    WidgetHandler.WIFI_OFF);
+	    sendBroadcast(intent);
+	    Toast.makeText(this, R.string.disabling_wifi,
+		    Toast.LENGTH_LONG).show();
+	}
+
+	invalidateServiceFragment();
     }
 
 }
