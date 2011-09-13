@@ -23,12 +23,8 @@ import java.util.List;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFConnection;
-import org.wahtod.wififixer.R.id;
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+
 import android.app.Activity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -38,6 +34,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -57,13 +55,10 @@ public class ScanFragment extends Fragment {
     private static final String WPA2 = "WPA2";
     private static final String WEP = "WEP";
     private String clicked;
-    private int clicked_position;
-    private View listviewitem;
     private ScanListAdapter adapter;
-    private static final int CONTEXT_ENABLE = 1;
-    private static final int CONTEXT_DISABLE = 2;
+    
     private static final int CONTEXT_CONNECT = 3;
-    private static final int CONTEXT_NONMANAGE = 4;
+    private static final int CONTEXT_INFO = 5;
 
     private Handler drawhandler = new Handler() {
 	@Override
@@ -86,12 +81,8 @@ public class ScanFragment extends Fragment {
 	    @Override
 	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 		    int position, long id) {
-		ListView lv = (ListView) v.findViewById(R.id.ListView02);
-		WFScanResult item = (WFScanResult) lv
-			.getItemAtPosition(position);
+		WFScanResult item = adapter.scanresultArray.get(position);
 		clicked = item.SSID;
-		clicked_position = position;
-		listviewitem = v;
 		return false;
 	    }
 
@@ -121,60 +112,21 @@ public class ScanFragment extends Fragment {
 	 * Clicked is the ListView selected string, so the SSID
 	 */
 	menu.setHeaderTitle(clicked);
-	menu.add(1, CONTEXT_ENABLE, 0, R.string.enable);
-	menu.add(2, CONTEXT_DISABLE, 1, R.string.disable);
 	menu.add(3, CONTEXT_CONNECT, 2, R.string.connect_now);
-	menu.add(4, CONTEXT_NONMANAGE, 3, R.string.set_non_managed);
-	if (!WFConnection.getNetworkState(getContext(), clicked_position)) {
-	    menu.setGroupEnabled(3, false);
-	    menu.setGroupEnabled(2, false);
-	} else
-	    menu.setGroupEnabled(1, false);
-
-	if (PrefUtil.readBoolean(getContext(), Pref.DISABLE_KEY.key()))
-	    menu.setGroupEnabled(3, false);
+	menu.add(4, CONTEXT_INFO, 3, R.string.about);
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-	ImageView iv = (ImageView) listviewitem.findViewById(id.NETWORK_ICON);
 	switch (item.getItemId()) {
-	case CONTEXT_ENABLE:
-	    iv.setImageResource(R.drawable.enabled_ssid);
-	    WFConnection.setNetworkState(getContext(), clicked_position, true);
-	    WFConnection.writeNetworkState(getContext(), clicked_position,
-		    false);
-	    adapter.notifyDataSetChanged();
-	    break;
-	case CONTEXT_DISABLE:
-	    iv.setImageResource(R.drawable.disabled_ssid);
-	    WFConnection.setNetworkState(getContext(), clicked_position, false);
-	    WFConnection
-		    .writeNetworkState(getContext(), clicked_position, true);
-	    adapter.notifyDataSetChanged();
-	    break;
 	case CONTEXT_CONNECT:
 	    Intent intent = new Intent(WFConnection.CONNECTINTENT);
-	    intent.putExtra(WFConnection.NETWORKNUMBER, clicked_position);
+	    intent.putExtra(WFConnection.NETWORKNUMBER, 0);
 	    getContext().sendBroadcast(intent);
 	    break;
 
-	case CONTEXT_NONMANAGE:
-	    if (!WFConnection.readManagedState(getContext(), clicked_position)) {
-		iv.setImageResource(R.drawable.ignore_ssid);
-		WFConnection.writeManagedState(getContext(), clicked_position,
-			true);
-	    } else {
-		if (WFConnection
-			.getNetworkState(getContext(), clicked_position))
-		    iv.setImageResource(R.drawable.enabled_ssid);
-		else
-		    iv.setImageResource(R.drawable.disabled_ssid);
-
-		WFConnection.writeManagedState(getContext(), clicked_position,
-			false);
-	    }
-	    adapter.notifyDataSetChanged();
+	case CONTEXT_INFO:
+	    
 	    break;
 	}
 	return true;
