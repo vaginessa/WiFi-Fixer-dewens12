@@ -216,7 +216,6 @@ public class PrefUtil extends Object {
 
     public static int readNetworkPref(final Context ctxt, final String network,
 	    final NetPref pref) {
-	getSharedPreferences(ctxt);
 	String key = NETPREFIX + network + pref.key();
 	if (getSharedPreferences(ctxt).contains(key))
 	    return getSharedPreferences(ctxt).getInt(key, 0);
@@ -226,7 +225,6 @@ public class PrefUtil extends Object {
 
     public static void writeNetworkPref(final Context ctxt,
 	    final String network, final NetPref pref, final int value) {
-	getSharedPreferences(ctxt);
 	/*
 	 * Check for actual changed value if changed, notify
 	 */

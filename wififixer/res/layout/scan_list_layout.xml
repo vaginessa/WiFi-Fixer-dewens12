@@ -13,7 +13,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="horizontal" android:layout_height="fill_parent"
 	android:layout_width="fill_parent" android:paddingBottom="5px"
-	android:paddingTop="5dp" android:paddingLeft="5dp">
+	android:paddingTop="5dp" android:paddingLeft="5dp"
+	android:baselineAligned="false">
 	<ImageView android:id="@+id/NETWORK_ICON"
 		android:layout_width="32dp" android:layout_height="34dp"
 		android:gravity="left" android:maxWidth="32dp" android:maxHeight="34dp"
@@ -23,11 +24,11 @@
 		android:gravity="left" android:maxWidth="16dp" android:maxHeight="20dp"
 		android:src="@drawable/icon"></ImageView>
 	<TextView android:id="@+id/ssid" android:text="default"
-		android:layout_gravity="center_vertical" android:layout_marginLeft="15dp"
-		android:layout_width="180dp" android:layout_height="fill_parent"
-		android:gravity="left" android:textSize="15dp"></TextView>
-	<TextView android:id="@+id/encryption" android:gravity="right"
-		android:layout_gravity="right" android:layout_marginLeft="10dp"
-		android:layout_width="50dp" android:layout_marginRight="10dp"
-		android:layout_height="fill_parent" android:textSize="10dp"></TextView>
+		android:layout_marginLeft="15dp" android:layout_height="fill_parent"
+		android:gravity="left" android:textSize="15dp" android:layout_width="120dp"
+		android:layout_gravity="left"></TextView>
+	<TextView android:id="@+id/encryption" android:text="encryption"
+		android:layout_marginLeft="5dp" android:layout_marginRight="10dp"
+		android:layout_height="fill_parent" android:textSize="10dp"
+		android:layout_gravity="right" android:layout_width="50dp"></TextView>
 </LinearLayout>

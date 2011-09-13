@@ -26,8 +26,6 @@ import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.R.id;
 import org.wahtod.wififixer.SharedPrefs.PrefUtil;
 import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
-import org.wahtod.wififixer.utility.LogService;
-
 import android.app.Activity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -292,6 +290,17 @@ public class ScanFragment extends Fragment {
 
     }
 
+    public static ScanFragment newInstance(int num) {
+	ScanFragment f = new ScanFragment();
+
+	// Supply num input as an argument.
+	Bundle args = new Bundle();
+	args.putInt("num", num);
+	f.setArguments(args);
+
+	return f;
+    }
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 	public void onReceive(final Context context, final Intent intent) {
 	    /*
@@ -305,11 +314,13 @@ public class ScanFragment extends Fragment {
 		 * Request refresh from activity
 		 */
 		if (!(adapter == null)) {
-		    FragmentManager fm = getActivity().getSupportFragmentManager();
-			ScanFragment sf = new ScanFragment();
-		FragmentTransaction ft = fm.beginTransaction();
-			ft.replace(R.id.scanfragment, sf, WifiFixerActivity.SCANFRAG_TAG);
-			ft.commit();
+		    FragmentManager fm = getActivity()
+			    .getSupportFragmentManager();
+		    ScanFragment sf = new ScanFragment();
+		    FragmentTransaction ft = fm.beginTransaction();
+		    ft.replace(R.id.scanfragment, sf,
+			    WifiFixerActivity.SCANFRAG_TAG);
+		    ft.commit();
 		}
 	    }
 	}
@@ -386,23 +397,17 @@ public class ScanFragment extends Fragment {
 
 	for (WFScanResult result : toremove) {
 	    adapter.scanresultArray.remove(result);
-	    LogService.log(getContext(), this.getClass().getName(), "Removing:"
-		    + result.SSID);
 	}
 
 	for (WFScanResult result : scan) {
 
 	    if (!scan.contains(result)) {
-		LogService.log(getContext(), this.getClass().getName(),
-			"Adding:" + result.SSID);
 		adapter.scanresultArray.add(result);
 	    } else {
 		int index = adapter.scanresultArray.indexOf(result);
 		if (index != -1) {
 		    if (result.level != adapter.scanresultArray.get(index).level)
 			adapter.scanresultArray.get(index).level = result.level;
-		    LogService.log(getContext(), this.getClass().getName(),
-			    "Updating signal for:" + result.SSID);
 		}
 	    }
 	}

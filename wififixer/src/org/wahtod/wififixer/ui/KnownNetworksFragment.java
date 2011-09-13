@@ -59,13 +59,15 @@ public class KnownNetworksFragment extends Fragment {
     private NetworkListAdapter adapter;
     private List<String> knownnetworks;
     private List<String> known_in_range;
-    private static final int MESSAGE = 31337;
+    private static final int SCAN_MESSAGE = 31337;
+    private static final int REFRESH_MESSAGE = 2944;
     private static final int SCAN_DELAY = 15000;
     private static final String EMPTY_SSID = "None";
     private static final int CONTEXT_ENABLE = 1;
     private static final int CONTEXT_DISABLE = 2;
     private static final int CONTEXT_CONNECT = 3;
     private static final int CONTEXT_NONMANAGE = 4;
+    private static final String NETWORKS_KEY = "NETWORKS_KEY";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,8 +97,13 @@ public class KnownNetworksFragment extends Fragment {
 	 */
 	knownnetworks = getNetworks(getContext());
 	known_in_range = new ArrayList<String>();
-
 	super.onAttach(activity);
+    }
+
+    @Override
+    public void onDetach() {
+        // TODO Auto-generated method stub
+        super.onDetach();
     }
 
     @Override
@@ -249,25 +256,34 @@ public class KnownNetworksFragment extends Fragment {
     private Handler scanhandler = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
-	    /*
-	     * If wifi is on, scan if not, make sure no networks shown in range
-	     */
-	    WifiManager wm = (WifiManager) getContext().getSystemService(
-		    Context.WIFI_SERVICE);
+	   switch (message.what){
+	   
+	   case SCAN_MESSAGE:
+	       /*
+		     * If wifi is on, scan if not, make sure no networks shown in range
+		     */
+		    WifiManager wm = (WifiManager) getContext().getSystemService(
+			    Context.WIFI_SERVICE);
 
-	    if (wm.isWifiEnabled())
-		getContext().sendBroadcast(
-			new Intent(WFConnection.ACTION_REQUEST_SCAN));
-	    else {
-		if (known_in_range != null && known_in_range.size() >= 1) {
-		    known_in_range.clear();
-		    if (adapter != null)
-			adapter.notifyDataSetChanged();
-		}
-	    }
-	    scanhandler.sendEmptyMessageDelayed(MESSAGE, SCAN_DELAY);
+		    if (wm.isWifiEnabled())
+			getContext().sendBroadcast(
+				new Intent(WFConnection.ACTION_REQUEST_SCAN));
+		    else {
+			if (known_in_range != null && known_in_range.size() >= 1) {
+			    known_in_range.clear();
+			    if (adapter != null)
+				adapter.notifyDataSetChanged();
+			}
+		    }
+		    scanhandler.sendEmptyMessageDelayed(SCAN_MESSAGE, SCAN_DELAY);
+	   break;
+	   
+	   case REFRESH_MESSAGE:
+	       refreshNetworkAdapter(message.getData().getStringArrayList(NETWORKS_KEY));
+	   break;
+	   
+	   }
 	}
-
     };
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -275,7 +291,13 @@ public class KnownNetworksFragment extends Fragment {
 	    /*
 	     * we know this is going to be a scan result notification
 	     */
-	    refreshNetworkAdapter(intent);
+	    
+	    Message msg = Message.obtain();
+	    msg.what= REFRESH_MESSAGE;
+	    Bundle data = new Bundle();
+	    data.putStringArrayList(NETWORKS_KEY, intent.getStringArrayListExtra(WFConnection.SCAN_RESULTS_ARRAY));
+	    msg.setData(data);
+	    scanhandler.sendMessage(msg);
 	}
 
     };
@@ -289,6 +311,17 @@ public class KnownNetworksFragment extends Fragment {
 	lv.setAdapter(adapter);
     }
     
+    public static KnownNetworksFragment newInstance(int num) {
+	KnownNetworksFragment f = new KnownNetworksFragment();
+
+        // Supply num input as an argument.
+        Bundle args = new Bundle();
+        args.putInt("num", num);
+        f.setArguments(args);
+
+        return f;
+    }
+    
     /*
      * Note that this WILL return a null String[] if called while wifi is off.
      */
@@ -296,10 +329,10 @@ public class KnownNetworksFragment extends Fragment {
 	WifiManager wm = (WifiManager) context
 		.getSystemService(Context.WIFI_SERVICE);
 	List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
-	List<String> networks = new ArrayList<String>();
-	if (wifiConfigs == null)
-	    return networks;
+	if (wifiConfigs == null || wifiConfigs.isEmpty())
+	    return new ArrayList<String>();
 
+	List<String> networks = new ArrayList<String>();
 	for (WifiConfiguration wfResult : wifiConfigs) {
 	    /*
 	     * Make sure there's a 1:1 correlation between
@@ -314,14 +347,13 @@ public class KnownNetworksFragment extends Fragment {
 	return networks;
     }
 
-    private void refreshNetworkAdapter(final Intent intent) {
+    private void refreshNetworkAdapter(final ArrayList<String> networks) {
 	/*
 	 * Don't refresh if knownnetworks is empty (wifi is off)
 	 */
 	knownnetworks = getNetworks(getContext());
 	if (knownnetworks.size() > 0) {
-	    known_in_range = intent
-		    .getStringArrayListExtra(WFConnection.SCAN_RESULTS_ARRAY);
+	    known_in_range = networks;
 	    if (adapter == null) {
 		createAdapter();
 	    } else {
@@ -359,12 +391,12 @@ public class KnownNetworksFragment extends Fragment {
     private void registerReceiver() {
 	IntentFilter filter = new IntentFilter(WFConnection.ACTION_SCAN_RESULTS);
 	getContext().registerReceiver(receiver, filter);
-	scanhandler.sendEmptyMessage(MESSAGE);
+	scanhandler.sendEmptyMessage(SCAN_MESSAGE);
     }
 
     private void unregisterReceiver() {
 	getContext().unregisterReceiver(receiver);
-	scanhandler.removeMessages(MESSAGE);
+	scanhandler.removeMessages(SCAN_MESSAGE);
     }
 
 }
