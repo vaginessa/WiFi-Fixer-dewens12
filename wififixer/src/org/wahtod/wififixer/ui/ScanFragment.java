@@ -74,13 +74,9 @@ public class ScanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
 	View v = inflater.inflate(R.layout.scannetworks, null);
-	List<WFScanResult> scan = getNetworks(getContext());
-	if (scan == null)
-	    return v;
-	else {
+	List<WFScanResult> scan = getNetworks(getContext());	
 	    createAdapter(v, scan);
 	    return v;
-	}
     }
 
     @Override

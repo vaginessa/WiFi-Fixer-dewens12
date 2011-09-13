@@ -54,7 +54,6 @@ public class KnownNetworksFragment extends Fragment {
 
     private String clicked;
     private int clicked_position;
-    private ListView lv;
     private View listviewitem;
     private NetworkListAdapter adapter;
     private List<String> knownnetworks;
@@ -73,20 +72,7 @@ public class KnownNetworksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
 	View v = inflater.inflate(R.layout.knownnetworks, null);
-	lv = (ListView) v.findViewById(R.id.ListView01);
-	createAdapter();
-	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
-	    @Override
-	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
-		    int position, long id) {
-		clicked = lv.getItemAtPosition(position).toString();
-		clicked_position = position;
-		listviewitem = v;
-		return false;
-	    }
-
-	});
-	registerForContextMenu(lv);
+	createAdapter(v);
 	return v;
     }
 
@@ -175,14 +161,16 @@ public class KnownNetworksFragment extends Fragment {
 
     @Override
     public void onPause() {
-	super.onPause();
 	unregisterReceiver();
+	this.unregisterForContextMenu((ListView) getView().findViewById(R.id.ListView01));
+	super.onPause();
     }
 
     @Override
     public void onResume() {
 	super.onResume();
 	registerReceiver();
+	registerContextMenu();
     }
 
     /*
@@ -306,8 +294,9 @@ public class KnownNetworksFragment extends Fragment {
      * Create adapter
      * Add Header view
      */
-    private void createAdapter(){
+    private void createAdapter(View v){
 	adapter = new NetworkListAdapter(knownnetworks);
+	ListView lv = (ListView) v.findViewById(R.id.ListView01);
 	lv.setAdapter(adapter);
     }
     
@@ -346,6 +335,23 @@ public class KnownNetworksFragment extends Fragment {
 
 	return networks;
     }
+    
+    private void registerContextMenu(){
+	ListView lv = (ListView) getView().findViewById(R.id.ListView01);
+	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
+	    @Override
+	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
+		    int position, long id) {
+		ListView lv = (ListView) getView().findViewById(R.id.ListView01);
+		clicked = lv.getItemAtPosition(position).toString();
+		clicked_position = position;
+		listviewitem = v;
+		return false;
+	    }
+
+	});
+	registerForContextMenu(lv);
+    }
 
     private void refreshNetworkAdapter(final ArrayList<String> networks) {
 	/*
@@ -355,7 +361,7 @@ public class KnownNetworksFragment extends Fragment {
 	if (knownnetworks.size() > 0) {
 	    known_in_range = networks;
 	    if (adapter == null) {
-		createAdapter();
+		createAdapter(getView());
 	    } else {
 		refreshArray();
 		adapter.notifyDataSetChanged();
