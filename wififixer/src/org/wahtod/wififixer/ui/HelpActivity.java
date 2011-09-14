@@ -28,7 +28,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class HelpActivity extends FragmentActivity {
-    
+
     WebView webview;
 
     @Override

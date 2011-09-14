@@ -88,8 +88,8 @@ public class KnownNetworksFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        // TODO Auto-generated method stub
-        super.onDetach();
+	// TODO Auto-generated method stub
+	super.onDetach();
     }
 
     @Override
@@ -162,7 +162,8 @@ public class KnownNetworksFragment extends Fragment {
     @Override
     public void onPause() {
 	unregisterReceiver();
-	this.unregisterForContextMenu((ListView) getView().findViewById(R.id.ListView01));
+	this.unregisterForContextMenu((ListView) getView().findViewById(
+		R.id.ListView01));
 	super.onPause();
     }
 
@@ -201,7 +202,8 @@ public class KnownNetworksFragment extends Fragment {
 	public View getView(int position, View convertView, ViewGroup parent) {
 	    ViewHolder holder;
 	    if (convertView == null) {
-		convertView = inflater.inflate(R.layout.known_list_layout, null);
+		convertView = inflater
+			.inflate(R.layout.known_list_layout, null);
 		holder = new ViewHolder();
 		holder.text = (TextView) convertView.findViewById(R.id.ssid);
 		holder.icon = (ImageView) convertView
@@ -244,33 +246,35 @@ public class KnownNetworksFragment extends Fragment {
     private Handler scanhandler = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
-	   switch (message.what){
-	   
-	   case SCAN_MESSAGE:
-	       /*
-		     * If wifi is on, scan if not, make sure no networks shown in range
-		     */
-		    WifiManager wm = (WifiManager) getContext().getSystemService(
-			    Context.WIFI_SERVICE);
+	    switch (message.what) {
 
-		    if (wm.isWifiEnabled())
-			getContext().sendBroadcast(
-				new Intent(WFConnection.ACTION_REQUEST_SCAN));
-		    else {
-			if (known_in_range != null && known_in_range.size() >= 1) {
-			    known_in_range.clear();
-			    if (adapter != null)
-				adapter.notifyDataSetChanged();
-			}
+	    case SCAN_MESSAGE:
+		/*
+		 * If wifi is on, scan if not, make sure no networks shown in
+		 * range
+		 */
+		WifiManager wm = (WifiManager) getContext().getSystemService(
+			Context.WIFI_SERVICE);
+
+		if (wm.isWifiEnabled())
+		    getContext().sendBroadcast(
+			    new Intent(WFConnection.ACTION_REQUEST_SCAN));
+		else {
+		    if (known_in_range != null && known_in_range.size() >= 1) {
+			known_in_range.clear();
+			if (adapter != null)
+			    adapter.notifyDataSetChanged();
 		    }
-		    scanhandler.sendEmptyMessageDelayed(SCAN_MESSAGE, SCAN_DELAY);
-	   break;
-	   
-	   case REFRESH_MESSAGE:
-	       refreshNetworkAdapter(message.getData().getStringArrayList(NETWORKS_KEY));
-	   break;
-	   
-	   }
+		}
+		scanhandler.sendEmptyMessageDelayed(SCAN_MESSAGE, SCAN_DELAY);
+		break;
+
+	    case REFRESH_MESSAGE:
+		refreshNetworkAdapter(message.getData().getStringArrayList(
+			NETWORKS_KEY));
+		break;
+
+	    }
 	}
     };
 
@@ -279,38 +283,38 @@ public class KnownNetworksFragment extends Fragment {
 	    /*
 	     * we know this is going to be a scan result notification
 	     */
-	    
+
 	    Message msg = Message.obtain();
-	    msg.what= REFRESH_MESSAGE;
+	    msg.what = REFRESH_MESSAGE;
 	    Bundle data = new Bundle();
-	    data.putStringArrayList(NETWORKS_KEY, intent.getStringArrayListExtra(WFConnection.SCAN_RESULTS_ARRAY));
+	    data.putStringArrayList(NETWORKS_KEY, intent
+		    .getStringArrayListExtra(WFConnection.SCAN_RESULTS_ARRAY));
 	    msg.setData(data);
 	    scanhandler.sendMessage(msg);
 	}
 
     };
-    
+
     /*
-     * Create adapter
-     * Add Header view
+     * Create adapter Add Header view
      */
-    private void createAdapter(View v){
+    private void createAdapter(View v) {
 	adapter = new NetworkListAdapter(knownnetworks);
 	ListView lv = (ListView) v.findViewById(R.id.ListView01);
 	lv.setAdapter(adapter);
     }
-    
+
     public static KnownNetworksFragment newInstance(int num) {
 	KnownNetworksFragment f = new KnownNetworksFragment();
 
-        // Supply num input as an argument.
-        Bundle args = new Bundle();
-        args.putInt("num", num);
-        f.setArguments(args);
+	// Supply num input as an argument.
+	Bundle args = new Bundle();
+	args.putInt("num", num);
+	f.setArguments(args);
 
-        return f;
+	return f;
     }
-    
+
     /*
      * Note that this WILL return a null String[] if called while wifi is off.
      */
@@ -335,14 +339,15 @@ public class KnownNetworksFragment extends Fragment {
 
 	return networks;
     }
-    
-    private void registerContextMenu(){
+
+    private void registerContextMenu() {
 	ListView lv = (ListView) getView().findViewById(R.id.ListView01);
 	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	    @Override
 	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 		    int position, long id) {
-		ListView lv = (ListView) getView().findViewById(R.id.ListView01);
+		ListView lv = (ListView) getView()
+			.findViewById(R.id.ListView01);
 		clicked = lv.getItemAtPosition(position).toString();
 		clicked_position = position;
 		listviewitem = v;
@@ -376,8 +381,8 @@ public class KnownNetworksFragment extends Fragment {
     private void refreshArray() {
 	if (knownnetworks.equals(adapter.ssidArray))
 	    return;
-	
-	ArrayList <String> remove = new ArrayList<String>(); 
+
+	ArrayList<String> remove = new ArrayList<String>();
 
 	for (String ssid : knownnetworks) {
 	    if (!adapter.ssidArray.contains(ssid))

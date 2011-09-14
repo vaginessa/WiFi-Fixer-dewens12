@@ -5,7 +5,7 @@ import java.util.List;
 
 import android.net.wifi.ScanResult;
 
-public class WFScanResult{
+public class WFScanResult {
     public String SSID;
     public String BSSID;
     public String capabilities;
@@ -14,7 +14,7 @@ public class WFScanResult{
     @Override
     public int hashCode() {
 	int hash = 1;
-	hash = hash * 31 +(SSID == null ? 0 : BSSID.hashCode());
+	hash = hash * 31 + (SSID == null ? 0 : BSSID.hashCode());
 	hash = hash * 31 + (SSID == null ? 0 : SSID.hashCode());
 	hash = hash * 31 + (capabilities == null ? 0 : capabilities.hashCode());
 
@@ -35,7 +35,7 @@ public class WFScanResult{
 	    return false;
 
     }
-    
+
     public WFScanResult() {
 	SSID = "";
 	capabilities = "";
@@ -65,7 +65,7 @@ public class WFScanResult{
 
 	level = result.level;
     }
-  
+
     public static List<WFScanResult> fromScanResultArray(
 	    final List<ScanResult> results) {
 	if (results == null)
@@ -73,11 +73,9 @@ public class WFScanResult{
 
 	List<WFScanResult> out = new ArrayList<WFScanResult>();
 	for (ScanResult result : results) {
-	    if (result == null)
-	    {
+	    if (result == null) {
 		out.add(new WFScanResult());
-	    }
-	    else
+	    } else
 		out.add(new WFScanResult(result));
 	}
 	return out;

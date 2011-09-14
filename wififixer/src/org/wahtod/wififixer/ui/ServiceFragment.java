@@ -37,7 +37,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class ServiceFragment extends Fragment {
-
     private TextView version;
     private ImageButton servicebutton;
     private ImageButton wifibutton;
@@ -51,13 +50,12 @@ public class ServiceFragment extends Fragment {
 		    || intent.getExtras().getInt(WifiManager.EXTRA_WIFI_STATE) == WifiManager.WIFI_STATE_ENABLED)
 		setIcon();
 	}
-
     };
 
     @Override
     public void onPause() {
-	super.onPause();
 	unregisterReceiver();
+	super.onPause();
     }
 
     private void unregisterReceiver() {
@@ -95,7 +93,7 @@ public class ServiceFragment extends Fragment {
 	return getActivity().getApplicationContext();
     }
 
-    void setIcon() {
+    private void setIcon() {
 
 	servicebutton.setAdjustViewBounds(true);
 	servicebutton.setMaxHeight(40);
@@ -128,10 +126,6 @@ public class ServiceFragment extends Fragment {
 	    wifibutton.setBackgroundResource(R.drawable.service_active);
 	}
 
-    }
-    
-    void serviceToggle(){
-	
     }
 
     void setText() {

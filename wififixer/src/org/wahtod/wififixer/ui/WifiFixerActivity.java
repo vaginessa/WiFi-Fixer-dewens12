@@ -62,7 +62,7 @@ public class WifiFixerActivity extends FragmentActivity {
 
     ViewPager vpager;
     FPAdapter fadapter;
-    private boolean adapterFlag;
+    public boolean adapterFlag;
 
     public static class FPAdapter extends FragmentPagerAdapter {
 	public FPAdapter(FragmentManager fm) {
@@ -83,11 +83,6 @@ public class WifiFixerActivity extends FragmentActivity {
 
 	}
     }
-
-    /*
-     * As ugly as caching context is, the alternative is uglier.
-     */
-    protected static Context ctxt;
 
     // New key for About nag
     // Set this when you change the About xml
@@ -121,13 +116,13 @@ public class WifiFixerActivity extends FragmentActivity {
     }
 
     private static void aboutNotification(final Context context) {
-        /*
-         * Fire About nag
-         */
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-        	new Intent(context, About.class), 0);
-        NotifUtil.show(context, context.getString(R.string.aboutnag), context
-        	.getString(R.string.please_read), 4145, contentIntent);
+	/*
+	 * Fire About nag
+	 */
+	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+		new Intent(context, About.class), 0);
+	NotifUtil.show(context, context.getString(R.string.aboutnag), context
+		.getString(R.string.please_read), 4145, contentIntent);
     }
 
     private void deleteLog() {
@@ -161,8 +156,8 @@ public class WifiFixerActivity extends FragmentActivity {
 	else if (intent.hasExtra(DELETE_LOG))
 	    deleteLog();
     }
-    
-    public void invalidateServiceFragment(){
+
+    private void invalidateServiceFragment() {
 	/*
 	 * Invalidate Service fragment
 	 */
@@ -248,7 +243,7 @@ public class WifiFixerActivity extends FragmentActivity {
 	dialog.show();
 
     }
-    
+
     public void serviceToggle(View view) {
 	if (PrefUtil.readBoolean(getApplicationContext(), Pref.DISABLE_KEY
 		.key())) {
@@ -341,42 +336,40 @@ public class WifiFixerActivity extends FragmentActivity {
 	setContentView(R.layout.main);
 	super.onCreate(savedInstanceState);
 
-	
-	    FragmentManager fm = getSupportFragmentManager();
+	if (findViewById(R.id.pager) != null && vpager == null) {
+	    adapterFlag = true;
+	    /*
+	     * First do small screen setup 
+	     * instantiate adapter and viewpager
+	     */
+	    fadapter = new FPAdapter(getSupportFragmentManager());
+	    vpager = (ViewPager) findViewById(R.id.pager);
+	    vpager.setAdapter(fadapter);
+	}
 
+	if (savedInstanceState == null) {
+	    FragmentManager fm = getSupportFragmentManager();
 	    ServiceFragment sf = new ServiceFragment();
 	    android.support.v4.app.FragmentTransaction ft = fm
 		    .beginTransaction();
-	    ft.replace(R.id.servicefragment, sf, SERVICEFRAG_TAG);
+	    ft.add(R.id.servicefragment, sf, SERVICEFRAG_TAG);
 
-	    if (findViewById(R.id.pager) != null) {
-		adapterFlag = true;
+	    if (!adapterFlag) {
 		/*
-		 * First do small screen setup instantiate adapter and viewpager
-		 */
-		fadapter = new FPAdapter(getSupportFragmentManager());
-		vpager = (ViewPager) findViewById(R.id.pager);
-		vpager.setAdapter(fadapter);
-	    } else {
-		/*
-		 * Then tablet layouts with the fragments in the main layout
+		 * We're on a tablet
+		 * so do tablet fragments
 		 */
 		KnownNetworksFragment knf = new KnownNetworksFragment();
-		ft.replace(R.id.knownnetworksfragment, knf,
-			KNOWNNETWORKSFRAG_TAG);
+		ft.add(R.id.knownnetworksfragment, knf, KNOWNNETWORKSFRAG_TAG);
 		if (null != findViewById(R.id.scanfragment)) {
 		    ScanFragment sc = new ScanFragment();
-		    ft.replace(R.id.scanfragment, sc, SCANFRAG_TAG);
+		    ft.add(R.id.scanfragment, sc, SCANFRAG_TAG);
 		}
 	    }
 	    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 	    ft.commit();
-	    
+	}
 	oncreate_setup();
-	/*
-	 * For ContextMenu handler
-	 */
-	ctxt = this;
 
 	/*
 	 * Handle intent command if destroyed or first start
@@ -495,23 +488,20 @@ public class WifiFixerActivity extends FragmentActivity {
     private void openNetworkList() {
 
     }
-    
+
     public void wifiToggle(View view) {
 	if (!getIsWifiOn(this)) {
-	    Intent intent = new Intent(
-		    WidgetHandler.WIFI_ON);
+	    Intent intent = new Intent(WidgetHandler.WIFI_ON);
 	    sendBroadcast(intent);
-	    Toast.makeText(this, R.string.enabling_wifi,
-		    Toast.LENGTH_LONG).show();
+	    Toast.makeText(this, R.string.enabling_wifi, Toast.LENGTH_LONG)
+		    .show();
 	} else {
-	    Intent intent = new Intent(
-		    WidgetHandler.WIFI_OFF);
+	    Intent intent = new Intent(WidgetHandler.WIFI_OFF);
 	    sendBroadcast(intent);
-	    Toast.makeText(this, R.string.disabling_wifi,
-		    Toast.LENGTH_LONG).show();
+	    Toast.makeText(this, R.string.disabling_wifi, Toast.LENGTH_LONG)
+		    .show();
 	}
 
-	invalidateServiceFragment();
     }
 
 }

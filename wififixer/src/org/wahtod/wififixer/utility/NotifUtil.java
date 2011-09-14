@@ -46,15 +46,15 @@ public abstract class NotifUtil {
     public static final int SSID_STATUS_MANAGED = 7;
     public static final String NULL_SSID = "empty";
     public static final String SEPARATOR = " : ";
-    
-    public static final String ACTION_STATUS_NOTIFICATION="org.wahtod.wififixer.STATNOTIF";
+
+    public static final String ACTION_STATUS_NOTIFICATION = "org.wahtod.wififixer.STATNOTIF";
     public static final String STATUS_DATA_KEY = "STATUS_DATA_KEY";
-    
+
     /*
      * Field keys for status bundle
      */
     public static final String SSID_KEY = "SSID";
-    public static final String STATUS_KEY ="STATUS";
+    public static final String STATUS_KEY = "STATUS";
     public static final String SIGNAL_KEY = "SIGNAL";
 
     /*
@@ -93,7 +93,7 @@ public abstract class NotifUtil {
 	    String status, final int signal, final boolean flag) {
 	cacheSelector();
 	selector.vaddStatNotif(ctxt, ssid, status, signal, flag);
-	if(flag)
+	if (flag)
 	    broadcastStatNotif(ctxt, ssid, status, signal);
     }
 
@@ -101,17 +101,17 @@ public abstract class NotifUtil {
 	    final String ssid, final String status, final int signal) {
 	Intent intent = new Intent(ACTION_STATUS_NOTIFICATION);
 	Bundle message = new Bundle();
-	if(ssid != null)
+	if (ssid != null)
 	    message.putString(SSID_KEY, ssid);
-	else 
-	    message.putString(SSID_KEY,"empty" );
+	else
+	    message.putString(SSID_KEY, "empty");
 
-	if(ssid != null)
+	if (ssid != null)
 	    message.putString(STATUS_KEY, status);
-	else 
-	    message.putString(STATUS_KEY,"empty" );
+	else
+	    message.putString(STATUS_KEY, "empty");
 	message.putLong(SIGNAL_KEY, signal);
-	
+
 	intent.putExtra(STATUS_DATA_KEY, message);
 	ctxt.sendBroadcast(intent);
     }

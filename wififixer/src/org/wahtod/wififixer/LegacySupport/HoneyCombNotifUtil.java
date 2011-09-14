@@ -155,12 +155,12 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	    NotifUtil.lognotif = builder.getNotification();
 	    NotifUtil.lognotif.contentView.setImageViewResource(R.id.signal,
 		    R.drawable.logging_enabled);
-	    
-	    NotifUtil.lognotif.contentView.setTextViewText(R.id.ssid,
-			ctxt.getString(R.string.logservice));
+
+	    NotifUtil.lognotif.contentView.setTextViewText(R.id.ssid, ctxt
+		    .getString(R.string.logservice));
 
 	}
-	
+
 	NotifUtil.lognotif.contentView.setTextViewText(R.id.status,
 		getLogString(ctxt).toString());
 

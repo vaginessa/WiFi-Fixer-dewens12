@@ -24,7 +24,6 @@ import java.util.List;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFConnection;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -34,8 +33,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -43,7 +40,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -58,6 +55,8 @@ public class ScanFragment extends Fragment {
 
     private static final int CONTEXT_CONNECT = 3;
     private static final int CONTEXT_INFO = 5;
+    protected static final int REFRESH_LIST_ADAPTER = 0;
+    protected static final int CLEAR_LIST_ADAPTER = 1;
 
     private Handler drawhandler = new Handler() {
 	@Override
@@ -66,7 +65,16 @@ public class ScanFragment extends Fragment {
 	     * handle SCAN_RESULTS_AVAILABLE intents to refresh ListView
 	     * asynchronously (to avoid ANR)
 	     */
-	    refreshScanListAdapter();
+	    switch (message.what) {
+	    case REFRESH_LIST_ADAPTER:
+		refreshScanListAdapter();
+		break;
+
+	    case CLEAR_LIST_ADAPTER:
+		clearScanListAdapter();
+		break;
+	    }
+
 	}
     };
 
@@ -74,17 +82,7 @@ public class ScanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
 	View v = inflater.inflate(R.layout.scannetworks, null);
-	List<WFScanResult> scan = getNetworks(getContext());	
-	    createAdapter(v, scan);
-	    return v;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-	/*
-	 * Grab and set up ListView
-	 */
-	super.onAttach(activity);
+	return v;
     }
 
     @Override
@@ -118,25 +116,33 @@ public class ScanFragment extends Fragment {
     @Override
     public void onPause() {
 	unregisterReceiver();
-	this.unregisterForContextMenu((ListView) getView().findViewById(R.id.ListView02));
+	if (adapter != null)
+	    this.unregisterForContextMenu((ListView) getView().findViewById(
+		    R.id.ListView02));
 	super.onPause();
     }
 
     @Override
     public void onResume() {
 	super.onResume();
-	registerReceiver();
+	List<WFScanResult> scan = getNetworks(getContext());
+	if (adapter == null)
+	    createAdapter(getView(), scan);
+
 	registerContextMenu();
+	registerReceiver();
     }
 
     /*
      * custom adapter for Network List ListView
      */
-    private class ScanListAdapter extends BaseAdapter {
+    private class ScanListAdapter extends ArrayAdapter<WFScanResult> {
 	private List<WFScanResult> scanresultArray;
 	private LayoutInflater inflater;
 
-	public ScanListAdapter(List<WFScanResult> scan) {
+	public ScanListAdapter(Context context, int textViewResourceId,
+		List<WFScanResult> scan) {
+	    super(context, textViewResourceId);
 	    inflater = (LayoutInflater) getContext().getSystemService(
 		    Context.LAYOUT_INFLATER_SERVICE);
 	    scanresultArray = scan;
@@ -149,7 +155,7 @@ public class ScanFragment extends Fragment {
 		return scanresultArray.size();
 	}
 
-	public Object getItem(int position) {
+	public WFScanResult getItem(int position) {
 	    return scanresultArray.get(position);
 	}
 
@@ -212,7 +218,6 @@ public class ScanFragment extends Fragment {
 		holder.security.setImageResource(R.drawable.secure);
 		holder.encryption.setText(getCapabilitiesString(scanresultArray
 			.get(position).capabilities));
-
 	    }
 
 	    return convertView;
@@ -245,71 +250,61 @@ public class ScanFragment extends Fragment {
 	     */
 	    if (intent.getAction().equals(
 		    WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
-		drawhandler.sendEmptyMessage(0);
+		drawhandler.sendEmptyMessage(REFRESH_LIST_ADAPTER);
 	    else if (intent.getExtras().getInt(WifiManager.EXTRA_WIFI_STATE) == WifiManager.WIFI_STATE_DISABLED) {
 		/*
 		 * Request refresh from activity
 		 */
 		if (!(adapter == null)) {
-		    FragmentManager fm = getActivity()
-			    .getSupportFragmentManager();
-		    ScanFragment sf = new ScanFragment();
-		    FragmentTransaction ft = fm.beginTransaction();
-		    ft.replace(R.id.scanfragment, sf,
-			    WifiFixerActivity.SCANFRAG_TAG);
-		    ft.commit();
+		    drawhandler.sendEmptyMessage(CLEAR_LIST_ADAPTER);
 		}
 	    }
 	}
     };
-    
-    private void registerContextMenu(){
-	ListView lv = (ListView) getView().findViewById(R.id.ListView02);
-	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
-	    @Override
-	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
-		    int position, long id) {
-		WFScanResult item = adapter.scanresultArray.get(position);
-		clicked = item.SSID;
-		return false;
-	    }
 
-	});
-	registerForContextMenu(lv);
+    protected void clearScanListAdapter() {
+	WFScanResult w = new WFScanResult();
+	w.SSID = getString(R.string.wifi_is_disabled);
+	w.level = -99;
+	List<WFScanResult> list = new ArrayList<WFScanResult>();
+	list.add(w);
+	refreshArray(list);
+	adapter.notifyDataSetChanged();
     }
 
     /*
-     * Create adapter Add Header view
+     * Create adapter
      */
     private void createAdapter(View v, List<WFScanResult> scan) {
-	adapter = new ScanListAdapter(scan);
+	adapter = new ScanListAdapter(getContext(), 0, scan);
 	ListView lv = (ListView) v.findViewById(R.id.ListView02);
 	lv.setAdapter(adapter);
+    }
+
+    private Context getContext() {
+	return getActivity().getApplicationContext();
     }
 
     /*
      * Note that this WILL return a null String[] if called while wifi is off.
      */
     private static List<WFScanResult> getNetworks(final Context context) {
-	/*
-	 * Can't return null
-	 */
 	WifiManager wm = (WifiManager) context
 		.getSystemService(Context.WIFI_SERVICE);
 
-	return WFScanResult.fromScanResultArray(wm.getScanResults());
+	if (wm.isWifiEnabled())
+	    return WFScanResult.fromScanResultArray(wm.getScanResults());
+	else
+	    return new ArrayList<WFScanResult>();
     }
 
     private void refreshScanListAdapter() {
 	/*
 	 * Firing this from a handler In case of ANR
 	 */
-
 	List<WFScanResult> scan = getNetworks(getContext());
-
 	if (adapter == null)
 	    createAdapter(getView(), scan);
-
 	refreshArray(scan);
 	adapter.notifyDataSetChanged();
     }
@@ -353,9 +348,9 @@ public class ScanFragment extends Fragment {
 
 	for (WFScanResult result : scan) {
 
-	    if (!scan.contains(result)) {
+	    if (!adapter.scanresultArray.contains(result))
 		adapter.scanresultArray.add(result);
-	    } else {
+	    else {
 		int index = adapter.scanresultArray.indexOf(result);
 		if (index != -1) {
 		    if (result.level != adapter.scanresultArray.get(index).level)
@@ -366,8 +361,19 @@ public class ScanFragment extends Fragment {
 	Collections.sort(adapter.scanresultArray, new SortBySignal());
     }
 
-    private Context getContext() {
-	return getActivity().getApplicationContext();
+    private void registerContextMenu() {
+	ListView lv = (ListView) getView().findViewById(R.id.ListView02);
+	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
+	    @Override
+	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
+		    int position, long id) {
+		WFScanResult item = adapter.scanresultArray.get(position);
+		clicked = item.SSID;
+		return false;
+	    }
+
+	});
+	registerForContextMenu(lv);
     }
 
     private void registerReceiver() {
