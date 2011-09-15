@@ -30,6 +30,7 @@ import org.wahtod.wififixer.widget.FixerWidget;
 
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -82,10 +83,13 @@ public class WifiFixerService extends Service implements
     private static void refreshWidget(final Context context) {
 	Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 	/*
-	 * Why would anyone possibly want more than 3? It only does one thing.
+	 * Doing this right. 
 	 */
-	int[] widgetids = { 0, 1, 2 };
-	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetids);
+	AppWidgetManager appWidgetManager = AppWidgetManager
+	.getInstance(context.getApplicationContext());
+	int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
+		context, FixerWidget.class));
+	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
 	intent.setClass(context, FixerWidget.class);
 	context.sendBroadcast(intent);
     }

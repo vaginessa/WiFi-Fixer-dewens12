@@ -17,6 +17,7 @@
 package org.wahtod.wififixer.widget;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants;
 import org.wahtod.wififixer.SharedPrefs.PrefUtil;
 import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
@@ -33,8 +34,20 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 
 public class FixerWidget extends AppWidgetProvider {
-
     public static final String W_INTENT = "org.wahtod.wififixer.WIDGET";
+
+    @Override
+    public void onDisabled(Context context) {
+	super.onDisabled(context);
+	PrefUtil.writeBoolean(context, PrefConstants.HAS_WIDGET, false);
+    }
+
+    @Override
+    public void onEnabled(Context context) {
+	if(!PrefUtil.readBoolean(context, PrefConstants.HAS_WIDGET))
+	    PrefUtil.writeBoolean(context, PrefConstants.HAS_WIDGET, true);
+	super.onEnabled(context);
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -104,6 +117,14 @@ public class FixerWidget extends AppWidgetProvider {
 		    FixerWidget.class);
 	    AppWidgetManager manager = AppWidgetManager.getInstance(this);
 	    manager.updateAppWidget(thisWidget, updateViews);
+
+	    /*
+	     * Set HAS_WIDGET true if not already
+	     */
+	    if (!PrefUtil.readBoolean(this.getApplicationContext(),
+		    PrefConstants.HAS_WIDGET))
+		PrefUtil.writeBoolean(this.getApplicationContext(),
+			PrefConstants.HAS_WIDGET, true);
 
 	}
 

@@ -23,7 +23,7 @@ import java.util.Map;
 public class PrefConstants {
 
     /*
-     * Constants
+     * Constants for non-UI-tracked preferences
      */
 
     public static final String SUPFIX_DEFAULT = "SPFDEF";
@@ -33,6 +33,7 @@ public class PrefConstants {
     public static final String WIDGET_KEY = "WIDGET";
     public static final String WIFI_STATE_LOCK = "WFSTATELOCK";
     public static final String LOGGING_MENU = "Logging";
+    public static final String HAS_WIDGET ="HASWIDGET";
 
     /*
      * PrefsList enum

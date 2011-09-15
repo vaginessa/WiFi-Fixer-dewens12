@@ -17,9 +17,13 @@
 package org.wahtod.wififixer.utility;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.WifiFixerService;
 import org.wahtod.wififixer.LegacySupport.HoneyCombNotifUtil;
 import org.wahtod.wififixer.LegacySupport.LegacyNotifUtil;
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants;
+import org.wahtod.wififixer.SharedPrefs.PrefUtil;
+import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -92,9 +96,19 @@ public abstract class NotifUtil {
     public static void addStatNotif(final Context ctxt, final String ssid,
 	    String status, final int signal, final boolean flag) {
 	cacheSelector();
-	selector.vaddStatNotif(ctxt, ssid, status, signal, flag);
-	if (flag)
+	/*
+	 * Show notification
+	 */
+	if (PrefUtil.readBoolean(ctxt, Pref.STATENOT_KEY.key()))
+	    selector.vaddStatNotif(ctxt, ssid, status, signal, flag);
+	/*
+	 * Send Broadcast
+	 */
+	if (flag && PrefUtil.readBoolean(ctxt, PrefConstants.HAS_WIDGET)) {
 	    broadcastStatNotif(ctxt, ssid, status, signal);
+	    LogService.log(ctxt, WifiFixerService.class.getName(),
+		    "Sending Widget Broadcast");
+	}
     }
 
     private static void broadcastStatNotif(final Context ctxt,

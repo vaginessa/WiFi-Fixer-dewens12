@@ -1832,7 +1832,7 @@ public class WFConnection extends Object implements
 	 * Set current state on resume
 	 */
 
-	if (statNotifCheck())
+	if (prefs.getFlag(Pref.STATENOT_KEY) && statNotifCheck())
 	    setStatNotif(true);
     }
 
@@ -1933,8 +1933,7 @@ public class WFConnection extends Object implements
     }
 
     private static boolean statNotifCheck() {
-	if (screenstate && prefs.getFlag(Pref.STATENOT_KEY)
-		&& getWifiManager(ctxt).isWifiEnabled())
+	if (screenstate && getWifiManager(ctxt).isWifiEnabled())
 	    return true;
 	else
 	    return false;
