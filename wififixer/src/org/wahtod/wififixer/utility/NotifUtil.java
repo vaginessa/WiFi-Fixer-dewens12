@@ -17,7 +17,6 @@
 package org.wahtod.wififixer.utility;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.WifiFixerService;
 import org.wahtod.wififixer.LegacySupport.HoneyCombNotifUtil;
 import org.wahtod.wififixer.LegacySupport.LegacyNotifUtil;
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
@@ -97,8 +96,6 @@ public abstract class NotifUtil {
 	 * Show (or cancel) notification
 	 */
 	selector.vaddStatNotif(ctxt, m.ssid, m.status, m.signal, m.show);
-	LogService.log(ctxt, WifiFixerService.class.getName(),
-		"Sending Notification Update");
     }
 
     public static void broadcastStatNotif(final Context ctxt,
@@ -110,8 +107,6 @@ public abstract class NotifUtil {
 	message.putInt(SIGNAL_KEY, m.signal);
 	intent.putExtra(STATUS_DATA_KEY, message);
 	ctxt.sendBroadcast(intent);
-	LogService.log(ctxt, WifiFixerService.class.getName(),
-		"Sending Widget Broadcast");
     }
 
     public static void addLogNotif(final Context context, final boolean flag) {

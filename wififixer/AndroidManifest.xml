@@ -25,7 +25,9 @@
 		android:backupAgent=".SharedPrefs.PrefsBackupAgent">
 		<meta-data android:name="com.google.android.backup.api_key"
 			android:value="AEdPqrEAAAAIAGomq--y98O0VHARd55VOdh8CoEphVxKfVXAHw" />
-
+		<!--
+			Main Activity
+		-->
 		<activity android:name=".ui.WifiFixerActivity"
 			android:launchMode="singleTask">
 			<intent-filter>
@@ -34,29 +36,29 @@
 			</intent-filter>
 		</activity>
 
+		<!--
+			Support Activities
+		-->
 		<activity android:name=".ui.About" />
 		<activity android:name=".ui.PrefActivity" />
 		<activity android:name=".ui.HelpActivity" />
 
+		<!--
+			Starts Boot thread service which waits 30s to run WifiFixerService
+		-->
 		<receiver android:name=".Boot.BootReceiver">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
 		</receiver>
+		<service android:name=".Boot.BootService" class="BootService">
+		</service>
 
-		<receiver android:name=".widget.WidgetReceiver"
-			android:process=":WidgetHandler" android:exported="false">
-			<intent-filter>
-				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_ON" />
-				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_OFF" />
-				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE" />
-				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE" />
-			</intent-filter>
-		</receiver>
-
+		<!--
+			Starts Boot thread service which waits 30s to run WifiFixerService
+		-->
 		<receiver android:name=".WFBroadcastReceiver">
 			<intent-filter>
-				<category android:name="android.intent.category.HOME" />
 				<action android:name="org.wahtod.wififixer.ACTION_WIFI_SERVICE_DISABLE" />
 				<action android:name="org.wahtod.wififixer.ACTION_WIFI_SERVICE_ENABLE" />
 				<action android:name="org.wahtod.wififixer.WIDGET" />
@@ -66,7 +68,21 @@
 				<action android:name="org.wahtod.wififixer.ACTION_WIFI_TOGGLE" />
 			</intent-filter>
 		</receiver>
-
+		
+		<!--
+			Widget intent dispatch
+			and support
+		-->
+		
+		<receiver android:name=".widget.WidgetReceiver"
+			android:process=":WidgetHandler" android:exported="false">
+			<intent-filter>
+				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_ON" />
+				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_OFF" />
+				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE" />
+				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE" />
+			</intent-filter>
+		</receiver>
 		<receiver android:name=".widget.FixerWidget">
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -75,23 +91,31 @@
 			<meta-data android:name="android.appwidget.provider"
 				android:resource="@xml/widget_provider" />
 		</receiver>
-
 		<service android:name=".widget.FixerWidget$UpdateService">
 		</service>
 		<service android:name=".widget.FixerWidget$StatusUpdateService">
 		</service>
+		
+		<!--
+			Networking guts
+		-->
 
 		<service android:persistent="true" android:exported="false"
 			android:name=".WifiFixerService" class="WifiFixerService"
 			android:process=":WifiFixerService">
 		</service>
+		
+		<!--
+			Provides LogService.log services
+		-->
 
 		<service android:name=".utility.LogService" class="LogService"
 			android:process=":LogService">>
 		</service>
-
-		<service android:name=".Boot.BootService" class="BootService">
-		</service>
+		
+		<!--
+			Handles asynchronous toggling of wifi state
+		-->
 
 		<service android:name=".ToggleService" class="ToggleService">
 		</service>

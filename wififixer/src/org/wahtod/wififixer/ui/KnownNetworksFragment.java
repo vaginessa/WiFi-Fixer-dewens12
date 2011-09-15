@@ -316,7 +316,7 @@ public class KnownNetworksFragment extends Fragment {
     }
 
     /*
-     * Note that this WILL return a null String[] if called while wifi is off.
+     * 
      */
     private static final List<String> getNetworks(final Context context) {
 	WifiManager wm = (WifiManager) context
@@ -336,7 +336,6 @@ public class KnownNetworksFragment extends Fragment {
 	    else
 		networks.add(EMPTY_SSID);
 	}
-
 	return networks;
     }
 
