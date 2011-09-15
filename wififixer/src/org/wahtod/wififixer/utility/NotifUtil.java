@@ -21,9 +21,7 @@ import org.wahtod.wififixer.WifiFixerService;
 import org.wahtod.wififixer.LegacySupport.HoneyCombNotifUtil;
 import org.wahtod.wififixer.LegacySupport.LegacyNotifUtil;
 import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants;
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.utility.StatusMessage;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -93,41 +91,27 @@ public abstract class NotifUtil {
     /*
      * Exposed API and utility methods
      */
-    public static void addStatNotif(final Context ctxt, final String ssid,
-	    String status, final int signal, final boolean flag) {
+    public static void addStatNotif(final Context ctxt, final StatusMessage m) {
 	cacheSelector();
 	/*
-	 * Show notification
+	 * Show (or cancel) notification
 	 */
-	if (PrefUtil.readBoolean(ctxt, Pref.STATENOT_KEY.key()))
-	    selector.vaddStatNotif(ctxt, ssid, status, signal, flag);
-	/*
-	 * Send Broadcast
-	 */
-	if (flag && PrefUtil.readBoolean(ctxt, PrefConstants.HAS_WIDGET)) {
-	    broadcastStatNotif(ctxt, ssid, status, signal);
-	    LogService.log(ctxt, WifiFixerService.class.getName(),
-		    "Sending Widget Broadcast");
-	}
+	selector.vaddStatNotif(ctxt, m.ssid, m.status, m.signal, m.show);
+	LogService.log(ctxt, WifiFixerService.class.getName(),
+		"Sending Notification Update");
     }
 
-    private static void broadcastStatNotif(final Context ctxt,
-	    final String ssid, final String status, final int signal) {
+    public static void broadcastStatNotif(final Context ctxt,
+	    final StatusMessage m) {
 	Intent intent = new Intent(ACTION_STATUS_NOTIFICATION);
 	Bundle message = new Bundle();
-	if (ssid != null)
-	    message.putString(SSID_KEY, ssid);
-	else
-	    message.putString(SSID_KEY, "empty");
-
-	if (ssid != null)
-	    message.putString(STATUS_KEY, status);
-	else
-	    message.putString(STATUS_KEY, "empty");
-	message.putLong(SIGNAL_KEY, signal);
-
+	message.putString(SSID_KEY, m.ssid);
+	message.putString(STATUS_KEY, m.status);
+	message.putInt(SIGNAL_KEY, m.signal);
 	intent.putExtra(STATUS_DATA_KEY, message);
 	ctxt.sendBroadcast(intent);
+	LogService.log(ctxt, WifiFixerService.class.getName(),
+		"Sending Widget Broadcast");
     }
 
     public static void addLogNotif(final Context context, final boolean flag) {

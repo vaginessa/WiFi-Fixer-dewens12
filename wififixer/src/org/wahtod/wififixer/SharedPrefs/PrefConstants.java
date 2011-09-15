@@ -33,7 +33,7 @@ public class PrefConstants {
     public static final String WIDGET_KEY = "WIDGET";
     public static final String WIFI_STATE_LOCK = "WFSTATELOCK";
     public static final String LOGGING_MENU = "Logging";
-    public static final String HAS_WIDGET ="HASWIDGET";
+    public static final String HAS_WIDGET = "HASWIDGET";
 
     /*
      * PrefsList enum
@@ -43,7 +43,7 @@ public class PrefConstants {
 	WIFILOCK_KEY("WiFiLock"), NOTIF_KEY("Notifications"), DISABLE_KEY(
 		"Disable"), LOG_KEY("SLOG"), SUPFIX_KEY("SUPFIX"), N1FIX2_KEY(
 		"N1FIX2"), NETNOT_KEY("NetNotif"), SCREEN_KEY("SCREEN"), STATENOT_KEY(
-		"StateNotif");
+		"StateNotif"), HASWIDGET_KEY("HASWIDGET");
 
 	private final String key;
 	private static final Map<String, Pref> lookup = new HashMap<String, Pref>();

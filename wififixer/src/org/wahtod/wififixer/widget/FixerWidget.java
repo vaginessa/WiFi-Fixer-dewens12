@@ -40,12 +40,14 @@ public class FixerWidget extends AppWidgetProvider {
     public void onDisabled(Context context) {
 	super.onDisabled(context);
 	PrefUtil.writeBoolean(context, PrefConstants.HAS_WIDGET, false);
+	PrefUtil.notifyPrefChange(context, PrefConstants.HAS_WIDGET, false);
     }
 
     @Override
     public void onEnabled(Context context) {
-	if(!PrefUtil.readBoolean(context, PrefConstants.HAS_WIDGET))
+	if (!PrefUtil.readBoolean(context, PrefConstants.HAS_WIDGET))
 	    PrefUtil.writeBoolean(context, PrefConstants.HAS_WIDGET, true);
+	PrefUtil.notifyPrefChange(context, PrefConstants.HAS_WIDGET, true);
 	super.onEnabled(context);
     }
 
@@ -80,7 +82,7 @@ public class FixerWidget extends AppWidgetProvider {
 		remoteViews.setTextViewText(R.id.status, data
 			.getString(NotifUtil.STATUS_KEY));
 		remoteViews.setImageViewResource(R.id.signal,
-			getIcon((int) data.getLong(NotifUtil.SIGNAL_KEY)));
+			getIcon(data.getInt(NotifUtil.SIGNAL_KEY)));
 		int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
 			this, FixerWidget.class));
 		for (int n = 0; n < ids.length; n++)

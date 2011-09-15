@@ -31,10 +31,12 @@ import org.wahtod.wififixer.utility.HttpHostup;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ScreenStateHandler;
+import org.wahtod.wififixer.utility.StatusDispatcher;
 import org.wahtod.wififixer.utility.WFConfig;
 import org.wahtod.wififixer.utility.WakeLock;
 import org.wahtod.wififixer.utility.WifiLock;
 import org.wahtod.wififixer.utility.ScreenStateHandler.OnScreenStateChangedListener;
+import org.wahtod.wififixer.utility.StatusMessage;
 import org.wahtod.wififixer.widget.WidgetHandler;
 
 import android.app.PendingIntent;
@@ -67,6 +69,7 @@ public class WFConnection extends Object implements
     private WakeLock wakelock;
     private WifiLock wifilock;
     static boolean screenstate;
+    private static StatusDispatcher statusdispatcher;
 
     // flags
     private static boolean shouldrepair = false;
@@ -519,8 +522,8 @@ public class WFConnection extends Object implements
 	    else
 		NotifUtil.setSsidStatus(NotifUtil.SSID_STATUS_MANAGED);
 
-	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
-		    true);
+	    statusdispatcher.sendMessage(ctxt, new StatusMessage(notifSSID,
+		    notifStatus, notifSignal, true));
 	}
 
     };
@@ -570,6 +573,7 @@ public class WFConnection extends Object implements
 
     public WFConnection(final Context context, PrefUtil p) {
 	prefs = p;
+	statusdispatcher = new StatusDispatcher(context, p);
 	ScreenStateHandler.setOnScreenStateChangedListener(this);
 	appname = LogService.getLogTag(context);
 	screenstate = ScreenStateHandler.getScreenState(context);
@@ -727,14 +731,14 @@ public class WFConnection extends Object implements
 	/*
 	 * Notify state
 	 */
-	if (prefs.getFlag(Pref.STATENOT_KEY) && screenstate) {
+	if (screenstate) {
 	    if (isup)
 		notifStatus = context.getString(R.string.passed);
 	    else
 		notifStatus = context.getString(R.string.failed);
 
-	    NotifUtil.addStatNotif(context, notifSSID, notifStatus,
-		    notifSignal, true);
+	    statusdispatcher.sendMessage(context, new StatusMessage(notifSSID,
+		    notifStatus, notifSignal, true));
 	}
 
 	return isup;
@@ -793,8 +797,9 @@ public class WFConnection extends Object implements
 		/*
 		 * Update status notification with new signal value
 		 */
-		NotifUtil.addStatNotif(context, notifSSID, context
-			.getString(R.string.network_test), notifSignal, true);
+		statusdispatcher.sendMessage(context, new StatusMessage(
+			notifSSID, context.getString(R.string.network_test),
+			notifSignal, true));
 	    }
 
 	}
@@ -1625,8 +1630,8 @@ public class WFConnection extends Object implements
 		notifStatus = sState;
 		notifSignal = 0;
 	    }
-	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
-		    true);
+	    statusdispatcher.sendMessage(ctxt, new StatusMessage(notifSSID,
+		    notifStatus, notifSignal, true));
 	}
 
 	/*
@@ -1800,6 +1805,10 @@ public class WFConnection extends Object implements
 
     private void onScreenOff() {
 	/*
+	 * Clear StatusDispatcher
+	 */
+	statusdispatcher.clearQueue();
+	/*
 	 * Disable Sleep check
 	 */
 	if (prefs.getFlag(Pref.SCREEN_KEY))
@@ -1848,9 +1857,8 @@ public class WFConnection extends Object implements
     private void onWifiDisabled() {
 	wifistate = false;
 	clearHandler();
-	if (prefs.getFlag(Pref.STATENOT_KEY))
-	    NotifUtil.addStatNotif(ctxt, NULL_SSID, ctxt
-		    .getString(R.string.wifi_is_disabled), 0, true);
+	statusdispatcher.sendMessage(ctxt, new StatusMessage(NULL_SSID, ctxt
+		.getString(R.string.wifi_is_disabled), 0, true));
 
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.setLogTS(ctxt, false, 0);
@@ -1914,11 +1922,10 @@ public class WFConnection extends Object implements
 	if (state) {
 	    notifStatus = getSupplicantStateString();
 	    notifSSID = getSSID();
-
-	    NotifUtil.addStatNotif(ctxt, notifSSID, notifStatus, notifSignal,
-		    true);
+	    statusdispatcher.sendMessage(ctxt, new StatusMessage(notifSSID,
+		    notifStatus, notifSignal, true));
 	} else {
-	    NotifUtil.addStatNotif(ctxt, null, null, 0, false);
+	    statusdispatcher.sendMessage(ctxt, new StatusMessage(false));
 	}
     }
 
@@ -2068,9 +2075,8 @@ public class WFConnection extends Object implements
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.toggling_wifi));
 	ctxt.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
-	if (prefs.getFlag(Pref.STATENOT_KEY))
-	    NotifUtil.addStatNotif(ctxt, NULL_SSID, ctxt
-		    .getString(R.string.toggling_wifi), 0, true);
+	statusdispatcher.sendMessage(ctxt, new StatusMessage(NULL_SSID, ctxt
+		.getString(R.string.toggling_wifi), 0, true));
     }
 
     private void wifiRepair() {

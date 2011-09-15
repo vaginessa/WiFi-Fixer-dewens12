@@ -34,7 +34,6 @@ public abstract class VersionedLogFile {
 	    } else
 		selector = new API8LogFile();
 	}
-
 	return selector.vgetLogFile(context);
     }
 }
