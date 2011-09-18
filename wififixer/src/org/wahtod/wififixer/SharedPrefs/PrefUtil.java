@@ -29,6 +29,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 
 public class PrefUtil extends Object {
@@ -43,6 +46,10 @@ public class PrefUtil extends Object {
     private static final String VALUE_KEY = "VALUE_KEY";
     private static final String INT_KEY = "INTKEY";
     private static final String NETPREFIX = "n_";
+    /*
+     * Actions for handler message bundles
+     */
+    protected static final String INTENT_ACTION = "INTENT_ACTION";
 
     /*
      * Fields
@@ -54,16 +61,36 @@ public class PrefUtil extends Object {
     private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
 	public void onReceive(final Context context, final Intent intent) {
 	    String valuekey = intent.getStringExtra(VALUE_KEY);
+	    Message message = receiverExecutor.obtainMessage();
+	    Bundle data = new Bundle();
 	    if (intent.getAction().equals(VALUE_CHANGED_ACTION)) {
-		Pref p = Pref.get(valuekey);
-		if (p != null)
-		    handlePrefChange(p, intent.getBooleanExtra(DATA_KEY, false));
-	    } else {
-		NetPref np = NetPref.get(valuekey);
-		if (np != null) {
-		    handleNetPrefChange(np, intent.getStringExtra(NET_KEY),
-			    intent.getIntExtra(INT_KEY, 0));
-		}
+
+		data.putString(INTENT_ACTION, intent.getAction());
+		data.putString(VALUE_KEY, valuekey);
+		data.putBoolean(DATA_KEY, intent.getBooleanExtra(DATA_KEY,
+			false));
+	    } else if (intent.getAction().equals(NETVALUE_CHANGED_ACTION)) {
+
+		data.putInt(DATA_KEY, intent.getIntExtra(DATA_KEY, 0));
+		data.putString(NET_KEY, intent.getStringExtra(NET_KEY));
+	    }
+
+	    message.setData(data);
+	    receiverExecutor.sendMessage(message);
+	}
+    };
+
+    private Handler receiverExecutor = new Handler() {
+	@Override
+	public void handleMessage(Message message) {
+	    Bundle data = message.getData();
+	    String action = data.getString(INTENT_ACTION);
+	    if (action.equals(VALUE_CHANGED_ACTION))
+		handlePrefChange(Pref.get(data.getString(VALUE_KEY)), data
+			.getBoolean(DATA_KEY));
+	    else if (action.equals(NETVALUE_CHANGED_ACTION)) {
+		handleNetPrefChange(NetPref.get(data.getString(VALUE_KEY)),
+			data.getString(NET_KEY), data.getInt(DATA_KEY));
 	    }
 	}
     };
