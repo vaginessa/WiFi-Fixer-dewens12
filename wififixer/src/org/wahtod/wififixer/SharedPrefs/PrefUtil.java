@@ -63,14 +63,12 @@ public class PrefUtil extends Object {
 	    String valuekey = intent.getStringExtra(VALUE_KEY);
 	    Message message = receiverExecutor.obtainMessage();
 	    Bundle data = new Bundle();
+	    data.putString(INTENT_ACTION, intent.getAction());
 	    if (intent.getAction().equals(VALUE_CHANGED_ACTION)) {
-
-		data.putString(INTENT_ACTION, intent.getAction());
 		data.putString(VALUE_KEY, valuekey);
 		data.putBoolean(DATA_KEY, intent.getBooleanExtra(DATA_KEY,
 			false));
 	    } else if (intent.getAction().equals(NETVALUE_CHANGED_ACTION)) {
-
 		data.putInt(DATA_KEY, intent.getIntExtra(DATA_KEY, 0));
 		data.putString(NET_KEY, intent.getStringExtra(NET_KEY));
 	    }
