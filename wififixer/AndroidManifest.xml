@@ -97,7 +97,7 @@
 		</service>
 		
 		<!--
-			Networking guts
+			Networking guts: Main Persistent process
 		-->
 
 		<service android:persistent="true" android:exported="false"
