@@ -51,6 +51,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
@@ -181,6 +182,7 @@ public class WFConnection extends Object implements
     private static final int CONNECTING_THRESHOLD = 3;
 
     // Runnable Constants for handler
+    private static final int INTENT = 37;
     private static final int MAIN = 0;
     private static final int REPAIR = 1;
     private static final int RECONNECT = 2;
@@ -199,6 +201,10 @@ public class WFConnection extends Object implements
 	@Override
 	public void handleMessage(Message message) {
 	    switch (message.what) {
+	    
+	    case INTENT:
+		dispatchIntent(ctxt,message.getData());
+		break;
 
 	    case MAIN:
 		handler.post(rMain);
@@ -532,41 +538,16 @@ public class WFConnection extends Object implements
 	public void onReceive(final Context context, final Intent intent) {
 
 	    /*
-	     * Dispatches the broadcast intent to the appropriate handler method
+	     * Dispatches the broadcast intent 
+	     * to the handler for processing
 	     */
-
-	    String iAction = intent.getAction();
-	    if (iAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION))
-		/*
-		 * Wifi state, e.g. on/off
-		 */
-		handleWifiState(intent);
-	    else if (iAction
-		    .equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION))
-		/*
-		 * Supplicant events
-		 */
-		handleSupplicantIntent(intent);
-	    else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
-		/*
-		 * Scan Results
-		 */
-		handleScanResults();
-	    else if (iAction
-		    .equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
-		/*
-		 * IP connectivity established
-		 */
-		handleNetworkAction();
-	    else if (iAction
-		    .equals(android.net.ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED))
-		checkBackgroundDataSetting(context);
-	    else if (iAction.equals(CONNECTINTENT))
-		handleConnectIntent(context, intent);
-	    else if (iAction.equals(USEREVENT))
-		handleUserEvent();
-	    else if (iAction.equals(ACTION_REQUEST_SCAN))
-		handleScanResultRequest(context);
+	    
+	    Message message = handler.obtainMessage();
+	    Bundle data = new Bundle();
+	    message.what = INTENT;
+	    data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
+	    if(intent.getExtras() != null)
+		data.putAll(intent.getExtras());
 	}
 
     };
@@ -906,6 +887,42 @@ public class WFConnection extends Object implements
 		return true;
 	}
 	return false;
+    }
+    
+    private void dispatchIntent(final Context context, final Bundle data){
+	  
+	    String iAction = data.getString(PrefUtil.INTENT_ACTION);
+	    if (iAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION))
+		/*
+		 * Wifi state, e.g. on/off
+		 */
+		handleWifiState(data);
+	    else if (iAction
+		    .equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION))
+		/*
+		 * Supplicant events
+		 */
+		handleSupplicantIntent(data);
+	    else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+		/*
+		 * Scan Results
+		 */
+		handleScanResults();
+	    else if (iAction
+		    .equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
+		/*
+		 * IP connectivity established
+		 */
+		handleNetworkAction();
+	    else if (iAction
+		    .equals(android.net.ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED))
+		checkBackgroundDataSetting(context);
+	    else if (iAction.equals(CONNECTINTENT))
+		handleConnectIntent(context, data);
+	    else if (iAction.equals(USEREVENT))
+		handleUserEvent();
+	    else if (iAction.equals(ACTION_REQUEST_SCAN))
+		handleScanResultRequest(context);
     }
 
     private void doscanrequest(Context context) {
@@ -1268,9 +1285,8 @@ public class WFConnection extends Object implements
 	connectee = null;
     }
 
-    private void handleConnectIntent(Context context, Intent intent) {
-
-	connectToAP(ctxt, intent.getIntExtra(NETWORKNUMBER, -1));
+    private void handleConnectIntent(Context context, Bundle data) {
+	connectToAP(ctxt, data.getInt(NETWORKNUMBER, -1));
     }
 
     private void handleNetworkAction() {
@@ -1604,7 +1620,7 @@ public class WFConnection extends Object implements
 
     }
 
-    private void handleSupplicantIntent(final Intent intent) {
+    private void handleSupplicantIntent(final Bundle data) {
 
 	/*
 	 * Get Supplicant New State but first make sure it's new
@@ -1618,7 +1634,7 @@ public class WFConnection extends Object implements
 	 * Check intent for auth error
 	 */
 
-	if (intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_ERROR))
+	if (data.containsKey(WifiManager.EXTRA_SUPPLICANT_ERROR))
 	    NotifUtil.show(ctxt, ctxt.getString(R.string.authentication_error),
 		    ctxt.getString(R.string.authentication_error), 2432, null);
 
@@ -1703,9 +1719,9 @@ public class WFConnection extends Object implements
 	    logSupplicant(ctxt, sState);
     }
 
-    private void handleWifiState(final Intent intent) {
+    private void handleWifiState(final Bundle data) {
 	// What kind of state change is it?
-	int state = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
+	int state = data.getInt(WifiManager.EXTRA_WIFI_STATE,
 		WifiManager.WIFI_STATE_UNKNOWN);
 	switch (state) {
 	case WifiManager.WIFI_STATE_ENABLED:

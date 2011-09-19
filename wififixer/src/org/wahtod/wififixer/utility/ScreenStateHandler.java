@@ -23,11 +23,32 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
+import android.os.Message;
 
 public class ScreenStateHandler {
+    
+    private static final int SCREEN_EVENT_OFF = 0;
+    private static final int SCREEN_EVENT_ON = 1;
+    
     public interface OnScreenStateChangedListener {
 	public abstract void onScreenStateChanged(boolean state);
     }
+
+    private Handler statehandler = new Handler() {
+	@Override
+	public void handleMessage(Message message) {
+	    switch (message.what) {
+	    case SCREEN_EVENT_OFF:
+		onScreenEvent(false);
+		break;
+		
+	    case SCREEN_EVENT_ON:
+		onScreenEvent(true);
+		break;
+	    }
+	}
+    };
 
     private static ArrayList<OnScreenStateChangedListener> onScreenStateChangedListener = new ArrayList<OnScreenStateChangedListener>();
     private static boolean registered;
@@ -55,9 +76,9 @@ public class ScreenStateHandler {
 	    String iAction = intent.getAction();
 
 	    if (iAction.equals(Intent.ACTION_SCREEN_ON))
-		onScreenEvent(true);
+		statehandler.sendEmptyMessage(SCREEN_EVENT_ON);
 	    else
-		onScreenEvent(false);
+		statehandler.sendEmptyMessage(SCREEN_EVENT_OFF);
 	}
 
     };

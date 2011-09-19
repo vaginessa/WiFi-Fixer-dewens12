@@ -43,13 +43,13 @@ public class PrefUtil extends Object {
     private static final String NETVALUE_CHANGED_ACTION = "ACTION.NETPREFS.VALUECHANGED";
     private static final String NET_KEY = "NETKEY";
     private static final String DATA_KEY = "DATA_KEY";
-    private static final String VALUE_KEY = "VALUE_KEY";
+    public static final String VALUE_KEY = "VALUE_KEY";
     private static final String INT_KEY = "INTKEY";
     private static final String NETPREFIX = "n_";
     /*
      * Actions for handler message bundles
      */
-    protected static final String INTENT_ACTION = "INTENT_ACTION";
+    public static final String INTENT_ACTION = "INTENT_ACTION";
 
     /*
      * Fields
