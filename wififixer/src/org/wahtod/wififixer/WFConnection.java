@@ -548,6 +548,8 @@ public class WFConnection extends Object implements
 	    data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
 	    if(intent.getExtras() != null)
 		data.putAll(intent.getExtras());
+	    message.setData(data);
+	    handler.sendMessage(message);
 	}
 
     };
