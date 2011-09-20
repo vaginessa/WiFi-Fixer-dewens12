@@ -55,7 +55,7 @@
 		</service>
 
 		<!--
-			Starts Boot thread service which waits 30s to run WifiFixerService
+			Handles incoming external intents
 		-->
 		<receiver android:name=".WFBroadcastReceiver">
 			<intent-filter>
