@@ -104,9 +104,6 @@ public class WidgetHandler {
 	data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
 	message.setData(data);
 	handler.sendMessage(message);
-	/*
-	 * Dispatch intent commands to handler
-	 */
     }
 
     public WidgetHandler(final Context context) {

@@ -29,6 +29,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,14 +43,30 @@ public class ServiceFragment extends Fragment {
     private ImageButton servicebutton;
     private ImageButton wifibutton;
 
-    private BroadcastReceiver wifireceiver = new BroadcastReceiver() {
-	public void onReceive(final Context context, final Intent intent) {
+    private Handler handler = new Handler() {
+	@Override
+	public void handleMessage(Message message) {
 	    /*
 	     * we know this is going to be a wifi state change notification
 	     */
-	    if (intent.getExtras().getInt(WifiManager.EXTRA_WIFI_STATE) == WifiManager.WIFI_STATE_DISABLED
-		    || intent.getExtras().getInt(WifiManager.EXTRA_WIFI_STATE) == WifiManager.WIFI_STATE_ENABLED)
+	    int state = message.getData().getInt(WifiManager.EXTRA_WIFI_STATE);
+	    if (state == WifiManager.WIFI_STATE_DISABLED
+		    || state == WifiManager.WIFI_STATE_ENABLED)
 		setIcon();
+	}
+    };
+    private BroadcastReceiver wifireceiver = new BroadcastReceiver() {
+	public void onReceive(final Context context, final Intent intent) {
+
+	    /*
+	     * Dispatch intent commands to handler
+	     */
+	    Message message = handler.obtainMessage();
+	    Bundle data = new Bundle();
+	    data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
+	    data.putAll(intent.getExtras());
+	    message.setData(data);
+	    handler.sendMessage(message);
 	}
     };
 
