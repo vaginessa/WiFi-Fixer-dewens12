@@ -25,11 +25,11 @@ public class StrictModeSetter extends StrictModeDetector {
 	if (flag) {
 	    StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
 		    .detectDiskReads().detectDiskWrites().detectNetwork() // or
-									  // .detectAll()
-									  // for
-									  // all
-									  // detectable
-									  // problems
+		    // .detectAll()
+		    // for
+		    // all
+		    // detectable
+		    // problems
 		    .penaltyLog().build());
 	} else {
 	    StrictMode.enableDefaults();

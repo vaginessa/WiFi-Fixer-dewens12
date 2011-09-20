@@ -27,10 +27,10 @@ import android.os.Handler;
 import android.os.Message;
 
 public class ScreenStateHandler {
-    
+
     private static final int SCREEN_EVENT_OFF = 0;
     private static final int SCREEN_EVENT_ON = 1;
-    
+
     public interface OnScreenStateChangedListener {
 	public abstract void onScreenStateChanged(boolean state);
     }
@@ -42,7 +42,7 @@ public class ScreenStateHandler {
 	    case SCREEN_EVENT_OFF:
 		onScreenEvent(false);
 		break;
-		
+
 	    case SCREEN_EVENT_ON:
 		onScreenEvent(true);
 		break;

@@ -34,7 +34,7 @@ public class StatusDispatcher {
 	c = context;
 	prefs = p;
     }
-    
+
     /*
      * Essentially, a Leaky Bucket Widget messages throttled to once every 10
      * seconds
@@ -57,11 +57,11 @@ public class StatusDispatcher {
 	    /*
 	     * Handle notification cancel case
 	     */
-		NotifUtil.addStatNotif(c, message);
+	    NotifUtil.addStatNotif(c, message);
 	} else {
 	    /*
-	     * Only if not a cancel (i.e. show = false)
-	     * do we want to display on widget
+	     * Only if not a cancel (i.e. show = false) do we want to display on
+	     * widget
 	     */
 	    m = message;
 	    /*

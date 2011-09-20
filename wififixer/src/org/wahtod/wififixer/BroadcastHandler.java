@@ -29,6 +29,9 @@ import org.wahtod.wififixer.widget.WidgetHandler;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 public class BroadcastHandler {
@@ -41,8 +44,14 @@ public class BroadcastHandler {
 
     private static final int AUTH_NOTIF_ID = 2934;
 
-    private static void handleWidgetAction(final Context context,
-	    final Intent intent) {
+    private Handler handler = new Handler() {
+	@Override
+	public void handleMessage(Message message) {
+	    dispatchIntent(message.getData());
+	}
+    };
+
+    private static void handleWidgetAction(final Context context) {
 	int command;
 	/*
 	 * Handle null value possible if prefs not initialized yet
@@ -76,35 +85,46 @@ public class BroadcastHandler {
 
     public void handleIntent(final Context context, final Intent intent) {
 	/*
+	 * Dispatches the broadcast intent to the handler for processing
+	 */
+	Message message = handler.obtainMessage();
+	Bundle data = new Bundle();
+	data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
+	if (intent.getExtras() != null)
+	    data.putAll(intent.getExtras());
+	message.setData(data);
+	handler.sendMessage(message);
+    }
+
+    private void dispatchIntent(final Bundle data) {
+	/*
 	 * Respond to manifest intents
 	 */
-	String action = intent.getAction();
+	String action = data.getString(PrefUtil.INTENT_ACTION);
 	/*
 	 * For WIFI_SERVICE_ENABLE intent, set service enabled and run
 	 */
 	if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)) {
-	    ServiceAlarm.setServiceEnabled(context, WifiFixerService.class,
-		    true);
-	    PrefUtil.writeBoolean(context, Pref.DISABLE_KEY.key(), false);
-	    context.startService(new Intent(context, WifiFixerService.class));
+	    ServiceAlarm.setServiceEnabled(ctxt, WifiFixerService.class, true);
+	    PrefUtil.writeBoolean(ctxt, Pref.DISABLE_KEY.key(), false);
+	    ctxt.startService(new Intent(ctxt, WifiFixerService.class));
 	}
 	/*
 	 * For WIFI_SERVICE_DISABLE intent, send stop to service and unset
 	 * logging and service alarms.
 	 */
 	else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_DISABLE)) {
-	    context.stopService(new Intent(context, WifiFixerService.class));
-	    ServiceAlarm.setServiceEnabled(context, WifiFixerService.class,
-		    false);
-	    PrefUtil.writeBoolean(context, Pref.DISABLE_KEY.key(), true);
-	    ServiceAlarm.unsetAlarm(context);
-	    context.stopService(new Intent(context, LogService.class));
+	    ctxt.stopService(new Intent(ctxt, WifiFixerService.class));
+	    ServiceAlarm.setServiceEnabled(ctxt, WifiFixerService.class, false);
+	    PrefUtil.writeBoolean(ctxt, Pref.DISABLE_KEY.key(), true);
+	    ServiceAlarm.unsetAlarm(ctxt);
+	    ctxt.stopService(new Intent(ctxt, LogService.class));
 	}
 	/*
 	 * Handle Widget intent
 	 */
 	else if (action.equals(FixerWidget.W_INTENT)) {
-	    handleWidgetAction(context, intent);
+	    handleWidgetAction(ctxt);
 	}
 	/*
 	 * Authorization code
@@ -113,8 +133,8 @@ public class BroadcastHandler {
 	 * donate!
 	 */
 	else if (action.equals(AUTH_ACTION)) {
-	    if (intent.hasExtra(AUTHEXTRA)
-		    && intent.getStringExtra(AUTHEXTRA).contains(AUTHSTRING)) {
+	    if (data.containsKey(AUTHEXTRA)
+		    && data.getString(AUTHEXTRA).contains(AUTHSTRING)) {
 		Log.i(LogService.getLogTag(ctxt), ctxt
 			.getString(R.string.authed));
 		// Ok, do the auth
@@ -138,18 +158,15 @@ public class BroadcastHandler {
 		}
 
 	    }
-	} else if (PrefUtil.readBoolean(context.getApplicationContext(),
+	} else if (PrefUtil.readBoolean(ctxt.getApplicationContext(),
 		PrefConstants.WIFI_STATE_LOCK))
 	    return;
 	else if (action.equals(IntentConstants.ACTION_WIFI_ON))
-	    context.getApplicationContext().sendBroadcast(
-		    new Intent(WidgetHandler.WIFI_ON));
+	    ctxt.sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
 	else if (action.equals(IntentConstants.ACTION_WIFI_OFF))
-	    context.getApplicationContext().sendBroadcast(
-		    new Intent(WidgetHandler.WIFI_OFF));
+	    ctxt.sendBroadcast(new Intent(WidgetHandler.WIFI_OFF));
 	else if (action.equals(IntentConstants.ACTION_WIFI_TOGGLE))
-	    context.getApplicationContext().sendBroadcast(
-		    new Intent(WidgetHandler.TOGGLE_WIFI));
+	    ctxt.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
     }
 
     public BroadcastHandler(Context context) {

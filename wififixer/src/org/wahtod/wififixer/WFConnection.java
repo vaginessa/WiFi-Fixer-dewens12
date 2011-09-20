@@ -201,9 +201,9 @@ public class WFConnection extends Object implements
 	@Override
 	public void handleMessage(Message message) {
 	    switch (message.what) {
-	    
+
 	    case INTENT:
-		dispatchIntent(ctxt,message.getData());
+		dispatchIntent(ctxt, message.getData());
 		break;
 
 	    case MAIN:
@@ -538,15 +538,13 @@ public class WFConnection extends Object implements
 	public void onReceive(final Context context, final Intent intent) {
 
 	    /*
-	     * Dispatches the broadcast intent 
-	     * to the handler for processing
+	     * Dispatches the broadcast intent to the handler for processing
 	     */
-	    
 	    Message message = handler.obtainMessage();
 	    Bundle data = new Bundle();
 	    message.what = INTENT;
 	    data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
-	    if(intent.getExtras() != null)
+	    if (intent.getExtras() != null)
 		data.putAll(intent.getExtras());
 	    message.setData(data);
 	    handler.sendMessage(message);
@@ -890,41 +888,40 @@ public class WFConnection extends Object implements
 	}
 	return false;
     }
-    
-    private void dispatchIntent(final Context context, final Bundle data){
-	  
-	    String iAction = data.getString(PrefUtil.INTENT_ACTION);
-	    if (iAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION))
-		/*
-		 * Wifi state, e.g. on/off
-		 */
-		handleWifiState(data);
-	    else if (iAction
-		    .equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION))
-		/*
-		 * Supplicant events
-		 */
-		handleSupplicantIntent(data);
-	    else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
-		/*
-		 * Scan Results
-		 */
-		handleScanResults();
-	    else if (iAction
-		    .equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
-		/*
-		 * IP connectivity established
-		 */
-		handleNetworkAction();
-	    else if (iAction
-		    .equals(android.net.ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED))
-		checkBackgroundDataSetting(context);
-	    else if (iAction.equals(CONNECTINTENT))
-		handleConnectIntent(context, data);
-	    else if (iAction.equals(USEREVENT))
-		handleUserEvent();
-	    else if (iAction.equals(ACTION_REQUEST_SCAN))
-		handleScanResultRequest(context);
+
+    private void dispatchIntent(final Context context, final Bundle data) {
+
+	String iAction = data.getString(PrefUtil.INTENT_ACTION);
+	if (iAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION))
+	    /*
+	     * Wifi state, e.g. on/off
+	     */
+	    handleWifiState(data);
+	else if (iAction.equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION))
+	    /*
+	     * Supplicant events
+	     */
+	    handleSupplicantIntent(data);
+	else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+	    /*
+	     * Scan Results
+	     */
+	    handleScanResults();
+	else if (iAction
+		.equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
+	    /*
+	     * IP connectivity established
+	     */
+	    handleNetworkAction();
+	else if (iAction
+		.equals(android.net.ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED))
+	    checkBackgroundDataSetting(context);
+	else if (iAction.equals(CONNECTINTENT))
+	    handleConnectIntent(context, data);
+	else if (iAction.equals(USEREVENT))
+	    handleUserEvent();
+	else if (iAction.equals(ACTION_REQUEST_SCAN))
+	    handleScanResultRequest(context);
     }
 
     private void doscanrequest(Context context) {

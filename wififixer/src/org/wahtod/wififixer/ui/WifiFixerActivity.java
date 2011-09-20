@@ -339,8 +339,7 @@ public class WifiFixerActivity extends FragmentActivity {
 	if (findViewById(R.id.pager) != null && vpager == null) {
 	    adapterFlag = true;
 	    /*
-	     * First do small screen setup 
-	     * instantiate adapter and viewpager
+	     * First do small screen setup instantiate adapter and viewpager
 	     */
 	    fadapter = new FPAdapter(getSupportFragmentManager());
 	    vpager = (ViewPager) findViewById(R.id.pager);
@@ -356,8 +355,7 @@ public class WifiFixerActivity extends FragmentActivity {
 
 	    if (!adapterFlag) {
 		/*
-		 * We're on a tablet
-		 * so do tablet fragments
+		 * We're on a tablet so do tablet fragments
 		 */
 		KnownNetworksFragment knf = new KnownNetworksFragment();
 		ft.add(R.id.knownnetworksfragment, knf, KNOWNNETWORKSFRAG_TAG);

@@ -81,8 +81,8 @@ public class FixerWidget extends AppWidgetProvider {
 			.getString(NotifUtil.SSID_KEY));
 		remoteViews.setTextViewText(R.id.status, data
 			.getString(NotifUtil.STATUS_KEY));
-		remoteViews.setImageViewResource(R.id.signal,
-			getIcon(data.getInt(NotifUtil.SIGNAL_KEY)));
+		remoteViews.setImageViewResource(R.id.signal, getIcon(data
+			.getInt(NotifUtil.SIGNAL_KEY)));
 		int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
 			this, FixerWidget.class));
 		for (int n = 0; n < ids.length; n++)

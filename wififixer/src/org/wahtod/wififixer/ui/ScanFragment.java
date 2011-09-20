@@ -253,7 +253,7 @@ public class ScanFragment extends Fragment {
 		drawhandler.sendEmptyMessage(REFRESH_LIST_ADAPTER);
 	    else if (intent.getExtras().getInt(WifiManager.EXTRA_WIFI_STATE) == WifiManager.WIFI_STATE_DISABLED) {
 		/*
-		 * Request refresh from activity
+		 * clear list
 		 */
 		if (!(adapter == null)) {
 		    drawhandler.sendEmptyMessage(CLEAR_LIST_ADAPTER);
