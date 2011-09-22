@@ -796,14 +796,14 @@ public class WFConnection extends Object implements
 		    + signal);
     }
 
-    private void connectToAP(final Context context, final String ssid) {
+    private void connectToAP(final Context context, final String bssid) {
 
 	if (!getWifiManager(ctxt).isWifiEnabled())
 	    return;
 	/*
 	 * Back to explicit connection
 	 */
-	int n = getNetworkfromSSID(context, ssid);
+	int n = getNetworkfromBSSID(context, bssid);
 
 	if (n == -1)
 	    return;
@@ -959,26 +959,26 @@ public class WFConnection extends Object implements
 	}
     }
 
-    private static int getNetworkfromSSID(final Context context,
-	    final String ssid) {
-	if (ssid == null)
+    private static int getNetworkfromBSSID(final Context context,
+	    final String bssid) {
+	if (bssid == null)
 	    return -1;
 	final List<WifiConfiguration> wifiConfigs = getWifiManager(context)
 		.getConfiguredNetworks();
 	for (WifiConfiguration w : wifiConfigs) {
-	    if (w.SSID.equals(ssid))
+	    if (w.SSID.equals(bssid))
 		return w.networkId;
 	}
 	return -1;
     }
 
-    public static String getSSIDfromNetwork(final Context context,
+    public static String getBSSIDfromNetwork(final Context context,
 	    final int network) {
 	final List<WifiConfiguration> wifiConfigs = getWifiManager(context)
 		.getConfiguredNetworks();
 	for (WifiConfiguration w : wifiConfigs) {
 	    if (w.networkId == network)
-		return w.SSID;
+		return w.BSSID;
 	}
 	return null;
     }

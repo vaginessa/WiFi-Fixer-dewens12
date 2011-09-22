@@ -135,7 +135,7 @@ public class KnownNetworksFragment extends Fragment {
 	case CONTEXT_CONNECT:
 	    Intent intent = new Intent(WFConnection.CONNECTINTENT);
 	    intent.putExtra(WFConnection.NETWORKNAME, WFConnection
-		    .getSSIDfromNetwork(getContext(), clicked_position));
+		    .getBSSIDfromNetwork(getContext(), clicked_position));
 	    getContext().sendBroadcast(intent);
 	    break;
 
