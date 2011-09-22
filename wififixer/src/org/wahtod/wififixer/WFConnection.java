@@ -95,7 +95,7 @@ public class WFConnection extends Object implements
 
     // Wifi Connect Intent
     public static final String CONNECTINTENT = "org.wahtod.wififixer.CONNECT";
-    public static final String NETWORKNUMBER = "net#";
+    public static final String NETWORKNAME = "net#";
 
     // User Event Intent
     public static final String USEREVENT = "org.wahtod.wififixer.USEREVENT";
@@ -796,23 +796,27 @@ public class WFConnection extends Object implements
 		    + signal);
     }
 
-    private void connectToAP(final Context context, final int network) {
+    private void connectToAP(final Context context, final String ssid) {
 
 	if (!getWifiManager(ctxt).isWifiEnabled())
 	    return;
 	/*
 	 * Back to explicit connection
 	 */
+	int n = getNetworkfromSSID(context, ssid);
+
+	if (n == -1)
+	    return;
 
 	WifiConfiguration target = getWifiManager(ctxt).getConfiguredNetworks()
-		.get(network);
+		.get(n);
 	/*
 	 * Create sparse WifiConfiguration with details of desired connectee
 	 */
 	connectee = new WFConfig();
 	WifiConfiguration cfg = new WifiConfiguration();
 	cfg.status = WifiConfiguration.Status.ENABLED;
-	cfg.networkId = network;
+	cfg.networkId = n;
 	connectee.wificonfig = cfg;
 	getWifiManager(ctxt).updateNetwork(connectee.wificonfig);
 	connectee.wificonfig.SSID = target.SSID;
@@ -868,16 +872,14 @@ public class WFConnection extends Object implements
 	/*
 	 * specify bssid and add it to the supplicant's known network entry
 	 */
-	int bestnid = best.wificonfig.networkId;
 	WifiConfiguration cfg = new WifiConfiguration();
 	cfg.BSSID = best.wificonfig.BSSID;
-	cfg.networkId = bestnid;
+	cfg.networkId = best.wificonfig.networkId;
 	getWifiManager(ctxt).updateNetwork(cfg);
-	connectToAP(context, bestnid);
+	connectToAP(context, best.wificonfig.SSID);
 	logBestNetwork(context, best);
 
-	return bestnid;
-
+	return cfg.networkId;
     }
 
     private static boolean containsBSSID(final String bssid,
@@ -955,6 +957,30 @@ public class WFConnection extends Object implements
 
 	    }
 	}
+    }
+
+    private static int getNetworkfromSSID(final Context context,
+	    final String ssid) {
+	if (ssid == null)
+	    return -1;
+	final List<WifiConfiguration> wifiConfigs = getWifiManager(context)
+		.getConfiguredNetworks();
+	for (WifiConfiguration w : wifiConfigs) {
+	    if (w.SSID.equals(ssid))
+		return w.networkId;
+	}
+	return -1;
+    }
+
+    public static String getSSIDfromNetwork(final Context context,
+	    final int network) {
+	final List<WifiConfiguration> wifiConfigs = getWifiManager(context)
+		.getConfiguredNetworks();
+	for (WifiConfiguration w : wifiConfigs) {
+	    if (w.networkId == network)
+		return w.SSID;
+	}
+	return null;
     }
 
     private static boolean getIsOnWifi(final Context context) {
@@ -1285,7 +1311,7 @@ public class WFConnection extends Object implements
     }
 
     private void handleConnectIntent(Context context, Bundle data) {
-	connectToAP(ctxt, data.getInt(NETWORKNUMBER, -1));
+	connectToAP(ctxt, data.getString(NETWORKNAME));
     }
 
     private void handleNetworkAction() {

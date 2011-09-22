@@ -102,7 +102,7 @@ public class ScanFragment extends Fragment {
 	switch (item.getItemId()) {
 	case CONTEXT_CONNECT:
 	    Intent intent = new Intent(WFConnection.CONNECTINTENT);
-	    intent.putExtra(WFConnection.NETWORKNUMBER, 0);
+	    intent.putExtra(WFConnection.NETWORKNAME, "None");
 	    getContext().sendBroadcast(intent);
 	    break;
 
