@@ -142,6 +142,7 @@ public class BroadcastHandler {
 			.getString(R.string.isauthed))) {
 		    PrefUtil.writeBoolean(ctxt, ctxt
 			    .getString(R.string.isauthed), true);
+		    NotifUtil.cancel(ctxt, 3337);
 		    NotifUtil
 			    .show(
 				    ctxt,

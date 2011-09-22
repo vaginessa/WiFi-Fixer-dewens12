@@ -751,6 +751,12 @@ public class WFConnection extends Object implements
 	pendingreconnect = false;
     }
 
+    private static void clearConnectedStatus(final String state) {
+	notifStatus = state;
+	notifSignal = R.drawable.signal0;
+	notifSSID = EMPTYSTRING;
+    }
+
     private static void checkSignal(final Context context) {
 	int signal = getWifiManager(ctxt).getConnectionInfo().getRssi();
 
@@ -1335,15 +1341,14 @@ public class WFConnection extends Object implements
 
     private void handleUserEvent() {
 	/*
-	 * Connect to last known valid
-	 * network entry
+	 * Connect to last known valid network entry
 	 */
 	if (connectee == null)
 	    return;
-	
+
 	connectee.wificonfig = getWifiManager(ctxt).getConfiguredNetworks()
 		.get(lastAP);
-	
+
 	clearHandler();
     }
 
@@ -1675,8 +1680,7 @@ public class WFConnection extends Object implements
 	    if (sState.equals(COMPLETED))
 		notifStatus = CONNECTED;
 	    else {
-		notifStatus = sState;
-		notifSignal = 0;
+		clearConnectedStatus(sState);
 	    }
 	    statusdispatcher.sendMessage(ctxt, new StatusMessage(notifSSID,
 		    notifStatus, notifSignal, true));
@@ -1713,8 +1717,10 @@ public class WFConnection extends Object implements
 	    pendingreconnect = false;
 	    lastAP = getNetworkID();
 	    return;
-	} else if (prefs.getFlag(Pref.STATENOT_KEY))
+	} else if (prefs.getFlag(Pref.STATENOT_KEY)) {
 	    notifStatus = EMPTYSTRING;
+	    notifSignal = 0;
+	}
 
 	/*
 	 * New setting disabling supplicant fixes
@@ -1831,8 +1837,8 @@ public class WFConnection extends Object implements
 	/*
 	 * Clear any error/new network notifications
 	 */
-	NotifUtil.cancel(ERR_NOTIF, ctxt);
-	NotifUtil.cancel(NotifUtil.NETNOTIFID, ctxt);
+	NotifUtil.cancel(ctxt, ERR_NOTIF);
+	NotifUtil.cancel(ctxt, NotifUtil.NETNOTIFID);
 
 	/*
 	 * Log Non-Managed network
@@ -1905,6 +1911,7 @@ public class WFConnection extends Object implements
     private void onWifiDisabled() {
 	wifistate = false;
 	clearHandler();
+	clearConnectedStatus(ctxt.getString(R.string.wifi_is_disabled));
 	statusdispatcher.sendMessage(ctxt, new StatusMessage(NULL_SSID, ctxt
 		.getString(R.string.wifi_is_disabled), 0, true));
 

@@ -151,7 +151,7 @@ public abstract class NotifUtil {
 
     }
 
-    public static void cancel(final int notif, final Context context) {
+    public static void cancel( final Context context, final int notif) {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 	nm.cancel(notif);

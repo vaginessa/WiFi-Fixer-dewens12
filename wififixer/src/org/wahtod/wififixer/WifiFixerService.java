@@ -407,7 +407,7 @@ public class WifiFixerService extends Service implements
 	};
 
 	prefs.loadPrefs();
-	NotifUtil.cancel(NOTIFID, notifcontext);
+	NotifUtil.cancel(notifcontext, NOTIFID);
 	wakelock.lock(false);
     }
 

@@ -299,7 +299,7 @@ public class WifiFixerActivity extends FragmentActivity {
     }
 
     private static void removeNag(final Context context) {
-	NotifUtil.cancel(3337, context);
+	NotifUtil.cancel(context, 3337);
     }
 
     public static boolean getIsWifiOn(final Context context) {

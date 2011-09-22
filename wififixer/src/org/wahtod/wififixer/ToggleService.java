@@ -79,7 +79,7 @@ public class ToggleService extends Service {
 			hWifiState.sendEmptyMessageDelayed(WATCHDOG,
 				WATCHDOG_DELAY);
 		    } else {
-			NotifUtil.cancel(TOGGLE_ID, ctxt);
+			NotifUtil.cancel(ctxt, TOGGLE_ID);
 			PrefUtil.writeBoolean(ctxt,
 				PrefConstants.WIFI_STATE_LOCK, false);
 			/*
