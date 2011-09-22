@@ -73,24 +73,7 @@ public class LegacyNotifUtil extends NotifUtil {
 	    return;
 	}
 
-	int icon = 0;
-	switch (signal) {
-	case 0:
-	    icon = R.drawable.signal0;
-	    break;
-	case 1:
-	    icon = R.drawable.signal1;
-	    break;
-	case 2:
-	    icon = R.drawable.signal2;
-	    break;
-	case 3:
-	    icon = R.drawable.signal3;
-	    break;
-	case 4:
-	    icon = R.drawable.signal4;
-	    break;
-	}
+	int icon = NotifUtil.getIconfromSignal(signal);
 
 	if (NotifUtil.statnotif == null) {
 	    NotifUtil.statnotif = new Notification(icon, ctxt

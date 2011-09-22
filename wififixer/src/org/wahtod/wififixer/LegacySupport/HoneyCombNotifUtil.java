@@ -75,26 +75,7 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	    NotifUtil.statnotif = null;
 	    return;
 	}
-
-	int icon = 0;
-	switch (signal) {
-	case 0:
-	    icon = R.drawable.signal0;
-	    break;
-	case 1:
-	    icon = R.drawable.signal1;
-	    break;
-	case 2:
-	    icon = R.drawable.signal2;
-	    break;
-	case 3:
-	    icon = R.drawable.signal3;
-	    break;
-	case 4:
-	    icon = R.drawable.signal4;
-	    break;
-	}
-
+	
 	if (NotifUtil.statnotif == null) {
 	    Notification.Builder builder = new Notification.Builder(ctxt);
 	    Intent intent = new Intent(ctxt, WifiFixerActivity.class)
@@ -116,11 +97,11 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	    status = ctxt.getString(R.string.unmanaged) + status;
 	}
 	NotifUtil.statnotif.iconLevel = signal;
-	NotifUtil.statnotif.contentView.setImageViewResource(R.id.signal, icon);
+	NotifUtil.statnotif.contentView.setImageViewResource(R.id.signal,
+		NotifUtil.getIconfromSignal(signal));
 	NotifUtil.statnotif.contentView.setTextViewText(R.id.ssid,
 		truncateSSID(ssid));
 	NotifUtil.statnotif.contentView.setTextViewText(R.id.status, status);
-
 	/*
 	 * Fire the notification
 	 */
@@ -158,7 +139,6 @@ public class HoneyCombNotifUtil extends NotifUtil {
 
 	    NotifUtil.lognotif.contentView.setTextViewText(R.id.ssid, ctxt
 		    .getString(R.string.logservice));
-
 	}
 
 	NotifUtil.lognotif.contentView.setTextViewText(R.id.status,

@@ -131,6 +131,27 @@ public abstract class NotifUtil {
 		selector = new LegacyNotifUtil();
 	}
     }
+    
+    public static int getIconfromSignal(int signal) {
+	switch (signal) {
+	case 0:
+	    signal = R.drawable.signal0;
+	    break;
+	case 1:
+	    signal = R.drawable.signal1;
+	    break;
+	case 2:
+	    signal = R.drawable.signal2;
+	    break;
+	case 3:
+	    signal = R.drawable.signal3;
+	    break;
+	case 4:
+	    signal = R.drawable.signal4;
+	    break;
+	}
+	return signal;
+    }
 
     public static StringBuilder getLogString(final Context context) {
 	StringBuilder logstring = new StringBuilder(context
