@@ -1334,9 +1334,16 @@ public class WFConnection extends Object implements
     }
 
     private void handleUserEvent() {
-	connectee = new WFConfig();
+	/*
+	 * Connect to last known valid
+	 * network entry
+	 */
+	if (connectee == null)
+	    return;
+	
 	connectee.wificonfig = getWifiManager(ctxt).getConfiguredNetworks()
 		.get(lastAP);
+	
 	clearHandler();
     }
 
