@@ -108,8 +108,8 @@
 	<string name="isauthed">ISAUTHED</string>
 	<string name="authed">Yep, we\'re authed!</string>
 	<string name="packagename">org.wahtod.wififixer</string>
-	<string name="wifi_is_disabled">Wifi is Disabled</string>
-	<string name="wifi_is_enabled">Wifi is Enabled</string>
+	<string name="wifi_is_disabled">Wifi Off</string>
+	<string name="wifi_is_enabled">Wifi On</string>
 	<string name="connecting_to_network">Connecting to Network:</string>
 	<string name="releasing_wifi_lock">Releasing Wifi Lock</string>
 	<string name="acquiring_wifi_lock">Acquiring Wifi Lock</string>

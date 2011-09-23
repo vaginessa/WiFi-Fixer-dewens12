@@ -21,5 +21,5 @@
     android:minWidth="294dip"
     android:minHeight="72dip"   
     android:updatePeriodMillis="86400000" 
-    android:initialLayout="@layout/statnotif"
+    android:initialLayout="@layout/widget"
 ></appwidget-provider>

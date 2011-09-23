@@ -12,30 +12,30 @@
 	-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/widget_target" android:orientation="horizontal"
-	android:layout_width="match_parent" android:layout_height="match_parent"
-	android:background="@drawable/listheader" android:layout_marginTop="8dp"
-	android:layout_marginBottom="8dp" android:gravity="center_horizontal">
+	android:layout_width="fill_parent" android:layout_height="match_parent"
+	android:background="@drawable/widget" android:layout_marginTop="8dp"
+	android:layout_marginBottom="8dp" android:gravity="left">
 	<ImageView android:id="@+id/signal" android:layout_height="fill_parent"
 		android:layout_gravity="left" android:src="@drawable/signal0"
-		android:layout_width="48dp" android:maxWidth="48dp"
+		android:layout_width="80dp" android:maxWidth="80dp"
 		android:paddingLeft="15dp" />
 	<TextView android:id="@+id/logo" android:text="@string/app_name"
 		android:textSize="20dp" android:layout_width="wrap_content"
 		android:layout_height="fill_parent" android:gravity="center_vertical"
 		android:layout_marginLeft="5dp" android:textStyle="bold"
-		android:layout_marginRight="15dp" />
+		android:paddingRight="50dp" android:paddingLeft="30dp" />
 	<LinearLayout android:id="@+id/statustext"
-		android:layout_width="wrap_content" android:layout_height="fill_parent"
-		android:layout_gravity="center_vertical" android:orientation="vertical"
-		android:background="@drawable/listheader">
+		android:layout_width="match_parent" android:layout_height="fill_parent"
+		android:layout_gravity="center_vertical" android:gravity="center"
+		android:orientation="vertical">
 		<TextView android:id="@+id/ssid" android:text="SSID"
-			android:layout_marginTop="5dp" android:gravity="center_vertical"
-			android:textStyle="bold"
-			android:layout_height="25dp" android:textSize="12dp"
-			android:layout_width="wrap_content" android:layout_gravity="center_horizontal" />
-		<TextView android:id="@+id/status" android:text="STATUS"
-			android:layout_height="25dp" android:gravity="center_vertical"
+			android:paddingTop="5dp" android:gravity="center_vertical"
+			android:textStyle="bold" android:layout_height="25dp"
 			android:textSize="10dp" android:layout_width="wrap_content"
-			android:layout_marginBottom="5dp" android:layout_gravity="center_horizontal" />
+			android:layout_gravity="left" />
+		<TextView android:id="@+id/status" android:text="STATUS"
+			android:paddingBottom="5dp" android:layout_height="25dp" android:gravity="center_vertical"
+			android:textSize="10dp" android:layout_width="wrap_content"
+			android:layout_gravity="left" />
 	</LinearLayout>
 </LinearLayout>

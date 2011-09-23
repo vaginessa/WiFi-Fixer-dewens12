@@ -160,7 +160,6 @@ public class FixerWidget extends AppWidgetProvider {
 	Intent intent = new Intent(W_INTENT);
 	PendingIntent pendingIntent = PendingIntent.getBroadcast(context
 		.getApplicationContext(), 0, intent, 0);
-
 	/*
 	 * Don't have to worry about pre-cupcake clients because they won't run
 	 * the widget code setting onclick on the view directly
