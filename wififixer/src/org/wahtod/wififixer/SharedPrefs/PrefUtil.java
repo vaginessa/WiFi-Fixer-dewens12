@@ -63,16 +63,15 @@ public class PrefUtil extends Object {
 	    String valuekey = intent.getStringExtra(VALUE_KEY);
 	    Message message = receiverExecutor.obtainMessage();
 	    Bundle data = new Bundle();
+	    data.putString(VALUE_KEY, valuekey);
 	    data.putString(INTENT_ACTION, intent.getAction());
 	    if (intent.getAction().equals(VALUE_CHANGED_ACTION)) {
-		data.putString(VALUE_KEY, valuekey);
 		data.putBoolean(DATA_KEY, intent.getBooleanExtra(DATA_KEY,
 			false));
 	    } else if (intent.getAction().equals(NETVALUE_CHANGED_ACTION)) {
-		data.putInt(DATA_KEY, intent.getIntExtra(DATA_KEY, 0));
+		data.putInt(INT_KEY, intent.getIntExtra(INT_KEY, 0));
 		data.putString(NET_KEY, intent.getStringExtra(NET_KEY));
 	    }
-
 	    message.setData(data);
 	    receiverExecutor.sendMessage(message);
 	}
@@ -88,7 +87,7 @@ public class PrefUtil extends Object {
 			.getBoolean(DATA_KEY));
 	    else if (action.equals(NETVALUE_CHANGED_ACTION)) {
 		handleNetPrefChange(NetPref.get(data.getString(VALUE_KEY)),
-			data.getString(NET_KEY), data.getInt(DATA_KEY));
+			data.getString(NET_KEY), data.getInt(INT_KEY));
 	    }
 	}
     };

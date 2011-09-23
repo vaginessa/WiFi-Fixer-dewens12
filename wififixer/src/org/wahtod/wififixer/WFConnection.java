@@ -753,7 +753,7 @@ public class WFConnection extends Object implements
 
     private static void clearConnectedStatus(final String state) {
 	notifStatus = state;
-	notifSignal = R.drawable.signal0;
+	notifSignal = 0;
 	notifSSID = EMPTYSTRING;
     }
 
