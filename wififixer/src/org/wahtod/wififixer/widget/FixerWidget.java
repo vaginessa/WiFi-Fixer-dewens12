@@ -77,6 +77,11 @@ public class FixerWidget extends AppWidgetProvider {
 			.getInstance(this.getApplicationContext());
 		RemoteViews remoteViews = new RemoteViews(getPackageName(),
 			R.layout.widget);
+		// Create an Intent to send widget command to WidgetReceiver
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(this
+			.getApplicationContext(), 0, new Intent(W_INTENT), 0);
+		remoteViews.setOnClickPendingIntent(R.id.widget_target,
+			pendingIntent);
 		remoteViews.setTextViewText(R.id.ssid, data
 			.getString(NotifUtil.SSID_KEY));
 		remoteViews.setTextViewText(R.id.status, data
@@ -156,10 +161,9 @@ public class FixerWidget extends AppWidgetProvider {
 
     public static RemoteViews doUpdate(Context context) {
 
-	// Create an Intent to launch the service
-	Intent intent = new Intent(W_INTENT);
+	// Create an Intent to send widget command to WidgetReceiver
 	PendingIntent pendingIntent = PendingIntent.getBroadcast(context
-		.getApplicationContext(), 0, intent, 0);
+		.getApplicationContext(), 0, new Intent(W_INTENT), 0);
 	/*
 	 * Don't have to worry about pre-cupcake clients because they won't run
 	 * the widget code setting onclick on the view directly
