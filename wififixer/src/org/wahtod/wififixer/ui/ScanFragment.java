@@ -46,7 +46,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-public class ScanFragment extends Fragment {
+public class ScanFragment extends Fragment{
     private static final String WPA = "WPA";
     private static final String WPA2 = "WPA2";
     private static final String WEP = "WEP";
@@ -57,7 +57,7 @@ public class ScanFragment extends Fragment {
     private static final int CONTEXT_INFO = 5;
     protected static final int REFRESH_LIST_ADAPTER = 0;
     protected static final int CLEAR_LIST_ADAPTER = 1;
-
+ 
     private Handler drawhandler = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
@@ -83,6 +83,7 @@ public class ScanFragment extends Fragment {
 	    Bundle savedInstanceState) {
 	View v = inflater.inflate(R.layout.scannetworks, null);
 	return v;
+
     }
 
     @Override

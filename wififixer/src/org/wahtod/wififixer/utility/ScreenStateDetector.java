@@ -26,7 +26,7 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
 
-public class ScreenStateHandler {
+public class ScreenStateDetector {
 
     private static final int SCREEN_EVENT_OFF = 0;
     private static final int SCREEN_EVENT_ON = 1;
@@ -83,14 +83,16 @@ public class ScreenStateHandler {
 
     };
 
-    public ScreenStateHandler(final Context context) {
+    public ScreenStateDetector(final Context context) {
 	if (!registered) {
 	    /*
 	     * Register for screen state events
 	     * 
 	     * Note: this Initializer must be used if you want to receive the
-	     * intent broadcast: also you want to use the unregister method from
-	     * where you instantiated it
+	     * intent broadcast: 
+	     * must use the unregister method appropriately
+	     * in the context where you instantiated it
+	     * or leak receiver
 	     */
 	    IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
 	    filter.addAction(Intent.ACTION_SCREEN_ON);

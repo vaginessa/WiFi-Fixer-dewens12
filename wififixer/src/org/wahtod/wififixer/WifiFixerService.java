@@ -22,10 +22,10 @@ import org.wahtod.wififixer.SharedPrefs.PrefUtil;
 import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
-import org.wahtod.wififixer.utility.ScreenStateHandler;
+import org.wahtod.wififixer.utility.ScreenStateDetector;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 import org.wahtod.wififixer.utility.WakeLock;
-import org.wahtod.wififixer.utility.ScreenStateHandler.OnScreenStateChangedListener;
+import org.wahtod.wififixer.utility.ScreenStateDetector.OnScreenStateChangedListener;
 import org.wahtod.wififixer.widget.FixerWidget;
 
 import android.app.Service;
@@ -67,7 +67,7 @@ public class WifiFixerService extends Service implements
 
     private WakeLock wakelock;
     private WFConnection wifi;
-    private static ScreenStateHandler screenstateHandler;
+    private static ScreenStateDetector screenstateHandler;
     /*
      * Cache context for notifications
      */
@@ -412,9 +412,9 @@ public class WifiFixerService extends Service implements
     }
 
     private void setInitialScreenState(final Context context) {
-	screenstateHandler = new ScreenStateHandler(this);
-	screenstate = ScreenStateHandler.getScreenState(context);
-	ScreenStateHandler.setOnScreenStateChangedListener(this);
+	screenstateHandler = new ScreenStateDetector(this);
+	screenstate = ScreenStateDetector.getScreenState(context);
+	ScreenStateDetector.setOnScreenStateChangedListener(this);
     }
 
     private void unregisterReceivers() {

@@ -30,12 +30,12 @@ import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.HttpHostup;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
-import org.wahtod.wififixer.utility.ScreenStateHandler;
+import org.wahtod.wififixer.utility.ScreenStateDetector;
 import org.wahtod.wififixer.utility.StatusDispatcher;
 import org.wahtod.wififixer.utility.WFConfig;
 import org.wahtod.wififixer.utility.WakeLock;
 import org.wahtod.wififixer.utility.WifiLock;
-import org.wahtod.wififixer.utility.ScreenStateHandler.OnScreenStateChangedListener;
+import org.wahtod.wififixer.utility.ScreenStateDetector.OnScreenStateChangedListener;
 import org.wahtod.wififixer.utility.StatusMessage;
 import org.wahtod.wififixer.widget.WidgetHandler;
 
@@ -555,9 +555,9 @@ public class WFConnection extends Object implements
     public WFConnection(final Context context, PrefUtil p) {
 	prefs = p;
 	statusdispatcher = new StatusDispatcher(context, p);
-	ScreenStateHandler.setOnScreenStateChangedListener(this);
+	ScreenStateDetector.setOnScreenStateChangedListener(this);
 	appname = LogService.getLogTag(context);
-	screenstate = ScreenStateHandler.getScreenState(context);
+	screenstate = ScreenStateDetector.getScreenState(context);
 	knownbysignal = new ArrayList<WFConfig>();
 	/*
 	 * Cache Context from consumer
