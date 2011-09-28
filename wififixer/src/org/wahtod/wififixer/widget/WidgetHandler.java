@@ -19,7 +19,7 @@ package org.wahtod.wififixer.widget;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ToggleService;
 import org.wahtod.wififixer.WFConnection;
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
+import org.wahtod.wififixer.prefs.PrefUtil;
 
 import android.content.Context;
 import android.content.Intent;

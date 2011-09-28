@@ -14,10 +14,10 @@
 
  */
 
-package org.wahtod.wififixer.Boot;
+package org.wahtod.wififixer.boot;
 
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

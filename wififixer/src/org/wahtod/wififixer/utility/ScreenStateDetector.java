@@ -17,7 +17,7 @@ package org.wahtod.wififixer.utility;
 
 import java.util.ArrayList;
 
-import org.wahtod.wififixer.LegacySupport.VersionedScreenState;
+import org.wahtod.wififixer.legacy.VersionedScreenState;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

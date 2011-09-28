@@ -14,7 +14,7 @@
 
  */
 
-package org.wahtod.wififixer.LegacySupport;
+package org.wahtod.wififixer.legacy;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ui.WifiFixerActivity;
@@ -28,36 +28,33 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.widget.RemoteViews;
 
-public class HoneyCombNotifUtil extends NotifUtil {
+public class LegacyNotifUtil extends NotifUtil {
     @Override
     public void vaddNetNotif(final Context context, final String ssid,
 	    final String signal) {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
-	Notification.Builder builder = new Notification.Builder(context);
-
 	if (ssid.length() > 0) {
 	    Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
 	    PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 		    intent, 0);
-	    builder.setOnlyAlertOnce(true);
-	    builder.setOngoing(true);
-	    builder.setContentIntent(contentIntent);
-	    builder.setSmallIcon(R.drawable.wifi_ap);
-	    builder.setContentText(context
-		    .getString(R.string.open_network_found));
-	    builder.setWhen(System.currentTimeMillis());
+
+	    Notification netnotif = new Notification(R.drawable.wifi_ap,
+		    context.getString(R.string.open_network_found), System
+			    .currentTimeMillis());
 	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
 		    R.layout.net_notif_layout);
 	    contentView.setTextViewText(R.id.ssid, ssid);
 	    contentView.setTextViewText(R.id.signal, signal);
-	    builder.setContent(contentView);
-	    builder.setTicker(context.getText(R.string.open_network_found));
+	    netnotif.contentView = contentView;
+	    netnotif.contentIntent = contentIntent;
+	    netnotif.flags = Notification.FLAG_ONGOING_EVENT;
+	    netnotif.tickerText = context.getText(R.string.open_network_found);
 	    /*
 	     * Fire notification, cancel if message empty: means no open APs
 	     */
-	    nm.notify(NotifUtil.NETNOTIFID, builder.getNotification());
+	    nm.notify(NotifUtil.NETNOTIFID, netnotif);
 	} else
 	    nm.cancel(NotifUtil.NETNOTIFID);
 
@@ -76,32 +73,31 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	    return;
 	}
 
+	int icon = NotifUtil.getIconfromSignal(signal);
+
 	if (NotifUtil.statnotif == null) {
-	    Notification.Builder builder = new Notification.Builder(ctxt);
+	    NotifUtil.statnotif = new Notification(icon, ctxt
+		    .getString(R.string.network_status), 0);
+
 	    Intent intent = new Intent(ctxt, WifiFixerActivity.class)
 		    .setAction(Intent.ACTION_MAIN).setFlags(
 			    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
 	    NotifUtil.contentIntent = PendingIntent.getActivity(ctxt, 0,
 		    intent, 0);
-	    builder.setContentIntent(NotifUtil.contentIntent);
-	    builder.setContent(new RemoteViews(ctxt.getPackageName(),
-		    R.layout.statnotif));
-	    builder.setOngoing(true);
-	    builder.setOnlyAlertOnce(true);
-	    builder.setSmallIcon(R.drawable.signal_level, signal);
-	    builder.setContentTitle(ctxt.getString(R.string.network_status));
-	    NotifUtil.statnotif = builder.getNotification();
+	    NotifUtil.statnotif.contentIntent = NotifUtil.contentIntent;
+	    NotifUtil.statnotif.flags = Notification.FLAG_ONGOING_EVENT;
 	}
 
 	if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
 	    status = ctxt.getString(R.string.unmanaged) + status;
 	}
+	NotifUtil.statnotif.icon = icon;
 	NotifUtil.statnotif.iconLevel = signal;
-	NotifUtil.statnotif.contentView.setImageViewResource(R.id.signal,
-		NotifUtil.getIconfromSignal(signal));
-	NotifUtil.statnotif.contentView.setTextViewText(R.id.ssid,
-		truncateSSID(ssid));
-	NotifUtil.statnotif.contentView.setTextViewText(R.id.status, status);
+	NotifUtil.statnotif.setLatestEventInfo(ctxt, ctxt
+		.getString(R.string.app_name), truncateSSID(ssid)
+		+ NotifUtil.SEPARATOR + status, NotifUtil.contentIntent);
+
 	/*
 	 * Fire the notification
 	 */
@@ -110,9 +106,9 @@ public class HoneyCombNotifUtil extends NotifUtil {
     }
 
     @Override
-    public void vaddLogNotif(final Context ctxt, final boolean flag) {
+    public void vaddLogNotif(final Context context, final boolean flag) {
 
-	NotificationManager nm = (NotificationManager) ctxt
+	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
 	if (!flag) {
@@ -120,29 +116,24 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	    return;
 	}
 	if (NotifUtil.lognotif == null) {
-	    Notification.Builder builder = new Notification.Builder(ctxt);
-	    Intent intent = new Intent(ctxt, WifiFixerActivity.class)
+	    NotifUtil.lognotif = new Notification(R.drawable.logging_enabled,
+		    context.getString(R.string.app_name), System
+			    .currentTimeMillis());
+	    NotifUtil.lognotif.flags = Notification.FLAG_ONGOING_EVENT;
+
+	    Intent intent = new Intent(context, WifiFixerActivity.class)
 		    .setAction(Intent.ACTION_MAIN).setFlags(
 			    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-	    NotifUtil.contentIntent = PendingIntent.getActivity(ctxt, 0,
-		    intent, 0);
-	    builder.setContentIntent(NotifUtil.contentIntent);
-	    builder.setContent(new RemoteViews(ctxt.getPackageName(),
-		    R.layout.statnotif));
-	    builder.setOngoing(true);
-	    builder.setOnlyAlertOnce(true);
-	    builder.setSmallIcon(R.drawable.logging_enabled);
-	    builder.setContentTitle(ctxt.getString(R.string.network_status));
-	    NotifUtil.lognotif = builder.getNotification();
-	    NotifUtil.lognotif.contentView.setImageViewResource(R.id.signal,
-		    R.drawable.logging_enabled);
 
-	    NotifUtil.lognotif.contentView.setTextViewText(R.id.ssid, ctxt
-		    .getString(R.string.logservice));
+	    NotifUtil.contentIntent = PendingIntent.getActivity(context, 0,
+		    intent, 0);
+
 	}
 
-	NotifUtil.lognotif.contentView.setTextViewText(R.id.status,
-		getLogString(ctxt).toString());
+	NotifUtil.lognotif.contentIntent = NotifUtil.contentIntent;
+	NotifUtil.lognotif.setLatestEventInfo(context, context
+		.getString(R.string.app_name),
+		getLogString(context).toString(), NotifUtil.contentIntent);
 
 	/*
 	 * Fire the notification
@@ -165,17 +156,15 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 
-	Notification.Builder builder = new Notification.Builder(context);
-	builder.setTicker(tickerText);
-	builder.setWhen(System.currentTimeMillis());
-	builder.setSmallIcon(R.drawable.statusicon);
-	builder.setContentTitle(context.getText(R.string.app_name));
-	builder.setContentIntent(contentIntent);
-	builder.setContentText(message);
-	builder.setAutoCancel(true);
+	CharSequence from = context.getText(R.string.app_name);
 
+	Notification notif = new Notification(R.drawable.statusicon,
+		tickerText, System.currentTimeMillis());
+
+	notif.setLatestEventInfo(context, from, message, contentIntent);
+	notif.flags = Notification.FLAG_AUTO_CANCEL;
 	// unique ID
-	nm.notify(id, builder.getNotification());
+	nm.notify(id, notif);
 
     }
 }

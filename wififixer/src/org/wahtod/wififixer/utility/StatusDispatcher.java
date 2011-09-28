@@ -16,8 +16,8 @@ limitations under the License.
 
 package org.wahtod.wififixer.utility;
 
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 
 import android.content.Context;
 import android.os.Handler;

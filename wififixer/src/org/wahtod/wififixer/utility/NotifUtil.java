@@ -17,9 +17,9 @@
 package org.wahtod.wififixer.utility;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.LegacySupport.HoneyCombNotifUtil;
-import org.wahtod.wififixer.LegacySupport.LegacyNotifUtil;
-import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
+import org.wahtod.wififixer.legacy.HoneyCombNotifUtil;
+import org.wahtod.wififixer.legacy.LegacyNotifUtil;
+import org.wahtod.wififixer.legacy.VersionedLogFile;
 import org.wahtod.wififixer.utility.StatusMessage;
 
 import android.app.Notification;

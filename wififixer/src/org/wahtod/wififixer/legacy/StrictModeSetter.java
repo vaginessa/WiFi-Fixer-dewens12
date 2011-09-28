@@ -13,20 +13,29 @@
    limitations under the License.
 
  */
-package org.wahtod.wififixer.LegacySupport;
+package org.wahtod.wififixer.legacy;
 
-import java.io.File;
-import android.content.Context;
+import android.os.StrictMode;
+import android.os.StrictMode.ThreadPolicy;
 
-public class API8LogFile extends VersionedLogFile {
+public class StrictModeSetter extends StrictModeDetector {
 
-    final static String FILENAME = "wififixer_log.txt";
-
-    public File vgetLogFile(Context context) {
-	/*
-	 * Whee
-	 */
-	return new File(context.getExternalFilesDir(null), FILENAME);
+    @Override
+    public boolean vSetPolicy(boolean flag) {
+	if (flag) {
+	    StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+		    .detectDiskReads().detectDiskWrites().detectNetwork() // or
+		    // .detectAll()
+		    // for
+		    // all
+		    // detectable
+		    // problems
+		    .penaltyLog().build());
+	} else {
+	    StrictMode.enableDefaults();
+	    StrictMode.setThreadPolicy(ThreadPolicy.LAX);
+	}
+	return true;
     }
 
 }

@@ -14,7 +14,7 @@
 
  */
 
-package org.wahtod.wififixer.SharedPrefs;
+package org.wahtod.wififixer.prefs;
 
 import java.util.EnumSet;
 import java.util.HashMap;

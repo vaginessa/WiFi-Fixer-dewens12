@@ -17,9 +17,9 @@
 package org.wahtod.wififixer.widget;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants;
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.prefs.PrefConstants;
+import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 

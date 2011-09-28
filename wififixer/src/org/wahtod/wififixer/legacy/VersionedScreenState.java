@@ -13,7 +13,7 @@
    limitations under the License.
 
  */
-package org.wahtod.wififixer.LegacySupport;
+package org.wahtod.wififixer.legacy;
 
 import android.content.Context;
 import android.os.Build;

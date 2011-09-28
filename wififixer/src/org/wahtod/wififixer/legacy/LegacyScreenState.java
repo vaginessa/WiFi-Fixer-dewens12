@@ -14,10 +14,10 @@
 
  */
 
-package org.wahtod.wififixer.LegacySupport;
+package org.wahtod.wififixer.legacy;
 
 import org.wahtod.wififixer.WifiFixerService;
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
+import org.wahtod.wififixer.prefs.PrefUtil;
 
 import android.content.Context;
 

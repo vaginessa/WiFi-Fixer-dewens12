@@ -13,7 +13,7 @@
    limitations under the License.
 
  */
-package org.wahtod.wififixer.LegacySupport;
+package org.wahtod.wififixer.legacy;
 
 public abstract class StrictModeDetector {
     private static StrictModeDetector selector;

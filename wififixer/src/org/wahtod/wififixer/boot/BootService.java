@@ -14,7 +14,7 @@
 
  */
 
-package org.wahtod.wififixer.Boot;
+package org.wahtod.wififixer.boot;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WifiFixerService;

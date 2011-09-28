@@ -24,10 +24,10 @@ import java.util.Date;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WifiFixerService;
-import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
-import org.wahtod.wififixer.LegacySupport.VersionedScreenState;
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.legacy.VersionedLogFile;
+import org.wahtod.wififixer.legacy.VersionedScreenState;
+import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 
 import android.app.Service;
 import android.content.Context;

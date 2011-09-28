@@ -14,7 +14,7 @@
 
  */
 
-package org.wahtod.wififixer.SharedPrefs;
+package org.wahtod.wififixer.prefs;
 
 import android.app.backup.BackupAgentHelper;
 import android.app.backup.SharedPreferencesBackupHelper;

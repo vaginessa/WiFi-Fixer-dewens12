@@ -20,9 +20,9 @@ import java.util.List;
 
 import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants;
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.prefs.PrefConstants;
+import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 
 import android.content.ContentResolver;
 import android.content.Context;

@@ -17,7 +17,7 @@
 package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
+import org.wahtod.wififixer.prefs.PrefUtil;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;

@@ -112,7 +112,6 @@ public class StatusFragment extends Fragment {
 	    capabilities.setText(EMPTYSTRING);
 	    status.setText(EMPTYSTRING);
 	} else {
-
 	    ssid.setText(info.getSSID());
 	    signal.setText(String.valueOf(info.getRssi()));
 	    capabilities.setText(String.valueOf(info.getLinkSpeed()));

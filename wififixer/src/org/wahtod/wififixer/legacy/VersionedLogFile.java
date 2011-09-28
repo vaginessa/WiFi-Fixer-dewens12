@@ -13,23 +13,27 @@
    limitations under the License.
 
  */
-package org.wahtod.wififixer.LegacySupport;
+package org.wahtod.wififixer.legacy;
 
 import java.io.File;
 import android.content.Context;
-import android.os.Environment;
+import android.os.Build;
 
-public class LegacyLogFile extends VersionedLogFile {
-    static final String FILENAME = "/wififixer_log.txt";
-    static final String DIRNAME = "/data/org.wahtod.wififixer";
+public abstract class VersionedLogFile {
+    private static VersionedLogFile selector;
 
-    @Override
-    public File vgetLogFile(Context context) {
-	File dir = new File(Environment.getExternalStorageDirectory() + DIRNAME);
-	if (!dir.exists()) {
-	    dir.mkdirs();
+    public abstract File vgetLogFile(Context context);
+
+    public static File getLogFile(Context context) {
+	/*
+	 * Instantiate appropriate VersionedLogFile
+	 */
+	if (selector == null) {
+	    if (Build.VERSION.SDK_INT < 8) {
+		selector = new LegacyLogFile();
+	    } else
+		selector = new API8LogFile();
 	}
-	return new File(dir.getAbsolutePath() + FILENAME);
+	return selector.vgetLogFile(context);
     }
-
 }
