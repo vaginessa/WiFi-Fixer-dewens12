@@ -20,7 +20,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1" android:background="@drawable/panebg"
+        android:layout_weight="1" android:background="@drawable/listbg"
         android:paddingTop="20dp" android:paddingRight="20dp" android:paddingLeft="20dp" android:paddingBottom="40dp">>
 
         <LinearLayout
