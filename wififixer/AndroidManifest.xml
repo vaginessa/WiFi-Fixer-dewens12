@@ -22,7 +22,7 @@
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
 		android:hardwareAccelerated="true" android:theme="@style/ThemeWifiFixer"
 		android:description="@string/app_desc" android:restoreAnyVersion="true"
-		android:backupAgent=".SharedPrefs.PrefsBackupAgent">
+		android:backupAgent=".prefs.PrefsBackupAgent">
 		<meta-data android:name="com.google.android.backup.api_key"
 			android:value="AEdPqrEAAAAIAGomq--y98O0VHARd55VOdh8CoEphVxKfVXAHw" />
 		<!--
@@ -46,12 +46,12 @@
 		<!--
 			Starts Boot thread service which waits 30s to run WifiFixerService
 		-->
-		<receiver android:name=".Boot.BootReceiver">
+		<receiver android:name=".boot.BootReceiver">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
 		</receiver>
-		<service android:name=".Boot.BootService" class="BootService">
+		<service android:name=".boot.BootService" class="BootService">
 		</service>
 
 		<!--
