@@ -22,9 +22,8 @@ public abstract class StrictModeDetector {
 
     public static boolean setPolicy(final boolean flag) {
 	/*
-	 * Handle logic to check if StrictMode exists
-	 * Set StrictMode based on flag if it does
-	 * otherwise return false
+	 * Handle logic to check if StrictMode exists Set StrictMode based on
+	 * flag if it does otherwise return false
 	 */
 	if (selector == null) {
 	    if (checkHasStrictMode()) {

@@ -131,7 +131,7 @@ public abstract class NotifUtil {
 		selector = new LegacyNotifUtil();
 	}
     }
-    
+
     public static int getIconfromSignal(int signal) {
 	switch (signal) {
 	case 0:
@@ -172,7 +172,7 @@ public abstract class NotifUtil {
 
     }
 
-    public static void cancel( final Context context, final int notif) {
+    public static void cancel(final Context context, final int notif) {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 	nm.cancel(notif);

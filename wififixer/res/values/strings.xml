@@ -228,5 +228,11 @@ Please be sure you have collected at least 10 minutes of data.</string>
 
 	<string name="logservice">LogService</string>
 
+	<string name="link_speed">Link Speed:</string>
+
+	<string name="signal_strength">Signal Strength:</string>
+
+	<string name="state">State:</string>
+
 
 </resources>

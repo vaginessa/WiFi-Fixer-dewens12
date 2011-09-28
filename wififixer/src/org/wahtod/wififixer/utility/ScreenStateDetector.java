@@ -89,10 +89,8 @@ public class ScreenStateDetector {
 	     * Register for screen state events
 	     * 
 	     * Note: this Initializer must be used if you want to receive the
-	     * intent broadcast: 
-	     * must use the unregister method appropriately
-	     * in the context where you instantiated it
-	     * or leak receiver
+	     * intent broadcast: must use the unregister method appropriately in
+	     * the context where you instantiated it or leak receiver
 	     */
 	    IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
 	    filter.addAction(Intent.ACTION_SCREEN_ON);

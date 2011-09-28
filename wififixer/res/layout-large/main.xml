@@ -13,11 +13,18 @@
 <LinearLayout android:id="@+id/widget46"
 	android:layout_width="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_height="fill_parent" android:orientation="horizontal">
-
-	<FrameLayout android:id="@+id/servicefragment"
-		android:layout_gravity="center_vertical" android:layout_weight="1"
-		android:layout_width="200dp" android:paddingRight="15dp"
-		android:layout_height="wrap_content"></FrameLayout>
+	<LinearLayout android:id="@+id/widget47"
+		android:layout_width="wrap_content" xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_height="wrap_content" android:orientation="vertical">
+		<FrameLayout android:id="@+id/servicefragment"
+			android:layout_gravity="center_vertical" android:layout_weight="1"
+			android:layout_width="300dp" android:paddingRight="15dp"
+			android:layout_height="300dp"></FrameLayout>
+		<FrameLayout android:id="@+id/statusfragment"
+			android:layout_gravity="center_vertical" android:layout_width="300dp"
+			android:paddingTop="15dp" android:paddingBottom="15dp"
+			android:layout_height="300dp"></FrameLayout>
+	</LinearLayout>
 
 	<FrameLayout android:id="@+id/knownnetworksfragment"
 		android:layout_weight="1" android:layout_width="300dp"

@@ -75,7 +75,7 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	    NotifUtil.statnotif = null;
 	    return;
 	}
-	
+
 	if (NotifUtil.statnotif == null) {
 	    Notification.Builder builder = new Notification.Builder(ctxt);
 	    Intent intent = new Intent(ctxt, WifiFixerActivity.class)

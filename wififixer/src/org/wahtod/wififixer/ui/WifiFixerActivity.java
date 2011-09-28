@@ -106,6 +106,7 @@ public class WifiFixerActivity extends FragmentActivity {
     public static final String SERVICEFRAG_TAG = "SERVICE_FRAGMENT";
     public static final String KNOWNNETWORKSFRAG_TAG = "KNOWNNETWORKS_FRAGMENT";
     public static final String SCANFRAG_TAG = "SCAN_FRAGMENT";
+    public static final String STATUSFRAG_TAG = "STATUS_FRAGMENT";
 
     void authCheck() {
 	if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
@@ -357,6 +358,8 @@ public class WifiFixerActivity extends FragmentActivity {
 		/*
 		 * We're on a tablet so do tablet fragments
 		 */
+		StatusFragment snf = new StatusFragment();
+		ft.add(R.id.statusfragment, snf, STATUSFRAG_TAG);
 		KnownNetworksFragment knf = new KnownNetworksFragment();
 		ft.add(R.id.knownnetworksfragment, knf, KNOWNNETWORKSFRAG_TAG);
 		if (null != findViewById(R.id.scanfragment)) {

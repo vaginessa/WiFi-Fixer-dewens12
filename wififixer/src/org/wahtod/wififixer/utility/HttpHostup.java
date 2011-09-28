@@ -121,7 +121,7 @@ public class HttpHostup {
 		return null;
 	} catch (InterruptedException e) {
 	    /*
-	     * rHttpHead interrupted this is desired behavior
+	     * rHttpHead interrupted: this is desired behavior
 	     */
 	    return target;
 	}
