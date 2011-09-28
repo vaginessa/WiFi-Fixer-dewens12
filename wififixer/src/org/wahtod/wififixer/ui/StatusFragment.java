@@ -69,6 +69,17 @@ public class StatusFragment extends Fragment {
 	super.onResume();
 	drawhandler.sendEmptyMessage(REFRESH);
     }
+    
+    public static StatusFragment newInstance(int num) {
+	StatusFragment f = new StatusFragment();
+
+	// Supply num input as an argument.
+	Bundle args = new Bundle();
+	args.putInt("num", num);
+	f.setArguments(args);
+
+	return f;
+    }
 
     private Context getContext() {
 	return getActivity().getApplicationContext();

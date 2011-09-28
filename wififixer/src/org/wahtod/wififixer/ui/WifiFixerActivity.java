@@ -71,16 +71,22 @@ public class WifiFixerActivity extends FragmentActivity {
 
 	@Override
 	public int getCount() {
-	    return 2;
+	    return 3;
 	}
 
 	@Override
 	public Fragment getItem(int position) {
-	    if (position == 1)
-		return ScanFragment.newInstance(position);
-	    else
+	    switch (position) {
+	    case 0:
 		return KnownNetworksFragment.newInstance(position);
 
+	    case 1:
+		return ScanFragment.newInstance(position);
+		
+	    case 2:
+		return StatusFragment.newInstance(position);
+	    }
+	    return null;
 	}
     }
 
