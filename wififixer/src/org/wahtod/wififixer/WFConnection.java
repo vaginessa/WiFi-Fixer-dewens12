@@ -882,7 +882,7 @@ public class WFConnection extends Object implements
 	cfg.BSSID = best.wificonfig.BSSID;
 	cfg.networkId = best.wificonfig.networkId;
 	getWifiManager(ctxt).updateNetwork(cfg);
-	connectToAP(context, best.wificonfig.SSID);
+	connectToAP(context, best.wificonfig.BSSID);
 	logBestNetwork(context, best);
 
 	return cfg.networkId;
@@ -972,7 +972,7 @@ public class WFConnection extends Object implements
 	final List<WifiConfiguration> wifiConfigs = getWifiManager(context)
 		.getConfiguredNetworks();
 	for (WifiConfiguration w : wifiConfigs) {
-	    if (w.SSID.equals(bssid))
+	    if (w.BSSID != null && w.BSSID.equals(bssid))
 		return w.networkId;
 	}
 	return -1;
@@ -1317,6 +1317,8 @@ public class WFConnection extends Object implements
     }
 
     private void handleConnectIntent(Context context, Bundle data) {
+	LogService.log(context, appname, "Connecting to:"
+		+ data.getString(NETWORKNAME));
 	connectToAP(ctxt, data.getString(NETWORKNAME));
     }
 
