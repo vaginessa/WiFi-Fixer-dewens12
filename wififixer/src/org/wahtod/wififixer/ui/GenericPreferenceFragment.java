@@ -16,11 +16,29 @@
 
 package org.wahtod.wififixer.ui;
 
-import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import org.wahtod.wififixer.R;
 
-public class GenericPreferenceFragment extends PreferenceFragment {
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Bundle;
+import android.preference.PreferenceFragment;
+
+public class GenericPreferenceFragment extends PreferenceFragment implements
+	OnSharedPreferenceChangeListener {
+    @Override
+    public void onStart() {
+	this.getPreferenceScreen().getSharedPreferences()
+	.registerOnSharedPreferenceChangeListener(this);
+	super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+	this.getPreferenceScreen().getSharedPreferences()
+	.unregisterOnSharedPreferenceChangeListener(this);
+	super.onStop();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -31,5 +49,11 @@ public class GenericPreferenceFragment extends PreferenceFragment {
 		getActivity().getString(R.string.xml),
 		getActivity().getPackageName());
 	addPreferencesFromResource(res);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+	    String key) {
+	PrefActivity.processPrefChange(getActivity(), sharedPreferences, key);
     }
 }

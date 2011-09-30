@@ -88,6 +88,13 @@ public class PrefActivity extends PreferenceActivity implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+	processPrefChange(this, prefs, key);
+    }
+
+    public static void processPrefChange(final Context context,
+	    SharedPreferences prefs, String key) {
+	if (key.length() == 0)
+	    return;
 	/*
 	 * Dispatch intent if this is a pref service is interested in
 	 */
@@ -96,16 +103,16 @@ public class PrefActivity extends PreferenceActivity implements
 	     * First handle Service enable case
 	     */
 	    if (key.equals(Pref.DISABLE_KEY.key())) {
-		if (!PrefUtil.readBoolean(this, Pref.DISABLE_KEY.key())) {
+		if (!PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key())) {
 		    Intent intent = new Intent(
 			    IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
-		    sendBroadcast(intent);
+		    context.sendBroadcast(intent);
 		}
 
 		else {
 		    Intent intent = new Intent(
 			    IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
-		    sendBroadcast(intent);
+		    context.sendBroadcast(intent);
 		}
 
 		return;
@@ -115,37 +122,43 @@ public class PrefActivity extends PreferenceActivity implements
 	     * interested in.
 	     */
 
-	    PrefUtil.notifyPrefChange(this, key, prefs.getBoolean(key, false));
+	    PrefUtil.notifyPrefChange(context, key, prefs
+		    .getBoolean(key, false));
 
 	} else if (key.contains(PrefConstants.PERF_KEY)) {
 
-	    int pVal = Integer.valueOf(PrefUtil.readString(this,
+	    int pVal = Integer.valueOf(PrefUtil.readString(context,
 		    PrefConstants.PERF_KEY));
 
 	    switch (pVal) {
 	    case 1:
-		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY.key(), true);
-		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY.key(), true);
+		PrefUtil.writeBoolean(context, Pref.WIFILOCK_KEY.key(), true);
+		PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(), true);
+		PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), true);
+		PrefUtil.notifyPrefChange(context, Pref.SCREEN_KEY.key(), true);
 		break;
 
 	    case 2:
-		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY.key(), true);
-		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY.key(), false);
+		PrefUtil.writeBoolean(context, Pref.WIFILOCK_KEY.key(), true);
+		PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(), true);
+		PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), false);
+		PrefUtil.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
 		break;
 
 	    case 3:
-		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY.key(), false);
-		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY.key(), false);
+		PrefUtil.writeBoolean(context, Pref.WIFILOCK_KEY.key(), false);
+		PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(),false);
+		PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), false);
+		PrefUtil.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
 		break;
 	    }
-	    PrefActivity.this.finish();
 
 	} else if (key.contains(PrefConstants.SLPOLICY_KEY)) {
 	    /*
 	     * Setting Wifi Sleep Policy
 	     */
-	    ContentResolver cr = getContentResolver();
-	    int wfsleep = Integer.valueOf(PrefUtil.readString(this,
+	    ContentResolver cr = context.getContentResolver();
+	    int wfsleep = Integer.valueOf(PrefUtil.readString(context,
 		    PrefConstants.SLPOLICY_KEY));
 	    if (wfsleep != 3) {
 
@@ -159,7 +172,7 @@ public class PrefActivity extends PreferenceActivity implements
 		try {
 		    wfsleep = android.provider.Settings.System.getInt(cr,
 			    android.provider.Settings.System.WIFI_SLEEP_POLICY);
-		    PrefUtil.writeString(this, PrefConstants.SLPOLICY_KEY,
+		    PrefUtil.writeString(context, PrefConstants.SLPOLICY_KEY,
 			    String.valueOf(wfsleep));
 
 		} catch (SettingNotFoundException e) {
