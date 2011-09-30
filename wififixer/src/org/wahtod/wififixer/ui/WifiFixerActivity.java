@@ -37,6 +37,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -181,7 +182,10 @@ public class WifiFixerActivity extends FragmentActivity {
     }
 
     void launchPrefs() {
-	startActivity(new Intent(this, PrefActivity.class));
+	if (Build.VERSION.SDK_INT<Build.VERSION_CODES.HONEYCOMB)
+	    startActivity(new Intent(this, PrefActivity.class));
+	else
+	    startActivity(new Intent(this, PrefActivityHC.class));
     }
 
     void sendLog() {

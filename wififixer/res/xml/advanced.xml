@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<!--
+		Copyright [2010-2011] [David Van de Ven] Licensed under the Apache License,
+		Version 2.0 (the "License"); you may not use this file except in
+		compliance with the License. You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+			<PreferenceCategory android:title="Wifi Usability">
+				<CheckBoxPreference android:key="WiFiLock"
+					android:defaultValue="true" android:title="Enable Wifi Lock"
+					android:summary="Enables Wifi Lock, which will increase battery use" />
+				<CheckBoxPreference android:key="SCREEN"
+					android:title="Disable Sleep"
+					android:defaultValue="true"
+					android:summary="Disables sleep on Screen Off, which will increase battery use moderately" />
+			</PreferenceCategory>
+			<PreferenceCategory android:title="Specialized Fixes">
+				<ListPreference android:title="Wifi Sleep Policy"
+					android:defaultValue="3"
+					android:summary="Controls Wifi sleep policy: See Known Issues in Documentation"
+					android:key="SLEEP_POLICY" android:entries="@array/wfsleep"
+					android:entryValues="@array/wfsleepValues" />
+				<CheckBoxPreference android:key="SUPFIX"
+					android:title="Disable Supplicant Fixes" android:summary="Check if having trouble on Android 1.5 or 1.6" />
+				<CheckBoxPreference android:key="N1FIX2"
+					android:title="Nexus One Sleep Fix"
+					android:summary="Experimental: please read Known Issues in Documentation." />
+			</PreferenceCategory>
+</PreferenceScreen>
