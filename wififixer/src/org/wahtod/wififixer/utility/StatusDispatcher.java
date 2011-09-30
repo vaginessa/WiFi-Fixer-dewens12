@@ -72,10 +72,10 @@ public class StatusDispatcher {
 	    /*
 	     * queue update for widget
 	     */
-	    
-	    if (!messagehandler.hasMessages(MESSAGE)){
+
+	    if (!messagehandler.hasMessages(MESSAGE)) {
 		messagehandler.sendEmptyMessage(MESSAGE);
-		messagehandler.sendEmptyMessageDelayed(MESSAGE,MESSAGE_DELAY);
+		messagehandler.sendEmptyMessageDelayed(MESSAGE, MESSAGE_DELAY);
 	    }
 	}
     }
