@@ -2,7 +2,7 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 		<header android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
 						android:title="Main"
-						android:summary="Control Wifi Fixer's general behavior here.">
+						android:summary="Configures Wifi Fixer's general behavior">
 			<extra android:name="resource" android:value="general" />
 		</header>
 		<header android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"

@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.provider.Settings.SettingNotFoundException;
@@ -152,6 +153,12 @@ public class PrefActivity extends PreferenceActivity implements
 		PrefUtil.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
 		break;
 	    }
+	    /*
+	     * Return to main activity so checkboxes aren't stale
+	     * Only need to do this on phone
+	     */
+	    if (Build.VERSION.SDK_INT<Build.VERSION_CODES.HONEYCOMB)
+		context.startActivity(new Intent(context, WifiFixerActivity.class));
 
 	} else if (key.contains(PrefConstants.SLPOLICY_KEY)) {
 	    /*
