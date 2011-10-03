@@ -28,14 +28,14 @@ public class GenericPreferenceFragment extends PreferenceFragment implements
     @Override
     public void onStart() {
 	this.getPreferenceScreen().getSharedPreferences()
-	.registerOnSharedPreferenceChangeListener(this);
+		.registerOnSharedPreferenceChangeListener(this);
 	super.onStart();
     }
 
     @Override
     public void onStop() {
 	this.getPreferenceScreen().getSharedPreferences()
-	.unregisterOnSharedPreferenceChangeListener(this);
+		.unregisterOnSharedPreferenceChangeListener(this);
 	super.onStop();
     }
 

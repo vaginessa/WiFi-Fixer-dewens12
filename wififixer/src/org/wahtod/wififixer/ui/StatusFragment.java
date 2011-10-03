@@ -69,7 +69,7 @@ public class StatusFragment extends Fragment {
 	super.onResume();
 	drawhandler.sendEmptyMessage(REFRESH);
     }
-    
+
     public static StatusFragment newInstance(int num) {
 	StatusFragment f = new StatusFragment();
 
@@ -105,7 +105,7 @@ public class StatusFragment extends Fragment {
 	TextView capabilities = (TextView) getView().findViewById(
 		R.id.capabilities);
 	TextView status = (TextView) getView().findViewById(R.id.status);
-	
+
 	if (info == null) {
 	    ssid.setText(getContext().getString(R.string.wifi_is_disabled));
 	    signal.setText(EMPTYSTRING);

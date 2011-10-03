@@ -84,8 +84,6 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	    NotifUtil.contentIntent = PendingIntent.getActivity(ctxt, 0,
 		    intent, 0);
 	    builder.setContentIntent(NotifUtil.contentIntent);
-	    builder.setContent(new RemoteViews(ctxt.getPackageName(),
-		    R.layout.statnotif));
 	    builder.setOngoing(true);
 	    builder.setOnlyAlertOnce(true);
 	    builder.setSmallIcon(R.drawable.signal_level, signal);
@@ -96,12 +94,14 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
 	    status = ctxt.getString(R.string.unmanaged) + status;
 	}
+	RemoteViews update = new RemoteViews(ctxt.getPackageName(),
+		R.layout.statnotif);
 	NotifUtil.statnotif.iconLevel = signal;
-	NotifUtil.statnotif.contentView.setImageViewResource(R.id.signal,
-		NotifUtil.getIconfromSignal(signal));
-	NotifUtil.statnotif.contentView.setTextViewText(R.id.ssid,
-		truncateSSID(ssid));
-	NotifUtil.statnotif.contentView.setTextViewText(R.id.status, status);
+	update.setImageViewResource(R.id.signal, NotifUtil
+		.getIconfromSignal(signal));
+	update.setTextViewText(R.id.ssid, truncateSSID(ssid));
+	update.setTextViewText(R.id.status, status);
+	NotifUtil.statnotif.contentView = update;
 	/*
 	 * Fire the notification
 	 */
@@ -127,8 +127,6 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	    NotifUtil.contentIntent = PendingIntent.getActivity(ctxt, 0,
 		    intent, 0);
 	    builder.setContentIntent(NotifUtil.contentIntent);
-	    builder.setContent(new RemoteViews(ctxt.getPackageName(),
-		    R.layout.statnotif));
 	    builder.setOngoing(true);
 	    builder.setOnlyAlertOnce(true);
 	    builder.setSmallIcon(R.drawable.logging_enabled);
@@ -140,9 +138,11 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	    NotifUtil.lognotif.contentView.setTextViewText(R.id.ssid, ctxt
 		    .getString(R.string.logservice));
 	}
+	RemoteViews update = new RemoteViews(ctxt.getPackageName(),
+		R.layout.lognotif);
 
-	NotifUtil.lognotif.contentView.setTextViewText(R.id.status,
-		getLogString(ctxt).toString());
+	update.setTextViewText(R.id.status, getLogString(ctxt).toString());
+	lognotif.contentView = update;
 
 	/*
 	 * Fire the notification

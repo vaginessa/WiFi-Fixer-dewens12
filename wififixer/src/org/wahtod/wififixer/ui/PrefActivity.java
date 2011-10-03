@@ -134,31 +134,37 @@ public class PrefActivity extends PreferenceActivity implements
 	    switch (pVal) {
 	    case 1:
 		PrefUtil.writeBoolean(context, Pref.WIFILOCK_KEY.key(), true);
-		PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(), true);
+		PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(),
+			true);
 		PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), true);
 		PrefUtil.notifyPrefChange(context, Pref.SCREEN_KEY.key(), true);
 		break;
 
 	    case 2:
 		PrefUtil.writeBoolean(context, Pref.WIFILOCK_KEY.key(), true);
-		PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(), true);
+		PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(),
+			true);
 		PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), false);
-		PrefUtil.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
+		PrefUtil
+			.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
 		break;
 
 	    case 3:
 		PrefUtil.writeBoolean(context, Pref.WIFILOCK_KEY.key(), false);
-		PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(),false);
+		PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(),
+			false);
 		PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), false);
-		PrefUtil.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
+		PrefUtil
+			.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
 		break;
 	    }
 	    /*
-	     * Return to main activity so checkboxes aren't stale
-	     * Only need to do this on phone
+	     * Return to main activity so checkboxes aren't stale Only need to
+	     * do this on phone
 	     */
-	    if (Build.VERSION.SDK_INT<Build.VERSION_CODES.HONEYCOMB)
-		context.startActivity(new Intent(context, WifiFixerActivity.class));
+	    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+		context.startActivity(new Intent(context,
+			WifiFixerActivity.class));
 
 	} else if (key.contains(PrefConstants.SLPOLICY_KEY)) {
 	    /*

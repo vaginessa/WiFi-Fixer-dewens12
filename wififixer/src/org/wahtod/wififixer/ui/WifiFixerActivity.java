@@ -83,7 +83,7 @@ public class WifiFixerActivity extends FragmentActivity {
 
 	    case 1:
 		return ScanFragment.newInstance(position);
-		
+
 	    case 2:
 		return StatusFragment.newInstance(position);
 	    }
@@ -182,7 +182,7 @@ public class WifiFixerActivity extends FragmentActivity {
     }
 
     void launchPrefs() {
-	if (Build.VERSION.SDK_INT<Build.VERSION_CODES.HONEYCOMB)
+	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
 	    startActivity(new Intent(this, PrefActivity.class));
 	else
 	    startActivity(new Intent(this, PrefActivityHC.class));
