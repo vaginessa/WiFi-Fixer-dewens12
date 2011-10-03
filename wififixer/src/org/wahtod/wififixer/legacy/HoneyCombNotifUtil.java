@@ -86,7 +86,7 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	    builder.setContentIntent(NotifUtil.contentIntent);
 	    builder.setOngoing(true);
 	    builder.setOnlyAlertOnce(true);
-	    builder.setSmallIcon(R.drawable.signal_level,signal);
+	    builder.setSmallIcon(R.drawable.notifsignal, signal);
 	    builder.setContentTitle(ctxt.getString(R.string.network_status));
 	    NotifUtil.statnotif = builder.getNotification();
 	}

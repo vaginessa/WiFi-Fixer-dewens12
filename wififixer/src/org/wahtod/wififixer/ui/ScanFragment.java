@@ -193,19 +193,19 @@ public class ScanFragment extends Fragment {
 
 	    switch (adjusted) {
 	    case 0:
-		holder.icon.setImageResource(R.drawable.signal0);
+		holder.icon.setImageResource(R.drawable.statsignal0);
 		break;
 	    case 1:
-		holder.icon.setImageResource(R.drawable.signal1);
+		holder.icon.setImageResource(R.drawable.statsignal1);
 		break;
 	    case 2:
-		holder.icon.setImageResource(R.drawable.signal2);
+		holder.icon.setImageResource(R.drawable.statsignal2);
 		break;
 	    case 3:
-		holder.icon.setImageResource(R.drawable.signal3);
+		holder.icon.setImageResource(R.drawable.statsignal3);
 		break;
 	    case 4:
-		holder.icon.setImageResource(R.drawable.signal4);
+		holder.icon.setImageResource(R.drawable.statsignal4);
 		break;
 	    }
 

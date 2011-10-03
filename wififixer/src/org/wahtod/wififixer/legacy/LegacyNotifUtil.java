@@ -73,10 +73,9 @@ public class LegacyNotifUtil extends NotifUtil {
 	    return;
 	}
 
-	int icon = NotifUtil.getIconfromSignal(signal);
 
 	if (NotifUtil.statnotif == null) {
-	    NotifUtil.statnotif = new Notification(icon, ctxt
+	    NotifUtil.statnotif = new Notification(R.drawable.notifsignal, ctxt
 		    .getString(R.string.network_status), 0);
 
 	    Intent intent = new Intent(ctxt, WifiFixerActivity.class)
@@ -92,7 +91,7 @@ public class LegacyNotifUtil extends NotifUtil {
 	if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
 	    status = ctxt.getString(R.string.unmanaged) + status;
 	}
-	NotifUtil.statnotif.icon = icon;
+	NotifUtil.statnotif.icon = getIconfromSignal(signal);
 	NotifUtil.statnotif.iconLevel = signal;
 	NotifUtil.statnotif.setLatestEventInfo(ctxt, ctxt
 		.getString(R.string.app_name), truncateSSID(ssid)
