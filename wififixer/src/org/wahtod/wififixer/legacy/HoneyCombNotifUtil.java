@@ -86,7 +86,7 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	    builder.setContentIntent(NotifUtil.contentIntent);
 	    builder.setOngoing(true);
 	    builder.setOnlyAlertOnce(true);
-	    builder.setSmallIcon(R.drawable.signal_level, signal);
+	    builder.setSmallIcon(R.drawable.signal_level,signal);
 	    builder.setContentTitle(ctxt.getString(R.string.network_status));
 	    NotifUtil.statnotif = builder.getNotification();
 	}
@@ -130,13 +130,8 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	    builder.setOngoing(true);
 	    builder.setOnlyAlertOnce(true);
 	    builder.setSmallIcon(R.drawable.logging_enabled);
-	    builder.setContentTitle(ctxt.getString(R.string.network_status));
+	    builder.setContentTitle(ctxt.getString(R.string.logservice));
 	    NotifUtil.lognotif = builder.getNotification();
-	    NotifUtil.lognotif.contentView.setImageViewResource(R.id.signal,
-		    R.drawable.logging_enabled);
-
-	    NotifUtil.lognotif.contentView.setTextViewText(R.id.ssid, ctxt
-		    .getString(R.string.logservice));
 	}
 	RemoteViews update = new RemoteViews(ctxt.getPackageName(),
 		R.layout.lognotif);
