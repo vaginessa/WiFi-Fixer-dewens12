@@ -19,14 +19,31 @@ package org.wahtod.wififixer.ui;
 import java.util.List;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.legacy.ActionBarDetector;
 
+import android.content.Intent;
 import android.preference.PreferenceActivity;
+import android.view.MenuItem;
 
 public class PrefActivityHC extends PreferenceActivity {
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+	switch (item.getItemId()) {
+	case android.R.id.home:
+	    // app icon in Action Bar clicked; go home
+	    Intent intent = new Intent(this, WifiFixerActivity.class);
+	    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    startActivity(intent);
+	    return true;
+	}
+	return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onBuildHeaders(List<Header> target) {
 	loadHeadersFromResource(R.xml.preference_headers, target);
 	super.onBuildHeaders(target);
+	ActionBarDetector.setUp(this);
     }
 }

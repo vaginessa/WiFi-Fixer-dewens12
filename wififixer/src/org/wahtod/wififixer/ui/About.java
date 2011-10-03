@@ -17,19 +17,36 @@
 package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.prefs.PrefUtil;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.MenuItem;
 
 public class About extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.about);
+	ActionBarDetector.setUp(this);
 	// Disable the nag if it's been read
 	if (!PrefUtil.readBoolean(this, WifiFixerActivity.sABOUT)) {
 	    PrefUtil.writeBoolean(this, WifiFixerActivity.sABOUT, true);
 	}
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+	switch (item.getItemId()) {
+	case android.R.id.home:
+	    // app icon in Action Bar clicked; go home
+	    Intent intent = new Intent(this, WifiFixerActivity.class);
+	    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    startActivity(intent);
+	    return true;
+	}
+	return super.onOptionsItemSelected(item);
     }
 }

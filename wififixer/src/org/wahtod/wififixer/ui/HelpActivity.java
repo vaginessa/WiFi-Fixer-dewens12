@@ -17,12 +17,14 @@
 package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.legacy.ActionBarDetector;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -46,7 +48,21 @@ public class HelpActivity extends FragmentActivity {
 	websettings.setSupportZoom(false);
 	websettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 	webview.loadUrl("file:///android_asset/index.html");
-
+	
+	ActionBarDetector.setUp(this);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+	switch (item.getItemId()) {
+	case android.R.id.home:
+	    // app icon in Action Bar clicked; go home
+	    Intent intent = new Intent(this, WifiFixerActivity.class);
+	    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    startActivity(intent);
+	    return true;
+	}
+	return super.onOptionsItemSelected(item);
     }
 
     @Override
