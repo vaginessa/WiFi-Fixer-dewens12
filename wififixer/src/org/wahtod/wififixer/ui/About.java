@@ -20,7 +20,6 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.prefs.PrefUtil;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
@@ -39,14 +38,7 @@ public class About extends FragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-	switch (item.getItemId()) {
-	case android.R.id.home:
-	    // app icon in Action Bar clicked; go home
-	    Intent intent = new Intent(this, WifiFixerActivity.class);
-	    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	    startActivity(intent);
-	    return true;
-	}
+	ActionBarDetector.handleHome(this, item);
 	return super.onOptionsItemSelected(item);
     }
 }

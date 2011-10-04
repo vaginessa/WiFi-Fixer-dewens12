@@ -15,7 +15,12 @@
  */
 package org.wahtod.wififixer.legacy;
 
+import org.wahtod.wififixer.ui.WifiFixerActivity;
+
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.view.MenuItem;
 
 public abstract class ActionBarDetector {
     private static ActionBarDetector selector;
@@ -47,6 +52,16 @@ public abstract class ActionBarDetector {
 	    return true;
 	} catch (Exception ex) {
 	    return false;
+	}
+    }
+
+    public static void handleHome(Context context, MenuItem item) {
+	switch (item.getItemId()) {
+	case android.R.id.home:
+	    // app icon in Action Bar clicked; go home
+	    Intent intent = new Intent(context, WifiFixerActivity.class);
+	    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    context.startActivity(intent);
 	}
     }
 }
