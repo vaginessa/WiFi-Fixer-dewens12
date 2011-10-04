@@ -31,7 +31,7 @@ public class StatusDispatcher {
     private PrefUtil prefs;
 
     public StatusDispatcher(final Context context, PrefUtil p) {
-	c = context;
+	c = context.getApplicationContext();
 	prefs = p;
     }
 
@@ -57,7 +57,8 @@ public class StatusDispatcher {
 	    /*
 	     * Handle notification cancel case
 	     */
-	    NotifUtil.addStatNotif(c, message);
+	    NotifUtil.addStatNotif(context, message);
+	    clearQueue();
 	} else {
 	    /*
 	     * Only if not a cancel (i.e. show = false) do we want to display on
@@ -68,7 +69,7 @@ public class StatusDispatcher {
 	     * Dispatch Status Notification update
 	     */
 	    if (prefs.getFlag(Pref.STATENOT_KEY))
-		NotifUtil.addStatNotif(c, m);
+		NotifUtil.addStatNotif(context, m);
 	    /*
 	     * queue update for widget
 	     */
