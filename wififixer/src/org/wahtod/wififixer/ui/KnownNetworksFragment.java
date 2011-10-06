@@ -103,46 +103,52 @@ public class KnownNetworksFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-	ImageView iv = (ImageView) listviewitem.findViewById(id.NETWORK_ICON);
-	switch (item.getItemId()) {
-	case CONTEXT_ENABLE:
-	    iv.setImageResource(R.drawable.enabled_ssid);
-	    WFConnection.setNetworkState(getContext(), clicked_position, true);
-	    WFConnection.writeNetworkState(getContext(), clicked_position,
-		    false);
-	    adapter.notifyDataSetChanged();
-	    break;
-	case CONTEXT_DISABLE:
-	    iv.setImageResource(R.drawable.disabled_ssid);
-	    WFConnection.setNetworkState(getContext(), clicked_position, false);
-	    WFConnection
-		    .writeNetworkState(getContext(), clicked_position, true);
-	    adapter.notifyDataSetChanged();
-	    break;
-	case CONTEXT_CONNECT:
-	    Intent intent = new Intent(WFConnection.CONNECTINTENT);
-	    intent.putExtra(WFConnection.NETWORKNAME, WFConnection
-		    .getBSSIDfromNetwork(getContext(), clicked_position));
-	    getContext().sendBroadcast(intent);
-	    break;
-
-	case CONTEXT_NONMANAGE:
-	    if (!WFConnection.readManagedState(getContext(), clicked_position)) {
-		iv.setImageResource(R.drawable.ignore_ssid);
-		WFConnection.writeManagedState(getContext(), clicked_position,
+	if (listviewitem != null) {
+	    ImageView iv = (ImageView) listviewitem
+		    .findViewById(id.NETWORK_ICON);
+	    switch (item.getItemId()) {
+	    case CONTEXT_ENABLE:
+		iv.setImageResource(R.drawable.enabled_ssid);
+		WFConnection.setNetworkState(getContext(), clicked_position,
 			true);
-	    } else {
-		if (WFConnection
-			.getNetworkState(getContext(), clicked_position))
-		    iv.setImageResource(R.drawable.enabled_ssid);
-		else
-		    iv.setImageResource(R.drawable.disabled_ssid);
-
-		WFConnection.writeManagedState(getContext(), clicked_position,
+		WFConnection.writeNetworkState(getContext(), clicked_position,
 			false);
+		adapter.notifyDataSetChanged();
+		break;
+	    case CONTEXT_DISABLE:
+		iv.setImageResource(R.drawable.disabled_ssid);
+		WFConnection.setNetworkState(getContext(), clicked_position,
+			false);
+		WFConnection.writeNetworkState(getContext(), clicked_position,
+			true);
+		adapter.notifyDataSetChanged();
+		break;
+	    case CONTEXT_CONNECT:
+		Intent intent = new Intent(WFConnection.CONNECTINTENT);
+		intent.putExtra(WFConnection.NETWORKNAME, WFConnection
+			.getBSSIDfromNetwork(getContext(), clicked_position));
+		getContext().sendBroadcast(intent);
+		break;
+
+	    case CONTEXT_NONMANAGE:
+		if (!WFConnection.readManagedState(getContext(),
+			clicked_position)) {
+		    iv.setImageResource(R.drawable.ignore_ssid);
+		    WFConnection.writeManagedState(getContext(),
+			    clicked_position, true);
+		} else {
+		    if (WFConnection.getNetworkState(getContext(),
+			    clicked_position))
+			iv.setImageResource(R.drawable.enabled_ssid);
+		    else
+			iv.setImageResource(R.drawable.disabled_ssid);
+
+		    WFConnection.writeManagedState(getContext(),
+			    clicked_position, false);
+		}
+		adapter.notifyDataSetChanged();
+		break;
 	    }
-	    adapter.notifyDataSetChanged();
-	    break;
 	}
 	return super.onContextItemSelected(item);
     }
