@@ -58,38 +58,25 @@ public class KnownNetworksFragment extends Fragment {
     private NetworkListAdapter adapter;
     private List<String> knownnetworks;
     private List<String> known_in_range;
+    private ListView lv;
     private static final int SCAN_MESSAGE = 31337;
     private static final int REFRESH_MESSAGE = 2944;
     private static final int SCAN_DELAY = 15000;
     private static final String EMPTY_SSID = "None";
-    private static final int CONTEXT_ENABLE = 1;
-    private static final int CONTEXT_DISABLE = 2;
-    private static final int CONTEXT_CONNECT = 3;
-    private static final int CONTEXT_NONMANAGE = 4;
+    private static final int CONTEXT_ENABLE = 115;
+    private static final int CONTEXT_DISABLE = 112;
+    private static final int CONTEXT_CONNECT = 113;
+    private static final int CONTEXT_NONMANAGE = 114;
     private static final String NETWORKS_KEY = "NETWORKS_KEY";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
 	View v = inflater.inflate(R.layout.knownnetworks, null);
-	createAdapter(v);
+	lv = (ListView) v.findViewById(R.id.knownlist);
+	createAdapter(lv);
+	registerContextMenu();
 	return v;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-	/*
-	 * Grab and set up ListView
-	 */
-	knownnetworks = getNetworks(getContext());
-	known_in_range = new ArrayList<String>();
-	super.onAttach(activity);
-    }
-
-    @Override
-    public void onDetach() {
-	// TODO Auto-generated method stub
-	super.onDetach();
     }
 
     @Override
@@ -157,14 +144,28 @@ public class KnownNetworksFragment extends Fragment {
 	    adapter.notifyDataSetChanged();
 	    break;
 	}
-	return true;
+	return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+	/*
+	 * Grab and set up ListView
+	 */
+	knownnetworks = getNetworks(getContext());
+	known_in_range = new ArrayList<String>();
+	super.onAttach(activity);
+    }
+
+    @Override
+    public void onDetach() {
+	this.unregisterForContextMenu(lv);
+	super.onDetach();
     }
 
     @Override
     public void onPause() {
 	unregisterReceiver();
-	this.unregisterForContextMenu((ListView) getView().findViewById(
-		R.id.ListView01));
 	super.onPause();
     }
 
@@ -172,7 +173,6 @@ public class KnownNetworksFragment extends Fragment {
     public void onResume() {
 	super.onResume();
 	registerReceiver();
-	registerContextMenu();
     }
 
     /*
@@ -297,12 +297,11 @@ public class KnownNetworksFragment extends Fragment {
     };
 
     /*
-     * Create adapter Add Header view
+     * Create adapter
      */
-    private void createAdapter(View v) {
+    private void createAdapter(ListView v) {
 	adapter = new NetworkListAdapter(knownnetworks);
-	ListView lv = (ListView) v.findViewById(R.id.ListView01);
-	lv.setAdapter(adapter);
+	v.setAdapter(adapter);
     }
 
     public static KnownNetworksFragment newInstance(int num) {
@@ -341,13 +340,10 @@ public class KnownNetworksFragment extends Fragment {
     }
 
     private void registerContextMenu() {
-	ListView lv = (ListView) getView().findViewById(R.id.ListView01);
 	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	    @Override
 	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 		    int position, long id) {
-		ListView lv = (ListView) getView()
-			.findViewById(R.id.ListView01);
 		clicked = lv.getItemAtPosition(position).toString();
 		clicked_position = position;
 		listviewitem = v;
@@ -366,7 +362,7 @@ public class KnownNetworksFragment extends Fragment {
 	if (knownnetworks.size() > 0) {
 	    known_in_range = networks;
 	    if (adapter == null) {
-		createAdapter(getView());
+		createAdapter(lv);
 	    } else {
 		refreshArray();
 		adapter.notifyDataSetChanged();

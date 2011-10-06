@@ -15,6 +15,7 @@
 		</TextView>
 		
 	<ListView android:layout_centerHorizontal="true"
+		android:id="@+id/scanlist"
 		android:headerDividersEnabled="false" 
 		android:animateLayoutChanges="true"
 		 android:cacheColorHint="#00000000"
@@ -22,7 +23,7 @@
 		android:paddingTop="5dp" android:paddingBottom="10dp"
 		android:layout_below="@+id/scanlist_title" android:layout_marginRight="30dp"
 		android:layout_width="match_parent"
-		android:layout_height="fill_parent" android:id="@+id/ListView02"
+		android:layout_height="fill_parent"
 		android:dividerHeight="1dip" android:divider="#545454"></ListView>
 </RelativeLayout>
 	

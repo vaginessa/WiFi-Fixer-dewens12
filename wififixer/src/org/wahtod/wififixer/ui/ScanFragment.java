@@ -50,11 +50,12 @@ public class ScanFragment extends Fragment {
     private static final String WPA = "WPA";
     private static final String WPA2 = "WPA2";
     private static final String WEP = "WEP";
-    private String clicked;
+    private WFScanResult clicked;
     private ScanListAdapter adapter;
+    private ListView lv;
 
-    private static final int CONTEXT_CONNECT = 3;
-    private static final int CONTEXT_INFO = 5;
+    private static final int CONTEXT_CONNECT = 13;
+    private static final int CONTEXT_INFO = 15;
     protected static final int REFRESH_LIST_ADAPTER = 0;
     protected static final int CLEAR_LIST_ADAPTER = 1;
 
@@ -82,8 +83,9 @@ public class ScanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
 	View v = inflater.inflate(R.layout.scannetworks, null);
+	lv = (ListView) v.findViewById(R.id.scanlist);
+	registerContextMenu();
 	return v;
-
     }
 
     @Override
@@ -91,9 +93,9 @@ public class ScanFragment extends Fragment {
 	    ContextMenuInfo menuInfo) {
 	super.onCreateContextMenu(menu, v, menuInfo);
 	/*
-	 * Clicked is the ListView selected string, so the SSID
+	 * Clicked is the ListView selected WFScanResult
 	 */
-	menu.setHeaderTitle(clicked);
+	menu.setHeaderTitle(clicked.SSID);
 	menu.add(3, CONTEXT_CONNECT, 2, R.string.connect_now);
 	menu.add(4, CONTEXT_INFO, 3, R.string.about);
     }
@@ -111,15 +113,12 @@ public class ScanFragment extends Fragment {
 
 	    break;
 	}
-	return true;
+	return super.onContextItemSelected(item);
     }
 
     @Override
     public void onPause() {
 	unregisterReceiver();
-	if (adapter != null)
-	    this.unregisterForContextMenu((ListView) getView().findViewById(
-		    R.id.ListView02));
 	super.onPause();
     }
 
@@ -129,8 +128,6 @@ public class ScanFragment extends Fragment {
 	List<WFScanResult> scan = getNetworks(getContext());
 	if (adapter == null)
 	    createAdapter(getView(), scan);
-
-	registerContextMenu();
 	registerReceiver();
     }
 
@@ -278,7 +275,6 @@ public class ScanFragment extends Fragment {
      */
     private void createAdapter(View v, List<WFScanResult> scan) {
 	adapter = new ScanListAdapter(getContext(), 0, scan);
-	ListView lv = (ListView) v.findViewById(R.id.ListView02);
 	lv.setAdapter(adapter);
     }
 
@@ -363,13 +359,12 @@ public class ScanFragment extends Fragment {
     }
 
     private void registerContextMenu() {
-	ListView lv = (ListView) getView().findViewById(R.id.ListView02);
 	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	    @Override
 	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 		    int position, long id) {
-		WFScanResult item = adapter.scanresultArray.get(position);
-		clicked = item.SSID;
+		clicked = adapter.scanresultArray.get(position);
+		;
 		return false;
 	    }
 

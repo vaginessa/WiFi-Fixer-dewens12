@@ -16,12 +16,13 @@
 	</TextView>
 
 	<ListView android:layout_centerHorizontal="true"
+	android:id="@+id/knownlist"
 	android:headerDividersEnabled="false" 
 	android:cacheColorHint="#00000000" android:paddingLeft="5dp"
 	android:paddingRight="20dp" android:paddingTop="5dp"
 	android:paddingBottom="10dp" android:layout_below="@+id/TextView01"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:id="@+id/ListView01" android:dividerHeight="1dip"
+	 android:dividerHeight="1dip"
 	android:divider="#545454">
 	</ListView>
 </RelativeLayout>
