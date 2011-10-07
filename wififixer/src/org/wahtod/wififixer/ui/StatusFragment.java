@@ -17,6 +17,7 @@
 package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.utility.NotifUtil;
 
 import android.content.Context;
 import android.net.wifi.WifiInfo;
@@ -28,6 +29,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 public class StatusFragment extends Fragment {
@@ -101,21 +103,26 @@ public class StatusFragment extends Fragment {
 
 	WifiInfo info = getNetwork(getContext());
 	TextView ssid = (TextView) getView().findViewById(R.id.SSID);
-	TextView signal = (TextView) getView().findViewById(R.id.signal);
+	TextView dbm = (TextView) getView().findViewById(R.id.signal);
 	TextView capabilities = (TextView) getView().findViewById(
 		R.id.capabilities);
 	TextView status = (TextView) getView().findViewById(R.id.status);
+	FrameLayout signal = (FrameLayout) getView().findViewById(
+		R.id.signal_status_fragment);
 
 	if (info == null) {
 	    ssid.setText(getContext().getString(R.string.wifi_is_disabled));
-	    signal.setText(EMPTYSTRING);
+	    dbm.setText(EMPTYSTRING);
 	    capabilities.setText(EMPTYSTRING);
 	    status.setText(EMPTYSTRING);
 	} else {
 	    ssid.setText(info.getSSID());
-	    signal.setText(String.valueOf(info.getRssi()));
+	    dbm.setText(String.valueOf(info.getRssi()));
 	    capabilities.setText(String.valueOf(info.getLinkSpeed()));
 	    status.setText(info.getSupplicantState().name());
+	    signal.setBackgroundResource(NotifUtil
+		    .getIconfromSignal(WifiManager.calculateSignalLevel(info
+			    .getRssi(), 5)));
 	}
 
 	drawhandler.sendEmptyMessageDelayed(REFRESH, REFRESH_DELAY);

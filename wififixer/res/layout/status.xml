@@ -22,43 +22,41 @@
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="fill_parent" android:orientation="vertical"
 		android:paddingTop="5dp" android:paddingLeft="8dp"
-		android:paddingRight="8dp" android:background="@drawable/listbg" android:layout_height="wrap_content">
+		android:paddingRight="8dp" android:background="@drawable/listbg" android:layout_height="wrap_content" android:weightSum="1">
 		<LinearLayout android:weightSum="1" android:id="@+id/LinearLayout01"
 			android:gravity="left" android:layout_gravity="left"
 			android:layout_width="wrap_content" android:baselineAligned="true"
 			android:layout_weight="0.00" android:layout_height="40dp">
 			<TextView android:id="@+id/TextView02"
-				android:layout_height="wrap_content" android:layout_width="wrap_content"
+				android:layout_width="wrap_content"
 				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:text="@string/signal_strength" android:layout_gravity="right"></TextView>
+				android:text="@string/signal_strength" android:layout_gravity="right" android:layout_height="match_parent" android:gravity="center"></TextView>
 			<TextView android:id="@+id/signal" android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="-99" android:layout_height="match_parent"
-				android:layout_gravity="right" android:layout_width="166dp"
-				android:paddingLeft="60dp"></TextView>
+				android:layout_width="166dp"
+				android:paddingLeft="60dp" android:layout_gravity="center" android:gravity="center_vertical"></TextView>
 		</LinearLayout>
 		<LinearLayout android:weightSum="1" android:id="@+id/linearLayout1"
 			android:gravity="center_horizontal" android:layout_gravity="left"
 			android:layout_width="wrap_content" android:layout_height="40dp">
-			<TextView android:id="@+id/textView1" android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium"
-				android:text="@string/link_speed" android:layout_gravity="left"></TextView>
+			<TextView android:id="@+id/textView1" android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium"
+				android:text="@string/link_speed" android:layout_gravity="left" android:layout_height="match_parent" android:gravity="center"></TextView>
 			<TextView android:id="@+id/capabilities"
 				android:layout_height="match_parent" android:textAppearance="?android:attr/textAppearanceSmall"
-				android:text="52" android:layout_gravity="center_horizontal"
-				android:paddingLeft="100dp" android:layout_width="134dp"></TextView>
+				android:text="52" android:paddingLeft="100dp" android:layout_width="134dp" android:layout_gravity="center" android:gravity="center_vertical"></TextView>
 		</LinearLayout>
 		<LinearLayout android:weightSum="1" android:id="@+id/LinearLayout02"
 			android:gravity="center_horizontal" android:layout_width="wrap_content"
 			android:layout_gravity="left" android:layout_weight="0.00" android:layout_height="40dp">
 			<TextView android:id="@+id/TextView03"
-				android:layout_height="wrap_content" android:layout_width="wrap_content"
+				android:layout_width="wrap_content"
 				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:text="@string/state" android:layout_gravity="center_horizontal"></TextView>
-			<TextView android:layout_weight="0.09" android:id="@+id/status"
-				android:layout_height="match_parent" android:layout_width="wrap_content"
+				android:text="@string/state" android:layout_gravity="center_horizontal" android:layout_height="match_parent" android:gravity="center"></TextView>
+			<TextView android:id="@+id/status"
+				android:layout_width="wrap_content"
 				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:text="COMPLETED" android:layout_gravity="center_horizontal"
-				android:paddingLeft="100dp"></TextView>
+				android:text="COMPLETED" android:paddingLeft="100dp" android:gravity="center_vertical" android:layout_height="match_parent"></TextView>
 		</LinearLayout>
+		<FrameLayout android:layout_width="match_parent" android:id="@+id/signal_status_fragment" android:layout_height="match_parent" android:layout_weight="0.73" android:background="@drawable/signal4"></FrameLayout>
 	</LinearLayout>
 </LinearLayout>
