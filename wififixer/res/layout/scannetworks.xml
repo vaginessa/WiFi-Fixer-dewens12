@@ -24,6 +24,7 @@
 		android:layout_below="@+id/scanlist_title" android:layout_marginRight="30dp"
 		android:layout_width="match_parent"
 		android:layout_height="fill_parent"
-		android:dividerHeight="1dip" android:divider="#545454"></ListView>
+		android:dividerHeight="0dp" android:divider = "#00000000"
+		></ListView>
 </RelativeLayout>
 	

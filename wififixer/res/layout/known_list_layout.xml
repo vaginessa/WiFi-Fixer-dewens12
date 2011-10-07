@@ -15,13 +15,13 @@
 	android:orientation="horizontal" android:layout_height="fill_parent"
 	android:layout_width="fill_parent" android:paddingBottom="5dp"
 	android:paddingTop="5dp" android:paddingLeft="5dp">
-	<ImageView android:id="@+id/NETWORK_ICON"
-		android:layout_width="64dp" android:layout_height="44dp"
-		android:gravity="left" android:maxWidth="64dp" android:maxHeight="44dp"
-		android:src="@drawable/icon"></ImageView>
 	<TextView android:id="@+id/ssid" android:text="default"
-		android:layout_gravity="top" android:layout_marginLeft="15dp"
-		android:layout_width="wrap_content" android:layout_height="44dp"
+		android:layout_gravity="top" android:layout_marginRight="15dp"
+		android:layout_width="100dp" android:layout_height="44dp"
 		android:layout_marginTop="10dp"
-		android:gravity="right" android:textSize="15dp"></TextView>
+		android:gravity="left" android:textSize="15dp"></TextView>
+		<ImageView android:id="@+id/NETWORK_ICON"
+		android:layout_width="64dp" android:layout_height="44dp"
+		android:gravity="right" android:maxWidth="64dp" android:maxHeight="44dp"
+		android:src="@drawable/icon"></ImageView>
 </LinearLayout>

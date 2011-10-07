@@ -13,6 +13,7 @@
 <LinearLayout android:id="@+id/widget46"
 	android:layout_width="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_height="fill_parent" android:orientation="horizontal">
+
 	<LinearLayout android:id="@+id/widget47"
 		android:layout_width="wrap_content" xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_height="wrap_content" android:orientation="vertical">
@@ -34,6 +35,5 @@
 	<FrameLayout android:id="@+id/scanfragment"
 		android:layout_width="500dp" android:paddingRight="50dp"
 		android:paddingBottom="50dp" android:layout_height="wrap_content"></FrameLayout>
-
 
 </LinearLayout>
