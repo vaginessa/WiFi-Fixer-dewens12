@@ -115,6 +115,7 @@ public class StatusFragment extends Fragment {
 	    dbm.setText(EMPTYSTRING);
 	    capabilities.setText(EMPTYSTRING);
 	    status.setText(EMPTYSTRING);
+	    signal.setBackgroundResource(R.drawable.signal0);
 	} else {
 	    ssid.setText(info.getSSID());
 	    dbm.setText(String.valueOf(info.getRssi()));

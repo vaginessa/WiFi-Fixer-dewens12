@@ -57,6 +57,6 @@
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="COMPLETED" android:paddingLeft="100dp" android:gravity="center_vertical" android:layout_height="match_parent"></TextView>
 		</LinearLayout>
-		<FrameLayout android:layout_width="match_parent" android:id="@+id/signal_status_fragment" android:layout_height="match_parent" android:layout_weight="0.73" android:background="@drawable/signal4"></FrameLayout>
+		<FrameLayout android:id="@+id/signal_status_fragment" android:layout_weight="0.73" android:background="@drawable/signal4" android:layout_width="wrap_content" android:layout_gravity="center" android:layout_height="wrap_content"></FrameLayout>
 	</LinearLayout>
 </LinearLayout>
