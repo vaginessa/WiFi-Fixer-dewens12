@@ -159,8 +159,8 @@ public class PrefActivity extends PreferenceActivity implements
 		break;
 	    }
 	    /*
-	     * Return to main activity so checkboxes aren't stale Only need to
-	     * do this on phone
+	     * Return to main activity so checkboxes aren't stale 
+	     * Only need to do this on phone
 	     */
 	    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
 		context.startActivity(new Intent(context,

@@ -809,7 +809,7 @@ public class WFConnection extends Object implements
 	/*
 	 * Back to explicit connection
 	 */
-	int n = getNetworkfromBSSID(context, bssid);
+	int n = getNetworkfromSSID(context, bssid);
 
 	if (n == -1)
 	    return;
@@ -965,26 +965,29 @@ public class WFConnection extends Object implements
 	}
     }
 
-    private static int getNetworkfromBSSID(final Context context,
+    private static int getNetworkfromSSID(final Context context,
 	    final String bssid) {
 	if (bssid == null)
 	    return -1;
 	final List<WifiConfiguration> wifiConfigs = getWifiManager(context)
 		.getConfiguredNetworks();
 	for (WifiConfiguration w : wifiConfigs) {
-	    if (w.BSSID != null && w.BSSID.equals(bssid))
+	    if (w.SSID != null && w.SSID.equals(bssid))
 		return w.networkId;
 	}
+	/*
+	 * Not found
+	 */
 	return -1;
     }
 
-    public static String getBSSIDfromNetwork(final Context context,
+    public static String getSSIDfromNetwork(final Context context,
 	    final int network) {
 	final List<WifiConfiguration> wifiConfigs = getWifiManager(context)
 		.getConfiguredNetworks();
 	for (WifiConfiguration w : wifiConfigs) {
 	    if (w.networkId == network)
-		return w.BSSID;
+		return w.SSID;
 	}
 	return null;
     }
@@ -1050,6 +1053,7 @@ public class WFConnection extends Object implements
 	 * Acquire scan results
 	 */
 	List<ScanResult> scanResults = getWifiManager(ctxt).getScanResults();
+	LogService.log(ctxt,appname,scanResults.toString());
 	/*
 	 * Catch null if scan results fires after wifi disabled or while wifi is
 	 * in intermediate state
