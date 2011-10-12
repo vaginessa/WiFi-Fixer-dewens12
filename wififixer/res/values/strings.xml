@@ -235,6 +235,7 @@ Please be sure you have collected at least 10 minutes of data.</string>
 	<string name="state">State:</string>
 	<string name="resource">resource</string>
 	<string name="xml">xml</string>
+	<string name="indexoutofbounds_in_removequotes">IndexOutOfBounds in removeQuotes</string>
 
 
 </resources>

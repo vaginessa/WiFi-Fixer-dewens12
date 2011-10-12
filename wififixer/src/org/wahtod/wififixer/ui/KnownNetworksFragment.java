@@ -51,7 +51,6 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 public class KnownNetworksFragment extends Fragment {
-
     private String clicked;
     private int clicked_position;
     private View listviewitem;
@@ -79,6 +78,11 @@ public class KnownNetworksFragment extends Fragment {
 	return v;
     }
 
+    @Override
+    public void onDestroyView() {
+	this.unregisterForContextMenu(lv);
+	super.onDestroyView();
+    }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
 	    ContextMenuInfo menuInfo) {
@@ -161,12 +165,6 @@ public class KnownNetworksFragment extends Fragment {
 	knownnetworks = getNetworks(getContext());
 	known_in_range = new ArrayList<String>();
 	super.onAttach(activity);
-    }
-
-    @Override
-    public void onDetach() {
-	this.unregisterForContextMenu(lv);
-	super.onDetach();
     }
 
     @Override

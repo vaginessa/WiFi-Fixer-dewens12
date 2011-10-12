@@ -897,6 +897,15 @@ public class WFConnection extends Object implements
 	return false;
     }
 
+    private static List<String> createKnownStringList(
+	    final List<WifiConfiguration> wificonfigs) {
+	List<String> known = new ArrayList<String>();
+	for (WifiConfiguration w : wificonfigs) {
+	    known.add(removeQuotes(w.SSID));
+	}
+	return known;
+    }
+
     private void dispatchIntent(final Context context, final Bundle data) {
 
 	String iAction = data.getString(PrefUtil.INTENT_ACTION);
@@ -1053,7 +1062,6 @@ public class WFConnection extends Object implements
 	 * Acquire scan results
 	 */
 	List<ScanResult> scanResults = getWifiManager(ctxt).getScanResults();
-	LogService.log(ctxt,appname,scanResults.toString());
 	/*
 	 * Catch null if scan results fires after wifi disabled or while wifi is
 	 * in intermediate state
@@ -1069,6 +1077,7 @@ public class WFConnection extends Object implements
 	 */
 	List<WifiConfiguration> wifiConfigs = getWifiManager(ctxt)
 		.getConfiguredNetworks();
+	List<String> known = createKnownStringList(wifiConfigs);
 
 	/*
 	 * Iterate the known networks over the scan results, adding found known
@@ -1080,51 +1089,48 @@ public class WFConnection extends Object implements
 		    .getString(R.string.parsing_scan_results));
 
 	for (ScanResult sResult : scanResults) {
-	    for (WifiConfiguration wfResult : wifiConfigs) {
+	    /*
+	     * Look for scan result in our known list
+	     */
+	    if (known.contains(sResult.SSID)) {
+		WifiConfiguration wfResult = wifiConfigs.get(known
+			.indexOf(sResult.SSID));
+		/*
+		 * Break if disabled
+		 */
+		if (!getNetworkState(context, wfResult.networkId))
+		    break;
+		/*
+		 * Log network
+		 */
+		if (prefs.getFlag(Pref.LOG_KEY)) {
+		    StringBuilder out = new StringBuilder();
+		    out.append(context.getString(R.string.found_ssid));
+		    out.append(sResult.SSID);
+		    out.append(NEWLINE);
+		    out.append(context.getString(R.string.capabilities));
+		    out.append(sResult.capabilities);
+		    out.append(NEWLINE);
+		    out.append(context.getString(R.string.signal_level));
+		    out.append(sResult.level);
+		    LogService.log(context, appname, out.toString());
+		}
 
 		/*
-		 * Check for null SSIDs replace with null_ssid string
+		 * Add result to knownbysignal containsBSSID to avoid dupes
 		 */
-		if (wfResult.SSID == null)
-		    wfResult.SSID = context.getString(R.string.null_ssid);
-
-		if (sResult.SSID == null)
-		    sResult.SSID = context.getString(R.string.null_ssid);
-
-		/*
-		 * Using .contains to find sResult.SSID in doublequoted string
-		 */
-		if (wfResult.SSID.contains(sResult.SSID)
-			&& getNetworkState(context, wfResult.networkId)) {
-		    if (prefs.getFlag(Pref.LOG_KEY)) {
-			StringBuilder out = new StringBuilder();
-			out.append(context.getString(R.string.found_ssid));
-			out.append(sResult.SSID);
-			out.append(NEWLINE);
-			out.append(context.getString(R.string.capabilities));
-			out.append(sResult.capabilities);
-			out.append(NEWLINE);
-			out.append(context.getString(R.string.signal_level));
-			out.append(sResult.level);
-			LogService.log(context, appname, out.toString());
-		    }
+		if (!containsBSSID(sResult.BSSID, knownbysignal))
+		    knownbysignal.add(new WFConfig(sResult, wfResult));
+		else {
 		    /*
-		     * Add result to knownbysignal containsBSSID to avoid dupes
+		     * Update signal level
 		     */
-		    if (!containsBSSID(sResult.BSSID, knownbysignal))
-			knownbysignal.add(new WFConfig(sResult, wfResult));
-		    else {
-			/*
-			 * Update signal level
-			 */
-			for (WFConfig config : knownbysignal) {
-			    if (config.wificonfig.BSSID.equals(sResult.BSSID)) {
-				knownbysignal
-					.get(knownbysignal.indexOf(config)).level = sResult.level;
-				break;
-			    }
-
+		    for (WFConfig config : knownbysignal) {
+			if (config.wificonfig.BSSID.equals(sResult.BSSID)) {
+			    knownbysignal.get(knownbysignal.indexOf(config)).level = sResult.level;
+			    break;
 			}
+
 		    }
 		}
 	    }
@@ -1168,10 +1174,8 @@ public class WFConnection extends Object implements
 
     private static ArrayList<String> getKnownAPArray(final Context context) {
 
-	WifiManager wm = (WifiManager) context
-		.getSystemService(Context.WIFI_SERVICE);
+	WifiManager wm = getWifiManager(context);
 
-	ArrayList<String> known_in_range = new ArrayList<String>();
 	List<ScanResult> scanResults = wm.getScanResults();
 
 	/*
@@ -1187,24 +1191,25 @@ public class WFConnection extends Object implements
 	 */
 	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
 
+	List<String> known = createKnownStringList(wifiConfigs);
+
 	/*
 	 * Iterate the known networks over the scan results, adding found known
 	 * networks.
 	 */
 
+	ArrayList<String> known_in_range = new ArrayList<String>();
 	for (ScanResult sResult : scanResults) {
-	    for (WifiConfiguration wfResult : wifiConfigs) {
+	    /*
+	     * Add known networks in range
+	     */
+
+	    if (known.contains(sResult.SSID)) {
 		/*
-		 * Using .contains to find sResult.SSID in doublequoted string
+		 * Add result to known_in_range
 		 */
+		known_in_range.add(sResult.SSID);
 
-		if (wfResult.SSID.contains(sResult.SSID)) {
-		    /*
-		     * Add result to known_in_range
-		     */
-		    known_in_range.add(sResult.SSID);
-
-		}
 	    }
 	}
 
@@ -1852,7 +1857,7 @@ public class WFConnection extends Object implements
 	if (!shouldManage(ctxt) && prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(ctxt, appname, ctxt
 		    .getString(R.string.not_managing_network)
-		    + getSSID());
+		    + notifSSID);
 
 	/*
 	 * Log connection
@@ -1939,6 +1944,20 @@ public class WFConnection extends Object implements
 	 */
 	if (PrefUtil.readBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK))
 	    PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, false);
+    }
+
+    private static String removeQuotes(String ssid) {
+	if (ssid == null)
+	    return EMPTYSTRING;
+	try {
+	    ssid = (String) ssid.subSequence(1, ssid.length() - 1);
+	} catch (IndexOutOfBoundsException e) {
+	    if (prefs.getFlag(Pref.LOG_KEY))
+		LogService.log(ctxt, appname, ctxt
+			.getString(R.string.indexoutofbounds_in_removequotes));
+	    return EMPTYSTRING;
+	}
+	return ssid;
     }
 
     private static boolean scancontainsBSSID(final String bssid,
