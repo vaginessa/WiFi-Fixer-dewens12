@@ -27,8 +27,6 @@
 					android:summary="Controls Wifi sleep policy: See Known Issues in Documentation"
 					android:key="SLEEP_POLICY" android:entries="@array/wfsleep"
 					android:entryValues="@array/wfsleepValues" />
-				<CheckBoxPreference android:key="SUPFIX"
-					android:title="Disable Supplicant Fixes" android:summary="Check if having trouble on Android 1.5 or 1.6" />
 				<CheckBoxPreference android:key="N1FIX2"
 					android:title="Nexus One Sleep Fix"
 					android:summary="Experimental: please read Known Issues in Documentation." />

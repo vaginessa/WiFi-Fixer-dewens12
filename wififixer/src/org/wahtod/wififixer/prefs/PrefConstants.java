@@ -26,7 +26,6 @@ public class PrefConstants {
      * Constants for non-UI-tracked preferences
      */
 
-    public static final String SUPFIX_DEFAULT = "SPFDEF";
     public static final String SLPOLICY_DEFAULT = "SLPDEF";
     public static final String STATNOTIF_DEFAULT = "STATNOTIFD";
     public static final String SLPOLICY_KEY = "SLEEP_POLICY";
@@ -42,7 +41,7 @@ public class PrefConstants {
 
     public static enum Pref {
 	WIFILOCK_KEY("WiFiLock"), NOTIF_KEY("Notifications"), DISABLE_KEY(
-		"Disable"), LOG_KEY("SLOG"), SUPFIX_KEY("SUPFIX"), N1FIX2_KEY(
+		"Disable"), LOG_KEY("SLOG"), N1FIX2_KEY(
 		"N1FIX2"), NETNOT_KEY("NetNotif"), SCREEN_KEY("SCREEN"), STATENOT_KEY(
 		"StateNotif"), HASWIDGET_KEY("HASWIDGET");
 

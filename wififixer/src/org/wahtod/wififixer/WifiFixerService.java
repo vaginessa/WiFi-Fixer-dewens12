@@ -376,7 +376,6 @@ public class WifiFixerService extends Service implements
 		    writeBoolean(context, PrefConstants.STATNOTIF_DEFAULT, true);
 		    writeBoolean(context, Pref.STATENOT_KEY.key(), true);
 		}
-		
 		/*
 		 * Set default: Wifi Sleep Policy
 		 */
@@ -384,8 +383,6 @@ public class WifiFixerService extends Service implements
 		    writeBoolean(context, PrefConstants.SLPOLICY_DEFAULT, true);
 		    PrefActivity.setPolicy(context, 2);
 		}
-
-	    	
 	    }
 
 	    @Override

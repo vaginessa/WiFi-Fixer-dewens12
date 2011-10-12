@@ -1734,12 +1734,6 @@ public class WFConnection extends Object implements
 	}
 
 	/*
-	 * New setting disabling supplicant fixes
-	 */
-	if (prefs.getFlag(Pref.SUPFIX_KEY) || !shouldManage(ctxt))
-	    return;
-
-	/*
 	 * The actual meat of the supplicant fixes
 	 */
 	handleSupplicantState(sState);
