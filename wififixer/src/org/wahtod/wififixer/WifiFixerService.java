@@ -20,6 +20,7 @@ import org.wahtod.wififixer.legacy.StrictModeDetector;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
+import org.wahtod.wififixer.ui.PrefActivity;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ScreenStateDetector;
@@ -375,28 +376,16 @@ public class WifiFixerService extends Service implements
 		    writeBoolean(context, PrefConstants.STATNOTIF_DEFAULT, true);
 		    writeBoolean(context, Pref.STATENOT_KEY.key(), true);
 		}
-
+		
 		/*
-		 * Sets default for Supplicant Fix pref on < 2.0 to true
+		 * Set default: Wifi Sleep Policy
 		 */
-		if (!readBoolean(context, PrefConstants.SUPFIX_DEFAULT)) {
-		    writeBoolean(context, PrefConstants.SUPFIX_DEFAULT, true);
-		    int ver;
-		    try {
-			ver = Integer.valueOf(Build.VERSION.RELEASE.substring(
-				0, 1));
-		    } catch (NumberFormatException e) {
-			ver = 0;
-		    }
-		    if (logging)
-			LogService.log(getBaseContext(), APP_NAME,
-				getBaseContext().getString(R.string.version)
-					+ ver);
-		    if (ver < 2) {
-			writeBoolean(context, Pref.SUPFIX_KEY.key(), true);
-		    }
-
+		if (!readBoolean(context, PrefConstants.SLPOLICY_DEFAULT)) {
+		    writeBoolean(context, PrefConstants.SLPOLICY_DEFAULT, true);
+		    PrefActivity.setPolicy(context, 2);
 		}
+
+	    	
 	    }
 
 	    @Override

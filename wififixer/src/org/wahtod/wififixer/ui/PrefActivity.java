@@ -46,7 +46,7 @@ public class PrefActivity extends PreferenceActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	setWifiSleepPolicy(this);
+	setPolicyfromSystem(this);
 	addPreferencesFromResource(R.xml.preferences);
     }
 
@@ -57,7 +57,7 @@ public class PrefActivity extends PreferenceActivity implements
 	// Set up a listener for when key changes
 	getPreferenceScreen().getSharedPreferences()
 		.registerOnSharedPreferenceChangeListener(this);
-	setWifiSleepPolicy(this);
+	setPolicyfromSystem(this);
     }
 
     @Override
@@ -67,24 +67,6 @@ public class PrefActivity extends PreferenceActivity implements
 	// Unregister the listener when paused
 	getPreferenceScreen().getSharedPreferences()
 		.unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    private static void setWifiSleepPolicy(final Context context) {
-	/*
-	 * Handle Wifi Sleep Policy
-	 */
-	ContentResolver cr = context.getContentResolver();
-	try {
-	    int wfsleep = android.provider.Settings.System.getInt(cr,
-		    android.provider.Settings.System.WIFI_SLEEP_POLICY);
-	    PrefUtil.writeString(context, PrefConstants.SLPOLICY_KEY, String
-		    .valueOf(wfsleep));
-	} catch (SettingNotFoundException e) {
-	    /*
-	     * Don't need a catch, all clients are >= 1.5 per manifest market
-	     * restriction
-	     */
-	}
     }
 
     @Override
@@ -138,6 +120,10 @@ public class PrefActivity extends PreferenceActivity implements
 			true);
 		PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), true);
 		PrefUtil.notifyPrefChange(context, Pref.SCREEN_KEY.key(), true);
+		/*
+		 * Set Wifi Sleep policy to Never
+		 */
+		setPolicy(context, 2);
 		break;
 
 	    case 2:
@@ -159,41 +145,49 @@ public class PrefActivity extends PreferenceActivity implements
 		break;
 	    }
 	    /*
-	     * Return to main activity so checkboxes aren't stale 
-	     * Only need to do this on phone
+	     * Return to main activity so checkboxes aren't stale Only need to
+	     * do this on phone
 	     */
 	    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
 		context.startActivity(new Intent(context,
 			WifiFixerActivity.class));
 
 	} else if (key.contains(PrefConstants.SLPOLICY_KEY)) {
-	    /*
-	     * Setting Wifi Sleep Policy
-	     */
-	    ContentResolver cr = context.getContentResolver();
 	    int wfsleep = Integer.valueOf(PrefUtil.readString(context,
 		    PrefConstants.SLPOLICY_KEY));
 	    if (wfsleep != 3) {
-
-		android.provider.Settings.System.putInt(cr,
-			android.provider.Settings.System.WIFI_SLEEP_POLICY,
-			wfsleep);
+		setPolicy(context, wfsleep);
 	    } else {
-		/*
-		 * Set to system state
-		 */
-		try {
-		    wfsleep = android.provider.Settings.System.getInt(cr,
-			    android.provider.Settings.System.WIFI_SLEEP_POLICY);
-		    PrefUtil.writeString(context, PrefConstants.SLPOLICY_KEY,
-			    String.valueOf(wfsleep));
-
-		} catch (SettingNotFoundException e) {
-		    /*
-		     * Should always be found since our clients are > SDK2
-		     */
-		}
+		setPolicyfromSystem(context);
 	    }
 	}
+    }
+
+    private static void setPolicyfromSystem(final Context context) {
+	/*
+	 * Handle Wifi Sleep Policy
+	 */
+	ContentResolver cr = context.getContentResolver();
+	try {
+	    int wfsleep = android.provider.Settings.System.getInt(cr,
+		    android.provider.Settings.System.WIFI_SLEEP_POLICY);
+	    PrefUtil.writeString(context, PrefConstants.SLPOLICY_KEY, String
+		    .valueOf(wfsleep));
+	} catch (SettingNotFoundException e) {
+	    /*
+	     * Don't need a catch, all clients are >= 1.5 per manifest market
+	     * restriction
+	     */
+	}
+    }
+
+    public static void setPolicy(final Context context, final int policy) {
+	/*
+	 * Set Wifi Sleep Policy
+	 */
+	ContentResolver cr = context.getContentResolver();
+	android.provider.Settings.System.putInt(cr,
+		android.provider.Settings.System.WIFI_SLEEP_POLICY, policy);
+
     }
 }
