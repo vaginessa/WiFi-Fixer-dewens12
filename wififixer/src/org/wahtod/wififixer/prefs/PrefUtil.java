@@ -24,6 +24,7 @@ import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -33,6 +34,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.Settings.SettingNotFoundException;
 
 public class PrefUtil extends Object {
 
@@ -326,6 +328,34 @@ public class PrefUtil extends Object {
 
     public void unRegisterReciever() {
 	context.unregisterReceiver(changeReceiver);
+    }
+    
+    public static void setPolicyfromSystem(final Context context) {
+	/*
+	 * Handle Wifi Sleep Policy
+	 */
+	ContentResolver cr = context.getContentResolver();
+	try {
+	    int wfsleep = android.provider.Settings.System.getInt(cr,
+		    android.provider.Settings.System.WIFI_SLEEP_POLICY);
+	    PrefUtil.writeString(context, PrefConstants.SLPOLICY_KEY, String
+		    .valueOf(wfsleep));
+	} catch (SettingNotFoundException e) {
+	    /*
+	     * Don't need a catch, all clients are >= 1.5 per manifest market
+	     * restriction
+	     */
+	}
+    }
+
+    public static void setPolicy(final Context context, final int policy) {
+	/*
+	 * Set Wifi Sleep Policy
+	 */
+	ContentResolver cr = context.getContentResolver();
+	android.provider.Settings.System.putInt(cr,
+		android.provider.Settings.System.WIFI_SLEEP_POLICY, policy);
+
     }
 
 }

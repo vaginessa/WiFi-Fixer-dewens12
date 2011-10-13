@@ -24,7 +24,6 @@ import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,7 +31,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.provider.Settings.SettingNotFoundException;
 
 public class PrefActivity extends PreferenceActivity implements
 	OnSharedPreferenceChangeListener {
@@ -46,7 +44,7 @@ public class PrefActivity extends PreferenceActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	setPolicyfromSystem(this);
+	PrefUtil.setPolicyfromSystem(this);
 	addPreferencesFromResource(R.xml.preferences);
     }
 
@@ -57,7 +55,7 @@ public class PrefActivity extends PreferenceActivity implements
 	// Set up a listener for when key changes
 	getPreferenceScreen().getSharedPreferences()
 		.registerOnSharedPreferenceChangeListener(this);
-	setPolicyfromSystem(this);
+	PrefUtil.setPolicyfromSystem(this);
     }
 
     @Override
@@ -123,7 +121,7 @@ public class PrefActivity extends PreferenceActivity implements
 		/*
 		 * Set Wifi Sleep policy to Never
 		 */
-		setPolicy(context, 2);
+		PrefUtil.setPolicy(context, 2);
 		break;
 
 	    case 2:
@@ -156,38 +154,10 @@ public class PrefActivity extends PreferenceActivity implements
 	    int wfsleep = Integer.valueOf(PrefUtil.readString(context,
 		    PrefConstants.SLPOLICY_KEY));
 	    if (wfsleep != 3) {
-		setPolicy(context, wfsleep);
+		PrefUtil.setPolicy(context, wfsleep);
 	    } else {
-		setPolicyfromSystem(context);
+		PrefUtil.setPolicyfromSystem(context);
 	    }
 	}
-    }
-
-    private static void setPolicyfromSystem(final Context context) {
-	/*
-	 * Handle Wifi Sleep Policy
-	 */
-	ContentResolver cr = context.getContentResolver();
-	try {
-	    int wfsleep = android.provider.Settings.System.getInt(cr,
-		    android.provider.Settings.System.WIFI_SLEEP_POLICY);
-	    PrefUtil.writeString(context, PrefConstants.SLPOLICY_KEY, String
-		    .valueOf(wfsleep));
-	} catch (SettingNotFoundException e) {
-	    /*
-	     * Don't need a catch, all clients are >= 1.5 per manifest market
-	     * restriction
-	     */
-	}
-    }
-
-    public static void setPolicy(final Context context, final int policy) {
-	/*
-	 * Set Wifi Sleep Policy
-	 */
-	ContentResolver cr = context.getContentResolver();
-	android.provider.Settings.System.putInt(cr,
-		android.provider.Settings.System.WIFI_SLEEP_POLICY, policy);
-
     }
 }

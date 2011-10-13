@@ -20,7 +20,6 @@ import org.wahtod.wififixer.legacy.StrictModeDetector;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
-import org.wahtod.wififixer.ui.PrefActivity;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ScreenStateDetector;
@@ -371,7 +370,7 @@ public class WifiFixerService extends Service implements
 		 */
 		if (!readBoolean(context, PrefConstants.SLPOLICY_DEFAULT)) {
 		    writeBoolean(context, PrefConstants.SLPOLICY_DEFAULT, true);
-		    PrefActivity.setPolicy(context, 2);
+		    setPolicy(context, 2);
 		}
 	    }
 
