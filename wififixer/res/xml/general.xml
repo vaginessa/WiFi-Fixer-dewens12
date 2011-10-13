@@ -18,14 +18,14 @@
 		<CheckBoxPreference android:key="Disable"
 			android:title="Disable Service" android:summary="Causes the Wifi Fixer service to stop running" />
 
-		<ListPreference android:title="Set Wifi Usablity"
+		<ListPreference android:title="@string/Perf_Mode_title"
 			android:defaultValue="1"
-			android:summary="Allows setting from max wifi usability to minimal battery use"
+			android:summary="@string/Perf_Mode_summary"
 			android:key="Perf_Mode" android:entries="@array/entries"
 			android:entryValues="@array/entryValues" />
 				
-		<ListPreference android:title="Widget Behavior"
-			android:summary="Selects widget behavior" android:defaultValue="0"
+		<ListPreference android:title="@string/WIDGET_title"
+			android:summary="@string/WIDGET_summary" android:defaultValue="0"
 			android:key="WIDGET" android:entries="@array/widget"
 			android:entryValues="@array/widgetValues" />
 

@@ -14,7 +14,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 			<PreferenceCategory android:title="Logging">
 				<CheckBoxPreference android:key="Logging"
-					android:title="Enable Log Menu" android:summary="Enables logging menu options in main activity" />
+					android:summary="@string/Logging_summary" android:title="@string/Logging_title"/>
 				<PreferenceScreen android:title="Delete Log"
 					android:summary="Deletes Existing Log">
 					<intent android:targetPackage="org.wahtod.wififixer"

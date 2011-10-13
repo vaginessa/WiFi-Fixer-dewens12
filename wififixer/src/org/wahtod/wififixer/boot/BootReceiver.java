@@ -28,10 +28,10 @@ public class BootReceiver extends BroadcastReceiver {
      * The idea here is that we want something lightweight to run at
      * BOOT_COMPLETED, so a minimal BroadcastReceiver implementation.
      * 
-     * Because of BroadcastReceiver lifecycle, a thread started from it (even
-     * asynctasks) will be GCed. So we're starting a minimal service,
-     * BootService which simply has a wait thread which launches
-     * WifiFixerService
+     * Because of BroadcastReceiver lifecycle, a thread started from it
+     * will be GCed. So we're starting a minimal service,
+     * BootService, which runs a wait thread which launches
+     * WifiFixerService after 30 seconds
      * 
      * @see android.content.BroadcastReceiver#onReceive(android.content.Context,
      * android.content.Intent)

@@ -14,21 +14,19 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 			<PreferenceCategory android:title="Wifi Usability">
 				<CheckBoxPreference android:key="WiFiLock"
-					android:defaultValue="true" android:title="Enable Wifi Lock"
-					android:summary="Enables Wifi Lock, which will increase battery use" />
+					android:defaultValue="true" android:title="@string/WiFiLock_title"
+					android:summary="@string/WiFiLock_title" />
 				<CheckBoxPreference android:key="SCREEN"
-					android:title="Disable Sleep"
-					android:defaultValue="true"
-					android:summary="Disables sleep on Screen Off, which will increase battery use moderately" />
+					android:defaultValue="true" android:summary="@string/SCREEN_summary" android:title="@string/SCREEN_title"/>
 			</PreferenceCategory>
 			<PreferenceCategory android:title="Specialized Fixes">
-				<ListPreference android:title="Wifi Sleep Policy"
+				<ListPreference android:title="@string/SLEEP_POLICY_title"
 					android:defaultValue="3"
-					android:summary="Controls Wifi sleep policy: See Known Issues in Documentation"
+					android:summary="@string/SLEEP_POLICY_summary"
 					android:key="SLEEP_POLICY" android:entries="@array/wfsleep"
 					android:entryValues="@array/wfsleepValues" />
 				<CheckBoxPreference android:key="N1FIX2"
-					android:title="Nexus One Sleep Fix"
-					android:summary="Experimental: please read Known Issues in Documentation." />
+					android:title="@string/N1FIX2_title"
+					android:summary="@string/N1FIX2_summary" />
 			</PreferenceCategory>
 </PreferenceScreen>

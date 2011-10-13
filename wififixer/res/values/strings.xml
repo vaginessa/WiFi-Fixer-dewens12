@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<!--
-		Copyright [2010-2011] [David Van de Ven] Licensed under the Apache License,
-		Version 2.0 (the "License"); you may not use this file except in
-		compliance with the License. You may obtain a copy of the License at
-
-		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		Copyright [2010-2011] [David Van de Ven] Licensed under the Apache
+		License, Version 2.0 (the "License"); you may not use this file except
+		in compliance with the License. You may obtain a copy of the License
+		at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
 		applicable law or agreed to in writing, software distributed under the
 		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 		CONDITIONS OF ANY KIND, either express or implied. See the License for
@@ -12,24 +11,25 @@
 		License.
 	-->
 <resources>
-    <string name="network_status">Network Status</string>
-    <string name="bdata_ticker">Service Disabled</string>
-    <string name="bdata_nag">Background Data Disabled</string>
-    <string name="scheduling_n1_fix">Scheduling N1 Fix</string>
-    <string name="widget_update_called">Widget Update Called</string>
-    <string name="logfile_delete_err_toast">Log File Doesn\'t Exist</string>
-    <string name="logfile_delete_toast">Log File Deleted</string>
-    <string name="connect_now">Connect Now</string>
-    <string name="disable">Disable</string>
-    <string name="enable">Enable</string>
-    <string name="enabling_logging">Enabling Logging</string>
-    <string name="disabling_logging">Disabling Logging</string>
-    <string name="donatenag">If you use this software, please donate!</string>
-    <string name="thank_you">Thank You for using Wifi Fixer</string>
-    <string name="aboutnag">Tap Here to Read About Page</string>
-    <string name="please_read">Please Read</string>
-    <string name="emailintent">Email:</string>
-	<string name="email_footer">What time did the issue occur? :\n\nWhat did you see?\n\nPlease include any other details. :\n\n\n</string>
+	<string name="network_status">Network Status</string>
+	<string name="bdata_ticker">Service Disabled</string>
+	<string name="bdata_nag">Background Data Disabled</string>
+	<string name="scheduling_n1_fix">Scheduling N1 Fix</string>
+	<string name="widget_update_called">Widget Update Called</string>
+	<string name="logfile_delete_err_toast">Log File Doesn\'t Exist</string>
+	<string name="logfile_delete_toast">Log File Deleted</string>
+	<string name="connect_now">Connect Now</string>
+	<string name="disable">Disable</string>
+	<string name="enable">Enable</string>
+	<string name="enabling_logging">Enabling Logging</string>
+	<string name="disabling_logging">Disabling Logging</string>
+	<string name="donatenag">If you use this software, please donate!</string>
+	<string name="thank_you">Thank You for using Wifi Fixer</string>
+	<string name="aboutnag">Tap Here to Read About Page</string>
+	<string name="please_read">Please Read</string>
+	<string name="emailintent">Email:</string>
+	<string name="email_footer">What time did the issue occur? :\n\nWhat did you
+		see?\n\nPlease include any other details. :\n\n\n</string>
 	<string name="subject">WifiFixer Log</string>
 	<string name="email">zanshin.g1@gmail.com</string>
 	<string name="log_doesn_t_exist">Log doesn\'t exist</string>
@@ -152,7 +152,8 @@
 
 	<string name="not_managing_network">Not managing network:</string>
 
-	<string name="supplicant_associate_threshold_exceeded">Supplicant Associate Threshold Exceeded: resetting wifi</string>
+	<string name="supplicant_associate_threshold_exceeded">Supplicant Associate Threshold Exceeded: resetting
+		wifi</string>
 
 	<string name="none">none</string>
 
@@ -176,7 +177,8 @@
 
 	<string name="alert_message">Preparing email to developer:
 
-Please be sure to collect at least 10 minutes of data.</string>
+		Please be sure to
+		collect at least 10 minutes of data.</string>
 
 	<string name="ok_button">OK</string>
 
@@ -200,7 +202,8 @@ Please be sure to collect at least 10 minutes of data.</string>
 
 	<string name="strict_mode_unavailable">Strict Mode Unavailable</string>
 
-	<string name="blurb">Wifi Fixer is a low-resource service that maintains your wifi connection.</string>
+	<string name="blurb">Wifi Fixer is a low-resource service that maintains
+		your wifi connection.</string>
 
 	<string name="service_status">Service</string>
 
@@ -230,6 +233,27 @@ Please be sure to collect at least 10 minutes of data.</string>
 	<string name="resource">resource</string>
 	<string name="xml">xml</string>
 	<string name="indexoutofbounds_in_removequotes">IndexOutOfBounds in removeQuotes</string>
+	<string name="SCREEN_summary">Checks wifi when screen is off which will use
+		slightly more battery</string>
+	<string name="SCREEN_title">Manage During Sleep</string>
+	<string name="Disable_title">Disable Service</string>
+	<string name="Disable_summary">Causes the Wifi Fixer service to stop running</string>
+	<string name="Perf_Mode_title">Set Wifi Usablity</string>
+	<string name="Perf_Mode_summary">Allows setting from max wifi usability to minimal battery use</string>
+	<string name="StateNotif_title">Status Notification</string>
+	<string name="StateNotif_summary">Displays an ongoing notification showing connection state</string>
+	<string name="Notifications_title">Repair Notifications</string>
+	<string name="Notifications_summary">Displays a notification when Wifi Fixer repairs a problem</string>
+	<string name="Logging_title">Enable Log Menu</string>
+	<string name="Logging_summary">Enables logging options. </string>
+	<string name="WIDGET_title">Widget Behavior</string>
+	<string name="WIDGET_summary">Selects widget behavior</string>
+	<string name="WiFiLock_title">Enable Wifi Lock</string>
+	<string name="WifiLock_summary">Enables Wifi Lock, which will increase battery use</string>
+	<string name="SLEEP_POLICY_title">Wifi Sleep Policy</string>
+	<string name="SLEEP_POLICY_summary">Controls Wifi sleep policy: See Known Issues in Documentation</string>
+	<string name="N1FIX2_title">Nexus One Sleep Fix</string>
+	<string name="N1FIX2_summary">Experimental: please read Known Issues in Documentation.</string>
 
 
 </resources>

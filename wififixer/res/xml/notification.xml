@@ -14,14 +14,12 @@
 
 		<PreferenceCategory android:title="Status Notification">
 			<CheckBoxPreference android:key="StateNotif"
-				android:defaultValue="true" android:title="Status Notification"
-				android:summary="Displays an ongoing notification showing connection state" />
+				android:defaultValue="true" android:summary="@string/StateNotif_summary" android:title="@string/StateNotif_title"/>
 		</PreferenceCategory>
 
 		<PreferenceCategory android:title="Repair Notification">
 			<CheckBoxPreference android:key="Notifications"
-				android:title="Repair Notifications"
-				android:summary="Displays a notification when Wifi Fixer repairs a problem" />
+				android:summary="@string/Notifications_summary" android:title="@string/Notifications_title"/>
 		</PreferenceCategory>
 
 </PreferenceScreen>
