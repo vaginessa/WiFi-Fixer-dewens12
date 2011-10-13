@@ -761,26 +761,10 @@ public class WFConnection extends Object implements
 	int signal = getWifiManager(ctxt).getConnectionInfo().getRssi();
 
 	if (statNotifCheck()) {
-	    int adjusted;
-	    try {
-		adjusted = WifiManager.calculateSignalLevel(signal, 5);
-	    } catch (ArithmeticException e) {
-		/*
-		 * WifiManager.calculateSignalLevel can cause divide by zero in
-		 * some API revisions
-		 */
-		LogService.log(ctxt, appname, context
-			.getString(R.string.thanks_google)
-			+ e.getStackTrace().toString());
-		adjusted = 0;
-
-	    }
-
-	    notifSignal = adjusted;
-
+	    notifSignal = WifiManager.calculateSignalLevel(signal, 5);
 	    if (signalcache == 0)
-		signalcache = adjusted;
-	    else if (signalcache != adjusted) {
+		signalcache = notifSignal;
+	    else if (signalcache != notifSignal) {
 		/*
 		 * Update status notification with new signal value
 		 */

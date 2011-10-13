@@ -54,9 +54,6 @@
 	<string name="dying">Dying</string>
 	<string name="signal_poor">Signal poor: scanning for better network.</string>
 	<string name="current_dbm">Current dBm:</string>
-	<string name="network_notification_scan">Network Notification Scan</string>
-	<string name="network_notification">Open Network Notification</string>
-	<string name="open_network_found">Open Network Found</string>
 	<string name="hopping">Found better signal: hopping to network  </string>
 	<string name="turn_logging_off">Disable Logging</string>
 	<string name="turn_logging_on">Enable Logging</string>
@@ -69,7 +66,6 @@
 	<string name="running_supplicant_fix">Running Supplicant Fix</string>
 	<string name="oncreate">OnCreate</string>
 	<string name="wififixerservice_build">WifiFixerService Build:</string>
-	<string name="onbind_intent">OnBind:Intent:</string>
 	<string name="wifi_connection_problem">Wifi Status:</string>
 	<string name="ssid">SSID:</string>
 	<string name="supplicant_nonresponsive">Supplicant Nonresponsive</string>
@@ -154,8 +150,6 @@
 
 	<string name="scan_interrupt">Scan would interrupt supplicant</string>
 
-	<string name="thanks_google">Thanks, Google!</string>
-
 	<string name="not_managing_network">Not managing network:</string>
 
 	<string name="supplicant_associate_threshold_exceeded">Supplicant Associate Threshold Exceeded: resetting wifi</string>
@@ -182,7 +176,7 @@
 
 	<string name="alert_message">Preparing email to developer:
 
-Please be sure you have collected at least 10 minutes of data.</string>
+Please be sure to collect at least 10 minutes of data.</string>
 
 	<string name="ok_button">OK</string>
 

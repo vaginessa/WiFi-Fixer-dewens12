@@ -129,9 +129,6 @@ public class WifiFixerService extends Service implements
 
     @Override
     public IBinder onBind(Intent intent) {
-	if (logging)
-	    LogService.log(this, APP_NAME, getString(R.string.onbind_intent)
-		    + intent.toString());
 	return null;
     }
 
@@ -254,7 +251,7 @@ public class WifiFixerService extends Service implements
 	/*
 	 * Set shared pref state for non-Eclair clients
 	 */
-	if (Integer.parseInt(Build.VERSION.SDK) >= Build.VERSION_CODES.ECLAIR_MR1)
+	if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.ECLAIR_MR1)
 	    PrefUtil.writeBoolean(this, SCREENOFF, true);
 	screenstate = false;
     }
@@ -264,7 +261,7 @@ public class WifiFixerService extends Service implements
 	/*
 	 * Set shared pref state
 	 */
-	if (Integer.parseInt(Build.VERSION.SDK) >= Build.VERSION_CODES.ECLAIR_MR1)
+	if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.ECLAIR_MR1)
 	    PrefUtil.writeBoolean(this, SCREENOFF, false);
 	screenstate = true;
     }
