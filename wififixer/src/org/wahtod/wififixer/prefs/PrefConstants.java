@@ -42,7 +42,7 @@ public class PrefConstants {
     public static enum Pref {
 	WIFILOCK_KEY("WiFiLock"), NOTIF_KEY("Notifications"), DISABLE_KEY(
 		"Disable"), LOG_KEY("SLOG"), N1FIX2_KEY(
-		"N1FIX2"), NETNOT_KEY("NetNotif"), SCREEN_KEY("SCREEN"), STATENOT_KEY(
+		"N1FIX2"), SCREEN_KEY("SCREEN"), STATENOT_KEY(
 		"StateNotif"), HASWIDGET_KEY("HASWIDGET");
 
 	private final String key;

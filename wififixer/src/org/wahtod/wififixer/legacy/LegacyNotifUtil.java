@@ -25,41 +25,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
-import android.widget.RemoteViews;
 
 public class LegacyNotifUtil extends NotifUtil {
-    @Override
-    public void vaddNetNotif(final Context context, final String ssid,
-	    final String signal) {
-	NotificationManager nm = (NotificationManager) context
-		.getSystemService(Context.NOTIFICATION_SERVICE);
-
-	if (ssid.length() > 0) {
-	    Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
-	    PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		    intent, 0);
-
-	    Notification netnotif = new Notification(R.drawable.wifi_ap,
-		    context.getString(R.string.open_network_found), System
-			    .currentTimeMillis());
-	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
-		    R.layout.net_notif_layout);
-	    contentView.setTextViewText(R.id.ssid, ssid);
-	    contentView.setTextViewText(R.id.signal, signal);
-	    netnotif.contentView = contentView;
-	    netnotif.contentIntent = contentIntent;
-	    netnotif.flags = Notification.FLAG_ONGOING_EVENT;
-	    netnotif.tickerText = context.getText(R.string.open_network_found);
-	    /*
-	     * Fire notification, cancel if message empty: means no open APs
-	     */
-	    nm.notify(NotifUtil.NETNOTIFID, netnotif);
-	} else
-	    nm.cancel(NotifUtil.NETNOTIFID);
-
-    }
-
     @Override
     public void vaddStatNotif(Context ctxt, final String ssid, String status,
 	    final int signal, final boolean flag) {

@@ -31,7 +31,6 @@ import android.os.Build;
 import android.os.Bundle;
 
 public abstract class NotifUtil {
-    public static final int NETNOTIFID = 8236;
     public static final int STATNOTIFID = 2392;
     public static final int MAX_SSID_LENGTH = 16;
     public static final int LOGNOTIFID = 2494;
@@ -66,8 +65,6 @@ public abstract class NotifUtil {
     /*
      * API
      */
-    public abstract void vaddNetNotif(final Context context, final String ssid,
-	    final String signal);
 
     public abstract void vaddStatNotif(Context ctxt, final String ssid,
 	    String status, final int signal, final boolean flag);
@@ -79,12 +76,6 @@ public abstract class NotifUtil {
 
     public static void setSsidStatus(final int status) {
 	ssidStatus = status;
-    }
-
-    public static void addNetNotif(final Context context, final String ssid,
-	    final String signal) {
-	cacheSelector();
-	selector.vaddNetNotif(context, ssid, signal);
     }
 
     /*

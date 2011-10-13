@@ -1496,38 +1496,7 @@ public class WFConnection extends Object implements
 		.getString(R.string.supplicant_state)
 		+ state);
     }
-
-    private static void networkNotify(final Context context) {
-	final int NUM_SSIDS = 3;
-	final int SSID_LENGTH = 10;
-	final List<ScanResult> wifiList = getWifiManager(ctxt).getScanResults();
-	/*
-	 * Hurk, this can be null!
-	 */
-	if (wifiList == null)
-	    return;
-
-	StringBuilder ssid = new StringBuilder();
-	StringBuilder signal = new StringBuilder();
-	int n = 0;
-	for (ScanResult sResult : wifiList) {
-	    if (sResult.capabilities.length() == 0 && n < NUM_SSIDS) {
-		if (sResult.SSID.length() > SSID_LENGTH) {
-		    ssid.append(sResult.SSID.substring(0, SSID_LENGTH));
-		    ssid.append(NEWLINE);
-		} else {
-
-		    ssid.append(sResult.SSID);
-		    ssid.append(NEWLINE);
-		}
-		signal.append(sResult.level);
-		ssid.append(NEWLINE);
-		n++;
-	    }
-	}
-	NotifUtil.addNetNotif(context, ssid.toString(), signal.toString());
-    }
-
+    
     private static void notifyWrap(final Context context, final String message) {
 	if (prefs.getFlag(Pref.NOTIF_KEY)) {
 	    NotifUtil.show(context, context
@@ -1631,15 +1600,6 @@ public class WFConnection extends Object implements
 		 */
 		return;
 	    } else {
-		/*
-		 * Network notification check
-		 */
-		if (prefs.getFlag(Pref.NETNOT_KEY)) {
-		    if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(ctxt, appname, ctxt
-				.getString(R.string.network_notification_scan));
-		    networkNotify(ctxt);
-		}
 		/*
 		 * Parse scan and connect if any known networks discovered
 		 */
@@ -1843,8 +1803,6 @@ public class WFConnection extends Object implements
 	 * Clear any error/new network notifications
 	 */
 	NotifUtil.cancel(ctxt, ERR_NOTIF);
-	NotifUtil.cancel(ctxt, NotifUtil.NETNOTIFID);
-
 	/*
 	 * Log Non-Managed network
 	 */

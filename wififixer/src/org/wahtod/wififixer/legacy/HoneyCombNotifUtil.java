@@ -25,44 +25,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.widget.RemoteViews;
 
 public class HoneyCombNotifUtil extends NotifUtil {
-    @Override
-    public void vaddNetNotif(final Context context, final String ssid,
-	    final String signal) {
-	NotificationManager nm = (NotificationManager) context
-		.getSystemService(Context.NOTIFICATION_SERVICE);
-
-	Notification.Builder builder = new Notification.Builder(context);
-
-	if (ssid.length() > 0) {
-	    Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
-	    PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		    intent, 0);
-	    builder.setOnlyAlertOnce(true);
-	    builder.setOngoing(true);
-	    builder.setContentIntent(contentIntent);
-	    builder.setSmallIcon(R.drawable.wifi_ap);
-	    builder.setContentText(context
-		    .getString(R.string.open_network_found));
-	    builder.setWhen(System.currentTimeMillis());
-	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
-		    R.layout.net_notif_layout);
-	    contentView.setTextViewText(R.id.ssid, ssid);
-	    contentView.setTextViewText(R.id.signal, signal);
-	    builder.setContent(contentView);
-	    builder.setTicker(context.getText(R.string.open_network_found));
-	    /*
-	     * Fire notification, cancel if message empty: means no open APs
-	     */
-	    nm.notify(NotifUtil.NETNOTIFID, builder.getNotification());
-	} else
-	    nm.cancel(NotifUtil.NETNOTIFID);
-
-    }
-
     @Override
     public void vaddStatNotif(Context ctxt, final String ssid, String status,
 	    final int signal, final boolean flag) {

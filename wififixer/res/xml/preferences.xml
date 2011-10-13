@@ -38,10 +38,6 @@
 			<CheckBoxPreference android:key="Notifications"
 				android:title="Repair Notifications"
 				android:summary="Displays a notification when Wifi Fixer repairs a problem" />
-
-			<CheckBoxPreference android:key="NetNotif"
-				android:title="Network Notifications"
-				android:summary="Displays a notification when a new open network is detected" />
 				</PreferenceCategory>
 		</PreferenceScreen>
 		<PreferenceScreen android:title="Logging"

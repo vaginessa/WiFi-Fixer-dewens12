@@ -331,16 +331,6 @@ public class WifiFixerService extends Service implements
 		    }
 		    break;
 
-		case NETNOT_KEY:
-		    /*
-		     * Disable notification if pref changed to false
-		     */
-		    if (!getFlag(Pref.NETNOT_KEY))
-			NotifUtil.addNetNotif(getBaseContext(), EMPTYSTRING,
-				EMPTYSTRING);
-
-		    break;
-
 		case STATENOT_KEY:
 		    /*
 		     * Notify WFConnection instance to create/destroy ongoing
