@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/content"
+<LinearLayout android:id="@+id/content"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:orientation="vertical">
 	
-	<TextView android:id="@+id/scanlist_title" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:layout_centerHorizontal="true"
+	<TextView android:id="@+id/scanlist_title" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
 		android:text="@string/scanfragment_header" 
-		android:paddingBottom="5px"
-		android:paddingLeft="30dp"
+		android:paddingBottom="25px"
 		android:paddingTop ="10dp"
 	    android:textSize="20dp">
 		</TextView>
@@ -18,12 +17,11 @@
 		android:headerDividersEnabled="false" 
 		android:animateLayoutChanges="true"
 		 android:cacheColorHint="#00000000"
-		android:paddingLeft="5dp" android:paddingRight="20dp"
+		android:paddingRight="20dp"
 		android:paddingTop="5dp" android:paddingBottom="10dp"
-		android:layout_below="@+id/scanlist_title" android:layout_marginRight="30dp"
 		android:layout_width="match_parent"
 		android:layout_height="fill_parent"
 		android:dividerHeight="0dp" android:divider = "#00000000"
 		></ListView>
-</RelativeLayout>
+</LinearLayout>
 	

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/content"
+<LinearLayout android:id="@+id/content"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:orientation="vertical">
 	
-	<TextView android:id="@+id/TextView01" android:layout_width="wrap_content"
-	android:layout_height="wrap_content" android:layout_centerHorizontal="true"
+	<TextView android:id="@+id/TextView01" android:layout_width="fill_parent"
+	android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
 	android:text="@string/knownnetworks_fragment_header"
-	android:paddingBottom="5px"
-		android:paddingLeft="25dp"
+	android:paddingBottom="25px"
 		android:paddingTop ="10dp"
 	android:textSize="20dp">
 	</TextView>
@@ -18,10 +17,10 @@
 	android:headerDividersEnabled="false" 
 	android:cacheColorHint="#00000000" android:paddingLeft="5dp"
 	android:paddingRight="20dp" android:paddingTop="5dp"
-	android:paddingBottom="10dp" android:layout_below="@+id/TextView01"
+	android:paddingBottom="10dp"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:dividerHeight="0dp" android:divider="#00000000"
 	>
 	</ListView>
-</RelativeLayout>
+</LinearLayout>
 	
