@@ -1480,7 +1480,7 @@ public class WFConnection extends Object implements
 		.getString(R.string.supplicant_state)
 		+ state);
     }
-    
+
     private static void notifyWrap(final Context context, final String message) {
 	if (prefs.getFlag(Pref.NOTIF_KEY)) {
 	    NotifUtil.show(context, context
@@ -1631,12 +1631,12 @@ public class WFConnection extends Object implements
 		    ctxt.getString(R.string.authentication_error), 2432, null);
 
 	if (statNotifCheck()) {
-	    notifSSID = getSSID();
-	    if (sState.equals(COMPLETED))
+	    if (sState.equals(COMPLETED)) {
 		notifStatus = CONNECTED;
-	    else {
+		notifSSID = getSSID();
+	    } else
 		clearConnectedStatus(sState);
-	    }
+
 	    statusdispatcher.sendMessage(ctxt, new StatusMessage(notifSSID,
 		    notifStatus, notifSignal, true));
 	}

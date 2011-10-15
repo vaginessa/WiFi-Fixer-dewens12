@@ -20,6 +20,7 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -41,7 +42,8 @@ public class HelpActivity extends FragmentActivity {
 	webview = (WebView) findViewById(R.id.helpwebview);
 	WebSettings websettings = webview.getSettings();
 	webview.setWebViewClient(new HelpWebViewClient());
-	webview.setBackgroundColor(255);
+	webview.setBackgroundColor(Color.BLACK);
+	webview.setBackgroundResource(R.drawable.themebg);
 	websettings.setSavePassword(false);
 	websettings.setSaveFormData(false);
 	websettings.setJavaScriptEnabled(false);
