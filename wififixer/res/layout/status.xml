@@ -17,12 +17,12 @@
 	<TextView android:gravity="center" android:layout_width="wrap_content"
 		android:layout_gravity="center" android:layout_height="40dp"
 		android:textAppearance="?android:attr/textAppearanceLarge" android:id="@+id/SSID"
-		android:background="@drawable/listheader" android:text="SSID"
+	    android:text="SSID"
 		android:layout_weight="0.04"></TextView>
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="fill_parent" android:orientation="vertical"
 		android:paddingTop="5dp" android:paddingLeft="8dp"
-		android:paddingRight="8dp" android:background="@drawable/listbg" android:layout_height="wrap_content" android:weightSum="1">
+		android:paddingRight="8dp" android:layout_height="wrap_content" android:weightSum="1">
 		<LinearLayout android:weightSum="1" android:id="@+id/LinearLayout01"
 			android:gravity="left" android:layout_gravity="left"
 			android:layout_width="wrap_content" android:baselineAligned="true"
