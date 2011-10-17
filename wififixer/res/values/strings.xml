@@ -254,6 +254,8 @@
 	<string name="SLEEP_POLICY_summary">Controls Wifi sleep policy: See Known Issues in Documentation</string>
 	<string name="N1FIX2_title">Nexus One Sleep Fix</string>
 	<string name="N1FIX2_summary">Experimental: please read Known Issues in Documentation.</string>
+	<string name="remove">Remove</string>
+	<string name="removing_network">Removing Network:</string>
 
 
 </resources>

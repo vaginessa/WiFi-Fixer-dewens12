@@ -23,7 +23,7 @@
 		android:shadowColor="#FFFF00"
 		android:shadowDx="1"
 		android:shadowDy="1"
-		android:shadowRadius="3">
+		android:shadowRadius="1">
 		</TextView>
 		<ImageView android:id="@+id/NETWORK_ICON"
 		android:layout_width="64dp" android:layout_height="44dp"

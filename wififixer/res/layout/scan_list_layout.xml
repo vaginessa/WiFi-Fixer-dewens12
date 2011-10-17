@@ -17,15 +17,15 @@
 	
 		<TextView android:id="@+id/ssid" android:text="default"
 		android:layout_marginLeft="15dp" android:layout_height="wrap_content"
-		android:maxLength="12"
-		android:gravity="left" android:textSize="15dp" android:layout_width="120dp"
+		android:maxLength="16"
+		android:gravity="left" android:textSize="15dp" android:layout_width="150dp"
 		android:shadowColor="#FFFF00"
 		android:shadowDx="1"
 		android:shadowDy="1"
-		android:shadowRadius="3"
+		android:shadowRadius="1"
 		android:layout_marginBottom="2dp"
 		android:layout_gravity="bottom"
-		android:textStyle="bold"></TextView>
+		></TextView>
 		
 		<ImageView android:id="@+id/NETWORK_ICON"
 		android:layout_width="32dp" android:layout_height="fill_parent"

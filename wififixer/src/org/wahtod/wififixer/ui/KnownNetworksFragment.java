@@ -48,6 +48,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 public class KnownNetworksFragment extends Fragment {
@@ -66,6 +67,7 @@ public class KnownNetworksFragment extends Fragment {
     private static final int CONTEXT_DISABLE = 112;
     private static final int CONTEXT_CONNECT = 113;
     private static final int CONTEXT_NONMANAGE = 114;
+    private static final int CONTEXT_REMOVE = 116;
     private static final String NETWORKS_KEY = "NETWORKS_KEY";
 
     @Override
@@ -83,6 +85,7 @@ public class KnownNetworksFragment extends Fragment {
 	this.unregisterForContextMenu(lv);
 	super.onDestroyView();
     }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
 	    ContextMenuInfo menuInfo) {
@@ -95,6 +98,7 @@ public class KnownNetworksFragment extends Fragment {
 	menu.add(2, CONTEXT_DISABLE, 1, R.string.disable);
 	menu.add(3, CONTEXT_CONNECT, 2, R.string.connect_now);
 	menu.add(4, CONTEXT_NONMANAGE, 3, R.string.set_non_managed);
+	menu.add(5, CONTEXT_REMOVE, 5, R.string.remove);
 	if (!WFConnection.getNetworkState(getContext(), clicked_position)) {
 	    menu.setGroupEnabled(3, false);
 	    menu.setGroupEnabled(2, false);
@@ -151,6 +155,16 @@ public class KnownNetworksFragment extends Fragment {
 			    clicked_position, false);
 		}
 		adapter.notifyDataSetChanged();
+		break;
+
+	    case CONTEXT_REMOVE:
+		Toast.makeText(
+			getContext(),
+			getContext().getString(R.string.removing_network)
+				+ WFConnection.getSSIDfromNetwork(getContext(),
+					clicked_position), Toast.LENGTH_SHORT)
+			.show();
+		WFConnection.removeNetwork(getContext(), clicked_position);
 		break;
 	    }
 	}

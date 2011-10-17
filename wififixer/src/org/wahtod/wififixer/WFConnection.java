@@ -1881,6 +1881,10 @@ public class WFConnection extends Object implements
 	if (PrefUtil.readBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK))
 	    PrefUtil.writeBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK, false);
     }
+    
+    public static boolean removeNetwork(final Context context, final int network){
+	return getWifiManager(context).removeNetwork(network);
+    }
 
     private static String removeQuotes(String ssid) {
 	if (ssid == null)
