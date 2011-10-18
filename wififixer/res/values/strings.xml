@@ -256,6 +256,7 @@
 	<string name="N1FIX2_summary">Experimental: please read Known Issues in Documentation.</string>
 	<string name="remove">Remove</string>
 	<string name="removing_network">Removing Network:</string>
+	<string name="about_target">ABOUT_TARGET</string>
 
 
 </resources>

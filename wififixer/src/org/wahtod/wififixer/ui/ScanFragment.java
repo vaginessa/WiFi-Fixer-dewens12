@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFConnection;
+import org.wahtod.wififixer.utility.LogService;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -104,13 +105,18 @@ public class ScanFragment extends Fragment {
     public boolean onContextItemSelected(MenuItem item) {
 	switch (item.getItemId()) {
 	case CONTEXT_CONNECT:
-	    Intent intent = new Intent(WFConnection.CONNECTINTENT);
-	    intent.putExtra(WFConnection.NETWORKNAME, "None");
-	    getContext().sendBroadcast(intent);
+	    Intent i = new Intent(WFConnection.CONNECTINTENT);
+	    i.putExtra(WFConnection.NETWORKNAME, "None");
+	    getContext().sendBroadcast(i);
 	    break;
 
 	case CONTEXT_INFO:
-
+	    Intent i2 = new Intent(getContext(),WifiFixerActivity.class);
+	    i2.putExtra(WifiFixerActivity.SHOW_ABOUT, true);
+	    i2.putExtra(getContext().getString(R.string.about_target),clicked.toBundle());
+	    LogService.log(getContext(), this.getClass().getName(),clicked.toBundle().toString());
+	    i2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    getContext().startActivity(i2);
 	    break;
 	}
 	return super.onContextItemSelected(item);

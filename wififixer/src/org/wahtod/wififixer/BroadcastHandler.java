@@ -76,7 +76,6 @@ public class BroadcastHandler {
 
 	case 2:
 	    Intent widgetintent = new Intent(context, WifiFixerActivity.class);
-	    widgetintent.putExtra(WifiFixerActivity.OPEN_NETWORK_LIST, true);
 	    widgetintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	    context.startActivity(widgetintent);
 	    break;

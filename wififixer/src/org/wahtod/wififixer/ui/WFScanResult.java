@@ -4,17 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.net.wifi.ScanResult;
+import android.os.Bundle;
 
 public class WFScanResult {
     public String SSID;
     public String BSSID;
     public String capabilities;
     public int level;
+    
+    private static String SSID_BUNDLE_KEY = "SSID";
+    private static String BSSID_BUNDLE_KEY = "BSSID";
+    private static String CAPABILITIES_BUNDLE_KEY = "CAPABILITIES";
+    private static String LEVEL_BUNDLE_KEY = "LEVEL";
 
     @Override
     public int hashCode() {
 	int hash = 1;
-	hash = hash * 31 + (SSID == null ? 0 : BSSID.hashCode());
+	hash = hash * 31 + (BSSID == null ? 0 : BSSID.hashCode());
 	hash = hash * 31 + (SSID == null ? 0 : SSID.hashCode());
 	hash = hash * 31 + (capabilities == null ? 0 : capabilities.hashCode());
 
@@ -42,6 +48,24 @@ public class WFScanResult {
 	BSSID = "";
 	level = 0;
 
+    }
+    
+    public static WFScanResult fromBundle(final Bundle bundle){
+	WFScanResult out = new WFScanResult();
+	out.SSID=bundle.getString(SSID_BUNDLE_KEY);
+	out.BSSID=bundle.getString(BSSID_BUNDLE_KEY);
+	out.capabilities=bundle.getString(CAPABILITIES_BUNDLE_KEY);
+	out.level=bundle.getInt(LEVEL_BUNDLE_KEY);
+	return out;
+    }
+    
+    public Bundle toBundle(){
+	Bundle bundle = new Bundle();
+	bundle.putString(SSID_BUNDLE_KEY, SSID);
+	bundle.putString(BSSID_BUNDLE_KEY, BSSID);
+	bundle.putString(CAPABILITIES_BUNDLE_KEY, capabilities);
+	bundle.putInt(LEVEL_BUNDLE_KEY, level);
+	return bundle;
     }
 
     public String getBSSID() {

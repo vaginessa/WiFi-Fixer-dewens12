@@ -97,7 +97,7 @@ public class WifiFixerActivity extends FragmentActivity {
     /*
      * Intent extra for widget command to open network list
      */
-    public static final String OPEN_NETWORK_LIST = "OPEN_NETWORK_LIST";
+    public static final String SHOW_ABOUT = "SHOW_ABOUT";
     /*
      * Market URI for pendingintent
      */
@@ -110,10 +110,11 @@ public class WifiFixerActivity extends FragmentActivity {
     /*
      * Fragment Tags
      */
-    public static final String SERVICEFRAG_TAG = "SERVICE_FRAGMENT";
-    public static final String KNOWNNETWORKSFRAG_TAG = "KNOWNNETWORKS_FRAGMENT";
-    public static final String SCANFRAG_TAG = "SCAN_FRAGMENT";
-    public static final String STATUSFRAG_TAG = "STATUS_FRAGMENT";
+    public static final String SERVICEFRAG_TAG = "SERVICE";
+    public static final String KNOWNNETWORKSFRAG_TAG = "KNOWNNETWORKS";
+    public static final String SCANFRAG_TAG = "SCAN";
+    public static final String STATUSFRAG_TAG = "STATUS";
+    public static final String ABOUTFRAG_TAG = "ABOUT";
 
     void authCheck() {
 	if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
@@ -152,12 +153,19 @@ public class WifiFixerActivity extends FragmentActivity {
 	return PrefUtil.readBoolean(context, Pref.LOG_KEY.key());
     }
 
-    private void handleIntent(final Intent intent) {
+    private void handleIntent(Intent intent) {
+	if (intent.getExtras() != null)
+	    LogService.log(this, this.getClass().getName() + ".handleIntent",
+		    intent
+			    .getBundleExtra(
+				  getString(R.string.about_target))
+			    .toString());
 	/*
 	 * Pop open network list if started by widget
 	 */
-	if (intent.hasExtra(OPEN_NETWORK_LIST))
-	    openNetworkList();
+	if (intent.hasExtra(SHOW_ABOUT))
+	    showAboutFragment(intent
+		    .getBundleExtra(getString(R.string.about_target)));
 	/*
 	 * Delete Log if called by preference
 	 */
@@ -360,8 +368,7 @@ public class WifiFixerActivity extends FragmentActivity {
 	if (savedInstanceState == null) {
 	    FragmentManager fm = getSupportFragmentManager();
 	    ServiceFragment sf = new ServiceFragment();
-	    android.support.v4.app.FragmentTransaction ft = fm
-		    .beginTransaction();
+	    FragmentTransaction ft = fm.beginTransaction();
 	    ft.add(R.id.servicefragment, sf, SERVICEFRAG_TAG);
 
 	    if (!adapterFlag) {
@@ -372,7 +379,7 @@ public class WifiFixerActivity extends FragmentActivity {
 		ft.add(R.id.statusfragment, snf, STATUSFRAG_TAG);
 		KnownNetworksFragment knf = new KnownNetworksFragment();
 		ft.add(R.id.knownnetworksfragment, knf, KNOWNNETWORKSFRAG_TAG);
-		if (null != findViewById(R.id.scanfragment)) {
+		if (findViewById(R.id.scanfragment) != null) {
 		    ScanFragment sc = new ScanFragment();
 		    ft.add(R.id.scanfragment, sc, SCANFRAG_TAG);
 		}
@@ -381,12 +388,13 @@ public class WifiFixerActivity extends FragmentActivity {
 	    ft.commit();
 	}
 	oncreate_setup();
-
+	if (savedInstanceState != null)
+	    LogService.log(this, this.getClass().getName() + ".onCreate",
+		    savedInstanceState.toString());
 	/*
 	 * Handle intent command if destroyed or first start
 	 */
 	handleIntent(getIntent());
-
 	/*
 	 * Make sure service settings are enforced.
 	 */
@@ -416,9 +424,9 @@ public class WifiFixerActivity extends FragmentActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
+	super.onNewIntent(intent);
 	setIntent(intent);
 	handleIntent(intent);
-	super.onNewIntent(intent);
     }
 
     // Create menus
@@ -496,8 +504,13 @@ public class WifiFixerActivity extends FragmentActivity {
 	return true;
     }
 
-    private void openNetworkList() {
-
+    private void showAboutFragment(Bundle bundle) {
+	Fragment aboutfragment = AboutFragment.newInstance(bundle);
+	FragmentManager fm = getSupportFragmentManager();
+	FragmentTransaction ft = fm.beginTransaction();
+	ft.add(R.id.servicefragment, aboutfragment, ABOUTFRAG_TAG);
+	ft.addToBackStack(null);
+	ft.commit();
     }
 
     public void wifiToggle(View view) {

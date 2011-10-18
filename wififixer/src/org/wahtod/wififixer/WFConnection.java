@@ -1883,7 +1883,9 @@ public class WFConnection extends Object implements
     }
     
     public static boolean removeNetwork(final Context context, final int network){
-	return getWifiManager(context).removeNetwork(network);
+	boolean state = getWifiManager(context).removeNetwork(network);
+	getWifiManager(context).saveConfiguration();
+	return state;
     }
 
     private static String removeQuotes(String ssid) {
