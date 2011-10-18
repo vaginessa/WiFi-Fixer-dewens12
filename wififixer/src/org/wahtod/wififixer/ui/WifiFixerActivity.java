@@ -155,22 +155,24 @@ public class WifiFixerActivity extends FragmentActivity {
 
     private void handleIntent(Intent intent) {
 	if (intent.getExtras() != null)
-	    LogService.log(this, this.getClass().getName() + ".handleIntent",
-		    intent
-			    .getBundleExtra(
-				  getString(R.string.about_target))
-			    .toString());
-	/*
-	 * Pop open network list if started by widget
-	 */
-	if (intent.hasExtra(SHOW_ABOUT))
-	    showAboutFragment(intent
-		    .getBundleExtra(getString(R.string.about_target)));
-	/*
-	 * Delete Log if called by preference
-	 */
-	else if (intent.hasExtra(DELETE_LOG))
-	    deleteLog();
+
+	    /*
+	     * Pop open network list if started by widget
+	     */
+	    if (intent.hasExtra(SHOW_ABOUT)) {
+		showAboutFragment(intent
+			.getBundleExtra(getString(R.string.about_target)));
+
+		LogService.log(this, this.getClass().getName()
+			+ ".handleIntent", intent.getBundleExtra(
+			getString(R.string.about_target)).toString());
+	    }
+
+	    /*
+	     * Delete Log if called by preference
+	     */
+	    else if (intent.hasExtra(DELETE_LOG))
+		deleteLog();
     }
 
     private void invalidateServiceFragment() {
