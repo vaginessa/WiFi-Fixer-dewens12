@@ -28,6 +28,7 @@ import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
+import org.wahtod.wififixer.utility.WFScanResult;
 import org.wahtod.wififixer.widget.WidgetHandler;
 
 import android.app.AlertDialog;
@@ -162,10 +163,6 @@ public class WifiFixerActivity extends FragmentActivity {
 	    if (intent.hasExtra(SHOW_ABOUT)) {
 		showAboutFragment(intent
 			.getBundleExtra(getString(R.string.about_target)));
-
-		LogService.log(this, this.getClass().getName()
-			+ ".handleIntent", intent.getBundleExtra(
-			getString(R.string.about_target)).toString());
 	    }
 
 	    /*
@@ -390,9 +387,6 @@ public class WifiFixerActivity extends FragmentActivity {
 	    ft.commit();
 	}
 	oncreate_setup();
-	if (savedInstanceState != null)
-	    LogService.log(this, this.getClass().getName() + ".onCreate",
-		    savedInstanceState.toString());
 	/*
 	 * Handle intent command if destroyed or first start
 	 */
@@ -471,6 +465,15 @@ public class WifiFixerActivity extends FragmentActivity {
 	    Intent myIntent = new Intent(this, About.class);
 	    startActivity(myIntent);
 	    return true;
+	    
+	case android.R.id.home:
+	    FragmentManager fm = getSupportFragmentManager();
+		if(!adapterFlag){
+		    StatusFragment snf = new StatusFragment();
+			FragmentTransaction ft = fm.beginTransaction();
+			ft.replace(R.id.statusfragment, snf, STATUSFRAG_TAG);
+			ft.commit();
+		}
 	}
 	return false;
     }
@@ -510,7 +513,12 @@ public class WifiFixerActivity extends FragmentActivity {
 	Fragment aboutfragment = AboutFragment.newInstance(bundle);
 	FragmentManager fm = getSupportFragmentManager();
 	FragmentTransaction ft = fm.beginTransaction();
+	ft.setBreadCrumbTitle(bundle.getString(WFScanResult.SSID_BUNDLE_KEY));
+	ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 	ft.replace(R.id.statusfragment, aboutfragment, ABOUTFRAG_TAG);
+	/*
+	 * Set transaction tag to SSID
+	 */
 	ft.addToBackStack(bundle.getString(WFScanResult.SSID_BUNDLE_KEY));
 	ft.commit();
     }

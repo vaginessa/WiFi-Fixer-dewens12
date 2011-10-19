@@ -17,6 +17,8 @@
 package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.utility.WFScanResult;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package org.wahtod.wififixer.ui;
+package org.wahtod.wififixer.utility;
 
 import java.util.ArrayList;
 import java.util.List;

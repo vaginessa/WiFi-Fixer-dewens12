@@ -24,6 +24,7 @@ import java.util.List;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.utility.LogService;
+import org.wahtod.wififixer.utility.WFScanResult;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

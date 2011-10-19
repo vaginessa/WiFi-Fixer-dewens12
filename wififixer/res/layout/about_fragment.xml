@@ -23,52 +23,123 @@
 		android:layout_width="fill_parent" android:orientation="vertical"
 		android:paddingTop="5dp" android:paddingLeft="8dp"
 		android:paddingRight="8dp" android:layout_height="wrap_content" android:weightSum="1">
-		<LinearLayout android:weightSum="1" android:id="@+id/LinearLayout00"
-			android:gravity="left" android:layout_gravity="left"
-			android:layout_width="wrap_content" android:baselineAligned="true"
-			android:layout_weight="0.00" android:layout_height="40dp">
-			<TextView android:id="@+id/BSSID_title"
-				android:layout_width="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:text="MAC:" android:layout_gravity="right" android:layout_height="match_parent" android:gravity="center"></TextView>
-			<TextView android:id="@+id/bssid" android:textAppearance="?android:attr/textAppearanceSmall"
-				android:text="af:fa:df:df:df" android:layout_height="match_parent"
-				android:layout_width="166dp"
-				android:paddingLeft="60dp" android:layout_gravity="right" android:gravity="center_vertical"></TextView>
+
+		<LinearLayout
+		    android:id="@+id/LinearLayout00"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center_horizontal"
+		    android:layout_weight="0.00"
+		    android:baselineAligned="true"
+		    android:gravity="left"
+		    android:orientation="vertical"
+		    android:paddingBottom="10dp"
+		    android:weightSum="1" >
+
+			<TextView
+			    android:id="@+id/BSSID_title"
+			    android:layout_width="wrap_content"
+			    android:layout_height="match_parent"
+			    android:layout_gravity="left"
+			    android:gravity="center"
+			    android:text="MAC:"
+			    android:textAppearance="?android:attr/textAppearanceMedium" >
+</TextView>
+
+			<TextView
+			    android:id="@+id/bssid"
+			    android:layout_width="166dp"
+			    android:layout_height="match_parent"
+			    android:layout_gravity="left"
+			    android:gravity="center_vertical"
+			    android:text="af:fa:df:df:df"
+			    android:textAppearance="?android:attr/textAppearanceSmall" >
+</TextView>
 		</LinearLayout>
-		<LinearLayout android:weightSum="1" android:id="@+id/LinearLayout01"
-			android:gravity="left" android:layout_gravity="left"
-			android:layout_width="wrap_content" android:baselineAligned="true"
-			android:layout_weight="0.00" android:layout_height="40dp">
-			<TextView android:id="@+id/TextView02"
-				android:layout_width="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:text="Capabilities:" android:layout_gravity="right" android:layout_height="match_parent" android:gravity="center"></TextView>
+
+		<LinearLayout
+		    android:id="@+id/LinearLayout01"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center_horizontal"
+		    android:baselineAligned="true"
+		    android:gravity="left"
+		    android:orientation="vertical"
+		    android:paddingBottom="10dp"
+		    android:weightSum="1" >
+
+			<TextView
+			    android:id="@+id/TextView02"
+			    android:layout_width="wrap_content"
+			    android:layout_height="match_parent"
+			    android:layout_gravity="left"
+			    android:gravity="center"
+			    android:text="Capabilities:"
+			    android:textAppearance="?android:attr/textAppearanceMedium" >
+</TextView>
 			<TextView android:id="@+id/capabilities" android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="OPEN" android:layout_height="match_parent"
 				android:layout_width="166dp"
-				android:paddingLeft="60dp" android:layout_gravity="right" android:gravity="center_vertical"></TextView>
+				android:layout_gravity="left" android:gravity="center_vertical"></TextView>
 		</LinearLayout>
-		<LinearLayout android:weightSum="1" android:id="@+id/linearLayout1"
-			android:gravity="center_horizontal" android:layout_gravity="left"
-			android:layout_width="wrap_content" android:layout_height="40dp">
-			<TextView android:id="@+id/textView1" android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium"
-				android:text="Frequency:" android:layout_gravity="left" android:layout_height="match_parent" android:gravity="center"></TextView>
-			<TextView android:id="@+id/frequency"
-				android:layout_height="match_parent" android:textAppearance="?android:attr/textAppearanceSmall"
-				android:text="40" android:paddingLeft="100dp" android:layout_width="134dp" android:layout_gravity="right" android:gravity="center_vertical"></TextView>
+
+		<LinearLayout
+		    android:id="@+id/linearLayout1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center_horizontal"
+		    android:gravity="center_horizontal"
+		    android:orientation="vertical"
+		    android:paddingBottom="10dp"
+		    android:weightSum="1" >
+
+		    <TextView
+		        android:id="@+id/textView1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="match_parent"
+		        android:layout_gravity="left"
+		        android:gravity="center"
+		        android:text="Frequency:"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+		    <TextView
+		        android:id="@+id/frequency"
+		        android:layout_width="134dp"
+		        android:layout_height="match_parent"
+		        android:layout_gravity="right"
+		        android:gravity="center_vertical"
+		        android:text="40"
+		        android:textAppearance="?android:attr/textAppearanceSmall" />
 		</LinearLayout>
-		<LinearLayout android:weightSum="1" android:id="@+id/LinearLayout02"
-			android:gravity="center_horizontal" android:layout_width="wrap_content"
-			android:layout_gravity="left" android:layout_weight="0.00" android:layout_height="40dp">
-			<TextView android:id="@+id/TextView03"
-				android:layout_width="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:text="Signal:" android:layout_gravity="center_horizontal" android:layout_height="match_parent" android:gravity="center"></TextView>
-			<TextView android:id="@+id/level"
-				android:layout_width="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:text="-42" android:paddingLeft="100dp" android:gravity="right" android:layout_height="match_parent"></TextView>
+
+		<LinearLayout
+		    android:id="@+id/LinearLayout02"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center_horizontal"
+		    android:gravity="center_horizontal"
+		    android:orientation="vertical"
+		    android:weightSum="1" >
+
+			<TextView
+			    android:id="@+id/TextView03"
+			    android:layout_width="wrap_content"
+			    android:layout_height="match_parent"
+			    android:layout_gravity="left"
+			    android:gravity="center"
+			    android:text="Signal:"
+			    android:textAppearance="?android:attr/textAppearanceMedium" >
+</TextView>
+
+			<TextView
+			    android:id="@+id/level"
+			    android:layout_width="wrap_content"
+			    android:layout_height="match_parent"
+			    android:layout_gravity="left"
+			    android:gravity="left"
+			    android:text="-42"
+			    android:textAppearance="?android:attr/textAppearanceSmall" >
+</TextView>
 		</LinearLayout>
 	</LinearLayout>
 </LinearLayout>
