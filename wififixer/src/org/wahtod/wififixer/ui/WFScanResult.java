@@ -11,11 +11,13 @@ public class WFScanResult {
     public String BSSID;
     public String capabilities;
     public int level;
+    public int frequency;
     
-    private static String SSID_BUNDLE_KEY = "SSID";
-    private static String BSSID_BUNDLE_KEY = "BSSID";
-    private static String CAPABILITIES_BUNDLE_KEY = "CAPABILITIES";
-    private static String LEVEL_BUNDLE_KEY = "LEVEL";
+    public static String SSID_BUNDLE_KEY = "SSID";
+    public static String BSSID_BUNDLE_KEY = "BSSID";
+    public static String CAPABILITIES_BUNDLE_KEY = "CAPABILITIES";
+    public static String FREQUENCY_BUNDLE_KEY = "FREQUENCY";
+    public static String LEVEL_BUNDLE_KEY = "LEVEL";
 
     @Override
     public int hashCode() {
@@ -23,7 +25,6 @@ public class WFScanResult {
 	hash = hash * 31 + (BSSID == null ? 0 : BSSID.hashCode());
 	hash = hash * 31 + (SSID == null ? 0 : SSID.hashCode());
 	hash = hash * 31 + (capabilities == null ? 0 : capabilities.hashCode());
-
 	return hash;
 
     }
@@ -46,8 +47,6 @@ public class WFScanResult {
 	SSID = "";
 	capabilities = "";
 	BSSID = "";
-	level = 0;
-
     }
     
     public static WFScanResult fromBundle(final Bundle bundle){
@@ -56,6 +55,7 @@ public class WFScanResult {
 	out.BSSID=bundle.getString(BSSID_BUNDLE_KEY);
 	out.capabilities=bundle.getString(CAPABILITIES_BUNDLE_KEY);
 	out.level=bundle.getInt(LEVEL_BUNDLE_KEY);
+	out.frequency=bundle.getInt(FREQUENCY_BUNDLE_KEY);
 	return out;
     }
     
@@ -65,11 +65,8 @@ public class WFScanResult {
 	bundle.putString(BSSID_BUNDLE_KEY, BSSID);
 	bundle.putString(CAPABILITIES_BUNDLE_KEY, capabilities);
 	bundle.putInt(LEVEL_BUNDLE_KEY, level);
+	bundle.putInt(FREQUENCY_BUNDLE_KEY, frequency);
 	return bundle;
-    }
-
-    public String getBSSID() {
-	return this.BSSID;
     }
 
     public WFScanResult(final ScanResult result) {
@@ -88,6 +85,7 @@ public class WFScanResult {
 	    BSSID = result.BSSID;
 
 	level = result.level;
+	frequency = result.frequency;
     }
 
     public static List<WFScanResult> fromScanResultArray(

@@ -26,5 +26,4 @@ public class UpSetter extends ActionBarDetector {
 	actionBar.setDisplayHomeAsUpEnabled(true);
 	return;
     }
-
 }

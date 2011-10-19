@@ -17,8 +17,6 @@
 package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.utility.LogService;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -39,30 +37,30 @@ public class AboutFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+	network = WFScanResult.fromBundle(this.getArguments());
 	super.onCreate(savedInstanceState);
-	LogService.log(this.getActivity().getApplicationContext(), this
-		.getClass().getName(), network.toString());
     }
 
     @Override
     public void onResume() {
-	if (network.SSID != null) {
+	if (this.getArguments() != null) {
 	    TextView t = (TextView) getView().findViewById(R.id.ssid);
 	    t.setText(network.SSID);
 	    t = (TextView) getView().findViewById(R.id.bssid);
 	    t.setText(network.BSSID);
 	    t = (TextView) getView().findViewById(R.id.capabilities);
 	    t.setText(network.capabilities);
+	    t = (TextView) getView().findViewById(R.id.frequency);
+	    t.setText(String.valueOf(network.frequency));
 	    t = (TextView) getView().findViewById(R.id.level);
-	    t.setText(network.level);
+	    t.setText(String.valueOf(network.level));
 	}
 	super.onResume();
     }
 
     public static AboutFragment newInstance(Bundle bundle) {
 	AboutFragment f = new AboutFragment();
-	f.network = WFScanResult.fromBundle(bundle);
+	f.setArguments(bundle);
 	return f;
     }
-
 }

@@ -510,8 +510,8 @@ public class WifiFixerActivity extends FragmentActivity {
 	Fragment aboutfragment = AboutFragment.newInstance(bundle);
 	FragmentManager fm = getSupportFragmentManager();
 	FragmentTransaction ft = fm.beginTransaction();
-	ft.add(R.id.servicefragment, aboutfragment, ABOUTFRAG_TAG);
-	ft.addToBackStack(null);
+	ft.replace(R.id.statusfragment, aboutfragment, ABOUTFRAG_TAG);
+	ft.addToBackStack(bundle.getString(WFScanResult.SSID_BUNDLE_KEY));
 	ft.commit();
     }
 

@@ -238,7 +238,7 @@
 	<string name="SCREEN_title">Manage During Sleep</string>
 	<string name="Disable_title">Disable Service</string>
 	<string name="Disable_summary">Causes the Wifi Fixer service to stop running</string>
-	<string name="Perf_Mode_title">Set Wifi Usablity</string>
+	<string name="Perf_Mode_title">Set Wifi Usability</string>
 	<string name="Perf_Mode_summary">Allows setting from max wifi usability to minimal battery use</string>
 	<string name="StateNotif_title">Status Notification</string>
 	<string name="StateNotif_summary">Displays an ongoing notification showing connection state</string>

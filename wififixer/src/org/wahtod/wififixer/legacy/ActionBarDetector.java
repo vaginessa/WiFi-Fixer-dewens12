@@ -29,8 +29,7 @@ public abstract class ActionBarDetector {
 
     public static void setUp(Activity a) {
 	/*
-	 * Handle logic to check if StrictMode exists Set StrictMode based on
-	 * flag if it does otherwise return false
+	 * Add Action Bar home up
 	 */
 	if (selector == null) {
 	    if (checkHasActionBar()) {
@@ -44,7 +43,7 @@ public abstract class ActionBarDetector {
 	selector.vSetUp(a);
 	return;
     }
-
+    
     public static boolean checkHasActionBar() {
 	try {
 	    Class.forName("android.app.ActionBar", true, Thread.currentThread()

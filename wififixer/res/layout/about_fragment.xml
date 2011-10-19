@@ -16,7 +16,7 @@
 	android:paddingRight="20dp" android:alpha=".8">
 	<TextView android:gravity="center" android:layout_width="wrap_content"
 		android:layout_gravity="center" android:layout_height="40dp"
-		android:textAppearance="?android:attr/textAppearanceLarge" android:id="@+id/SSID"
+		android:textAppearance="?android:attr/textAppearanceLarge" android:id="@+id/ssid"
 	    android:text="SSID"
 		android:layout_weight="0.04"></TextView>
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -34,7 +34,7 @@
 			<TextView android:id="@+id/bssid" android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="af:fa:df:df:df" android:layout_height="match_parent"
 				android:layout_width="166dp"
-				android:paddingLeft="60dp" android:layout_gravity="center" android:gravity="center_vertical"></TextView>
+				android:paddingLeft="60dp" android:layout_gravity="right" android:gravity="center_vertical"></TextView>
 		</LinearLayout>
 		<LinearLayout android:weightSum="1" android:id="@+id/LinearLayout01"
 			android:gravity="left" android:layout_gravity="left"
@@ -44,10 +44,10 @@
 				android:layout_width="wrap_content"
 				android:textAppearance="?android:attr/textAppearanceMedium"
 				android:text="Capabilities:" android:layout_gravity="right" android:layout_height="match_parent" android:gravity="center"></TextView>
-			<TextView android:id="@+id/signal" android:textAppearance="?android:attr/textAppearanceSmall"
+			<TextView android:id="@+id/capabilities" android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="OPEN" android:layout_height="match_parent"
 				android:layout_width="166dp"
-				android:paddingLeft="60dp" android:layout_gravity="center" android:gravity="center_vertical"></TextView>
+				android:paddingLeft="60dp" android:layout_gravity="right" android:gravity="center_vertical"></TextView>
 		</LinearLayout>
 		<LinearLayout android:weightSum="1" android:id="@+id/linearLayout1"
 			android:gravity="center_horizontal" android:layout_gravity="left"
@@ -56,7 +56,7 @@
 				android:text="Frequency:" android:layout_gravity="left" android:layout_height="match_parent" android:gravity="center"></TextView>
 			<TextView android:id="@+id/frequency"
 				android:layout_height="match_parent" android:textAppearance="?android:attr/textAppearanceSmall"
-				android:text="40" android:paddingLeft="100dp" android:layout_width="134dp" android:layout_gravity="center" android:gravity="center_vertical"></TextView>
+				android:text="40" android:paddingLeft="100dp" android:layout_width="134dp" android:layout_gravity="right" android:gravity="center_vertical"></TextView>
 		</LinearLayout>
 		<LinearLayout android:weightSum="1" android:id="@+id/LinearLayout02"
 			android:gravity="center_horizontal" android:layout_width="wrap_content"
@@ -68,8 +68,7 @@
 			<TextView android:id="@+id/level"
 				android:layout_width="wrap_content"
 				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:text="COMPLETED" android:paddingLeft="100dp" android:gravity="center_vertical" android:layout_height="match_parent"></TextView>
+				android:text="-42" android:paddingLeft="100dp" android:gravity="right" android:layout_height="match_parent"></TextView>
 		</LinearLayout>
-		<FrameLayout android:id="@+id/signal_status_fragment" android:layout_weight="0.73" android:background="@drawable/signal4" android:layout_width="wrap_content" android:layout_gravity="center" android:layout_height="wrap_content"></FrameLayout>
 	</LinearLayout>
 </LinearLayout>
