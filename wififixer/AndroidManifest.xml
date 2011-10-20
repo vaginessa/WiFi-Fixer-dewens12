@@ -12,7 +12,7 @@
 	-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.wahtod.wififixer" android:installLocation="internalOnly"
-	android:versionName="0.9.0p34" android:versionCode="879">
+	android:versionName="0.9.0p35" android:versionCode="881">
 	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="11" />
 	<uses-feature android:name="android.hardware.wifi"
 		android:required="true" />
@@ -42,7 +42,7 @@
 		<activity android:name=".ui.PrefActivity" />
 		<activity android:name=".ui.PrefActivityHC" />
 		<activity android:name=".ui.HelpActivity" />
-		<activity android:name=".ui.AboutFragmentActivity" />
+		<activity android:name=".ui.GenericFragmentActivity" />
 
 		<!--
 			Starts Boot thread service which waits 30s to run WifiFixerService

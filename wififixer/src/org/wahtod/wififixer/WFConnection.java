@@ -1224,7 +1224,7 @@ public class WFConnection extends Object implements
 	    return INVALID;
     }
 
-    private static WifiManager getWifiManager(final Context context) {
+    public static WifiManager getWifiManager(final Context context) {
 	/*
 	 * Cache WifiManager
 	 */

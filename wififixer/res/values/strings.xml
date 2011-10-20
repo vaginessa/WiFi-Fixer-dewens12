@@ -256,11 +256,12 @@
 	<string name="N1FIX2_summary">Experimental: please read Known Issues in Documentation.</string>
 	<string name="remove">Remove</string>
 	<string name="removing_network">Removing Network:</string>
-	<string name="about_target">ABOUT_TARGET</string>
 	<string name="about_activity_title">About</string>
 	<string name="help_activity_title">Help</string>
 	<string name="preferences_activity_title">Preferences</string>
 	<string name="about_fragment_title_">"About: "</string>
+	<string name="passwd_entry_text">Enter key to connect to this network</string>
+	<string name="connect_fragment_title">"Connect: "</string>
 
 
 </resources>

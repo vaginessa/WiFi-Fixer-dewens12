@@ -11,7 +11,9 @@
 		License.
 	-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent" android:weightSum="1" android:orientation="vertical"
-	android:paddingLeft="20dp" android:layout_height="wrap_content"
-	android:paddingRight="20dp" android:alpha=".8" android:id="@+id/about_fragment">
+	android:layout_width="fill_parent" android:weightSum="1" android:orientation="vertical"
+	android:layout_height="fill_parent"
+	android:paddingBottom="100dp"
+	android:gravity="center" android:layout_gravity="center"
+	android:alpha=".8" android:id="@+id/fragment_target">
 </LinearLayout>

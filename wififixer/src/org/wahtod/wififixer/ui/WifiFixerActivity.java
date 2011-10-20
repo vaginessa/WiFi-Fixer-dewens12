@@ -97,9 +97,9 @@ public class WifiFixerActivity extends FragmentActivity {
     // Set this when you change the About xml
     static final String sABOUT = "ABOUT2";
     /*
-     * Intent extra for widget command to open network list
+     * Intent extra for fragment commands
      */
-    public static final String SHOW_ABOUT = "SHOW_ABOUT";
+    public static final String SHOW_FRAGMENT = "SHOW_FRAGMENT";
     /*
      * Market URI for pendingintent
      */
@@ -161,17 +161,14 @@ public class WifiFixerActivity extends FragmentActivity {
 	    /*
 	     * Show About Fragment either via fragment or otherwise
 	     */
-	    if (intent.hasExtra(SHOW_ABOUT)) {
+	    if (intent.hasExtra(SHOW_FRAGMENT)) {
 		if (adapterFlag) {
-		    Intent i = new Intent(this, AboutFragmentActivity.class);
-		    i.putExtras(intent
-			    .getBundleExtra(getString(R.string.about_target)));
+		    Intent i = new Intent(this, GenericFragmentActivity.class);
+		    i.putExtras(intent);
 		    startActivity(i);
 		} else
-		    showAboutFragment(intent
-			    .getBundleExtra(getString(R.string.about_target)));
+		    showFragment(intent.getExtras());
 	    }
-
 	    /*
 	     * Delete Log if called by preference
 	     */
@@ -183,9 +180,9 @@ public class WifiFixerActivity extends FragmentActivity {
 	/*
 	 * Invalidate Service fragment
 	 */
-	android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+	FragmentManager fm = getSupportFragmentManager();
 	ServiceFragment sf = new ServiceFragment();
-	android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+	FragmentTransaction ft = fm.beginTransaction();
 	ft.replace(R.id.servicefragment, sf, SERVICEFRAG_TAG);
 	ft.commit();
     }
@@ -358,7 +355,7 @@ public class WifiFixerActivity extends FragmentActivity {
     public void onBackPressed() {
 	if (!adapterFlag
 		&& getSupportFragmentManager().getBackStackEntryCount() == 1)
-	    ActionBarDetector.setUp(this, false, getString(R.string.app_name));
+	    ActionBarDetector.setUp(this, false, null);
 	super.onBackPressed();
     }
 
@@ -488,8 +485,7 @@ public class WifiFixerActivity extends FragmentActivity {
 		while (fm.getBackStackEntryCount() > 0)
 		    fm.popBackStackImmediate();
 		ft.commit();
-		ActionBarDetector.setUp(this, false,
-			getString(R.string.app_name));
+		ActionBarDetector.setUp(this, false, null);
 	    }
 	}
 	return false;
@@ -527,13 +523,12 @@ public class WifiFixerActivity extends FragmentActivity {
 	return true;
     }
 
-    private void showAboutFragment(Bundle bundle) {
-	Fragment aboutfragment = AboutFragment.newInstance(bundle);
+    private void showFragment(Bundle bundle) {
+	Fragment f = FragmentSwitchboard.newInstance(bundle);
 	FragmentManager fm = getSupportFragmentManager();
 	FragmentTransaction ft = fm.beginTransaction();
-	ft.setBreadCrumbTitle(bundle.getString(WFScanResult.SSID_BUNDLE_KEY));
 	ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-	ft.replace(R.id.statusfragment, aboutfragment, ABOUTFRAG_TAG);
+	ft.replace(R.id.statusfragment, f, null);
 	/*
 	 * Set transaction tag to SSID
 	 */

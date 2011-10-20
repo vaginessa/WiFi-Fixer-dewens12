@@ -24,20 +24,19 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-public class AboutFragmentActivity extends FragmentActivity {
+public class GenericFragmentActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	setContentView(R.layout.about_container);
-	Bundle bundle = getIntent().getExtras(); 
-	if(bundle !=null)
-	{
-	    Fragment aboutfragment = AboutFragment.newInstance(bundle);
-		FragmentManager fm = getSupportFragmentManager();
-		FragmentTransaction ft = fm.beginTransaction();
-		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		ft.replace(R.id.about_fragment, aboutfragment);
-		ft.commit();
+	setContentView(R.layout.fragment_container);
+	Bundle bundle = getIntent().getExtras();
+	if (bundle != null) {
+	    Fragment f = FragmentSwitchboard.newInstance(bundle);
+	    FragmentManager fm = getSupportFragmentManager();
+	    FragmentTransaction ft = fm.beginTransaction();
+	    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+	    ft.replace(R.id.fragment_target, f);
+	    ft.commit();
 	}
     }
 }

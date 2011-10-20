@@ -18,6 +18,7 @@ public class WFScanResult {
     public static String CAPABILITIES_BUNDLE_KEY = "CAPABILITIES";
     public static String FREQUENCY_BUNDLE_KEY = "FREQUENCY";
     public static String LEVEL_BUNDLE_KEY = "LEVEL";
+    public static String BUNDLE_KEY = "WFSCANRESULT";
 
     @Override
     public int hashCode() {
@@ -50,12 +51,13 @@ public class WFScanResult {
     }
     
     public static WFScanResult fromBundle(final Bundle bundle){
+	Bundle fields = bundle.getBundle(BUNDLE_KEY);
 	WFScanResult out = new WFScanResult();
-	out.SSID=bundle.getString(SSID_BUNDLE_KEY);
-	out.BSSID=bundle.getString(BSSID_BUNDLE_KEY);
-	out.capabilities=bundle.getString(CAPABILITIES_BUNDLE_KEY);
-	out.level=bundle.getInt(LEVEL_BUNDLE_KEY);
-	out.frequency=bundle.getInt(FREQUENCY_BUNDLE_KEY);
+	out.SSID=fields.getString(SSID_BUNDLE_KEY);
+	out.BSSID=fields.getString(BSSID_BUNDLE_KEY);
+	out.capabilities=fields.getString(CAPABILITIES_BUNDLE_KEY);
+	out.level=fields.getInt(LEVEL_BUNDLE_KEY);
+	out.frequency=fields.getInt(FREQUENCY_BUNDLE_KEY);
 	return out;
     }
     

@@ -22,8 +22,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.WFConnection;
-import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.WFScanResult;
 
 import android.content.BroadcastReceiver;
@@ -105,24 +103,22 @@ public class ScanFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+	Intent i = new Intent(getContext(), WifiFixerActivity.class);
+	i.putExtra(WifiFixerActivity.SHOW_FRAGMENT, true);
+	i.putExtra(WFScanResult.BUNDLE_KEY, clicked.toBundle());
 	switch (item.getItemId()) {
 	case CONTEXT_CONNECT:
-	    Intent i = new Intent(WFConnection.CONNECTINTENT);
-	    i.putExtra(WFConnection.NETWORKNAME, "None");
-	    getContext().sendBroadcast(i);
+	    i.putExtra(FragmentSwitchboard.FRAGMENT_KEY, ConnectFragment.class
+		    .getName());
 	    break;
 
 	case CONTEXT_INFO:
-	    Intent i2 = new Intent(getContext(), WifiFixerActivity.class);
-	    i2.putExtra(WifiFixerActivity.SHOW_ABOUT, true);
-	    i2.putExtra(getContext().getString(R.string.about_target), clicked
-		    .toBundle());
-	    LogService.log(getContext(), this.getClass().getName(), clicked
-		    .toBundle().toString());
-	    i2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	    getContext().startActivity(i2);
+	    i.putExtra(FragmentSwitchboard.FRAGMENT_KEY, AboutFragment.class
+		    .getName());
 	    break;
 	}
+	i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	getContext().startActivity(i);
 	return super.onContextItemSelected(item);
     }
 
@@ -317,16 +313,17 @@ public class ScanFragment extends Fragment {
     }
 
     public static String getCapabilitiesString(String capabilities) {
-	
-	if(capabilities.length()==0)
-	return OPEN;
-    else if (capabilities.contains(WEP))
+	if (capabilities == null)
+	    return OPEN;
+	else if (capabilities.length() == 0)
+	    return OPEN;
+	else if (capabilities.contains(WEP))
 	    capabilities = WEP;
 	else if (capabilities.contains(WPA2))
 	    capabilities = WPA2;
 	else if (capabilities.contains(WPA))
 	    capabilities = WPA;
-	
+
 	return capabilities;
     }
 

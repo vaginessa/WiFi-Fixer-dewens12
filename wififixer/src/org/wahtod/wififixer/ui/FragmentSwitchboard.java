@@ -13,23 +13,23 @@
    limitations under the License.
 
  */
-package org.wahtod.wififixer.legacy;
 
-import org.wahtod.wififixer.R;
+package org.wahtod.wififixer.ui;
 
-import android.app.ActionBar;
-import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
-public class UpSetter extends ActionBarDetector {
+public abstract class FragmentSwitchboard extends Fragment {
 
-    @Override
-    public void vSetUp(Activity a, boolean state, String title) {
-	ActionBar actionBar = a.getActionBar();
-	actionBar.setDisplayHomeAsUpEnabled(state);
-	if (title != null)
-	    actionBar.setTitle(title);
+    public static final String FRAGMENT_KEY = "FRAGMENT";
+
+    public static FragmentSwitchboard newInstance(Bundle bundle) {
+	String s = bundle.getString(FRAGMENT_KEY);
+	if (s.equals(AboutFragment.class.getName()))
+	    return AboutFragment.newInstance(bundle);
+	else if (s.equals(ConnectFragment.class.getName()))
+	    return ConnectFragment.newInstance(bundle);
 	else
-	    actionBar.setTitle(a.getString(R.string.app_name));
-	return;
+	    return null;
     }
 }

@@ -21,13 +21,12 @@ import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.utility.WFScanResult;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class AboutFragment extends Fragment {
+public class AboutFragment extends FragmentSwitchboard {
 
     private WFScanResult network;
 
