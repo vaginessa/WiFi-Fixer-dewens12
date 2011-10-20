@@ -52,14 +52,16 @@ public class AboutFragment extends Fragment {
 	    t = (TextView) getView().findViewById(R.id.bssid);
 	    t.setText(network.BSSID);
 	    t = (TextView) getView().findViewById(R.id.capabilities);
-	    t.setText(network.capabilities);
+	    t.setText(ScanFragment.getCapabilitiesString(network.capabilities));
 	    t = (TextView) getView().findViewById(R.id.frequency);
 	    t.setText(String.valueOf(network.frequency));
 	    t = (TextView) getView().findViewById(R.id.level);
 	    t.setText(String.valueOf(network.level));
 	}
 	super.onResume();
-	ActionBarDetector.setUp(this.getActivity(), true, network.SSID);
+	ActionBarDetector.setUp(this.getActivity(), true, getActivity()
+		.getString(R.string.about_fragment_title_)
+		+ network.SSID);
     }
 
     public static AboutFragment newInstance(Bundle bundle) {

@@ -159,11 +159,17 @@ public class WifiFixerActivity extends FragmentActivity {
 	if (intent.getExtras() != null)
 
 	    /*
-	     * Pop open network list if started by widget
+	     * Show About Fragment either via fragment or otherwise
 	     */
 	    if (intent.hasExtra(SHOW_ABOUT)) {
-		showAboutFragment(intent
-			.getBundleExtra(getString(R.string.about_target)));
+		if (adapterFlag) {
+		    Intent i = new Intent(this, AboutFragmentActivity.class);
+		    i.putExtras(intent
+			    .getBundleExtra(getString(R.string.about_target)));
+		    startActivity(i);
+		} else
+		    showAboutFragment(intent
+			    .getBundleExtra(getString(R.string.about_target)));
 	    }
 
 	    /*
@@ -351,7 +357,7 @@ public class WifiFixerActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
 	if (!adapterFlag
-		&& getSupportFragmentManager().getBackStackEntryCount() ==1)
+		&& getSupportFragmentManager().getBackStackEntryCount() == 1)
 	    ActionBarDetector.setUp(this, false, getString(R.string.app_name));
 	super.onBackPressed();
     }

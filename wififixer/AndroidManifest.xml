@@ -42,6 +42,7 @@
 		<activity android:name=".ui.PrefActivity" />
 		<activity android:name=".ui.PrefActivityHC" />
 		<activity android:name=".ui.HelpActivity" />
+		<activity android:name=".ui.AboutFragmentActivity" />
 
 		<!--
 			Starts Boot thread service which waits 30s to run WifiFixerService

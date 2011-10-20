@@ -19,10 +19,17 @@
 		android:textAppearance="?android:attr/textAppearanceLarge" android:id="@+id/ssid"
 	    android:text="SSID"
 		android:layout_weight="0.04"></TextView>
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="fill_parent" android:orientation="vertical"
-		android:paddingTop="5dp" android:paddingLeft="8dp"
-		android:paddingRight="8dp" android:layout_height="wrap_content" android:weightSum="1">
+
+	<LinearLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center_horizontal"
+	    android:orientation="vertical"
+	    android:paddingLeft="8dp"
+	    android:paddingRight="8dp"
+	    android:paddingTop="5dp"
+	    android:weightSum="1" >
 
 		<LinearLayout
 		    android:id="@+id/LinearLayout00"

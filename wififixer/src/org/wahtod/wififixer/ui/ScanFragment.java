@@ -312,8 +312,8 @@ public class ScanFragment extends Fragment {
 	refreshArray(scan);
 	adapter.notifyDataSetChanged();
     }
-
-    private static String getCapabilitiesString(String capabilities) {
+    
+    public static String getCapabilitiesString(String capabilities) {
 
 	if (capabilities.contains(WEP))
 	    capabilities = WEP;

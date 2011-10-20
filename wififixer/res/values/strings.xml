@@ -260,6 +260,7 @@
 	<string name="about_activity_title">About</string>
 	<string name="help_activity_title">Help</string>
 	<string name="preferences_activity_title">Preferences</string>
+	<string name="about_fragment_title_">"About: "</string>
 
 
 </resources>
