@@ -52,6 +52,7 @@ public class ScanFragment extends Fragment {
     private static final String WPA = "WPA";
     private static final String WPA2 = "WPA2";
     private static final String WEP = "WEP";
+    private static final String OPEN = "OPEN";
     private WFScanResult clicked;
     private ScanListAdapter adapter;
     private ListView lv;
@@ -112,10 +113,12 @@ public class ScanFragment extends Fragment {
 	    break;
 
 	case CONTEXT_INFO:
-	    Intent i2 = new Intent(getContext(),WifiFixerActivity.class);
+	    Intent i2 = new Intent(getContext(), WifiFixerActivity.class);
 	    i2.putExtra(WifiFixerActivity.SHOW_ABOUT, true);
-	    i2.putExtra(getContext().getString(R.string.about_target),clicked.toBundle());
-	    LogService.log(getContext(), this.getClass().getName(),clicked.toBundle().toString());
+	    i2.putExtra(getContext().getString(R.string.about_target), clicked
+		    .toBundle());
+	    LogService.log(getContext(), this.getClass().getName(), clicked
+		    .toBundle().toString());
 	    i2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	    getContext().startActivity(i2);
 	    break;
@@ -312,16 +315,18 @@ public class ScanFragment extends Fragment {
 	refreshArray(scan);
 	adapter.notifyDataSetChanged();
     }
-    
-    public static String getCapabilitiesString(String capabilities) {
 
-	if (capabilities.contains(WEP))
+    public static String getCapabilitiesString(String capabilities) {
+	
+	if(capabilities.length()==0)
+	return OPEN;
+    else if (capabilities.contains(WEP))
 	    capabilities = WEP;
 	else if (capabilities.contains(WPA2))
 	    capabilities = WPA2;
 	else if (capabilities.contains(WPA))
 	    capabilities = WPA;
-
+	
 	return capabilities;
     }
 
