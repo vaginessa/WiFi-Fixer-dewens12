@@ -25,9 +25,9 @@ import android.view.MenuItem;
 public abstract class ActionBarDetector {
     private static ActionBarDetector selector;
 
-    public abstract void vSetUp(Activity a);
+    public abstract void vSetUp(Activity a, boolean state, String title);
 
-    public static void setUp(Activity a) {
+    public static void setUp(Activity a, boolean state, String title) {
 	/*
 	 * Add Action Bar home up
 	 */
@@ -40,10 +40,10 @@ public abstract class ActionBarDetector {
 	/*
 	 * If API exists, set policy
 	 */
-	selector.vSetUp(a);
+	selector.vSetUp(a, state, title);
 	return;
     }
-    
+
     public static boolean checkHasActionBar() {
 	try {
 	    Class.forName("android.app.ActionBar", true, Thread.currentThread()

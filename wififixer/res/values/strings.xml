@@ -257,6 +257,9 @@
 	<string name="remove">Remove</string>
 	<string name="removing_network">Removing Network:</string>
 	<string name="about_target">ABOUT_TARGET</string>
+	<string name="about_activity_title">About</string>
+	<string name="help_activity_title">Help</string>
+	<string name="preferences_activity_title">Preferences</string>
 
 
 </resources>

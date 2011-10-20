@@ -17,6 +17,7 @@
 package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.utility.WFScanResult;
 
 import android.os.Bundle;
@@ -58,6 +59,7 @@ public class AboutFragment extends Fragment {
 	    t.setText(String.valueOf(network.level));
 	}
 	super.onResume();
+	ActionBarDetector.setUp(this.getActivity(), true, network.SSID);
     }
 
     public static AboutFragment newInstance(Bundle bundle) {

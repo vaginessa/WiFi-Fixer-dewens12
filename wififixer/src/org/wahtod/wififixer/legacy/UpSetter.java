@@ -21,9 +21,11 @@ import android.app.Activity;
 public class UpSetter extends ActionBarDetector {
 
     @Override
-    public void vSetUp(Activity a) {
+    public void vSetUp(Activity a, boolean state, String title) {
 	ActionBar actionBar = a.getActionBar();
-	actionBar.setDisplayHomeAsUpEnabled(true);
+	actionBar.setDisplayHomeAsUpEnabled(state);
+	if (title != null)
+	    actionBar.setTitle(title);
 	return;
     }
 }

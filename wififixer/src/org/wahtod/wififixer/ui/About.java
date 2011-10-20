@@ -29,7 +29,8 @@ public class About extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.about);
-	ActionBarDetector.setUp(this);
+	ActionBarDetector.setUp(this, true,
+		getString(R.string.about_activity_title));
 	// Disable the nag if it's been read
 	if (!PrefUtil.readBoolean(this, WifiFixerActivity.sABOUT)) {
 	    PrefUtil.writeBoolean(this, WifiFixerActivity.sABOUT, true);

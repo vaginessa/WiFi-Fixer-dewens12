@@ -21,6 +21,7 @@ import java.io.File;
 import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WifiFixerService;
+import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.legacy.VersionedLogFile;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
@@ -347,6 +348,14 @@ public class WifiFixerActivity extends FragmentActivity {
 	}
     }
 
+    @Override
+    public void onBackPressed() {
+	if (!adapterFlag
+		&& getSupportFragmentManager().getBackStackEntryCount() ==1)
+	    ActionBarDetector.setUp(this, false, getString(R.string.app_name));
+	super.onBackPressed();
+    }
+
     // On Create
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -465,15 +474,17 @@ public class WifiFixerActivity extends FragmentActivity {
 	    Intent myIntent = new Intent(this, About.class);
 	    startActivity(myIntent);
 	    return true;
-	    
+
 	case android.R.id.home:
 	    FragmentManager fm = getSupportFragmentManager();
-		if(!adapterFlag){
-		    StatusFragment snf = new StatusFragment();
-			FragmentTransaction ft = fm.beginTransaction();
-			ft.replace(R.id.statusfragment, snf, STATUSFRAG_TAG);
-			ft.commit();
-		}
+	    if (!adapterFlag) {
+		FragmentTransaction ft = fm.beginTransaction();
+		while (fm.getBackStackEntryCount() > 0)
+		    fm.popBackStackImmediate();
+		ft.commit();
+		ActionBarDetector.setUp(this, false,
+			getString(R.string.app_name));
+	    }
 	}
 	return false;
     }
@@ -487,6 +498,7 @@ public class WifiFixerActivity extends FragmentActivity {
     @Override
     public void onResume() {
 	super.onResume();
+
 	if (optionsmenu != null)
 	    onPrepareOptionsMenu(optionsmenu);
     }

@@ -50,10 +50,11 @@ public class HelpActivity extends FragmentActivity {
 	websettings.setSupportZoom(false);
 	websettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 	webview.loadUrl("file:///android_asset/index.html");
-	
-	ActionBarDetector.setUp(this);
+
+	ActionBarDetector.setUp(this, true,
+		getString(R.string.help_activity_title));
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 	ActionBarDetector.handleHome(this, item);
