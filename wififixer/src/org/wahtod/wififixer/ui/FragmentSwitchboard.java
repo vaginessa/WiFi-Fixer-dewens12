@@ -25,11 +25,13 @@ public abstract class FragmentSwitchboard extends Fragment {
 
     public static FragmentSwitchboard newInstance(Bundle bundle) {
 	String s = bundle.getString(FRAGMENT_KEY);
+	if (s == null)
+	    return AboutFragment.newInstance(bundle);
 	if (s.equals(AboutFragment.class.getName()))
 	    return AboutFragment.newInstance(bundle);
 	else if (s.equals(ConnectFragment.class.getName()))
 	    return ConnectFragment.newInstance(bundle);
 	else
-	    return null;
+	    return AboutFragment.newInstance(bundle);
     }
 }

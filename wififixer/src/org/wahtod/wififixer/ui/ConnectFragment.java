@@ -61,12 +61,17 @@ public class ConnectFragment extends FragmentSwitchboard {
 		    InputMethodManager imm = (InputMethodManager) getActivity()
 			    .getSystemService(Context.INPUT_METHOD_SERVICE);
 		    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-		    FragmentManager fm = getActivity()
-			    .getSupportFragmentManager();
-		    fm.popBackStack();
-		    ActionBarDetector.setUp(getActivity(), false, null);
+		    if (getActivity().getClass().equals(
+			    GenericFragmentActivity.class))
+			getActivity().finish();
+		    else {
+			FragmentManager fm = getActivity()
+				.getSupportFragmentManager();
+			fm.popBackStack();
+			ActionBarDetector.setUp(getActivity(), false, null);
+		    }
 		}
-		return false;
+		return true;
 	    }
 	});
 	return v;

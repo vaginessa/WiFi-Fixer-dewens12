@@ -79,7 +79,6 @@ public class KnownNetworksFragment extends Fragment {
 	registerContextMenu();
 	return v;
     }
-
     @Override
     public void onDestroyView() {
 	this.unregisterForContextMenu(lv);

@@ -45,7 +45,7 @@ public final class ServiceAlarm extends Object {
 	return (createPendingIntent(c, PendingIntent.FLAG_NO_CREATE) != null);
     }
 
-    public static PendingIntent createPendingIntent(final Context context,
+    private static PendingIntent createPendingIntent(final Context context,
 	    final int flag) {
 	Intent intent = new Intent(context, WifiFixerService.class);
 	intent.setFlags(Intent.FLAG_FROM_BACKGROUND);

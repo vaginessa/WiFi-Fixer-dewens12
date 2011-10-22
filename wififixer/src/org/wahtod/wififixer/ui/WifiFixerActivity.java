@@ -48,6 +48,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,12 +63,10 @@ public class WifiFixerActivity extends FragmentActivity {
     public boolean loggingFlag = false;
 
     private Menu optionsmenu;
-
-    ViewPager vpager;
-    FPAdapter fadapter;
     public boolean adapterFlag;
 
-    public static class FPAdapter extends FragmentPagerAdapter {
+    public class FPAdapter extends FragmentPagerAdapter {
+
 	public FPAdapter(FragmentManager fm) {
 	    super(fm);
 	}
@@ -162,6 +161,7 @@ public class WifiFixerActivity extends FragmentActivity {
 	     * Show About Fragment either via fragment or otherwise
 	     */
 	    if (intent.hasExtra(SHOW_FRAGMENT)) {
+		intent.removeExtra(SHOW_FRAGMENT);
 		if (adapterFlag) {
 		    Intent i = new Intent(this, GenericFragmentActivity.class);
 		    i.putExtras(intent);
@@ -172,8 +172,15 @@ public class WifiFixerActivity extends FragmentActivity {
 	    /*
 	     * Delete Log if called by preference
 	     */
-	    else if (intent.hasExtra(DELETE_LOG))
+	    else if (intent.hasExtra(DELETE_LOG)){
+		intent.removeExtra(DELETE_LOG);
 		deleteLog();
+	    }
+	/*
+	 * Set Activity intent to one without 
+	 * commands we've "consumed"
+	 */
+	setIntent(intent);
     }
 
     private void invalidateServiceFragment() {
@@ -359,24 +366,26 @@ public class WifiFixerActivity extends FragmentActivity {
 	super.onBackPressed();
     }
 
-    // On Create
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-	setTitle(R.string.app_name);
-	setContentView(R.layout.main);
-	super.onCreate(savedInstanceState);
+    public void drawUI(Bundle savedinstanceState) {
+	ViewPager vp = (ViewPager) findViewById(R.id.pager);
 
-	if (findViewById(R.id.pager) != null && vpager == null) {
+	if (vp != null) {
 	    adapterFlag = true;
 	    /*
 	     * First do small screen setup instantiate adapter and viewpager
 	     */
-	    fadapter = new FPAdapter(getSupportFragmentManager());
-	    vpager = (ViewPager) findViewById(R.id.pager);
-	    vpager.setAdapter(fadapter);
+
+	    if (vp.getAdapter() == null) {
+		FPAdapter fadapter = new FPAdapter(getSupportFragmentManager());
+		vp.setAdapter(fadapter);
+
+	    }
 	}
 
-	if (savedInstanceState == null) {
+	/*
+	 * Handle Fragments
+	 */
+	if (savedinstanceState == null) {
 	    FragmentManager fm = getSupportFragmentManager();
 	    ServiceFragment sf = new ServiceFragment();
 	    FragmentTransaction ft = fm.beginTransaction();
@@ -398,6 +407,19 @@ public class WifiFixerActivity extends FragmentActivity {
 	    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 	    ft.commit();
 	}
+    }
+
+    // On Create
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+	if(savedInstanceState != null){
+	    Log.i(this.getClass().getName(),savedInstanceState.keySet().toString());
+	    Log.i(this.getClass().getName(),savedInstanceState.toString());
+	}
+	super.onCreate(savedInstanceState);
+	setTitle(R.string.app_name);
+	setContentView(R.layout.main);
+	drawUI(savedInstanceState);
 	oncreate_setup();
 	/*
 	 * Handle intent command if destroyed or first start
@@ -407,6 +429,7 @@ public class WifiFixerActivity extends FragmentActivity {
 	 * Make sure service settings are enforced.
 	 */
 	ServiceAlarm.enforceServicePrefs(this);
+
     };
 
     private void oncreate_setup() {
@@ -433,7 +456,6 @@ public class WifiFixerActivity extends FragmentActivity {
     @Override
     protected void onNewIntent(Intent intent) {
 	super.onNewIntent(intent);
-	setIntent(intent);
 	handleIntent(intent);
     }
 

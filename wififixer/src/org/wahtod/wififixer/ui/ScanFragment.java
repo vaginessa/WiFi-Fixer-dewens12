@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -391,5 +392,24 @@ public class ScanFragment extends Fragment {
     private void unregisterReceiver() {
 	getContext().unregisterReceiver(receiver);
     }
+
+    @Override
+    public void onDetach() {
+	Log.i(this.getClass().getName(),"OnDetatch");
+	super.onDetach();
+    }
+
+    @Override
+    public void onDestroyView() {
+	Log.i(this.getClass().getName(),"DestroyView");
+	super.onDestroyView();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+	Log.i(this.getClass().getName(),String.valueOf(hidden));
+	super.onHiddenChanged(hidden);
+    }
+    
 
 }
