@@ -126,10 +126,9 @@ public class Hostup {
 	 */
 	self = Thread.currentThread();
 	Thread tgetHeaders = new Thread(new GetHeaders());
-	tgetHeaders.start();
-
 	Thread tgetICMP = new Thread(new GetICMP());
 	tgetICMP.start();
+	tgetHeaders.start();
 
 	try {
 	    Thread.sleep(reachable);
