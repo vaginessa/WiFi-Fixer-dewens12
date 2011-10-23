@@ -1361,7 +1361,7 @@ public class WFConnection extends Object implements
 	 */
 
 	boolean isup = networkUp(context);
-	if (!isup)
+	if (isup && wifirepair != W_REASSOCIATE)
 	    wifirepair = W_REASSOCIATE;
 
 	return isup;
