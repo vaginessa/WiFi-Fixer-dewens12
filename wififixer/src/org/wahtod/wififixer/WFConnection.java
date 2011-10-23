@@ -730,7 +730,9 @@ public class WFConnection extends Object implements
 	 * First with router, then with google
 	 */
 
-	isup = hostup(context);
+	isup = networkUp(context);
+	if (isup && wifirepair != W_REASSOCIATE)
+	    wifirepair = W_REASSOCIATE;
 
 	/*
 	 * Signal check
@@ -1353,18 +1355,6 @@ public class WFConnection extends Object implements
 		return false;
 	}
 	return true;
-    }
-
-    private static boolean hostup(final Context context) {
-	/*
-	 * Now one single method
-	 */
-
-	boolean isup = networkUp(context);
-	if (isup && wifirepair != W_REASSOCIATE)
-	    wifirepair = W_REASSOCIATE;
-
-	return isup;
     }
 
     private static boolean networkUp(final Context context) {
