@@ -51,4 +51,12 @@
         <requestFocus />
     </EditText>
 
+    <Button
+        android:id="@+id/connect"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:alpha="30"
+        android:text="Connect" />
+
 </LinearLayout>

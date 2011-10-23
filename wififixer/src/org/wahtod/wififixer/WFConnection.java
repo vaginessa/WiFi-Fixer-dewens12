@@ -680,6 +680,38 @@ public class WFConnection extends Object implements
 	}
     }
 
+    private void clearHandler() {
+	if (handler.hasMessages(MAIN))
+	    handler.removeMessages(MAIN);
+	else if (handler.hasMessages(REPAIR))
+	    handler.removeMessages(REPAIR);
+	else if (handler.hasMessages(RECONNECT))
+	    handler.removeMessages(RECONNECT);
+	else if (handler.hasMessages(WIFITASK))
+	    handler.removeMessages(WIFITASK);
+	else if (handler.hasMessages(SLEEPCHECK))
+	    handler.removeMessages(SLEEPCHECK);
+	else if (handler.hasMessages(SCAN))
+	    handler.removeMessages(SCAN);
+	else if (handler.hasMessages(N1CHECK))
+	    handler.removeMessages(N1CHECK);
+	else if (handler.hasMessages(SIGNALHOP))
+	    handler.removeMessages(SIGNALHOP);
+	else if (handler.hasMessages(SCANWATCHDOG))
+	    handler.removeMessages(SCANWATCHDOG);
+	/*
+	 * Also clear all relevant flags
+	 */
+	shouldrepair = false;
+	pendingreconnect = false;
+    }
+
+    private static void clearConnectedStatus(final String state) {
+	notifStatus = state;
+	notifSignal = 0;
+	notifSSID = EMPTYSTRING;
+    }
+
     private static boolean checkNetwork(final Context context) {
 	boolean isup = false;
 
@@ -723,38 +755,6 @@ public class WFConnection extends Object implements
 	}
 
 	return isup;
-    }
-
-    private void clearHandler() {
-	if (handler.hasMessages(MAIN))
-	    handler.removeMessages(MAIN);
-	else if (handler.hasMessages(REPAIR))
-	    handler.removeMessages(REPAIR);
-	else if (handler.hasMessages(RECONNECT))
-	    handler.removeMessages(RECONNECT);
-	else if (handler.hasMessages(WIFITASK))
-	    handler.removeMessages(WIFITASK);
-	else if (handler.hasMessages(SLEEPCHECK))
-	    handler.removeMessages(SLEEPCHECK);
-	else if (handler.hasMessages(SCAN))
-	    handler.removeMessages(SCAN);
-	else if (handler.hasMessages(N1CHECK))
-	    handler.removeMessages(N1CHECK);
-	else if (handler.hasMessages(SIGNALHOP))
-	    handler.removeMessages(SIGNALHOP);
-	else if (handler.hasMessages(SCANWATCHDOG))
-	    handler.removeMessages(SCANWATCHDOG);
-	/*
-	 * Also clear all relevant flags
-	 */
-	shouldrepair = false;
-	pendingreconnect = false;
-    }
-
-    private static void clearConnectedStatus(final String state) {
-	notifStatus = state;
-	notifSignal = 0;
-	notifSSID = EMPTYSTRING;
     }
 
     private static void checkSignal(final Context context) {
@@ -1438,7 +1438,9 @@ public class WFConnection extends Object implements
 		    + accesspointIP);
 
 	try {
-	    if (InetAddress.getByName(accesspointIP).isReachable(REACHABLE)) {
+	    if (InetAddress.getByName(accesspointIP).isReachable(REACHABLE)
+		    && InetAddress.getByName(
+			    context.getString(R.string.dns_check_target)).getHostAddress() != null) {
 		isUp = true;
 		if (prefs.getFlag(Pref.LOG_KEY))
 		    LogService.log(context, appname, context

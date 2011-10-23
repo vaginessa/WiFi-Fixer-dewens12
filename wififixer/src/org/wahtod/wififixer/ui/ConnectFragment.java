@@ -27,53 +27,26 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
-public class ConnectFragment extends FragmentSwitchboard {
+public class ConnectFragment extends FragmentSwitchboard implements
+	OnClickListener {
 
     private WFScanResult network;
-    private EditText edit;
-    private String password;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
 	View v = inflater.inflate(R.layout.connect_fragment, null);
-	edit = (EditText) v.findViewById(R.id.password);
-	edit.setOnEditorActionListener(new OnEditorActionListener() {
-
-	    @Override
-	    public boolean onEditorAction(TextView v, int actionId,
-		    KeyEvent event) {
-		Log.i(this.getClass().getName(), String.valueOf(actionId));
-		if (actionId == EditorInfo.IME_ACTION_NEXT
-			|| actionId == EditorInfo.IME_ACTION_DONE) {
-		    password = String.valueOf(v.getText());
-		    requestConnect(password);
-		    InputMethodManager imm = (InputMethodManager) getActivity()
-			    .getSystemService(Context.INPUT_METHOD_SERVICE);
-		    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-		    if (getActivity().getClass().equals(
-			    GenericFragmentActivity.class))
-			getActivity().finish();
-		    else {
-			FragmentManager fm = getActivity()
-				.getSupportFragmentManager();
-			fm.popBackStack();
-			ActionBarDetector.setUp(getActivity(), false, null);
-		    }
-		}
-		return true;
-	    }
-	});
+	Button b = (Button) v.findViewById(R.id.connect);
+	b.setOnClickListener(this);
 	return v;
     }
 
@@ -119,5 +92,26 @@ public class ConnectFragment extends FragmentSwitchboard {
 	ConnectFragment f = new ConnectFragment();
 	f.setArguments(bundle);
 	return f;
+    }
+
+    public void onClick(View v) {
+	View e = ((View) v.getParent()).findViewById(R.id.password);
+	String password;
+	try {
+	    password = String.valueOf(((EditText) e).getText());
+	} catch (NullPointerException e1) {
+	    password = "";
+	}
+	requestConnect(password);
+	InputMethodManager imm = (InputMethodManager) getActivity()
+		.getSystemService(Context.INPUT_METHOD_SERVICE);
+	imm.hideSoftInputFromWindow(e.getWindowToken(), 0);
+	if (getActivity().getClass().equals(GenericFragmentActivity.class))
+	    getActivity().finish();
+	else {
+	    FragmentManager fm = getActivity().getSupportFragmentManager();
+	    fm.popBackStack();
+	    ActionBarDetector.setUp(getActivity(), false, null);
+	}
     }
 }
