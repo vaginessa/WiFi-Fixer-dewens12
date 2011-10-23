@@ -15,9 +15,6 @@
  */
 package org.wahtod.wififixer;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,16 +24,16 @@ import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
-import org.wahtod.wififixer.utility.HttpHostup;
+import org.wahtod.wififixer.utility.Hostup;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ScreenStateDetector;
 import org.wahtod.wififixer.utility.StatusDispatcher;
+import org.wahtod.wififixer.utility.StatusMessage;
 import org.wahtod.wififixer.utility.WFConfig;
 import org.wahtod.wififixer.utility.WakeLock;
 import org.wahtod.wififixer.utility.WifiLock;
 import org.wahtod.wififixer.utility.ScreenStateDetector.OnScreenStateChangedListener;
-import org.wahtod.wififixer.utility.StatusMessage;
 import org.wahtod.wififixer.widget.WidgetHandler;
 
 import android.app.PendingIntent;
@@ -151,7 +148,7 @@ public class WFConnection extends Object implements
 
     private static WifiManager wm;
     private static WFConfig connectee;
-    private static HttpHostup httphostup;
+    private static Hostup hostup;
     private static List<WFConfig> knownbysignal;
     private static String lastSupplicantState;
     private static int signalcache;
@@ -1360,50 +1357,47 @@ public class WFConnection extends Object implements
 
     private static boolean hostup(final Context context) {
 	/*
-	 * No longer a failover, always icmp first, then http
+	 * Now one single method
 	 */
 
-	boolean isup = icmpHostup(context);
-	if (!isup) {
-	    isup = httpHostup(context);
-	    if (isup)
-		wifirepair = W_REASSOCIATE;
-	} else
+	boolean isup = networkUp(context);
+	if (!isup)
 	    wifirepair = W_REASSOCIATE;
 
 	return isup;
     }
 
-    private static boolean httpHostup(final Context context) {
+    private static boolean networkUp(final Context context) {
 	String isUp = null;
 	/*
-	 * Instantiate httphostup if it's not already instantiated
+	 * Instantiate hostup if it's not already instantiated
 	 */
-	if (httphostup == null)
-	    httphostup = new HttpHostup();
+	if (hostup == null)
+	    hostup = new Hostup();
 	/*
-	 * httphostup.getHostup does all the heavy lifting
+	 * hostup.getHostup does all the heavy lifting
 	 */
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(context, appname, context
-		    .getString(R.string.http_method));
+		    .getString(R.string.network_check));
 
 	/*
-	 * Try HTTP HEAD to access point first
+	 * Launches ICMP/HTTP HEAD check threads which compete for successful
+	 * state return.
 	 */
-	isUp = httphostup.getHostup(REACHABLE, context, context
+	isUp = hostup.getHostup(REACHABLE, context, context
 		.getString(R.string.http)
 		+ accesspointIP);
 	if (isUp == null)
-	    isUp = httphostup.getHostup(REACHABLE, context, null);
+	    isUp = hostup.getHostup(REACHABLE, context, null);
 
 	if (prefs.getFlag(Pref.LOG_KEY)) {
 	    if (isUp != null)
 		LogService.log(context, appname, isUp
 			+ context.getString(R.string.responded));
 	    else
-		LogService.log(context, appname, context
-			.getString(R.string.http_failure));
+		LogService.log(context, appname, isUp
+			+ context.getString(R.string.network_check_failed));
 	}
 
 	if (isUp == null)
@@ -1422,40 +1416,6 @@ public class WFConnection extends Object implements
 	    LogService.log(context, appname, context
 		    .getString(R.string.cached_ip)
 		    + accesspointIP);
-    }
-
-    private static boolean icmpHostup(final Context context) {
-	boolean isUp = false;
-	/*
-	 * If IP hasn't been cached yet cache it
-	 */
-	if (accesspointIP == null)
-	    icmpCache(context);
-
-	if (prefs.getFlag(Pref.LOG_KEY))
-	    LogService.log(context, appname, context
-		    .getString(R.string.icmp_method)
-		    + accesspointIP);
-
-	try {
-	    if (InetAddress.getByName(accesspointIP).isReachable(REACHABLE)
-		    && InetAddress.getByName(
-			    context.getString(R.string.dns_check_target)).getHostAddress() != null) {
-		isUp = true;
-		if (prefs.getFlag(Pref.LOG_KEY))
-		    LogService.log(context, appname, context
-			    .getString(R.string.icmp_success));
-	    }
-	} catch (UnknownHostException e) {
-	    if (prefs.getFlag(Pref.LOG_KEY))
-		LogService.log(context, appname, context
-			.getString(R.string.unknown_host_exception));
-	} catch (IOException e) {
-	    if (prefs.getFlag(Pref.LOG_KEY))
-		LogService.log(context, appname, context
-			.getString(R.string.ioexception));
-	}
-	return isUp;
     }
 
     private static void logBestNetwork(final Context context,

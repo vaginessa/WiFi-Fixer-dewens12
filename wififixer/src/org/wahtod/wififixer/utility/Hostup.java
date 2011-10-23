@@ -17,8 +17,10 @@ package org.wahtod.wififixer.utility;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpHead;
@@ -26,31 +28,34 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.wahtod.wififixer.R;
 import android.content.Context;
 
-public class HttpHostup {
+public class Hostup {
 
     /*
-     * The reason for this odd class is that under some circumstances,
-     * HttpClient ignores its timeouts and must be nulled
+     * getHostUp method: Executes 2 threads, icmp check and http check one
+     * returns true/false state and is returned or times out and returns false
      */
 
+    private final static int REACHABLE = 4000;
     private static volatile DefaultHttpClient httpclient;
     private static volatile HttpParams httpparams;
     private static HttpHead head;
     private static volatile HttpResponse response;
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
-    private static String target = H_TARGET;
+    private static String target;
     private static final int TIMEOUT_EXTRA = 2000;
     private static URI headURI;
     private static int reachable;
     private static Context context;
     private volatile static boolean state;
     private Thread self;
+    private static String accesspointIP;
 
     /*
-     * Thread for header check
+     * for http header check thread
      */
     private class GetHeaders implements Runnable {
 	public void run() {
@@ -71,11 +76,27 @@ public class HttpHostup {
 	}
     };
 
-    public synchronized String getHostup(final int timeout, final Context ctxt,
-	    final String router) {
+    /*
+     * for icmp check thread
+     */
+    private class GetICMP implements Runnable {
+	public void run() {
 
+	    state = icmpHostup(context);
+	    /*
+	     * Interrupt waiting thread since we have a result
+	     */
+	    self.interrupt();
+
+	}
+    };
+
+    public synchronized String getHostup(final int timeout, Context ctxt,
+	    final String router) {
+	context = ctxt;
+	accesspointIP = router.substring(7, router.length());
 	/*
-	 * If null, use H_TARGET else try to construct URL from router string
+	 * If null, use H_TARGET else construct URL from router string
 	 */
 	if (router == null)
 	    target = H_TARGET;
@@ -101,11 +122,14 @@ public class HttpHostup {
 
 	reachable = timeout + TIMEOUT_EXTRA;
 	/*
-	 * Header Check Thread
+	 * Start Check Threads
 	 */
 	self = Thread.currentThread();
 	Thread tgetHeaders = new Thread(new GetHeaders());
 	tgetHeaders.start();
+
+	Thread tgetICMP = new Thread(new GetICMP());
+	tgetICMP.start();
 
 	try {
 	    Thread.sleep(reachable);
@@ -121,11 +145,32 @@ public class HttpHostup {
 		return null;
 	} catch (InterruptedException e) {
 	    /*
-	     * rHttpHead interrupted: this is desired behavior
+	     * interrupted by a result: this is desired behavior
 	     */
 	    return target;
 	}
 
+    }
+
+    private static boolean icmpHostup(final Context context) {
+	boolean isUp = false;
+
+	try {
+	    if (InetAddress.getByName(accesspointIP).isReachable(REACHABLE))
+		isUp = true;
+
+	} catch (UnknownHostException e) {
+
+	} catch (IOException e) {
+
+	}
+
+	if (isUp)
+	    target = target + context.getString(R.string.icmp_ok);
+	else
+	    target = target + context.getString(R.string.icmp_fail);
+
+	return isUp;
     }
 
     /*
@@ -159,13 +204,17 @@ public class HttpHostup {
 	    // httpclient in bad state, reset
 	    status = -1;
 	    httpclient = null;
+	    target = target + context.getString(R.string.http_fail);
 	    return false;
 	}
 
-	if (status == HttpURLConnection.HTTP_OK)
+	if (status == HttpURLConnection.HTTP_OK) {
+	    target = target + context.getString(R.string.http_ok);
 	    return true;
-	else
+	} else {
+	    target = target + context.getString(R.string.http_fail);
 	    return false;
+	}
     }
 
 }
