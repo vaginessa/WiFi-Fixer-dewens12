@@ -86,8 +86,9 @@ public class FixerWidget extends AppWidgetProvider {
 			.getString(NotifUtil.SSID_KEY));
 		remoteViews.setTextViewText(R.id.status, data
 			.getString(NotifUtil.STATUS_KEY));
-		remoteViews.setImageViewResource(R.id.signal, getIcon(data
-			.getInt(NotifUtil.SIGNAL_KEY)));
+		remoteViews.setImageViewResource(R.id.signal, NotifUtil
+			.getIconfromSignal(data.getInt(NotifUtil.SIGNAL_KEY),
+				NotifUtil.ICON_SET_LARGE));
 		int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
 			this, FixerWidget.class));
 		for (int n = 0; n < ids.length; n++)
@@ -135,28 +136,6 @@ public class FixerWidget extends AppWidgetProvider {
 
 	}
 
-    }
-
-    public static int getIcon(final int signal) {
-	switch (signal) {
-	case 0:
-	    return R.drawable.signal0;
-
-	case 1:
-	    return R.drawable.signal1;
-
-	case 2:
-	    return R.drawable.signal2;
-
-	case 3:
-	    return R.drawable.signal3;
-
-	case 4:
-	    return R.drawable.signal4;
-
-	}
-
-	return 0;
     }
 
     public static RemoteViews doUpdate(Context context) {

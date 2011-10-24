@@ -56,6 +56,12 @@ public abstract class NotifUtil {
     public static final String SSID_KEY = "SSID";
     public static final String STATUS_KEY = "STATUS";
     public static final String SIGNAL_KEY = "SIGNAL";
+    
+    /*
+     * Icon type for getIconfromSignal()
+     */
+    public static final int ICON_SET_SMALL = 0;
+    public static final int ICON_SET_LARGE = 1;
 
     /*
      * Cache appropriate NotifUtil
@@ -123,22 +129,37 @@ public abstract class NotifUtil {
 	}
     }
 
-    public static int getIconfromSignal(int signal) {
+    public static int getIconfromSignal(int signal, int iconset) {
 	switch (signal) {
 	case 0:
-	    signal = R.drawable.signal0;
+	    if(iconset == ICON_SET_SMALL)
+		signal = R.drawable.statsignal0;
+	    else
+		signal = R.drawable.signal0;
 	    break;
 	case 1:
-	    signal = R.drawable.signal1;
+	    if(iconset == ICON_SET_SMALL)
+		signal = R.drawable.statsignal1;
+	    else
+		signal = R.drawable.signal1;
 	    break;
 	case 2:
-	    signal = R.drawable.signal2;
+	    if(iconset == ICON_SET_SMALL)
+		signal = R.drawable.statsignal2;
+	    else
+		signal = R.drawable.signal2;
 	    break;
 	case 3:
-	    signal = R.drawable.signal3;
+	    if(iconset == ICON_SET_SMALL)
+		signal = R.drawable.statsignal3;
+	    else
+		signal = R.drawable.signal3;
 	    break;
 	case 4:
-	    signal = R.drawable.signal4;
+	    if(iconset == ICON_SET_SMALL)
+		signal = R.drawable.statsignal4;
+	    else
+		signal = R.drawable.signal4;
 	    break;
 	}
 	return signal;

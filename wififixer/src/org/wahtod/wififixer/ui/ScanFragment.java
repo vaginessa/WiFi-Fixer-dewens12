@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
 
 import android.content.BroadcastReceiver;
@@ -194,23 +195,8 @@ public class ScanFragment extends Fragment {
 	    int adjusted = WifiManager.calculateSignalLevel(scanresultArray
 		    .get(position).level, 5);
 
-	    switch (adjusted) {
-	    case 0:
-		holder.icon.setImageResource(R.drawable.statsignal0);
-		break;
-	    case 1:
-		holder.icon.setImageResource(R.drawable.statsignal1);
-		break;
-	    case 2:
-		holder.icon.setImageResource(R.drawable.statsignal2);
-		break;
-	    case 3:
-		holder.icon.setImageResource(R.drawable.statsignal3);
-		break;
-	    case 4:
-		holder.icon.setImageResource(R.drawable.statsignal4);
-		break;
-	    }
+	    holder.icon.setImageResource(NotifUtil.getIconfromSignal(adjusted,
+		    NotifUtil.ICON_SET_SMALL));
 
 	    /*
 	     * Set security icon and encryption text
@@ -373,7 +359,6 @@ public class ScanFragment extends Fragment {
 	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 		    int position, long id) {
 		clicked = adapter.scanresultArray.get(position);
-		;
 		return false;
 	    }
 

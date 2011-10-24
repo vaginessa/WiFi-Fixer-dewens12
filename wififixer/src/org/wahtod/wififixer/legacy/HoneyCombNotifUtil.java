@@ -62,8 +62,8 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	RemoteViews update = new RemoteViews(ctxt.getPackageName(),
 		R.layout.statnotif);
 	NotifUtil.statnotif.iconLevel = signal;
-	update.setImageViewResource(R.id.signal, NotifUtil
-		.getIconfromSignal(signal));
+	update.setImageViewResource(R.id.signal, getIconfromSignal(signal,
+		NotifUtil.ICON_SET_LARGE));
 	update.setTextViewText(R.id.ssid, truncateSSID(ssid));
 	update.setTextViewText(R.id.status, status);
 	NotifUtil.statnotif.contentView = update;

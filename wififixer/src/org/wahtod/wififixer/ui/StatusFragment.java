@@ -121,12 +121,11 @@ public class StatusFragment extends Fragment {
 	    dbm.setText(String.valueOf(info.getRssi()));
 	    capabilities.setText(String.valueOf(info.getLinkSpeed()));
 	    status.setText(info.getSupplicantState().name());
-	    signal.setBackgroundResource(NotifUtil
-		    .getIconfromSignal(WifiManager.calculateSignalLevel(info
-			    .getRssi(), 5)));
+	    signal.setBackgroundResource(NotifUtil.getIconfromSignal(
+		    WifiManager.calculateSignalLevel(info.getRssi(), 5),
+		    NotifUtil.ICON_SET_LARGE));
 	}
 
 	drawhandler.sendEmptyMessageDelayed(REFRESH, REFRESH_DELAY);
     }
-
 }
