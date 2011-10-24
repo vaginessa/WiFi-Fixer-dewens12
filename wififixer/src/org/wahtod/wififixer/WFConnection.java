@@ -1846,9 +1846,6 @@ public class WFConnection extends Object implements
 	try {
 	    ssid = (String) ssid.subSequence(1, ssid.length() - 1);
 	} catch (IndexOutOfBoundsException e) {
-	    if (prefs.getFlag(Pref.LOG_KEY))
-		LogService.log(ctxt, appname, ctxt
-			.getString(R.string.indexoutofbounds_in_removequotes));
 	    return EMPTYSTRING;
 	}
 	return ssid;

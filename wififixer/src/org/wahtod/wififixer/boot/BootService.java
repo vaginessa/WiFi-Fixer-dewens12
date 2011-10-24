@@ -16,7 +16,6 @@
 
 package org.wahtod.wififixer.boot;
 
-import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WifiFixerService;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 
@@ -24,7 +23,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
 public class BootService extends Service {
     private Context ctxt;
@@ -39,8 +37,9 @@ public class BootService extends Service {
 	    try {
 		Thread.sleep(ServiceAlarm.STARTDELAY);
 	    } catch (InterruptedException e) {
-		Log.i(ctxt.getString(R.string.broadcasthandler), ctxt
-			.getString(R.string.t_interrupt));
+		/*
+		 * Doesn't happen
+		 */
 	    }
 
 	    /**

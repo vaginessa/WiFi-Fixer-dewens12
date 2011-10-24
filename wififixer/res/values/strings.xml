@@ -82,8 +82,6 @@
     <string name="parsing_scan_results">Parsing Scan Results</string>
     <string name="null_scan_results">Null Scan Results</string>
     <string name="cached_ip">Cached IP:</string>
-    <string name="icmp_method">ICMP Method:</string>
-    <string name="ioexception">IOException</string>
     <string name="wifi_state_unknown">WIFI_STATE_UNKNOWN</string>
     <string name="wifi_state_disabled">WIFI_STATE_DISABLED</string>
     <string name="wifi_state_enabled">WIFI_STATE_ENABLED</string>
@@ -144,7 +142,6 @@
     <string name="low_memory">Low Memory</string>
     <string name="knownbysignal_empty_exiting">KnownbySignal Empty, Exiting</string>
     <string name="error_allocating_buffered_writer">Error allocating buffered writer:</string>
-    <string name="unknown_host_exception">Unknown Host Exception</string>
     <string name="mimetype_text_plain">text/plain</string>
     <string name="unmanaged">-U- </string>
     <string name="scan_mode">Should be in normal scan mode</string>
@@ -153,7 +150,6 @@
 		collect at least 10 minutes of data.</string>
     <string name="ok_button">OK</string>
     <string name="cancel_button">Cancel</string>
-    <string name="broadcasthandler">BroadCastHandler</string>
     <string name="t_interrupt">Startup Thread Interrupted</string>
     <string name="null_ssid">NULL_SSID</string>
     <string name="http">http://</string>
@@ -179,8 +175,7 @@
     <string name="state">State:</string>
     <string name="resource">resource</string>
     <string name="xml">xml</string>
-    <string name="indexoutofbounds_in_removequotes">IndexOutOfBounds in removeQuotes</string>
-    <string name="SCREEN_summary">Checks wifi when screen is off which will use
+    <string name="SCREEN_summary">Network checks when screen is off: will use
 		slightly more battery</string>
     <string name="SCREEN_title">Manage During Sleep</string>
     <string name="Disable_title">Disable Service</string>
@@ -196,7 +191,7 @@
     <string name="WIDGET_title">Widget Behavior</string>
     <string name="WIDGET_summary">Selects widget behavior</string>
     <string name="WiFiLock_title">Enable Wifi Lock</string>
-    <string name="WifiLock_summary">Enables Wifi Lock, which will increase battery use</string>
+    <string name="WifiLock_summary">Enables Wifi Lock: will increase battery use</string>
     <string name="SLEEP_POLICY_title">Wifi Sleep Policy</string>
     <string name="SLEEP_POLICY_summary">Controls Wifi sleep policy: See Known Issues in Documentation</string>
     <string name="N1FIX2_title">Nexus One Sleep Fix</string>
