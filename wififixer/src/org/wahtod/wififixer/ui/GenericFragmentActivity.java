@@ -17,6 +17,7 @@
 package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.utility.WFScanResult;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,7 +31,7 @@ public class GenericFragmentActivity extends FragmentActivity {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.fragment_container);
 	Bundle bundle = getIntent().getExtras();
-	if (bundle != null) {
+	if (bundle.containsKey(WFScanResult.BUNDLE_KEY)) {
 	    Fragment f = FragmentSwitchboard.newInstance(bundle);
 	    FragmentManager fm = getSupportFragmentManager();
 	    FragmentTransaction ft = fm.beginTransaction();

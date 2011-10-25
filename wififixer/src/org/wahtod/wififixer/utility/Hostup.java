@@ -33,14 +33,15 @@ import android.content.Context;
 public class Hostup {
 
     /*
-     * getHostUp method: Executes 2 threads, icmp check and http check one
-     * returns true/false state and is returned or times out and returns false
+     * getHostUp method: Executes 2 threads, icmp check and http check first
+     * thread to return state "wins"
      */
 
-    private final static int REACHABLE = 4000;
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
     private static final String SERVICE_TAG = "WifiFixerService";
+    private static final String INET_LOOPBACK = "127.0.0.1";
+    private static final String INET_INVALID = "0.0.0.0";
     private static String target;
     private static String response;
     private static final int TIMEOUT_EXTRA = 2000;
@@ -52,6 +53,7 @@ public class Hostup {
     private Thread self;
     private static String icmpIP;
     private static long timer;
+    private static DefaultHttpClient httpclient;
 
     /*
      * for http header check thread
@@ -115,8 +117,10 @@ public class Hostup {
 	 */
 	self = Thread.currentThread();
 	Thread tgetHeaders = new Thread(new GetHeaders());
-	Thread tgetICMP = new Thread(new GetICMP());
-	tgetICMP.start();
+	if (!icmpIP.equals(INET_LOOPBACK) && !icmpIP.equals(INET_INVALID)) {
+	    Thread tgetICMP = new Thread(new GetICMP());
+	    tgetICMP.start();
+	}
 	tgetHeaders.start();
 	timer = System.currentTimeMillis();
 
@@ -147,11 +151,14 @@ public class Hostup {
 
     }
 
+    /*
+     * Performs ICMP ping/echo and returns boolean success or failure
+     */
     private static boolean icmpHostup(final Context context) {
 	boolean isUp = false;
 
 	try {
-	    if (InetAddress.getByName(icmpIP).isReachable(REACHABLE))
+	    if (InetAddress.getByName(icmpIP).isReachable(reachable))
 		isUp = true;
 
 	} catch (UnknownHostException e) {
@@ -175,17 +182,18 @@ public class Hostup {
 	    throws IOException, URISyntaxException {
 
 	/*
-	 * Reusing Httpclient, only initializing first time
+	 * Reusing Httpclient, since it's expensive
 	 */
-
-	DefaultHttpClient httpclient = new DefaultHttpClient();
-	BasicHttpParams httpparams = new BasicHttpParams();
-	HttpConnectionParams.setConnectionTimeout(httpparams, Integer
-		.valueOf(reachable));
-	HttpConnectionParams.setSoTimeout(httpparams, reachable);
-	HttpConnectionParams.setLinger(httpparams, 1);
-	HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
-	httpclient.setParams(httpparams);
+	if (httpclient == null) {
+	    httpclient = new DefaultHttpClient();
+	    BasicHttpParams httpparams = new BasicHttpParams();
+	    HttpConnectionParams.setConnectionTimeout(httpparams, Integer
+		    .valueOf(reachable));
+	    HttpConnectionParams.setSoTimeout(httpparams, reachable);
+	    HttpConnectionParams.setLinger(httpparams, 1);
+	    HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
+	    httpclient.setParams(httpparams);
+	}
 	/*
 	 * get URI
 	 */
@@ -203,13 +211,13 @@ public class Hostup {
 	int status;
 	try {
 	    /*
-	     * The next two lines actually perform the connection since it's the
-	     * same, can re-use.
+	     * Get response
 	     */
 	    HttpResponse response = httpclient.execute(new HttpHead(headURI));
 	    status = response.getStatusLine().getStatusCode();
 	} catch (IllegalStateException e) {
 	    // httpclient in bad state, reset
+	    httpclient = null;
 	    status = -1;
 	}
 	if (status == HttpURLConnection.HTTP_OK) {
