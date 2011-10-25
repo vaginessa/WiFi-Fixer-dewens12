@@ -1358,7 +1358,7 @@ public class WFConnection extends Object implements
     }
 
     private static boolean networkUp(final Context context) {
-	String isUp = null;
+	boolean isUp = false;
 	/*
 	 * Instantiate hostup if it's not already instantiated
 	 */
@@ -1377,23 +1377,12 @@ public class WFConnection extends Object implements
 	 */
 	isUp = hostup.getHostup(REACHABLE, context, context
 		.getString(R.string.http)
-		+ accesspointIP);
-	if (isUp == null)
-	    isUp = hostup.getHostup(REACHABLE, context, null);
+		+ accesspointIP, prefs.getFlag(Pref.LOG_KEY));
+	if (!isUp)
+	    isUp = hostup.getHostup(REACHABLE, context, null, prefs
+		    .getFlag(Pref.LOG_KEY));
 
-	if (prefs.getFlag(Pref.LOG_KEY)) {
-	    if (isUp != null)
-		LogService.log(context, appname, isUp
-			+ context.getString(R.string.responded));
-	    else
-		LogService.log(context, appname, isUp
-			+ context.getString(R.string.network_check_failed));
-	}
-
-	if (isUp == null)
-	    return false;
-	else
-	    return true;
+	return isUp;
     }
 
     private static void icmpCache(final Context context) {

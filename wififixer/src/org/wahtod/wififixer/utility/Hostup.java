@@ -27,7 +27,6 @@ import org.apache.http.client.methods.HttpHead;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.wahtod.wififixer.R;
 import android.content.Context;
 
@@ -39,39 +38,42 @@ public class Hostup {
      */
 
     private final static int REACHABLE = 4000;
-    private static volatile DefaultHttpClient httpclient;
-    private static volatile HttpParams httpparams;
-    private static HttpHead head;
-    private static volatile HttpResponse response;
     // Target for header check
     private static final String H_TARGET = "http://www.google.com";
+    private static final String SERVICE_TAG = "WifiFixerService";
     private static String target;
+    private static String response;
     private static final int TIMEOUT_EXTRA = 2000;
     private static URI headURI;
     private static int reachable;
-    private static Context context;
+    private Context context;
     private volatile static boolean state;
+    private volatile static boolean finished;
     private Thread self;
-    private static String accesspointIP;
+    private static String icmpIP;
+    private static long timer;
 
     /*
      * for http header check thread
      */
     private class GetHeaders implements Runnable {
 	public void run() {
-
+	    boolean up;
 	    try {
-		state = getHttpHeaders(context);
+		up = getHttpHeaders(context);
 
 	    } catch (IOException e) {
-		state = false;
+		up = false;
 	    } catch (URISyntaxException e) {
-		state = false;
+		up = false;
 	    }
 	    /*
 	     * Interrupt waiting thread since we have a result
 	     */
-	    self.interrupt();
+	    if (!finished) {
+		state = up;
+		self.interrupt();
+	    }
 
 	}
     };
@@ -81,29 +83,109 @@ public class Hostup {
      */
     private class GetICMP implements Runnable {
 	public void run() {
-
-	    state = icmpHostup(context);
+	    boolean up = icmpHostup(context);
 	    /*
 	     * Interrupt waiting thread since we have a result
 	     */
-	    self.interrupt();
+	    if (!finished) {
+		state = up;
+		self.interrupt();
+	    }
 
 	}
     };
 
-    public synchronized String getHostup(final int timeout, Context ctxt,
-	    final String router) {
+    public synchronized boolean getHostup(final int timeout, Context ctxt,
+	    final String router, boolean log) {
+	finished = false;
 	context = ctxt;
-	accesspointIP = router.substring(7, router.length());
 	/*
 	 * If null, use H_TARGET else construct URL from router string
 	 */
 	if (router == null)
 	    target = H_TARGET;
-	else {
+	else
 	    target = router;
+
+	icmpIP = target.substring(7, target.length());
+
+	reachable = timeout + TIMEOUT_EXTRA;
+	/*
+	 * Start Check Threads
+	 */
+	self = Thread.currentThread();
+	Thread tgetHeaders = new Thread(new GetHeaders());
+	Thread tgetICMP = new Thread(new GetICMP());
+	tgetICMP.start();
+	tgetHeaders.start();
+	timer = System.currentTimeMillis();
+
+	try {
+	    Thread.sleep(reachable);
+	    /*
+	     * Oh no, looks like rHttpHead has timed out longer than it should
+	     * have
+	     */
+	    if (log)
+		LogService.log(ctxt, SERVICE_TAG, ctxt
+			.getString(R.string.critical_timeout));
+	    return false;
+	} catch (InterruptedException e) {
+	    finished = true;
+	    /*
+	     * interrupted by a result: this is desired behavior
+	     */
+	    if (log) {
+		LogService.log(ctxt, SERVICE_TAG, response);
+		LogService.log(ctxt, SERVICE_TAG, String.valueOf(System
+			.currentTimeMillis()
+			- timer)
+			+ "ms");
+	    }
+	    return state;
 	}
 
+    }
+
+    private static boolean icmpHostup(final Context context) {
+	boolean isUp = false;
+
+	try {
+	    if (InetAddress.getByName(icmpIP).isReachable(REACHABLE))
+		isUp = true;
+
+	} catch (UnknownHostException e) {
+
+	} catch (IOException e) {
+
+	}
+
+	if (isUp && !finished)
+	    response = icmpIP + context.getString(R.string.icmp_ok);
+	else
+	    response = icmpIP + context.getString(R.string.icmp_fail);
+
+	return isUp;
+    }
+
+    /*
+     * Performs HTTP HEAD request and returns boolean success or failure
+     */
+    private static boolean getHttpHeaders(final Context context)
+	    throws IOException, URISyntaxException {
+
+	/*
+	 * Reusing Httpclient, only initializing first time
+	 */
+
+	DefaultHttpClient httpclient = new DefaultHttpClient();
+	BasicHttpParams httpparams = new BasicHttpParams();
+	HttpConnectionParams.setConnectionTimeout(httpparams, Integer
+		.valueOf(reachable));
+	HttpConnectionParams.setSoTimeout(httpparams, reachable);
+	HttpConnectionParams.setLinger(httpparams, 1);
+	HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
+	httpclient.setParams(httpparams);
 	/*
 	 * get URI
 	 */
@@ -118,102 +200,26 @@ public class Hostup {
 	    }
 	}
 
-	head = new HttpHead(headURI);
-
-	reachable = timeout + TIMEOUT_EXTRA;
-	/*
-	 * Start Check Threads
-	 */
-	self = Thread.currentThread();
-	Thread tgetHeaders = new Thread(new GetHeaders());
-	Thread tgetICMP = new Thread(new GetICMP());
-	tgetICMP.start();
-	tgetHeaders.start();
-
-	try {
-	    Thread.sleep(reachable);
-	    /*
-	     * Oh no, looks like rHttpHead has timed out longer than it should
-	     * have, reset it
-	     */
-	    httpclient = null;
-
-	    if (state)
-		return target;
-	    else
-		return null;
-	} catch (InterruptedException e) {
-	    /*
-	     * interrupted by a result: this is desired behavior
-	     */
-	    return target;
-	}
-
-    }
-
-    private static boolean icmpHostup(final Context context) {
-	boolean isUp = false;
-
-	try {
-	    if (InetAddress.getByName(accesspointIP).isReachable(REACHABLE))
-		isUp = true;
-
-	} catch (UnknownHostException e) {
-
-	} catch (IOException e) {
-
-	}
-
-	if (isUp)
-	    target = target + context.getString(R.string.icmp_ok);
-	else
-	    target = target + context.getString(R.string.icmp_fail);
-
-	return isUp;
-    }
-
-    /*
-     * Performs HTTP HEAD request and returns boolean success or failure
-     */
-    private static boolean getHttpHeaders(final Context context)
-	    throws IOException, URISyntaxException {
-
-	/*
-	 * Reusing Httpclient, only initializing first time
-	 */
-	if (httpclient == null) {
-	    httpclient = new DefaultHttpClient();
-	    httpparams = new BasicHttpParams();
-	    HttpConnectionParams.setConnectionTimeout(httpparams, Integer
-		    .valueOf(reachable));
-	    HttpConnectionParams.setSoTimeout(httpparams, reachable);
-	    HttpConnectionParams.setLinger(httpparams, 1);
-	    HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
-	    httpclient.setParams(httpparams);
-	}
 	int status;
 	try {
 	    /*
 	     * The next two lines actually perform the connection since it's the
 	     * same, can re-use.
 	     */
-	    response = httpclient.execute(head);
+	    HttpResponse response = httpclient.execute(new HttpHead(headURI));
 	    status = response.getStatusLine().getStatusCode();
 	} catch (IllegalStateException e) {
 	    // httpclient in bad state, reset
 	    status = -1;
-	    httpclient = null;
-	    target = target + context.getString(R.string.http_fail);
-	    return false;
 	}
-
 	if (status == HttpURLConnection.HTTP_OK) {
-	    target = target + context.getString(R.string.http_ok);
+	    if (!finished)
+		response = icmpIP + context.getString(R.string.http_ok);
 	    return true;
 	} else {
-	    target = target + context.getString(R.string.http_fail);
+	    if (!finished)
+		response = icmpIP + context.getString(R.string.http_fail);
 	    return false;
 	}
     }
-
 }
