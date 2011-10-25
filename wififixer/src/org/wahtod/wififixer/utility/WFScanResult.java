@@ -58,7 +58,6 @@ public class WFScanResult {
 	out.capabilities=fields.getString(CAPABILITIES_BUNDLE_KEY);
 	out.level=fields.getInt(LEVEL_BUNDLE_KEY);
 	out.frequency=fields.getInt(FREQUENCY_BUNDLE_KEY);
-	bundle.remove(BUNDLE_KEY);
 	return out;
     }
     

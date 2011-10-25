@@ -222,11 +222,11 @@ public class Hostup {
 	}
 	if (status == HttpURLConnection.HTTP_OK) {
 	    if (!finished)
-		response = icmpIP + context.getString(R.string.http_ok);
+		response = target + context.getString(R.string.http_ok);
 	    return true;
 	} else {
 	    if (!finished)
-		response = icmpIP + context.getString(R.string.http_fail);
+		response = target + context.getString(R.string.http_fail);
 	    return false;
 	}
     }

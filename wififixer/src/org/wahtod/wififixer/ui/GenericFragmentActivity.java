@@ -30,8 +30,9 @@ public class GenericFragmentActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.fragment_container);
-	Bundle bundle = getIntent().getExtras();
-	if (bundle.containsKey(WFScanResult.BUNDLE_KEY)) {
+	
+	if (getIntent().hasExtra(WFScanResult.BUNDLE_KEY)) {
+	    Bundle bundle = getIntent().getExtras();
 	    Fragment f = FragmentSwitchboard.newInstance(bundle);
 	    FragmentManager fm = getSupportFragmentManager();
 	    FragmentTransaction ft = fm.beginTransaction();
