@@ -19,7 +19,7 @@
     <string name="widget_update_called">Widget Update Called</string>
     <string name="logfile_delete_err_toast">Log File Doesn\'t Exist</string>
     <string name="logfile_delete_toast">Log File Deleted</string>
-    <string name="connect_now">Connect Now</string>
+    <string name="connect">Connect</string>
     <string name="disable">Disable</string>
     <string name="enable">Enable</string>
     <string name="enabling_logging">Enabling Logging</string>
@@ -211,5 +211,6 @@
     <string name="icmp_ok">:ICMP_OK</string>
     <string name="icmp_fail">:ICMP_FAIL</string>
     <string name="critical_timeout">Network Check fail: critical timeout</string>
+    <string name="add">Add</string>
 
 </resources>

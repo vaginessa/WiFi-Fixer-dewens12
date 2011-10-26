@@ -95,7 +95,7 @@ public class KnownNetworksFragment extends Fragment {
 	menu.setHeaderTitle(clicked);
 	menu.add(1, CONTEXT_ENABLE, 0, R.string.enable);
 	menu.add(2, CONTEXT_DISABLE, 1, R.string.disable);
-	menu.add(3, CONTEXT_CONNECT, 2, R.string.connect_now);
+	menu.add(3, CONTEXT_CONNECT, 2, R.string.connect);
 	menu.add(4, CONTEXT_NONMANAGE, 3, R.string.set_non_managed);
 	menu.add(5, CONTEXT_REMOVE, 5, R.string.remove);
 	if (!WFConnection.getNetworkState(getContext(), clicked_position)) {
@@ -332,10 +332,7 @@ public class KnownNetworksFragment extends Fragment {
 	return f;
     }
 
-    /*
-     * 
-     */
-    private static final List<String> getNetworks(final Context context) {
+    public static final List<String> getNetworks(final Context context) {
 	WifiManager wm = (WifiManager) context
 		.getSystemService(Context.WIFI_SERVICE);
 	List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();

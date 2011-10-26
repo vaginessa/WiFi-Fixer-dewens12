@@ -48,7 +48,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -412,10 +411,6 @@ public class WifiFixerActivity extends FragmentActivity {
     // On Create
     @Override
     public void onCreate(Bundle savedInstanceState) {
-	if(savedInstanceState != null){
-	    Log.i(this.getClass().getName(),savedInstanceState.keySet().toString());
-	    Log.i(this.getClass().getName(),savedInstanceState.toString());
-	}
 	super.onCreate(savedInstanceState);
 	setTitle(R.string.app_name);
 	setContentView(R.layout.main);
@@ -456,6 +451,7 @@ public class WifiFixerActivity extends FragmentActivity {
     @Override
     protected void onNewIntent(Intent intent) {
 	super.onNewIntent(intent);
+	setIntent(intent);
 	handleIntent(intent);
     }
 

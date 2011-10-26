@@ -98,8 +98,19 @@ public class ScanFragment extends Fragment {
 	 * Clicked is the ListView selected WFScanResult
 	 */
 	menu.setHeaderTitle(clicked.SSID);
-	menu.add(3, CONTEXT_CONNECT, 2, R.string.connect_now);
+	menu.add(4, CONTEXT_CONNECT, 2, getConnectMenuStringFromClicked(
+		getContext(), clicked));
 	menu.add(4, CONTEXT_INFO, 3, R.string.about);
+    }
+
+    public static int getConnectMenuStringFromClicked(final Context context,
+	    WFScanResult clicked) {
+	if (KnownNetworksFragment.getNetworks(context).contains(clicked.SSID))
+	    return R.string.connect;
+	else if (getCapabilitiesString(clicked.capabilities) == OPEN)
+	    return R.string.connect;
+	else
+	    return R.string.add;
     }
 
     @Override

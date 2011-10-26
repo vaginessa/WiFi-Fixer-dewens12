@@ -68,12 +68,12 @@ public class ConnectFragment extends FragmentSwitchboard implements
 		+ network.SSID);
     }
 
-    private static String addquotes(String s) {
+    public static String addquotes(String s) {
 	final String QUOTE = "\"";
 	return QUOTE + s + QUOTE;
     }
 
-    private void requestConnect(final String password) {
+    public void addNetwork(final String password) {
 	Log.i(this.getClass().getName(), password);
 	WifiConfiguration wf = new WifiConfiguration();
 	wf.SSID = addquotes(network.SSID);
@@ -84,8 +84,10 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	WifiManager wm = WFConnection.getWifiManager(getActivity()
 		.getApplicationContext());
 	int network = wm.addNetwork(wf);
-	wm.enableNetwork(network, false);
-	wm.saveConfiguration();
+	if (network != -1) {
+	    wm.enableNetwork(network, false);
+	    wm.saveConfiguration();
+	}
     }
 
     public static ConnectFragment newInstance(Bundle bundle) {
@@ -102,7 +104,7 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	} catch (NullPointerException e1) {
 	    password = "";
 	}
-	requestConnect(password);
+	addNetwork(password);
 	InputMethodManager imm = (InputMethodManager) getActivity()
 		.getSystemService(Context.INPUT_METHOD_SERVICE);
 	imm.hideSoftInputFromWindow(e.getWindowToken(), 0);
