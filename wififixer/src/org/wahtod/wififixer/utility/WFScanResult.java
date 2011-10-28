@@ -12,7 +12,7 @@ public class WFScanResult {
     public String capabilities;
     public int level;
     public int frequency;
-    
+
     public static String SSID_BUNDLE_KEY = "SSID";
     public static String BSSID_BUNDLE_KEY = "BSSID";
     public static String CAPABILITIES_BUNDLE_KEY = "CAPABILITIES";
@@ -49,19 +49,21 @@ public class WFScanResult {
 	capabilities = "";
 	BSSID = "";
     }
-    
-    public static WFScanResult fromBundle(final Bundle bundle){
-	Bundle fields = bundle.getBundle(BUNDLE_KEY);
+
+    public static WFScanResult fromBundle(final Bundle bundle) {
 	WFScanResult out = new WFScanResult();
-	out.SSID=fields.getString(SSID_BUNDLE_KEY);
-	out.BSSID=fields.getString(BSSID_BUNDLE_KEY);
-	out.capabilities=fields.getString(CAPABILITIES_BUNDLE_KEY);
-	out.level=fields.getInt(LEVEL_BUNDLE_KEY);
-	out.frequency=fields.getInt(FREQUENCY_BUNDLE_KEY);
+	if (bundle != null && bundle.containsKey(BUNDLE_KEY)) {
+	    Bundle fields = bundle.getBundle(BUNDLE_KEY);
+	    out.SSID = fields.getString(SSID_BUNDLE_KEY);
+	    out.BSSID = fields.getString(BSSID_BUNDLE_KEY);
+	    out.capabilities = fields.getString(CAPABILITIES_BUNDLE_KEY);
+	    out.level = fields.getInt(LEVEL_BUNDLE_KEY);
+	    out.frequency = fields.getInt(FREQUENCY_BUNDLE_KEY);
+	}
 	return out;
     }
-    
-    public Bundle toBundle(){
+
+    public Bundle toBundle() {
 	Bundle bundle = new Bundle();
 	bundle.putString(SSID_BUNDLE_KEY, SSID);
 	bundle.putString(BSSID_BUNDLE_KEY, BSSID);

@@ -48,6 +48,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 public class ScanFragment extends Fragment {
+    private boolean receiverRegistered;
     private static final String WPA = "WPA";
     private static final String WPA2 = "WPA2";
     private static final String WEP = "WEP";
@@ -70,11 +71,13 @@ public class ScanFragment extends Fragment {
 	     */
 	    switch (message.what) {
 	    case REFRESH_LIST_ADAPTER:
-		refreshScanListAdapter();
+		if (getActivity() != null)
+		    refreshScanListAdapter();
 		break;
 
 	    case CLEAR_LIST_ADAPTER:
-		clearScanListAdapter();
+		if (getActivity() != null)
+		    clearScanListAdapter();
 		break;
 	    }
 
@@ -87,6 +90,7 @@ public class ScanFragment extends Fragment {
 	View v = inflater.inflate(R.layout.scannetworks, null);
 	lv = (ListView) v.findViewById(R.id.scanlist);
 	registerContextMenu();
+	registerReceiver();
 	return v;
     }
 
@@ -146,7 +150,6 @@ public class ScanFragment extends Fragment {
 	List<WFScanResult> scan = getNetworks(getContext());
 	if (adapter == null)
 	    createAdapter(getView(), scan);
-	registerReceiver();
     }
 
     /*
@@ -378,13 +381,19 @@ public class ScanFragment extends Fragment {
     }
 
     private void registerReceiver() {
+	if (receiverRegistered == true)
+	    return;
 	IntentFilter filter = new IntentFilter(
 		WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 	filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 	getContext().registerReceiver(receiver, filter);
+	receiverRegistered = true;
     }
 
     private void unregisterReceiver() {
-	getContext().unregisterReceiver(receiver);
+	if (receiverRegistered) {
+	    getContext().unregisterReceiver(receiver);
+	    receiverRegistered = false;
+	}
     }
 }

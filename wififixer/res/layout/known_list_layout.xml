@@ -14,11 +14,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="horizontal" android:layout_height="fill_parent"
 	android:layout_width="fill_parent" android:paddingBottom="5dp"
-	android:paddingTop="5dp" android:paddingLeft="25dp">
+	android:paddingTop="5dp" android:paddingLeft="25dp"
+	android:layout_marginLeft="15dp">
 	<TextView android:id="@+id/ssid" android:text="default"
-		android:layout_gravity="top" android:layout_marginRight="15dp"
+		android:layout_gravity="top" 
+		android:layout_margin="15dp"
 		android:layout_width="150dp" android:layout_height="44dp"
-		android:layout_marginTop="10dp"
 		android:gravity="left" android:textSize="15dp"
 		android:shadowColor="#FFFF00"
 		android:shadowDx="1"

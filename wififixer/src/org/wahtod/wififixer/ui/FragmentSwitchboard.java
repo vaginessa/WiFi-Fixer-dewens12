@@ -28,8 +28,8 @@ public abstract class FragmentSwitchboard extends Fragment {
 
     @SuppressWarnings("unchecked")
     public static FragmentSwitchboard newInstance(Bundle bundle) {
-	String s = bundle.getString(FRAGMENT_KEY);
 	try {
+	    String s = bundle.getString(FRAGMENT_KEY);
 	    Class c = Class.forName(s);
 	    Class p[] = new Class[1];
 	    p[0] = Bundle.class;
@@ -38,6 +38,6 @@ public abstract class FragmentSwitchboard extends Fragment {
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
-	return null;
-    }
+    return new AboutFragment();
+}
 }
