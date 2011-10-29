@@ -31,6 +31,7 @@ import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
+import org.wahtod.wififixer.utility.WFScanResult;
 import org.wahtod.wififixer.widget.WidgetHandler;
 
 import android.app.AlertDialog;
@@ -158,6 +159,7 @@ public class WifiFixerActivity extends FragmentActivity implements
     public static final String ABOUTFRAG_TAG = "ABOUT";
     public static final String TABLETPAGERFRAG_TAG = "TPFT";
     private static final String FRAGMENTS_INSTANCE_STATE = "FRAGMENTS_INSTANCE_STATE";
+    private static final String FRAGMENT_BUNDLES = "FRAGMENT_BUNDLES";
 
     void authCheck() {
 	if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
@@ -186,6 +188,10 @@ public class WifiFixerActivity extends FragmentActivity implements
 
 	tabletvp.setCurrentItem(fragments.size() - 1, true);
 	Log.i(this.getClass().getName(), String.valueOf(fragments.size()));
+	if (!onpagechangeRegistered){
+	    tabletvp.setOnPageChangeListener(this);
+	    onpagechangeRegistered = true;
+	}
     }
 
     private void deleteLog() {
@@ -482,13 +488,13 @@ public class WifiFixerActivity extends FragmentActivity implements
 	Bundle map = new Bundle();
 	if (!phoneFlag) {
 	    for (Fragment f : fragments) {
-		if (f.getClass() != StatusFragment.class && f.getTag() != null) {
+		if (f.getTag() != null) {
 		    tags.add(f.getTag());
-		    map.putBundle(f.getTag(),f.getArguments());
+		    map.putBundle(f.getTag(), f.getArguments());
 		}
 	    }
 	    outState.putStringArrayList(FRAGMENTS_INSTANCE_STATE, tags);
-	    outState.putAll(map);
+	    outState.putBundle(FRAGMENT_BUNDLES, map);
 	}
 	super.onSaveInstanceState(outState);
     }
@@ -591,14 +597,19 @@ public class WifiFixerActivity extends FragmentActivity implements
 	    return;
 	FragmentManager fm = getSupportFragmentManager();
 	Fragment f;
+	Bundle b = savedInstanceState.getBundle(FRAGMENT_BUNDLES);
+	Bundle b1;
 	FragmentTransaction ft = fm.beginTransaction();
 	for (String tag : savedInstanceState
 		.getStringArrayList(FRAGMENTS_INSTANCE_STATE)) {
 	    f = fm.findFragmentByTag(tag);
 	    ft.remove(f);
-	    fragmentbundles.add(savedInstanceState.getBundle(tag));
-	    fragments.add(FragmentSwitchboard.newInstance(fragmentbundles
-		    .get(fragmentbundles.size() - 1)));
+	    fragmentbundles.add(b.getBundle(tag));
+	    b1 = fragmentbundles.get(fragmentbundles.size() - 1);
+	    if (b1 == null)
+		fragments.add(new StatusFragment());
+	    else
+		fragments.add(FragmentSwitchboard.newInstance(b1));
 	}
 	ft.commit();
     }
@@ -608,8 +619,6 @@ public class WifiFixerActivity extends FragmentActivity implements
 	fragmentbundles.add(bundle);
 	tadapter.add(f);
 	tabletvp.setCurrentItem(tadapter.getCount() - 1);
-	if (!onpagechangeRegistered)
-	    tabletvp.setOnPageChangeListener(this);
     }
 
     public void wifiToggle(View view) {
@@ -646,6 +655,11 @@ public class WifiFixerActivity extends FragmentActivity implements
     public void onPageSelected(int arg0) {
 	Log.i(this.getClass().getName(), "OnPageSelected:"
 		+ String.valueOf(arg0));
+	if (arg0 == 0) {
+	    ActionBarDetector.setUp(this, false, null);
+	    return;
+	}
+	Bundle b = fragmentbundles.get(arg0 - 1);
+	ActionBarDetector.setUp(this, true, WFScanResult.fromBundle(b).SSID);
     }
-
 }
