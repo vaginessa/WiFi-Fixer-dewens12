@@ -119,23 +119,27 @@ public class ScanFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-	Intent i = new Intent(getContext(), WifiFixerActivity.class);
-	i.putExtra(WifiFixerActivity.SHOW_FRAGMENT, true);
-	i.putExtra(WFScanResult.BUNDLE_KEY, clicked.toBundle());
+
 	switch (item.getItemId()) {
 	case CONTEXT_CONNECT:
-	    i.putExtra(FragmentSwitchboard.FRAGMENT_KEY, ConnectFragment.class
-		    .getName());
+	    dispatchContextMenuSelected(ConnectFragment.class.getName());
 	    break;
 
 	case CONTEXT_INFO:
-	    i.putExtra(FragmentSwitchboard.FRAGMENT_KEY, AboutFragment.class
-		    .getName());
+	    dispatchContextMenuSelected(AboutFragment.class.getName());
 	    break;
 	}
-	i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	getContext().startActivity(i);
+	
 	return super.onContextItemSelected(item);
+    }
+
+    private void dispatchContextMenuSelected(String classname) {
+	Intent i = new Intent(getContext(), WifiFixerActivity.class);
+	i.putExtra(WifiFixerActivity.SHOW_FRAGMENT, true);
+	i.putExtra(WFScanResult.BUNDLE_KEY, clicked.toBundle());
+	i.putExtra(FragmentSwitchboard.FRAGMENT_KEY, classname);
+	i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+	getActivity().startActivity(i);
     }
 
     @Override

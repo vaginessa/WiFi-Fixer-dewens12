@@ -51,7 +51,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,7 +71,6 @@ public class WifiFixerActivity extends FragmentActivity implements
     private ViewPager tabletvp;
     private TabletAdapter tadapter;
     protected List<Fragment> fragments = new ArrayList<Fragment>();
-    protected List<Bundle> fragmentbundles = new ArrayList<Bundle>();
     private boolean onpagechangeRegistered;
 
     public class PhoneAdapter extends FragmentPagerAdapter {
@@ -148,7 +146,12 @@ public class WifiFixerActivity extends FragmentActivity implements
      * Delete Log intent extra
      */
     private static final String DELETE_LOG = "DELETE_LOG";
-
+    
+    /*
+     * Remove Connect fragment key
+     */
+    static final String REMOVE_CONNECT_FRAGMENTS = "RMCNCTFRGMTS";
+    
     /*
      * Fragment Tags
      */
@@ -159,7 +162,6 @@ public class WifiFixerActivity extends FragmentActivity implements
     public static final String ABOUTFRAG_TAG = "ABOUT";
     public static final String TABLETPAGERFRAG_TAG = "TPFT";
     private static final String FRAGMENTS_INSTANCE_STATE = "FRAGMENTS_INSTANCE_STATE";
-    private static final String FRAGMENT_BUNDLES = "FRAGMENT_BUNDLES";
 
     void authCheck() {
 	if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
@@ -187,8 +189,8 @@ public class WifiFixerActivity extends FragmentActivity implements
 	    tadapter.add(new StatusFragment());
 
 	tabletvp.setCurrentItem(fragments.size() - 1, true);
-	Log.i(this.getClass().getName(), String.valueOf(fragments.size()));
-	if (!onpagechangeRegistered){
+	onPageSelected(fragments.size() - 1);
+	if (!onpagechangeRegistered) {
 	    tabletvp.setOnPageChangeListener(this);
 	    onpagechangeRegistered = true;
 	}
@@ -234,6 +236,10 @@ public class WifiFixerActivity extends FragmentActivity implements
 	    else if (intent.hasExtra(DELETE_LOG)) {
 		intent.removeExtra(DELETE_LOG);
 		deleteLog();
+	    }
+	    else if (intent.hasExtra(REMOVE_CONNECT_FRAGMENTS)){
+		intent.removeExtra(REMOVE_CONNECT_FRAGMENTS);
+		removeConnectFragments();
 	    }
 	/*
 	 * Set Activity intent to one without commands we've "consumed"
@@ -434,10 +440,17 @@ public class WifiFixerActivity extends FragmentActivity implements
 
     @Override
     public void onBackPressed() {
-	if (!phoneFlag
-		&& getSupportFragmentManager().getBackStackEntryCount() == 1)
-	    ActionBarDetector.setUp(this, false, null);
-	super.onBackPressed();
+	if (!phoneFlag) {
+	    if (getSupportFragmentManager().getBackStackEntryCount() == 1)
+		ActionBarDetector.setUp(this, false, null);
+	    int tabletvpItem = tabletvp.getCurrentItem();
+	    if (tabletvpItem > 0)
+		tabletvp.setCurrentItem(tabletvpItem - 1);
+	    else
+		super.onBackPressed();
+	}
+	else
+	    super.onBackPressed();
     }
 
     // On Create
@@ -485,16 +498,13 @@ public class WifiFixerActivity extends FragmentActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 	ArrayList<String> tags = new ArrayList<String>();
-	Bundle map = new Bundle();
 	if (!phoneFlag) {
 	    for (Fragment f : fragments) {
 		if (f.getTag() != null) {
 		    tags.add(f.getTag());
-		    map.putBundle(f.getTag(), f.getArguments());
 		}
 	    }
 	    outState.putStringArrayList(FRAGMENTS_INSTANCE_STATE, tags);
-	    outState.putBundle(FRAGMENT_BUNDLES, map);
 	}
 	super.onSaveInstanceState(outState);
     }
@@ -548,14 +558,18 @@ public class WifiFixerActivity extends FragmentActivity implements
 	    return true;
 
 	case android.R.id.home:
-	    FragmentManager fm = getSupportFragmentManager();
+
 	    if (!phoneFlag) {
-		FragmentTransaction ft = fm.beginTransaction();
-		while (fm.getBackStackEntryCount() > 0)
-		    fm.popBackStackImmediate();
-		ft.commit();
+		/*
+		 * FragmentManager fm = getSupportFragmentManager();
+		 * FragmentTransaction ft = fm.beginTransaction(); while
+		 * (fm.getBackStackEntryCount() > 0) fm.popBackStackImmediate();
+		 * ft.commit();
+		 */
+		tabletvp.setCurrentItem(0);
 		ActionBarDetector.setUp(this, false, null);
 	    }
+	    return true;
 	}
 	return false;
     }
@@ -591,32 +605,41 @@ public class WifiFixerActivity extends FragmentActivity implements
 	return true;
     }
 
+    private void removeConnectFragments() {
+	FragmentManager fm = getSupportFragmentManager();
+	FragmentTransaction ft = fm.beginTransaction();
+        Fragment f = tadapter.getItem(tabletvp.getCurrentItem());
+        tadapter.destroyItem(tabletvp, tabletvp.getCurrentItem(), f);
+        fragments.remove(f);
+        ft.remove(f);
+        tabletvp.setCurrentItem(tabletvp.getCurrentItem()-1);
+        ft.commit();
+    }
+
     private void restoreOrphanedFragments(Bundle savedInstanceState) {
 	if (savedInstanceState == null
 		|| !savedInstanceState.containsKey(FRAGMENTS_INSTANCE_STATE))
 	    return;
 	FragmentManager fm = getSupportFragmentManager();
 	Fragment f;
-	Bundle b = savedInstanceState.getBundle(FRAGMENT_BUNDLES);
-	Bundle b1;
 	FragmentTransaction ft = fm.beginTransaction();
 	for (String tag : savedInstanceState
 		.getStringArrayList(FRAGMENTS_INSTANCE_STATE)) {
 	    f = fm.findFragmentByTag(tag);
-	    ft.remove(f);
-	    fragmentbundles.add(b.getBundle(tag));
-	    b1 = fragmentbundles.get(fragmentbundles.size() - 1);
-	    if (b1 == null)
+	    if (f == null)
+		break;
+	    if (f.getArguments() == null)
 		fragments.add(new StatusFragment());
 	    else
-		fragments.add(FragmentSwitchboard.newInstance(b1));
+		fragments
+			.add(FragmentSwitchboard.newInstance(f.getArguments()));
+	    ft.remove(f);
 	}
 	ft.commit();
     }
 
     private void showFragment(Bundle bundle) {
 	Fragment f = FragmentSwitchboard.newInstance(bundle);
-	fragmentbundles.add(bundle);
 	tadapter.add(f);
 	tabletvp.setCurrentItem(tadapter.getCount() - 1);
     }
@@ -633,7 +656,6 @@ public class WifiFixerActivity extends FragmentActivity implements
 	    Toast.makeText(this, R.string.disabling_wifi, Toast.LENGTH_LONG)
 		    .show();
 	}
-
     }
 
     @Override
@@ -653,13 +675,11 @@ public class WifiFixerActivity extends FragmentActivity implements
 
     @Override
     public void onPageSelected(int arg0) {
-	Log.i(this.getClass().getName(), "OnPageSelected:"
-		+ String.valueOf(arg0));
 	if (arg0 == 0) {
 	    ActionBarDetector.setUp(this, false, null);
 	    return;
 	}
-	Bundle b = fragmentbundles.get(arg0 - 1);
-	ActionBarDetector.setUp(this, true, WFScanResult.fromBundle(b).SSID);
+	ActionBarDetector.setUp(this, true, WFScanResult.fromBundle(tadapter
+		.getItem(arg0).getArguments()).SSID);
     }
 }

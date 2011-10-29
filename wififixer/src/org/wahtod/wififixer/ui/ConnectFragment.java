@@ -22,10 +22,10 @@ import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.utility.WFScanResult;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -111,9 +111,11 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	if (getActivity().getClass().equals(GenericFragmentActivity.class))
 	    getActivity().finish();
 	else {
-	    FragmentManager fm = getActivity().getSupportFragmentManager();
-	    fm.popBackStack();
-	    ActionBarDetector.setUp(getActivity(), false, null);
+	    Intent i = new Intent(getActivity(),
+		    WifiFixerActivity.class);
+	    i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+	    i.putExtra(WifiFixerActivity.REMOVE_CONNECT_FRAGMENTS, true);
+	    getActivity().startActivity(i);
 	}
     }
 }

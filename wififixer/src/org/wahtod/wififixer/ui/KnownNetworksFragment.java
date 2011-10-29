@@ -164,6 +164,8 @@ public class KnownNetworksFragment extends Fragment {
 					clicked_position), Toast.LENGTH_SHORT)
 			.show();
 		WFConnection.removeNetwork(getContext(), clicked_position);
+		adapter.ssidArray.remove(clicked_position);
+		adapter.notifyDataSetChanged();
 		break;
 	    }
 	}
