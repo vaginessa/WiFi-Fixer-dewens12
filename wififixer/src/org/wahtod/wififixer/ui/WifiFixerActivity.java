@@ -146,12 +146,12 @@ public class WifiFixerActivity extends FragmentActivity implements
      * Delete Log intent extra
      */
     private static final String DELETE_LOG = "DELETE_LOG";
-    
+
     /*
      * Remove Connect fragment key
      */
     static final String REMOVE_CONNECT_FRAGMENTS = "RMCNCTFRGMTS";
-    
+
     /*
      * Fragment Tags
      */
@@ -236,10 +236,9 @@ public class WifiFixerActivity extends FragmentActivity implements
 	    else if (intent.hasExtra(DELETE_LOG)) {
 		intent.removeExtra(DELETE_LOG);
 		deleteLog();
-	    }
-	    else if (intent.hasExtra(REMOVE_CONNECT_FRAGMENTS)){
+	    } else if (intent.hasExtra(REMOVE_CONNECT_FRAGMENTS)) {
 		intent.removeExtra(REMOVE_CONNECT_FRAGMENTS);
-		removeConnectFragments();
+		removeConnectFragments(tabletvp.getCurrentItem());
 	    }
 	/*
 	 * Set Activity intent to one without commands we've "consumed"
@@ -444,12 +443,15 @@ public class WifiFixerActivity extends FragmentActivity implements
 	    if (getSupportFragmentManager().getBackStackEntryCount() == 1)
 		ActionBarDetector.setUp(this, false, null);
 	    int tabletvpItem = tabletvp.getCurrentItem();
-	    if (tabletvpItem > 0)
-		tabletvp.setCurrentItem(tabletvpItem - 1);
-	    else
+	    if (tabletvpItem > 0) {
+		if (tadapter.getItem(tabletvpItem).getClass().equals(
+			ConnectFragment.class))
+		    removeConnectFragments(tabletvpItem);
+		else
+		    tabletvp.setCurrentItem(tabletvpItem - 1);
+	    } else
 		super.onBackPressed();
-	}
-	else
+	} else
 	    super.onBackPressed();
     }
 
@@ -566,6 +568,9 @@ public class WifiFixerActivity extends FragmentActivity implements
 		 * (fm.getBackStackEntryCount() > 0) fm.popBackStackImmediate();
 		 * ft.commit();
 		 */
+		if (tadapter.getItem(tabletvp.getCurrentItem()).getClass()
+			.equals(ConnectFragment.class))
+		    removeConnectFragments(tabletvp.getCurrentItem());
 		tabletvp.setCurrentItem(0);
 		ActionBarDetector.setUp(this, false, null);
 	    }
@@ -605,15 +610,15 @@ public class WifiFixerActivity extends FragmentActivity implements
 	return true;
     }
 
-    private void removeConnectFragments() {
+    private void removeConnectFragments(int n) {
 	FragmentManager fm = getSupportFragmentManager();
 	FragmentTransaction ft = fm.beginTransaction();
-        Fragment f = tadapter.getItem(tabletvp.getCurrentItem());
-        tadapter.destroyItem(tabletvp, tabletvp.getCurrentItem(), f);
-        fragments.remove(f);
-        ft.remove(f);
-        tabletvp.setCurrentItem(tabletvp.getCurrentItem()-1);
-        ft.commit();
+	Fragment f = tadapter.getItem(n);
+	tadapter.destroyItem(tabletvp, n, f);
+	fragments.remove(f);
+	ft.remove(f);
+	tabletvp.setCurrentItem(n - 1);
+	ft.commit();
     }
 
     private void restoreOrphanedFragments(Bundle savedInstanceState) {
@@ -677,9 +682,9 @@ public class WifiFixerActivity extends FragmentActivity implements
     public void onPageSelected(int arg0) {
 	if (arg0 == 0) {
 	    ActionBarDetector.setUp(this, false, null);
-	    return;
+	} else {
+	    ActionBarDetector.setUp(this, true, WFScanResult
+		    .fromBundle(tadapter.getItem(arg0).getArguments()).SSID);
 	}
-	ActionBarDetector.setUp(this, true, WFScanResult.fromBundle(tadapter
-		.getItem(arg0).getArguments()).SSID);
     }
 }
