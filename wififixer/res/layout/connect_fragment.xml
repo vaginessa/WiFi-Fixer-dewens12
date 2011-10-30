@@ -31,7 +31,7 @@
     </TextView>
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/password_summary"
         android:layout_width="168dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
