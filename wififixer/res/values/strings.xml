@@ -202,7 +202,7 @@
     <string name="help_activity_title">Help</string>
     <string name="preferences_activity_title">Preferences</string>
     <string name="about_fragment_title_">"About: "</string>
-    <string name="passwd_entry_text">Please enter wifi key</string>
+    <string name="passwd_entry_text">Enter wifi key</string>
     <string name="connect_fragment_title">"Connect: "</string>
     <string name="dns_check_target">google.com</string>
     <string name="network_check">Network Check:</string>
