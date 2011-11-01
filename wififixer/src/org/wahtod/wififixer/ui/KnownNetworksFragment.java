@@ -24,13 +24,13 @@ import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.R.id;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -79,6 +79,7 @@ public class KnownNetworksFragment extends Fragment {
 	registerContextMenu();
 	return v;
     }
+
     @Override
     public void onDestroyView() {
 	this.unregisterForContextMenu(lv);
@@ -277,8 +278,7 @@ public class KnownNetworksFragment extends Fragment {
 			Context.WIFI_SERVICE);
 
 		if (wm.isWifiEnabled())
-		    getContext().sendBroadcast(
-			    new Intent(WFConnection.ACTION_REQUEST_SCAN));
+		    wm.startScan();
 		else {
 		    if (known_in_range != null && known_in_range.size() >= 1) {
 			known_in_range.clear();
@@ -307,8 +307,7 @@ public class KnownNetworksFragment extends Fragment {
 	    Message msg = Message.obtain();
 	    msg.what = REFRESH_MESSAGE;
 	    Bundle data = new Bundle();
-	    data.putStringArrayList(NETWORKS_KEY, intent
-		    .getStringArrayListExtra(WFConnection.SCAN_RESULTS_ARRAY));
+	    data.putStringArrayList(NETWORKS_KEY, getKnownAPArray(context));
 	    msg.setData(data);
 	    scanhandler.sendMessage(msg);
 	}
@@ -332,6 +331,43 @@ public class KnownNetworksFragment extends Fragment {
 	f.setArguments(args);
 
 	return f;
+    }
+
+    private ArrayList<String> getKnownAPArray(final Context context) {
+
+	WifiManager wm = (WifiManager) context
+		.getSystemService(Context.WIFI_SERVICE);
+
+	List<ScanResult> scanResults = wm.getScanResults();
+
+	/*
+	 * Catch null if scan results fires after wifi disabled or while wifi is
+	 * in intermediate state
+	 */
+	if (scanResults == null) {
+	    return null;
+	}
+
+	/*
+	 * Iterate the known networks over the scan results, adding found known
+	 * networks.
+	 */
+
+	ArrayList<String> known_in_range = new ArrayList<String>();
+	for (ScanResult sResult : scanResults) {
+	    /*
+	     * Add known networks in range
+	     */
+
+	    if (knownnetworks.contains(sResult.SSID)) {
+		/*
+		 * Add result to known_in_range
+		 */
+		known_in_range.add(sResult.SSID);
+	    }
+	}
+
+	return known_in_range;
     }
 
     public static final List<String> getNetworks(final Context context) {
@@ -412,7 +448,8 @@ public class KnownNetworksFragment extends Fragment {
     }
 
     private void registerReceiver() {
-	IntentFilter filter = new IntentFilter(WFConnection.ACTION_SCAN_RESULTS);
+	IntentFilter filter = new IntentFilter(
+		WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 	getContext().registerReceiver(receiver, filter);
 	scanhandler.sendEmptyMessage(SCAN_MESSAGE);
     }

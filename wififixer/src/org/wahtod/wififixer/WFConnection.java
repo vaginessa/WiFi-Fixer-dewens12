@@ -30,6 +30,7 @@ import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ScreenStateDetector;
 import org.wahtod.wififixer.utility.StatusDispatcher;
 import org.wahtod.wififixer.utility.StatusMessage;
+import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFConfig;
 import org.wahtod.wififixer.utility.WakeLock;
 import org.wahtod.wififixer.utility.WifiLock;
@@ -96,16 +97,6 @@ public class WFConnection extends Object implements
 
     // User Event Intent
     public static final String USEREVENT = "org.wahtod.wififixer.USEREVENT";
-
-    // Scan list request Intents
-    public static final String ACTION_REQUEST_SCAN = "org.wahtod.wififixer.REQUEST_SCAN";
-    public static final String ACTION_SCAN_RESULTS = "org.wahtod.wififixer.SCAN_RESULTS";
-    public static final String SCAN_RESULTS_ARRAY = "SCAN_RESULTS_ARRAY";
-
-    /*
-     * Flag for scan result request
-     */
-    public static boolean scan_request = false;
 
     // Empty string
     private static final String EMPTYSTRING = "";
@@ -595,9 +586,6 @@ public class WFConnection extends Object implements
 	// User Event
 	filter.addAction(USEREVENT);
 
-	// Scan Result Request
-	filter.addAction(ACTION_REQUEST_SCAN);
-
 	context.registerReceiver(receiver, filter);
 
 	// Initialize WakeLock
@@ -657,10 +645,6 @@ public class WFConnection extends Object implements
 	 * Start Main tick
 	 */
 	handlerWrapper(MAIN);
-    }
-
-    public static String addQuotes(String s) {
-	return "\"" + s + "\"";
     }
 
     public static void checkBackgroundDataSetting(final Context context) {
@@ -847,7 +831,10 @@ public class WFConnection extends Object implements
 		    logBestNetwork(context, network);
 		    connecting++;
 		    if (connecting >= CONNECTING_THRESHOLD) {
-			LogService.log(context, appname,
+			LogService
+				.log(
+					context,
+					appname,
 					context
 						.getString(R.string.connection_threshold_exceeded));
 			restoreNetworkAndReset(context, network);
@@ -884,7 +871,7 @@ public class WFConnection extends Object implements
 	    final List<WifiConfiguration> wificonfigs) {
 	List<String> known = new ArrayList<String>();
 	for (WifiConfiguration w : wificonfigs) {
-	    known.add(removeQuotes(w.SSID));
+	    known.add(StringUtil.removeQuotes(w.SSID));
 	}
 	return known;
     }
@@ -920,16 +907,6 @@ public class WFConnection extends Object implements
 	    handleConnectIntent(context, data);
 	else if (iAction.equals(USEREVENT))
 	    handleUserEvent();
-	else if (iAction.equals(ACTION_REQUEST_SCAN))
-	    handleScanResultRequest(context);
-    }
-
-    private void doscanrequest(Context context) {
-	scan_request = false;
-	Intent scanresults = new Intent(ACTION_SCAN_RESULTS);
-	scanresults.putStringArrayListExtra(SCAN_RESULTS_ARRAY,
-		getKnownAPArray(context));
-	context.sendBroadcast(scanresults);
     }
 
     private static void fixDisabledNetwork(final Context context,
@@ -946,8 +923,8 @@ public class WFConnection extends Object implements
 		 * bugged, enable
 		 */
 		setNetworkState(context, wfresult.networkId, true);
-		getWifiManager(context).getConfiguredNetworks().get(
-			wfresult.networkId).status = WifiConfiguration.Status.ENABLED;
+		getWifiManager(context)
+			.enableNetwork(wfresult.networkId, false);
 		if (prefs.getFlag(Pref.LOG_KEY))
 		    LogService.log(context, appname, context
 			    .getString(R.string.reenablenetwork)
@@ -965,7 +942,8 @@ public class WFConnection extends Object implements
 		.getConfiguredNetworks();
 	for (WifiConfiguration w : wifiConfigs) {
 	    if (w.SSID != null
-		    && removeQuotes(w.SSID).equals(removeQuotes(ssid)))
+		    && StringUtil.removeQuotes(w.SSID).equals(
+			    StringUtil.removeQuotes(ssid)))
 		return w.networkId;
 	}
 	/*
@@ -1156,49 +1134,6 @@ public class WFConnection extends Object implements
 	return getWifiManager(ctxt).getConnectionInfo().getNetworkId();
     }
 
-    private static ArrayList<String> getKnownAPArray(final Context context) {
-
-	WifiManager wm = getWifiManager(context);
-
-	List<ScanResult> scanResults = wm.getScanResults();
-
-	/*
-	 * Catch null if scan results fires after wifi disabled or while wifi is
-	 * in intermediate state
-	 */
-	if (scanResults == null) {
-	    return null;
-	}
-
-	/*
-	 * Known networks from supplicant.
-	 */
-	final List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
-
-	List<String> known = createKnownStringList(wifiConfigs);
-
-	/*
-	 * Iterate the known networks over the scan results, adding found known
-	 * networks.
-	 */
-
-	ArrayList<String> known_in_range = new ArrayList<String>();
-	for (ScanResult sResult : scanResults) {
-	    /*
-	     * Add known networks in range
-	     */
-
-	    if (known.contains(addQuotes(sResult.SSID))) {
-		/*
-		 * Add result to known_in_range
-		 */
-		known_in_range.add(addQuotes(sResult.SSID));
-	    }
-	}
-
-	return known_in_range;
-    }
-
     private static String getSSID() {
 	String ssid = getWifiManager(ctxt).getConnectionInfo().getSSID();
 	if (ssid != null)
@@ -1325,14 +1260,6 @@ public class WFConnection extends Object implements
 	    return;
 	else
 	    onNetworkConnected();
-    }
-
-    private void handleScanResultRequest(Context context) {
-	/*
-	 * Request scan and set scan request true
-	 */
-	wm.startScan();
-	scan_request = true;
     }
 
     private void handleUserEvent() {
@@ -1517,9 +1444,6 @@ public class WFConnection extends Object implements
     private void handleScanResults() {
 	if (!getWifiManager(ctxt).isWifiEnabled())
 	    return;
-	if (scan_request)
-	    doscanrequest(ctxt);
-
 	if (!pendingscan) {
 	    if (getIsOnWifi(ctxt)) {
 		/*
@@ -1829,19 +1753,6 @@ public class WFConnection extends Object implements
 	boolean state = getWifiManager(context).removeNetwork(network);
 	getWifiManager(context).saveConfiguration();
 	return state;
-    }
-
-    private static String removeQuotes(String ssid) {
-	if (ssid == null)
-	    return EMPTYSTRING;
-	else if (!ssid.endsWith("\""))
-	    return ssid;
-	try {
-	    ssid = (String) ssid.subSequence(1, ssid.length() - 1);
-	} catch (IndexOutOfBoundsException e) {
-	    return EMPTYSTRING;
-	}
-	return ssid;
     }
 
     private static boolean scancontainsBSSID(final String bssid,
