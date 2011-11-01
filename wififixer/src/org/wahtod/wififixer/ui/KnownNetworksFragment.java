@@ -457,6 +457,7 @@ public class KnownNetworksFragment extends Fragment {
     private void unregisterReceiver() {
 	getContext().unregisterReceiver(receiver);
 	scanhandler.removeMessages(SCAN_MESSAGE);
+	scanhandler.removeMessages(REFRESH_MESSAGE);
     }
 
 }
