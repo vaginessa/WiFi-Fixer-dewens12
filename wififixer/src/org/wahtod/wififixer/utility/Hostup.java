@@ -219,6 +219,11 @@ public class Hostup {
 	    // httpclient in bad state, reset
 	    httpclient = null;
 	    status = -1;
+	}catch(NullPointerException e){
+	    /*
+	     * httpConnection null
+	     */
+	    status = -1;
 	}
 	if (status == HttpURLConnection.HTTP_OK) {
 	    if (!finished)

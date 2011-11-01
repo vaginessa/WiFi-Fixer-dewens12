@@ -19,6 +19,7 @@ package org.wahtod.wififixer.ui;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
+import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
 
 import android.content.Context;
@@ -26,6 +27,7 @@ import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,11 +81,6 @@ public class ConnectFragment extends FragmentSwitchboard implements
 		+ network.SSID);
     }
 
-    public static String addquotes(String s) {
-	final String QUOTE = "\"";
-	return QUOTE + s + QUOTE;
-    }
-
     private void addNetwork(final String password) {
 	WifiConfiguration wf = getKeyAppropriateConfig(password);
 	WifiManager wm = WFConnection.getWifiManager(getActivity()
@@ -92,12 +89,13 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	if (network != -1) {
 	    wm.enableNetwork(network, false);
 	    wm.saveConfiguration();
+	    Log.i(this.getClass().getName(),wf.toString());
 	}
     }
 
     private WifiConfiguration getKeyAppropriateConfig(final String password) {
 	WifiConfiguration wf = new WifiConfiguration();
-	wf.SSID = addquotes(network.SSID);
+	wf.SSID = StringUtil.addQuotes(network.SSID);
 	if (network.capabilities.length() == 0) {
 	    wf.BSSID = network.BSSID;
 	    wf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
@@ -113,9 +111,9 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	if (network.capabilities.contains(WEP)) {
 	    wf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
 	    wf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
-	    wf.wepKeys[0] = addquotes(password);
+	    wf.wepKeys[0] = StringUtil.addQuotes(password);
 	} else if (network.capabilities.contains(WPA)) {
-	    wf.preSharedKey = addquotes(password);
+	    wf.preSharedKey = StringUtil.addQuotes(password);
 	}
 	return wf;
     }

@@ -54,6 +54,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.text.format.Formatter;
+import android.util.Log;
 
 /*
  * Handles all interaction 
@@ -790,8 +791,9 @@ public class WFConnection extends Object implements
 	/*
 	 * Create sparse WifiConfiguration with details of desired connectee
 	 */
+	Log.i(this.getClass().getName(), target.toString());
 	connectee = new WFConfig();
-	target.status = WifiConfiguration.Status.ENABLED;
+	getWifiManager(context).enableNetwork(target.networkId, false);
 	connectee.wificonfig = target;
 	/*
 	 * Remove all posts to handler
