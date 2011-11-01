@@ -19,6 +19,7 @@ package org.wahtod.wififixer.prefs;
 import java.util.HashMap;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
@@ -229,8 +230,8 @@ public class PrefUtil extends Object {
 	if (!wm.isWifiEnabled())
 	    return context.getString(R.string.none);
 	else
-	    return getSafeFileName(context, wm.getConfiguredNetworks().get(
-		    network).SSID);
+	    return getSafeFileName(context, WFConnection.getSSIDfromNetwork(
+		    context, network));
     }
 
     public static String getSafeFileName(final Context ctxt, String filename) {
@@ -329,7 +330,7 @@ public class PrefUtil extends Object {
     public void unRegisterReciever() {
 	context.unregisterReceiver(changeReceiver);
     }
-    
+
     public static void setPolicyfromSystem(final Context context) {
 	/*
 	 * Handle Wifi Sleep Policy

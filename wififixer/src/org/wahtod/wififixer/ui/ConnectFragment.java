@@ -99,11 +99,11 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	WifiConfiguration wf = new WifiConfiguration();
 	wf.SSID = addquotes(network.SSID);
 	if (network.capabilities.length() == 0) {
-	    wf.BSSID = addquotes(network.BSSID);
+	    wf.BSSID = network.BSSID;
+	    wf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
 	    wf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
 	    return wf;
 	}
-	wf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
 	wf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
 	wf.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
 	wf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);

@@ -110,18 +110,6 @@ public class WifiFixerActivity extends FragmentActivity implements
 	}
 
 	@Override
-	public void destroyItem(View container, int position, Object object) {
-	    // TODO Auto-generated method stub
-	    super.destroyItem(container, position, object);
-	}
-
-	@Override
-	public Object instantiateItem(View container, int position) {
-	    // TODO Auto-generated method stub
-	    return super.instantiateItem(container, position);
-	}
-
-	@Override
 	public Fragment getItem(int position) {
 	    return fragments.get(position);
 	}
@@ -560,14 +548,7 @@ public class WifiFixerActivity extends FragmentActivity implements
 	    return true;
 
 	case android.R.id.home:
-
 	    if (!phoneFlag) {
-		/*
-		 * FragmentManager fm = getSupportFragmentManager();
-		 * FragmentTransaction ft = fm.beginTransaction(); while
-		 * (fm.getBackStackEntryCount() > 0) fm.popBackStackImmediate();
-		 * ft.commit();
-		 */
 		if (tadapter.getItem(tabletvp.getCurrentItem()).getClass()
 			.equals(ConnectFragment.class))
 		    removeConnectFragments(tabletvp.getCurrentItem());

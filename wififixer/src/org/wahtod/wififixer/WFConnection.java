@@ -659,6 +659,10 @@ public class WFConnection extends Object implements
 	handlerWrapper(MAIN);
     }
 
+    public static String addQuotes(String s) {
+	return "\"" + s + "\"";
+    }
+
     public static void checkBackgroundDataSetting(final Context context) {
 	ConnectivityManager cm = (ConnectivityManager) context
 		.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -785,14 +789,14 @@ public class WFConnection extends Object implements
 		    + signal);
     }
 
-    private void connectToAP(final Context context, final String bssid) {
+    private void connectToAP(final Context context, final String ssid) {
 
 	if (!getWifiManager(ctxt).isWifiEnabled())
 	    return;
 	/*
 	 * Back to explicit connection
 	 */
-	int n = getNetworkfromSSID(context, bssid);
+	int n = getNetworkfromSSID(context, ssid);
 
 	if (n == -1)
 	    return;
@@ -803,13 +807,8 @@ public class WFConnection extends Object implements
 	 * Create sparse WifiConfiguration with details of desired connectee
 	 */
 	connectee = new WFConfig();
-	WifiConfiguration cfg = new WifiConfiguration();
-	cfg.status = WifiConfiguration.Status.ENABLED;
-	cfg.networkId = n;
-	connectee.wificonfig = cfg;
-	getWifiManager(ctxt).updateNetwork(connectee.wificonfig);
-	connectee.wificonfig.SSID = target.SSID;
-
+	target.status = WifiConfiguration.Status.ENABLED;
+	connectee.wificonfig = target;
 	/*
 	 * Remove all posts to handler
 	 */
@@ -847,8 +846,13 @@ public class WFConnection extends Object implements
 		if (network.wificonfig.SSID.equals(connectee.wificonfig.SSID)) {
 		    logBestNetwork(context, network);
 		    connecting++;
-		    if (connecting > CONNECTING_THRESHOLD)
+		    if (connecting >= CONNECTING_THRESHOLD) {
+			LogService.log(context, appname,
+					context
+						.getString(R.string.connection_threshold_exceeded));
 			restoreNetworkAndReset(context, network);
+		    } else
+			connectToAP(context, connectee.wificonfig.SSID);
 		    return network.wificonfig.networkId;
 		}
 	    }
@@ -859,16 +863,12 @@ public class WFConnection extends Object implements
 
 	WFConfig best = knownbysignal.get(0);
 	/*
-	 * specify bssid and add it to the supplicant's known network entry
+	 * Until BSSID blacklisting is implemented, no point
 	 */
-	WifiConfiguration cfg = new WifiConfiguration();
-	cfg.BSSID = best.wificonfig.BSSID;
-	cfg.networkId = best.wificonfig.networkId;
-	getWifiManager(ctxt).updateNetwork(cfg);
-	connectToAP(context, best.wificonfig.BSSID);
+	connectToAP(context, best.wificonfig.SSID);
 	logBestNetwork(context, best);
 
-	return cfg.networkId;
+	return best.wificonfig.networkId;
     }
 
     private static boolean containsBSSID(final String bssid,
@@ -958,13 +958,14 @@ public class WFConnection extends Object implements
     }
 
     private static int getNetworkfromSSID(final Context context,
-	    final String bssid) {
-	if (bssid == null)
+	    final String ssid) {
+	if (ssid == null)
 	    return -1;
 	final List<WifiConfiguration> wifiConfigs = getWifiManager(context)
 		.getConfiguredNetworks();
 	for (WifiConfiguration w : wifiConfigs) {
-	    if (w.SSID != null && w.SSID.equals(bssid))
+	    if (w.SSID != null
+		    && removeQuotes(w.SSID).equals(removeQuotes(ssid)))
 		return w.networkId;
 	}
 	/*
@@ -1187,12 +1188,11 @@ public class WFConnection extends Object implements
 	     * Add known networks in range
 	     */
 
-	    if (known.contains(sResult.SSID)) {
+	    if (known.contains(addQuotes(sResult.SSID))) {
 		/*
 		 * Add result to known_in_range
 		 */
-		known_in_range.add(sResult.SSID);
-
+		known_in_range.add(addQuotes(sResult.SSID));
 	    }
 	}
 
@@ -1200,8 +1200,9 @@ public class WFConnection extends Object implements
     }
 
     private static String getSSID() {
-	if (getWifiManager(ctxt).getConnectionInfo().getSSID() != null)
-	    return getWifiManager(ctxt).getConnectionInfo().getSSID();
+	String ssid = getWifiManager(ctxt).getConnectionInfo().getSSID();
+	if (ssid != null)
+	    return ssid;
 	else
 	    return NULL_SSID;
     }
@@ -1304,13 +1305,14 @@ public class WFConnection extends Object implements
 	    else
 		return;
 	}
-	getWifiManager(ctxt).updateNetwork(connectee.wificonfig);
 	connectee = null;
     }
 
     private void handleConnectIntent(Context context, Bundle data) {
-	LogService.log(context, appname, "Connecting to:"
-		+ data.getString(NETWORKNAME));
+	if (prefs.getFlag(Pref.LOG_KEY))
+	    LogService.log(context, appname, context
+		    .getString(R.string.connecting_to_network)
+		    + data.getString(NETWORKNAME));
 	connectToAP(ctxt, data.getString(NETWORKNAME));
     }
 
@@ -1832,6 +1834,8 @@ public class WFConnection extends Object implements
     private static String removeQuotes(String ssid) {
 	if (ssid == null)
 	    return EMPTYSTRING;
+	else if (!ssid.endsWith("\""))
+	    return ssid;
 	try {
 	    ssid = (String) ssid.subSequence(1, ssid.length() - 1);
 	} catch (IndexOutOfBoundsException e) {
@@ -1890,7 +1894,7 @@ public class WFConnection extends Object implements
     }
 
     private static boolean shouldManage(final Context ctx) {
-	String ssid = PrefUtil.getSafeFileName(ctx, getSSID());
+	String ssid = PrefUtil.getSafeFileName(ctx, notifSSID);
 	if (ssid == NULL_SSID)
 	    return true;
 	else if (prefs.getnetPref(ctxt, NetPref.NONMANAGED_KEY, ssid) == 1)
@@ -2072,14 +2076,6 @@ public class WFConnection extends Object implements
 
     private static void restoreNetworkAndReset(final Context context,
 	    final WFConfig network) {
-	/*
-	 * First restore normal priority before we try manual connect
-	 */
-	WifiConfiguration cfg = new WifiConfiguration();
-	cfg.priority = connectee.wificonfig.priority;
-	cfg.networkId = connectee.wificonfig.networkId;
-	connectee.wificonfig = cfg;
-	getWifiManager(ctxt).updateNetwork(connectee.wificonfig);
 	/*
 	 * Turns out we just want to toggle wifi
 	 */

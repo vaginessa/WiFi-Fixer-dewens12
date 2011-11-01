@@ -213,5 +213,6 @@
     <string name="critical_timeout">Network Check fail: critical timeout</string>
     <string name="add">Add</string>
     <string name="button_connect">Tap button to connect</string>
+    <string name="connection_threshold_exceeded">Connection Threshold Exceeded</string>
 
 </resources>
