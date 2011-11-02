@@ -17,9 +17,9 @@
 package org.wahtod.wififixer.prefs;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
@@ -30,6 +30,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -59,6 +60,7 @@ public class PrefUtil extends Object {
      */
     private boolean[] keyVals;
     private static Context context;
+    private static WifiManager wm_;
     private HashMap<String, int[]> netprefs;
 
     private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
@@ -230,13 +232,24 @@ public class PrefUtil extends Object {
 	if (!wm.isWifiEnabled())
 	    return context.getString(R.string.none);
 	else
-	    return getSafeFileName(context, WFConnection.getSSIDfromNetwork(
+	    return getSafeFileName(context, getSSIDfromNetwork(
 		    context, network));
+    }
+    
+    public static String getSSIDfromNetwork(final Context context,
+	    final int network) {
+	final List<WifiConfiguration> wifiConfigs = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE))
+		.getConfiguredNetworks();
+	for (WifiConfiguration w : wifiConfigs) {
+	    if (w.networkId == network)
+		return w.SSID;
+	}
+	return null;
     }
 
     public static String getSafeFileName(final Context ctxt, String filename) {
 	if (filename == null)
-	    filename = context.getString(R.string.none);
+	    filename = ctxt.getString(R.string.none);
 
 	return filename.replaceAll("[^a-zA-Z0-9]", "");
     }
@@ -357,6 +370,77 @@ public class PrefUtil extends Object {
 	android.provider.Settings.System.putInt(cr,
 		android.provider.Settings.System.WIFI_SLEEP_POLICY, policy);
 
+    }
+    
+    public static WifiManager getWifiManager(final Context context) {
+	/*
+	 * Cache WifiManager
+	 */
+	if(wm_ == null){
+	    wm_ = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+	}
+	return wm_;
+    }
+    
+    public static boolean getNetworkState(final Context context,
+	    final int network) {
+	if (!getWifiManager(context).isWifiEnabled())
+	    return !readNetworkState(context, network);
+	else if (getWifiManager(context).getConfiguredNetworks().get(network).status == WifiConfiguration.Status.DISABLED)
+	    return false;
+	else
+	    return true;
+    }
+
+    public static void writeNetworkState(final Context context,
+	    final int network, final boolean state) {
+	String netstring = getnetworkSSID(context, network);
+	if (state)
+	    PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY,
+		    1);
+	else
+	    PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY,
+		    0);
+    }
+
+    public static boolean readManagedState(final Context context,
+	    final int network) {
+
+	if (PrefUtil.readNetworkPref(context, getnetworkSSID(context,
+		network), NetPref.NONMANAGED_KEY) == 1)
+	    return true;
+	else
+	    return false;
+    }
+
+    public static void writeManagedState(final Context context,
+	    final int network, final boolean state) {
+	String netstring = getnetworkSSID(context, network);
+	if (state)
+	    PrefUtil.writeNetworkPref(context, netstring,
+		    NetPref.NONMANAGED_KEY, 1);
+	else
+	    PrefUtil.writeNetworkPref(context, netstring,
+		    NetPref.NONMANAGED_KEY, 0);
+    }
+
+    public static boolean readNetworkState(final Context context,
+	    final int network) {
+	if (PrefUtil.readNetworkPref(context,getnetworkSSID(context,
+		network), NetPref.DISABLED_KEY) == 1)
+	    return true;
+	else
+	    return false;
+    }
+    
+    public static boolean setNetworkState(final Context context,
+	    final int network, final boolean state) {
+	WifiManager w = getWifiManager(context);
+	if (state)
+	    w.enableNetwork(network, false);
+	else
+	    w.disableNetwork(network);
+	return w.saveConfiguration();
     }
 
 }

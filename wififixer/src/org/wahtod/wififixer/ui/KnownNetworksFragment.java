@@ -24,6 +24,8 @@ import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.R.id;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
+import org.wahtod.wififixer.utility.StringUtil;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -99,7 +101,9 @@ public class KnownNetworksFragment extends Fragment {
 	menu.add(3, CONTEXT_CONNECT, 2, R.string.connect);
 	menu.add(4, CONTEXT_NONMANAGE, 3, R.string.set_non_managed);
 	menu.add(5, CONTEXT_REMOVE, 5, R.string.remove);
-	if (!WFConnection.getNetworkState(getContext(), clicked_position)) {
+	menu.setGroupEnabled(3, known_in_range.contains(clicked));
+
+	if (!PrefUtil.getNetworkState(getContext(), clicked_position)) {
 	    menu.setGroupEnabled(3, false);
 	    menu.setGroupEnabled(2, false);
 	} else
@@ -117,42 +121,39 @@ public class KnownNetworksFragment extends Fragment {
 	    switch (item.getItemId()) {
 	    case CONTEXT_ENABLE:
 		iv.setImageResource(R.drawable.enabled_ssid);
-		WFConnection.setNetworkState(getContext(), clicked_position,
-			true);
-		WFConnection.writeNetworkState(getContext(), clicked_position,
+		PrefUtil.setNetworkState(getContext(), clicked_position, true);
+		PrefUtil.writeNetworkState(getContext(), clicked_position,
 			false);
 		adapter.notifyDataSetChanged();
 		break;
 	    case CONTEXT_DISABLE:
 		iv.setImageResource(R.drawable.disabled_ssid);
-		WFConnection.setNetworkState(getContext(), clicked_position,
-			false);
-		WFConnection.writeNetworkState(getContext(), clicked_position,
-			true);
+		PrefUtil.setNetworkState(getContext(), clicked_position, false);
+		PrefUtil
+			.writeNetworkState(getContext(), clicked_position, true);
 		adapter.notifyDataSetChanged();
 		break;
 	    case CONTEXT_CONNECT:
 		Intent intent = new Intent(WFConnection.CONNECTINTENT);
-		intent.putExtra(WFConnection.NETWORKNAME, WFConnection
+		intent.putExtra(WFConnection.NETWORKNAME, PrefUtil
 			.getSSIDfromNetwork(getContext(), clicked_position));
 		getContext().sendBroadcast(intent);
 		break;
 
 	    case CONTEXT_NONMANAGE:
-		if (!WFConnection.readManagedState(getContext(),
-			clicked_position)) {
+		if (!PrefUtil.readManagedState(getContext(), clicked_position)) {
 		    iv.setImageResource(R.drawable.ignore_ssid);
-		    WFConnection.writeManagedState(getContext(),
-			    clicked_position, true);
+		    PrefUtil.writeManagedState(getContext(), clicked_position,
+			    true);
 		} else {
-		    if (WFConnection.getNetworkState(getContext(),
-			    clicked_position))
+		    if (PrefUtil
+			    .getNetworkState(getContext(), clicked_position))
 			iv.setImageResource(R.drawable.enabled_ssid);
 		    else
 			iv.setImageResource(R.drawable.disabled_ssid);
 
-		    WFConnection.writeManagedState(getContext(),
-			    clicked_position, false);
+		    PrefUtil.writeManagedState(getContext(), clicked_position,
+			    false);
 		}
 		adapter.notifyDataSetChanged();
 		break;
@@ -161,10 +162,11 @@ public class KnownNetworksFragment extends Fragment {
 		Toast.makeText(
 			getContext(),
 			getContext().getString(R.string.removing_network)
-				+ WFConnection.getSSIDfromNetwork(getContext(),
+				+ PrefUtil.getSSIDfromNetwork(getContext(),
 					clicked_position), Toast.LENGTH_SHORT)
 			.show();
-		WFConnection.removeNetwork(getContext(), clicked_position);
+		PrefUtil.getWifiManager(getActivity()).removeNetwork(
+			clicked_position);
 		adapter.ssidArray.remove(clicked_position);
 		adapter.notifyDataSetChanged();
 		break;
@@ -246,10 +248,10 @@ public class KnownNetworksFragment extends Fragment {
 	    /*
 	     * Set State icon
 	     */
-	    if (WFConnection.readManagedState(getContext(), position))
+	    if (PrefUtil.readManagedState(getContext(), position))
 		holder.icon.setImageResource(R.drawable.ignore_ssid);
 	    else {
-		if (WFConnection.getNetworkState(getContext(), position))
+		if (PrefUtil.getNetworkState(getContext(), position))
 		    holder.icon.setImageResource(R.drawable.enabled_ssid);
 		else
 		    holder.icon.setImageResource(R.drawable.disabled_ssid);
@@ -384,7 +386,7 @@ public class KnownNetworksFragment extends Fragment {
 	     * getConfiguredNetworks() and the array
 	     */
 	    if (wfResult.SSID != null && wfResult.SSID.length() > 0)
-		networks.add(wfResult.SSID.replace("\"", ""));
+		networks.add(StringUtil.removeQuotes(wfResult.SSID));
 	    else
 		networks.add(EMPTY_SSID);
 	}

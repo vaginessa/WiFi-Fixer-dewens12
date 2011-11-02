@@ -16,11 +16,14 @@
 
 package org.wahtod.wififixer.ui;
 
+import java.lang.reflect.Field;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
+import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
+import org.wahtod.wififixer.widget.WidgetHandler;
 
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +44,10 @@ import android.widget.Toast;
 public class ConnectFragment extends FragmentSwitchboard implements
 	OnClickListener {
 
+    private static final String BUGGED = "Proxy";
+    private static final String DHCP_CONSTANT = "DHCP";
+    private static final String IPASSIGNMENT_CLASS = "android.net.wifi.WifiConfiguration$IpAssignment";
+    private static final String IP_ASSIGNMENT = "ipAssignment";
     private static final String WPA = "WPA";
     private static final String WEP = "WEP";
     private WFScanResult network;
@@ -83,18 +90,43 @@ public class ConnectFragment extends FragmentSwitchboard implements
 
     private void addNetwork(final String password) {
 	WifiConfiguration wf = getKeyAppropriateConfig(password);
-	WifiManager wm = WFConnection.getWifiManager(getActivity()
+	WifiManager wm = PrefUtil.getWifiManager(getActivity()
 		.getApplicationContext());
 	int network = wm.addNetwork(wf);
 	if (network != -1) {
 	    wm.enableNetwork(network, false);
 	    wm.saveConfiguration();
-	    Log.i(this.getClass().getName(),wf.toString());
+	    if (wf.toString().contains(BUGGED)) {
+		getActivity().sendBroadcast(
+			new Intent(WidgetHandler.TOGGLE_WIFI));
+	    }
 	}
+    }
+    
+    @SuppressWarnings("unchecked")
+    private static WifiConfiguration addHiddenFields(WifiConfiguration w){
+	try {
+	    Field f = w.getClass().getField(IP_ASSIGNMENT);
+	    Class ipc = Class.forName(IPASSIGNMENT_CLASS);
+	    Field dhcp = ipc.getField(DHCP_CONSTANT);
+	    Object value = dhcp.get(null);
+	    f.set(w,value);
+	} catch (Exception e) {
+	    Log.i("WifiFixer", e.toString());
+	}
+	
+	return w;
     }
 
     private WifiConfiguration getKeyAppropriateConfig(final String password) {
 	WifiConfiguration wf = new WifiConfiguration();
+	if (wf.toString().contains(BUGGED)) {
+	    /*
+	     * hopefully...
+	     */
+	   wf = addHiddenFields(wf);
+	   Log.i(this.getClass().getName(),"Adding hidden fields");
+	}
 	wf.SSID = StringUtil.addQuotes(network.SSID);
 	if (network.capabilities.length() == 0) {
 	    wf.BSSID = network.BSSID;

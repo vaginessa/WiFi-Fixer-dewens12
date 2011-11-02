@@ -54,7 +54,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.text.format.Formatter;
-import android.util.Log;
 
 /*
  * Handles all interaction 
@@ -138,7 +137,6 @@ public class WFConnection extends Object implements
     private static final int NULLVAL = -1;
     private static int lastAP = NULLVAL;
 
-    private static WifiManager wm;
     private static WFConfig connectee;
     private static Hostup hostup;
     private static List<WFConfig> knownbysignal;
@@ -168,6 +166,7 @@ public class WFConnection extends Object implements
      * For connectToAP sticking
      */
     private static int connecting = 0;
+    private static WifiManager wm_;
     private static final int CONNECTING_THRESHOLD = 3;
 
     // Runnable Constants for handler
@@ -791,7 +790,6 @@ public class WFConnection extends Object implements
 	/*
 	 * Create sparse WifiConfiguration with details of desired connectee
 	 */
-	Log.i(this.getClass().getName(), target.toString());
 	connectee = new WFConfig();
 	getWifiManager(context).enableNetwork(target.networkId, false);
 	connectee.wificonfig = target;
@@ -806,6 +804,7 @@ public class WFConnection extends Object implements
 	getWifiManager(ctxt).disconnect();
 	getWifiManager(ctxt)
 		.enableNetwork(connectee.wificonfig.networkId, true);
+	startScan(true);
 
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(context, appname, context
@@ -839,7 +838,7 @@ public class WFConnection extends Object implements
 					appname,
 					context
 						.getString(R.string.connection_threshold_exceeded));
-			restoreNetworkAndReset(context, network);
+			restoreandReset(context, network);
 		    } else
 			connectToAP(context, connectee.wificonfig.SSID);
 		    return network.wificonfig.networkId;
@@ -911,7 +910,7 @@ public class WFConnection extends Object implements
 	    handleUserEvent();
     }
 
-    private static void fixDisabledNetwork(final Context context,
+    private static void fixDisabledNetworks(final Context context,
 	    List<WifiConfiguration> wflist) {
 
 	for (WifiConfiguration wfresult : wflist) {
@@ -920,11 +919,11 @@ public class WFConnection extends Object implements
 	     * state won't match stored state
 	     */
 	    if (wfresult.status == WifiConfiguration.Status.DISABLED
-		    && !readNetworkState(context, wfresult.networkId)) {
+		    && !PrefUtil.readNetworkState(context, wfresult.networkId)) {
 		/*
 		 * bugged, enable
 		 */
-		setNetworkState(context, wfresult.networkId, true);
+		PrefUtil.setNetworkState(context, wfresult.networkId, true);
 		getWifiManager(context)
 			.enableNetwork(wfresult.networkId, false);
 		if (prefs.getFlag(Pref.LOG_KEY))
@@ -952,17 +951,6 @@ public class WFConnection extends Object implements
 	 * Not found
 	 */
 	return -1;
-    }
-
-    public static String getSSIDfromNetwork(final Context context,
-	    final int network) {
-	final List<WifiConfiguration> wifiConfigs = getWifiManager(context)
-		.getConfiguredNetworks();
-	for (WifiConfiguration w : wifiConfigs) {
-	    if (w.networkId == network)
-		return w.SSID;
-	}
-	return null;
     }
 
     private static boolean getIsOnWifi(final Context context) {
@@ -1062,7 +1050,7 @@ public class WFConnection extends Object implements
 		/*
 		 * Break if disabled
 		 */
-		if (!getNetworkState(context, wfResult.networkId))
+		if (!PrefUtil.getNetworkState(context, wfResult.networkId))
 		    break;
 		/*
 		 * Log network
@@ -1165,65 +1153,13 @@ public class WFConnection extends Object implements
 	/*
 	 * Cache WifiManager
 	 */
-	if (wm == null) {
-	    wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-	    if (prefs != null && prefs.getFlag(Pref.LOG_KEY))
+	if (wm_ == null) {
+	    wm_ = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+	    if (prefs.getFlag(Pref.LOG_KEY))
 		LogService.log(context, LogService.getLogTag(context), context
 			.getString(R.string.cachewfinst));
 	}
-
-	return wm;
-    }
-
-    public static boolean getNetworkState(final Context context,
-	    final int network) {
-	if (!getWifiManager(context).isWifiEnabled())
-	    return !readNetworkState(context, network);
-	else if (getWifiManager(context).getConfiguredNetworks().get(network).status == WifiConfiguration.Status.DISABLED)
-	    return false;
-	else
-	    return true;
-    }
-
-    public static void writeNetworkState(final Context context,
-	    final int network, final boolean state) {
-	String netstring = PrefUtil.getnetworkSSID(context, network);
-	if (state)
-	    PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY,
-		    1);
-	else
-	    PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY,
-		    0);
-    }
-
-    public static boolean readManagedState(final Context context,
-	    final int network) {
-
-	if (PrefUtil.readNetworkPref(context, PrefUtil.getnetworkSSID(context,
-		network), NetPref.NONMANAGED_KEY) == 1)
-	    return true;
-	else
-	    return false;
-    }
-
-    public static void writeManagedState(final Context context,
-	    final int network, final boolean state) {
-	String netstring = PrefUtil.getnetworkSSID(context, network);
-	if (state)
-	    PrefUtil.writeNetworkPref(context, netstring,
-		    NetPref.NONMANAGED_KEY, 1);
-	else
-	    PrefUtil.writeNetworkPref(context, netstring,
-		    NetPref.NONMANAGED_KEY, 0);
-    }
-
-    public static boolean readNetworkState(final Context context,
-	    final int network) {
-	if (PrefUtil.readNetworkPref(context, PrefUtil.getnetworkSSID(context,
-		network), NetPref.DISABLED_KEY) == 1)
-	    return true;
-	else
-	    return false;
+	return wm_;
     }
 
     private void handleConnect() {
@@ -1642,7 +1578,7 @@ public class WFConnection extends Object implements
 	 * Check for Android 2.x disabled network bug WifiConfiguration state
 	 * won't match stored state
 	 */
-	fixDisabledNetwork(ctxt, getWifiManager(ctxt).getConfiguredNetworks());
+	fixDisabledNetworks(ctxt, getWifiManager(ctxt).getConfiguredNetworks());
 
 	/*
 	 * restart the Main tick
@@ -1783,16 +1719,6 @@ public class WFConnection extends Object implements
 	    handlerWrapper(SCAN, NORMAL_SCAN_DELAY);
 	else
 	    handlerWrapper(SCAN, SLEEPWAIT);
-    }
-
-    public static boolean setNetworkState(final Context context,
-	    final int network, final boolean state) {
-	WifiManager w = getWifiManager(context);
-	if (state)
-	    w.enableNetwork(network, false);
-	else
-	    w.disableNetwork(network);
-	return w.saveConfiguration();
     }
 
     protected void setStatNotif(final boolean state) {
@@ -1987,11 +1913,12 @@ public class WFConnection extends Object implements
 	wifilock.lock(state);
     }
 
-    private static void restoreNetworkAndReset(final Context context,
+    private static void restoreandReset(final Context ctxt,
 	    final WFConfig network) {
 	/*
-	 * Turns out we just want to toggle wifi
+	 * Enable bugged disabled networks, reset
 	 */
+	fixDisabledNetworks(ctxt, getWifiManager(ctxt).getConfiguredNetworks());
 	toggleWifi();
 	connecting = 0;
     }
