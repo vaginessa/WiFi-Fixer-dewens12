@@ -61,8 +61,6 @@ import android.text.format.Formatter;
  */
 public class WFConnection extends Object implements
 	OnScreenStateChangedListener {
-    private static final String AS_INTERFACE = "asInterface";
-    private static final String GET_SERVICE = "getService";
     private static String accesspointIP;
     private static String appname;
     private static PrefUtil prefs;
@@ -92,9 +90,6 @@ public class WFConnection extends Object implements
 
     // For blank SSIDs
     private static final String NULL_SSID = "None";
-
-    // Reflection constants for connection
-    private static final String CONNECT_NETWORK = "connectNetwork";
 
     // Wifi Connect Intent
     public static final String CONNECTINTENT = "org.wahtod.wififixer.CONNECT";
@@ -803,18 +798,10 @@ public class WFConnection extends Object implements
 	 */
 	clearHandler();
 	/*
-	 * Disconnect and explicitly connect will handle re-enabling other
-	 * networks next scan
+	 * Connect
 	 */
-	getWifiManager(ctxt).disconnect();
-	/*
-	 * Handle hidden 3.1+ connect method
-	 */
-	// if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1)
-	    getWifiManager(ctxt).enableNetwork(connectee.wificonfig.networkId,
-		    true);
-//	else
-//	    connectNetworkHoneycomb(context, connectee.wificonfig.networkId);
+	getWifiManager(ctxt)
+		.enableNetwork(connectee.wificonfig.networkId, true);
 
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(context, appname, context
@@ -823,50 +810,7 @@ public class WFConnection extends Object implements
 
     }
 
-   /* @SuppressWarnings("unchecked")
-    private static void connectNetworkHoneycomb(final Context context,
-	    final int network) {
-
-	String serviceManagerName = "android.os.IServiceManager";
-	String serviceManagerNativeName = "android.os.ServiceManagerNative";
-	String wifiStubName = "android.net.wifi.IWifiManager";
-
-	Class wifiClass;
-	Class wifiStubClass;
-	Class serviceManagerClass;
-	Class serviceManagerNativeClass;
-	Object wifiObject;
-	Object serviceManagerObject;
-
-	try {
-	    wifiClass = Class.forName(wifiStubName);
-	    wifiStubClass = wifiClass.getClasses()[0];
-	    serviceManagerClass = Class.forName(serviceManagerName);
-	    serviceManagerNativeClass = Class.forName(serviceManagerNativeName);
-
-	    Method getService = serviceManagerClass.getMethod(GET_SERVICE,
-		    String.class);
-
-	    Method tempInterfaceMethod = serviceManagerNativeClass.getMethod(
-		    AS_INTERFACE, IBinder.class);
-	    Binder tmpBinder = new Binder();
-	    tmpBinder.attachInterface(null, "fake");
-	    serviceManagerObject = tempInterfaceMethod.invoke(null,  new Object[] { tmpBinder });
-
-	    IBinder retbinder = (IBinder) getService.invoke(
-		    serviceManagerObject, Context.WIFI_SERVICE);
-	    Method serviceMethod = wifiStubClass.getMethod(AS_INTERFACE,
-		    IBinder.class);
-	    wifiObject = serviceMethod.invoke(null, new Object[] { retbinder });
-	    Method connectNetwork = wifiClass.getDeclaredMethod(
-		    CONNECT_NETWORK, int.class);
-	    connectNetwork.invoke(wifiObject, network);
-	} catch (Exception e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-    }
-*/
+   
     private int connectToBest(final Context context) {
 	/*
 	 * Make sure knownbysignal is populated first
