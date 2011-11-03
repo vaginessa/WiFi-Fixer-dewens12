@@ -804,7 +804,7 @@ public class WFConnection extends Object implements
 	getWifiManager(ctxt).disconnect();
 	getWifiManager(ctxt)
 		.enableNetwork(connectee.wificonfig.networkId, true);
-	startScan(true);
+	//startScan(true);
 
 	if (prefs.getFlag(Pref.LOG_KEY))
 	    LogService.log(context, appname, context

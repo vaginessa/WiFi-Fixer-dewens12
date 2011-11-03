@@ -23,8 +23,6 @@ import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
-import org.wahtod.wififixer.widget.WidgetHandler;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
@@ -44,10 +42,13 @@ import android.widget.Toast;
 public class ConnectFragment extends FragmentSwitchboard implements
 	OnClickListener {
 
+    private static final String PROXY_CLASS = "android.net.wifi.WifiConfiguration$ProxySettings";
     private static final String BUGGED = "Proxy";
     private static final String DHCP_CONSTANT = "DHCP";
+    private static final String NONE_CONSTANT = "NONE";
     private static final String IPASSIGNMENT_CLASS = "android.net.wifi.WifiConfiguration$IpAssignment";
     private static final String IP_ASSIGNMENT = "ipAssignment";
+    private static final String PROXY_SETTINGS = "proxySettings";
     private static final String WPA = "WPA";
     private static final String WEP = "WEP";
     private WFScanResult network;
@@ -96,27 +97,45 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	if (network != -1) {
 	    wm.enableNetwork(network, false);
 	    wm.saveConfiguration();
-	    if (wf.toString().contains(BUGGED)) {
-		getActivity().sendBroadcast(
-			new Intent(WidgetHandler.TOGGLE_WIFI));
-	    }
 	}
     }
-    
+
     @SuppressWarnings("unchecked")
-    private static WifiConfiguration addHiddenFields(WifiConfiguration w){
+    private static WifiConfiguration addHiddenFields(WifiConfiguration w) {
 	try {
 	    Field f = w.getClass().getField(IP_ASSIGNMENT);
+	    Field f2 = w.getClass().getField(PROXY_SETTINGS);
 	    Class ipc = Class.forName(IPASSIGNMENT_CLASS);
+	    Class proxy = Class.forName(PROXY_CLASS);
 	    Field dhcp = ipc.getField(DHCP_CONSTANT);
-	    Object value = dhcp.get(null);
-	    f.set(w,value);
+	    Field none = proxy.getField(NONE_CONSTANT);
+	    Object v = dhcp.get(null);
+	    Object v2 = none.get(null);
+	    f.set(w, v);
+	    f2.set(w, v2);
 	} catch (Exception e) {
 	    Log.i("WifiFixer", e.toString());
 	}
-	
+
 	return w;
     }
+
+    // @SuppressWarnings("unchecked")
+    // private static void reflectionMagic() {
+    // Class c = null;
+    // try {
+    // c = Class.forName(PROXY_CLASS);
+    // } catch (ClassNotFoundException e) {
+    // // TODO Auto-generated catch block
+    // e.printStackTrace();
+    // }
+    // Field[] fields = c.getFields();
+    // for (Field f : fields) {
+    // Log.i(c.getClass().getName(), f.getName() + ":"
+    // + f.getType().getName()
+    // + Modifier.toString(f.getModifiers()));
+    // }
+    // }
 
     private WifiConfiguration getKeyAppropriateConfig(final String password) {
 	WifiConfiguration wf = new WifiConfiguration();
@@ -124,8 +143,9 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	    /*
 	     * hopefully...
 	     */
-	   wf = addHiddenFields(wf);
-	   Log.i(this.getClass().getName(),"Adding hidden fields");
+	    wf = addHiddenFields(wf);
+	    Log.i(this.getClass().getName(), "Adding hidden fields");
+	    Log.i(this.getClass().getName(), wf.toString());
 	}
 	wf.SSID = StringUtil.addQuotes(network.SSID);
 	if (network.capabilities.length() == 0) {
