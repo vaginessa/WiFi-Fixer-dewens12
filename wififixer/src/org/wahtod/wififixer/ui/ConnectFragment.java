@@ -17,12 +17,14 @@
 package org.wahtod.wififixer.ui;
 
 import java.lang.reflect.Field;
+
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
@@ -41,7 +43,6 @@ import android.widget.Toast;
 
 public class ConnectFragment extends FragmentSwitchboard implements
 	OnClickListener {
-
     private static final String PROXY_CLASS = "android.net.wifi.WifiConfiguration$ProxySettings";
     private static final String BUGGED = "Proxy";
     private static final String DHCP_CONSTANT = "DHCP";
@@ -89,24 +90,24 @@ public class ConnectFragment extends FragmentSwitchboard implements
 		+ network.SSID);
     }
 
-    private void addNetwork(final String password) {
+    private int addNetwork(final String password) {
 	WifiConfiguration wf = getKeyAppropriateConfig(password);
 	WifiManager wm = PrefUtil.getWifiManager(getActivity()
 		.getApplicationContext());
-	int network = wm.addNetwork(wf);
-	if (network != -1) {
-	    wm.enableNetwork(network, false);
+	int n = wm.addNetwork(wf);
+	if (n != -1) {
+	    wm.enableNetwork(n, false);
 	    wm.saveConfiguration();
 	}
+	return n;
     }
 
-    @SuppressWarnings("unchecked")
     private static WifiConfiguration addHiddenFields(WifiConfiguration w) {
 	try {
 	    Field f = w.getClass().getField(IP_ASSIGNMENT);
 	    Field f2 = w.getClass().getField(PROXY_SETTINGS);
-	    Class ipc = Class.forName(IPASSIGNMENT_CLASS);
-	    Class proxy = Class.forName(PROXY_CLASS);
+	    Class<?> ipc = Class.forName(IPASSIGNMENT_CLASS);
+	    Class<?> proxy = Class.forName(PROXY_CLASS);
 	    Field dhcp = ipc.getField(DHCP_CONSTANT);
 	    Field none = proxy.getField(NONE_CONSTANT);
 	    Object v = dhcp.get(null);
@@ -119,23 +120,6 @@ public class ConnectFragment extends FragmentSwitchboard implements
 
 	return w;
     }
-
-    // @SuppressWarnings("unchecked")
-    // private static void reflectionMagic() {
-    // Class c = null;
-    // try {
-    // c = Class.forName(PROXY_CLASS);
-    // } catch (ClassNotFoundException e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    // Field[] fields = c.getFields();
-    // for (Field f : fields) {
-    // Log.i(c.getClass().getName(), f.getName() + ":"
-    // + f.getType().getName()
-    // + Modifier.toString(f.getModifiers()));
-    // }
-    // }
 
     private WifiConfiguration getKeyAppropriateConfig(final String password) {
 	WifiConfiguration wf = new WifiConfiguration();
