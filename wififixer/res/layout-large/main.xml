@@ -24,15 +24,14 @@
         android:gravity="center_horizontal"
         android:orientation="horizontal" >
 
-        <fragment
+        <FrameLayout
             android:id="@+id/servicefragment"
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_gravity="center_horizontal"
-            class="org.wahtod.wififixer.ui.ServiceFragment"
             android:paddingBottom="15dp"
             android:paddingTop="15dp" >
-        </fragment>
+        </FrameLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/tpager"
@@ -53,25 +52,23 @@
         android:gravity="center_horizontal"
         android:orientation="horizontal" >
 
-        <fragment
+        <FrameLayout
             android:id="@+id/knownnetworksfragment"
             android:layout_width="400dp"
             android:layout_height="fill_parent"
-            class="org.wahtod.wififixer.ui.KnownNetworksFragment"
             android:paddingBottom="30dp"
             android:paddingLeft="50dp"
             android:paddingRight="50dp" >
-        </fragment>
+        </FrameLayout>
 
-        <fragment
+        <FrameLayout
             android:id="@+id/scanfragment"
             android:layout_width="400dp"
             android:layout_height="fill_parent"
             android:layout_marginLeft="200dp"
-            class="org.wahtod.wififixer.ui.ScanFragment"
             android:paddingBottom="30dp"
             android:paddingRight="50dp" >
-        </fragment>
+        </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>

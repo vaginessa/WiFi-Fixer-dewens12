@@ -16,13 +16,12 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <fragment
+    <FrameLayout
         android:id="@+id/servicefragment"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        class="org.wahtod.wififixer.ui.ServiceFragment"
         android:paddingBottom="5dp" >
-    </fragment>
+    </FrameLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"

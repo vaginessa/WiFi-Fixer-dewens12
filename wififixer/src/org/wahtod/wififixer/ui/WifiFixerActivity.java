@@ -411,18 +411,25 @@ public class WifiFixerActivity extends FragmentActivity implements
 
     public void drawUI(Bundle savedinstanceState) {
 	/*
-	 * Set up ViewPagers and FragmentPagerAdapters for phone and tablet
+	 * Set up Fragments, ViewPagers and FragmentPagerAdapters for phone and
+	 * tablet
 	 */
 	ViewPager phonevp = (ViewPager) findViewById(R.id.pager);
 	if (phonevp != null) {
+	    drawFragment(R.id.servicefragment, ServiceFragment.class);
 	    phoneFlag = true;
 	    if (phonevp.getAdapter() == null) {
 		PhoneAdapter fadapter = new PhoneAdapter(
 			getSupportFragmentManager());
 		phonevp.setAdapter(fadapter);
 	    }
-	} else
+	} else {
+	    drawFragment(R.id.servicefragment, ServiceFragment.class);
+	    drawFragment(R.id.knownnetworksfragment,
+		    KnownNetworksFragment.class);
+	    drawFragment(R.id.scanfragment, ScanFragment.class);
 	    createTabletAdapter();
+	}
     }
 
     @Override
@@ -622,6 +629,23 @@ public class WifiFixerActivity extends FragmentActivity implements
 	    ft.remove(f);
 	}
 	ft.commit();
+    }
+
+    private void drawFragment(int id, Class<?> f) {
+	FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+	if (getSupportFragmentManager().findFragmentByTag(
+		f.getClass().getName()) == null) {
+	    Fragment fn = null;
+	    try {
+		fn = (Fragment) f.newInstance();
+	    } catch (InstantiationException e) {
+		e.printStackTrace();
+	    } catch (IllegalAccessException e) {
+		e.printStackTrace();
+	    }
+	    ft.replace(id, fn, f.getClass().getName());
+	    ft.commit();
+	}
     }
 
     private void showFragment(Bundle bundle) {
