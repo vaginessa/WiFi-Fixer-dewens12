@@ -20,26 +20,26 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/wrapper1"
         android:layout_width="fill_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal" >
 
         <FrameLayout
             android:id="@+id/servicefragment"
             android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:paddingBottom="15dp"
+            android:paddingBottom="5dp"
             android:paddingTop="15dp" >
         </FrameLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/tpager"
             android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="200dp"
-            android:paddingBottom="15dp"
+            android:layout_marginLeft="100dp"
+            android:paddingBottom="5dp"
             android:paddingTop="15dp" >
         </android.support.v4.view.ViewPager>
     </LinearLayout>
@@ -54,19 +54,19 @@
 
         <FrameLayout
             android:id="@+id/knownnetworksfragment"
-            android:layout_width="400dp"
-            android:layout_height="fill_parent"
-            android:paddingBottom="30dp"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
             android:paddingLeft="50dp"
             android:paddingRight="50dp" >
         </FrameLayout>
 
         <FrameLayout
             android:id="@+id/scanfragment"
-            android:layout_width="400dp"
-            android:layout_height="fill_parent"
-            android:layout_marginLeft="200dp"
-            android:paddingBottom="30dp"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:paddingBottom="5dp"
             android:paddingRight="50dp" >
         </FrameLayout>
     </LinearLayout>

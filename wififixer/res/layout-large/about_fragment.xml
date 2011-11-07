@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<!--
+		Copyright [2010-2011] [David Van de Ven] Licensed under the Apache
+		License, Version 2.0 (the "License"); you may not use this file except
+		in compliance with the License. You may obtain a copy of the License
+		at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:weightSum="1" android:orientation="vertical"
+	android:layout_height="wrap_content"
+	android:paddingRight="20dp" android:alpha=".8">
+	<TextView android:gravity="center" android:layout_width="wrap_content"
+		android:layout_gravity="center" android:layout_height="20dp"
+		android:textSize="14sp" android:id="@+id/ssid"
+	    android:text="SSID"
+		android:layout_weight="0.04"></TextView>
+
+	<LinearLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="left"
+	    android:gravity="center_vertical"
+	    android:orientation="vertical"
+	    android:paddingLeft="100dp"
+	    android:paddingRight="8dp"
+	    android:paddingTop="5dp"
+	    android:weightSum="1" >
+
+		<LinearLayout
+		    android:id="@+id/LinearLayout00"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="left"
+		    android:layout_weight="0.00"
+		    android:baselineAligned="true"
+		    android:gravity="center_vertical"
+		    android:orientation="vertical"
+		    android:paddingBottom="10dp"
+		    android:weightSum="1" >
+
+			<TextView
+			    android:id="@+id/BSSID_title"
+			    android:layout_width="wrap_content"
+			    android:layout_height="match_parent"
+			    android:layout_gravity="center_vertical"
+			    android:gravity="left"
+			    android:text="MAC:"
+			    android:textSize="10sp" >
+</TextView>
+
+			<TextView
+			    android:id="@+id/bssid"
+			    android:layout_width="166dp"
+			    android:layout_height="match_parent"
+			    android:layout_gravity="left"
+			    android:gravity="center_vertical"
+			    android:text="af:fa:df:df:df"
+			    android:textSize="10sp" >
+</TextView>
+		</LinearLayout>
+
+		<LinearLayout
+		    android:id="@+id/LinearLayout01"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="left"
+		    android:baselineAligned="true"
+		    android:gravity="center_vertical"
+		    android:orientation="vertical"
+		    android:paddingBottom="10dp"
+		    android:weightSum="1" >
+
+			<TextView
+			    android:id="@+id/TextView02"
+			    android:layout_width="wrap_content"
+			    android:layout_height="match_parent"
+			    android:layout_gravity="left"
+			    android:gravity="center_vertical"
+			    android:text="Capabilities:"
+			    android:textSize="10sp" >
+</TextView>
+			<TextView android:id="@+id/capabilities" android:textSize="10sp"
+				android:text="OPEN" android:layout_height="match_parent"
+				android:layout_width="166dp"
+				android:layout_gravity="left" android:gravity="center_vertical"></TextView>
+		</LinearLayout>
+
+		<LinearLayout
+		    android:id="@+id/linearLayout1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center_vertical"
+		    android:gravity="left"
+		    android:orientation="vertical"
+		    android:paddingBottom="10dp"
+		    android:weightSum="1" >
+
+		    <TextView
+		        android:id="@+id/textView1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="match_parent"
+		        android:layout_gravity="left"
+		        android:gravity="center_vertical"
+		        android:text="Frequency:"
+		        android:textSize="10sp" />
+
+		    <TextView
+		        android:id="@+id/frequency"
+		        android:layout_width="134dp"
+		        android:layout_height="match_parent"
+		        android:layout_gravity="left"
+		        android:gravity="center_vertical"
+		        android:text="40"
+		        android:textSize="10sp" />
+		</LinearLayout>
+
+		<LinearLayout
+		    android:id="@+id/LinearLayout02"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="left"
+		    android:gravity="center_vertical"
+		    android:orientation="vertical"
+		    android:weightSum="1" >
+
+			<TextView
+			    android:id="@+id/TextView03"
+			    android:layout_width="wrap_content"
+			    android:layout_height="match_parent"
+			    android:layout_gravity="left"
+			    android:gravity="center_vertical"
+			    android:text="Signal:"
+			    android:textSize="10sp" >
+</TextView>
+
+			<TextView
+			    android:id="@+id/level"
+			    android:layout_width="wrap_content"
+			    android:layout_height="match_parent"
+			    android:layout_gravity="left"
+			    android:gravity="center_vertical"
+			    android:text="-42"
+			   android:textSize="10sp" >
+</TextView>
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>
