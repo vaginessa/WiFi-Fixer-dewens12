@@ -20,16 +20,15 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/wrapper1"
         android:layout_width="fill_parent"
-        android:layout_height="250dp"
+        android:layout_height="270dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal" >
 
         <FrameLayout
             android:id="@+id/servicefragment"
-            android:layout_width="wrap_content"
-            android:layout_height="250dp"
-            android:layout_gravity="center_horizontal"
-            android:paddingLeft="30dp"
+            android:layout_width="220dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp" 
             >
@@ -38,7 +37,7 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/tpager"
             android:layout_width="220dp"
-            android:layout_height="250dp"
+            android:layout_height="fill_parent"
             android:layout_gravity="center_horizontal"
             android:paddingBottom="15dp"
             android:paddingTop="15dp" >
@@ -50,26 +49,24 @@
         android:id="@+id/wrapper2"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="5dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal" >
 
         <FrameLayout
             android:id="@+id/knownnetworksfragment"
-            android:layout_width="220dp"
+            android:layout_width="230dp"
             android:layout_height="fill_parent"
-            android:paddingBottom="20dp"
             android:paddingLeft="5dp"
             android:paddingRight="10dp" >
         </FrameLayout>
 
         <FrameLayout
             android:id="@+id/scanfragment"
-            android:layout_width="220dp"
+            android:layout_width="230dp"
             android:layout_height="fill_parent"
             android:paddingLeft="5dp"
-            android:paddingBottom="20dp"
-            android:paddingRight="20dp" >
+             >
         </FrameLayout>
     </LinearLayout>
 

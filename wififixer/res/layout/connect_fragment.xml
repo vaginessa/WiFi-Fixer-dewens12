@@ -21,39 +21,36 @@
 
     <TextView
         android:id="@+id/SSID"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        style="@style/Wftext.large"
         android:layout_gravity="center"
         android:layout_weight="0.04"
         android:gravity="center"
         android:text="SSID"
-        android:textAppearance="?android:attr/textAppearanceLarge" >
+      	>
     </TextView>
 
     <TextView
         android:id="@+id/password_summary"
-        android:layout_width="168dp"
-        android:layout_height="wrap_content"
+        style="@style/Wftext"
         android:layout_gravity="center_horizontal"
+        android:gravity = "center"
         android:paddingBottom="20dp"
         android:text="@string/passwd_entry_text"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+       	 />
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/Wftext"
         android:editable="true"
         android:inputType="textPassword"
         android:password="true"
         android:singleLine="true" >
-
         <requestFocus />
     </EditText>
 
     <Button
         android:id="@+id/connect"
-        android:layout_width="160dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:alpha="30"
