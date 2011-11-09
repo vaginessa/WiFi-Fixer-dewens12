@@ -14,14 +14,14 @@
 	android:layout_width="wrap_content" android:weightSum="1" android:orientation="vertical"
 	android:layout_height="wrap_content"
 	android:paddingRight="20dp" android:alpha=".8">
-	<TextView android:gravity="center" android:layout_width="wrap_content"
-		android:layout_gravity="center" android:layout_height="40dp"
-		android:textAppearance="?android:attr/textAppearanceLarge" android:id="@+id/ssid"
+	<TextView android:gravity="center" 
+		android:layout_gravity="center" 
+		style="@style/Wftext.large" 
+		android:id="@+id/ssid"
 	    android:text="SSID"
 		android:layout_weight="0.04"></TextView>
 
 	<LinearLayout
-	    xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="left"
@@ -46,22 +46,20 @@
 
 			<TextView
 			    android:id="@+id/BSSID_title"
-			    android:layout_width="wrap_content"
-			    android:layout_height="match_parent"
+			    style="@style/Wftext.header"
 			    android:layout_gravity="center_vertical"
 			    android:gravity="left"
 			    android:text="MAC:"
-			    android:textAppearance="?android:attr/textAppearanceMedium" >
+			    >
 </TextView>
 
 			<TextView
 			    android:id="@+id/bssid"
-			    android:layout_width="166dp"
-			    android:layout_height="match_parent"
+			    style="@style/Wftext"
 			    android:layout_gravity="left"
 			    android:gravity="center_vertical"
 			    android:text="af:fa:df:df:df"
-			    android:textAppearance="?android:attr/textAppearanceSmall" >
+			    >
 </TextView>
 		</LinearLayout>
 
@@ -78,16 +76,15 @@
 
 			<TextView
 			    android:id="@+id/TextView02"
-			    android:layout_width="wrap_content"
-			    android:layout_height="match_parent"
+			    style="@style/Wftext.header"
 			    android:layout_gravity="left"
 			    android:gravity="center_vertical"
 			    android:text="Capabilities:"
-			    android:textAppearance="?android:attr/textAppearanceMedium" >
+			    >
 </TextView>
-			<TextView android:id="@+id/capabilities" android:textAppearance="?android:attr/textAppearanceSmall"
-				android:text="OPEN" android:layout_height="match_parent"
-				android:layout_width="166dp"
+			<TextView android:id="@+id/capabilities" 
+			    style="@style/Wftext"
+				android:text="OPEN" 
 				android:layout_gravity="left" android:gravity="center_vertical"></TextView>
 		</LinearLayout>
 
@@ -102,22 +99,20 @@
 		    android:weightSum="1" >
 
 		    <TextView
+		        style="@style/Wftext.header"
 		        android:id="@+id/textView1"
-		        android:layout_width="wrap_content"
-		        android:layout_height="match_parent"
 		        android:layout_gravity="left"
 		        android:gravity="center_vertical"
 		        android:text="Frequency:"
-		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		        />
 
 		    <TextView
+		        style="@style/Wftext"
 		        android:id="@+id/frequency"
-		        android:layout_width="134dp"
-		        android:layout_height="match_parent"
 		        android:layout_gravity="left"
 		        android:gravity="center_vertical"
 		        android:text="40"
-		        android:textAppearance="?android:attr/textAppearanceSmall" />
+		        />
 		</LinearLayout>
 
 		<LinearLayout
@@ -130,23 +125,21 @@
 		    android:weightSum="1" >
 
 			<TextView
+			    style="@style/Wftext.header"
 			    android:id="@+id/TextView03"
-			    android:layout_width="wrap_content"
-			    android:layout_height="match_parent"
 			    android:layout_gravity="left"
 			    android:gravity="center_vertical"
 			    android:text="Signal:"
-			    android:textAppearance="?android:attr/textAppearanceMedium" >
+			    >
 </TextView>
 
 			<TextView
+			    style="@style/Wftext"
 			    android:id="@+id/level"
-			    android:layout_width="wrap_content"
-			    android:layout_height="match_parent"
 			    android:layout_gravity="left"
 			    android:gravity="center_vertical"
 			    android:text="-42"
-			    android:textAppearance="?android:attr/textAppearanceSmall" >
+			    >
 </TextView>
 		</LinearLayout>
 	</LinearLayout>
