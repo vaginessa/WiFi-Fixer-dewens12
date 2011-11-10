@@ -37,7 +37,7 @@
     <string name="sd_card_unavailable">SD Card Unavailable</string>
     <string name="donateservice">com.wahtod.wififixer.WFDonateService</string>
     <string name="about">About</string>
-    <string name="documentation">Documentation</string>
+    <string name="help">Help</string>
     <string name="preferences">Preferences</string>
     <string name="send_log">Send Log</string>
     <string name="toggle_logging">Toggle Logging</string>
