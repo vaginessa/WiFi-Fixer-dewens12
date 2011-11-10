@@ -64,7 +64,6 @@ public class KnownNetworksFragment extends Fragment {
     private static final int SCAN_MESSAGE = 31337;
     private static final int REFRESH_MESSAGE = 2944;
     private static final int SCAN_DELAY = 15000;
-    private static final String EMPTY_SSID = "None";
     private static final int CONTEXT_ENABLE = 115;
     private static final int CONTEXT_DISABLE = 112;
     private static final int CONTEXT_CONNECT = 113;
@@ -378,7 +377,7 @@ public class KnownNetworksFragment extends Fragment {
 	List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
 	if (wifiConfigs == null || wifiConfigs.isEmpty())
 	    return new ArrayList<String>();
-
+	  
 	List<String> networks = new ArrayList<String>();
 	for (WifiConfiguration wfResult : wifiConfigs) {
 	    /*
@@ -388,7 +387,7 @@ public class KnownNetworksFragment extends Fragment {
 	    if (wfResult.SSID != null && wfResult.SSID.length() > 0)
 		networks.add(StringUtil.removeQuotes(wfResult.SSID));
 	    else
-		networks.add(EMPTY_SSID);
+		networks.add(context.getString(R.string.null_ssid));
 	}
 	return networks;
     }

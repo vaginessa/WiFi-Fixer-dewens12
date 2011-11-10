@@ -129,7 +129,7 @@ public class ScanFragment extends Fragment {
 	    dispatchContextMenuSelected(AboutFragment.class.getName());
 	    break;
 	}
-	
+
 	return super.onContextItemSelected(item);
     }
 

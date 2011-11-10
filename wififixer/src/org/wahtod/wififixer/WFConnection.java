@@ -694,7 +694,7 @@ public class WFConnection extends Object implements
     private static void clearConnectedStatus(final String state) {
 	notifStatus = state;
 	notifSignal = 0;
-	notifSSID = EMPTYSTRING;
+	notifSSID = ctxt.getString(R.string.null_ssid);
     }
 
     private static boolean checkNetwork(final Context context) {
@@ -810,7 +810,6 @@ public class WFConnection extends Object implements
 
     }
 
-   
     private int connectToBest(final Context context) {
 	/*
 	 * Make sure knownbysignal is populated first
@@ -1437,7 +1436,7 @@ public class WFConnection extends Object implements
 	    if (sState.equals(COMPLETED)) {
 		notifStatus = CONNECTED;
 		notifSSID = getSSID();
-	    } else
+	    } else if (!getIsOnWifi(ctxt))
 		clearConnectedStatus(sState);
 
 	    statusdispatcher.sendMessage(ctxt, new StatusMessage(notifSSID,
