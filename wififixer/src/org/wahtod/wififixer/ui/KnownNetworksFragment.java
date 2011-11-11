@@ -166,7 +166,9 @@ public class KnownNetworksFragment extends Fragment {
 			.show();
 		PrefUtil.getWifiManager(getActivity()).removeNetwork(
 			clicked_position);
+		PrefUtil.getWifiManager(getActivity()).saveConfiguration();
 		adapter.ssidArray.remove(clicked_position);
+		knownnetworks.remove(clicked_position);
 		adapter.notifyDataSetChanged();
 		break;
 	    }
