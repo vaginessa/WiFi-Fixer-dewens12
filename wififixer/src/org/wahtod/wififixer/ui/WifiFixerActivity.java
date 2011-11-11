@@ -234,17 +234,6 @@ public class WifiFixerActivity extends FragmentActivity implements
 	setIntent(intent);
     }
 
-    private void invalidateServiceFragment() {
-	/*
-	 * Invalidate Service fragment
-	 */
-	FragmentManager fm = getSupportFragmentManager();
-	ServiceFragment sf = new ServiceFragment();
-	FragmentTransaction ft = fm.beginTransaction();
-	ft.replace(R.id.servicefragment, sf, SERVICEFRAG_TAG);
-	ft.commit();
-    }
-
     void launchHelp() {
 	Intent myIntent = new Intent(this, HelpActivity.class);
 	startActivity(myIntent);
@@ -340,7 +329,7 @@ public class WifiFixerActivity extends FragmentActivity implements
 		    Toast.LENGTH_LONG).show();
 	}
 
-	invalidateServiceFragment();
+	this.sendBroadcast(new Intent(ServiceFragment.REFRESH_ACTION));
     }
 
     void setLogging(boolean state) {

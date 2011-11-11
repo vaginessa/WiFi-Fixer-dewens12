@@ -39,6 +39,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class ServiceFragment extends Fragment {
+    public static final String REFRESH_ACTION = "org.wahtod.wififixer.ui.ServiceFragment.REFRESH";
     private TextView version;
     private ImageButton servicebutton;
     private ImageButton wifibutton;
@@ -49,7 +50,11 @@ public class ServiceFragment extends Fragment {
 	    /*
 	     * we know this is going to be a wifi state change notification
 	     */
-	    int state = message.getData().getInt(WifiManager.EXTRA_WIFI_STATE);
+	    int state = -1;
+	    if (message.getData().isEmpty())
+		setIcon();
+	    else
+		state = message.getData().getInt(WifiManager.EXTRA_WIFI_STATE);
 	    if (state == WifiManager.WIFI_STATE_DISABLED
 		    || state == WifiManager.WIFI_STATE_ENABLED)
 		setIcon();
@@ -63,8 +68,10 @@ public class ServiceFragment extends Fragment {
 	     */
 	    Message message = handler.obtainMessage();
 	    Bundle data = new Bundle();
+	    if(intent.getExtras() != null){
 	    data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
 	    data.putAll(intent.getExtras());
+	    }
 	    message.setData(data);
 	    handler.sendMessage(message);
 	}
@@ -83,6 +90,7 @@ public class ServiceFragment extends Fragment {
     private void registerReceiver() {
 	IntentFilter filter = new IntentFilter(
 		WifiManager.WIFI_STATE_CHANGED_ACTION);
+	filter.addAction(REFRESH_ACTION);
 	getContext().registerReceiver(wifireceiver, filter);
     }
 
@@ -113,16 +121,10 @@ public class ServiceFragment extends Fragment {
 
     private void setIcon() {
 
-	servicebutton.setAdjustViewBounds(true);
-	servicebutton.setMaxHeight(40);
-	servicebutton.setMaxWidth(40);
 	servicebutton.setClickable(true);
 	servicebutton.setFocusable(false);
 	servicebutton.setFocusableInTouchMode(false);
 
-	wifibutton.setAdjustViewBounds(true);
-	wifibutton.setMaxHeight(40);
-	wifibutton.setMaxWidth(40);
 	wifibutton.setClickable(true);
 	wifibutton.setFocusable(false);
 	wifibutton.setFocusableInTouchMode(false);
@@ -137,8 +139,7 @@ public class ServiceFragment extends Fragment {
 	    servicebutton.setBackgroundResource(R.drawable.service_active);
 	}
 
-	if (!WifiFixerActivity.getIsWifiOn(getActivity()
-		.getApplicationContext())) {
+	if (!WifiFixerActivity.getIsWifiOn(getContext())) {
 	    wifibutton.setBackgroundResource(R.drawable.service_inactive);
 	} else {
 	    wifibutton.setBackgroundResource(R.drawable.service_active);
