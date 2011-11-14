@@ -110,8 +110,6 @@ public class ServiceFragment extends Fragment {
 	servicebutton = (ImageButton) v.findViewById(R.id.ImageButton01);
 	wifibutton = (ImageButton) v.findViewById(R.id.ImageButton02);
 	setText();
-	setIcon();
-	registerReceiver();
 	return v;
     }
 
