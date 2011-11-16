@@ -104,7 +104,6 @@ public class PhoneTutorial {
 		 */
 		m3 = handler.obtainMessage(PAGE, 0, 0);
 		handler.sendMessageDelayed(m3, TOAST_DELAY * 2);
-		h = null;
 		break;
 	    }
 	}
