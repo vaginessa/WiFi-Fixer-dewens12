@@ -270,6 +270,9 @@ public class KnownNetworksFragment extends Fragment {
     private Handler scanhandler = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
+	    if(getActivity() == null)
+		return;
+	    
 	    switch (message.what) {
 
 	    case SCAN_MESSAGE:

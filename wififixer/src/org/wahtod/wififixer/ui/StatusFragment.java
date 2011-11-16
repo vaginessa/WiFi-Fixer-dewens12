@@ -46,13 +46,13 @@ public class StatusFragment extends Fragment {
 	     */
 	    switch (message.what) {
 	    case REFRESH:
-		refresh();
+		if (getActivity() != null)
+		    refresh();
 		break;
 
 	    }
 	}
     };
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

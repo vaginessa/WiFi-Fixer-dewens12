@@ -47,9 +47,8 @@ public class ServiceFragment extends Fragment {
     private Handler handler = new Handler() {
 	@Override
 	public void handleMessage(Message message) {
-	    /*
-	     * we know this is going to be a wifi state change notification
-	     */
+	    if (getActivity() == null)
+		return;
 	    int state = -1;
 	    if (message.getData().isEmpty())
 		setIcon();
@@ -68,9 +67,9 @@ public class ServiceFragment extends Fragment {
 	     */
 	    Message message = handler.obtainMessage();
 	    Bundle data = new Bundle();
-	    if(intent.getExtras() != null){
-	    data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
-	    data.putAll(intent.getExtras());
+	    if (intent.getExtras() != null) {
+		data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
+		data.putAll(intent.getExtras());
 	    }
 	    message.setData(data);
 	    handler.sendMessage(message);
