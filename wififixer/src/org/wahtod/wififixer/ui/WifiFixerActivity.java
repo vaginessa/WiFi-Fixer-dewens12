@@ -150,6 +150,7 @@ public class WifiFixerActivity extends FragmentActivity implements
     public static final String ABOUTFRAG_TAG = "ABOUT";
     public static final String TABLETPAGERFRAG_TAG = "TPFT";
     private static final String FRAGMENTS_INSTANCE_STATE = "FRAGMENTS_INSTANCE_STATE";
+    private static final String RUN_TUTORIAL = "RUN_TUTORIAL";
 
     void authCheck() {
 	if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
@@ -227,6 +228,10 @@ public class WifiFixerActivity extends FragmentActivity implements
 	    } else if (intent.hasExtra(REMOVE_CONNECT_FRAGMENTS)) {
 		intent.removeExtra(REMOVE_CONNECT_FRAGMENTS);
 		removeConnectFragments(tabletvp.getCurrentItem());
+	    } else if (intent.hasExtra(RUN_TUTORIAL)) {
+		intent.removeExtra(RUN_TUTORIAL);
+		if (findViewById(R.id.pager) != null)
+		    phoneTutorial();
 	    }
 	/*
 	 * Set Activity intent to one without commands we've "consumed"
@@ -412,6 +417,8 @@ public class WifiFixerActivity extends FragmentActivity implements
 			getSupportFragmentManager());
 		phonevp.setAdapter(fadapter);
 	    }
+	    if (!PrefUtil.readBoolean(this, PrefConstants.TUTORIAL))
+		phoneTutNag();
 	} else {
 	    drawFragment(R.id.servicefragment, ServiceFragment.class);
 	    drawFragment(R.id.knownnetworksfragment,
@@ -585,6 +592,41 @@ public class WifiFixerActivity extends FragmentActivity implements
 	}
 
 	return true;
+    }
+
+    private void phoneTutNag() {
+	AlertDialog dialog = new AlertDialog.Builder(this).create();
+
+	dialog.setTitle(getString(R.string.phone_ui_tutorial));
+
+	dialog.setMessage(getString(R.string.phone_tutorial_q));
+
+	dialog.setIcon(R.drawable.icon);
+
+	dialog.setButton(getString(R.string.ok_button),
+		new DialogInterface.OnClickListener() {
+
+		    public void onClick(DialogInterface dialog, int which) {
+			phoneTutorial();
+		    }
+		});
+
+	dialog.setButton2(getString(R.string.cancel_button),
+		new DialogInterface.OnClickListener() {
+
+		    public void onClick(DialogInterface dialog, int which) {
+
+			return;
+
+		    }
+		});
+
+	dialog.show();
+
+    }
+    
+    private void phoneTutorial(){
+	new PhoneTutorial(this, this);
     }
 
     private void removeConnectFragments(int n) {

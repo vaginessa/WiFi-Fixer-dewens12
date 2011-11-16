@@ -214,5 +214,15 @@
     <string name="add">Add</string>
     <string name="button_connect">Tap button to connect</string>
     <string name="connection_threshold_exceeded">Connection Threshold Exceeded</string>
+    <string name="tutorial_toast_1">This is Known Networks</string>
+    <string name="tutorial_toast_2">Known Networks shows networks you\'ve connected to</string>
+    <string name="tutorial_toast_4">This is Local Networks</string>
+    <string name="tutorial_toast_3">You can swipe left here to get to the next page</string>
+    <string name="tutorial_toast_5">Local Networks shows you scanned networks in the area</string>
+    <string name="tutorial_toast_6">This is the Status view</string>
+    <string name="tutorial_toast_7">Status shows you the status of WiFi</string>
+    <string name="tutorial_toast_8">That\'s it!  Happy WiFi-ing!\nIf you want to run the tutorial again, go to preferences.</string>
+    <string name="phone_ui_tutorial">Phone UI Tutorial</string>
+    <string name="phone_tutorial_q">Please take a moment to view a quick UI tutorial</string>
 
 </resources>

@@ -609,7 +609,7 @@ public class WFConnection extends Object implements
 
 	};
 
-	// Initialize WifiLock
+	// Initialize PhoneTutorial
 	wifilock = new WifiLock(context) {
 	    @Override
 	    public void onAcquire() {

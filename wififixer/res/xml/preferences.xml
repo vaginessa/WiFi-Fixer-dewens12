@@ -13,6 +13,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<PreferenceCategory android:title="Wifi Fixer Preferences">
+	    
+	    <PreferenceScreen android:title="@string/phone_ui_tutorial"
+					>
+					<intent android:targetPackage="org.wahtod.wififixer"
+						android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity">
+						<extra android:name="RUN_TUTORIAL" android:value="pi">
+						</extra>
+					</intent>
+
+				</PreferenceScreen>
 
 		<CheckBoxPreference android:key="Disable"
 			android:summary="@string/Disable_summary" android:title="@string/Disable_title"/>
