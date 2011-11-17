@@ -34,101 +34,107 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class PhoneTutorial {
-    protected static final int TOAST = 0;
-    protected static final int PAGE = 1;
-    protected static final int PART1 = 2;
-    protected static final int PART2 = 3;
-    protected static final int PART3 = 4;
+	protected static final int TOAST = 0;
+	protected static final int PAGE = 1;
+	protected static final int PART1 = 2;
+	protected static final int PART2 = 3;
+	protected static final int PART3 = 4;
+	protected static final int LOCK_VP = 5;
+	protected static final int UNLOCK_VP = 5;
 
-    private static final int TOAST_DELAY = 4000;
+	private static final int TOAST_DELAY = 4000;
 
-    ViewPager pv;
-    Context ctxt;
-    Activity h;
+	ViewPager pv;
+	Context ctxt;
+	Activity h;
 
-    private Handler handler = new Handler() {
-	@Override
-	public void handleMessage(Message message) {
-	    switch (message.what) {
-	    case TOAST:
-		showToast(message.arg1);
-		break;
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message message) {
+			switch (message.what) {
+			case TOAST:
+				showToast(message.arg1);
+				break;
 
-	    case PAGE:
-		pv.setCurrentItem(message.arg1);
-		break;
+			case PAGE:
+				pv.setCurrentItem(message.arg1);
+				break;
 
-	    case PART1:
-		Message m1 = handler.obtainMessage(PAGE, 0, 0);
-		handler.sendMessage(m1);
-		m1 = handler.obtainMessage(TOAST, R.string.tutorial_toast_1, 0);
-		handler.sendMessageDelayed(m1, 0);
-		m1 = handler.obtainMessage(TOAST, R.string.tutorial_toast_2, 0);
-		handler.sendMessageDelayed(m1, TOAST_DELAY);
-		m1 = handler.obtainMessage(TOAST, R.string.tutorial_toast_3, 0);
-		handler.sendMessageDelayed(m1, TOAST_DELAY * 2);
-		/*
-		 * Change page to Local Networks
-		 */
-		m1 = handler.obtainMessage(PAGE, 1, 0);
-		handler.sendMessageDelayed(m1, TOAST_DELAY * 4);
-		handler.sendEmptyMessageDelayed(PART2, TOAST_DELAY * 5);
-		break;
+			case LOCK_VP:
+				pv.setCurrentItem(message.arg1);
+				break;
 
-	    case PART2:
-		Message m2 = handler.obtainMessage(TOAST,
-			R.string.tutorial_toast_4, 0);
-		handler.sendMessageDelayed(m2, 0);
-		m2 = handler.obtainMessage(TOAST, R.string.tutorial_toast_5, 0);
-		handler.sendMessageDelayed(m2, TOAST_DELAY);
-		m2 = handler.obtainMessage(TOAST, R.string.tutorial_toast_3, 0);
-		handler.sendMessageDelayed(m2, TOAST_DELAY * 2);
-		/*
-		 * Change page to Status fragment
-		 */
-		m2 = handler.obtainMessage(PAGE, 2, 0);
-		handler.sendMessageDelayed(m2, TOAST_DELAY * 3);
-		handler.sendEmptyMessageDelayed(PART3, TOAST_DELAY * 4);
-		break;
+			case PART1:
+				Message m1 = handler.obtainMessage(PAGE, 0, 0);
+				handler.sendMessage(m1);
+				m1 = handler.obtainMessage(TOAST, R.string.tutorial_toast_1, 0);
+				handler.sendMessageDelayed(m1, 0);
+				m1 = handler.obtainMessage(TOAST, R.string.tutorial_toast_2, 0);
+				handler.sendMessageDelayed(m1, TOAST_DELAY);
+				m1 = handler.obtainMessage(TOAST, R.string.tutorial_toast_3, 0);
+				handler.sendMessageDelayed(m1, TOAST_DELAY * 2);
+				/*
+				 * Change page to Local Networks
+				 */
+				m1 = handler.obtainMessage(PAGE, 1, 0);
+				handler.sendMessageDelayed(m1, TOAST_DELAY * 4);
+				handler.sendEmptyMessageDelayed(PART2, TOAST_DELAY * 5);
+				break;
 
-	    case PART3:
-		Message m3 = handler.obtainMessage(TOAST,
-			R.string.tutorial_toast_6, 0);
-		handler.sendMessageDelayed(m3, 0);
-		m3 = handler.obtainMessage(TOAST, R.string.tutorial_toast_7, 0);
-		handler.sendMessageDelayed(m3, TOAST_DELAY);
-		m3 = handler.obtainMessage(TOAST, R.string.tutorial_toast_8, 0);
-		handler.sendMessageDelayed(m3, TOAST_DELAY * 2);
-		/*
-		 * Change page to Status fragment
-		 */
-		m3 = handler.obtainMessage(PAGE, 0, 0);
-		handler.sendMessageDelayed(m3, TOAST_DELAY * 2);
-		break;
-	    }
+			case PART2:
+				Message m2 = handler.obtainMessage(TOAST,
+						R.string.tutorial_toast_4, 0);
+				handler.sendMessageDelayed(m2, 0);
+				m2 = handler.obtainMessage(TOAST, R.string.tutorial_toast_5, 0);
+				handler.sendMessageDelayed(m2, TOAST_DELAY);
+				m2 = handler.obtainMessage(TOAST, R.string.tutorial_toast_3, 0);
+				handler.sendMessageDelayed(m2, TOAST_DELAY * 2);
+				/*
+				 * Change page to Status fragment
+				 */
+				m2 = handler.obtainMessage(PAGE, 2, 0);
+				handler.sendMessageDelayed(m2, TOAST_DELAY * 3);
+				handler.sendEmptyMessageDelayed(PART3, TOAST_DELAY * 4);
+				break;
+
+			case PART3:
+				Message m3 = handler.obtainMessage(TOAST,
+						R.string.tutorial_toast_6, 0);
+				handler.sendMessageDelayed(m3, 0);
+				m3 = handler.obtainMessage(TOAST, R.string.tutorial_toast_7, 0);
+				handler.sendMessageDelayed(m3, TOAST_DELAY);
+				m3 = handler.obtainMessage(TOAST, R.string.tutorial_toast_8, 0);
+				handler.sendMessageDelayed(m3, TOAST_DELAY * 2);
+				/*
+				 * Change page to Status fragment
+				 */
+				m3 = handler.obtainMessage(PAGE, 0, 0);
+				handler.sendMessageDelayed(m3, TOAST_DELAY * 2);
+				break;
+			}
+		}
+	};
+
+	public PhoneTutorial(final Context context, Activity host) {
+		pv = (ViewPager) host.findViewById(R.id.pager);
+		ctxt = context;
+		h = host;
+		handler.sendEmptyMessage(PART1);
+		PrefUtil.writeBoolean(h, PrefConstants.TUTORIAL, true);
 	}
-    };
 
-    public PhoneTutorial(final Context context, Activity host) {
-	pv = (ViewPager) host.findViewById(R.id.pager);
-	ctxt = context;
-	h = host;
-	handler.sendEmptyMessage(PART1);
-	PrefUtil.writeBoolean(h, PrefConstants.TUTORIAL, true);
-    }
-
-    private void showToast(final int id) {
-	LayoutInflater inflater = h.getLayoutInflater();
-	View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) h
-		.findViewById(R.id.toast_root));
-	ImageView image = (ImageView) layout.findViewById(R.id.icon);
-	image.setImageResource(R.drawable.icon);
-	TextView text = (TextView) layout.findViewById(R.id.toast_text);
-	text.setText(ctxt.getString(id));
-	Toast toast = new Toast(ctxt.getApplicationContext());
-	toast.setGravity(Gravity.BOTTOM, 0, 0);
-	toast.setDuration(Toast.LENGTH_LONG);
-	toast.setView(layout);
-	toast.show();
-    }
+	private void showToast(final int id) {
+		LayoutInflater inflater = h.getLayoutInflater();
+		View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) h
+				.findViewById(R.id.toast_root));
+		ImageView image = (ImageView) layout.findViewById(R.id.icon);
+		image.setImageResource(R.drawable.icon);
+		TextView text = (TextView) layout.findViewById(R.id.toast_text);
+		text.setText(ctxt.getString(id));
+		Toast toast = new Toast(ctxt.getApplicationContext());
+		toast.setGravity(Gravity.BOTTOM, 0, 0);
+		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setView(layout);
+		toast.show();
+	}
 }
