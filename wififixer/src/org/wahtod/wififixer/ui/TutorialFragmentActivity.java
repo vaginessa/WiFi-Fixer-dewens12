@@ -96,7 +96,7 @@ public class TutorialFragmentActivity extends FragmentActivity {
 				break;
 
 			case PART3:
-				Message m3 = handler.obtainMessage(SET_PART, 2, 0);
+				Message m3 = handler.obtainMessage(SET_PART, 3, 0);
 				handler.sendMessage(m3);
 				/*
 				 * Change page to Status fragment
@@ -120,13 +120,17 @@ public class TutorialFragmentActivity extends FragmentActivity {
 			}
 		}
 	};
-
-	@Override
-	protected void onDestroy() {
+	
+	private void removeAllMessages(){
 		for (int n = 0; n < 7; n++) {
 			handler.removeMessages(n);
 		}
-		super.onDestroy();
+	}
+
+	@Override
+	protected void onPause() {
+		removeAllMessages();
+		super.onPause();
 	}
 
 	@Override
