@@ -45,7 +45,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -56,7 +55,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-public class WifiFixerActivity extends FragmentActivity implements
+public class WifiFixerActivity extends TutorialFragmentActivity implements
 	OnPageChangeListener {
     // Is this the paid version?
     public boolean isfreeFlag = true;
@@ -231,7 +230,7 @@ public class WifiFixerActivity extends FragmentActivity implements
 	    } else if (intent.hasExtra(RUN_TUTORIAL)) {
 		intent.removeExtra(RUN_TUTORIAL);
 		if (findViewById(R.id.pager) != null)
-		    phoneTutorial();
+		    runTutorial();
 	    }
 	/*
 	 * Set Activity intent to one without commands we've "consumed"
@@ -607,7 +606,7 @@ public class WifiFixerActivity extends FragmentActivity implements
 		new DialogInterface.OnClickListener() {
 
 		    public void onClick(DialogInterface dialog, int which) {
-			phoneTutorial();
+			runTutorial();
 		    }
 		});
 
@@ -625,10 +624,6 @@ public class WifiFixerActivity extends FragmentActivity implements
 
     }
     
-    private void phoneTutorial(){
-	new PhoneTutorial(this, this);
-    }
-
     private void removeConnectFragments(int n) {
 	FragmentManager fm = getSupportFragmentManager();
 	FragmentTransaction ft = fm.beginTransaction();
