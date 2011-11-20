@@ -24,7 +24,7 @@
         android:layout_marginLeft="@dimen/scan_list_ssid_margin_left"
         android:layout_width="@dimen/scan_list_ssid_width"
         android:gravity="left"
-        android:maxLength="12"
+        android:maxLength="14"
         android:shadowColor="#FFFF00"
         android:shadowDx="1"
         android:shadowDy="1"

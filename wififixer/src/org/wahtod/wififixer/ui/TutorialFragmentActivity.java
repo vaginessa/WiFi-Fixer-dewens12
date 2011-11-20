@@ -43,6 +43,7 @@ public class TutorialFragmentActivity extends FragmentActivity {
 
 	private static final int TOAST_DELAY = 4000;
 	private static final String CURRENT_PART = "TutorialFragmentActivity:CURRENT_PART";
+	private static final long RESTORE_DELAY = 1000;
 
 	private int part = -1;
 
@@ -137,7 +138,7 @@ public class TutorialFragmentActivity extends FragmentActivity {
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		if (savedInstanceState.containsKey(CURRENT_PART)) {
 			part = savedInstanceState.getInt(CURRENT_PART);
-			handler.sendEmptyMessageDelayed(part, 2000);
+			handler.sendEmptyMessageDelayed(part, RESTORE_DELAY);
 		}
 		super.onRestoreInstanceState(savedInstanceState);
 	}
