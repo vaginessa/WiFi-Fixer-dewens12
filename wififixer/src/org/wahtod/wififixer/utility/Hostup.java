@@ -145,7 +145,7 @@ public class Hostup {
 				LogService.log(ctxt, SERVICE_TAG, String.valueOf(System
 						.currentTimeMillis()
 						- timer)
-						+ "ms");
+						+ ctxt.getString(R.string.ms));
 			}
 			return state;
 		}

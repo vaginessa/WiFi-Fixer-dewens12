@@ -40,7 +40,8 @@ import android.provider.Settings.SettingNotFoundException;
 
 public class PrefUtil extends Object {
 
-    /*
+    private static final String COLON = ":";
+	/*
      * Intent Constants
      */
     private static final String VALUE_CHANGED_ACTION = "ACTION.PREFS.VALUECHANGED";
@@ -122,9 +123,9 @@ public class PrefUtil extends Object {
 	if (getFlag(Pref.LOG_KEY)) {
 	    StringBuilder logstring = new StringBuilder();
 	    logstring.append(pref.key());
-	    logstring.append(":");
+			logstring.append(COLON);
 	    logstring.append(network);
-	    logstring.append(":");
+	    logstring.append(COLON);
 	    logstring.append(intTemp[pref.ordinal()]);
 	    LogService.log(context, LogService.getLogTag(context), logstring
 		    .toString());
