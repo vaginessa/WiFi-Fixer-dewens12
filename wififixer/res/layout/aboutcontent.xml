@@ -21,6 +21,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1" 
+        android:gravity ="center"
         android:padding="20dp" >
 
         <LinearLayout
@@ -32,7 +33,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dip"
-                        android:text="Wifi Fixer is a low-resource service that works around several problems with Android wifi.\n\nWifi Fixer should help immediately, but may need preferences adjusted to work optimally.\n\nPlease read the documentation for specifics."
+                        android:text="Wifi Fixer is a low-resource service that works around several problems with Android wifi.\n\nWifi Fixer should help immediately, but may need preferences adjusted to work best.\n\nPlease read the documentation for specifics."
                         android:textSize="16sp"
                         />
                 
