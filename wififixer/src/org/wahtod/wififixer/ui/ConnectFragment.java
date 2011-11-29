@@ -30,7 +30,6 @@ import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,9 +114,11 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	    f.set(w, v);
 	    f2.set(w, v2);
 	} catch (Exception e) {
-	    Log.i("WifiFixer", e.toString());
+	   /*
+	    * Log
+	    */
+		e.printStackTrace();
 	}
-
 	return w;
     }
 
@@ -125,11 +126,9 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	WifiConfiguration wf = new WifiConfiguration();
 	if (wf.toString().contains(BUGGED)) {
 	    /*
-	     * hopefully...
+	     * Add hidden fields on bugged Android 3.2+ configs
 	     */
 	    wf = addHiddenFields(wf);
-	    Log.i(this.getClass().getName(), "Adding hidden fields");
-	    Log.i(this.getClass().getName(), wf.toString());
 	}
 	wf.SSID = StringUtil.addQuotes(network.SSID);
 	if (network.capabilities.length() == 0) {
