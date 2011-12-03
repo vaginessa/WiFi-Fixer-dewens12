@@ -34,124 +34,124 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 
 public class FixerWidget extends AppWidgetProvider {
-    public static final String W_INTENT = "org.wahtod.wififixer.WIDGET";
+	public static final String W_INTENT = "org.wahtod.wififixer.WIDGET";
 
-    @Override
-    public void onDisabled(Context context) {
-	super.onDisabled(context);
-	PrefUtil.writeBoolean(context, PrefConstants.HAS_WIDGET, false);
-	PrefUtil.notifyPrefChange(context, PrefConstants.HAS_WIDGET, false);
-    }
-
-    @Override
-    public void onEnabled(Context context) {
-	if (!PrefUtil.readBoolean(context, PrefConstants.HAS_WIDGET))
-	    PrefUtil.writeBoolean(context, PrefConstants.HAS_WIDGET, true);
-	PrefUtil.notifyPrefChange(context, PrefConstants.HAS_WIDGET, true);
-	super.onEnabled(context);
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-	if (intent.getAction().equals(NotifUtil.ACTION_STATUS_NOTIFICATION))
-	    doStatusUpdate(context, intent);
-	super.onReceive(context, intent);
-    }
-
-    private void doStatusUpdate(final Context context, Intent intent) {
-	Intent start = new Intent(context, StatusUpdateService.class);
-	start.fillIn(intent, Intent.FILL_IN_DATA);
-	context.startService(start);
-    }
-
-    public static class StatusUpdateService extends IntentService {
-	public StatusUpdateService() {
-	    super("FixerWidget$StatusUpdateService");
+	@Override
+	public void onDisabled(Context context) {
+		super.onDisabled(context);
+		PrefUtil.writeBoolean(context, PrefConstants.HAS_WIDGET, false);
+		PrefUtil.notifyPrefChange(context, PrefConstants.HAS_WIDGET, false);
 	}
 
 	@Override
-	protected void onHandleIntent(Intent intent) {
-	    if (intent != null) {
-		Bundle data = intent.getBundleExtra(NotifUtil.STATUS_DATA_KEY);
-		AppWidgetManager appWidgetManager = AppWidgetManager
-			.getInstance(this.getApplicationContext());
-		RemoteViews remoteViews = new RemoteViews(getPackageName(),
-			R.layout.widget);
+	public void onEnabled(Context context) {
+		if (!PrefUtil.readBoolean(context, PrefConstants.HAS_WIDGET))
+			PrefUtil.writeBoolean(context, PrefConstants.HAS_WIDGET, true);
+		PrefUtil.notifyPrefChange(context, PrefConstants.HAS_WIDGET, true);
+		super.onEnabled(context);
+	}
+
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		if (intent.getAction().equals(NotifUtil.ACTION_STATUS_NOTIFICATION))
+			doStatusUpdate(context, intent);
+		super.onReceive(context, intent);
+	}
+
+	private void doStatusUpdate(final Context context, Intent intent) {
+		Intent start = new Intent(context, StatusUpdateService.class);
+		start.fillIn(intent, Intent.FILL_IN_DATA);
+		context.startService(start);
+	}
+
+	public static class StatusUpdateService extends IntentService {
+		public StatusUpdateService() {
+			super("FixerWidget$StatusUpdateService");
+		}
+
+		@Override
+		protected void onHandleIntent(Intent intent) {
+			if (intent != null) {
+				Bundle data = intent.getBundleExtra(NotifUtil.STATUS_DATA_KEY);
+				AppWidgetManager appWidgetManager = AppWidgetManager
+						.getInstance(this.getApplicationContext());
+				RemoteViews remoteViews = new RemoteViews(getPackageName(),
+						R.layout.widget);
+				// Create an Intent to send widget command to WidgetReceiver
+				PendingIntent pendingIntent = PendingIntent.getBroadcast(this
+						.getApplicationContext(), 0, new Intent(W_INTENT), 0);
+				remoteViews.setOnClickPendingIntent(R.id.widget_target,
+						pendingIntent);
+				remoteViews.setTextViewText(R.id.ssid, data
+						.getString(NotifUtil.SSID_KEY));
+				remoteViews.setTextViewText(R.id.status, data
+						.getString(NotifUtil.STATUS_KEY));
+				remoteViews.setImageViewResource(R.id.signal, NotifUtil
+						.getIconfromSignal(data.getInt(NotifUtil.SIGNAL_KEY),
+								NotifUtil.ICON_SET_LARGE));
+				int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
+						this, FixerWidget.class));
+				for (int n = 0; n < ids.length; n++)
+					appWidgetManager.updateAppWidget(ids[n], remoteViews);
+			}
+		}
+	}
+
+	@Override
+	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
+			int[] appWidgetIds) {
+		/*
+		 * Send Update To Widgets
+		 */
+		if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
+			LogService.log(context, LogService.getLogTag(context), context
+					.getString(R.string.widget_update_called));
+		context.startService(new Intent(context, UpdateService.class));
+		super.onUpdate(context, appWidgetManager, appWidgetIds);
+	}
+
+	public static class UpdateService extends IntentService {
+		public UpdateService() {
+			super("FixerWidget$UpdateService");
+		}
+
+		@Override
+		protected void onHandleIntent(Intent intent) {
+			// Build the widget update for today
+			RemoteViews updateViews = doUpdate(this);
+
+			// Push update for this widget to the home screen
+			ComponentName thisWidget = new ComponentName(this,
+					FixerWidget.class);
+			AppWidgetManager manager = AppWidgetManager.getInstance(this);
+			manager.updateAppWidget(thisWidget, updateViews);
+
+			/*
+			 * Set HAS_WIDGET true if not already
+			 */
+			if (!PrefUtil.readBoolean(this.getApplicationContext(),
+					PrefConstants.HAS_WIDGET))
+				PrefUtil.writeBoolean(this.getApplicationContext(),
+						PrefConstants.HAS_WIDGET, true);
+
+		}
+
+	}
+
+	public static RemoteViews doUpdate(Context context) {
+
 		// Create an Intent to send widget command to WidgetReceiver
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(this
-			.getApplicationContext(), 0, new Intent(W_INTENT), 0);
-		remoteViews.setOnClickPendingIntent(R.id.widget_target,
-			pendingIntent);
-		remoteViews.setTextViewText(R.id.ssid, data
-			.getString(NotifUtil.SSID_KEY));
-		remoteViews.setTextViewText(R.id.status, data
-			.getString(NotifUtil.STATUS_KEY));
-		remoteViews.setImageViewResource(R.id.signal, NotifUtil
-			.getIconfromSignal(data.getInt(NotifUtil.SIGNAL_KEY),
-				NotifUtil.ICON_SET_LARGE));
-		int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
-			this, FixerWidget.class));
-		for (int n = 0; n < ids.length; n++)
-		    appWidgetManager.updateAppWidget(ids[n], remoteViews);
-	    }
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context
+				.getApplicationContext(), 0, new Intent(W_INTENT), 0);
+		/*
+		 * Don't have to worry about pre-cupcake clients because they won't run
+		 * the widget code setting onclick on the view directly
+		 */
+		RemoteViews views = new RemoteViews(context.getPackageName(),
+				R.layout.widget);
+		;
+		views.setOnClickPendingIntent(R.id.widget_target, pendingIntent);
+
+		return views;
 	}
-    }
-
-    @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager,
-	    int[] appWidgetIds) {
-	/*
-	 * Send Update To Widgets
-	 */
-	if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
-	    LogService.log(context, LogService.getLogTag(context), context
-		    .getString(R.string.widget_update_called));
-	context.startService(new Intent(context, UpdateService.class));
-	super.onUpdate(context, appWidgetManager, appWidgetIds);
-    }
-
-    public static class UpdateService extends IntentService {
-	public UpdateService() {
-	    super("FixerWidget$UpdateService");
-	}
-
-	@Override
-	protected void onHandleIntent(Intent intent) {
-	    // Build the widget update for today
-	    RemoteViews updateViews = doUpdate(this);
-
-	    // Push update for this widget to the home screen
-	    ComponentName thisWidget = new ComponentName(this,
-		    FixerWidget.class);
-	    AppWidgetManager manager = AppWidgetManager.getInstance(this);
-	    manager.updateAppWidget(thisWidget, updateViews);
-
-	    /*
-	     * Set HAS_WIDGET true if not already
-	     */
-	    if (!PrefUtil.readBoolean(this.getApplicationContext(),
-		    PrefConstants.HAS_WIDGET))
-		PrefUtil.writeBoolean(this.getApplicationContext(),
-			PrefConstants.HAS_WIDGET, true);
-
-	}
-
-    }
-
-    public static RemoteViews doUpdate(Context context) {
-
-	// Create an Intent to send widget command to WidgetReceiver
-	PendingIntent pendingIntent = PendingIntent.getBroadcast(context
-		.getApplicationContext(), 0, new Intent(W_INTENT), 0);
-	/*
-	 * Don't have to worry about pre-cupcake clients because they won't run
-	 * the widget code setting onclick on the view directly
-	 */
-	RemoteViews views = new RemoteViews(context.getPackageName(),
-		R.layout.widget);
-	;
-	views.setOnClickPendingIntent(R.id.widget_target, pendingIntent);
-
-	return views;
-    }
 };

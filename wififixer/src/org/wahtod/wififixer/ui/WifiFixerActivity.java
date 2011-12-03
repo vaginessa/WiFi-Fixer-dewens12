@@ -609,7 +609,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 					}
 				});
 
-		dialog.setButton2(getString(R.string.cancel_button),
+		dialog.setButton2(getString(R.string.later_button),
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int which) {
