@@ -84,9 +84,9 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	    ssid.setText(network.SSID);
 	}
 	super.onResume();
-	ActionBarDetector.setUp(this.getActivity(), true, getActivity()
-		.getString(R.string.connect_fragment_title)
-		+ network.SSID);
+		ActionBarDetector.setUp(getActivity(), true, getActivity().getString(
+				R.string.connect_fragment_title)
+				+ network.SSID);
     }
 
     private int addNetwork(final String password) {

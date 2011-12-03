@@ -226,5 +226,6 @@
     <string name="phone_tutorial_q">Please take a moment for a quick UI tutorial</string>
     <string name="ms">ms</string>
     <string name="later_button">Later</string>
+    <string name="about_actionbar">"About: "</string>
 
 </resources>

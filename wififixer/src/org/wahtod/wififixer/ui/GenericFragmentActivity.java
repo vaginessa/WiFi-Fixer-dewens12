@@ -17,6 +17,7 @@
 package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.utility.WFScanResult;
 
 import android.os.Bundle;
@@ -24,21 +25,27 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.MenuItem;
 
 public class GenericFragmentActivity extends FragmentActivity {
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-	setContentView(R.layout.fragment_container);
-	
-	if (getIntent().hasExtra(WFScanResult.BUNDLE_KEY)) {
-	    Bundle bundle = getIntent().getExtras();
-	    Fragment f = FragmentSwitchboard.newInstance(bundle);
-	    FragmentManager fm = getSupportFragmentManager();
-	    FragmentTransaction ft = fm.beginTransaction();
-	    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-	    ft.replace(R.id.fragment_target, f);
-	    ft.commit();
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.fragment_container);
+
+		if (getIntent().hasExtra(WFScanResult.BUNDLE_KEY)) {
+			Bundle bundle = getIntent().getExtras();
+			Fragment f = FragmentSwitchboard.newInstance(bundle);
+			FragmentManager fm = getSupportFragmentManager();
+			FragmentTransaction ft = fm.beginTransaction();
+			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			ft.replace(R.id.fragment_target, f);
+			ft.commit();
+		}
 	}
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		ActionBarDetector.handleHome(this, item);
+		return super.onOptionsItemSelected(item);
+	}
 }

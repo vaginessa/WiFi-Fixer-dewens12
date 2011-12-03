@@ -23,44 +23,44 @@ import android.content.Intent;
 import android.view.MenuItem;
 
 public abstract class ActionBarDetector {
-    private static ActionBarDetector selector;
+	private static ActionBarDetector selector;
 
-    public abstract void vSetUp(Activity a, boolean state, String title);
+	public abstract void vSetUp(Activity a, boolean state, String title);
 
-    public static void setUp(Activity a, boolean state, String title) {
-	/*
-	 * Add Action Bar home up
-	 */
-	if (selector == null) {
-	    if (checkHasActionBar()) {
-		selector = new UpSetter();
-	    } else
+	public static void setUp(Activity a, boolean state, String title) {
+		/*
+		 * Add Action Bar home up
+		 */
+		if (selector == null) {
+			if (checkHasActionBar()) {
+				selector = new UpSetter();
+			} else
+				return;
+		}
+		/*
+		 * If API exists, set policy
+		 */
+		selector.vSetUp(a, state, title);
 		return;
 	}
-	/*
-	 * If API exists, set policy
-	 */
-	selector.vSetUp(a, state, title);
-	return;
-    }
 
-    public static boolean checkHasActionBar() {
-	try {
-	    Class.forName("android.app.ActionBar", true, Thread.currentThread()
-		    .getContextClassLoader());
-	    return true;
-	} catch (Exception ex) {
-	    return false;
+	public static boolean checkHasActionBar() {
+		try {
+			Class.forName("android.app.ActionBar", true, Thread.currentThread()
+					.getContextClassLoader());
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
 	}
-    }
 
-    public static void handleHome(Context context, MenuItem item) {
-	switch (item.getItemId()) {
-	case android.R.id.home:
-	    // app icon in Action Bar clicked; go home
-	    Intent intent = new Intent(context, WifiFixerActivity.class);
-	    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	    context.startActivity(intent);
+	public static void handleHome(Context context, MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// app icon in Action Bar clicked; go home
+			Intent intent = new Intent(context, WifiFixerActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			context.startActivity(intent);
+		}
 	}
-    }
 }
