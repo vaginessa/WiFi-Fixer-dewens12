@@ -13,8 +13,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="internalOnly"
     package="org.wahtod.wififixer"
-    android:versionCode="895"
-    android:versionName="0.9.0b7" >
+    android:versionCode="897"
+    android:versionName="0.9.0RC1" >
 
     <supports-screens
         android:largeScreens="true"

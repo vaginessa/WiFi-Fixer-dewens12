@@ -123,7 +123,7 @@ public class TutorialFragmentActivity extends FragmentActivity {
 	};
 	
 	private void removeAllMessages(){
-		for (int n = 0; n < 7; n++) {
+		for (int n = 0; n < 6; n++) {
 			handler.removeMessages(n);
 		}
 	}
