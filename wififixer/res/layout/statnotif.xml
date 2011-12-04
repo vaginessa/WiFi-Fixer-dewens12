@@ -12,7 +12,8 @@
 	-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="horizontal" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:background="@drawable/themebg"
+	android:layout_height="fill_parent"
+    android:background="#292b76"
 	android:alpha=".85">
 	<ImageView android:id="@+id/signal" android:layout_height="fill_parent"
 		android:layout_gravity="left" android:src="@drawable/signal0"
