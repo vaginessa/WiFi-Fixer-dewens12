@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+		Copyright [2010-2011] [David Van de Ven] Licensed under the Apache
+		License, Version 2.0 (the "License"); you may not use this file except
+		in compliance with the License. You may obtain a copy of the License
+		at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:padding="@dimen/scan_list_padding" >
+
+    <TextView
+        android:id="@+id/ssid"
+        style="@style/Wftext.header"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="@dimen/scan_list_ssid_margin_bottom"
+        android:layout_marginLeft="@dimen/scan_list_ssid_margin_left"
+        android:layout_width="@dimen/scan_list_ssid_width"
+        android:gravity="left"
+        android:maxLength="13"
+        android:shadowColor="#FFFF00"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:text="default" >
+    </TextView>
+
+    <ImageView
+        android:id="@+id/NETWORK_ICON"
+        android:layout_width="@dimen/scan_list_neticon_width"
+        android:layout_height="fill_parent"
+        android:layout_gravity="bottom"
+        android:gravity="left"
+        android:src="@drawable/icon" >
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/SECURE_ICON"
+        android:layout_width="@dimen/scan_list_securicon_width"
+        android:layout_height="fill_parent"
+        android:layout_gravity="bottom"
+        android:gravity="left"
+        android:src="@drawable/icon" >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/encryption"
+        style="@style/Wftext"
+        android:layout_gravity="bottom"
+        android:layout_margin="2dp"
+        android:layout_width="@dimen/scan_list_encryption_width"
+        android:gravity="left"
+        android:text="encryption"
+      	 >
+    </TextView>
+
+</LinearLayout>

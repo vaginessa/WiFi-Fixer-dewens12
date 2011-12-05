@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<!--
-		Copyright [2010-2011] [David Van de Ven] Licensed under the Apache License,
-		Version 2.0 (the "License"); you may not use this file except in
-		compliance with the License. You may obtain a copy of the License at
-
-		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+<!--
+		Copyright [2010-2011] [David Van de Ven] Licensed under the Apache
+		License, Version 2.0 (the "License"); you may not use this file except
+		in compliance with the License. You may obtain a copy of the License
+		at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
 		applicable law or agreed to in writing, software distributed under the
 		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 		CONDITIONS OF ANY KIND, either express or implied. See the License for
 		the specific language governing permissions and limitations under the
 		License.
-	-->
+-->
 <resources>
+
     <string name="network_status">Network Status</string>
     <string name="bdata_ticker">Service Disabled</string>
     <string name="bdata_nag">Background Data Disabled</string>
@@ -19,189 +19,213 @@
     <string name="widget_update_called">Widget Update Called</string>
     <string name="logfile_delete_err_toast">Log File Doesn\'t Exist</string>
     <string name="logfile_delete_toast">Log File Deleted</string>
-    <string name="connect_now">Connect Now</string>
+    <string name="connect">Connect</string>
     <string name="disable">Disable</string>
     <string name="enable">Enable</string>
     <string name="enabling_logging">Enabling Logging</string>
     <string name="disabling_logging">Disabling Logging</string>
-    <string name="donatenag">Thank you for using Wifi Fixer. If you find this software useful, please tap here to donate.</string>
-    <string name="thank_you">Thank You</string>
+    <string name="donatenag">If you use this software, please donate!</string>
+    <string name="thank_you">Thank You for using Wifi Fixer</string>
     <string name="aboutnag">Tap Here to Read About Page</string>
     <string name="please_read">Please Read</string>
     <string name="emailintent">Email:</string>
-	<string name="email_footer">What time did the issue occur? :\n\nWhat did you see?\n\nPlease include any other details. :\n\n\n</string>
-	<string name="subject">WifiFixer Log</string>
-	<string name="email">zanshin.g1@gmail.com</string>
-	<string name="log_doesn_t_exist">Log doesn\'t exist</string>
-	<string name="sd_card_unavailable">SD Card Unavailable</string>
-	<string name="donateservice">com.wahtod.wififixer.WFDonateService</string>
-	<string name="about">About</string>
-	<string name="documentation">Documentation</string>
-	<string name="preferences">Preferences</string>
-	<string name="send_log">Send Log</string>
-	<string name="toggle_logging">Toggle Logging</string>
-	<string name="ondestroy">onDestroy, killed by Android</string>
-	<string name="colon">:</string>
-	<string name="prefs_change">Prefs Change:</string>
-	<string name="connect_failed">Connect Failed</string>
-	<string name="connect_succeeded">Connect Succeeded</string>
-	<string name="initiating_scan">Initiating Scan</string>
-	<string name="instantiating_httpclient">Instantiating httpclient</string>
-	<string name="signalhop_no_result">Signalhop: No best network result</string>
-	<string name="signalhop_nonetworks">SignalHop: No alternate networks</string>
-	<string name="number_of_known">Number of known networks:</string>
-	<string name="known_networks_found">Known Networks Found: </string>
-	<string name="dying">Dying</string>
-	<string name="signal_poor">Signal poor: scanning for better network.</string>
-	<string name="current_dbm">Current dBm:</string>
-	<string name="network_notification_scan">Network Notification Scan</string>
-	<string name="network_notification">Open Network Notification</string>
-	<string name="open_network_found">Open Network Found</string>
-	<string name="hopping">Found better signal: hopping to network  </string>
-	<string name="turn_logging_off">Disable Logging</string>
-	<string name="turn_logging_on">Enable Logging</string>
-	<string name="wifi_repair_post_failed">Wifi Repair:Screen Off</string>
-	<string name="icmp_success">ICMP Success</string>
-	<string name="wifi_not_current_network">Wifi Not Current Network</string>
-	<string name="running_wifi_repair">Running Wifi Repair</string>
-	<string name="releasing_wake_lock">Releasing Wake Lock</string>
-	<string name="acquiring_wake_lock">Acquiring Wake Lock</string>
-	<string name="running_supplicant_fix">Running Supplicant Fix</string>
-	<string name="oncreate">OnCreate</string>
-	<string name="wififixerservice_build">WifiFixerService Build:</string>
-	<string name="onbind_intent">OnBind:Intent:</string>
-	<string name="wifi_connection_problem">Wifi Status:</string>
-	<string name="ssid">SSID:</string>
-	<string name="supplicant_nonresponsive">Supplicant Nonresponsive</string>
-	<string name="supplicant_responded">Supplicant Responded</string>
-	<string name="supplicant_state">Supplicant State:</string>
-	<string name="loading_settings">Loading Settings</string>
-	<string name="version">Version:</string>
-	<string name="no_known_networks_found">No known networks found</string>
-	<string name="best_signal_ssid">Best Signal: SSID: </string>
-	<string name="signal_level">Signal Level:</string>
-	<string name="capabilities">Capabilities:</string>
-	<string name="found_ssid">Found SSID:</string>
-	<string name="parsing_scan_results">Parsing Scan Results</string>
-	<string name="null_scan_results">Null Scan Results</string>
-	<string name="cached_ip">Cached IP:</string>
-	<string name="icmp_method">ICMP Method:</string>
-	<string name="ioexception">IOException</string>
-	<string name="http_method">HTTP Method</string>
-	<string name="wifi_state_unknown">WIFI_STATE_UNKNOWN</string>
-	<string name="wifi_state_disabled">WIFI_STATE_DISABLED</string>
-	<string name="wifi_state_enabled">WIFI_STATE_ENABLED</string>
-	<string name="wifi_state_disabling">WIFI_STATE_DISABLING</string>
-	<string name="wifi_state_enabling">WIFI_STATE_ENABLING</string>
-	<string name="reconnecthandler">Scan Results Acquired:Running Reconnect_Handler
+    <string name="email_footer">What time did the issue occur? :\n\nWhat did you
+		see?\n\nPlease include any other details. :\n\n\n</string>
+    <string name="subject">WifiFixer Log</string>
+    <string name="email">zanshin.g1@gmail.com</string>
+    <string name="log_doesn_t_exist">Log doesn\'t exist</string>
+    <string name="sd_card_unavailable">SD Card Unavailable</string>
+    <string name="donateservice">com.wahtod.wififixer.WFDonateService</string>
+    <string name="about">About</string>
+    <string name="help">Help</string>
+    <string name="preferences">Preferences</string>
+    <string name="send_log">Send Log</string>
+    <string name="toggle_logging">Toggle Logging</string>
+    <string name="ondestroy">onDestroy, killed by Android</string>
+    <string name="colon">:</string>
+    <string name="prefs_change">Prefs Change:</string>
+    <string name="connect_failed">Connect Failed</string>
+    <string name="connect_succeeded">Connect Succeeded</string>
+    <string name="initiating_scan">Initiating Scan</string>
+    <string name="instantiating_httpclient">Instantiating httpclient</string>
+    <string name="signalhop_no_result">Signalhop: No best network result</string>
+    <string name="signalhop_nonetworks">SignalHop: No alternate networks</string>
+    <string name="number_of_known">Number of known networks:</string>
+    <string name="known_networks_found">Known Networks Found: </string>
+    <string name="dying">Dying</string>
+    <string name="signal_poor">Signal poor: scanning for better network.</string>
+    <string name="current_dbm">Current dBm:</string>
+    <string name="hopping">Found better signal: hopping to network  </string>
+    <string name="turn_logging_off">Disable Logging</string>
+    <string name="turn_logging_on">Enable Logging</string>
+    <string name="wifi_repair_post_failed">Wifi Repair:Screen Off</string>
+    <string name="icmp_success">ICMP Success</string>
+    <string name="wifi_not_current_network">Wifi Not Current Network</string>
+    <string name="running_wifi_repair">Running Wifi Repair</string>
+    <string name="releasing_wake_lock">Releasing Wake Lock</string>
+    <string name="acquiring_wake_lock">Acquiring Wake Lock</string>
+    <string name="running_supplicant_fix">Running Supplicant Fix</string>
+    <string name="oncreate">OnCreate</string>
+    <string name="wififixerservice_build">WifiFixerService Build:</string>
+    <string name="wifi_connection_problem">Wifi Status:</string>
+    <string name="ssid">SSID:</string>
+    <string name="supplicant_nonresponsive">Supplicant Nonresponsive</string>
+    <string name="supplicant_responded">Supplicant Responded</string>
+    <string name="supplicant_state">Supplicant State:</string>
+    <string name="loading_settings">Loading Settings</string>
+    <string name="version">Version:</string>
+    <string name="no_known_networks_found">No known networks found</string>
+    <string name="best_signal_ssid">Best Signal: SSID: </string>
+    <string name="signal_level">Signal Level:</string>
+    <string name="capabilities">Capabilities:</string>
+    <string name="found_ssid">Found SSID:</string>
+    <string name="parsing_scan_results">Parsing Scan Results</string>
+    <string name="null_scan_results">Null Scan Results</string>
+    <string name="cached_ip">Cached IP:</string>
+    <string name="wifi_state_unknown">WIFI_STATE_UNKNOWN</string>
+    <string name="wifi_state_disabled">WIFI_STATE_DISABLED</string>
+    <string name="wifi_state_enabled">WIFI_STATE_ENABLED</string>
+    <string name="wifi_state_disabling">WIFI_STATE_DISABLING</string>
+    <string name="wifi_state_enabling">WIFI_STATE_ENABLING</string>
+    <string name="reconnecthandler">Scan Results Acquired:Running Reconnect_Handler
 	</string>
-	<string name="repairhandler">Scan Results Acquired:Running Repair_Handler
+    <string name="repairhandler">Scan Results Acquired:Running Repair_Handler
 	</string>
-	<string name="nopendingscan">No Pending Scan.</string>
-	<string name="widgetaction">***Widget Action***</string>
-	<string name="normal_startup_or_reload">Normal Startup or reload</string>
-	<string name="alarm_intent">Alarm Intent</string>
-	<string name="screen_on_handler">SCREEN_ON handler</string>
-	<string name="screen_off_handler">SCREEN_OFF handler</string>
-	<string name="authorized">Authorized</string>
-	<string name="donatethanks">Thank you for your donation.</string>
-	<string name="isauthed">ISAUTHED</string>
-	<string name="authed">Yep, we\'re authed!</string>
-	<string name="packagename">org.wahtod.wififixer</string>
-	<string name="wifi_is_disabled">Wifi is Disabled</string>
-	<string name="wifi_is_enabled">Wifi is Enabled</string>
-	<string name="connecting_to_network">Connecting to Network:</string>
-	<string name="releasing_wifi_lock">Releasing Wifi Lock</string>
-	<string name="acquiring_wifi_lock">Acquiring Wifi Lock</string>
-	<string name="nid"> NID:</string>
-	<string name="fix_algorithm">Fix Algorithm </string>
-	<string name="repairing">Repairing</string>
-	<string name="reconnecting">Reconnecting</string>
-	<string name="reassociating">Reassociating</string>
-	<string name="shouldrun_false_dying">SHOULDRUN false, pausing.</string>
-	<string name="supplicant_nonresponsive_toggling_wifi">Supplicant Nonresponsive, resetting wifi</string>
-	<string name="exiting_supplicant_fix_thread_starting_scan">Exiting Supplicant Fix Thread:Starting Scan
+    <string name="nopendingscan">No Pending Scan.</string>
+    <string name="widgetaction">***Widget Action***</string>
+    <string name="normal_startup_or_reload">Normal Startup or reload</string>
+    <string name="alarm_intent">Alarm Intent</string>
+    <string name="screen_on_handler">SCREEN_ON handler</string>
+    <string name="screen_off_handler">SCREEN_OFF handler</string>
+    <string name="authorized">Authorized</string>
+    <string name="donatethanks">Thank you for your donation.</string>
+    <string name="isauthed">ISAUTHED</string>
+    <string name="authed">Yep, we\'re authed!</string>
+    <string name="packagename">org.wahtod.wififixer</string>
+    <string name="wifi_is_disabled">Wifi Off</string>
+    <string name="wifi_is_enabled">Wifi On</string>
+    <string name="connecting_to_network">Connecting to Network:</string>
+    <string name="releasing_wifi_lock">Releasing Wifi Lock</string>
+    <string name="acquiring_wifi_lock">Acquiring Wifi Lock</string>
+    <string name="nid"> NID:</string>
+    <string name="fix_algorithm">Fix Algorithm </string>
+    <string name="repairing">Repairing</string>
+    <string name="reconnecting">Reconnecting</string>
+    <string name="reassociating">Reassociating</string>
+    <string name="shouldrun_false_dying">SHOULDRUN false, pausing.</string>
+    <string name="supplicant_nonresponsive_toggling_wifi">Supplicant Nonresponsive, resetting wifi</string>
+    <string name="exiting_supplicant_fix_thread_starting_scan">Exiting Supplicant Fix Thread:Starting Scan
 	</string>
-	<string name="wifi_off_aborting_reconnect">Wifi Off:Aborting Reconnect</string>
-	<string name="toggling_wifi">Resetting Wifi</string>
-	<string name="connected_to_network">Connected to Network:</string>
-	<string name="wifi_off_aborting_repair">Wifi Off:Aborting Repair</string>
-	<string name="removing_temp_lock">Removing Temp Lock</string>
-	<string name="setting_temp_lock">Setting Temp Lock</string>
-
-	<string name="app_name">Wifi Fixer</string>
-
-	<string name="app_desc">Wifi health monitoring service with integrated wifi
+    <string name="wifi_off_aborting_reconnect">Wifi Off:Aborting Reconnect</string>
+    <string name="toggling_wifi">Resetting Wifi</string>
+    <string name="connected_to_network">Connected to Network:</string>
+    <string name="wifi_off_aborting_repair">Wifi Off:Aborting Repair</string>
+    <string name="removing_temp_lock">Removing Temp Lock</string>
+    <string name="setting_temp_lock">Setting Temp Lock</string>
+    <string name="app_name">Wifi Fixer</string>
+    <string name="app_desc">Wifi health monitoring service with integrated wifi
 		lock option. </string>
-
-	<string name="widget_name">WifiFixerWidget</string>
-
-	<string name="network_test">*PING*</string>
-
-	<string name="passed">PASSED</string>
-
-	<string name="failed">FAILED</string>
-
-	<string name="reenablenetwork">HURK! Disabled network re-enabled:</string>
-
-	<string name="authentication_error">Authentication Error</string>
-
-	<string name="set_non_managed">Toggle Non-Managed</string>
-
-	<string name="cachewfinst">Cacheing WifiManager Instance</string>
-
-	<string name="last_scan">Last scan:</string>
-
-	<string name="scan_interrupt">Scan would interrupt supplicant</string>
-
-	<string name="thanks_google">Thanks, Google!</string>
-
-	<string name="service_onscreenoff">Service:OnScreenOff</string>
-
-	<string name="service_onscreenon">Service:OnScreenOn</string>
-
-	<string name="not_managing_network">Not managing network:</string>
-
-	<string name="supplicant_associate_threshold_exceeded">Supplicant Associate Threshold Exceeded: resetting wifi</string>
-
-	<string name="none">none</string>
-
-	<string name="low_memory">Low Memory</string>
-
-	<string name="knownbysignal_empty_exiting">KnownbySignal Empty, Exiting</string>
-
-	<string name="error_allocating_buffered_writer">Error allocating buffered writer:</string>
-
-	<string name="http_success">HTTP Success</string>
-
-	<string name="http_failure">HTTP Failure</string>
-
-	<string name="unknown_host_exception">Unknown Host Exception</string>
-
-	<string name="mimetype_text_plain">text/plain</string>
-
-	<string name="unmanaged">  -U-</string>
-
-	<string name="scan_mode">Should be in normal scan mode</string>
-
-	<string name="alert_message">Preparing email to developer:
-
-Please be sure you have collected at least 10 minutes of data.</string>
-
-	<string name="ok_button">OK</string>
-
-	<string name="cancel_button">Cancel</string>
-
-	<string name="broadcasthandler">BroadCastHandler</string>
-
-	<string name="t_interrupt">Startup Thread Interrupted</string>
-
-	<string name="null_ssid">NULL_SSID</string>
-
-	<string name="http">http://</string>
-
-	<string name="responded">:RESPONDED</string>
-
-	<string name="currently_logging">Wifi Fixer: Logging</string>
+    <string name="widget_name">WifiFixerWidget</string>
+    <string name="network_test">*PING*</string>
+    <string name="passed">PASSED</string>
+    <string name="failed">FAILED</string>
+    <string name="reenablenetwork">Disabled network re-enabled:</string>
+    <string name="authentication_error">Authentication Error</string>
+    <string name="set_non_managed">Toggle Non-Managed</string>
+    <string name="cachewfinst">Caching WifiManager Instance</string>
+    <string name="last_scan">Last scan:</string>
+    <string name="scan_interrupt">Scan would interrupt supplicant</string>
+    <string name="not_managing_network">Not managing network:</string>
+    <string name="supplicant_associate_threshold_exceeded">Supplicant Associate Threshold Exceeded: resetting
+		wifi</string>
+    <string name="none">none</string>
+    <string name="low_memory">Low Memory</string>
+    <string name="knownbysignal_empty_exiting">KnownbySignal Empty, Exiting</string>
+    <string name="error_allocating_buffered_writer">Error allocating buffered writer:</string>
+    <string name="mimetype_text_plain">text/plain</string>
+    <string name="unmanaged">-U- </string>
+    <string name="scan_mode">Should be in normal scan mode</string>
+    <string name="alert_message">Preparing email to developer:
+		Please be sure to
+		collect at least 10 minutes of data.</string>
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="t_interrupt">Startup Thread Interrupted</string>
+    <string name="null_ssid">None</string>
+    <string name="http">http://</string>
+    <string name="responded">:RESPONDED</string>
+    <string name="writing_to_log">Writing to Log</string>
+    <string name="k"> KB</string>
+    <string name="strict_mode_extant">Strict Mode Extant</string>
+    <string name="strict_mode_unavailable">Strict Mode Unavailable</string>
+    <string name="blurb">Wifi Fixer is a low-resource service that maintains
+		your wifi connection.</string>
+    <string name="service_status">Service</string>
+    <string name="enabling_wififixerservice">Enabling WifiFixerService</string>
+    <string name="disabling_wififixerservice">Disabling WifiFixerService</string>
+    <string name="wifi">Wifi</string>
+    <string name="enabling_wifi">Enabling Wifi</string>
+    <string name="disabling_wifi">Disabling Wifi</string>
+    <string name="knownnetworks_fragment_header">Known Networks</string>
+    <string name="scanfragment_header">Local Networks</string>
+    <string name="open_network">Open</string>
+    <string name="logservice">LogService</string>
+    <string name="link_speed">Link Speed:</string>
+    <string name="signal_strength">Signal Strength:</string>
+    <string name="state">State:</string>
+    <string name="resource">resource</string>
+    <string name="xml">xml</string>
+    <string name="SCREEN_summary">Network checks when screen is off: will use
+		slightly more battery</string>
+    <string name="SCREEN_title">Manage During Sleep</string>
+    <string name="Disable_title">Disable Service</string>
+    <string name="Disable_summary">Causes the Wifi Fixer service to stop running</string>
+    <string name="Perf_Mode_title">Set Wifi Usability</string>
+    <string name="Perf_Mode_summary">Allows setting from max wifi usability to minimal battery use</string>
+    <string name="StateNotif_title">Status Notification</string>
+    <string name="StateNotif_summary">Displays an ongoing notification showing connection state</string>
+    <string name="Notifications_title">Repair Notifications</string>
+    <string name="Notifications_summary">Displays a notification when Wifi Fixer repairs a problem</string>
+    <string name="Logging_title">Enable Log Menu</string>
+    <string name="Logging_summary">Enables logging options. </string>
+    <string name="WIDGET_title">Widget Behavior</string>
+    <string name="WIDGET_summary">Selects widget behavior</string>
+    <string name="WiFiLock_title">Enable Wifi Lock</string>
+    <string name="WifiLock_summary">Enables Wifi Lock: will increase battery use</string>
+    <string name="SLEEP_POLICY_title">Wifi Sleep Policy</string>
+    <string name="SLEEP_POLICY_summary">Controls Wifi sleep policy: See Known Issues in Documentation</string>
+    <string name="N1FIX2_title">Nexus One Sleep Fix</string>
+    <string name="N1FIX2_summary">Experimental: please read Known Issues in Documentation.</string>
+    <string name="remove">Remove</string>
+    <string name="removing_network">Removing Network:</string>
+    <string name="about_activity_title">About</string>
+    <string name="help_activity_title">Help</string>
+    <string name="preferences_activity_title">Preferences</string>
+    <string name="about_fragment_title_">"About: "</string>
+    <string name="passwd_entry_text">Enter wifi key</string>
+    <string name="connect_fragment_title">"Connect: "</string>
+    <string name="dns_check_target">google.com</string>
+    <string name="network_check">Network Check:</string>
+    <string name="http_ok">:HTTP_OK</string>
+    <string name="http_fail">:HTTP_FAIL</string>
+    <string name="icmp_ok">:ICMP_OK</string>
+    <string name="icmp_fail">:ICMP_FAIL</string>
+    <string name="critical_timeout">Network Check fail: critical timeout</string>
+    <string name="add">Add</string>
+    <string name="button_connect">Tap button to connect</string>
+    <string name="connection_threshold_exceeded">Connection Threshold Exceeded</string>
+    <string name="tutorial_toast_1">This is Known Networks</string>
+    <string name="tutorial_toast_2">Known Networks shows networks you\'ve added</string>
+    <string name="tutorial_toast_4">This is Local Networks</string>
+    <string name="tutorial_toast_3">You can swipe left here to get to the next page</string>
+    <string name="tutorial_toast_5">Local Networks shows scanned networks around you</string>
+    <string name="tutorial_toast_6">This is the Status view</string>
+    <string name="tutorial_toast_7">Status shows you what Wifi is doing</string>
+    <string name="tutorial_toast_8">That\'s it!\n\nIf you want to run the tutorial again, go to preferences.</string>
+    <string name="phone_ui_tutorial">Phone UI Tutorial</string>
+    <string name="phone_tutorial_q">Please take a moment for a quick UI tutorial</string>
+    <string name="ms">ms</string>
+    <string name="later_button">Later</string>
+    <string name="about_actionbar">"About: "</string>
 
 </resources>

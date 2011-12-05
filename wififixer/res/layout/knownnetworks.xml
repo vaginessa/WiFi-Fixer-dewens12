@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/TextView01"
+        style="@style/Wftext.large"
+        android:layout_gravity="center_horizontal"
+        android:alpha=".8"
+        android:paddingBottom="@dimen/knownnetworks_header_padding_bottom"
+        android:paddingTop="@dimen/knownnetworks_header_padding_top"
+        android:text="@string/knownnetworks_fragment_header" >
+    </TextView>
+
+    <ListView
+        android:id="@+id/knownlist"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerHorizontal="true"
+        android:alpha=".8"
+        android:cacheColorHint="#00000000"
+        android:divider="#00000000"
+        android:dividerHeight="0dp"
+        android:headerDividersEnabled="false"
+        android:paddingLeft="@dimen/knownnetworks_list_padding_left"
+        android:scrollbars="none" >
+    </ListView>
+
+</LinearLayout>

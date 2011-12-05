@@ -17,8 +17,8 @@
 package org.wahtod.wififixer.utility;
 
 import org.wahtod.wififixer.WifiFixerService;
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -45,7 +45,7 @@ public final class ServiceAlarm extends Object {
 	return (createPendingIntent(c, PendingIntent.FLAG_NO_CREATE) != null);
     }
 
-    public static PendingIntent createPendingIntent(final Context context,
+    private static PendingIntent createPendingIntent(final Context context,
 	    final int flag) {
 	Intent intent = new Intent(context, WifiFixerService.class);
 	intent.setFlags(Intent.FLAG_FROM_BACKGROUND);

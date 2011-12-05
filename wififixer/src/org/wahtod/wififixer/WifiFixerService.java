@@ -16,19 +16,21 @@
 
 package org.wahtod.wififixer;
 
-import org.wahtod.wififixer.SharedPrefs.PrefConstants;
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.legacy.StrictModeDetector;
+import org.wahtod.wififixer.prefs.PrefConstants;
+import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
-import org.wahtod.wififixer.utility.ScreenStateHandler;
+import org.wahtod.wififixer.utility.ScreenStateDetector;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 import org.wahtod.wififixer.utility.WakeLock;
-import org.wahtod.wififixer.utility.ScreenStateHandler.OnScreenStateChangedListener;
+import org.wahtod.wififixer.utility.ScreenStateDetector.OnScreenStateChangedListener;
 import org.wahtod.wififixer.widget.FixerWidget;
 
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -65,7 +67,7 @@ public class WifiFixerService extends Service implements
 
     private WakeLock wakelock;
     private WFConnection wifi;
-    private static ScreenStateHandler screenstateHandler;
+    private static ScreenStateDetector screenstateHandler;
     /*
      * Cache context for notifications
      */
@@ -81,10 +83,13 @@ public class WifiFixerService extends Service implements
     private static void refreshWidget(final Context context) {
 	Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 	/*
-	 * Why would anyone possibly want more than 3? It only does one thing.
+	 * Doing this right.
 	 */
-	int[] widgetids = { 0, 1, 2 };
-	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetids);
+	AppWidgetManager appWidgetManager = AppWidgetManager
+		.getInstance(context.getApplicationContext());
+	int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context,
+		FixerWidget.class));
+	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
 	intent.setClass(context, FixerWidget.class);
 	context.sendBroadcast(intent);
     }
@@ -124,14 +129,21 @@ public class WifiFixerService extends Service implements
 
     @Override
     public IBinder onBind(Intent intent) {
-	if (logging)
-	    LogService.log(this, APP_NAME, getString(R.string.onbind_intent)
-		    + intent.toString());
 	return null;
     }
 
     @Override
     public void onCreate() {
+	/*
+	 * Strict Mode check
+	 */
+
+	if (StrictModeDetector.setPolicy(false))
+	    LogService.log(this, APP_NAME,
+		    getString(R.string.strict_mode_extant));
+	else
+	    LogService.log(this, APP_NAME,
+		    getString(R.string.strict_mode_unavailable));
 
 	/*
 	 * Make sure service settings are enforced.
@@ -205,7 +217,10 @@ public class WifiFixerService extends Service implements
 	/*
 	 * Set registered flag true so unregister code runs later
 	 */
-	registered = true;
+	if (registered)
+	    stopSelf();
+	else
+	    registered = true;
 
 	if (logging)
 	    LogService.log(this, APP_NAME, getString(R.string.oncreate));
@@ -214,13 +229,13 @@ public class WifiFixerService extends Service implements
 
     @Override
     public void onDestroy() {
-	super.onDestroy();
 	unregisterReceivers();
 	if (prefs.getFlag(Pref.STATENOT_KEY))
 	    wifi.setStatNotif(false);
 	if (logging)
 	    LogService.log(this, APP_NAME, getString(R.string.ondestroy));
 	cleanup();
+	super.onDestroy();
 
     }
 
@@ -236,13 +251,8 @@ public class WifiFixerService extends Service implements
 	/*
 	 * Set shared pref state for non-Eclair clients
 	 */
-	if (Integer.parseInt(Build.VERSION.SDK) >= Build.VERSION_CODES.ECLAIR_MR1)
+	if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.ECLAIR_MR1)
 	    PrefUtil.writeBoolean(this, SCREENOFF, true);
-
-	if (logging)
-	    LogService.log(this, APP_NAME,
-		    getString(R.string.service_onscreenoff));
-
 	screenstate = false;
     }
 
@@ -251,13 +261,8 @@ public class WifiFixerService extends Service implements
 	/*
 	 * Set shared pref state
 	 */
-	if (Integer.parseInt(Build.VERSION.SDK) >= Build.VERSION_CODES.ECLAIR_MR1)
+	if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.ECLAIR_MR1)
 	    PrefUtil.writeBoolean(this, SCREENOFF, false);
-
-	if (logging)
-	    LogService.log(this, APP_NAME,
-		    getString(R.string.service_onscreenon));
-
 	screenstate = true;
     }
 
@@ -322,16 +327,6 @@ public class WifiFixerService extends Service implements
 		    }
 		    break;
 
-		case NETNOT_KEY:
-		    /*
-		     * Disable notification if pref changed to false
-		     */
-		    if (!getFlag(Pref.NETNOT_KEY))
-			NotifUtil.addNetNotif(getBaseContext(), EMPTYSTRING,
-				EMPTYSTRING);
-
-		    break;
-
 		case STATENOT_KEY:
 		    /*
 		     * Notify WFConnection instance to create/destroy ongoing
@@ -367,27 +362,12 @@ public class WifiFixerService extends Service implements
 		    writeBoolean(context, PrefConstants.STATNOTIF_DEFAULT, true);
 		    writeBoolean(context, Pref.STATENOT_KEY.key(), true);
 		}
-
 		/*
-		 * Sets default for Supplicant Fix pref on < 2.0 to true
+		 * Set default: Wifi Sleep Policy
 		 */
-		if (!readBoolean(context, PrefConstants.SUPFIX_DEFAULT)) {
-		    writeBoolean(context, PrefConstants.SUPFIX_DEFAULT, true);
-		    int ver;
-		    try {
-			ver = Integer.valueOf(Build.VERSION.RELEASE.substring(
-				0, 1));
-		    } catch (NumberFormatException e) {
-			ver = 0;
-		    }
-		    if (logging)
-			LogService.log(getBaseContext(), APP_NAME,
-				getBaseContext().getString(R.string.version)
-					+ ver);
-		    if (ver < 2) {
-			writeBoolean(context, Pref.SUPFIX_KEY.key(), true);
-		    }
-
+		if (!readBoolean(context, PrefConstants.SLPOLICY_DEFAULT)) {
+		    writeBoolean(context, PrefConstants.SLPOLICY_DEFAULT, true);
+		    setPolicy(context, 2);
 		}
 	    }
 
@@ -399,14 +379,14 @@ public class WifiFixerService extends Service implements
 	};
 
 	prefs.loadPrefs();
-	NotifUtil.cancel(NOTIFID, notifcontext);
+	NotifUtil.cancel(notifcontext, NOTIFID);
 	wakelock.lock(false);
     }
 
     private void setInitialScreenState(final Context context) {
-	screenstateHandler = new ScreenStateHandler(this);
-	screenstate = ScreenStateHandler.getScreenState(context);
-	ScreenStateHandler.setOnScreenStateChangedListener(this);
+	screenstateHandler = new ScreenStateDetector(this);
+	screenstate = ScreenStateDetector.getScreenState(context);
+	ScreenStateDetector.setOnScreenStateChangedListener(this);
     }
 
     private void unregisterReceivers() {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<!--
+<!--
 		Copyright [2010-2011] [David Van de Ven] Licensed under the Apache
 		License, Version 2.0 (the "License"); you may not use this file except
 		in compliance with the License. You may obtain a copy of the License
@@ -9,109 +9,166 @@
 		CONDITIONS OF ANY KIND, either express or implied. See the License for
 		the specific language governing permissions and limitations under the
 		License.
-	-->
-
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.wahtod.wififixer" android:installLocation="internalOnly" android:versionName="0.8.0.6" android:versionCode="838">
-	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
-	<uses-feature android:name="android.hardware.wifi"
-		android:required="true" />
-	<uses-feature android:name="android.hardware.touchscreen"
-		android:required="true"></uses-feature>
-	<application android:icon="@drawable/icon" android:label="@string/app_name"
-		android:description="@string/app_desc" android:backupAgent=".PrefsBackupAgent"
-		android:restoreAnyVersion="true">
-		<meta-data android:name="com.google.android.backup.api_key"
-			android:value="AEdPqrEAAAAIAGomq--y98O0VHARd55VOdh8CoEphVxKfVXAHw" />
+    android:installLocation="internalOnly"
+    package="org.wahtod.wififixer"
+    android:versionCode="897"
+    android:versionName="0.9.0RC1" >
 
-		<activity android:name=".ui.WifiFixerActivity"
-			android:launchMode="singleTask" android:screenOrientation="portrait"
-			android:configChanges="keyboardHidden">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
+    <supports-screens
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" >
+    </supports-screens>
 
-		</activity>
-		<activity android:name=".ui.About" />
-		<activity android:name=".ui.PrefActivity" />
-		<activity android:name=".ui.HelpActivity" />
+    <uses-sdk
+        android:minSdkVersion="4"
+        android:targetSdkVersion="11" />
+
+    <uses-feature
+        android:name="android.hardware.wifi"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="true" >
+    </uses-feature>
+
+    <application
+        android:backupAgent=".prefs.PrefsBackupAgent"
+        android:description="@string/app_desc"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:restoreAnyVersion="true"
+        android:theme="@style/ThemeWifiFixer" >
+        <meta-data
+            android:name="com.google.android.backup.api_key"
+            android:value="AEdPqrEAAAAIAGomq--y98O0VHARd55VOdh8CoEphVxKfVXAHw" />
+<!-- 			Main Activity -->
+        <activity
+            android:launchMode="singleTop"
+            android:name=".ui.WifiFixerActivity" >
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+<!-- 			Support Activities -->
+        <activity android:name=".ui.About" />
+        <activity android:name=".ui.PrefActivity" />
+        <activity android:name=".ui.PrefActivityHC" />
+        <activity android:name=".ui.HelpActivity" />
+        <activity android:name=".ui.GenericFragmentActivity" />
+
+<!-- 			Starts Boot thread service which waits 30s to run WifiFixerService -->
+        <receiver android:name=".boot.BootReceiver" >
+            <intent-filter >
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            class="BootService"
+            android:name=".boot.BootService" >
+        </service>
+
+<!-- 			Handles incoming external intents -->
+        <receiver android:name=".WFBroadcastReceiver" >
+            <intent-filter >
+                <action android:name="org.wahtod.wififixer.ACTION_WIFI_SERVICE_DISABLE" />
+                <action android:name="org.wahtod.wififixer.ACTION_WIFI_SERVICE_ENABLE" />
+                <action android:name="org.wahtod.wififixer.WIDGET" />
+                <action android:name="org.wahtod.wififixer.AUTH" />
+                <action android:name="org.wahtod.wififixer.ACTION_WIFI_ON" />
+                <action android:name="org.wahtod.wififixer.ACTION_WIFI_OFF" />
+                <action android:name="org.wahtod.wififixer.ACTION_WIFI_TOGGLE" />
+            </intent-filter>
+        </receiver>
+
+        <!--
+			Widget intent dispatch
+			and support
+        -->
+
+        <receiver
+            android:exported="false"
+            android:name=".widget.WidgetReceiver"
+            android:process=":WidgetHandler" >
+            <intent-filter >
+                <action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_ON" />
+                <action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_OFF" />
+                <action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE" />
+                <action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".widget.FixerWidget" >
+            <intent-filter >
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="org.wahtod.wififixer.STATNOTIF" >
+                </action>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider" />
+        </receiver>
+
+        <service android:name=".widget.FixerWidget$UpdateService" >
+        </service>
+        <service android:name=".widget.FixerWidget$StatusUpdateService" >
+        </service>
+
+<!-- 			Networking guts: Main Persistent process -->
+
+        <service
+            class="WifiFixerService"
+            android:exported="false"
+            android:name=".WifiFixerService"
+            android:persistent="true"
+            android:process=":WifiFixerService" >
+        </service>
+
+<!-- 			Provides LogService.log services -->
+
+        <service
+            class="LogService"
+            android:name=".utility.LogService"
+            android:process=":LogService" >
+>
 		
-		<receiver android:name=".Boot.BootReceiver">
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED" />
-			</intent-filter>
-		</receiver>
-		
-		<receiver android:name=".widget.WidgetReceiver"
-			android:process=":WidgetHandler" android:exported="false">
-			<intent-filter>
-				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_ON" />
-				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_OFF" />
-				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE" />
-				<action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE" />
-			</intent-filter>
-		</receiver>
+        </service>
 
-		<receiver android:name=".WFBroadcastReceiver">
-			<intent-filter>
-				<category android:name="android.intent.category.HOME" />
-				<action android:name="org.wahtod.wififixer.ACTION_WIFI_SERVICE_DISABLE" />
-				<action android:name="org.wahtod.wififixer.ACTION_WIFI_SERVICE_ENABLE" />
-				<action android:name="org.wahtod.wififixer.WIDGET" />
-				<action android:name="org.wahtod.wififixer.AUTH" />
-				<action android:name="org.wahtod.wififixer.ACTION_WIFI_ON" />
-				<action android:name="org.wahtod.wififixer.ACTION_WIFI_OFF" />
-				<action android:name="org.wahtod.wififixer.ACTION_WIFI_TOGGLE" />
-			</intent-filter>
-		</receiver>
+<!-- 			Handles asynchronous toggling of wifi state -->
 
-		<receiver android:name=".widget.FixerWidget">
-			<intent-filter>
-				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-			</intent-filter>
-			<meta-data android:name="android.appwidget.provider"
-				android:resource="@xml/widget_provider" />
-		</receiver>
-		
-		<service android:name=".widget.FixerWidget$UpdateService">
-		</service>
+        <service
+            class="ToggleService"
+            android:name=".ToggleService" >
+        </service>
+    </application>
 
-		<service android:persistent="true" android:exported="false"
-			android:name=".WifiFixerService" class="WifiFixerService"
-			android:process=":WifiFixerService">
-		</service>
-
-		<service android:name=".utility.LogService" class="LogService"
-			android:process=":LogService">>
-		</service>
-		
-		<service android:name=".Boot.BootService" class="BootService">
-		</service>
-		
-		<service android:name=".ToggleService" class="ToggleService">
-		</service>
-		
-	</application>
-
-	<!--Documenting permissions here-->
-	<!-- For service start alarm (2 mins from boot_completed) -->
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-	<!-- For wifi state -->
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<!-- For detecting ip connectivity and cacheing IP of router-->
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<!--
+    <!-- Documenting permissions here -->
+    <!-- For service start (30 seconds from boot_completed) -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- For wifi state -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- For detecting ip connectivity and caching IP of router -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--
 		For switching wifi off/on, doing reassociate/reconnect, requesting
 		connections, etc.
-	-->
-	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-	<!-- For http head check as backup for icmp echo/ping to AP -->
-	<uses-permission android:name="android.permission.INTERNET" />
-	<!-- For waking the phone/radio up -->
-	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<!-- For storing the log so user can send it to me -->
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<!-- For setting Wifi Sleep Policy -->
-	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- For http head check as backup for icmp echo/ping to AP -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- For waking the phone/radio up -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- For storing the log so user can send it to me -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- For setting Wifi Sleep Policy -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
 </manifest>

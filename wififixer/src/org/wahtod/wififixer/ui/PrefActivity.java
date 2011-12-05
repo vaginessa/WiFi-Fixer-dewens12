@@ -18,175 +18,139 @@ package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants;
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.prefs.PrefConstants;
+import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceActivity;
-import android.provider.Settings.SettingNotFoundException;
 
 public class PrefActivity extends PreferenceActivity implements
-	OnSharedPreferenceChangeListener {
+		OnSharedPreferenceChangeListener {
 
-    private static Context ctxt;
-    private int what;
-
-    /*
-     * Yuck: due to write cacheing in the PrefsManager we have to delay the
-     * notification so its clients pick up the right value
-     */
-    private static final long NOTIFY_DELAY = 5000;
-    private static final String NOTIFICATION_DATA = "fnord";
-
-    private Handler handler = new Handler() {
 	@Override
-	public void handleMessage(Message message) {
-	    what = message.what;
-	    PrefUtil.notifyPrefChange(ctxt, message.getData().getString(
-		    NOTIFICATION_DATA));
+	protected void onCreate(Bundle savedInstanceState) {
+		setTheme(android.R.style.Theme_Black);
+		super.onCreate(savedInstanceState);
+		PrefUtil.setPolicyfromSystem(this);
+		addPreferencesFromResource(R.xml.preferences);
 	}
-    };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-	setWifiSleepPolicy(this);
-	addPreferencesFromResource(R.xml.preferences);
-	ctxt = this;
+	@Override
+	protected void onResume() {
+		super.onResume();
 
-    }
-
-    @Override
-    protected void onResume() {
-	super.onResume();
-
-	// Set up a listener for when key changes
-	getPreferenceScreen().getSharedPreferences()
-		.registerOnSharedPreferenceChangeListener(this);
-	setWifiSleepPolicy(this);
-    }
-
-    @Override
-    protected void onPause() {
-	super.onPause();
-
-	// Unregister the listener when paused
-	getPreferenceScreen().getSharedPreferences()
-		.unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    private static void setWifiSleepPolicy(final Context context) {
-	/*
-	 * Handle Wifi Sleep Policy
-	 */
-	ContentResolver cr = context.getContentResolver();
-	try {
-	    int wfsleep = android.provider.Settings.System.getInt(cr,
-		    android.provider.Settings.System.WIFI_SLEEP_POLICY);
-	    PrefUtil.writeString(context, PrefConstants.SLPOLICY_KEY, String
-		    .valueOf(wfsleep));
-	} catch (SettingNotFoundException e) {
-	    /*
-	     * Don't need a catch, all clients are >= 1.5 per manifest market
-	     * restriction
-	     */
+		// Set up a listener for when key changes
+		getPreferenceScreen().getSharedPreferences()
+				.registerOnSharedPreferenceChangeListener(this);
+		PrefUtil.setPolicyfromSystem(this);
 	}
-    }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-	/*
-	 * Dispatch intent if this is a pref service is interested in
-	 */
-	if (Pref.get(key) != null) {
-	    /*
-	     * First handle Service enable case
-	     */
-	    if (key.equals(Pref.DISABLE_KEY.key())) {
-		if (!PrefUtil.readBoolean(this, Pref.DISABLE_KEY.key())) {
-		    Intent intent = new Intent(
-			    IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
-		    sendBroadcast(intent);
-		}
+	@Override
+	protected void onPause() {
+		super.onPause();
 
-		else {
-		    Intent intent = new Intent(
-			    IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
-		    sendBroadcast(intent);
-		}
+		// Unregister the listener when paused
+		getPreferenceScreen().getSharedPreferences()
+				.unregisterOnSharedPreferenceChangeListener(this);
+	}
 
-		return;
-	    }
-	    /*
-	     * We want to notify for these, since they're prefs the service is
-	     * interested in.
-	     */
-	    Message msg = Message.obtain();
-	    Bundle bundle = new Bundle();
-	    bundle.putString(NOTIFICATION_DATA, key);
-	    msg.setData(bundle);
-	    handler.removeMessages(what, msg);
-	    handler.sendMessageDelayed(msg, NOTIFY_DELAY);
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+		processPrefChange(this, prefs, key);
+	}
 
-	} else if (key.contains(PrefConstants.PERF_KEY)) {
-
-	    int pVal = Integer.valueOf(PrefUtil.readString(this,
-		    PrefConstants.PERF_KEY));
-
-	    switch (pVal) {
-	    case 1:
-		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY.key(), true);
-		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY.key(), true);
-		break;
-
-	    case 2:
-		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY.key(), true);
-		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY.key(), false);
-		break;
-
-	    case 3:
-		PrefUtil.writeBoolean(this, Pref.WIFILOCK_KEY.key(), false);
-		PrefUtil.writeBoolean(this, Pref.SCREEN_KEY.key(), false);
-		break;
-	    }
-	    PrefActivity.this.finish();
-
-	} else if (key.contains(PrefConstants.SLPOLICY_KEY)) {
-	    /*
-	     * Setting Wifi Sleep Policy
-	     */
-	    ContentResolver cr = getContentResolver();
-	    int wfsleep = Integer.valueOf(PrefUtil.readString(this,
-		    PrefConstants.SLPOLICY_KEY));
-	    if (wfsleep != 3) {
-
-		android.provider.Settings.System.putInt(cr,
-			android.provider.Settings.System.WIFI_SLEEP_POLICY,
-			wfsleep);
-	    } else {
+	public static void processPrefChange(final Context context,
+			SharedPreferences prefs, String key) {
+		if (key.length() == 0)
+			return;
 		/*
-		 * Set to system state
+		 * Dispatch intent if this is a pref service is interested in
 		 */
-		try {
-		    wfsleep = android.provider.Settings.System.getInt(cr,
-			    android.provider.Settings.System.WIFI_SLEEP_POLICY);
-		    PrefUtil.writeString(this, PrefConstants.SLPOLICY_KEY,
-			    String.valueOf(wfsleep));
+		if (Pref.get(key) != null) {
+			/*
+			 * First handle Service enable case
+			 */
+			if (key.equals(Pref.DISABLE_KEY.key())) {
+				if (!PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key())) {
+					Intent intent = new Intent(
+							IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
+					context.sendBroadcast(intent);
+				}
 
-		} catch (SettingNotFoundException e) {
-		    /*
-		     * Should always be found since our clients are > SDK2
-		     */
+				else {
+					Intent intent = new Intent(
+							IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
+					context.sendBroadcast(intent);
+				}
+
+				return;
+			}
+			/*
+			 * We want to notify for these, since they're prefs the service is
+			 * interested in.
+			 */
+
+			PrefUtil.notifyPrefChange(context, key, prefs
+					.getBoolean(key, false));
+
+		} else if (key.contains(PrefConstants.PERF_KEY)) {
+
+			int pVal = Integer.valueOf(PrefUtil.readString(context,
+					PrefConstants.PERF_KEY));
+
+			switch (pVal) {
+			case 1:
+				PrefUtil.writeBoolean(context, Pref.WIFILOCK_KEY.key(), true);
+				PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(),
+						true);
+				PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), true);
+				PrefUtil.notifyPrefChange(context, Pref.SCREEN_KEY.key(), true);
+				/*
+				 * Set Wifi Sleep policy to Never
+				 */
+				PrefUtil.setPolicy(context, 2);
+				break;
+
+			case 2:
+				PrefUtil.writeBoolean(context, Pref.WIFILOCK_KEY.key(), true);
+				PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(),
+						true);
+				PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), false);
+				PrefUtil
+						.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
+				break;
+
+			case 3:
+				PrefUtil.writeBoolean(context, Pref.WIFILOCK_KEY.key(), false);
+				PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(),
+						false);
+				PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), false);
+				PrefUtil
+						.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
+				break;
+			}
+			/*
+			 * Return to main activity so checkboxes aren't stale Only need to
+			 * do this on phone
+			 */
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+				context.startActivity(new Intent(context,
+						WifiFixerActivity.class));
+
+		} else if (key.contains(PrefConstants.SLPOLICY_KEY)) {
+			int wfsleep = Integer.valueOf(PrefUtil.readString(context,
+					PrefConstants.SLPOLICY_KEY));
+			if (wfsleep != 3) {
+				PrefUtil.setPolicy(context, wfsleep);
+			} else {
+				PrefUtil.setPolicyfromSystem(context);
+			}
 		}
-	    }
 	}
-    }
 }

@@ -16,8 +16,8 @@
 
 package org.wahtod.wififixer;
 
-import org.wahtod.wififixer.SharedPrefs.PrefConstants;
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
+import org.wahtod.wififixer.prefs.PrefConstants;
+import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.WifiFixerActivity;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.WakeLock;
@@ -79,7 +79,7 @@ public class ToggleService extends Service {
 			hWifiState.sendEmptyMessageDelayed(WATCHDOG,
 				WATCHDOG_DELAY);
 		    } else {
-			NotifUtil.cancel(TOGGLE_ID, ctxt);
+			NotifUtil.cancel(ctxt, TOGGLE_ID);
 			PrefUtil.writeBoolean(ctxt,
 				PrefConstants.WIFI_STATE_LOCK, false);
 			/*

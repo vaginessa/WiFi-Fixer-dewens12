@@ -20,764 +20,701 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.WifiFixerService;
-import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
-import org.wahtod.wififixer.R.id;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants;
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.legacy.ActionBarDetector;
+import org.wahtod.wififixer.legacy.VersionedLogFile;
+import org.wahtod.wififixer.prefs.PrefConstants;
+import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
+import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
+import org.wahtod.wififixer.utility.WFScanResult;
+import org.wahtod.wififixer.widget.WidgetHandler;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Color;
 import android.net.Uri;
-import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
-import android.util.DisplayMetrics;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.RemoteViews;
-import android.widget.SlidingDrawer;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemLongClickListener;
 
-public class WifiFixerActivity extends Activity {
-    // Is this the paid version?
-    public boolean isfreeFlag = true;
-    public boolean isauthedFlag = false;
-    public boolean aboutFlag = false;
-    public boolean loggingmenuFlag = false;
-    public boolean loggingFlag = false;
+public class WifiFixerActivity extends TutorialFragmentActivity implements
+		OnPageChangeListener {
+	// Is this the paid version?
+	public boolean isfreeFlag = true;
+	public boolean isauthedFlag = false;
+	public boolean aboutFlag = false;
+	public boolean loggingmenuFlag = false;
+	public boolean loggingFlag = false;
 
-    // constants
-    private static final int MENU_LOGGING = 1;
-    private static final int MENU_SEND = 2;
-    private static final int MENU_PREFS = 3;
-    private static final int MENU_HELP = 4;
-    private static final int MENU_ABOUT = 5;
-    private static final int LOGGING_GROUP = 42;
+	private Menu optionsmenu;
+	public boolean phoneFlag;
 
-    private static final int CONTEXT_ENABLE = 1;
-    private static final int CONTEXT_DISABLE = 2;
-    private static final int CONTEXT_CONNECT = 3;
-    private static final int CONTEXT_NONMANAGE = 4;
+	private ViewPager tabletvp;
+	private TabletAdapter tadapter;
+	protected List<Fragment> fragments = new ArrayList<Fragment>();
+	private boolean onpagechangeRegistered;
 
-    private static final int MESSAGE = 31337;
-    private static final int SCAN_DELAY = 15000;
-
-    private static final String EMPTY_SSID = "None";
-
-    private String clicked;
-    private int clicked_position;
-    VersionedLogFile vlogfile;
-    private static View listviewitem;
-    private static NetworkListAdapter adapter;
-    private static List<String> knownnetworks;
-    private static List<String> known_in_range;
-
-    /*
-     * As ugly as caching context is, the alternative is uglier.
-     */
-    protected static Context ctxt;
-
-    // New key for About nag
-    // Set this when you change the About xml
-    static final String sABOUT = "ABOUT2";
-    /*
-     * Intent extra for widget command to open network list
-     */
-    public static final String OPEN_NETWORK_LIST = "OPEN_NETWORK_LIST";
-    /*
-     * Market URI for pendingintent
-     */
-    private static final String MARKET_URI = "market://details?id=com.wahtod.wififixer";
-    /*
-     * Delete Log intent extra
-     */
-    private static final String DELETE_LOG = "DELETE_LOG";
-
-    /*
-     * custom adapter for Network List ListView
-     */
-    private static class NetworkListAdapter extends BaseAdapter {
-	private List<String> ssidArray;
-	private static LayoutInflater inflater;
-
-	public NetworkListAdapter(Context context, List<String> knownnetworks) {
-	    inflater = (LayoutInflater) context
-		    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	    ssidArray = knownnetworks;
-	}
-
-	public int getCount() {
-	    return ssidArray.size();
-	}
-
-	public Object getItem(int position) {
-	    return ssidArray.get(position);
-	}
-
-	public long getItemId(int position) {
-	    return position;
-	}
-
-	public View getView(int position, View convertView, ViewGroup parent) {
-	    ViewHolder holder;
-	    if (convertView == null) {
-		convertView = inflater.inflate(R.layout.list_item_layout, null);
-		holder = new ViewHolder();
-		holder.text = (TextView) convertView.findViewById(R.id.ssid);
-		holder.icon = (ImageView) convertView
-			.findViewById(R.id.NETWORK_ICON);
-		convertView.setTag(holder);
-	    } else {
-		holder = (ViewHolder) convertView.getTag();
-	    }
-	    /*
-	     * Set SSID text and color
-	     */
-	    holder.text.setText(ssidArray.get(position));
-
-	    if (known_in_range.contains(ssidArray.get(position)))
-		holder.text.setTextColor(Color.YELLOW);
-	    else
-		holder.text.setTextColor(Color.WHITE);
-
-	    /*
-	     * Set State icon
-	     */
-	    if (WFConnection.readManagedState(ctxt, position))
-		holder.icon.setImageResource(R.drawable.ignore_ssid);
-	    else {
-		if (WFConnection.getNetworkState(ctxt, position))
-		    holder.icon.setImageResource(R.drawable.enabled_ssid);
-		else
-		    holder.icon.setImageResource(R.drawable.disabled_ssid);
-	    }
-	    return convertView;
-	}
-
-	static class ViewHolder {
-	    TextView text;
-	    ImageView icon;
-	}
-
-    }
-
-    private Handler handler = new Handler() {
-	@Override
-	public void handleMessage(Message message) {
-	    /*
-	     * If wifi is on, scan if not, make sure no networks shown in range
-	     */
-	    WifiManager wm = (WifiManager) getBaseContext().getSystemService(
-		    Context.WIFI_SERVICE);
-
-	    if (wm.isWifiEnabled())
-		ctxt
-			.sendBroadcast(new Intent(
-				WFConnection.ACTION_REQUEST_SCAN));
-	    else {
-		if (known_in_range != null && known_in_range.size() >= 1) {
-		    known_in_range.clear();
-		    if (adapter != null)
-			adapter.notifyDataSetChanged();
+	public class PhoneAdapter extends FragmentPagerAdapter {
+		public PhoneAdapter(FragmentManager fm) {
+			super(fm);
 		}
-	    }
-	    handler.sendEmptyMessageDelayed(MESSAGE, SCAN_DELAY);
+
+		@Override
+		public int getCount() {
+			return 3;
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			switch (position) {
+			case 0:
+				return KnownNetworksFragment.newInstance(position);
+
+			case 1:
+				return ScanFragment.newInstance(position);
+
+			case 2:
+				return StatusFragment.newInstance(position);
+			}
+			return null;
+		}
 	}
 
-    };
+	public class TabletAdapter extends FragmentPagerAdapter {
+		public TabletAdapter(FragmentManager fm) {
+			super(fm);
+		}
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-	public void onReceive(final Context context, final Intent intent) {
-	    /*
-	     * we know this is going to be a scan result notification
-	     */
-	    refreshNetworkAdapter(intent);
+		@Override
+		public int getCount() {
+			return fragments.size();
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			return fragments.get(position);
+		}
+
+		public void add(Fragment f) {
+			fragments.add(f);
+		}
 	}
 
-    };
-
-    void authCheck() {
-	if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
-	    // Handle Donate Auth
-	    startService(new Intent(getString(R.string.donateservice)));
-	    nagNotification();
-	}
-    }
-
-    private void deleteLog() {
+	// New key for About nag
+	// Set this when you change the About xml
+	static final String sABOUT = "ABOUT2";
 	/*
-	 * Delete old log
+	 * Intent extra for fragment commands
 	 */
-	File file = vlogfile.getLogFile(this);
-
-	if (file.delete())
-	    Toast.makeText(WifiFixerActivity.this,
-		    R.string.logfile_delete_toast, Toast.LENGTH_LONG).show();
-	else
-	    Toast.makeText(WifiFixerActivity.this,
-		    R.string.logfile_delete_err_toast, Toast.LENGTH_LONG)
-		    .show();
-    }
-
-    private static boolean getLogging(final Context context) {
-	return PrefUtil.readBoolean(context, Pref.LOG_KEY.key());
-    }
-
-    private void handleIntent(final Intent intent) {
+	public static final String SHOW_FRAGMENT = "SHOW_FRAGMENT";
 	/*
-	 * Pop open network list if started by widget
+	 * Market URI for pendingintent
 	 */
-	if (intent.hasExtra(OPEN_NETWORK_LIST))
-	    openNetworkList();
+	private static final String MARKET_URI = "market://details?id=com.wahtod.wififixer";
 	/*
-	 * Delete Log if called by preference
+	 * Delete Log intent extra
 	 */
-	else if (intent.hasExtra(DELETE_LOG))
-	    deleteLog();
-    }
+	private static final String DELETE_LOG = "DELETE_LOG";
 
-    void launchHelp() {
-	Intent myIntent = new Intent(this, HelpActivity.class);
-	startActivity(myIntent);
-    }
-
-    void launchPrefs() {
-	startActivity(new Intent(this, PrefActivity.class));
-    }
-
-    void sendLog() {
 	/*
-	 * Gets appropriate dir and filename on sdcard across API versions.
+	 * Remove Connect fragment key
 	 */
-	final File file = vlogfile.getLogFile(getBaseContext());
+	static final String REMOVE_CONNECT_FRAGMENTS = "RMCNCTFRGMTS";
 
-	if (Environment.getExternalStorageState() != null
-		&& !(Environment.getExternalStorageState()
-			.contains(Environment.MEDIA_MOUNTED))) {
-	    Toast.makeText(WifiFixerActivity.this,
-		    R.string.sd_card_unavailable, Toast.LENGTH_LONG).show();
+	/*
+	 * Fragment Tags
+	 */
+	public static final String SERVICEFRAG_TAG = "SERVICE";
+	public static final String KNOWNNETWORKSFRAG_TAG = "KNOWNNETWORKS";
+	public static final String SCANFRAG_TAG = "SCAN";
+	public static final String STATUSFRAG_TAG = "STATUS";
+	public static final String ABOUTFRAG_TAG = "ABOUT";
+	public static final String TABLETPAGERFRAG_TAG = "TPFT";
+	private static final String FRAGMENTS_INSTANCE_STATE = "FRAGMENTS_INSTANCE_STATE";
+	private static final String RUN_TUTORIAL = "RUN_TUTORIAL";
 
-	    return;
-
-	} else if (!file.exists()) {
-	    Toast.makeText(WifiFixerActivity.this, R.string.log_doesn_t_exist,
-		    Toast.LENGTH_LONG).show();
-	    return;
+	void authCheck() {
+		if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
+			// Handle Donate Auth
+			startService(new Intent(getString(R.string.donateservice)));
+			nagNotification(this);
+		}
 	}
 
-	AlertDialog dialog = new AlertDialog.Builder(this).create();
+	private static void aboutNotification(final Context context) {
+		/*
+		 * Fire About nag
+		 */
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+				new Intent(context, About.class), 0);
+		NotifUtil.show(context, context.getString(R.string.aboutnag), context
+				.getString(R.string.please_read), 4145, contentIntent);
+	}
 
-	dialog.setTitle(getString(R.string.send_log));
+	private void createTabletAdapter() {
+		tabletvp = (ViewPager) findViewById(R.id.tpager);
+		tadapter = new TabletAdapter(getSupportFragmentManager());
+		tabletvp.setAdapter(tadapter);
+		if (tadapter.getCount() == 0)
+			tadapter.add(new StatusFragment());
 
-	dialog.setMessage(getString(R.string.alert_message));
+		tabletvp.setCurrentItem(fragments.size() - 1, true);
+		onPageSelected(fragments.size() - 1);
+		if (!onpagechangeRegistered) {
+			tabletvp.setOnPageChangeListener(this);
+			onpagechangeRegistered = true;
+		}
+	}
 
-	dialog.setIcon(R.drawable.icon);
+	private void deleteLog() {
+		/*
+		 * Delete old log
+		 */
+		File file = VersionedLogFile.getLogFile(this);
 
-	dialog.setButton(getString(R.string.ok_button),
-		new DialogInterface.OnClickListener() {
+		if (file.delete())
+			Toast.makeText(WifiFixerActivity.this,
+					R.string.logfile_delete_toast, Toast.LENGTH_LONG).show();
+		else
+			Toast.makeText(WifiFixerActivity.this,
+					R.string.logfile_delete_err_toast, Toast.LENGTH_LONG)
+					.show();
+	}
 
-		    public void onClick(DialogInterface dialog, int which) {
+	private static boolean getLogging(final Context context) {
+		return PrefUtil.readBoolean(context, Pref.LOG_KEY.key());
+	}
 
-			setLogging(false);
-			Intent sendIntent = new Intent(Intent.ACTION_SEND);
-			sendIntent
-				.setType(getString(R.string.mimetype_text_plain));
-			sendIntent.putExtra(Intent.EXTRA_EMAIL,
-				new String[] { getString(R.string.email) });
-			sendIntent.putExtra(Intent.EXTRA_SUBJECT,
-				getString(R.string.subject));
-			sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file
-				.toURI().toString()));
-			sendIntent.putExtra(Intent.EXTRA_TEXT,
-				getString(R.string.email_footer)
-					+ LogService.getBuildInfo());
+	private void handleIntent(Intent intent) {
+		if (intent.getExtras() != null)
 
-			startActivity(Intent.createChooser(sendIntent,
-				getString(R.string.emailintent)));
+			/*
+			 * Show About Fragment either via fragment or otherwise
+			 */
+			if (intent.hasExtra(SHOW_FRAGMENT)) {
+				intent.removeExtra(SHOW_FRAGMENT);
+				if (phoneFlag) {
+					Intent i = new Intent(this, GenericFragmentActivity.class);
+					i.putExtras(intent);
+					startActivity(i);
+				} else
+					showFragment(intent.getExtras());
+			}
+			/*
+			 * Delete Log if called by preference
+			 */
+			else if (intent.hasExtra(DELETE_LOG)) {
+				intent.removeExtra(DELETE_LOG);
+				deleteLog();
+			} else if (intent.hasExtra(REMOVE_CONNECT_FRAGMENTS)) {
+				intent.removeExtra(REMOVE_CONNECT_FRAGMENTS);
+				removeConnectFragments(tabletvp.getCurrentItem());
+			} else if (intent.hasExtra(RUN_TUTORIAL)) {
+				intent.removeExtra(RUN_TUTORIAL);
+				if (findViewById(R.id.pager) != null)
+					phoneTutNag();
+			}
+		/*
+		 * Set Activity intent to one without commands we've "consumed"
+		 */
+		setIntent(intent);
+	}
 
-		    }
-		});
+	void launchHelp() {
+		startActivity(new Intent(this, HelpActivity.class));
+	}
 
-	dialog.setButton2(getString(R.string.cancel_button),
-		new DialogInterface.OnClickListener() {
+	void launchPrefs() {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+			startActivity(new Intent(this, PrefActivity.class));
+		else
+			startActivity(new Intent(this, PrefActivityHC.class));
+	}
 
-		    public void onClick(DialogInterface dialog, int which) {
+	void sendLog() {
+		/*
+		 * Gets appropriate dir and filename on sdcard across API versions.
+		 */
+		final File file = VersionedLogFile.getLogFile(this);
+
+		if (Environment.getExternalStorageState() != null
+				&& !(Environment.getExternalStorageState()
+						.contains(Environment.MEDIA_MOUNTED))) {
+			Toast.makeText(WifiFixerActivity.this,
+					R.string.sd_card_unavailable, Toast.LENGTH_LONG).show();
 
 			return;
 
-		    }
-		});
+		} else if (!file.exists()) {
+			Toast.makeText(WifiFixerActivity.this, R.string.log_doesn_t_exist,
+					Toast.LENGTH_LONG).show();
+			return;
+		}
 
-	dialog.show();
+		AlertDialog dialog = new AlertDialog.Builder(this).create();
 
-    }
+		dialog.setTitle(getString(R.string.send_log));
 
-    void setIcon() {
-	DisplayMetrics metrics = new DisplayMetrics();
-	getWindowManager().getDefaultDisplay().getMetrics(metrics);
-	int scale = metrics.widthPixels / 7;
-	ImageButton serviceButton = (ImageButton) findViewById(R.id.ImageButton01);
-	serviceButton.setAdjustViewBounds(true);
-	serviceButton.setMaxHeight(scale);
-	serviceButton.setMaxWidth(scale);
-	serviceButton.setClickable(false);
-	serviceButton.setFocusable(false);
-	serviceButton.setFocusableInTouchMode(false);
-	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY.key())) {
-	    serviceButton.setImageResource(R.drawable.service_inactive);
-	} else {
-	    serviceButton.setImageResource(R.drawable.service_active);
-	}
-    }
+		dialog.setMessage(getString(R.string.alert_message));
 
-    void setLogging(boolean state) {
-	loggingFlag = state;
-	PrefUtil.writeBoolean(this, Pref.LOG_KEY.key(), state);
-	if (!state)
-	    ServiceAlarm.setServiceEnabled(this, LogService.class, false);
-	PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key());
-    }
+		dialog.setIcon(R.drawable.icon);
 
-    void setText() {
-	PackageManager pm = getPackageManager();
-	String vers = "";
-	try {
-	    /*
-	     * Get PackageInfo object
-	     */
-	    PackageInfo pi = pm.getPackageInfo(this.getPackageName(), 0);
-	    /*
-	     * get version code string
-	     */
-	    vers = pi.versionName;
-	} catch (NameNotFoundException e) {
-	    /*
-	     * shouldn't ever be not found
-	     */
-	    e.printStackTrace();
-	}
-	TextView vButton = (TextView) findViewById(R.id.version);
-	vButton.setText(vers.toCharArray(), 0, vers.length());
-    }
+		dialog.setButton(getString(R.string.ok_button),
+				new DialogInterface.OnClickListener() {
 
-    void setToggleIcon(Menu menu) {
-	MenuItem logging = menu.getItem(MENU_LOGGING - 1);
-	if (loggingFlag) {
-	    logging.setIcon(R.drawable.logging_enabled);
-	    logging.setTitle(R.string.turn_logging_off);
-	} else {
-	    logging.setIcon(R.drawable.logging_disabled);
-	    logging.setTitle(R.string.turn_logging_on);
+					public void onClick(DialogInterface dialog, int which) {
+
+						setLogging(false);
+						Intent sendIntent = new Intent(Intent.ACTION_SEND);
+						sendIntent
+								.setType(getString(R.string.mimetype_text_plain));
+						sendIntent.putExtra(Intent.EXTRA_EMAIL,
+								new String[] { getString(R.string.email) });
+						sendIntent.putExtra(Intent.EXTRA_SUBJECT,
+								getString(R.string.subject));
+						sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file
+								.toURI().toString()));
+						sendIntent.putExtra(Intent.EXTRA_TEXT,
+								getString(R.string.email_footer)
+										+ LogService.getBuildInfo());
+
+						startActivity(Intent.createChooser(sendIntent,
+								getString(R.string.emailintent)));
+
+					}
+				});
+
+		dialog.setButton2(getString(R.string.cancel_button),
+				new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int which) {
+
+						return;
+
+					}
+				});
+
+		dialog.show();
+
 	}
 
-    }
+	public void serviceToggle(View view) {
+		if (PrefUtil.readBoolean(getApplicationContext(), Pref.DISABLE_KEY
+				.key())) {
+			Intent intent = new Intent(
+					IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
+			sendBroadcast(intent);
+			Toast.makeText(this, R.string.enabling_wififixerservice,
+					Toast.LENGTH_LONG).show();
+		} else {
+			Intent intent = new Intent(
+					IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
+			sendBroadcast(intent);
+			Toast.makeText(this, R.string.disabling_wififixerservice,
+					Toast.LENGTH_LONG).show();
+		}
 
-    void showNotification() {
-
-	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-	// The details of our message
-	CharSequence from = getString(R.string.app_name);
-	PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-		new Intent(this, About.class), 0);
-	// construct the NotifUtil object.
-	Notification notif = new Notification(R.drawable.icon,
-		getString(R.string.please_read), System.currentTimeMillis());
-
-	// Set the info for the views that show in the notification panel.
-	notif.setLatestEventInfo(this, from, getString(R.string.aboutnag),
-		contentIntent);
-	notif.flags = Notification.FLAG_AUTO_CANCEL;
-	nm.notify(4145, notif);
-
-    }
-
-    private static void startwfService(final Context context) {
-	context.startService(new Intent(context, WifiFixerService.class));
-    }
-
-    void nagNotification() {
-
-	NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-	PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-		new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI)), 0);
-	Notification notif = new Notification(R.drawable.icon,
-		getString(R.string.thank_you), System.currentTimeMillis());
-
-	RemoteViews contentView = new RemoteViews(getPackageName(),
-		R.layout.nag_layout);
-	contentView.setImageViewResource(R.id.image, R.drawable.icon);
-	contentView.setTextViewText(R.id.text, getString(R.string.donatenag));
-	notif.contentView = contentView;
-	notif.contentIntent = contentIntent;
-
-	notif.flags = Notification.FLAG_AUTO_CANCEL;
-
-	// hax
-	nm.notify(31337, notif);
-
-    }
-
-    private static void removeNag(final Context context) {
-	NotificationManager nm = (NotificationManager) context
-		.getSystemService(NOTIFICATION_SERVICE);
-	nm.cancel(31337);
-    }
-
-    void toggleLog() {
-	if (loggingFlag) {
-	    Toast.makeText(WifiFixerActivity.this, R.string.disabling_logging,
-		    Toast.LENGTH_SHORT).show();
-	    setLogging(false);
-	} else {
-	    if (Environment.getExternalStorageState() != null
-		    && !(Environment.getExternalStorageState()
-			    .contains(Environment.MEDIA_MOUNTED))) {
-		Toast.makeText(WifiFixerActivity.this,
-			R.string.sd_card_unavailable, Toast.LENGTH_SHORT)
-			.show();
-		return;
-	    }
-
-	    Toast.makeText(WifiFixerActivity.this, R.string.enabling_logging,
-		    Toast.LENGTH_SHORT).show();
-	    setLogging(true);
+		this.sendBroadcast(new Intent(ServiceFragment.REFRESH_ACTION));
 	}
-    }
 
-    // On Create
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-	setTitle(R.string.app_name);
-	setContentView(R.layout.main);
-	/*
-	 * Grab and set up ListView in sliding drawer for network list UI
-	 */
-	final ListView lv = (ListView) findViewById(R.id.ListView01);
-	knownnetworks = getNetworks(this);
-	known_in_range = new ArrayList<String>();
-	adapter = new NetworkListAdapter(this, knownnetworks);
-	lv.setAdapter(adapter);
-	lv.setOnItemLongClickListener(new OnItemLongClickListener() {
-	    @Override
-	    public boolean onItemLongClick(AdapterView<?> adapterview, View v,
-		    int position, long id) {
-		clicked = lv.getItemAtPosition(position).toString();
-		clicked_position = position;
-		listviewitem = v;
+	void setLogging(boolean state) {
+		loggingFlag = state;
+		setToggleIcon(optionsmenu);
+		PrefUtil.writeBoolean(this, Pref.LOG_KEY.key(), state);
+		if (!state)
+			ServiceAlarm.setServiceEnabled(this, LogService.class, false);
+		PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), state);
+	}
+
+	void setToggleIcon(Menu menu) {
+		MenuItem logging = menu.findItem(R.id.menu_logging);
+		if (loggingFlag) {
+			logging.setIcon(R.drawable.logging_enabled);
+			logging.setTitle(R.string.turn_logging_off);
+		} else {
+			logging.setIcon(R.drawable.logging_disabled);
+			logging.setTitle(R.string.turn_logging_on);
+		}
+
+	}
+
+	private static void startwfService(final Context context) {
+		context.startService(new Intent(context, WifiFixerService.class));
+	}
+
+	private static void nagNotification(final Context context) {
+		/*
+		 * Nag for donation
+		 */
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+				new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI)), 0);
+		NotifUtil.show(context, context.getString(R.string.donatenag), context
+				.getString(R.string.thank_you), 3337, contentIntent);
+	}
+
+	private static void removeNag(final Context context) {
+		NotifUtil.cancel(context, 3337);
+	}
+
+	public static boolean getIsWifiOn(final Context context) {
+		WifiManager wm = (WifiManager) context
+				.getSystemService(Context.WIFI_SERVICE);
+		return wm.isWifiEnabled();
+	}
+
+	void toggleLog() {
+		if (loggingFlag) {
+			Toast.makeText(WifiFixerActivity.this, R.string.disabling_logging,
+					Toast.LENGTH_SHORT).show();
+			setLogging(false);
+		} else {
+			if (Environment.getExternalStorageState() != null
+					&& !(Environment.getExternalStorageState()
+							.contains(Environment.MEDIA_MOUNTED))) {
+				Toast.makeText(WifiFixerActivity.this,
+						R.string.sd_card_unavailable, Toast.LENGTH_SHORT)
+						.show();
+				return;
+			}
+
+			Toast.makeText(WifiFixerActivity.this, R.string.enabling_logging,
+					Toast.LENGTH_SHORT).show();
+			setLogging(true);
+		}
+	}
+
+	public void drawUI(Bundle savedinstanceState) {
+		/*
+		 * Set up Fragments, ViewPagers and FragmentPagerAdapters for phone and
+		 * tablet
+		 */
+		ViewPager phonevp = (ViewPager) findViewById(R.id.pager);
+		if (phonevp != null) {
+			drawFragment(R.id.servicefragment, ServiceFragment.class);
+			phoneFlag = true;
+			if (phonevp.getAdapter() == null) {
+				PhoneAdapter fadapter = new PhoneAdapter(
+						getSupportFragmentManager());
+				phonevp.setAdapter(fadapter);
+			}
+			if (!PrefUtil.readBoolean(this, PrefConstants.TUTORIAL))
+				phoneTutNag();
+		} else {
+			drawFragment(R.id.servicefragment, ServiceFragment.class);
+			drawFragment(R.id.knownnetworksfragment,
+					KnownNetworksFragment.class);
+			drawFragment(R.id.scanfragment, ScanFragment.class);
+			createTabletAdapter();
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (!phoneFlag) {
+			if (getSupportFragmentManager().getBackStackEntryCount() == 1)
+				ActionBarDetector.setUp(this, false, null);
+			int tabletvpItem = tabletvp.getCurrentItem();
+			if (tabletvpItem > 0) {
+				if (tadapter.getItem(tabletvpItem).getClass().equals(
+						ConnectFragment.class))
+					removeConnectFragments(tabletvpItem);
+				else
+					tabletvp.setCurrentItem(tabletvpItem - 1);
+			} else
+				super.onBackPressed();
+		} else
+			super.onBackPressed();
+	}
+
+	// On Create
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setTitle(R.string.app_name);
+		setContentView(R.layout.main);
+		restoreOrphanedFragments(savedInstanceState);
+		drawUI(savedInstanceState);
+
+		oncreate_setup();
+		/*
+		 * Handle intent command if destroyed or first start
+		 */
+		handleIntent(getIntent());
+		/*
+		 * Make sure service settings are enforced.
+		 */
+		ServiceAlarm.enforceServicePrefs(this);
+
+	};
+
+	private void oncreate_setup() {
+		loggingmenuFlag = PrefUtil
+				.readBoolean(this, PrefConstants.LOGGING_MENU);
+		loggingFlag = getLogging(this);
+		// Fire new About nag
+		if (!PrefUtil.readBoolean(this, sABOUT)) {
+			aboutNotification(this);
+		}
+		// Here's where we fire the nag
+		authCheck();
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		loggingmenuFlag = PrefUtil
+				.readBoolean(this, PrefConstants.LOGGING_MENU);
+		loggingFlag = getLogging(this);
+		startwfService(this);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		ArrayList<String> tags = new ArrayList<String>();
+		if (!phoneFlag) {
+			for (Fragment f : fragments) {
+				if (f.getTag() != null) {
+					tags.add(f.getTag());
+				}
+			}
+			outState.putStringArrayList(FRAGMENTS_INSTANCE_STATE, tags);
+		}
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		setIntent(intent);
+		handleIntent(intent);
+	}
+
+	// Create menus
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.logging, menu);
+		getMenuInflater().inflate(R.menu.sendlog, menu);
+		getMenuInflater().inflate(R.menu.help, menu);
+		getMenuInflater().inflate(R.menu.about, menu);
+		getMenuInflater().inflate(R.menu.prefs, menu);
+		optionsmenu = menu;
+		return true;
+	}
+
+	/* Handles item selections */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+
+		switch (item.getItemId()) {
+
+		case R.id.menu_logging:
+			toggleLog();
+			return true;
+
+		case R.id.menu_send:
+			sendLog();
+			return true;
+
+		case R.id.menu_prefs:
+			launchPrefs();
+			return true;
+
+		case R.id.menu_help:
+			launchHelp();
+			return true;
+
+		case R.id.menu_about:
+			Intent myIntent = new Intent(this, About.class);
+			startActivity(myIntent);
+			return true;
+
+		case android.R.id.home:
+			if (!phoneFlag) {
+				if (tadapter.getItem(tabletvp.getCurrentItem()).getClass()
+						.equals(ConnectFragment.class))
+					removeConnectFragments(tabletvp.getCurrentItem());
+				tabletvp.setCurrentItem(0);
+				ActionBarDetector.setUp(this, false, null);
+			}
+			return true;
+		}
 		return false;
-	    }
-
-	});
-	registerForContextMenu(lv);
-
-	// Set layout version code
-	setText();
-	oncreate_setup();
-	/*
-	 * For ContextMenu handler
-	 */
-	ctxt = this;
-
-	/*
-	 * Handle intent command if destroyed or first start
-	 */
-	handleIntent(getIntent());
-
-	/*
-	 * Make sure service settings are enforced.
-	 */
-	ServiceAlarm.enforceServicePrefs(this);
-    };
-
-    /*
-     * Note that this WILL return a null String[] if called while wifi is off.
-     */
-    private static final List<String> getNetworks(final Context context) {
-	WifiManager wm = (WifiManager) context
-		.getSystemService(Context.WIFI_SERVICE);
-	List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
-	List<String> networks = new ArrayList<String>();
-	if (wifiConfigs == null)
-	    return networks;
-
-	for (WifiConfiguration wfResult : wifiConfigs) {
-	    /*
-	     * Make sure there's a 1:1 correlation between
-	     * getConfiguredNetworks() and the array
-	     */
-	    if (wfResult.SSID != null && wfResult.SSID.length() > 0)
-		networks.add(wfResult.SSID.replace("\"", ""));
-	    else
-		networks.add(EMPTY_SSID);
 	}
 
-	return networks;
-    }
+	@Override
+	public void onPause() {
+		super.onPause();
+		removeNag(this);
+	}
 
-    private void oncreate_setup() {
-	loggingmenuFlag = PrefUtil
-		.readBoolean(this, PrefConstants.LOGGING_MENU);
-	loggingFlag = getLogging(this);
-	// Fire new About nag
-	if (!PrefUtil.readBoolean(this, sABOUT)) {
-	    showNotification();
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (optionsmenu != null)
+			onPrepareOptionsMenu(optionsmenu);
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		// Menu drawing stuffs
+
+		if (loggingmenuFlag) {
+			menu.findItem(R.id.menu_logging).setVisible(true);
+			menu.findItem(R.id.menu_send).setVisible(true);
+			setToggleIcon(menu);
+
+		} else {
+			menu.findItem(R.id.menu_logging).setVisible(false);
+			menu.findItem(R.id.menu_send).setVisible(false);
+		}
+
+		return true;
+	}
+
+	private void phoneTutNag() {
+		AlertDialog dialog = new AlertDialog.Builder(this).create();
+
+		dialog.setTitle(getString(R.string.phone_ui_tutorial));
+
+		dialog.setMessage(getString(R.string.phone_tutorial_q));
+
+		dialog.setIcon(R.drawable.icon);
+
+		dialog.setButton(getString(R.string.ok_button),
+				new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int which) {
+						runTutorial();
+					}
+				});
+
+		dialog.setButton2(getString(R.string.later_button),
+				new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int which) {
+
+						return;
+
+					}
+				});
+
+		dialog.show();
 
 	}
 
-	// Here's where we fire the nag
-	authCheck();
-	vlogfile = VersionedLogFile.newInstance(this);
-
-    }
-
-    @Override
-    public void onStart() {
-	super.onStart();
-	setIcon();
-	loggingmenuFlag = PrefUtil
-		.readBoolean(this, PrefConstants.LOGGING_MENU);
-	loggingFlag = getLogging(this);
-	startwfService(this);
-	registerReceiver();
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-	setIntent(intent);
-	handleIntent(intent);
-	super.onNewIntent(intent);
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-	    ContextMenuInfo menuInfo) {
-	super.onCreateContextMenu(menu, v, menuInfo);
-	/*
-	 * Clicked is the ListView selected string, so the SSID
-	 */
-	menu.setHeaderTitle(clicked);
-	menu.add(1, CONTEXT_ENABLE, 0, R.string.enable);
-	menu.add(2, CONTEXT_DISABLE, 1, R.string.disable);
-	menu.add(3, CONTEXT_CONNECT, 2, R.string.connect_now);
-	menu.add(4, CONTEXT_NONMANAGE, 3, R.string.set_non_managed);
-	if (!WFConnection.getNetworkState(ctxt, clicked_position)) {
-	    menu.setGroupEnabled(3, false);
-	    menu.setGroupEnabled(2, false);
-	} else
-	    menu.setGroupEnabled(1, false);
-
-	if (PrefUtil.readBoolean(this, Pref.DISABLE_KEY.key()))
-	    menu.setGroupEnabled(3, false);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-	ImageView iv = (ImageView) listviewitem.findViewById(id.NETWORK_ICON);
-	switch (item.getItemId()) {
-	case CONTEXT_ENABLE:
-	    iv.setImageResource(R.drawable.enabled_ssid);
-	    WFConnection.setNetworkState(ctxt, clicked_position, true);
-	    WFConnection.writeNetworkState(ctxt, clicked_position, false);
-	    adapter.notifyDataSetChanged();
-	    break;
-	case CONTEXT_DISABLE:
-	    iv.setImageResource(R.drawable.disabled_ssid);
-	    WFConnection.setNetworkState(ctxt, clicked_position, false);
-	    WFConnection.writeNetworkState(ctxt, clicked_position, true);
-	    adapter.notifyDataSetChanged();
-	    break;
-	case CONTEXT_CONNECT:
-	    Intent intent = new Intent(WFConnection.CONNECTINTENT);
-	    intent.putExtra(WFConnection.NETWORKNUMBER, clicked_position);
-	    this.sendBroadcast(intent);
-	    break;
-
-	case CONTEXT_NONMANAGE:
-	    if (!WFConnection.readManagedState(this, clicked_position)) {
-		iv.setImageResource(R.drawable.ignore_ssid);
-		WFConnection.writeManagedState(this, clicked_position, true);
-	    } else {
-		if (WFConnection.getNetworkState(this, clicked_position))
-		    iv.setImageResource(R.drawable.enabled_ssid);
-		else
-		    iv.setImageResource(R.drawable.disabled_ssid);
-
-		WFConnection.writeManagedState(this, clicked_position, false);
-	    }
-	    adapter.notifyDataSetChanged();
-	    break;
-	}
-	return true;
-    }
-
-    // Create menus
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-	super.onCreateOptionsMenu(menu);
-	menu.add(LOGGING_GROUP, MENU_LOGGING, 0, R.string.toggle_logging)
-		.setIcon(R.drawable.logging_enabled);
-
-	menu.add(LOGGING_GROUP, MENU_SEND, 1, R.string.send_log).setIcon(
-		R.drawable.ic_menu_send);
-
-	menu.add(Menu.NONE, MENU_PREFS, 2, R.string.preferences).setIcon(
-		R.drawable.ic_prefs);
-
-	menu.add(Menu.NONE, MENU_HELP, 3, R.string.documentation).setIcon(
-		R.drawable.ic_menu_help);
-
-	menu.add(Menu.NONE, MENU_ABOUT, 4, R.string.about).setIcon(
-		R.drawable.ic_menu_info);
-
-	return true;
-    }
-
-    /* Handles item selections */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-	super.onOptionsItemSelected(item);
-
-	switch (item.getItemId()) {
-
-	case MENU_LOGGING:
-	    toggleLog();
-	    return true;
-
-	case MENU_SEND:
-	    sendLog();
-	    return true;
-
-	case MENU_PREFS:
-	    launchPrefs();
-	    return true;
-
-	case MENU_HELP:
-	    launchHelp();
-	    return true;
-	case MENU_ABOUT:
-	    Intent myIntent = new Intent(this, About.class);
-	    startActivity(myIntent);
-	    return true;
-
-	}
-	return false;
-    }
-
-    @Override
-    public void onPause() {
-	super.onPause();
-	removeNag(this);
-	unregisterReceiver();
-    }
-
-    @Override
-    public void onResume() {
-	super.onResume();
-	registerReceiver();
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-	super.onPrepareOptionsMenu(menu);
-	// Menu drawing stuffs
-
-	if (loggingmenuFlag) {
-	    menu.setGroupVisible(LOGGING_GROUP, true);
-	    setToggleIcon(menu);
-
-	} else {
-	    menu.setGroupVisible(LOGGING_GROUP, false);
+	private void removeConnectFragments(int n) {
+		FragmentManager fm = getSupportFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
+		Fragment f = tadapter.getItem(n);
+		tadapter.destroyItem(tabletvp, n, f);
+		fragments.remove(f);
+		ft.remove(f);
+		tabletvp.setCurrentItem(n - 1);
+		ft.commit();
 	}
 
-	return true;
-    }
-
-    private void openNetworkList() {
-	final SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.SlidingDrawer);
-	if (!drawer.isOpened())
-	    drawer.animateOpen();
-    }
-
-    private void refreshNetworkAdapter(final Intent intent) {
-	/*
-	 * Don't refresh if knownnetworks is empty (wifi is off)
-	 */
-	knownnetworks = getNetworks(this);
-	if (knownnetworks.size() > 0) {
-	    known_in_range = intent
-		    .getStringArrayListExtra(WFConnection.SCAN_RESULTS_ARRAY);
-	    if (adapter == null) {
-		adapter = new NetworkListAdapter(this, knownnetworks);
-		final ListView lv = (ListView) findViewById(R.id.ListView01);
-		lv.setAdapter(adapter);
-	    } else {
-		refreshArray();
-		adapter.notifyDataSetChanged();
-	    }
-
-	}
-    }
-
-    private static void refreshArray() {
-	if (knownnetworks.equals(adapter.ssidArray))
-	    return;
-
-	for (String ssid : knownnetworks) {
-	    if (!adapter.ssidArray.contains(ssid))
-		adapter.ssidArray.add(ssid);
+	private void restoreOrphanedFragments(Bundle savedInstanceState) {
+		if (savedInstanceState == null
+				|| !savedInstanceState.containsKey(FRAGMENTS_INSTANCE_STATE))
+			return;
+		FragmentManager fm = getSupportFragmentManager();
+		Fragment f;
+		FragmentTransaction ft = fm.beginTransaction();
+		for (String tag : savedInstanceState
+				.getStringArrayList(FRAGMENTS_INSTANCE_STATE)) {
+			f = fm.findFragmentByTag(tag);
+			if (f == null)
+				break;
+			if (f.getArguments() == null)
+				fragments.add(new StatusFragment());
+			else
+				fragments
+						.add(FragmentSwitchboard.newInstance(f.getArguments()));
+			ft.remove(f);
+		}
+		ft.commit();
 	}
 
-	for (String ssid : adapter.ssidArray) {
-	    if (!knownnetworks.contains(ssid))
-		adapter.ssidArray.remove(ssid);
+	private void drawFragment(int id, Class<?> f) {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		if (getSupportFragmentManager().findFragmentByTag(
+				f.getClass().getName()) == null) {
+			Fragment fn = null;
+			try {
+				fn = (Fragment) f.newInstance();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			ft.replace(id, fn, f.getClass().getName());
+			ft.commit();
+		}
 	}
-    }
 
-    private void registerReceiver() {
-	IntentFilter filter = new IntentFilter(WFConnection.ACTION_SCAN_RESULTS);
-	this.registerReceiver(receiver, filter);
-	handler.sendEmptyMessage(MESSAGE);
-    }
+	private void showFragment(Bundle bundle) {
+		Fragment f = FragmentSwitchboard.newInstance(bundle);
+		tadapter.add(f);
+		tabletvp.setCurrentItem(tadapter.getCount() - 1);
+	}
 
-    private void unregisterReceiver() {
-	this.unregisterReceiver(receiver);
-	handler.removeMessages(MESSAGE);
-    }
+	public void wifiToggle(View view) {
+		if (!getIsWifiOn(this)) {
+			Intent intent = new Intent(WidgetHandler.WIFI_ON);
+			sendBroadcast(intent);
+			Toast.makeText(this, R.string.enabling_wifi, Toast.LENGTH_LONG)
+					.show();
+		} else {
+			Intent intent = new Intent(WidgetHandler.WIFI_OFF);
+			sendBroadcast(intent);
+			Toast.makeText(this, R.string.disabling_wifi, Toast.LENGTH_LONG)
+					.show();
+		}
+	}
 
+	@Override
+	public void onPageScrollStateChanged(int arg0) {
+		/*
+		 * Don't need this
+		 */
+	}
+
+	@Override
+	public void onPageScrolled(int arg0, float arg1, int arg2) {
+		/*
+		 * Don't need this
+		 */
+
+	}
+
+	@Override
+	public void onPageSelected(int arg0) {
+		if (arg0 == 0) {
+			ActionBarDetector.setUp(this, false, null);
+		} else {
+			ActionBarDetector.setUp(this, true, WFScanResult
+					.fromBundle(tadapter.getItem(arg0).getArguments()).SSID);
+		}
+	}
 }

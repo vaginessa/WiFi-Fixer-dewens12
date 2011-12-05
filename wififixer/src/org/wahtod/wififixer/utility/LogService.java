@@ -24,10 +24,10 @@ import java.util.Date;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WifiFixerService;
-import org.wahtod.wififixer.LegacySupport.VersionedLogFile;
-import org.wahtod.wififixer.LegacySupport.VersionedScreenState;
-import org.wahtod.wififixer.SharedPrefs.PrefUtil;
-import org.wahtod.wififixer.SharedPrefs.PrefConstants.Pref;
+import org.wahtod.wififixer.legacy.VersionedLogFile;
+import org.wahtod.wififixer.legacy.VersionedScreenState;
+import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 
 import android.app.Service;
 import android.content.Context;
@@ -36,6 +36,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
@@ -66,11 +67,8 @@ public class LogService extends Service {
     private static final long TS_WAIT_SCREENOFF = 60000;
 
     // Write buffer constants
-    private static final int WRITE_BUFFER_SIZE = 32768;
-    private static final int BUFFER_FLUSH_DELAY = 300000;
-
-    private static VersionedScreenState vscreenstate;
-    private static VersionedLogFile vlogfile;
+    private static final int WRITE_BUFFER_SIZE = 8192;
+    private static final int BUFFER_FLUSH_DELAY = 30000;
     private static File file;
     private static Context ctxt;
 
@@ -80,6 +78,7 @@ public class LogService extends Service {
 
     private static final int TS_MESSAGE = 1;
     private static final int FLUSH_MESSAGE = 2;
+    private static final int INTENT = 3;
 
     private Handler handler = new Handler() {
 	@Override
@@ -94,9 +93,25 @@ public class LogService extends Service {
 		flushBwriter();
 		break;
 
+	    case INTENT:
+		dispatchIntent(message.getData());
+		break;
+
 	    }
 	}
     };
+
+    private void dispatchIntent(final Bundle data) {
+
+	if (data.containsKey(APPNAME) && data.containsKey(MESSAGE)) {
+	    String app_name = data.getString(APPNAME);
+	    String sMessage = data.getString(MESSAGE);
+	    if (app_name.equals(TIMESTAMP)) {
+		handleTSCommand(data);
+	    } else
+		processLogIntent(this, app_name, sMessage);
+	}
+    }
 
     private void flushBwriter() {
 	if (bwriter != null) {
@@ -147,23 +162,27 @@ public class LogService extends Service {
 
     private void handleStart(final Intent intent) {
 
-	if (intent.hasExtra(APPNAME) && intent.hasExtra(MESSAGE)) {
-	    String app_name = intent.getStringExtra(APPNAME);
-	    String sMessage = intent.getStringExtra(MESSAGE);
-	    if (app_name.equals(TIMESTAMP)) {
-		handleTSCommand(intent);
-	    } else
-		processLogIntent(this, app_name, sMessage);
-	}
+	/*
+	 * Dispatches the broadcast intent to the handler for processing
+	 */
+
+	Message message = handler.obtainMessage();
+	Bundle data = new Bundle();
+	message.what = INTENT;
+	data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
+	if (intent.getExtras() != null)
+	    data.putAll(intent.getExtras());
+	message.setData(data);
+	handler.sendMessage(message);
     }
 
-    private void handleTSCommand(final Intent intent) {
-	if (intent.getStringExtra(MESSAGE).equals(TS_DISABLE))
+    private void handleTSCommand(final Bundle data) {
+	if (data.getString(MESSAGE).equals(TS_DISABLE))
 	    handler.removeMessages(TS_MESSAGE);
 	else {
 	    handler.removeMessages(TS_MESSAGE);
-	    handler.sendEmptyMessageDelayed(TS_MESSAGE, Long.valueOf(intent
-		    .getStringExtra(MESSAGE)));
+	    handler.sendEmptyMessageDelayed(TS_MESSAGE, Long.valueOf(data
+		    .getString(MESSAGE)));
 	}
     }
 
@@ -202,13 +221,7 @@ public class LogService extends Service {
     public void onCreate() {
 	super.onCreate();
 	ctxt = this;
-
-	if (vscreenstate == null)
-	    vscreenstate = VersionedScreenState.newInstance(this);
-	if (vlogfile == null) {
-	    vlogfile = VersionedLogFile.newInstance(this);
-	    file = vlogfile.getLogFile(this);
-	}
+	file = VersionedLogFile.getLogFile(ctxt);
 	if (version == 0)
 	    getPackageInfo();
 
@@ -249,6 +262,12 @@ public class LogService extends Service {
 
     private void timeStamp(final Context context) {
 
+	/*
+	 * Also, refresh ongoing notification
+	 */
+	if (VersionedScreenState.getScreenState(context))
+	    NotifUtil.addLogNotif(context, true);
+
 	Date time = new Date();
 	/*
 	 * Construct timestamp header if null
@@ -271,9 +290,9 @@ public class LogService extends Service {
 	 */
 	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
 	    return;
-	else if (vscreenstate.getScreenState(context))
+	else if (VersionedScreenState.getScreenState(context)) {
 	    handler.sendEmptyMessageDelayed(TS_MESSAGE, TS_WAIT_SCREENON);
-	else
+	} else
 	    handler.sendEmptyMessageDelayed(TS_MESSAGE, TS_WAIT_SCREENOFF);
     }
 
@@ -295,7 +314,7 @@ public class LogService extends Service {
 	}
 
 	if (file == null)
-	    file = vlogfile.getLogFile(ctxt);
+	    file = VersionedLogFile.getLogFile(ctxt);
 
 	try {
 	    if (!file.exists()) {

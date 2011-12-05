@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+		Copyright [2010-2011] [David Van de Ven] Licensed under the Apache
+		License, Version 2.0 (the "License"); you may not use this file except
+		in compliance with the License. You may obtain a copy of the License
+		at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:alpha=".8"
+    android:gravity="center"
+    android:layout_gravity ="center_horizontal"
+    android:orientation="vertical"
+    android:paddingRight="20dp"
+    android:weightSum="1" >
+
+    <TextView
+        android:id="@+id/ssid"
+        style="@style/Wftext.large"
+        android:layout_gravity="center"
+        android:layout_weight="0.04"
+        android:gravity="center"
+        android:text="SSID" >
+    </TextView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:weightSum="1" >
+
+        <LinearLayout
+            android:id="@+id/LinearLayout00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.00"
+            android:baselineAligned="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/aboutfragment_layout_padding_bottom"
+            android:weightSum="1" >
+
+            <TextView
+                android:id="@+id/BSSID_title"
+                style="@style/Wftext.header"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="MAC:" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/bssid"
+                style="@style/Wftext"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="af:fa:df:df:df" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearLayout01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:baselineAligned="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/aboutfragment_layout_padding_bottom"
+            android:weightSum="1" >
+
+            <TextView
+                android:id="@+id/TextView02"
+                style="@style/Wftext.header"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Capabilities:" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/capabilities"
+                style="@style/Wftext"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="OPEN" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+             android:paddingBottom="@dimen/aboutfragment_layout_padding_bottom"
+            android:weightSum="1" >
+
+            <TextView
+                android:id="@+id/textView1"
+                style="@style/Wftext.header"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Frequency:" />
+
+            <TextView
+                android:id="@+id/frequency"
+                style="@style/Wftext"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="40" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearLayout02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:weightSum="1" >
+
+            <TextView
+                android:id="@+id/TextView03"
+                style="@style/Wftext.header"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Signal:" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/level"
+                style="@style/Wftext"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="-42" >
+            </TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

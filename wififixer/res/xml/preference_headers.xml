@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+	<header android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+		android:icon="@drawable/ic_menu_manage" android:title="Main">
+		<extra android:name="resource" android:value="general" />
+	</header>
+	<header android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+		android:icon="@drawable/ic_menu_notifications" android:title="Notification"
+		>
+		<extra android:name="resource" android:value="notification" />
+	</header>
+	<header android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+		android:icon="@drawable/ic_menu_save" android:title="Logging"
+		>
+		<extra android:name="resource" android:value="logging" />
+	</header>
+	<header android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+		android:icon="@drawable/ic_menu_add" android:title="Advanced"
+		>
+		<extra android:name="resource" android:value="advanced" />
+	</header>
+</preference-headers>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<style name="Theme"></style>
+    <style name="ThemeWifiFixer" parent="android:Theme.Holo">
+    <item name="android:windowAnimationStyle">@style/WifiFixerAnimation</item>
+     <item name="android:windowBackground">@drawable/themebg</item>
+</style>
+</resources>

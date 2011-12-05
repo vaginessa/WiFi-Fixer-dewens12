@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:gravity="left"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/widget39"
+        style="@style/Wftext.header"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text="@string/app_name" >
+    </TextView>
+
+    <RelativeLayout
+        android:id="@+id/logowrap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:gravity="right" >
+
+        <ImageView
+            android:id="@+id/wficon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="@dimen/service_wficon_padding_bottom"
+            android:src="@drawable/icon" >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/version"
+            style="@style/Wftext"
+            android:layout_width="@dimen/service_version_layout_width"
+            android:layout_gravity="right"
+            android:layout_marginLeft="@dimen/service_version_margin_left"
+            android:layout_toRightOf="@+id/wficon"
+            android:paddingBottom="@dimen/service_version_padding_bottom"
+            android:paddingTop="@dimen/service_version_padding_top"
+            android:text="@+id/TextView02" >
+        </TextView>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/aboutText"
+        style="@style/Wftext"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logowrap"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/service_abouttext_margin_left"
+        android:layout_marginRight="@dimen/service_abouttext_margin_right"
+        android:paddingBottom="@dimen/service_abouttext_padding_bottom"
+        android:text="@string/blurb" >
+    </TextView>
+
+    <LinearLayout
+        android:id="@+id/buttonscontainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" >
+
+        <LinearLayout
+            android:id="@+id/servicecontainer"
+            android:layout_width="@dimen/service_container_layout_width"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:orientation="vertical" >
+
+            <ImageButton
+                android:id="@+id/ImageButton01"
+                android:layout_width="@dimen/service_imagebutton_dimensions"
+                android:layout_height="@dimen/service_imagebutton_dimensions"
+                android:layout_gravity="center_horizontal"
+                android:clickable="true"
+                android:onClick="serviceToggle"
+                android:paddingBottom="@dimen/service_imagebutton_padding_bottom"
+                android:paddingTop="@dimen/service_imagebutton_padding_top" >
+            </ImageButton>
+
+            <TextView
+                android:id="@+id/TextView01"
+                style="@style/Wftext"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="@dimen/service_imagebutton_padding_bottom"
+                android:text="@string/service_status" >
+
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/wificontainer"
+            android:layout_width="@dimen/service_container_layout_width"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="vertical" >
+
+            <ImageButton
+                android:id="@+id/ImageButton02"
+                android:layout_width="@dimen/service_imagebutton_dimensions"
+                android:layout_height="@dimen/service_imagebutton_dimensions"
+                android:layout_gravity="center_horizontal"
+                android:clickable="true"
+                android:onClick="wifiToggle"
+                android:paddingBottom="@dimen/service_imagebutton_padding_bottom"
+                android:paddingTop="@dimen/service_imagebutton_padding_top" >
+            </ImageButton>
+
+            <TextView
+                android:id="@+id/TextView02"
+                style="@style/Wftext"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="@dimen/service_imagebutton_padding_bottom"
+                android:text="@string/wifi" >
+
+            </TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

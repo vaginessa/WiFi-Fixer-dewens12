@@ -17,183 +17,161 @@
 package org.wahtod.wififixer.utility;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.ui.WifiFixerActivity;
+import org.wahtod.wififixer.legacy.HoneyCombNotifUtil;
+import org.wahtod.wififixer.legacy.LegacyNotifUtil;
+import org.wahtod.wififixer.legacy.VersionedLogFile;
+import org.wahtod.wififixer.utility.StatusMessage;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
-import android.widget.RemoteViews;
+import android.os.Build;
+import android.os.Bundle;
 
-public class NotifUtil {
-    public static final int NETNOTIFID = 8236;
-    private static final int STATNOTIFID = 2392;
-    private static final int MAX_SSID_LENGTH = 16;
-    private static final int LOGNOTIFID = 2494;
-    private static int ssidStatus = 0;
+public abstract class NotifUtil {
+    public static final int STATNOTIFID = 2392;
+    public static final int MAX_SSID_LENGTH = 16;
+    public static final int LOGNOTIFID = 2494;
+    public static int ssidStatus = 0;
+    public static Notification statnotif;
+    public static Notification lognotif;
+    public static PendingIntent contentIntent;
 
     /*
      * for SSID status in status notification
      */
     public static final int SSID_STATUS_UNMANAGED = 3;
     public static final int SSID_STATUS_MANAGED = 7;
-    private static final String NULL_SSID = "empty";
+    public static final String NULL_SSID = "empty";
+    public static final String SEPARATOR = " : ";
 
-    private NotifUtil() {
+    public static final String ACTION_STATUS_NOTIFICATION = "org.wahtod.wififixer.STATNOTIF";
+    public static final String STATUS_DATA_KEY = "STATUS_DATA_KEY";
 
+    /*
+     * Field keys for status bundle
+     */
+    public static final String SSID_KEY = "SSID";
+    public static final String STATUS_KEY = "STATUS";
+    public static final String SIGNAL_KEY = "SIGNAL";
+    
+    /*
+     * Icon type for getIconfromSignal()
+     */
+    public static final int ICON_SET_SMALL = 0;
+    public static final int ICON_SET_LARGE = 1;
+
+    /*
+     * Cache appropriate NotifUtil
+     */
+    private static NotifUtil selector;
+
+    /*
+     * API
+     */
+
+    public abstract void vaddStatNotif(Context ctxt, final String ssid,
+	    String status, final int signal, final boolean flag);
+
+    public abstract void vaddLogNotif(final Context context, final boolean flag);
+
+    public abstract void vshow(final Context context, final String message,
+	    final String tickerText, final int id, PendingIntent contentIntent);
+
+    public static void setSsidStatus(final int status) {
+	ssidStatus = status;
     }
 
-    public static void addNetNotif(final Context context, final String ssid,
-	    final String signal) {
-	NotificationManager nm = (NotificationManager) context
-		.getSystemService(Context.NOTIFICATION_SERVICE);
-
-	if (ssid.length() > 0) {
-	    Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
-	    PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		    intent, 0);
-
-	    Notification netnotif = new Notification(R.drawable.wifi_ap,
-		    context.getString(R.string.open_network_found), System
-			    .currentTimeMillis());
-	    RemoteViews contentView = new RemoteViews(context.getPackageName(),
-		    R.layout.net_notif_layout);
-	    contentView.setTextViewText(R.id.ssid, ssid);
-	    contentView.setTextViewText(R.id.signal, signal);
-	    netnotif.contentView = contentView;
-	    netnotif.contentIntent = contentIntent;
-	    netnotif.flags = Notification.FLAG_ONGOING_EVENT;
-	    netnotif.tickerText = context.getText(R.string.open_network_found);
-	    /*
-	     * Fire notification, cancel if message empty: means no open APs
-	     */
-	    nm.notify(NETNOTIFID, netnotif);
-	} else
-	    nm.cancel(NETNOTIFID);
-
-    }
-
-    public static void addStatNotif(final Context context, final String ssid,
-	    String status, final int signal, final boolean flag) {
-
-	NotificationManager nm = (NotificationManager) context
-		.getSystemService(Context.NOTIFICATION_SERVICE);
-
-	if (!flag) {
-	    nm.cancel(STATNOTIFID);
-	    return;
-	}
-
-	int icon = 0;
-	switch (signal) {
-	case 0:
-	    icon = R.drawable.signal0;
-	    break;
-	case 1:
-	    icon = R.drawable.signal1;
-	    break;
-	case 2:
-	    icon = R.drawable.signal2;
-	    break;
-	case 3:
-	    icon = R.drawable.signal3;
-	    break;
-	case 4:
-	    icon = R.drawable.signal4;
-	    break;
-	}
-
-	Notification statnotif = new Notification(icon, context
-		.getString(R.string.network_status), System.currentTimeMillis());
-
-	Intent intent = new Intent(context, WifiFixerActivity.class).setAction(
-		Intent.ACTION_MAIN).setFlags(
-		Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-
-	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		intent, 0);
-	statnotif.contentIntent = contentIntent;
-	statnotif.flags = Notification.FLAG_ONGOING_EVENT;
-
-	if (ssidStatus == SSID_STATUS_UNMANAGED) {
-	    status = status + context.getString(R.string.unmanaged);
-	}
-	statnotif.setLatestEventInfo(context, truncateSSID(ssid), status,
-		contentIntent);
-	statnotif.iconLevel = signal;
-
+    /*
+     * Exposed API and utility methods
+     */
+    public static void addStatNotif(final Context ctxt, final StatusMessage m) {
+	cacheSelector();
 	/*
-	 * Fire the notification
+	 * Show (or cancel) notification
 	 */
-	nm.notify(STATNOTIFID, statnotif);
+	selector.vaddStatNotif(ctxt, m.ssid, m.status, m.signal, m.show);
+    }
 
+    public static void broadcastStatNotif(final Context ctxt,
+	    final StatusMessage m) {
+	Intent intent = new Intent(ACTION_STATUS_NOTIFICATION);
+	Bundle message = new Bundle();
+	message.putString(SSID_KEY, m.ssid);
+	message.putString(STATUS_KEY, m.status);
+	message.putInt(SIGNAL_KEY, m.signal);
+	intent.putExtra(STATUS_DATA_KEY, message);
+	ctxt.sendBroadcast(intent);
     }
 
     public static void addLogNotif(final Context context, final boolean flag) {
-
-	NotificationManager nm = (NotificationManager) context
-		.getSystemService(Context.NOTIFICATION_SERVICE);
-
-	if (!flag) {
-	    nm.cancel(LOGNOTIFID);
-	    return;
-	}
-
-	Notification lognotif = new Notification(R.drawable.logging_enabled,
-		context.getString(R.string.currently_logging), System
-			.currentTimeMillis());
-	lognotif.flags = Notification.FLAG_ONGOING_EVENT;
-
-	Intent intent = new Intent(context, WifiFixerActivity.class).setAction(
-		Intent.ACTION_MAIN).setFlags(
-		Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-
-	PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		intent, 0);
-
-	lognotif.contentIntent = contentIntent;
-
-	lognotif.setLatestEventInfo(context, context
-		.getString(R.string.currently_logging), context
-		.getString(R.string.currently_logging), contentIntent);
-
-	/*
-	 * Fire the notification
-	 */
-	nm.notify(LOGNOTIFID, lognotif);
-
-    }
-
-    public static void setSsidStatus(final int color) {
-
-	ssidStatus = color;
+	cacheSelector();
+	selector.vaddLogNotif(context, flag);
     }
 
     public static void show(final Context context, final String message,
 	    final String tickerText, final int id, PendingIntent contentIntent) {
+	cacheSelector();
+	selector.vshow(context, message, tickerText, id, contentIntent);
+    }
 
+    private static void cacheSelector() {
 	/*
-	 * If contentIntent is NULL, create valid contentIntent
+	 * Instantiate and cache appropriate NotifUtil implementation
 	 */
-	if (contentIntent == null)
-	    contentIntent = PendingIntent.getActivity(context, 0, new Intent(),
-		    0);
+	if (selector == null) {
+	    if (Build.VERSION.SDK_INT > 10) {
+		selector = new HoneyCombNotifUtil();
+	    } else
+		selector = new LegacyNotifUtil();
+	}
+    }
 
-	NotificationManager nm = (NotificationManager) context
-		.getSystemService(Context.NOTIFICATION_SERVICE);
+    public static int getIconfromSignal(int signal, int iconset) {
+	switch (signal) {
+	case 0:
+	    if(iconset == ICON_SET_SMALL)
+		signal = R.drawable.statsignal0;
+	    else
+		signal = R.drawable.signal0;
+	    break;
+	case 1:
+	    if(iconset == ICON_SET_SMALL)
+		signal = R.drawable.statsignal1;
+	    else
+		signal = R.drawable.signal1;
+	    break;
+	case 2:
+	    if(iconset == ICON_SET_SMALL)
+		signal = R.drawable.statsignal2;
+	    else
+		signal = R.drawable.signal2;
+	    break;
+	case 3:
+	    if(iconset == ICON_SET_SMALL)
+		signal = R.drawable.statsignal3;
+	    else
+		signal = R.drawable.signal3;
+	    break;
+	case 4:
+	    if(iconset == ICON_SET_SMALL)
+		signal = R.drawable.statsignal4;
+	    else
+		signal = R.drawable.signal4;
+	    break;
+	}
+	return signal;
+    }
 
-	CharSequence from = context.getText(R.string.app_name);
-
-	Notification notif = new Notification(R.drawable.statusicon,
-		tickerText, System.currentTimeMillis());
-
-	notif.setLatestEventInfo(context, from, message, contentIntent);
-	notif.flags = Notification.FLAG_AUTO_CANCEL;
-	// unique ID
-	nm.notify(id, notif);
-
+    public static StringBuilder getLogString(final Context context) {
+	StringBuilder logstring = new StringBuilder(context
+		.getString(R.string.writing_to_log));
+	logstring.append(NotifUtil.SEPARATOR);
+	logstring.append(VersionedLogFile.getLogFile(context).length() / 1024);
+	logstring.append(context.getString(R.string.k));
+	return logstring;
     }
 
     public static String truncateSSID(String ssid) {
@@ -206,7 +184,7 @@ public class NotifUtil {
 
     }
 
-    public static void cancel(final int notif, final Context context) {
+    public static void cancel(final Context context, final int notif) {
 	NotificationManager nm = (NotificationManager) context
 		.getSystemService(Context.NOTIFICATION_SERVICE);
 	nm.cancel(notif);
