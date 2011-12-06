@@ -35,8 +35,8 @@ public class PrefActivityHC extends PreferenceActivity {
     @Override
     public void onBuildHeaders(List<Header> target) {
 	loadHeadersFromResource(R.xml.preference_headers, target);
-	super.onBuildHeaders(target);
 	ActionBarDetector.setUp(this, true,
-		getString(R.string.preferences_activity_title));
+			getString(R.string.preferences_activity_title));
+	super.onBuildHeaders(target);
     }
 }

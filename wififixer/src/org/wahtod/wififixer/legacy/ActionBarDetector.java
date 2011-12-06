@@ -20,10 +20,10 @@ import org.wahtod.wififixer.ui.WifiFixerActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.view.MenuItem;
 
 public abstract class ActionBarDetector {
-	private static final String ANDROID_APP_ACTION_BAR = "android.app.ActionBar";
 	private static ActionBarDetector selector;
 
 	public abstract void vSetUp(Activity a, boolean state, String title);
@@ -46,16 +46,7 @@ public abstract class ActionBarDetector {
 	}
 
 	public static boolean checkHasActionBar() {
-		try {
-		 Class.forName(ANDROID_APP_ACTION_BAR, false, Thread.currentThread()
-					.getContextClassLoader());
-		 return true;
-		} catch (Exception ex) {
-			/*
-			 * Older device without Actionbar, we're done. 
-			 */
-			return false;
-		}
+		return Build.VERSION.SDK_INT >= 11;
 	}
 
 	public static void handleHome(Context context, MenuItem item) {
