@@ -117,10 +117,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			fragments.add(f);
 		}
 	}
-
-	// New key for About nag
-	// Set this when you change the About xml
-	static final String sABOUT = "ABOUT2";
 	/*
 	 * Intent extra for fragment commands
 	 */
@@ -157,16 +153,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			startService(new Intent(getString(R.string.donateservice)));
 			nagNotification(this);
 		}
-	}
-
-	private static void aboutNotification(final Context context) {
-		/*
-		 * Fire About nag
-		 */
-		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-				new Intent(context, About.class), 0);
-		NotifUtil.show(context, context.getString(R.string.aboutnag), context
-				.getString(R.string.please_read), 4145, contentIntent);
 	}
 
 	private void createTabletAdapter() {
@@ -469,10 +455,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		loggingmenuFlag = PrefUtil
 				.readBoolean(this, PrefConstants.LOGGING_MENU);
 		loggingFlag = getLogging(this);
-		// Fire new About nag
-		if (!PrefUtil.readBoolean(this, sABOUT)) {
-			aboutNotification(this);
-		}
 		// Here's where we fire the nag
 		authCheck();
 	}
