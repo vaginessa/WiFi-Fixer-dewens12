@@ -237,7 +237,6 @@ public class ScanFragment extends Fragment {
 			ImageView icon;
 			ImageView security;
 		}
-
 	}
 
 	public static ScanFragment newInstance(int num) {
