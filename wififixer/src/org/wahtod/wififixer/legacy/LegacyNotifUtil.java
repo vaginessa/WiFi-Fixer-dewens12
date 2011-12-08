@@ -133,4 +133,12 @@ public class LegacyNotifUtil extends NotifUtil {
 	nm.notify(id, notif);
 
     }
+
+	@Override
+	public void vsetStatNotifWifiState(Context ctxt, boolean screenstate) {
+		/*
+		 * Do nothing here. We're not on Honeycomb. 
+		 */
+		
+	}
 }

@@ -41,361 +41,361 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 
 public class WifiFixerService extends Service implements
-	OnScreenStateChangedListener {
-
-    /*
-     * Loads WFConnection class, Prefs
-     */
-
-    // IDs For notifications
-    private static final int NOTIFID = 31337;
-    // Screen State SharedPref key
-    public static final String SCREENOFF = "SCREENOFF";
-
-    // *****************************
-    final static String APP_NAME = "WifiFixerService";
-    private final static String EMPTYSTRING = "";
-
-    // Flags
-    private static boolean registered = false;
-
-    // logging flag, local for performance
-    private static boolean logging = false;
-
-    // Version
-    private static int version = 0;
-
-    private WakeLock wakelock;
-    private WFConnection wifi;
-    private static ScreenStateDetector screenstateHandler;
-    /*
-     * Cache context for notifications
-     */
-    private Context notifcontext;
-
-    static boolean screenstate;
-
-    /*
-     * Preferences
-     */
-    static PrefUtil prefs;
-
-    private static void refreshWidget(final Context context) {
-	Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-	/*
-	 * Doing this right.
-	 */
-	AppWidgetManager appWidgetManager = AppWidgetManager
-		.getInstance(context.getApplicationContext());
-	int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context,
-		FixerWidget.class));
-	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-	intent.setClass(context, FixerWidget.class);
-	context.sendBroadcast(intent);
-    }
-
-    private void cleanup() {
-	wakelock.lock(false);
-	wifi.wifiLock(false);
-	screenstateHandler.unregister(this);
-    }
-
-    private void getPackageInfo() {
-	PackageManager pm = getPackageManager();
-	try {
-	    // ---get the package info---
-	    PackageInfo pi = pm.getPackageInfo(getString(R.string.packagename),
-		    0);
-	    // ---display the versioncode--
-	    version = pi.versionCode;
-	} catch (NameNotFoundException e) {
-	    /*
-	     * If own package isn't found, something is horribly wrong.
-	     */
-	}
-    }
-
-    private void handleStart(final Intent intent) {
-
-	if (intent != null && logging) {
-	    if (intent.hasExtra(ServiceAlarm.ALARM_START))
-		LogService
-			.log(this, APP_NAME, getString(R.string.alarm_intent));
-	    else
-		LogService.log(this, APP_NAME,
-			getString(R.string.normal_startup_or_reload));
-	}
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-	return null;
-    }
-
-    @Override
-    public void onCreate() {
-	/*
-	 * Strict Mode check
-	 */
-
-	if (StrictModeDetector.setPolicy(false))
-	    LogService.log(this, APP_NAME,
-		    getString(R.string.strict_mode_extant));
-	else
-	    LogService.log(this, APP_NAME,
-		    getString(R.string.strict_mode_unavailable));
+		OnScreenStateChangedListener {
 
 	/*
-	 * Make sure service settings are enforced.
+	 * Loads WFConnection class, Prefs
 	 */
-	ServiceAlarm.enforceServicePrefs(this);
 
-	super.onCreate();
+	// IDs For notifications
+	private static final int NOTIFID = 31337;
+	// Screen State SharedPref key
+	public static final String SCREENOFF = "SCREENOFF";
+
+	// *****************************
+	final static String APP_NAME = "WifiFixerService";
+	private final static String EMPTYSTRING = "";
+
+	// Flags
+	private static boolean registered = false;
+
+	// logging flag, local for performance
+	private static boolean logging = false;
+
+	// Version
+	private static int version = 0;
+
+	private WakeLock wakelock;
+	private WFConnection wifi;
+	private static ScreenStateDetector screenstateHandler;
 	/*
 	 * Cache context for notifications
 	 */
-	notifcontext = this;
+	private Context notifcontext;
 
-	// Initialize WakeLock
-	wakelock = new WakeLock(this) {
+	static boolean screenstate;
 
-	    @Override
-	    public void onAcquire() {
-		if (logging)
-		    LogService.log(getBaseContext(), APP_NAME,
-			    getString(R.string.acquiring_wake_lock));
-		super.onAcquire();
-	    }
+	/*
+	 * Preferences
+	 */
+	static PrefUtil prefs;
 
-	    @Override
-	    public void onRelease() {
-		if (logging)
-		    LogService.log(getBaseContext(), APP_NAME,
-			    getString(R.string.releasing_wake_lock));
-		super.onRelease();
-	    }
-
-	};
-
-	getPackageInfo();
-
-	if (logging) {
-	    LogService.log(this, APP_NAME,
-		    getString(R.string.wififixerservice_build) + version);
+	private static void refreshWidget(final Context context) {
+		Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+		/*
+		 * Doing this right.
+		 */
+		AppWidgetManager appWidgetManager = AppWidgetManager
+				.getInstance(context.getApplicationContext());
+		int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context,
+				FixerWidget.class));
+		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+		intent.setClass(context, FixerWidget.class);
+		context.sendBroadcast(intent);
 	}
 
-	/*
-	 * Load Preferences
-	 */
-	preferenceInitialize(this);
+	private void cleanup() {
+		wakelock.lock(false);
+		wifi.wifiLock(false);
+		screenstateHandler.unregister(this);
+	}
 
-	/*
-	 * If BG data is off, we should quit.
-	 */
-	WFConnection.checkBackgroundDataSetting(this);
+	private void getPackageInfo() {
+		PackageManager pm = getPackageManager();
+		try {
+			// ---get the package info---
+			PackageInfo pi = pm.getPackageInfo(getString(R.string.packagename),
+					0);
+			// ---display the versioncode--
+			version = pi.versionCode;
+		} catch (NameNotFoundException e) {
+			/*
+			 * If own package isn't found, something is horribly wrong.
+			 */
+		}
+	}
 
-	/*
-	 * Set initial screen state
-	 */
-	setInitialScreenState(this);
+	private void handleStart(final Intent intent) {
 
-	/*
-	 * Refresh Widget
-	 */
-	refreshWidget(this);
+		if (intent != null && logging) {
+			if (intent.hasExtra(ServiceAlarm.ALARM_START))
+				LogService
+						.log(this, APP_NAME, getString(R.string.alarm_intent));
+			else
+				LogService.log(this, APP_NAME,
+						getString(R.string.normal_startup_or_reload));
+		}
+	}
 
-	/*
-	 * Initialize Wifi Connection class
-	 */
-	wifi = new WFConnection(this, prefs);
+	@Override
+	public IBinder onBind(Intent intent) {
+		return null;
+	}
 
-	/*
-	 * Start Service watchdog alarm
-	 */
-	if (!ServiceAlarm.alarmExists(this))
-	    ServiceAlarm.setAlarm(this, true);
-	/*
-	 * Set registered flag true so unregister code runs later
-	 */
-	if (registered)
-	    stopSelf();
-	else
-	    registered = true;
+	@Override
+	public void onCreate() {
+		/*
+		 * Strict Mode check
+		 */
 
-	if (logging)
-	    LogService.log(this, APP_NAME, getString(R.string.oncreate));
+		if (StrictModeDetector.setPolicy(false))
+			LogService.log(this, APP_NAME,
+					getString(R.string.strict_mode_extant));
+		else
+			LogService.log(this, APP_NAME,
+					getString(R.string.strict_mode_unavailable));
 
-    }
+		/*
+		 * Make sure service settings are enforced.
+		 */
+		ServiceAlarm.enforceServicePrefs(this);
 
-    @Override
-    public void onDestroy() {
-	unregisterReceivers();
-	if (prefs.getFlag(Pref.STATENOT_KEY))
-	    wifi.setStatNotif(false);
-	if (logging)
-	    LogService.log(this, APP_NAME, getString(R.string.ondestroy));
-	cleanup();
-	super.onDestroy();
+		super.onCreate();
+		/*
+		 * Cache context for notifications
+		 */
+		notifcontext = this;
 
-    }
+		// Initialize WakeLock
+		wakelock = new WakeLock(this) {
 
-    @Override
-    public void onLowMemory() {
-	if (logging)
-	    LogService.log(this, APP_NAME, getString(R.string.low_memory));
-	super.onLowMemory();
-    }
+			@Override
+			public void onAcquire() {
+				if (logging)
+					LogService.log(getBaseContext(), APP_NAME,
+							getString(R.string.acquiring_wake_lock));
+				super.onAcquire();
+			}
 
-    private void onScreenOff() {
+			@Override
+			public void onRelease() {
+				if (logging)
+					LogService.log(getBaseContext(), APP_NAME,
+							getString(R.string.releasing_wake_lock));
+				super.onRelease();
+			}
 
-	/*
-	 * Set shared pref state for non-Eclair clients
-	 */
-	if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.ECLAIR_MR1)
-	    PrefUtil.writeBoolean(this, SCREENOFF, true);
-	screenstate = false;
-    }
+		};
 
-    private void onScreenOn() {
+		getPackageInfo();
 
-	/*
-	 * Set shared pref state
-	 */
-	if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.ECLAIR_MR1)
-	    PrefUtil.writeBoolean(this, SCREENOFF, false);
-	screenstate = true;
-    }
-
-    @Override
-    public void onStart(Intent intent, int startId) {
-	handleStart(intent);
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-	handleStart(intent);
-	return START_STICKY;
-    }
-
-    @Override
-    public void onScreenStateChanged(boolean state) {
-	if (state)
-	    onScreenOn();
-	else
-	    onScreenOff();
-    }
-
-    private void preferenceInitialize(final Context context) {
-	prefs = new PrefUtil(this) {
-	    @Override
-	    public void log() {
 		if (logging) {
-		    LogService.log(getBaseContext(), APP_NAME, getBaseContext()
-			    .getString(R.string.loading_settings));
-		    for (Pref prefkey : Pref.values()) {
-			if (getFlag(prefkey))
-			    LogService.log(getBaseContext(), APP_NAME, prefkey
-				    .key());
-		    }
-
-		}
-	    }
-
-	    @Override
-	    public void postValChanged(final Pref p) {
-		switch (p) {
-
-		case WIFILOCK_KEY:
-		    if (wifi != null && prefs.getFlag(Pref.WIFILOCK_KEY)) {
-			// generate new lock
-			wifi.wifiLock(true);
-		    } else if (wifi != null
-			    && !prefs.getFlag(Pref.WIFILOCK_KEY)) {
-			wifi.wifiLock(false);
-		    }
-		    break;
-
-		case LOG_KEY:
-		    logging = getFlag(Pref.LOG_KEY);
-		    if (logging) {
-			ServiceAlarm.setServiceEnabled(getBaseContext(),
-				LogService.class, true);
-			LogService.setLogTS(getBaseContext(), logging, 0);
-			LogService.log(getBaseContext(), LogService.DUMPBUILD,
-				EMPTYSTRING);
-			log();
-		    }
-		    break;
-
-		case STATENOT_KEY:
-		    /*
-		     * Notify WFConnection instance to create/destroy ongoing
-		     * status notification
-		     */
-		    wifi.setStatNotif(getFlag(Pref.STATENOT_KEY));
-		    break;
+			LogService.log(this, APP_NAME,
+					getString(R.string.wififixerservice_build) + version);
 		}
 
 		/*
-		 * Log change of preference state
+		 * Load Preferences
 		 */
+		preferenceInitialize(this);
+
+		/*
+		 * If BG data is off, we should quit.
+		 */
+		WFConnection.checkBackgroundDataSetting(this);
+
+		/*
+		 * Set initial screen state
+		 */
+		setInitialScreenState(this);
+
+		/*
+		 * Refresh Widget
+		 */
+		refreshWidget(this);
+
+		/*
+		 * Initialize Wifi Connection class
+		 */
+		wifi = new WFConnection(this, prefs);
+
+		/*
+		 * Start Service watchdog alarm
+		 */
+		if (!ServiceAlarm.alarmExists(this))
+			ServiceAlarm.setAlarm(this, true);
+		/*
+		 * Set registered flag true so unregister code runs later
+		 */
+		if (registered)
+			stopSelf();
+		else
+			registered = true;
+
 		if (logging)
-		    LogService.log(getBaseContext(), APP_NAME,
-			    getString(R.string.prefs_change) + p.key()
-				    + getString(R.string.colon) + getFlag(p));
-	    }
+			LogService.log(this, APP_NAME, getString(R.string.oncreate));
 
-	    @Override
-	    public void preLoad() {
-
-		/*
-		 * Set defaults. Doing here instead of activity because service
-		 * may be started first due to boot intent.
-		 */
-		PreferenceManager.setDefaultValues(context, R.xml.preferences,
-			false);
-
-		/*
-		 * Set default: Status Notification on
-		 */
-		if (!readBoolean(context, PrefConstants.STATNOTIF_DEFAULT)) {
-		    writeBoolean(context, PrefConstants.STATNOTIF_DEFAULT, true);
-		    writeBoolean(context, Pref.STATENOT_KEY.key(), true);
-		}
-		/*
-		 * Set default: Wifi Sleep Policy
-		 */
-		if (!readBoolean(context, PrefConstants.SLPOLICY_DEFAULT)) {
-		    writeBoolean(context, PrefConstants.SLPOLICY_DEFAULT, true);
-		    setPolicy(context, 2);
-		}
-	    }
-
-	    @Override
-	    public void specialCase() {
-		postValChanged(Pref.LOG_KEY);
-		postValChanged(Pref.WIFILOCK_KEY);
-	    }
-	};
-
-	prefs.loadPrefs();
-	NotifUtil.cancel(notifcontext, NOTIFID);
-	wakelock.lock(false);
-    }
-
-    private void setInitialScreenState(final Context context) {
-	screenstateHandler = new ScreenStateDetector(this);
-	screenstate = ScreenStateDetector.getScreenState(context);
-	ScreenStateDetector.setOnScreenStateChangedListener(this);
-    }
-
-    private void unregisterReceivers() {
-	if (registered) {
-	    prefs.unRegisterReciever();
-	    screenstateHandler.unregister(this);
-	    wifi.cleanup();
-	    registered = false;
 	}
-    }
+
+	@Override
+	public void onDestroy() {
+		unregisterReceivers();
+		if (prefs.getFlag(Pref.STATENOT_KEY))
+			wifi.setStatNotif(false);
+		if (logging)
+			LogService.log(this, APP_NAME, getString(R.string.ondestroy));
+		cleanup();
+		super.onDestroy();
+
+	}
+
+	@Override
+	public void onLowMemory() {
+		if (logging)
+			LogService.log(this, APP_NAME, getString(R.string.low_memory));
+		super.onLowMemory();
+	}
+
+	private void onScreenOff() {
+
+		/*
+		 * Set shared pref state for non-Eclair clients
+		 */
+		if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.ECLAIR_MR1)
+			PrefUtil.writeBoolean(this, SCREENOFF, true);
+		screenstate = false;
+	}
+
+	private void onScreenOn() {
+
+		/*
+		 * Set shared pref state
+		 */
+		if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.ECLAIR_MR1)
+			PrefUtil.writeBoolean(this, SCREENOFF, false);
+		screenstate = true;
+	}
+
+	@Override
+	public void onStart(Intent intent, int startId) {
+		handleStart(intent);
+	}
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		handleStart(intent);
+		return START_STICKY;
+	}
+
+	@Override
+	public void onScreenStateChanged(boolean state) {
+		if (state)
+			onScreenOn();
+		else
+			onScreenOff();
+	}
+
+	private void preferenceInitialize(final Context context) {
+		prefs = new PrefUtil(this) {
+			@Override
+			public void log() {
+				if (logging) {
+					LogService.log(getBaseContext(), APP_NAME, getBaseContext()
+							.getString(R.string.loading_settings));
+					for (Pref prefkey : Pref.values()) {
+						if (getFlag(prefkey))
+							LogService.log(getBaseContext(), APP_NAME, prefkey
+									.key());
+					}
+
+				}
+			}
+
+			@Override
+			public void postValChanged(final Pref p) {
+				switch (p) {
+
+				case WIFILOCK_KEY:
+					if (wifi != null && prefs.getFlag(Pref.WIFILOCK_KEY)) {
+						// generate new lock
+						wifi.wifiLock(true);
+					} else if (wifi != null
+							&& !prefs.getFlag(Pref.WIFILOCK_KEY)) {
+						wifi.wifiLock(false);
+					}
+					break;
+
+				case LOG_KEY:
+					logging = getFlag(Pref.LOG_KEY);
+					if (logging) {
+						ServiceAlarm.setServiceEnabled(getBaseContext(),
+								LogService.class, true);
+						LogService.setLogTS(getBaseContext(), logging, 0);
+						LogService.log(getBaseContext(), LogService.DUMPBUILD,
+								EMPTYSTRING);
+						log();
+					}
+					break;
+
+				case STATENOT_KEY:
+					/*
+					 * Notify WFConnection instance to create/destroy ongoing
+					 * status notification
+					 */
+					wifi.setStatNotif(getFlag(Pref.STATENOT_KEY));
+					break;
+				}
+
+				/*
+				 * Log change of preference state
+				 */
+				if (logging)
+					LogService.log(getBaseContext(), APP_NAME,
+							getString(R.string.prefs_change) + p.key()
+									+ getString(R.string.colon) + getFlag(p));
+			}
+
+			@Override
+			public void preLoad() {
+
+				/*
+				 * Set defaults. Doing here instead of activity because service
+				 * may be started first due to boot intent.
+				 */
+				PreferenceManager.setDefaultValues(context, R.xml.preferences,
+						false);
+
+				/*
+				 * Set default: Status Notification on
+				 */
+				if (!readBoolean(context, PrefConstants.STATNOTIF_DEFAULT)) {
+					writeBoolean(context, PrefConstants.STATNOTIF_DEFAULT, true);
+					writeBoolean(context, Pref.STATENOT_KEY.key(), true);
+				}
+				/*
+				 * Set default: Wifi Sleep Policy
+				 */
+				if (!readBoolean(context, PrefConstants.SLPOLICY_DEFAULT)) {
+					writeBoolean(context, PrefConstants.SLPOLICY_DEFAULT, true);
+					setPolicy(context, 2);
+				}
+			}
+
+			@Override
+			public void specialCase() {
+				postValChanged(Pref.LOG_KEY);
+				postValChanged(Pref.WIFILOCK_KEY);
+			}
+		};
+
+		prefs.loadPrefs();
+		NotifUtil.cancel(notifcontext, NOTIFID);
+		wakelock.lock(false);
+	}
+
+	private void setInitialScreenState(final Context context) {
+		screenstateHandler = new ScreenStateDetector(this);
+		screenstate = ScreenStateDetector.getScreenState(context);
+		ScreenStateDetector.setOnScreenStateChangedListener(this);
+	}
+
+	private void unregisterReceivers() {
+		if (registered) {
+			prefs.unRegisterReciever();
+			screenstateHandler.unregister(this);
+			wifi.cleanup();
+			registered = false;
+		}
+	}
 
 }
