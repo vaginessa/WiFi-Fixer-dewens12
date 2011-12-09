@@ -322,9 +322,7 @@ public class ScanFragment extends Fragment {
 	}
 
 	public static String getCapabilitiesString(String capabilities) {
-		if (capabilities == null)
-			return OPEN;
-		else if (capabilities.length() == 0)
+		if (capabilities.length() == 0)
 			return OPEN;
 		else if (capabilities.contains(WEP))
 			capabilities = WEP;
@@ -332,6 +330,8 @@ public class ScanFragment extends Fragment {
 			capabilities = WPA2;
 		else if (capabilities.contains(WPA))
 			capabilities = WPA;
+		else
+			capabilities = OPEN;
 
 		return capabilities;
 	}
