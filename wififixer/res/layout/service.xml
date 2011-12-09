@@ -80,8 +80,8 @@
                 android:background="@drawable/buttons"
                 android:clickable="true"
                 android:onClick="serviceToggle"
-                android:paddingBottom="@dimen/service_imagebutton_padding_bottom"
-                android:paddingTop="@dimen/service_imagebutton_padding_top"
+                android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
+                android:layout_marginTop="@dimen/service_imagebutton_margin_top"
                 android:src="@drawable/buttons" >
 
             </ImageButton>
@@ -91,7 +91,7 @@
                 style="@style/Wftext"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:paddingBottom="@dimen/service_imagebutton_padding_bottom"
+                android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
                 android:text="@string/service_status" >
             </TextView>
         </LinearLayout>
@@ -111,8 +111,8 @@
                 android:background="@drawable/buttons"
                 android:clickable="true"
                 android:onClick="wifiToggle"
-                android:paddingBottom="@dimen/service_imagebutton_padding_bottom"
-                android:paddingTop="@dimen/service_imagebutton_padding_top"
+                android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
+                android:layout_marginTop="@dimen/service_imagebutton_margin_top"
                 android:src="@drawable/buttons" >
 
             </ImageButton>
@@ -122,7 +122,7 @@
                 style="@style/Wftext"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:paddingBottom="@dimen/service_imagebutton_padding_bottom"
+                android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
                 android:text="@string/wifi" >
             </TextView>
         </LinearLayout>
