@@ -3,11 +3,11 @@
     <style name="Wftext" parent="@android:style/TextAppearance">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">8sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
     
     <style name="Wftext.header">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
     
      <style name="Wftext.large">

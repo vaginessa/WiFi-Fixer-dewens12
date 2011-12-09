@@ -29,6 +29,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -220,9 +222,13 @@ public class ScanFragment extends Fragment {
 			 * Set security icon and encryption text
 			 */
 			if (scanresultArray.get(position).capabilities.length() == 0) {
-				holder.security.setImageResource(R.drawable.service_active);
+				holder.security.setImageResource(R.drawable.buttons);
+				holder.security.setColorFilter(Color.GREEN,
+						PorterDuff.Mode.SRC_ATOP);
 				holder.encryption.setText(R.string.open_network);
 			} else {
+				holder.security.setColorFilter(Color.TRANSPARENT,
+						PorterDuff.Mode.SRC_ATOP);
 				holder.security.setImageResource(R.drawable.secure);
 				holder.encryption.setText(getCapabilitiesString(scanresultArray
 						.get(position).capabilities));

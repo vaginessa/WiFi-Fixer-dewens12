@@ -77,10 +77,13 @@
                 android:layout_width="@dimen/service_imagebutton_dimensions"
                 android:layout_height="@dimen/service_imagebutton_dimensions"
                 android:layout_gravity="center_horizontal"
+                android:background="@drawable/buttons"
                 android:clickable="true"
                 android:onClick="serviceToggle"
                 android:paddingBottom="@dimen/service_imagebutton_padding_bottom"
-                android:paddingTop="@dimen/service_imagebutton_padding_top" >
+                android:paddingTop="@dimen/service_imagebutton_padding_top"
+                android:src="@drawable/buttons" >
+
             </ImageButton>
 
             <TextView
@@ -90,7 +93,6 @@
                 android:layout_gravity="center_horizontal"
                 android:paddingBottom="@dimen/service_imagebutton_padding_bottom"
                 android:text="@string/service_status" >
-
             </TextView>
         </LinearLayout>
 
@@ -106,10 +108,13 @@
                 android:layout_width="@dimen/service_imagebutton_dimensions"
                 android:layout_height="@dimen/service_imagebutton_dimensions"
                 android:layout_gravity="center_horizontal"
+                android:background="@drawable/buttons"
                 android:clickable="true"
                 android:onClick="wifiToggle"
                 android:paddingBottom="@dimen/service_imagebutton_padding_bottom"
-                android:paddingTop="@dimen/service_imagebutton_padding_top" >
+                android:paddingTop="@dimen/service_imagebutton_padding_top"
+                android:src="@drawable/buttons" >
+
             </ImageButton>
 
             <TextView
@@ -119,7 +124,6 @@
                 android:layout_gravity="center_horizontal"
                 android:paddingBottom="@dimen/service_imagebutton_padding_bottom"
                 android:text="@string/wifi" >
-
             </TextView>
         </LinearLayout>
     </LinearLayout>

@@ -41,7 +41,7 @@
         android:layout_height="@dimen/known_list_icon_height"
         android:gravity="right"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/icon" >
+        android:src="@drawable/buttons" >
     </ImageView>
 
 </LinearLayout>
