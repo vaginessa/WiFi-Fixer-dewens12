@@ -117,6 +117,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			fragments.add(f);
 		}
 	}
+
 	/*
 	 * Intent extra for fragment commands
 	 */
@@ -554,6 +555,12 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		super.onResume();
 		if (optionsmenu != null)
 			onPrepareOptionsMenu(optionsmenu);
+		/*
+		 * Make sure Action Bar has current fragment title
+		 */
+		if (ActionBarDetector.checkHasActionBar() && !phoneFlag) {
+			setTitleFromFragment(this, tabletvp);
+		}
 	}
 
 	@Override
@@ -690,13 +697,20 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 
 	}
 
+	private static void setTitleFromFragment(TutorialFragmentActivity a,
+			ViewPager f) {
+		FragmentPagerAdapter fp = (FragmentPagerAdapter) f.getAdapter();
+		int i = f.getCurrentItem();
+		if (i == 0) {
+			ActionBarDetector.setUp(a, false, null);
+		} else {
+			ActionBarDetector.setUp(a, true, WFScanResult.fromBundle(fp
+					.getItem(i).getArguments()).SSID);
+		}
+	}
+
 	@Override
 	public void onPageSelected(int arg0) {
-		if (arg0 == 0) {
-			ActionBarDetector.setUp(this, false, null);
-		} else {
-			ActionBarDetector.setUp(this, true, WFScanResult
-					.fromBundle(tadapter.getItem(arg0).getArguments()).SSID);
-		}
+		setTitleFromFragment(this, tabletvp);
 	}
 }

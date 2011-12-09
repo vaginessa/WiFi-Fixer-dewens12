@@ -57,9 +57,11 @@ public class AboutFragment extends FragmentSwitchboard {
 	    t = (TextView) getView().findViewById(R.id.level);
 	    t.setText(String.valueOf(network.level));
 	    
-	    ActionBarDetector.setUp(getActivity(), true, getActivity()
-	    		.getString(R.string.about_actionbar)
-	    		+ network.SSID);
+	    if (getActivity().getClass().equals(GenericFragmentActivity.class)) {
+			ActionBarDetector.setUp(getActivity(), true, getActivity()
+					.getString(R.string.connect_fragment_title)
+					+ network.SSID);
+		}
 	}
 	super.onResume();
     }
