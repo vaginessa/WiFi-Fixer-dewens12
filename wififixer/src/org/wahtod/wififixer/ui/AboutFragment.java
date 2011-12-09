@@ -28,47 +28,47 @@ import android.widget.TextView;
 
 public class AboutFragment extends FragmentSwitchboard {
 
-    private WFScanResult network;
+	private WFScanResult network;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	    Bundle savedInstanceState) {
-	View v = inflater.inflate(R.layout.about_fragment, null);
-	return v;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-	network = WFScanResult.fromBundle(this.getArguments());
-	super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-	if (this.getArguments() != null) {
-	    TextView t = (TextView) getView().findViewById(R.id.ssid);
-	    t.setText(network.SSID);
-	    t = (TextView) getView().findViewById(R.id.bssid);
-	    t.setText(network.BSSID);
-	    t = (TextView) getView().findViewById(R.id.capabilities);
-	    t.setText(ScanFragment.getCapabilitiesString(network.capabilities));
-	    t = (TextView) getView().findViewById(R.id.frequency);
-	    t.setText(String.valueOf(network.frequency));
-	    t = (TextView) getView().findViewById(R.id.level);
-	    t.setText(String.valueOf(network.level));
-	    
-	    if (getActivity().getClass().equals(GenericFragmentActivity.class)) {
-			ActionBarDetector.setUp(getActivity(), true, getActivity()
-					.getString(R.string.connect_fragment_title)
-					+ network.SSID);
-		}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.about_fragment, null);
+		return v;
 	}
-	super.onResume();
-    }
 
-    public static AboutFragment newInstance(Bundle bundle) {
-	AboutFragment f = new AboutFragment();
-	f.setArguments(bundle);
-	return f;
-    }
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		network = WFScanResult.fromBundle(this.getArguments());
+		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	public void onResume() {
+		if (this.getArguments() != null) {
+			TextView t = (TextView) getView().findViewById(R.id.ssid);
+			t.setText(network.SSID);
+			t = (TextView) getView().findViewById(R.id.bssid);
+			t.setText(network.BSSID);
+			t = (TextView) getView().findViewById(R.id.capabilities);
+			t.setText(ScanFragment.getCapabilitiesString(network.capabilities));
+			t = (TextView) getView().findViewById(R.id.frequency);
+			t.setText(String.valueOf(network.frequency));
+			t = (TextView) getView().findViewById(R.id.level);
+			t.setText(String.valueOf(network.level));
+
+			if (getActivity().getClass().equals(GenericFragmentActivity.class)) {
+				ActionBarDetector.setUp(getActivity(), true, getActivity()
+						.getString(R.string.about_fragment_title_)
+						+ network.SSID);
+			}
+		}
+		super.onResume();
+	}
+
+	public static AboutFragment newInstance(Bundle bundle) {
+		AboutFragment f = new AboutFragment();
+		f.setArguments(bundle);
+		return f;
+	}
 }
