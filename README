@@ -17,7 +17,7 @@ Public Intents:
 /wififixer/src/org/wahtod/wififixer/IntentConstants.java
 
 <Targets>
-should run on all Android devices 1.6 to 3.2 with wifi and a touchscreen
+should run on all Android devices 1.6 to 4.x with wifi and a touchscreen
 
 <Why is it free?>
 Because software which provides utility which should've been in the product it runs on to begin with should be free!
