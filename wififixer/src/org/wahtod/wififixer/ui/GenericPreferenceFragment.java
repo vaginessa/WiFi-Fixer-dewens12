@@ -24,36 +24,36 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
 public class GenericPreferenceFragment extends PreferenceFragment implements
-	OnSharedPreferenceChangeListener {
-    @Override
-    public void onStart() {
-	this.getPreferenceScreen().getSharedPreferences()
-		.registerOnSharedPreferenceChangeListener(this);
-	super.onStart();
-    }
+		OnSharedPreferenceChangeListener {
+	@Override
+	public void onStart() {
+		this.getPreferenceScreen().getSharedPreferences()
+				.registerOnSharedPreferenceChangeListener(this);
+		super.onStart();
+	}
 
-    @Override
-    public void onStop() {
-	this.getPreferenceScreen().getSharedPreferences()
-		.unregisterOnSharedPreferenceChangeListener(this);
-	super.onStop();
-    }
+	@Override
+	public void onStop() {
+		this.getPreferenceScreen().getSharedPreferences()
+				.unregisterOnSharedPreferenceChangeListener(this);
+		super.onStop();
+	}
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-	int res = getActivity().getResources().getIdentifier(
-		getArguments().getString(
-			getActivity().getString(R.string.resource)),
-		getActivity().getString(R.string.xml),
-		getActivity().getPackageName());
-	addPreferencesFromResource(res);
-    }
+		int res = getActivity().getResources().getIdentifier(
+				getArguments().getString(
+						getActivity().getString(R.string.resource)),
+				getActivity().getString(R.string.xml),
+				getActivity().getPackageName());
+		addPreferencesFromResource(res);
+	}
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-	    String key) {
-	PrefActivity.processPrefChange(getActivity(), sharedPreferences, key);
-    }
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
+		PrefActivity.processPrefChange(getActivity(), sharedPreferences, key);
+	}
 }
