@@ -21,6 +21,11 @@ public class StringUtil {
     
     
     public static final String EMPTYSTRING = "";
+    public static final String WPA = "WPA";
+	public static final String WPA2 = "WPA2";
+	public static final String WEP = "WEP";
+	public static final String OPEN = "OPEN";
+	public static final CharSequence ESS = "ESS";
 
     public static String addQuotes(String s) {
 	return "\"" + s + "\"";
@@ -38,5 +43,20 @@ public class StringUtil {
 	}
 	return ssid;
     }
+    
+    public static String getCapabilitiesString(final String capabilities) {
+		if (capabilities.length() == 0)
+			return OPEN;
+		else if (capabilities.contains(WEP))
+			return WEP;
+		else if (capabilities.contains(WPA2))
+			return WPA2;
+		else if (capabilities.contains(WPA))
+			return WPA;
+		else if (capabilities.contains(ESS))
+			return OPEN;
+		else
+			return capabilities;
+	}
 
 }

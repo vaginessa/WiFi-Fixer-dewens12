@@ -18,6 +18,7 @@ package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
+import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
 
 import android.os.Bundle;
@@ -51,7 +52,7 @@ public class AboutFragment extends FragmentSwitchboard {
 			t = (TextView) getView().findViewById(R.id.bssid);
 			t.setText(network.BSSID);
 			t = (TextView) getView().findViewById(R.id.capabilities);
-			t.setText(ScanFragment.getCapabilitiesString(network.capabilities));
+			t.setText(StringUtil.getCapabilitiesString(network.capabilities));
 			t = (TextView) getView().findViewById(R.id.frequency);
 			t.setText(String.valueOf(network.frequency));
 			t = (TextView) getView().findViewById(R.id.level);

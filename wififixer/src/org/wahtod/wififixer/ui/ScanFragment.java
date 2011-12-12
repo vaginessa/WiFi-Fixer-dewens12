@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.utility.NotifUtil;
+import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
 
 import android.content.BroadcastReceiver;
@@ -51,10 +52,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 public class ScanFragment extends Fragment {
 	private boolean receiverRegistered;
-	private static final String WPA = "WPA";
-	private static final String WPA2 = "WPA2";
-	private static final String WEP = "WEP";
-	private static final String OPEN = "OPEN";
 	private WFScanResult clicked;
 	private ScanListAdapter adapter;
 	private ListView lv;
@@ -113,7 +110,7 @@ public class ScanFragment extends Fragment {
 			WFScanResult clicked) {
 		if (KnownNetworksFragment.getNetworks(context).contains(clicked.SSID))
 			return R.string.connect;
-		else if (getCapabilitiesString(clicked.capabilities) == OPEN)
+		else if (StringUtil.getCapabilitiesString(clicked.capabilities) == StringUtil.OPEN)
 			return R.string.connect;
 		else
 			return R.string.add;
@@ -221,7 +218,7 @@ public class ScanFragment extends Fragment {
 			/*
 			 * Set security icon and encryption text
 			 */
-			if (scanresultArray.get(position).capabilities.length() == 0) {
+			if (StringUtil.getCapabilitiesString(scanresultArray.get(position).capabilities).equals(StringUtil.OPEN)) {
 				holder.security.setImageResource(R.drawable.buttons);
 				holder.security.setColorFilter(Color.GREEN,
 						PorterDuff.Mode.SRC_ATOP);
@@ -230,7 +227,7 @@ public class ScanFragment extends Fragment {
 				holder.security.setColorFilter(Color.TRANSPARENT,
 						PorterDuff.Mode.SRC_ATOP);
 				holder.security.setImageResource(R.drawable.secure);
-				holder.encryption.setText(getCapabilitiesString(scanresultArray
+				holder.encryption.setText(StringUtil.getCapabilitiesString(scanresultArray
 						.get(position).capabilities));
 			}
 
@@ -319,21 +316,6 @@ public class ScanFragment extends Fragment {
 			createAdapter(getView(), scan);
 		refreshArray(scan);
 		adapter.notifyDataSetChanged();
-	}
-
-	public static String getCapabilitiesString(String capabilities) {
-		if (capabilities.length() == 0)
-			return OPEN;
-		else if (capabilities.contains(WEP))
-			capabilities = WEP;
-		else if (capabilities.contains(WPA2))
-			capabilities = WPA2;
-		else if (capabilities.contains(WPA))
-			capabilities = WPA;
-		else
-			capabilities = OPEN;
-
-		return capabilities;
 	}
 
 	private void refreshArray(List<WFScanResult> scan) {
