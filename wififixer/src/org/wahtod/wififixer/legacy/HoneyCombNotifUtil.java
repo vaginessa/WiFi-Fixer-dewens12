@@ -132,7 +132,7 @@ public class HoneyCombNotifUtil extends NotifUtil {
 		Notification.Builder builder = new Notification.Builder(context);
 		builder.setTicker(tickerText);
 		builder.setWhen(System.currentTimeMillis());
-		builder.setSmallIcon(R.drawable.statusicon);
+		builder.setSmallIcon(R.drawable.icon);
 		builder.setContentTitle(context.getText(R.string.app_name));
 		builder.setContentIntent(contentIntent);
 		builder.setContentText(message);

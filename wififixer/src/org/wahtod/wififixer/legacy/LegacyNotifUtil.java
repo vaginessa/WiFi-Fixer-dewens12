@@ -124,7 +124,7 @@ public class LegacyNotifUtil extends NotifUtil {
 
 	CharSequence from = context.getText(R.string.app_name);
 
-	Notification notif = new Notification(R.drawable.statusicon,
+	Notification notif = new Notification(R.drawable.icon,
 		tickerText, System.currentTimeMillis());
 
 	notif.setLatestEventInfo(context, from, message, contentIntent);
