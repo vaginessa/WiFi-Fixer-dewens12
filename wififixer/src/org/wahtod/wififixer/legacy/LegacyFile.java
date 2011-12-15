@@ -17,23 +17,17 @@ package org.wahtod.wififixer.legacy;
 
 import java.io.File;
 import android.content.Context;
-import android.os.Build;
+import android.os.Environment;
 
-public abstract class VersionedLogFile {
-    private static VersionedLogFile selector;
-
-    public abstract File vgetLogFile(Context context);
-
-    public static File getLogFile(Context context) {
-	/*
-	 * Instantiate appropriate VersionedLogFile
-	 */
-	if (selector == null) {
-	    if (Build.VERSION.SDK_INT < 8) {
-		selector = new LegacyLogFile();
-	    } else
-		selector = new API8LogFile();
+public class LegacyFile extends VersionedFile {
+    @Override
+    public File vgetLogFile(Context context, String filename) {
+    	File root = Environment.getExternalStorageDirectory();
+	File file = new File(root, filename);
+	if (!file.exists()) {
+	    file.mkdirs();
 	}
-	return selector.vgetLogFile(context);
+	return file;
     }
+
 }

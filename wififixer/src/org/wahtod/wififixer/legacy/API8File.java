@@ -17,19 +17,14 @@ package org.wahtod.wififixer.legacy;
 
 import java.io.File;
 import android.content.Context;
-import android.os.Environment;
 
-public class LegacyLogFile extends VersionedLogFile {
-    static final String FILENAME = "/wififixer_log.txt";
-    static final String DIRNAME = "/data/org.wahtod.wififixer";
+public class API8File extends VersionedFile {
 
-    @Override
-    public File vgetLogFile(Context context) {
-	File dir = new File(Environment.getExternalStorageDirectory() + DIRNAME);
-	if (!dir.exists()) {
-	    dir.mkdirs();
-	}
-	return new File(dir.getAbsolutePath() + FILENAME);
+    public File vgetLogFile(Context context, String filename) {
+	/*
+	 * Whee
+	 */
+	return new File(context.getExternalFilesDir(null), filename);
     }
 
 }

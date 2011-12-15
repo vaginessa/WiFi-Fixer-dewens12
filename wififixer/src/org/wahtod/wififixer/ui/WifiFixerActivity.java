@@ -20,11 +20,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.wahtod.wififixer.DefaultExceptionHandler;
 import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WifiFixerService;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
-import org.wahtod.wififixer.legacy.VersionedLogFile;
+import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
@@ -175,7 +176,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		/*
 		 * Delete old log
 		 */
-		File file = VersionedLogFile.getLogFile(this);
+		File file = VersionedFile.getFile(this, LogService.LOGFILE);
 
 		if (file.delete())
 			Toast.makeText(WifiFixerActivity.this,
@@ -240,7 +241,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		/*
 		 * Gets appropriate dir and filename on sdcard across API versions.
 		 */
-		final File file = VersionedLogFile.getLogFile(this);
+		final File file = VersionedFile.getFile(this, LogService.LOGFILE);
 
 		if (Environment.getExternalStorageState() != null
 				&& !(Environment.getExternalStorageState()
@@ -434,6 +435,13 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	// On Create
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		/*
+		 * Set Default Exception handler
+		 */
+		DefaultExceptionHandler.register(this);
+		/*
+		 * Do startup
+		 */
 		super.onCreate(savedInstanceState);
 		setTitle(R.string.app_name);
 		setContentView(R.layout.main);

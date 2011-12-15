@@ -22,22 +22,21 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 public abstract class FragmentSwitchboard extends Fragment {
+	public static final String FRAGMENT_KEY = "FRAGMENT";
+	public static final String METHOD = "newInstance";
 
-    public static final String FRAGMENT_KEY = "FRAGMENT";
-    public static final String METHOD = "newInstance";
-
-    @SuppressWarnings("unchecked")
-    public static FragmentSwitchboard newInstance(Bundle bundle) {
-	try {
-	    String s = bundle.getString(FRAGMENT_KEY);
-	    Class c = Class.forName(s);
-	    Class p[] = new Class[1];
-	    p[0] = Bundle.class;
-	    Method m = c.getMethod(METHOD, p);
-	    return (FragmentSwitchboard) m.invoke(c, bundle);
-	} catch (Exception e) {
-	    e.printStackTrace();
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static FragmentSwitchboard newInstance(Bundle bundle) {
+		try {
+			String s = bundle.getString(FRAGMENT_KEY);
+			Class c = Class.forName(s);
+			Class p[] = new Class[1];
+			p[0] = Bundle.class;
+			Method m = c.getMethod(METHOD, p);
+			return (FragmentSwitchboard) m.invoke(c, bundle);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new AboutFragment();
 	}
-    return new AboutFragment();
-}
 }

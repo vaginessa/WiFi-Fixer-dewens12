@@ -19,7 +19,7 @@ package org.wahtod.wififixer.utility;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.HoneyCombNotifUtil;
 import org.wahtod.wififixer.legacy.LegacyNotifUtil;
-import org.wahtod.wififixer.legacy.VersionedLogFile;
+import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.utility.StatusMessage;
 
 import android.app.Notification;
@@ -86,8 +86,7 @@ public abstract class NotifUtil {
 	public static void setStatNotifWifiState(final Context ctxt,
 			final boolean wifistate) {
 		cacheSelector();
-		selector
-				.vsetStatNotifWifiState(ctxt.getApplicationContext(), wifistate);
+		selector.vsetStatNotifWifiState(ctxt.getApplicationContext(), wifistate);
 	}
 
 	public static void setSsidStatus(final int status) {
@@ -176,10 +175,11 @@ public abstract class NotifUtil {
 	}
 
 	public static StringBuilder getLogString(final Context context) {
-		StringBuilder logstring = new StringBuilder(context
-				.getString(R.string.writing_to_log));
+		StringBuilder logstring = new StringBuilder(
+				context.getString(R.string.writing_to_log));
 		logstring.append(NotifUtil.SEPARATOR);
-		logstring.append(VersionedLogFile.getLogFile(context).length() / 1024);
+		logstring.append(VersionedFile.getFile(context, LogService.LOGFILE)
+				.length() / 1024);
 		logstring.append(context.getString(R.string.k));
 		return logstring;
 	}

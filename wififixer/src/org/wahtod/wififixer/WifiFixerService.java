@@ -135,6 +135,10 @@ public class WifiFixerService extends Service implements
 	@Override
 	public void onCreate() {
 		/*
+		 * Set Default Exception handler
+		 */
+		DefaultExceptionHandler.register(this);
+		/*
 		 * Strict Mode check
 		 */
 
