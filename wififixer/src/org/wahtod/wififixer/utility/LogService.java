@@ -114,7 +114,6 @@ public class LogService extends Service {
 			String line;
 
 			while ((line = b.readLine()) != null) {
-				Log.i("Farts", line);
 				writeToFileLog(context, line);
 			}
 			b.close();
@@ -332,7 +331,6 @@ public class LogService extends Service {
 		if (processCommands(context, APP_NAME))
 			return;
 		else {
-			Log.i(APP_NAME, Message);
 			writeToFileLog(context, Message);
 		}
 	}

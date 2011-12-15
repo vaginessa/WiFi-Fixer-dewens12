@@ -26,7 +26,6 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import org.wahtod.wififixer.legacy.VersionedFile;
 
 import android.content.Context;
-import android.util.Log;
 
 public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 	public static final String EXCEPTIONS_FILENAME = "exceptions.txt";
@@ -56,7 +55,6 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 			b.write(stacktrace);
 			b.flush();
 			b.close();
-			Log.i(this.getClass().getName(), "Wrote Exception");
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
