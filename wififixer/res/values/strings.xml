@@ -17,7 +17,7 @@
 	<string name="bdata_nag">Background Data Disabled</string>
 	<string name="scheduling_n1_fix">Scheduling N1 Fix</string>
 	<string name="widget_update_called">Widget Update Called</string>
-	<string name="logfile_delete_err_toast">Log File Doesn\'t Exist</string>
+	<string name="logfile_delete_err_toast">Please enable logging for a few minutes first.</string>
 	<string name="logfile_delete_toast">Log File Deleted</string>
 	<string name="connect">Connect</string>
 	<string name="disable">Disable</string>
@@ -31,7 +31,6 @@
 		see?\n\nPlease include any other details. :\n\n\n</string>
 	<string name="subject">WifiFixer Log</string>
 	<string name="email">zanshin.g1@gmail.com</string>
-	<string name="log_doesn_t_exist">Log doesn\'t exist</string>
 	<string name="sd_card_unavailable">SD Card Unavailable</string>
 	<string name="donateservice">com.wahtod.wififixer.WFDonateService</string>
 	<string name="about">About</string>

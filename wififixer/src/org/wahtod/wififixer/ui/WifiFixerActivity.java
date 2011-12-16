@@ -241,22 +241,26 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		/*
 		 * Gets appropriate dir and filename on sdcard across API versions.
 		 */
-		final File file = VersionedFile.getFile(this, LogService.LOGFILE);
+		File file = VersionedFile.getFile(this, LogService.LOGFILE);
 
 		if (Environment.getExternalStorageState() != null
 				&& !(Environment.getExternalStorageState()
 						.contains(Environment.MEDIA_MOUNTED))) {
 			Toast.makeText(WifiFixerActivity.this,
 					R.string.sd_card_unavailable, Toast.LENGTH_LONG).show();
-
 			return;
-
 		} else if (!file.exists()) {
-			Toast.makeText(WifiFixerActivity.this, R.string.log_doesn_t_exist,
-					Toast.LENGTH_LONG).show();
-			return;
+			file = VersionedFile.getFile(this,
+					DefaultExceptionHandler.EXCEPTIONS_FILENAME);
+			if (!file.exists()) {
+				Toast.makeText(WifiFixerActivity.this,
+						R.string.logfile_delete_err_toast, Toast.LENGTH_LONG).show();
+				return;
+			}
 		}
-
+		
+		final String fileuri = file.toURI().toString();
+		
 		AlertDialog dialog = new AlertDialog.Builder(this).create();
 
 		dialog.setTitle(getString(R.string.send_log));
@@ -278,9 +282,10 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 								new String[] { getString(R.string.email) });
 						sendIntent.putExtra(Intent.EXTRA_SUBJECT,
 								getString(R.string.subject));
-						sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file
-								.toURI().toString()));
-						sendIntent.putExtra(Intent.EXTRA_TEXT,
+						sendIntent.putExtra(Intent.EXTRA_STREAM,
+								Uri.parse(fileuri));
+						sendIntent.putExtra(
+								Intent.EXTRA_TEXT,
 								getString(R.string.email_footer)
 										+ LogService.getBuildInfo());
 
@@ -305,8 +310,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	}
 
 	public void serviceToggle(View view) {
-		if (PrefUtil.readBoolean(getApplicationContext(), Pref.DISABLE_KEY
-				.key())) {
+		if (PrefUtil.readBoolean(getApplicationContext(),
+				Pref.DISABLE_KEY.key())) {
 			Intent intent = new Intent(
 					IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
 			sendBroadcast(intent);
@@ -354,8 +359,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		 */
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 				new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI)), 0);
-		NotifUtil.show(context, context.getString(R.string.donatenag), context
-				.getString(R.string.thank_you), 3337, contentIntent);
+		NotifUtil.show(context, context.getString(R.string.donatenag),
+				context.getString(R.string.thank_you), 3337, contentIntent);
 	}
 
 	private static void removeNag(final Context context) {
@@ -421,8 +426,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 				ActionBarDetector.setUp(this, false, null);
 			int tabletvpItem = tabletvp.getCurrentItem();
 			if (tabletvpItem > 0) {
-				if (tadapter.getItem(tabletvpItem).getClass().equals(
-						ConnectFragment.class))
+				if (tadapter.getItem(tabletvpItem).getClass()
+						.equals(ConnectFragment.class))
 					removeConnectFragments(tabletvpItem);
 				else
 					tabletvp.setCurrentItem(tabletvpItem - 1);
@@ -712,8 +717,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		if (i == 0) {
 			ActionBarDetector.setUp(a, false, null);
 		} else {
-			ActionBarDetector.setUp(a, true, WFScanResult.fromBundle(fp
-					.getItem(i).getArguments()).SSID);
+			ActionBarDetector.setUp(a, true,
+					WFScanResult.fromBundle(fp.getItem(i).getArguments()).SSID);
 		}
 	}
 
