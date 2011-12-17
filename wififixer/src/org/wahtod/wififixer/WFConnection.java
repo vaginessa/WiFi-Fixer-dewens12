@@ -1845,11 +1845,21 @@ public class WFConnection extends Object implements
 		// We want a wakelock during scan, broadcastreceiver for results
 		// gets its own wake lock
 		wakelock.lock(true);
-		getWifiManager(ctxt).startScan();
+		if(getWifiManager(ctxt).startScan()){
 		if (prefs.getFlag(Pref.LOG_KEY))
 			LogService.log(ctxt, appname, ctxt
 					.getString(R.string.initiating_scan));
 		tempLock(LOCKWAIT);
+		}
+		else{
+			/*
+			 * Reset supplicant, log
+			 */
+			toggleWifi();
+			if (prefs.getFlag(Pref.LOG_KEY))
+				LogService.log(ctxt, appname,
+						ctxt.getString(R.string.scan_failed));
+		}
 		wakelock.lock(false);
 	}
 

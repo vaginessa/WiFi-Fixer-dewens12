@@ -331,6 +331,7 @@ public class LogService extends Service {
 		if (processCommands(context, APP_NAME))
 			return;
 		else {
+			Log.i(APP_NAME, Message);
 			writeToFileLog(context, Message);
 		}
 	}

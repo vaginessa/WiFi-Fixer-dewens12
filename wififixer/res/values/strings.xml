@@ -238,5 +238,6 @@
 	<string name="ms">ms</string>
 	<string name="later_button">Later</string>
 	<string name="about_actionbar">"About: "</string>
+	<string name="scan_failed">Scan Failed: Resetting Wifi</string>
 
 </resources>
