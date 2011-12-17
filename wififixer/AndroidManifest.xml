@@ -111,7 +111,6 @@
                 <action android:name="org.wahtod.wififixer.STATNOTIF" >
                 </action>
             </intent-filter>
-
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_provider" />
