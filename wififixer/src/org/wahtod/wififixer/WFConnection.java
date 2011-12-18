@@ -1141,11 +1141,10 @@ public class WFConnection extends Object implements
 	}
 
 	private static String getSupplicantStateString() {
-		SupplicantState sstate = getWifiManager(ctxt).getConnectionInfo()
-				.getSupplicantState();
-		if (sstate == SupplicantState.COMPLETED)
+		SupplicantState sstate = getSupplicantState();
+		if (sstate.equals( SupplicantState.COMPLETED))
 			return CONNECTED;
-		else if (sstate == SupplicantState.DORMANT)
+		else if (sstate.equals(SupplicantState.DORMANT))
 			return SLEEPING;
 		else if (SupplicantState.isValidState(sstate))
 			return sstate.name();

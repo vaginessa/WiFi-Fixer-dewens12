@@ -110,9 +110,8 @@ public class LogService extends Service {
 		try {
 			File f = VersionedFile.getFile(context,
 					DefaultExceptionHandler.EXCEPTIONS_FILENAME);
-			b = new BufferedReader(new FileReader(f), 8128);
+			b = new BufferedReader(new FileReader(f), WRITE_BUFFER_SIZE);
 			String line;
-
 			while ((line = b.readLine()) != null) {
 				writeToFileLog(context, line);
 			}
@@ -263,7 +262,8 @@ public class LogService extends Service {
 	public static boolean processCommands(final Context context,
 			final String command) {
 		/*
-		 * Incoming intents might have a command process or pass to add to log
+		 * Incoming intents might have a command to
+		 *  process
 		 */
 		if (command.equals(DUMPBUILD)) {
 			processLogIntent(context, getLogTag(context), getBuildInfo());

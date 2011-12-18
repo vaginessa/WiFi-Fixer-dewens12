@@ -60,6 +60,7 @@ public class ScanFragment extends Fragment {
 	private static final int CONTEXT_INFO = 15;
 	protected static final int REFRESH_LIST_ADAPTER = 0;
 	protected static final int CLEAR_LIST_ADAPTER = 1;
+	protected static Fragment self;
 
 	private Handler drawhandler = new Handler() {
 		@Override
@@ -90,6 +91,7 @@ public class ScanFragment extends Fragment {
 		lv = (ListView) v.findViewById(R.id.scanlist);
 		registerContextMenu();
 		registerReceiver();
+		self = this;
 		return v;
 	}
 
@@ -101,9 +103,15 @@ public class ScanFragment extends Fragment {
 		 * Clicked is the ListView selected WFScanResult
 		 */
 		menu.setHeaderTitle(clicked.SSID);
-		menu.add(4, CONTEXT_CONNECT, 2, getConnectMenuStringFromClicked(
-				getContext(), clicked));
+		menu.add(4, CONTEXT_CONNECT, 2,
+				getConnectMenuStringFromClicked(getContext(), clicked));
 		menu.add(4, CONTEXT_INFO, 3, R.string.about);
+	}
+
+	@Override
+	public void onDestroy() {
+		unregisterReceiver();
+		super.onDestroy();
 	}
 
 	public static int getConnectMenuStringFromClicked(final Context context,
@@ -139,12 +147,6 @@ public class ScanFragment extends Fragment {
 		i.putExtra(FragmentSwitchboard.FRAGMENT_KEY, classname);
 		i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		getActivity().startActivity(i);
-	}
-
-	@Override
-	public void onPause() {
-		unregisterReceiver();
-		super.onPause();
 	}
 
 	@Override
@@ -209,8 +211,8 @@ public class ScanFragment extends Fragment {
 			/*
 			 * Set signal icon
 			 */
-			int adjusted = WifiManager.calculateSignalLevel(scanresultArray
-					.get(position).level, 5);
+			int adjusted = WifiManager.calculateSignalLevel(
+					scanresultArray.get(position).level, 5);
 
 			holder.icon.setImageResource(NotifUtil.getIconfromSignal(adjusted,
 					NotifUtil.ICON_SET_SMALL));
@@ -218,7 +220,9 @@ public class ScanFragment extends Fragment {
 			/*
 			 * Set security icon and encryption text
 			 */
-			if (StringUtil.getCapabilitiesString(scanresultArray.get(position).capabilities).equals(StringUtil.OPEN)) {
+			if (StringUtil.getCapabilitiesString(
+					scanresultArray.get(position).capabilities).equals(
+					StringUtil.OPEN)) {
 				holder.security.setImageResource(R.drawable.buttons);
 				holder.security.setColorFilter(Color.GREEN,
 						PorterDuff.Mode.SRC_ATOP);
@@ -227,8 +231,10 @@ public class ScanFragment extends Fragment {
 				holder.security.setColorFilter(Color.TRANSPARENT,
 						PorterDuff.Mode.SRC_ATOP);
 				holder.security.setImageResource(R.drawable.secure);
-				holder.encryption.setText(StringUtil.getCapabilitiesString(scanresultArray
-						.get(position).capabilities));
+				holder.encryption
+						.setText(StringUtil
+								.getCapabilitiesString(scanresultArray
+										.get(position).capabilities));
 			}
 
 			return convertView;
@@ -258,7 +264,9 @@ public class ScanFragment extends Fragment {
 			/*
 			 * On Scan result intent refresh ListView
 			 */
-			if (intent.getAction().equals(
+			if (self.isDetached())
+				return;
+			else if (intent.getAction().equals(
 					WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
 				drawhandler.sendEmptyMessage(REFRESH_LIST_ADAPTER);
 			else if (intent.getExtras().getInt(WifiManager.EXTRA_WIFI_STATE) == WifiManager.WIFI_STATE_DISABLED) {
