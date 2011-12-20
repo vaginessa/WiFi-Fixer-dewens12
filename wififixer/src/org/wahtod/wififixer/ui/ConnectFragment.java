@@ -60,7 +60,7 @@ public class ConnectFragment extends FragmentSwitchboard implements
 		Button b = (Button) v.findViewById(R.id.connect);
 		View e = v.findViewById(R.id.password);
 		TextView summary = (TextView) v.findViewById(R.id.password_summary);
-		if (network.capabilities.length() == 0
+		if (StringUtil.getCapabilitiesString(network.SSID) == StringUtil.OPEN
 				|| KnownNetworksFragment.getNetworks(getActivity()).contains(
 						network.SSID)) {
 			e.setVisibility(View.INVISIBLE);
