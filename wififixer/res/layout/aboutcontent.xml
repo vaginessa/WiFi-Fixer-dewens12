@@ -39,7 +39,7 @@
 
 		<TextView android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:paddingTop="10dip"
-			android:text="Privacy Disclosure:\nLogging is not enabled by default.\nThe log will only be enabled and sent to the developer when requested.\nLogging stores some personal information, specifically current timezone and SSID of configured access points and scanned SSIDs during connection."
+			android:text="Privacy Disclosure:\nLogging is not enabled by default.\nThe log will only be enabled and sent to the developer when requested.\nLogging stores some personal information, specifically current timezone and SSID of configured access points and scanned SSIDs during connection.\n\nStack traces are collected upon an uncaught exception.  The stack traces contain no identifying information.  Stack traces are only sent to the developer when requested"
 			style="@style/Wftext.header" />
 
 		<TextView android:layout_width="fill_parent"
