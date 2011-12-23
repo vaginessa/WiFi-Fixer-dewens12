@@ -968,7 +968,6 @@ public class WFConnection extends Object implements
 			 * Need this catch because NetworkInfo can return null
 			 */
 		}
-
 		return false;
 	}
 
@@ -994,7 +993,6 @@ public class WFConnection extends Object implements
 				LogService.log(context, appname,
 						context.getString(R.string.wifi_is_disabled));
 		}
-
 		return wifistate;
 	}
 

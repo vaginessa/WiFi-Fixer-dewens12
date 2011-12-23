@@ -2,7 +2,7 @@
     Wifi Fixer for Android
 ================================
 
-Copyright [2010-2011] [David Van de Ven]
+Copyright [2010-2012] [David Van de Ven]
 
 <License>
 This source code is Apache 2 licensed: 
@@ -17,7 +17,7 @@ Public Intents:
 /wififixer/src/org/wahtod/wififixer/IntentConstants.java
 
 <Targets>
-should run on all Android devices 1.6 to 4.x with wifi and a touchscreen
+All Android devices 1.6 to 4.x with wifi and a touchscreen
 
 <Why is it free?>
 Because software which provides utility which should've been in the product it runs on to begin with should be free!
@@ -29,7 +29,7 @@ I like developing for Android.  Hope it shows.
 Release Candidate: 0.9.0 Rotated Recluse
 
 
-Bugfixes and enhancements, UI overhaul
+Bugfixes and enhancements, UI overhaul, Chutzpah
 
 
 
