@@ -27,118 +27,119 @@ import android.content.Context;
 import android.content.Intent;
 
 public class LegacyNotifUtil extends NotifUtil {
-    @Override
-    public void vaddStatNotif(Context ctxt, final String ssid, String status,
-	    final int signal, final boolean flag) {
-	ctxt = ctxt.getApplicationContext();
-	NotificationManager nm = (NotificationManager) ctxt
-		.getSystemService(Context.NOTIFICATION_SERVICE);
+	@Override
+	public void vaddStatNotif(Context ctxt, final String ssid, String status,
+			final int signal, final boolean flag) {
+		ctxt = ctxt.getApplicationContext();
+		NotificationManager nm = (NotificationManager) ctxt
+				.getSystemService(Context.NOTIFICATION_SERVICE);
 
-	if (!flag) {
-	    nm.cancel(NotifUtil.STATNOTIFID);
-	    NotifUtil.statnotif = null;
-	    return;
-	}
+		if (!flag) {
+			nm.cancel(NotifUtil.STATNOTIFID);
+			NotifUtil.statnotif = null;
+			return;
+		}
 
+		if (NotifUtil.statnotif == null) {
+			NotifUtil.statnotif = new Notification(R.drawable.notifsignal,
+					ctxt.getString(R.string.network_status), 0);
 
-	if (NotifUtil.statnotif == null) {
-	    NotifUtil.statnotif = new Notification(R.drawable.notifsignal, ctxt
-		    .getString(R.string.network_status), 0);
+			Intent intent = new Intent(ctxt, WifiFixerActivity.class)
+					.setAction(Intent.ACTION_MAIN).setFlags(
+							Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 
-	    Intent intent = new Intent(ctxt, WifiFixerActivity.class)
-		    .setAction(Intent.ACTION_MAIN).setFlags(
-			    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+			NotifUtil.contentIntent = PendingIntent.getActivity(ctxt, 0,
+					intent, 0);
+			NotifUtil.statnotif.contentIntent = NotifUtil.contentIntent;
+			NotifUtil.statnotif.flags = Notification.FLAG_ONGOING_EVENT;
+		}
 
-	    NotifUtil.contentIntent = PendingIntent.getActivity(ctxt, 0,
-		    intent, 0);
-	    NotifUtil.statnotif.contentIntent = NotifUtil.contentIntent;
-	    NotifUtil.statnotif.flags = Notification.FLAG_ONGOING_EVENT;
-	}
+		if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
+			status = ctxt.getString(R.string.unmanaged) + status;
+		}
+		NotifUtil.statnotif.icon = getIconfromSignal(signal,
+				NotifUtil.ICON_SET_SMALL);
+		NotifUtil.statnotif.iconLevel = signal;
+		NotifUtil.statnotif
+				.setLatestEventInfo(ctxt, ctxt.getString(R.string.app_name),
+						truncateSSID(ssid) + NotifUtil.SEPARATOR + status,
+						NotifUtil.contentIntent);
 
-	if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
-	    status = ctxt.getString(R.string.unmanaged) + status;
-	}
-	NotifUtil.statnotif.icon = getIconfromSignal(signal,NotifUtil.ICON_SET_SMALL);
-	NotifUtil.statnotif.iconLevel = signal;
-	NotifUtil.statnotif.setLatestEventInfo(ctxt, ctxt
-		.getString(R.string.app_name), truncateSSID(ssid)
-		+ NotifUtil.SEPARATOR + status, NotifUtil.contentIntent);
-
-	/*
-	 * Fire the notification
-	 */
-	nm.notify(NotifUtil.STATNOTIFID, NotifUtil.statnotif);
-
-    }
-
-    @Override
-    public void vaddLogNotif(final Context context, final boolean flag) {
-
-	NotificationManager nm = (NotificationManager) context
-		.getSystemService(Context.NOTIFICATION_SERVICE);
-
-	if (!flag) {
-	    nm.cancel(NotifUtil.LOGNOTIFID);
-	    return;
-	}
-	if (NotifUtil.lognotif == null) {
-	    NotifUtil.lognotif = new Notification(R.drawable.logging_enabled,
-		    context.getString(R.string.app_name), System
-			    .currentTimeMillis());
-	    NotifUtil.lognotif.flags = Notification.FLAG_ONGOING_EVENT;
-
-	    Intent intent = new Intent(context, WifiFixerActivity.class)
-		    .setAction(Intent.ACTION_MAIN).setFlags(
-			    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-
-	    NotifUtil.contentIntent = PendingIntent.getActivity(context, 0,
-		    intent, 0);
+		/*
+		 * Fire the notification
+		 */
+		nm.notify(NotifUtil.STATNOTIFID, NotifUtil.statnotif);
 
 	}
 
-	NotifUtil.lognotif.contentIntent = NotifUtil.contentIntent;
-	NotifUtil.lognotif.setLatestEventInfo(context, context
-		.getString(R.string.app_name),
-		getLogString(context).toString(), NotifUtil.contentIntent);
+	@Override
+	public void vaddLogNotif(final Context context, final boolean flag) {
 
-	/*
-	 * Fire the notification
-	 */
-	nm.notify(NotifUtil.LOGNOTIFID, NotifUtil.lognotif);
+		NotificationManager nm = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
 
-    }
+		if (!flag) {
+			nm.cancel(NotifUtil.LOGNOTIFID);
+			return;
+		}
+		if (NotifUtil.lognotif == null) {
+			NotifUtil.lognotif = new Notification(R.drawable.logging_enabled,
+					context.getString(R.string.app_name),
+					System.currentTimeMillis());
+			NotifUtil.lognotif.flags = Notification.FLAG_ONGOING_EVENT;
 
-    @Override
-    public void vshow(final Context context, final String message,
-	    final String tickerText, final int id, PendingIntent contentIntent) {
+			Intent intent = new Intent(context, WifiFixerActivity.class)
+					.setAction(Intent.ACTION_MAIN).setFlags(
+							Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 
-	/*
-	 * If contentIntent is NULL, create valid contentIntent
-	 */
-	if (contentIntent == null)
-	    contentIntent = PendingIntent.getActivity(context, 0, new Intent(),
-		    0);
+			NotifUtil.contentIntent = PendingIntent.getActivity(context, 0,
+					intent, 0);
 
-	NotificationManager nm = (NotificationManager) context
-		.getSystemService(Context.NOTIFICATION_SERVICE);
+		}
 
-	CharSequence from = context.getText(R.string.app_name);
+		NotifUtil.lognotif.contentIntent = NotifUtil.contentIntent;
+		NotifUtil.lognotif.setLatestEventInfo(context, context
+				.getString(R.string.app_name),
+				getLogString(context).toString(), NotifUtil.contentIntent);
 
-	Notification notif = new Notification(R.drawable.icon,
-		tickerText, System.currentTimeMillis());
+		/*
+		 * Fire the notification
+		 */
+		nm.notify(NotifUtil.LOGNOTIFID, NotifUtil.lognotif);
 
-	notif.setLatestEventInfo(context, from, message, contentIntent);
-	notif.flags = Notification.FLAG_AUTO_CANCEL;
-	// unique ID
-	nm.notify(id, notif);
+	}
 
-    }
+	@Override
+	public void vshow(final Context context, final String message,
+			final String tickerText, final int id, PendingIntent contentIntent) {
+
+		/*
+		 * If contentIntent is NULL, create valid contentIntent
+		 */
+		if (contentIntent == null)
+			contentIntent = PendingIntent.getActivity(context, 0, new Intent(),
+					0);
+
+		NotificationManager nm = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+
+		CharSequence from = context.getText(R.string.app_name);
+
+		Notification notif = new Notification(R.drawable.icon, tickerText,
+				System.currentTimeMillis());
+
+		notif.setLatestEventInfo(context, from, message, contentIntent);
+		notif.flags = Notification.FLAG_AUTO_CANCEL;
+		// unique ID
+		nm.notify(id, notif);
+
+	}
 
 	@Override
 	public void vsetStatNotifWifiState(Context ctxt, boolean screenstate) {
 		/*
-		 * Do nothing here. We're not on Honeycomb. 
+		 * Do nothing here. We're not on Honeycomb.
 		 */
-		
+
 	}
 }

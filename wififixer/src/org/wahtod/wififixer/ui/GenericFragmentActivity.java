@@ -43,6 +43,7 @@ public class GenericFragmentActivity extends FragmentActivity {
 			ft.commit();
 		}
 	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		ActionBarDetector.handleHome(this, item);

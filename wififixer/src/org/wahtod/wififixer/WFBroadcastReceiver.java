@@ -21,14 +21,14 @@ import android.content.Context;
 import android.content.Intent;
 
 public class WFBroadcastReceiver extends BroadcastReceiver {
-    private static BroadcastHandler broadcasthandler;
+	private static BroadcastHandler broadcasthandler;
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-	if (broadcasthandler == null)
-	    broadcasthandler = new BroadcastHandler(context);
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		if (broadcasthandler == null)
+			broadcasthandler = new BroadcastHandler(context);
 
-	broadcasthandler.handleIntent(context, intent);
-    }
+		broadcasthandler.handleIntent(context, intent);
+	}
 
 }

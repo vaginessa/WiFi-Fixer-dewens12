@@ -24,15 +24,15 @@ import android.app.backup.SharedPreferencesBackupHelper;
  * also assuming you've used SharedPreferences.getDefaultSharedPreferences 
  */
 public class PrefsBackupAgent extends BackupAgentHelper {
-    static final String PREFS = "_preferences";
-    // A key to uniquely identify the set of backup data
-    static final String PREFS_BACKUP_KEY = "prefs";
+	static final String PREFS = "_preferences";
+	// A key to uniquely identify the set of backup data
+	static final String PREFS_BACKUP_KEY = "prefs";
 
-    // Allocate a helper and add it to the backup agent
-    @Override
-    public void onCreate() {
-	SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(
-		this, this.getPackageName() + PREFS);
-	addHelper(PREFS_BACKUP_KEY, helper);
-    }
+	// Allocate a helper and add it to the backup agent
+	@Override
+	public void onCreate() {
+		SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(
+				this, this.getPackageName() + PREFS);
+		addHelper(PREFS_BACKUP_KEY, helper);
+	}
 }

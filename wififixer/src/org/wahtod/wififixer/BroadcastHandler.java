@@ -134,8 +134,8 @@ public class BroadcastHandler {
 		else if (action.equals(AUTH_ACTION)) {
 			if (data.containsKey(AUTHEXTRA)
 					&& data.getString(AUTHEXTRA).contains(AUTHSTRING)) {
-				Log.i(LogService.getLogTag(ctxt), ctxt
-						.getString(R.string.authed));
+				Log.i(LogService.getLogTag(ctxt),
+						ctxt.getString(R.string.authed));
 				Intent intent = new Intent(ctxt, WifiFixerActivity.class)
 						.setAction(Intent.ACTION_MAIN).setFlags(
 								Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
@@ -143,10 +143,10 @@ public class BroadcastHandler {
 				PendingIntent pending = PendingIntent.getActivity(ctxt, 0,
 						intent, 0);
 				// Ok, do the auth
-				if (!PrefUtil.readBoolean(ctxt, ctxt
-						.getString(R.string.isauthed))) {
-					PrefUtil.writeBoolean(ctxt, ctxt
-							.getString(R.string.isauthed), true);
+				if (!PrefUtil.readBoolean(ctxt,
+						ctxt.getString(R.string.isauthed))) {
+					PrefUtil.writeBoolean(ctxt,
+							ctxt.getString(R.string.isauthed), true);
 					NotifUtil.cancel(ctxt, 3337);
 					NotifUtil.show(ctxt, ctxt.getString(R.string.donatethanks),
 							ctxt.getString(R.string.authorized), AUTH_NOTIF_ID,

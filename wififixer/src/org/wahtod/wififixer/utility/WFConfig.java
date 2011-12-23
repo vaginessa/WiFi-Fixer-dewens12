@@ -20,42 +20,42 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 
 public class WFConfig extends Object {
-    /*
-     * Object to store WifiConfigurations and level
-     * 
-     * Why isn't this an extension of WifiConfiguration? Because WFConfig is
-     * only downclassed. More efficient than copying all fields individually.
-     */
-
-    public WifiConfiguration wificonfig;
-    public int level;
-    public int failcount;
-
-    public WFConfig(final ScanResult sResult, final WifiConfiguration wConfig) {
 	/*
-	 * Constructor for only use of object so far
+	 * Object to store WifiConfigurations and level
+	 * 
+	 * Why isn't this an extension of WifiConfiguration? Because WFConfig is
+	 * only downclassed. More efficient than copying all fields individually.
 	 */
-	level = sResult.level;
-	wificonfig = wConfig;
-	wificonfig.BSSID = sResult.BSSID;
-	failcount = 0;
-    }
 
-    public WFConfig() {
-	failcount = 0;
-    }
+	public WifiConfiguration wificonfig;
+	public int level;
+	public int failcount;
 
-    @Override
-    public String toString() {
-	StringBuilder result = new StringBuilder();
-	String NEW_LINE = System.getProperty("line.separator");
+	public WFConfig(final ScanResult sResult, final WifiConfiguration wConfig) {
+		/*
+		 * Constructor for only use of object so far
+		 */
+		level = sResult.level;
+		wificonfig = wConfig;
+		wificonfig.BSSID = sResult.BSSID;
+		failcount = 0;
+	}
 
-	result.append(this.getClass().getName() + " Object {" + NEW_LINE);
-	result.append("WifiConfiguration:" + wificonfig.toString() + NEW_LINE);
-	result.append("Level: " + level);
-	result.append("}");
+	public WFConfig() {
+		failcount = 0;
+	}
 
-	return result.toString();
-    }
+	@Override
+	public String toString() {
+		StringBuilder result = new StringBuilder();
+		String NEW_LINE = System.getProperty("line.separator");
+
+		result.append(this.getClass().getName() + " Object {" + NEW_LINE);
+		result.append("WifiConfiguration:" + wificonfig.toString() + NEW_LINE);
+		result.append("Level: " + level);
+		result.append("}");
+
+		return result.toString();
+	}
 
 }

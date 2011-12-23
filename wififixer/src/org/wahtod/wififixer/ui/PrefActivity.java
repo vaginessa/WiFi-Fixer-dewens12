@@ -96,8 +96,8 @@ public class PrefActivity extends PreferenceActivity implements
 			 * interested in.
 			 */
 
-			PrefUtil.notifyPrefChange(context, key, prefs
-					.getBoolean(key, false));
+			PrefUtil.notifyPrefChange(context, key,
+					prefs.getBoolean(key, false));
 
 		} else if (key.contains(PrefConstants.PERF_KEY)) {
 
@@ -122,8 +122,7 @@ public class PrefActivity extends PreferenceActivity implements
 				PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(),
 						true);
 				PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), false);
-				PrefUtil
-						.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
+				PrefUtil.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
 				break;
 
 			case 3:
@@ -131,8 +130,7 @@ public class PrefActivity extends PreferenceActivity implements
 				PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(),
 						false);
 				PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), false);
-				PrefUtil
-						.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
+				PrefUtil.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
 				break;
 			}
 			/*

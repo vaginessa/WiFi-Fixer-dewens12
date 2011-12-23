@@ -129,8 +129,7 @@ public class KnownNetworksFragment extends Fragment {
 			case CONTEXT_DISABLE:
 				iv.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
 				PrefUtil.setNetworkState(getContext(), clicked_position, false);
-				PrefUtil
-						.writeNetworkState(getContext(), clicked_position, true);
+				PrefUtil.writeNetworkState(getContext(), clicked_position, true);
 				adapter.notifyDataSetChanged();
 				break;
 			case CONTEXT_CONNECT:
@@ -148,13 +147,9 @@ public class KnownNetworksFragment extends Fragment {
 				} else {
 					if (PrefUtil
 							.getNetworkState(getContext(), clicked_position))
-						iv
-								.setColorFilter(Color.WHITE,
-										PorterDuff.Mode.SRC_ATOP);
+						iv.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 					else
-						iv
-								.setColorFilter(Color.BLACK,
-										PorterDuff.Mode.SRC_ATOP);
+						iv.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
 
 					PrefUtil.writeManagedState(getContext(), clicked_position,
 							false);

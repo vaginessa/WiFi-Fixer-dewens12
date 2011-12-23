@@ -31,83 +31,83 @@ import android.widget.Toast;
 
 public class WidgetHandler {
 
-    private static Context ctxt;
+	private static Context ctxt;
 
-    /*
-     * Intent Constants
-     */
-    public static final String WIFI_ON = "org.wahtod.wififixer.WidgetReceiver.WIFI_ON";
-    public static final String WIFI_OFF = "org.wahtod.wififixer.WidgetReceiver.WIFI_OFF";
-    public static final String TOGGLE_WIFI = "org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE";
-    public static final String REASSOCIATE = "org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE";
-
-    private static WifiManager wm;
-
-    private Handler handler = new Handler() {
-	@Override
-	public void handleMessage(Message message) {
-	    String action = message.getData().getString(PrefUtil.INTENT_ACTION);
-	    /*
-	     * Turn on WIFI
-	     */
-	    if (action.equals(WIFI_ON))
-		setWifiState(ctxt, true);
-	    else
-	    /*
-	     * If Wifi is disabled, notify
-	     */
-	    if (!getWifiManager(ctxt).isWifiEnabled()) {
-		Toast.makeText(ctxt, ctxt.getString(R.string.wifi_is_disabled),
-			Toast.LENGTH_LONG).show();
-		return;
-	    }
-	    /*
-	     * Turn off Wifi
-	     */
-	    else if (action.equals(WIFI_OFF))
-		setWifiState(ctxt, false);
-	    /*
-	     * Toggle Wifi
-	     */
-	    else if (action.equals(TOGGLE_WIFI)) {
-		ctxt.startService(new Intent(ctxt, ToggleService.class));
-	    }
-	    /*
-	     * Reassociate
-	     */
-	    else if (action.equals(REASSOCIATE)) {
-		Toast.makeText(ctxt, ctxt.getString(R.string.reassociating),
-			Toast.LENGTH_LONG).show();
-		ctxt.sendBroadcast(new Intent(WFConnection.USEREVENT));
-		getWifiManager(ctxt).reassociate();
-	    }
-
-	}
-    };
-
-    public static WifiManager getWifiManager(final Context context) {
-	if (wm == null)
-	    wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-	return wm;
-    }
-
-    public static void setWifiState(final Context context, final boolean state) {
-	getWifiManager(context).setWifiEnabled(state);
-    }
-
-    public void handleIntent(final Context context, final Intent intent) {
 	/*
-	 * Dispatch intent commands to handler
+	 * Intent Constants
 	 */
-	Message message = handler.obtainMessage();
-	Bundle data = new Bundle();
-	data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
-	message.setData(data);
-	handler.sendMessage(message);
-    }
+	public static final String WIFI_ON = "org.wahtod.wififixer.WidgetReceiver.WIFI_ON";
+	public static final String WIFI_OFF = "org.wahtod.wififixer.WidgetReceiver.WIFI_OFF";
+	public static final String TOGGLE_WIFI = "org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE";
+	public static final String REASSOCIATE = "org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE";
 
-    public WidgetHandler(final Context context) {
-	ctxt = context;
-    }
+	private static WifiManager wm;
+
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message message) {
+			String action = message.getData().getString(PrefUtil.INTENT_ACTION);
+			/*
+			 * Turn on WIFI
+			 */
+			if (action.equals(WIFI_ON))
+				setWifiState(ctxt, true);
+			else
+			/*
+			 * If Wifi is disabled, notify
+			 */
+			if (!getWifiManager(ctxt).isWifiEnabled()) {
+				Toast.makeText(ctxt, ctxt.getString(R.string.wifi_is_disabled),
+						Toast.LENGTH_LONG).show();
+				return;
+			}
+			/*
+			 * Turn off Wifi
+			 */
+			else if (action.equals(WIFI_OFF))
+				setWifiState(ctxt, false);
+			/*
+			 * Toggle Wifi
+			 */
+			else if (action.equals(TOGGLE_WIFI)) {
+				ctxt.startService(new Intent(ctxt, ToggleService.class));
+			}
+			/*
+			 * Reassociate
+			 */
+			else if (action.equals(REASSOCIATE)) {
+				Toast.makeText(ctxt, ctxt.getString(R.string.reassociating),
+						Toast.LENGTH_LONG).show();
+				ctxt.sendBroadcast(new Intent(WFConnection.USEREVENT));
+				getWifiManager(ctxt).reassociate();
+			}
+
+		}
+	};
+
+	public static WifiManager getWifiManager(final Context context) {
+		if (wm == null)
+			wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		return wm;
+	}
+
+	public static void setWifiState(final Context context, final boolean state) {
+		getWifiManager(context).setWifiEnabled(state);
+	}
+
+	public void handleIntent(final Context context, final Intent intent) {
+		/*
+		 * Dispatch intent commands to handler
+		 */
+		Message message = handler.obtainMessage();
+		Bundle data = new Bundle();
+		data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
+		message.setData(data);
+		handler.sendMessage(message);
+	}
+
+	public WidgetHandler(final Context context) {
+		ctxt = context;
+	}
 
 }

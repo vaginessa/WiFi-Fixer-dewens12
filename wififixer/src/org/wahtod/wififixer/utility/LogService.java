@@ -262,8 +262,7 @@ public class LogService extends Service {
 	public static boolean processCommands(final Context context,
 			final String command) {
 		/*
-		 * Incoming intents might have a command to
-		 *  process
+		 * Incoming intents might have a command to process
 		 */
 		if (command.equals(DUMPBUILD)) {
 			processLogIntent(context, getLogTag(context), getBuildInfo());

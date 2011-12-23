@@ -20,22 +20,22 @@ import android.os.StrictMode.ThreadPolicy;
 
 public class StrictModeSetter extends StrictModeDetector {
 
-    @Override
-    public boolean vSetPolicy(boolean flag) {
-	if (flag) {
-	    StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-		    .detectDiskReads().detectDiskWrites().detectNetwork() // or
-		    // .detectAll()
-		    // for
-		    // all
-		    // detectable
-		    // problems
-		    .penaltyLog().build());
-	} else {
-	    StrictMode.enableDefaults();
-	    StrictMode.setThreadPolicy(ThreadPolicy.LAX);
+	@Override
+	public boolean vSetPolicy(boolean flag) {
+		if (flag) {
+			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+					.detectDiskReads().detectDiskWrites().detectNetwork() // or
+					// .detectAll()
+					// for
+					// all
+					// detectable
+					// problems
+					.penaltyLog().build());
+		} else {
+			StrictMode.enableDefaults();
+			StrictMode.setThreadPolicy(ThreadPolicy.LAX);
+		}
+		return true;
 	}
-	return true;
-    }
 
 }

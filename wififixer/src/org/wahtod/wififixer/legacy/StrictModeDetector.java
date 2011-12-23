@@ -16,34 +16,34 @@
 package org.wahtod.wififixer.legacy;
 
 public abstract class StrictModeDetector {
-    private static StrictModeDetector selector;
+	private static StrictModeDetector selector;
 
-    public abstract boolean vSetPolicy(final boolean flag);
+	public abstract boolean vSetPolicy(final boolean flag);
 
-    public static boolean setPolicy(final boolean flag) {
-	/*
-	 * Handle logic to check if StrictMode exists Set StrictMode based on
-	 * flag if it does otherwise return false
-	 */
-	if (selector == null) {
-	    if (checkHasStrictMode()) {
-		selector = new StrictModeSetter();
-	    } else
-		return false;
+	public static boolean setPolicy(final boolean flag) {
+		/*
+		 * Handle logic to check if StrictMode exists Set StrictMode based on
+		 * flag if it does otherwise return false
+		 */
+		if (selector == null) {
+			if (checkHasStrictMode()) {
+				selector = new StrictModeSetter();
+			} else
+				return false;
+		}
+		/*
+		 * If API exists, set policy
+		 */
+		return selector.vSetPolicy(flag);
 	}
-	/*
-	 * If API exists, set policy
-	 */
-	return selector.vSetPolicy(flag);
-    }
 
-    public static boolean checkHasStrictMode() {
-	try {
-	    Class.forName("android.os.StrictMode", true, Thread.currentThread()
-		    .getContextClassLoader());
-	    return true;
-	} catch (Exception ex) {
-	    return false;
+	public static boolean checkHasStrictMode() {
+		try {
+			Class.forName("android.os.StrictMode", true, Thread.currentThread()
+					.getContextClassLoader());
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
 	}
-    }
 }

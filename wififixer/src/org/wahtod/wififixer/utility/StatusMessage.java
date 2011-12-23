@@ -16,20 +16,20 @@ limitations under the License.
 package org.wahtod.wififixer.utility;
 
 public class StatusMessage {
-    String ssid;
-    String status;
-    int signal;
-    boolean show;
+	String ssid;
+	String status;
+	int signal;
+	boolean show;
 
-    public StatusMessage(final String ss, final String st, final int si,
-	    final boolean sh) {
-	ssid = ss;
-	status = st;
-	signal = si;
-	show = sh;
-    }
+	public StatusMessage(final String ss, final String st, final int si,
+			final boolean sh) {
+		ssid = ss;
+		status = st;
+		signal = si;
+		show = sh;
+	}
 
-    public StatusMessage(final boolean sh) {
-	show = sh;
-    }
+	public StatusMessage(final boolean sh) {
+		show = sh;
+	}
 }

@@ -132,8 +132,8 @@ public class Hostup {
 			 * have
 			 */
 			if (log)
-				LogService.log(ctxt, SERVICE_TAG, ctxt
-						.getString(R.string.critical_timeout));
+				LogService.log(ctxt, SERVICE_TAG,
+						ctxt.getString(R.string.critical_timeout));
 			return false;
 		} catch (InterruptedException e) {
 			finished = true;
@@ -142,10 +142,9 @@ public class Hostup {
 			 */
 			if (log) {
 				LogService.log(ctxt, SERVICE_TAG, response);
-				LogService.log(ctxt, SERVICE_TAG, String.valueOf(System
-						.currentTimeMillis()
-						- timer)
-						+ ctxt.getString(R.string.ms));
+				LogService.log(ctxt, SERVICE_TAG,
+						String.valueOf(System.currentTimeMillis() - timer)
+								+ ctxt.getString(R.string.ms));
 			}
 			return state;
 		}
@@ -188,8 +187,8 @@ public class Hostup {
 		if (httpclient == null) {
 			httpclient = new DefaultHttpClient();
 			BasicHttpParams httpparams = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpparams, Integer
-					.valueOf(reachable));
+			HttpConnectionParams.setConnectionTimeout(httpparams,
+					Integer.valueOf(reachable));
 			HttpConnectionParams.setSoTimeout(httpparams, reachable);
 			HttpConnectionParams.setLinger(httpparams, 1);
 			HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);

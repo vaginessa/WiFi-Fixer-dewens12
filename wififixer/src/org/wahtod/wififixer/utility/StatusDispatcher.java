@@ -24,60 +24,60 @@ import android.os.Handler;
 import android.os.Message;
 
 public class StatusDispatcher {
-    private StatusMessage m;
-    private static final int MESSAGE_DELAY = 10000;
-    private static final int MESSAGE = 42;
-    private Context c;
-    private PrefUtil prefs;
+	private StatusMessage m;
+	private static final int MESSAGE_DELAY = 10000;
+	private static final int MESSAGE = 42;
+	private Context c;
+	private PrefUtil prefs;
 
-    public StatusDispatcher(final Context context, PrefUtil p) {
-	c = context.getApplicationContext();
-	prefs = p;
-    }
-
-    /*
-     * Essentially, a Leaky Bucket Widget messages throttled to once every 10
-     * seconds
-     */
-    private Handler messagehandler = new Handler() {
-	@Override
-	public void handleMessage(Message message) {
-	    if (prefs.getFlag(Pref.HASWIDGET_KEY))
-		NotifUtil.broadcastStatNotif(c, m);
+	public StatusDispatcher(final Context context, PrefUtil p) {
+		c = context.getApplicationContext();
+		prefs = p;
 	}
 
-    };
+	/*
+	 * Essentially, a Leaky Bucket Widget messages throttled to once every 10
+	 * seconds
+	 */
+	private Handler messagehandler = new Handler() {
+		@Override
+		public void handleMessage(Message message) {
+			if (prefs.getFlag(Pref.HASWIDGET_KEY))
+				NotifUtil.broadcastStatNotif(c, m);
+		}
 
-    public void clearQueue() {
-	messagehandler.removeMessages(MESSAGE);
-    }
+	};
 
-    public void sendMessage(final Context context, final StatusMessage message) {
-	if (!message.show) {
-	    /*
-	     * Handle notification cancel case
-	     */
-	    NotifUtil.addStatNotif(context, message);
-	    clearQueue();
-	} else {
-	    /*
-	     * Only if not a cancel (i.e. show = false) do we want to display on
-	     * widget
-	     */
-	    m = message;
-	    /*
-	     * Dispatch Status Notification update
-	     */
-	    if (prefs.getFlag(Pref.STATENOT_KEY))
-		NotifUtil.addStatNotif(context, m);
-	    /*
-	     * queue update for widget
-	     */
-
-	    if (!messagehandler.hasMessages(MESSAGE)) {
-		messagehandler.sendEmptyMessage(MESSAGE);
-		messagehandler.sendEmptyMessageDelayed(MESSAGE, MESSAGE_DELAY);
-	    }
+	public void clearQueue() {
+		messagehandler.removeMessages(MESSAGE);
 	}
-    }
+
+	public void sendMessage(final Context context, final StatusMessage message) {
+		if (!message.show) {
+			/*
+			 * Handle notification cancel case
+			 */
+			NotifUtil.addStatNotif(context, message);
+			clearQueue();
+		} else {
+			/*
+			 * Only if not a cancel (i.e. show = false) do we want to display on
+			 * widget
+			 */
+			m = message;
+			/*
+			 * Dispatch Status Notification update
+			 */
+			if (prefs.getFlag(Pref.STATENOT_KEY))
+				NotifUtil.addStatNotif(context, m);
+			/*
+			 * queue update for widget
+			 */
+
+			if (!messagehandler.hasMessages(MESSAGE)) {
+				messagehandler.sendEmptyMessage(MESSAGE);
+				messagehandler.sendEmptyMessageDelayed(MESSAGE, MESSAGE_DELAY);
+			}
+		}
+	}
 }

@@ -23,12 +23,12 @@ import android.content.Context;
 
 public class LegacyScreenState extends VersionedScreenState {
 
-    @Override
-    public boolean vgetScreenState(Context context) {
-	if (PrefUtil.readBoolean(context, WifiFixerService.SCREENOFF))
-	    return false;
-	else
-	    return true;
-    }
+	@Override
+	public boolean vgetScreenState(Context context) {
+		if (PrefUtil.readBoolean(context, WifiFixerService.SCREENOFF))
+			return false;
+		else
+			return true;
+	}
 
 }

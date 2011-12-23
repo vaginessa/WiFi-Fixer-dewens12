@@ -20,11 +20,11 @@ import android.content.Context;
 
 public class API8File extends VersionedFile {
 
-    public File vgetLogFile(Context context, String filename) {
-	/*
-	 * Whee
-	 */
-	return new File(context.getExternalFilesDir(null), filename);
-    }
+	public File vgetLogFile(Context context, String filename) {
+		/*
+		 * Whee
+		 */
+		return new File(context.getExternalFilesDir(null), filename);
+	}
 
 }

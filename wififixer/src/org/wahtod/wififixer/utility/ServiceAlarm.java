@@ -30,83 +30,83 @@ import android.os.SystemClock;
 
 public final class ServiceAlarm extends Object {
 
-    /*
-     * Notifies Service that start intent comes from ServiceAlarm
-     */
-    public static final String ALARM_START = "ALARM_SERVICE_START";
+	/*
+	 * Notifies Service that start intent comes from ServiceAlarm
+	 */
+	public static final String ALARM_START = "ALARM_SERVICE_START";
 
-    public static final String FIRST_RUN = "FIRST_RUN";
+	public static final String FIRST_RUN = "FIRST_RUN";
 
-    public static final long PERIOD = 300000;
-    public static final long STARTDELAY = 30000;
-    private static final long NODELAY = 0;
+	public static final long PERIOD = 300000;
+	public static final long STARTDELAY = 30000;
+	private static final long NODELAY = 0;
 
-    public static boolean alarmExists(final Context c) {
-	return (createPendingIntent(c, PendingIntent.FLAG_NO_CREATE) != null);
-    }
-
-    private static PendingIntent createPendingIntent(final Context context,
-	    final int flag) {
-	Intent intent = new Intent(context, WifiFixerService.class);
-	intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
-	intent.putExtra(ALARM_START, ALARM_START);
-	PendingIntent pendingintent = PendingIntent.getService(context, 0,
-		intent, flag);
-	return pendingintent;
-    }
-
-    /*
-     * Makes sure that if package is updated LogService and WifiFixerService
-     * respect disabled state
-     */
-    public static void enforceServicePrefs(final Context context) {
-	if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
-	    setServiceEnabled(context, WifiFixerService.class, false);
-	else
-	    setServiceEnabled(context, WifiFixerService.class, true);
-
-	if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
-	    setServiceEnabled(context, LogService.class, true);
-	else
-	    setServiceEnabled(context, LogService.class, false);
-
-    }
-
-    public static void setServiceEnabled(final Context context,
-	    final Class<?> cls, final Boolean state) {
-	PackageManager pm = context.getPackageManager();
-	ComponentName service = new ComponentName(context, cls);
-	if (state)
-	    pm.setComponentEnabledSetting(service,
-		    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-		    PackageManager.DONT_KILL_APP);
-	else {
-	    pm.setComponentEnabledSetting(service,
-		    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-		    PackageManager.DONT_KILL_APP);
-	    context.stopService(new Intent(context, cls));
+	public static boolean alarmExists(final Context c) {
+		return (createPendingIntent(c, PendingIntent.FLAG_NO_CREATE) != null);
 	}
-    }
 
-    public static void setAlarm(final Context c, final boolean initialdelay) {
-	Long delay;
+	private static PendingIntent createPendingIntent(final Context context,
+			final int flag) {
+		Intent intent = new Intent(context, WifiFixerService.class);
+		intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
+		intent.putExtra(ALARM_START, ALARM_START);
+		PendingIntent pendingintent = PendingIntent.getService(context, 0,
+				intent, flag);
+		return pendingintent;
+	}
 
-	if (initialdelay)
-	    delay = PERIOD;
-	else
-	    delay = NODELAY;
+	/*
+	 * Makes sure that if package is updated LogService and WifiFixerService
+	 * respect disabled state
+	 */
+	public static void enforceServicePrefs(final Context context) {
+		if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
+			setServiceEnabled(context, WifiFixerService.class, false);
+		else
+			setServiceEnabled(context, WifiFixerService.class, true);
 
-	AlarmManager mgr = (AlarmManager) c
-		.getSystemService(Context.ALARM_SERVICE);
+		if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
+			setServiceEnabled(context, LogService.class, true);
+		else
+			setServiceEnabled(context, LogService.class, false);
 
-	mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock
-		.elapsedRealtime()
-		+ delay, PERIOD, createPendingIntent(c, 0));
-    }
+	}
 
-    public static void unsetAlarm(final Context c) {
-	AlarmManager mgr = (AlarmManager) c
-		.getSystemService(Context.ALARM_SERVICE);
-	mgr.cancel(createPendingIntent(c, 0));
-    }
+	public static void setServiceEnabled(final Context context,
+			final Class<?> cls, final Boolean state) {
+		PackageManager pm = context.getPackageManager();
+		ComponentName service = new ComponentName(context, cls);
+		if (state)
+			pm.setComponentEnabledSetting(service,
+					PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+					PackageManager.DONT_KILL_APP);
+		else {
+			pm.setComponentEnabledSetting(service,
+					PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+					PackageManager.DONT_KILL_APP);
+			context.stopService(new Intent(context, cls));
+		}
+	}
+
+	public static void setAlarm(final Context c, final boolean initialdelay) {
+		Long delay;
+
+		if (initialdelay)
+			delay = PERIOD;
+		else
+			delay = NODELAY;
+
+		AlarmManager mgr = (AlarmManager) c
+				.getSystemService(Context.ALARM_SERVICE);
+
+		mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+				SystemClock.elapsedRealtime() + delay, PERIOD,
+				createPendingIntent(c, 0));
+	}
+
+	public static void unsetAlarm(final Context c) {
+		AlarmManager mgr = (AlarmManager) c
+				.getSystemService(Context.ALARM_SERVICE);
+		mgr.cancel(createPendingIntent(c, 0));
+	}
 }

@@ -66,8 +66,8 @@ public class HoneyCombNotifUtil extends NotifUtil {
 				R.layout.statnotif);
 		drawWifiToggle(ctxt, update);
 		NotifUtil.statnotif.iconLevel = signal;
-		update.setImageViewResource(R.id.signal, getIconfromSignal(signal,
-				NotifUtil.ICON_SET_LARGE));
+		update.setImageViewResource(R.id.signal,
+				getIconfromSignal(signal, NotifUtil.ICON_SET_LARGE));
 		update.setTextViewText(R.id.ssid, truncateSSID(ssid));
 		update.setTextViewText(R.id.status, status);
 		NotifUtil.statnotif.contentView = update;
@@ -104,7 +104,7 @@ public class HoneyCombNotifUtil extends NotifUtil {
 		}
 		RemoteViews update = new RemoteViews(ctxt.getPackageName(),
 				R.layout.lognotif);
-		
+
 		update.setTextViewText(R.id.status, getLogString(ctxt).toString());
 		lognotif.contentView = update;
 
@@ -147,8 +147,8 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	public void vsetStatNotifWifiState(Context ctxt, boolean wifistate) {
 		mWifiState = wifistate;
 	}
-	
-	private static void drawWifiToggle(final Context ctxt, RemoteViews notif){
+
+	private static void drawWifiToggle(final Context ctxt, RemoteViews notif) {
 		/*
 		 * Draw wifi toggle icon and set pendingintent
 		 */
@@ -158,12 +158,12 @@ public class HoneyCombNotifUtil extends NotifUtil {
 			pendingIntent = PendingIntent.getBroadcast(ctxt
 					.getApplicationContext(), 0, new Intent(
 					IntentConstants.ACTION_WIFI_OFF), 0);
-			i=R.drawable.wifi_on;
+			i = R.drawable.wifi_on;
 		} else {
 			pendingIntent = PendingIntent.getBroadcast(ctxt
 					.getApplicationContext(), 0, new Intent(
 					IntentConstants.ACTION_WIFI_ON), 0);
-			i=R.drawable.wifi_off;
+			i = R.drawable.wifi_off;
 		}
 		notif.setOnClickPendingIntent(R.id.wifitoggle, pendingIntent);
 		notif.setImageViewResource(R.id.wifitoggle, i);

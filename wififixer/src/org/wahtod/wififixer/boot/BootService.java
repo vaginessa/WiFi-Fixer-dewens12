@@ -25,46 +25,46 @@ import android.content.Intent;
 import android.os.IBinder;
 
 public class BootService extends Service {
-    private Context ctxt;
-    private BootService bootservice;
+	private Context ctxt;
+	private BootService bootservice;
 
-    /*
-     * Runnable for boot service start
-     */
-    private class TStartService implements Runnable {
-	@Override
-	public void run() {
-	    try {
-		Thread.sleep(ServiceAlarm.STARTDELAY);
-	    } catch (InterruptedException e) {
-		/*
-		 * Doesn't happen
-		 */
-	    }
-
-	    /**
-	     * Start Service
-	     */
-	    ctxt.startService(new Intent(ctxt, WifiFixerService.class));
-	    bootservice.stopSelf();
-	}
-    };
-
-    @Override
-    public void onCreate() {
-	bootservice = this;
-	ctxt = this;
-	Thread serviceStart = new Thread(new TStartService());
-	serviceStart.start();
-	super.onCreate();
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
 	/*
-	 * Mandatory override
+	 * Runnable for boot service start
 	 */
-	return null;
-    }
+	private class TStartService implements Runnable {
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(ServiceAlarm.STARTDELAY);
+			} catch (InterruptedException e) {
+				/*
+				 * Doesn't happen
+				 */
+			}
+
+			/**
+			 * Start Service
+			 */
+			ctxt.startService(new Intent(ctxt, WifiFixerService.class));
+			bootservice.stopSelf();
+		}
+	};
+
+	@Override
+	public void onCreate() {
+		bootservice = this;
+		ctxt = this;
+		Thread serviceStart = new Thread(new TStartService());
+		serviceStart.start();
+		super.onCreate();
+	}
+
+	@Override
+	public IBinder onBind(Intent intent) {
+		/*
+		 * Mandatory override
+		 */
+		return null;
+	}
 
 }

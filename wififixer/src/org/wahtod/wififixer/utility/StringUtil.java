@@ -16,35 +16,33 @@
 
 package org.wahtod.wififixer.utility;
 
-
 public class StringUtil {
-    
-    
-    public static final String EMPTYSTRING = "";
-    public static final String WPA = "WPA";
+
+	public static final String EMPTYSTRING = "";
+	public static final String WPA = "WPA";
 	public static final String WPA2 = "WPA2";
 	public static final String WEP = "WEP";
 	public static final String OPEN = "OPEN";
 	public static final CharSequence ESS = "ESS";
 
-    public static String addQuotes(String s) {
-	return "\"" + s + "\"";
-    }
-    
-    public static String removeQuotes(String ssid) {
-	if (ssid == null)
-	    return EMPTYSTRING;
-	else if (!ssid.endsWith("\""))
-	    return ssid;
-	try {
-	    ssid = (String) ssid.subSequence(1, ssid.length() - 1);
-	} catch (IndexOutOfBoundsException e) {
-	    return EMPTYSTRING;
+	public static String addQuotes(String s) {
+		return "\"" + s + "\"";
 	}
-	return ssid;
-    }
-    
-    public static String getCapabilitiesString(final String capabilities) {
+
+	public static String removeQuotes(String ssid) {
+		if (ssid == null)
+			return EMPTYSTRING;
+		else if (!ssid.endsWith("\""))
+			return ssid;
+		try {
+			ssid = (String) ssid.subSequence(1, ssid.length() - 1);
+		} catch (IndexOutOfBoundsException e) {
+			return EMPTYSTRING;
+		}
+		return ssid;
+	}
+
+	public static String getCapabilitiesString(final String capabilities) {
 		if (capabilities.length() == 0)
 			return OPEN;
 		else if (capabilities.contains(WEP))

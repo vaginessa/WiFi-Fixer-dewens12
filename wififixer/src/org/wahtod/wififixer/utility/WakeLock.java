@@ -20,44 +20,44 @@ import android.content.Context;
 import android.os.PowerManager;
 
 public class WakeLock {
-    private static PowerManager.WakeLock wakelock;
-    private static final String WAKELOCK_NAME = "WFWAKELOCK";
+	private static PowerManager.WakeLock wakelock;
+	private static final String WAKELOCK_NAME = "WFWAKELOCK";
 
-    public WakeLock(final Context context) {
-	PowerManager pm = (PowerManager) context
-		.getSystemService(Context.POWER_SERVICE);
-	/*
-	 * We want PowerManager.PARTIAL_WAKE_LOCK because we don't want to
-	 * change screen state, we just want to rev up the CPU so the wifi
-	 * commands work right
-	 */
-	wakelock = pm
-		.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_NAME);
-    }
-
-    public void lock(final boolean state) {
-	if (state && !wakelock.isHeld()) {
-	    wakelock.acquire();
-	    onAcquire();
-
-	} else if (wakelock.isHeld()) {
-	    wakelock.release();
-	    onRelease();
+	public WakeLock(final Context context) {
+		PowerManager pm = (PowerManager) context
+				.getSystemService(Context.POWER_SERVICE);
+		/*
+		 * We want PowerManager.PARTIAL_WAKE_LOCK because we don't want to
+		 * change screen state, we just want to rev up the CPU so the wifi
+		 * commands work right
+		 */
+		wakelock = pm
+				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_NAME);
 	}
-    }
 
-    public void onRelease() {
-	/*
-	 * Override
-	 */
+	public void lock(final boolean state) {
+		if (state && !wakelock.isHeld()) {
+			wakelock.acquire();
+			onAcquire();
 
-    }
+		} else if (wakelock.isHeld()) {
+			wakelock.release();
+			onRelease();
+		}
+	}
 
-    public void onAcquire() {
-	/*
-	 * Override
-	 */
+	public void onRelease() {
+		/*
+		 * Override
+		 */
 
-    }
+	}
+
+	public void onAcquire() {
+		/*
+		 * Override
+		 */
+
+	}
 
 }

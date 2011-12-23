@@ -26,17 +26,17 @@ import android.view.MenuItem;
 
 public class PrefActivityHC extends PreferenceActivity {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-	ActionBarDetector.handleHome(this, item);
-	return super.onOptionsItemSelected(item);
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		ActionBarDetector.handleHome(this, item);
+		return super.onOptionsItemSelected(item);
+	}
 
-    @Override
-    public void onBuildHeaders(List<Header> target) {
-	loadHeadersFromResource(R.xml.preference_headers, target);
-	ActionBarDetector.setUp(this, true,
-			getString(R.string.preferences_activity_title));
-	super.onBuildHeaders(target);
-    }
+	@Override
+	public void onBuildHeaders(List<Header> target) {
+		loadHeadersFromResource(R.xml.preference_headers, target);
+		ActionBarDetector.setUp(this, true,
+				getString(R.string.preferences_activity_title));
+		super.onBuildHeaders(target);
+	}
 }

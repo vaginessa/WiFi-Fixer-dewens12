@@ -24,27 +24,26 @@ import android.content.Context;
 import android.content.Intent;
 
 public class BootReceiver extends BroadcastReceiver {
-    /*
-     * The idea here is that we want something lightweight to run at
-     * BOOT_COMPLETED, so a minimal BroadcastReceiver implementation.
-     * 
-     * Because of BroadcastReceiver lifecycle, a thread started from it
-     * will be GCed. So we're starting a minimal service,
-     * BootService, which runs a wait thread which launches
-     * WifiFixerService after 30 seconds
-     * 
-     * @see android.content.BroadcastReceiver#onReceive(android.content.Context,
-     * android.content.Intent)
-     */
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
 	/*
-	 * For boot completed, check DISABLE_KEY if false, start the service
-	 * loader run
+	 * The idea here is that we want something lightweight to run at
+	 * BOOT_COMPLETED, so a minimal BroadcastReceiver implementation.
+	 * 
+	 * Because of BroadcastReceiver lifecycle, a thread started from it will be
+	 * GCed. So we're starting a minimal service, BootService, which runs a wait
+	 * thread which launches WifiFixerService after 30 seconds
+	 * 
+	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context,
+	 * android.content.Intent)
 	 */
-	if (!PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key())) {
-	    context.startService(new Intent(context, BootService.class));
+
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		/*
+		 * For boot completed, check DISABLE_KEY if false, start the service
+		 * loader run
+		 */
+		if (!PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key())) {
+			context.startService(new Intent(context, BootService.class));
+		}
 	}
-    }
 }

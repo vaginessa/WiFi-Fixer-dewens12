@@ -20,14 +20,14 @@ import android.content.Context;
 import android.os.Environment;
 
 public class LegacyFile extends VersionedFile {
-    @Override
-    public File vgetLogFile(Context context, String filename) {
-    	File root = Environment.getExternalStorageDirectory();
-	File file = new File(root, filename);
-	if (!file.exists()) {
-	    file.mkdirs();
+	@Override
+	public File vgetLogFile(Context context, String filename) {
+		File root = Environment.getExternalStorageDirectory();
+		File file = new File(root, filename);
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		return file;
 	}
-	return file;
-    }
 
 }

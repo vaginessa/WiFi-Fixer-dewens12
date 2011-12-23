@@ -21,13 +21,13 @@ import android.content.Context;
 import android.content.Intent;
 
 public class WidgetReceiver extends BroadcastReceiver {
-    WidgetHandler widgethandler;
+	WidgetHandler widgethandler;
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-	if (widgethandler == null)
-	    widgethandler = new WidgetHandler(context);
-	widgethandler.handleIntent(context, intent);
-    }
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		if (widgethandler == null)
+			widgethandler = new WidgetHandler(context);
+		widgethandler.handleIntent(context, intent);
+	}
 
 }

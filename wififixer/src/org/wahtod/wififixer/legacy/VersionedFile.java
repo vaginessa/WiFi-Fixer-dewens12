@@ -20,18 +20,21 @@ import android.content.Context;
 import android.os.Build;
 
 public abstract class VersionedFile {
-    private static VersionedFile selector;
-    public abstract File vgetLogFile(final Context context, final String filename);
-    public static File getFile(final Context context, final String filename) {
-	/*
-	 * Instantiate appropriate VersionedLogFile
-	 */
-	if (selector == null) {
-	    if (Build.VERSION.SDK_INT < 8) {
-		selector = new LegacyFile();
-	    } else
-		selector = new API8File();
+	private static VersionedFile selector;
+
+	public abstract File vgetLogFile(final Context context,
+			final String filename);
+
+	public static File getFile(final Context context, final String filename) {
+		/*
+		 * Instantiate appropriate VersionedLogFile
+		 */
+		if (selector == null) {
+			if (Build.VERSION.SDK_INT < 8) {
+				selector = new LegacyFile();
+			} else
+				selector = new API8File();
+		}
+		return selector.vgetLogFile(context, filename);
 	}
-	return selector.vgetLogFile(context, filename);
-    }
 }

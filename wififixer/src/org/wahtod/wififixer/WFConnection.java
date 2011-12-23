@@ -960,10 +960,13 @@ public class WFConnection extends Object implements
 		try {
 			NetworkInfo ni = cm.getActiveNetworkInfo();
 			if (ni.isConnectedOrConnecting())
-				if (ni.getType() == ConnectivityManager.TYPE_WIFI)
+				if (ni.getType() == ConnectivityManager.TYPE_WIFI
+						&& !(ni.getState() == NetworkInfo.State.CONNECTING))
 					return true;
 		} catch (NullPointerException e) {
-			return false;
+			/*
+			 * Need this catch because NetworkInfo can return null
+			 */
 		}
 
 		return false;

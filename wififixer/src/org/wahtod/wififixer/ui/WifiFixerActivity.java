@@ -254,13 +254,14 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 					DefaultExceptionHandler.EXCEPTIONS_FILENAME);
 			if (!file.exists()) {
 				Toast.makeText(WifiFixerActivity.this,
-						R.string.logfile_delete_err_toast, Toast.LENGTH_LONG).show();
+						R.string.logfile_delete_err_toast, Toast.LENGTH_LONG)
+						.show();
 				return;
 			}
 		}
-		
+
 		final String fileuri = file.toURI().toString();
-		
+
 		AlertDialog dialog = new AlertDialog.Builder(this).create();
 
 		dialog.setTitle(getString(R.string.send_log));
@@ -698,16 +699,15 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	@Override
 	public void onPageScrollStateChanged(int arg0) {
 		/*
-		 * Don't need this
+		 * Part of the interface, unneeded
 		 */
 	}
 
 	@Override
 	public void onPageScrolled(int arg0, float arg1, int arg2) {
 		/*
-		 * Don't need this
+		 * Part of the interface, unneeded
 		 */
-
 	}
 
 	private static void setTitleFromFragment(TutorialFragmentActivity a,

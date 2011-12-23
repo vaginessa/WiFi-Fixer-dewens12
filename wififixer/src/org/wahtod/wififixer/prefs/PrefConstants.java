@@ -22,78 +22,79 @@ import java.util.Map;
 
 public class PrefConstants {
 
-    /*
-     * Constants for non-UI-tracked preferences
-     */
+	/*
+	 * Constants for non-UI-tracked preferences
+	 */
 
-    public static final String SLPOLICY_DEFAULT = "SLPDEF";
-    public static final String STATNOTIF_DEFAULT = "STATNOTIFD";
-    public static final String SLPOLICY_KEY = "SLEEP_POLICY";
-    public static final String PERF_KEY = "Perf_Mode";
-    public static final String WIDGET_KEY = "WIDGET";
-    public static final String WIFI_STATE_LOCK = "WFSTATELOCK";
-    public static final String LOGGING_MENU = "Logging";
-    public static final String HAS_WIDGET = "HASWIDGET";
-    public static final String TUTORIAL = "TUTORIAL";
+	public static final String SLPOLICY_DEFAULT = "SLPDEF";
+	public static final String STATNOTIF_DEFAULT = "STATNOTIFD";
+	public static final String SLPOLICY_KEY = "SLEEP_POLICY";
+	public static final String PERF_KEY = "Perf_Mode";
+	public static final String WIDGET_KEY = "WIDGET";
+	public static final String WIFI_STATE_LOCK = "WFSTATELOCK";
+	public static final String LOGGING_MENU = "Logging";
+	public static final String HAS_WIDGET = "HASWIDGET";
+	public static final String TUTORIAL = "TUTORIAL";
 
-    /*
-     * PrefsList enum
-     */
+	/*
+	 * PrefsList enum
+	 */
 
-    public static enum Pref {
-	WIFILOCK_KEY("WiFiLock"), NOTIF_KEY("Notifications"), DISABLE_KEY(
-		"Disable"), LOG_KEY("SLOG"), N1FIX2_KEY(
-		"N1FIX2"), SCREEN_KEY("SCREEN"), STATENOT_KEY(
-		"StateNotif"), HASWIDGET_KEY("HASWIDGET");
+	public static enum Pref {
+		WIFILOCK_KEY("WiFiLock"), NOTIF_KEY("Notifications"), DISABLE_KEY(
+				"Disable"), LOG_KEY("SLOG"), N1FIX2_KEY("N1FIX2"), SCREEN_KEY(
+				"SCREEN"), STATENOT_KEY("StateNotif"), HASWIDGET_KEY(
+				"HASWIDGET");
 
-	private final String key;
-	private static final Map<String, Pref> lookup = new HashMap<String, Pref>();
+		private final String key;
+		private static final Map<String, Pref> lookup = new HashMap<String, Pref>();
 
-	static {
-	    for (Pref p : EnumSet.allOf(Pref.class))
-		lookup.put(p.key(), p);
+		static {
+			for (Pref p : EnumSet.allOf(Pref.class))
+				lookup.put(p.key(), p);
+		}
+
+		Pref(String key) {
+			this.key = key;
+		}
+
+		public String key() {
+			return key;
+		}
+
+		public static Pref get(final String pstring) {
+
+			return lookup.get(pstring);
+		}
+
 	}
 
-	Pref(String key) {
-	    this.key = key;
+	public static final int NUMNETPREFS = 2;
+
+	public static enum NetPref {
+		DISABLED_KEY("ENABLEDSTATE"), NONMANAGED_KEY("NONMANAGED");
+
+		private final String key;
+		private static final Map<String, NetPref> lookup = new HashMap<String, NetPref>();
+
+		static {
+			for (NetPref p : EnumSet.allOf(NetPref.class))
+				lookup.put(p.key(), p);
+		}
+
+		NetPref(String key) {
+			this.key = key;
+		}
+
+		public String key() {
+			return key;
+		}
+
+		public static NetPref get(final String pstring) {
+
+			return lookup.get(pstring);
+		}
+
 	}
-
-	public String key() {
-	    return key;
-	}
-
-	public static Pref get(final String pstring) {
-
-	    return lookup.get(pstring);
-	}
-
-    }
-
-    public static final int NUMNETPREFS = 2;
-    public static enum NetPref {
-	DISABLED_KEY("ENABLEDSTATE"), NONMANAGED_KEY("NONMANAGED");
-
-	private final String key;
-	private static final Map<String, NetPref> lookup = new HashMap<String, NetPref>();
-
-	static {
-	    for (NetPref p : EnumSet.allOf(NetPref.class))
-		lookup.put(p.key(), p);
-	}
-
-	NetPref(String key) {
-	    this.key = key;
-	}
-
-	public String key() {
-	    return key;
-	}
-
-	public static NetPref get(final String pstring) {
-
-	    return lookup.get(pstring);
-	}
-
-    }
 
 }

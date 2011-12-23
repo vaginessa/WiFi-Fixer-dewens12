@@ -20,41 +20,41 @@ import android.content.Context;
 import android.net.wifi.WifiManager;
 
 public class WifiLock {
-    static WifiManager.WifiLock wifilock;
-    private static final String WIFILOCK_TAG = "WFWIFILOCK";
+	static WifiManager.WifiLock wifilock;
+	private static final String WIFILOCK_TAG = "WFWIFILOCK";
 
-    public WifiLock(final Context context) {
-	WifiManager wm = (WifiManager) context
-		.getSystemService(Context.WIFI_SERVICE);
-	/*
-	 * We want WifiManager.WIFI_MODE_FULL as we're not just scanning
-	 */
-	wifilock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, WIFILOCK_TAG);
-    }
-
-    public void lock(final boolean state) {
-	if (state && !wifilock.isHeld()) {
-	    wifilock.acquire();
-	    onAcquire();
-
-	} else if (wifilock.isHeld()) {
-	    wifilock.release();
-	    onRelease();
+	public WifiLock(final Context context) {
+		WifiManager wm = (WifiManager) context
+				.getSystemService(Context.WIFI_SERVICE);
+		/*
+		 * We want WifiManager.WIFI_MODE_FULL as we're not just scanning
+		 */
+		wifilock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, WIFILOCK_TAG);
 	}
-    }
 
-    public void onRelease() {
-	/*
-	 * Override
-	 */
+	public void lock(final boolean state) {
+		if (state && !wifilock.isHeld()) {
+			wifilock.acquire();
+			onAcquire();
 
-    }
+		} else if (wifilock.isHeld()) {
+			wifilock.release();
+			onRelease();
+		}
+	}
 
-    public void onAcquire() {
-	/*
-	 * Override
-	 */
+	public void onRelease() {
+		/*
+		 * Override
+		 */
 
-    }
+	}
+
+	public void onAcquire() {
+		/*
+		 * Override
+		 */
+
+	}
 
 }

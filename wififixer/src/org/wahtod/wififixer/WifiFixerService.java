@@ -298,8 +298,8 @@ public class WifiFixerService extends Service implements
 							.getString(R.string.loading_settings));
 					for (Pref prefkey : Pref.values()) {
 						if (getFlag(prefkey))
-							LogService.log(getBaseContext(), APP_NAME, prefkey
-									.key());
+							LogService.log(getBaseContext(), APP_NAME,
+									prefkey.key());
 					}
 
 				}

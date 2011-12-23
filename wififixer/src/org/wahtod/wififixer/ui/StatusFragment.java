@@ -33,100 +33,100 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 public class StatusFragment extends Fragment {
-    protected static final int REFRESH = 0;
-    protected static final int REFRESH_DELAY = 5000;
-    private static final String EMPTYSTRING = "";
+	protected static final int REFRESH = 0;
+	protected static final int REFRESH_DELAY = 5000;
+	private static final String EMPTYSTRING = "";
 
-    private Handler drawhandler = new Handler() {
+	private Handler drawhandler = new Handler() {
+		@Override
+		public void handleMessage(Message message) {
+			/*
+			 * handle SCAN_RESULTS_AVAILABLE intents to refresh ListView
+			 * asynchronously (to avoid ANR)
+			 */
+			switch (message.what) {
+			case REFRESH:
+				if (getActivity() != null)
+					refresh();
+				break;
+
+			}
+		}
+	};
+
 	@Override
-	public void handleMessage(Message message) {
-	    /*
-	     * handle SCAN_RESULTS_AVAILABLE intents to refresh ListView
-	     * asynchronously (to avoid ANR)
-	     */
-	    switch (message.what) {
-	    case REFRESH:
-		if (getActivity() != null)
-		    refresh();
-		break;
-
-	    }
-	}
-    };
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	    Bundle savedInstanceState) {
-	View v = inflater.inflate(R.layout.status, null);
-	return v;
-    }
-
-    @Override
-    public void onPause() {
-	drawhandler.removeMessages(REFRESH);
-	super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-	super.onResume();
-	drawhandler.sendEmptyMessage(REFRESH);
-    }
-
-    public static StatusFragment newInstance(int num) {
-	StatusFragment f = new StatusFragment();
-
-	// Supply num input as an argument.
-	Bundle args = new Bundle();
-	args.putInt("num", num);
-	f.setArguments(args);
-
-	return f;
-    }
-
-    private Context getContext() {
-	return getActivity().getApplicationContext();
-    }
-
-    /*
-     * Note that this WILL return a null String[] if called while wifi is off.
-     */
-    private static WifiInfo getNetwork(final Context context) {
-	WifiManager wm = (WifiManager) context
-		.getSystemService(Context.WIFI_SERVICE);
-	if (wm.isWifiEnabled()) {
-	    return wm.getConnectionInfo();
-	} else
-	    return null;
-    }
-
-    private void refresh() {
-
-	WifiInfo info = getNetwork(getContext());
-	TextView ssid = (TextView) getView().findViewById(R.id.SSID);
-	TextView dbm = (TextView) getView().findViewById(R.id.signal);
-	TextView capabilities = (TextView) getView().findViewById(
-		R.id.capabilities);
-	TextView status = (TextView) getView().findViewById(R.id.status);
-	FrameLayout signal = (FrameLayout) getView().findViewById(
-		R.id.signal_status_fragment);
-
-	if (info == null) {
-	    ssid.setText(getContext().getString(R.string.wifi_is_disabled));
-	    dbm.setText(EMPTYSTRING);
-	    capabilities.setText(EMPTYSTRING);
-	    status.setText(EMPTYSTRING);
-	    signal.setBackgroundResource(R.drawable.signal0);
-	} else {
-	    ssid.setText(info.getSSID());
-	    dbm.setText(String.valueOf(info.getRssi()));
-	    capabilities.setText(String.valueOf(info.getLinkSpeed()));
-	    status.setText(info.getSupplicantState().name());
-	    signal.setBackgroundResource(NotifUtil.getIconfromSignal(
-		    WifiManager.calculateSignalLevel(info.getRssi(), 5),
-		    NotifUtil.ICON_SET_LARGE));
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.status, null);
+		return v;
 	}
 
-	drawhandler.sendEmptyMessageDelayed(REFRESH, REFRESH_DELAY);
-    }
+	@Override
+	public void onPause() {
+		drawhandler.removeMessages(REFRESH);
+		super.onPause();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		drawhandler.sendEmptyMessage(REFRESH);
+	}
+
+	public static StatusFragment newInstance(int num) {
+		StatusFragment f = new StatusFragment();
+
+		// Supply num input as an argument.
+		Bundle args = new Bundle();
+		args.putInt("num", num);
+		f.setArguments(args);
+
+		return f;
+	}
+
+	private Context getContext() {
+		return getActivity().getApplicationContext();
+	}
+
+	/*
+	 * Note that this WILL return a null String[] if called while wifi is off.
+	 */
+	private static WifiInfo getNetwork(final Context context) {
+		WifiManager wm = (WifiManager) context
+				.getSystemService(Context.WIFI_SERVICE);
+		if (wm.isWifiEnabled()) {
+			return wm.getConnectionInfo();
+		} else
+			return null;
+	}
+
+	private void refresh() {
+
+		WifiInfo info = getNetwork(getContext());
+		TextView ssid = (TextView) getView().findViewById(R.id.SSID);
+		TextView dbm = (TextView) getView().findViewById(R.id.signal);
+		TextView capabilities = (TextView) getView().findViewById(
+				R.id.capabilities);
+		TextView status = (TextView) getView().findViewById(R.id.status);
+		FrameLayout signal = (FrameLayout) getView().findViewById(
+				R.id.signal_status_fragment);
+
+		if (info == null) {
+			ssid.setText(getContext().getString(R.string.wifi_is_disabled));
+			dbm.setText(EMPTYSTRING);
+			capabilities.setText(EMPTYSTRING);
+			status.setText(EMPTYSTRING);
+			signal.setBackgroundResource(R.drawable.signal0);
+		} else {
+			ssid.setText(info.getSSID());
+			dbm.setText(String.valueOf(info.getRssi()));
+			capabilities.setText(String.valueOf(info.getLinkSpeed()));
+			status.setText(info.getSupplicantState().name());
+			signal.setBackgroundResource(NotifUtil.getIconfromSignal(
+					WifiManager.calculateSignalLevel(info.getRssi(), 5),
+					NotifUtil.ICON_SET_LARGE));
+		}
+
+		drawhandler.sendEmptyMessageDelayed(REFRESH, REFRESH_DELAY);
+	}
 }
