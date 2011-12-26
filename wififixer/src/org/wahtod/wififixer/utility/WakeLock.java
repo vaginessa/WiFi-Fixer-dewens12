@@ -20,7 +20,7 @@ import android.content.Context;
 import android.os.PowerManager;
 
 public class WakeLock {
-	private static PowerManager.WakeLock wakelock;
+	private PowerManager.WakeLock wakelock;
 	private static final String WAKELOCK_NAME = "WFWAKELOCK";
 
 	public WakeLock(final Context context) {
