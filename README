@@ -9,7 +9,7 @@ This source code is Apache 2 licensed:
 http://www.apache.org/licenses/LICENSE-2.0
 
 <Project>
-Purely functional set of heuristic workarounds for Android wifi. 
+Functional set of heuristics and workarounds for Android wifi. 
 Designed to use as few resources on the user's device as possible. 
 
 <Developers>
