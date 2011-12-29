@@ -127,7 +127,7 @@ public class WFConnection extends Object implements
 
 	// Last Scan
 	private static long lastscan_time;
-	private static final int SCAN_WATCHDOG_DELAY = 10000;
+	private static final int SCAN_WATCHDOG_DELAY = 5000;
 	private static final int NORMAL_SCAN_DELAY = 15000;
 
 	// for Dbm
@@ -140,7 +140,7 @@ public class WFConnection extends Object implements
 	private static WFConfig connectee;
 	private static Hostup hostup;
 	private static List<WFConfig> knownbysignal;
-	private static String lastSupplicantState;
+	private static SupplicantState lastSupplicantState;
 	private static int signalcache;
 	private static boolean wifistate;
 
@@ -272,7 +272,7 @@ public class WFConnection extends Object implements
 				pendingreconnect = false;
 			} else {
 				wifirepair = W_REASSOCIATE;
-				startScan(true);
+				requestScan();
 				if (prefs.getFlag(Pref.LOG_KEY))
 					LogService
 							.log(ctxt,
@@ -401,7 +401,7 @@ public class WFConnection extends Object implements
 				// Start Scan
 				tempLock(SHORTWAIT);
 				getWifiManager(ctxt).disconnect();
-				startScan(true);
+				requestScan();
 				/*
 				 * Reset state
 				 */
@@ -503,10 +503,9 @@ public class WFConnection extends Object implements
 	 */
 	private Runnable rUpdateStatus = new Runnable() {
 		public void run() {
-			notifStatus = getSupplicantStateString();
-
+			notifStatus = getSupplicantStateString(lastSupplicantState);
 			/*
-			 * Indicate managed status by changing ssid text color
+			 * Indicate managed status by text
 			 */
 			boolean should = shouldManage(ctxt);
 			if (!should)
@@ -555,6 +554,10 @@ public class WFConnection extends Object implements
 		 */
 		lastAP = getNetworkID();
 
+		/*
+		 * Set current supplicant state
+		 */
+		lastSupplicantState = getSupplicantState();
 		/*
 		 * Set current wifi radio state
 		 */
@@ -1140,8 +1143,7 @@ public class WFConnection extends Object implements
 		return getWifiManager(ctxt).getConnectionInfo().getSupplicantState();
 	}
 
-	private static String getSupplicantStateString() {
-		SupplicantState sstate = getSupplicantState();
+	private static String getSupplicantStateString(final SupplicantState sstate) {
 		if (sstate.equals(SupplicantState.COMPLETED))
 			return CONNECTED;
 		else if (sstate.equals(SupplicantState.DORMANT))
@@ -1329,10 +1331,9 @@ public class WFConnection extends Object implements
 			}
 		} else {
 			/*
-			 * Directly start scan, we know we're disconnected.
+			 * start scan, we know we're disconnected.
 			 */
-			startScan(true);
-			pendingscan = true;
+			requestScan();
 		}
 	}
 
@@ -1423,7 +1424,8 @@ public class WFConnection extends Object implements
 		/*
 		 * Get Supplicant New State but first make sure it's new
 		 */
-		String sState = getSupplicantStateString();
+		SupplicantState sState = data
+				.getParcelable(WifiManager.EXTRA_NEW_STATE);
 		if (sState.equals(lastSupplicantState))
 			return;
 		lastSupplicantState = sState;
@@ -1441,7 +1443,7 @@ public class WFConnection extends Object implements
 				notifStatus = CONNECTED;
 				notifSSID = getSSID();
 			} else if (!getIsOnWifi(ctxt))
-				clearConnectedStatus(sState);
+				clearConnectedStatus(sState.name());
 
 			statusdispatcher.sendMessage(ctxt, new StatusMessage(notifSSID,
 					notifStatus, notifSignal, true));
@@ -1486,7 +1488,7 @@ public class WFConnection extends Object implements
 		/*
 		 * The actual meat of the supplicant fixes
 		 */
-		handleSupplicantState(sState);
+		handleSupplicantState(sState.name());
 
 	}
 
@@ -1501,7 +1503,7 @@ public class WFConnection extends Object implements
 		} else if (!screenstate && !prefs.getFlag(Pref.SCREEN_KEY))
 			return;
 		else if (sState == DISCONNECTED) {
-			startScan(true);
+			requestScan();
 			notifyWrap(ctxt, sState);
 		} else if (sState == INVALID) {
 			supplicantFix();
@@ -1695,6 +1697,10 @@ public class WFConnection extends Object implements
 		return state;
 	}
 
+	private void requestScan() {
+		handlerWrapper(SCAN);
+	}
+
 	private static boolean scancontainsBSSID(final String bssid,
 			final List<ScanResult> results) {
 		for (ScanResult sResult : results) {
@@ -1707,7 +1713,7 @@ public class WFConnection extends Object implements
 	public void scanwatchdog() {
 		if (getWifiManager(ctxt).isWifiEnabled()
 				&& !getIsOnWifi(ctxt)
-				&& lastscan_time < (SystemClock.elapsedRealtime() - SCAN_WATCHDOG_DELAY)) {
+				&& lastscan_time > (SystemClock.elapsedRealtime() - SCAN_WATCHDOG_DELAY)) {
 			/*
 			 * Reset Wifi, scan didn't succeed.
 			 */
@@ -1736,7 +1742,7 @@ public class WFConnection extends Object implements
 
 	protected void setStatNotif(final boolean state) {
 		if (state) {
-			notifStatus = getSupplicantStateString();
+			notifStatus = getSupplicantStateString(lastSupplicantState);
 			notifSSID = getSSID();
 			statusdispatcher.sendMessage(ctxt, new StatusMessage(notifSSID,
 					notifStatus, notifSignal, true));
@@ -1832,11 +1838,7 @@ public class WFConnection extends Object implements
 
 	}
 
-	private void startScan(final boolean pending) {
-
-		if (!supplicantInterruptCheck(ctxt))
-			return;
-
+	public void startScan(final boolean pending) {
 		pendingscan = pending;
 		// We want a wakelock during scan, broadcastreceiver for results
 		// gets its own wake lock
@@ -1873,12 +1875,11 @@ public class WFConnection extends Object implements
 		/*
 		 * First, make sure this won't interrupt anything
 		 */
-		if (sstate == SupplicantState.SCANNING
-				|| sstate == SupplicantState.ASSOCIATING
-				|| sstate == SupplicantState.ASSOCIATED
-				|| sstate == SupplicantState.COMPLETED
-				|| sstate == SupplicantState.GROUP_HANDSHAKE
-				|| sstate == SupplicantState.FOUR_WAY_HANDSHAKE)
+		if (sstate.equals(SupplicantState.ASSOCIATING)
+				|| sstate.equals(SupplicantState.ASSOCIATED)
+				|| sstate.equals(SupplicantState.COMPLETED)
+				|| sstate.equals(SupplicantState.GROUP_HANDSHAKE)
+				|| sstate.equals(SupplicantState.FOUR_WAY_HANDSHAKE))
 			return false;
 		else
 			return true;
