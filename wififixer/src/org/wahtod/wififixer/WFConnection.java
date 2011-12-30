@@ -55,7 +55,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.text.format.Formatter;
-import android.util.Log;
 
 /*
  * Handles all interaction 
@@ -127,7 +126,7 @@ public class WFConnection extends Object implements
 
 	// Last Scan
 	private static long _last_scan_request;
-	private static final int SCAN_WATCHDOG_DELAY = 5000;
+	private static final int SCAN_WATCHDOG_DELAY = 15000;
 	private static final int NORMAL_SCAN_DELAY = 15000;
 
 	// for Dbm
@@ -1434,6 +1433,8 @@ public class WFConnection extends Object implements
 		 */
 		SupplicantState sState = data
 				.getParcelable(WifiManager.EXTRA_NEW_STATE);
+		if (sState.equals(lastSupplicantState))
+			return;
 		lastSupplicantState = sState;
 		wedgeCheck();
 		/*
@@ -1493,7 +1494,6 @@ public class WFConnection extends Object implements
 
 	private static void wedgeCheck() {
 		_supplicantFifo.add(lastSupplicantState);
-		Log.i(appname, _supplicantFifo.toString());
 		if (_supplicantFifo.containsAll(SupplicantPatterns.SCAN_BOUNCE_PATTERN)) {
 			LogService.log(ctxt, appname, ctxt.getString(R.string.scan_bounce));
 			_supplicantFifo.clear();
@@ -1727,19 +1727,16 @@ public class WFConnection extends Object implements
 			 * Reset Wifi, scan didn't succeed.
 			 */
 			toggleWifi();
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(
-						ctxt,
-						appname,
-						ctxt.getString(R.string.scan_failed)
-								+ ":"
-								+ String.valueOf(SystemClock.elapsedRealtime()
-										- _last_scan_request) + "ms");
-		}
 
+		}
 		if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(ctxt, appname, ctxt.getString(R.string.last_scan)
-					+ String.valueOf(_last_scan_request));
+			LogService.log(
+					ctxt,
+					appname,
+					ctxt.getString(R.string.scan_failed)
+							+ ":"
+							+ String.valueOf(SystemClock.elapsedRealtime()
+									- _last_scan_request) + "ms");
 		if (screenstate)
 			handlerWrapper(SCAN, NORMAL_SCAN_DELAY);
 		else
