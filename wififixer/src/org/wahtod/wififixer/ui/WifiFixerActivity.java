@@ -148,6 +148,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	public static final String TABLETPAGERFRAG_TAG = "TPFT";
 	private static final String FRAGMENTS_INSTANCE_STATE = "FRAGMENTS_INSTANCE_STATE";
 	private static final String RUN_TUTORIAL = "RUN_TUTORIAL";
+	public static final String RESET_LAYOUT = "RESET";
 
 	void authCheck() {
 		if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
@@ -219,6 +220,11 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 				intent.removeExtra(RUN_TUTORIAL);
 				if (findViewById(R.id.pager) != null)
 					phoneTutNag();
+			} else if (intent.hasExtra(RESET_LAYOUT)) {
+				PendingIntent p = PendingIntent.getActivity(this, 0,
+						new Intent(this, WifiFixerActivity.class), 0);
+				ServiceAlarm.addAlarm(this, true, false, p);
+				this.finish();
 			}
 		/*
 		 * Set Activity intent to one without commands we've "consumed"
@@ -450,7 +456,10 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		 */
 		super.onCreate(savedInstanceState);
 		setTitle(R.string.app_name);
-		setContentView(R.layout.main);
+		if (PrefUtil.readBoolean(this, getString(R.string.forcephone_key)))
+			setContentView(R.layout.mainalt);
+		else
+			setContentView(R.layout.main);
 		restoreOrphanedFragments(savedInstanceState);
 		drawUI(savedInstanceState);
 

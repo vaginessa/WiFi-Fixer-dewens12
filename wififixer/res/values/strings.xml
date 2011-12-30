@@ -239,5 +239,8 @@
 	<string name="about_actionbar">"About: "</string>
 	<string name="scan_failed">Scan Failed: Resetting Wifi</string>
 	<string name="checking_network">Checking Network</string>
+	<string name="forcephone_title">Force Phone UI</string>
+	<string name="forcephone_key">ForcePhone</string>
+	<string name="forcephone_summary">Enable if you are seeing the tablet user interface on a phone.</string>
 
 </resources>

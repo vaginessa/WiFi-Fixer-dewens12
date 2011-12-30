@@ -89,6 +89,11 @@ public final class ServiceAlarm extends Object {
 	}
 
 	public static void setAlarm(final Context c, final boolean initialdelay) {
+		addAlarm(c, initialdelay, true, createPendingIntent(c, 0));
+	}
+
+	public static void addAlarm(final Context c, final boolean initialdelay,
+			final boolean repeating, PendingIntent p) {
 		Long delay;
 
 		if (initialdelay)
@@ -98,10 +103,12 @@ public final class ServiceAlarm extends Object {
 
 		AlarmManager mgr = (AlarmManager) c
 				.getSystemService(Context.ALARM_SERVICE);
-
-		mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-				SystemClock.elapsedRealtime() + delay, PERIOD,
-				createPendingIntent(c, 0));
+		if (repeating)
+			mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+					SystemClock.elapsedRealtime() + delay, PERIOD, p);
+		else
+			mgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+					SystemClock.elapsedRealtime() + delay, p);
 	}
 
 	public static void unsetAlarm(final Context c) {

@@ -149,6 +149,10 @@ public class PrefActivity extends PreferenceActivity implements
 			} else {
 				PrefUtil.setPolicyfromSystem(context);
 			}
+		} else if (key.contains(context.getString(R.string.forcephone_key))) {
+			Intent i = new Intent(context, WifiFixerActivity.class);
+			i.putExtra(WifiFixerActivity.RESET_LAYOUT, true);
+			context.startActivity(i);
 		}
 	}
 }
