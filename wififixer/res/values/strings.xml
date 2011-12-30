@@ -242,5 +242,7 @@
 	<string name="forcephone_title">Force Phone UI</string>
 	<string name="forcephone_key">ForcePhone</string>
 	<string name="forcephone_summary">Enable if you are seeing the tablet user interface on a phone.</string>
+	<string name="scan_bounce">Scan-Bounce Pattern Detected:Resetting</string>
+	<string name="wifimanager_scan">Requesting WifiManager Scan</string>
 
 </resources>

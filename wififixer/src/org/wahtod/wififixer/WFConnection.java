@@ -24,6 +24,7 @@ import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
+import org.wahtod.wififixer.utility.FifoList;
 import org.wahtod.wififixer.utility.Hostup;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
@@ -54,6 +55,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.text.format.Formatter;
+import android.util.Log;
 
 /*
  * Handles all interaction 
@@ -79,13 +81,11 @@ public class WFConnection extends Object implements
 	// IDs For notifications
 	private static final int ERR_NOTIF = 7972;
 
-	// Supplicant Constants
-	private static final String DISCONNECTED = "DISCONNECTED";
-	private static final String COMPLETED = "COMPLETED";
-	private static final String CONNECTED = "CONNECTED";
-	private static final String SLEEPING = "SLEEPING";
-	private static final String SCANNING = "SCANNING";
-	private static final String ASSOCIATING = "ASSOCIATING";
+	/*
+	 * Supplicant State FIFO for pattern matching
+	 */
+	private static FifoList _supplicantFifo;
+	private static final int FIFO_LENGTH = 10;
 	private static final String INVALID = "INVALID";
 
 	// For blank SSIDs
@@ -126,7 +126,7 @@ public class WFConnection extends Object implements
 	private static final int REALLYSHORTWAIT = 200;
 
 	// Last Scan
-	private static long lastscan_time;
+	private static long _last_scan_request;
 	private static final int SCAN_WATCHDOG_DELAY = 5000;
 	private static final int NORMAL_SCAN_DELAY = 15000;
 
@@ -461,6 +461,10 @@ public class WFConnection extends Object implements
 			 */
 			if (supplicantInterruptCheck(ctxt)) {
 				startScan(true);
+				_last_scan_request = SystemClock.elapsedRealtime();
+				if (prefs.getFlag(Pref.LOG_KEY))
+					LogService.log(ctxt, appname,
+							ctxt.getString(R.string.wifimanager_scan));
 				handlerWrapper(SCANWATCHDOG, SCAN_WATCHDOG_DELAY);
 			} else {
 				if (prefs.getFlag(Pref.LOG_KEY))
@@ -538,6 +542,7 @@ public class WFConnection extends Object implements
 	};
 
 	public WFConnection(final Context context, PrefUtil p) {
+		_supplicantFifo = new FifoList(FIFO_LENGTH);
 		prefs = p;
 		statusdispatcher = new StatusDispatcher(context, p);
 		ScreenStateDetector.setOnScreenStateChangedListener(this);
@@ -1144,11 +1149,7 @@ public class WFConnection extends Object implements
 	}
 
 	private static String getSupplicantStateString(final SupplicantState sstate) {
-		if (sstate.equals(SupplicantState.COMPLETED))
-			return CONNECTED;
-		else if (sstate.equals(SupplicantState.DORMANT))
-			return SLEEPING;
-		else if (SupplicantState.isValidState(sstate))
+		if (SupplicantState.isValidState(sstate))
 			return sstate.name();
 		else
 			return INVALID;
@@ -1382,6 +1383,13 @@ public class WFConnection extends Object implements
 	}
 
 	private void handleScanResults() {
+		/*
+		 * Scan results received.  Remove Scan Watchdog. 
+		 */
+		handler.removeMessages(SCANWATCHDOG);
+		/*
+		 * Sanity checks
+		 */
 		if (!getWifiManager(ctxt).isWifiEnabled())
 			return;
 		if (!pendingscan) {
@@ -1426,21 +1434,18 @@ public class WFConnection extends Object implements
 		 */
 		SupplicantState sState = data
 				.getParcelable(WifiManager.EXTRA_NEW_STATE);
-		if (sState.equals(lastSupplicantState))
-			return;
 		lastSupplicantState = sState;
-
+		wedgeCheck();
 		/*
-		 * Check intent for auth error
+		 * Check for auth error
 		 */
-
 		if (data.containsKey(WifiManager.EXTRA_SUPPLICANT_ERROR))
 			NotifUtil.show(ctxt, ctxt.getString(R.string.authentication_error),
 					ctxt.getString(R.string.authentication_error), 2432, null);
 
 		if (statNotifCheck()) {
-			if (sState.equals(COMPLETED)) {
-				notifStatus = CONNECTED;
+			if (sState.equals(SupplicantState.COMPLETED)) {
+				notifStatus = SupplicantState.COMPLETED.name();
 				notifSSID = getSSID();
 			} else if (!getIsOnWifi(ctxt))
 				clearConnectedStatus(sState.name());
@@ -1452,25 +1457,20 @@ public class WFConnection extends Object implements
 		/*
 		 * Check for ASSOCIATING bug but first clear check if not ASSOCIATING
 		 */
-		if (!sState.equals(ASSOCIATING)) {
+		if (!sState.equals(SupplicantState.ASSOCIATING)) {
 			supplicant_associating = 0;
 			handler.removeMessages(ASSOCWATCHDOG);
-		} else if (sState.equals(ASSOCIATING)) {
+		} else if (sState.equals(SupplicantState.ASSOCIATING)) {
 			handlerWrapper(ASSOCWATCHDOG, SHORTWAIT);
 
-		} else
-		/*
-		 * store last supplicant scan state
-		 */
-		if (sState.equals(SCANNING))
-			lastscan_time = SystemClock.elapsedRealtime();
-		else
+		} 
 		/*
 		 * Flush queue if connected
 		 * 
 		 * Also clear any error notifications
 		 */
-		if (sState.equals(COMPLETED) || sState.equals(CONNECTED)) {
+		else if (sState.equals(SupplicantState.ASSOCIATED)
+				|| sState.equals(SupplicantState.COMPLETED)) {
 
 			if (connectee != null) {
 				handleConnect();
@@ -1489,7 +1489,16 @@ public class WFConnection extends Object implements
 		 * The actual meat of the supplicant fixes
 		 */
 		handleSupplicantState(sState.name());
+	}
 
+	private static void wedgeCheck() {
+		_supplicantFifo.add(lastSupplicantState);
+		Log.i(appname, _supplicantFifo.toString());
+		if (_supplicantFifo.containsAll(SupplicantPatterns.SCAN_BOUNCE_PATTERN)) {
+			LogService.log(ctxt, appname, ctxt.getString(R.string.scan_bounce));
+			_supplicantFifo.clear();
+			toggleWifi();
+		}
 	}
 
 	private void handleSupplicantState(final String sState) {
@@ -1502,7 +1511,7 @@ public class WFConnection extends Object implements
 			return;
 		} else if (!screenstate && !prefs.getFlag(Pref.SCREEN_KEY))
 			return;
-		else if (sState == DISCONNECTED) {
+		else if (sState == SupplicantState.DISCONNECTED.name()) {
 			requestScan();
 			notifyWrap(ctxt, sState);
 		} else if (sState == INVALID) {
@@ -1713,16 +1722,19 @@ public class WFConnection extends Object implements
 	public void scanwatchdog() {
 		if (getWifiManager(ctxt).isWifiEnabled()
 				&& !getIsOnWifi(ctxt)
-				&& lastscan_time > (SystemClock.elapsedRealtime() - SCAN_WATCHDOG_DELAY)) {
+				&& (SystemClock.elapsedRealtime() - _last_scan_request) > SCAN_WATCHDOG_DELAY) {
 			/*
 			 * Reset Wifi, scan didn't succeed.
 			 */
 			toggleWifi();
+			if (prefs.getFlag(Pref.LOG_KEY))
+				LogService.log(ctxt, appname,
+						ctxt.getString(R.string.scan_failed));
 		}
 
 		if (prefs.getFlag(Pref.LOG_KEY))
 			LogService.log(ctxt, appname, ctxt.getString(R.string.last_scan)
-					+ String.valueOf(lastscan_time));
+					+ String.valueOf(_last_scan_request));
 		if (screenstate)
 			handlerWrapper(SCAN, NORMAL_SCAN_DELAY);
 		else
