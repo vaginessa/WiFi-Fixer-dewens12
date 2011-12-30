@@ -64,6 +64,7 @@ public class LogService extends Service {
 	public static final String LOG = "LOG";
 
 	public static final String TIMESTAMP = "TS";
+	public static final String FLUSH = "*FLUSH*";
 	public static final String TS_DELAY = "TSDELAY";
 
 	// Log Timestamp
@@ -132,6 +133,14 @@ public class LogService extends Service {
 			String sMessage = data.getString(MESSAGE);
 			if (app_name.equals(TIMESTAMP)) {
 				handleTSCommand(data);
+			} else if (app_name.equals(FLUSH)) {
+				if (bwriter != null) {
+					try {
+						bwriter.flush();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			} else
 				processLogIntent(this, app_name, sMessage);
 		}
@@ -248,15 +257,12 @@ public class LogService extends Service {
 		file = VersionedFile.getFile(ctxt, LOGFILE);
 		if (version == 0)
 			getPackageInfo();
-
 		handler.sendEmptyMessageDelayed(FLUSH_MESSAGE, BUFFER_FLUSH_DELAY);
 		handler.sendEmptyMessageDelayed(TS_MESSAGE, WRITE_BUFFER_SIZE);
-
 		/*
 		 * Add ongoing notification
 		 */
 		NotifUtil.addLogNotif(this, true);
-
 	}
 
 	public static boolean processCommands(final Context context,
@@ -326,11 +332,14 @@ public class LogService extends Service {
 	}
 
 	private static void processLogIntent(final Context context,
-			final String APP_NAME, final String Message) {
-		if (processCommands(context, APP_NAME))
+			final String command, final String Message) {
+		if (processCommands(context, command))
 			return;
 		else {
-			Log.i(APP_NAME, Message);
+			/*
+			 * Write to syslog and our log file on sdcard
+			 */
+			Log.i(command, Message);
 			writeToFileLog(context, Message);
 		}
 	}

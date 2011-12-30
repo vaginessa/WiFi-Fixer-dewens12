@@ -1384,7 +1384,7 @@ public class WFConnection extends Object implements
 
 	private void handleScanResults() {
 		/*
-		 * Scan results received.  Remove Scan Watchdog. 
+		 * Scan results received. Remove Scan Watchdog.
 		 */
 		handler.removeMessages(SCANWATCHDOG);
 		/*
@@ -1463,7 +1463,7 @@ public class WFConnection extends Object implements
 		} else if (sState.equals(SupplicantState.ASSOCIATING)) {
 			handlerWrapper(ASSOCWATCHDOG, SHORTWAIT);
 
-		} 
+		}
 		/*
 		 * Flush queue if connected
 		 * 
@@ -1728,8 +1728,13 @@ public class WFConnection extends Object implements
 			 */
 			toggleWifi();
 			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.scan_failed));
+				LogService.log(
+						ctxt,
+						appname,
+						ctxt.getString(R.string.scan_failed)
+								+ ":"
+								+ String.valueOf(SystemClock.elapsedRealtime()
+										- _last_scan_request) + "ms");
 		}
 
 		if (prefs.getFlag(Pref.LOG_KEY))
