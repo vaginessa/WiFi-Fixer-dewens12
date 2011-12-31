@@ -106,13 +106,11 @@
             </PreferenceCategory>
         </PreferenceScreen>
 
-        <PreferenceCategory android:title="@string/forcephone_title" >
-            <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="@string/forcephone_key"
-                android:summary="@string/forcephone_summary"
-                android:title="@string/forcephone_title" />
-        </PreferenceCategory>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/forcephone_key"
+            android:summary="@string/forcephone_summary"
+            android:title="@string/forcephone_title" />
     </PreferenceCategory>
 
 </PreferenceScreen>
