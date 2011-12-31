@@ -17,6 +17,7 @@ package org.wahtod.wififixer.utility;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class FifoList extends ArrayList<Object> {
 	/*
@@ -40,18 +41,19 @@ public class FifoList extends ArrayList<Object> {
 		return true;
 	}
 
-	@Override
-	public boolean containsAll(Collection<?> collection) {
+	public boolean containsPattern(Collection<?> collection) {
 		if (collection.size() > this.size())
 			return false;
 		else {
 			int tocheck = this.size() - collection.size();
 			int current = 0;
+			List<Object> sublist;
 			while (current < tocheck) {
-				if (this.subList(current, collection.size() + current).equals(
-						collection))
+				sublist = this.subList(current, collection.size() + current);
+				if (sublist.equals(collection))
 					return true;
-				current++;
+				else
+					current++;
 			}
 			return false;
 		}

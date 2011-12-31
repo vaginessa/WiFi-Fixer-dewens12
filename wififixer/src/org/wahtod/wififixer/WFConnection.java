@@ -1494,7 +1494,8 @@ public class WFConnection extends Object implements
 
 	private static void wedgeCheck() {
 		_supplicantFifo.add(lastSupplicantState);
-		if (_supplicantFifo.containsAll(SupplicantPatterns.SCAN_BOUNCE_PATTERN)) {
+		if (_supplicantFifo
+				.containsPattern(SupplicantPatterns.SCAN_BOUNCE_PATTERN)) {
 			LogService.log(ctxt, appname, ctxt.getString(R.string.scan_bounce));
 			_supplicantFifo.clear();
 			toggleWifi();
