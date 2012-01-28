@@ -22,11 +22,19 @@ import android.net.wifi.SupplicantState;
 
 public class SupplicantPatterns {
 	/*
-	 * Lists of patterns which indicate 
-	 * bugged supplicant
+	 * Lists of patterns which indicate high confidence bugged supplicant state
 	 */
-	public static final List<SupplicantState> SCAN_BOUNCE_PATTERN = Arrays
+	public static final List<SupplicantState> SCAN_BOUNCE_1 = Arrays
 			.asList(new SupplicantState[] { SupplicantState.DISCONNECTED,
 					SupplicantState.SCANNING, SupplicantState.DISCONNECTED,
 					SupplicantState.SCANNING });
+
+	public static final List<SupplicantState> SCAN_BOUNCE_2 = Arrays
+			.asList(new SupplicantState[] { SupplicantState.DISCONNECTED,
+					SupplicantState.INACTIVE, SupplicantState.SCANNING,
+					SupplicantState.DISCONNECTED, SupplicantState.INACTIVE });
+
+	@SuppressWarnings("unchecked")
+	public static final List<List<SupplicantState>> SCAN_BOUNCE_CLUSTER = Arrays
+			.asList(SCAN_BOUNCE_1, SCAN_BOUNCE_2);
 }

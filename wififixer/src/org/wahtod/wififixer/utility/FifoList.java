@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import android.net.wifi.SupplicantState;
+import android.util.Log;
+
 public class FifoList extends ArrayList<Object> {
 	/*
 	 * Behaves as fixed-size FIFO
@@ -42,21 +45,24 @@ public class FifoList extends ArrayList<Object> {
 	}
 
 	public boolean containsPattern(Collection<?> collection) {
-		if (collection.size() > this.size())
+		if (this.toString()
+				.contains(StringUtil.trimStringEnds(collection.toString())))
+			return true;
+		else
 			return false;
-		else {
-			int tocheck = this.size() - collection.size();
-			int current = 0;
-			List<Object> sublist;
-			while (current < tocheck) {
-				sublist = this.subList(current, collection.size() + current);
-				if (sublist.equals(collection))
-					return true;
-				else
-					current++;
-			}
-			return false;
-		}
+	}
 
+	public List<List<SupplicantState>> containsPatterns(
+			List<List<SupplicantState>> patterns) {
+		List<List<SupplicantState>> matches = new ArrayList<List<SupplicantState>>();
+		for (List<SupplicantState> n : patterns) {
+			if (this.containsPattern(n))
+				matches.add(n);
+			Log.i(this.getClass().getName(),
+					this.toString() + " contains "
+							+ StringUtil.trimStringEnds(n.toString()) + " "
+							+ String.valueOf(this.containsPattern(n)));
+		}
+		return matches;
 	}
 }

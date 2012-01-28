@@ -45,6 +45,8 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -119,6 +121,13 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		}
 	}
 
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message message) {
+			handleIntentMessage(message);
+		}
+	};
+
 	/*
 	 * Intent extra for fragment commands
 	 */
@@ -192,44 +201,61 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		return PrefUtil.readBoolean(context, Pref.LOG_KEY.key());
 	}
 
-	private void handleIntent(Intent intent) {
-		if (intent.getExtras() != null)
+	private void bundleIntent(final Intent intent) {
+		/*
+		 * Dispatch intent commands to handler
+		 */
+		Message message = handler.obtainMessage();
+		Bundle data = new Bundle();
+		data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
+		if (intent.getExtras() != null) {
+			data.putAll(intent.getExtras());
+		}
+		message.setData(data);
+		handler.sendMessage(message);
+	}
 
-			/*
-			 * Show About Fragment either via fragment or otherwise
-			 */
-			if (intent.hasExtra(SHOW_FRAGMENT)) {
-				intent.removeExtra(SHOW_FRAGMENT);
-				if (phoneFlag) {
-					Intent i = new Intent(this, GenericFragmentActivity.class);
-					i.putExtras(intent);
-					startActivity(i);
-				} else
-					showFragment(intent.getExtras());
-			}
-			/*
-			 * Delete Log if called by preference
-			 */
-			else if (intent.hasExtra(DELETE_LOG)) {
-				intent.removeExtra(DELETE_LOG);
-				deleteLog();
-			} else if (intent.hasExtra(REMOVE_CONNECT_FRAGMENTS)) {
-				intent.removeExtra(REMOVE_CONNECT_FRAGMENTS);
-				removeConnectFragments(tabletvp.getCurrentItem());
-			} else if (intent.hasExtra(RUN_TUTORIAL)) {
-				intent.removeExtra(RUN_TUTORIAL);
-				if (findViewById(R.id.pager) != null)
-					phoneTutNag();
-			} else if (intent.hasExtra(RESET_LAYOUT)) {
-				PendingIntent p = PendingIntent.getActivity(this, 0,
-						new Intent(this, WifiFixerActivity.class), 0);
-				ServiceAlarm.addAlarm(this, true, false, p);
-				this.finish();
-			}
+	private void handleIntentMessage(Message message) {
+		if (message.getData().isEmpty())
+			return;
+		Bundle data = message.getData();
+		/*
+		 * Show About Fragment either via fragment or otherwise
+		 */
+		if (data.containsKey(SHOW_FRAGMENT)) {
+			data.remove(SHOW_FRAGMENT);
+			if (phoneFlag) {
+				Intent i = new Intent(this, GenericFragmentActivity.class);
+				i.putExtras(data);
+				startActivity(i);
+			} else
+				showFragment(data);
+		}
+		/*
+		 * Delete Log if called by preference
+		 */
+		else if (data.containsKey(DELETE_LOG)) {
+			data.remove(DELETE_LOG);
+			deleteLog();
+		} else if (data.containsKey(REMOVE_CONNECT_FRAGMENTS)) {
+			data.remove(REMOVE_CONNECT_FRAGMENTS);
+			removeConnectFragments(tabletvp.getCurrentItem());
+		} else if (data.containsKey(RUN_TUTORIAL)) {
+			data.remove(RUN_TUTORIAL);
+			if (findViewById(R.id.pager) != null)
+				phoneTutNag();
+		} else if (data.containsKey(RESET_LAYOUT)) {
+			PendingIntent p = PendingIntent.getActivity(this, 0, new Intent(
+					this, WifiFixerActivity.class), 0);
+			ServiceAlarm.addAlarm(this, true, false, p);
+			this.finish();
+		}
 		/*
 		 * Set Activity intent to one without commands we've "consumed"
 		 */
-		setIntent(intent);
+		Intent i = new Intent(data.getString(PrefUtil.INTENT_ACTION));
+		i.putExtras(data);
+		setIntent(i);
 	}
 
 	void launchHelp() {
@@ -265,11 +291,11 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 				return;
 			}
 		}
-		
+
 		/*
 		 * Make sure LogService's buffer is flushed
 		 */
-		LogService.log(this,LogService.FLUSH,null);
+		LogService.log(this, LogService.FLUSH, null);
 
 		final String fileuri = file.toURI().toString();
 
@@ -472,7 +498,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		/*
 		 * Handle intent command if destroyed or first start
 		 */
-		handleIntent(getIntent());
+		bundleIntent(getIntent());
 		/*
 		 * Make sure service settings are enforced.
 		 */
@@ -515,7 +541,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		setIntent(intent);
-		handleIntent(intent);
+		bundleIntent(intent);
 	}
 
 	// Create menus

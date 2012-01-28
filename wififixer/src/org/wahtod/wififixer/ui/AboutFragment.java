@@ -16,12 +16,23 @@
 
 package org.wahtod.wififixer.ui;
 
+import java.util.List;
+
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
+import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +41,52 @@ import android.widget.TextView;
 public class AboutFragment extends FragmentSwitchboard {
 
 	private WFScanResult network;
+
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message message) {
+			if (getActivity() == null)
+				return;
+			WifiManager wm = (WifiManager) getContext().getSystemService(
+					Context.WIFI_SERVICE);
+			List<ScanResult> results = wm.getScanResults();
+			boolean found = false;
+			for (ScanResult n : results) {
+				if (n.SSID.contains(network.SSID)) {
+					found = true;
+					/*
+					 * Refresh values
+					 */
+					network = new WFScanResult(n);
+					drawView();
+					break;
+				}
+			}
+			if (!found) {
+				/*
+				 * Here's where we're going to tell the activity to remove this
+				 * fragment.
+				 */
+			}
+		}
+	};
+
+	private BroadcastReceiver scanreceiver = new BroadcastReceiver() {
+		public void onReceive(final Context context, final Intent intent) {
+
+			/*
+			 * Dispatch intent commands to handler
+			 */
+			Message message = handler.obtainMessage();
+			Bundle data = new Bundle();
+			if (intent.getExtras() != null) {
+				data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
+				data.putAll(intent.getExtras());
+			}
+			message.setData(data);
+			handler.sendMessage(message);
+		}
+	};
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,19 +102,16 @@ public class AboutFragment extends FragmentSwitchboard {
 	}
 
 	@Override
-	public void onResume() {
-		if (this.getArguments() != null) {
-			TextView t = (TextView) getView().findViewById(R.id.ssid);
-			t.setText(network.SSID);
-			t = (TextView) getView().findViewById(R.id.bssid);
-			t.setText(network.BSSID);
-			t = (TextView) getView().findViewById(R.id.capabilities);
-			t.setText(StringUtil.getCapabilitiesString(network.capabilities));
-			t = (TextView) getView().findViewById(R.id.frequency);
-			t.setText(String.valueOf(network.frequency));
-			t = (TextView) getView().findViewById(R.id.level);
-			t.setText(String.valueOf(network.level));
+	public void onPause() {
+		unregisterReceiver();
+		super.onPause();
+	}
 
+	@Override
+	public void onResume() {
+		registerReceiver();
+		if (this.getArguments() != null) {
+			drawView();
 			if (getActivity().getClass().equals(GenericFragmentActivity.class)) {
 				ActionBarDetector.setUp(getActivity(), true, getActivity()
 						.getString(R.string.about_fragment_title_)
@@ -65,6 +119,33 @@ public class AboutFragment extends FragmentSwitchboard {
 			}
 		}
 		super.onResume();
+	}
+
+	private void unregisterReceiver() {
+		getContext().unregisterReceiver(scanreceiver);
+	}
+
+	private void registerReceiver() {
+		IntentFilter filter = new IntentFilter(
+				WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+		getContext().registerReceiver(scanreceiver, filter);
+	}
+
+	private Context getContext() {
+		return getActivity().getApplicationContext();
+	}
+
+	private void drawView() {
+		TextView t = (TextView) getView().findViewById(R.id.ssid);
+		t.setText(network.SSID);
+		t = (TextView) getView().findViewById(R.id.bssid);
+		t.setText(network.BSSID);
+		t = (TextView) getView().findViewById(R.id.capabilities);
+		t.setText(StringUtil.getCapabilitiesString(network.capabilities));
+		t = (TextView) getView().findViewById(R.id.frequency);
+		t.setText(String.valueOf(network.frequency));
+		t = (TextView) getView().findViewById(R.id.level);
+		t.setText(String.valueOf(network.level));
 	}
 
 	public static AboutFragment newInstance(Bundle bundle) {

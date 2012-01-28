@@ -32,14 +32,24 @@ public class StringUtil {
 	public static String removeQuotes(String ssid) {
 		if (ssid == null)
 			return EMPTYSTRING;
-		else if (!ssid.endsWith("\""))
-			return ssid;
+		else if (ssid.endsWith("\"") && ssid.startsWith("\"")) {
+
+			try {
+				ssid = ssid.substring(1, ssid.length() - 1);
+			} catch (IndexOutOfBoundsException e) {
+				return EMPTYSTRING;
+			}
+		}
+		return ssid;
+	}
+
+	public static String trimStringEnds(String s) {
 		try {
-			ssid = (String) ssid.subSequence(1, ssid.length() - 1);
+			s = s.substring(1, s.length() - 1);
 		} catch (IndexOutOfBoundsException e) {
 			return EMPTYSTRING;
 		}
-		return ssid;
+		return s;
 	}
 
 	public static String getCapabilitiesString(final String capabilities) {
