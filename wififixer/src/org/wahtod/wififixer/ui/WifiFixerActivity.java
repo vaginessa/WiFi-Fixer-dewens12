@@ -677,6 +677,10 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		ft.commit();
 	}
 
+	/*
+	 * Necessary to work around
+	 * http://code.google.com/p/android/issues/detail?id=19211
+	 */
 	private void restoreOrphanedFragments(Bundle savedInstanceState) {
 		if (savedInstanceState == null
 				|| !savedInstanceState.containsKey(FRAGMENTS_INSTANCE_STATE))
