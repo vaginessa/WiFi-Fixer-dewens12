@@ -60,8 +60,6 @@ import android.widget.Toast;
 
 public class WifiFixerActivity extends TutorialFragmentActivity implements
 		OnPageChangeListener {
-	// Is this the paid version?
-	public boolean isfreeFlag = true;
 	public boolean isauthedFlag = false;
 	public boolean aboutFlag = false;
 	public boolean loggingmenuFlag = false;

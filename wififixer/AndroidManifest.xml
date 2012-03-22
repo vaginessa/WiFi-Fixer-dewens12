@@ -13,8 +13,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="internalOnly"
     package="org.wahtod.wififixer"
-    android:versionCode="916"
-    android:versionName="0.9.0.2p1" >
+    android:versionCode="917"
+    android:versionName="0.9.0.2p3" >
 
     <supports-screens
         android:largeScreens="true"
@@ -97,7 +97,7 @@
         <receiver
             android:exported="false"
             android:name=".widget.WidgetReceiver"
-            android:process=":WidgetHandler" >
+            >
             <intent-filter >
                 <action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_ON" />
                 <action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_OFF" />
@@ -121,14 +121,14 @@
         <service android:name=".widget.FixerWidget$StatusUpdateService" >
         </service>
 
-<!-- 			Networking guts: Main Persistent process -->
+<!-- 			Networking guts: Main Persistent service -->
 
         <service
             class="WifiFixerService"
             android:exported="false"
             android:name=".WifiFixerService"
             android:persistent="true"
-            android:process=":WifiFixerService" >
+            >
         </service>
 
 <!-- 			Provides LogService.log services -->
@@ -136,7 +136,7 @@
         <service
             class="LogService"
             android:name=".utility.LogService"
-            android:process=":LogService" >
+            >
 >
 		
         </service>
