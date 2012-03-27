@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.List;
 
 import android.net.wifi.SupplicantState;
-import android.util.Log;
 
 public class FifoList extends ArrayList<Object> {
 	/*
@@ -58,10 +57,6 @@ public class FifoList extends ArrayList<Object> {
 		for (List<SupplicantState> n : patterns) {
 			if (this.containsPattern(n))
 				matches.add(n);
-			Log.i(this.getClass().getName(),
-					this.toString() + " contains "
-							+ StringUtil.trimStringEnds(n.toString()) + " "
-							+ String.valueOf(this.containsPattern(n)));
 		}
 		return matches;
 	}
