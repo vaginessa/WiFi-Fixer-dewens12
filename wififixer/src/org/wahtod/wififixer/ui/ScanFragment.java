@@ -327,6 +327,12 @@ public class ScanFragment extends Fragment {
 	}
 
 	private void refreshArray(List<WFScanResult> scan) {
+		
+		/*
+		 * Null check
+		 */
+		if (scan == null)
+			return;
 
 		/*
 		 * Comparator for sorting results by signal level
@@ -351,15 +357,18 @@ public class ScanFragment extends Fragment {
 			adapter.scanresultArray.remove(result);
 		}
 
-		for (WFScanResult result : scan) {
-
-			if (!adapter.scanresultArray.contains(result))
-				adapter.scanresultArray.add(result);
+		for (WFScanResult network : scan) {
+			/*
+			 * If network isn't in adapter's list
+			 * add it, otherwise update signal level
+			 */
+			if (!adapter.scanresultArray.contains(network))
+				adapter.scanresultArray.add(network);
 			else {
-				int index = adapter.scanresultArray.indexOf(result);
+				int index = adapter.scanresultArray.indexOf(network);
 				if (index != -1) {
-					if (result.level != adapter.scanresultArray.get(index).level)
-						adapter.scanresultArray.get(index).level = result.level;
+					if (network.level != adapter.scanresultArray.get(index).level)
+						adapter.scanresultArray.get(index).level = network.level;
 				}
 			}
 		}
