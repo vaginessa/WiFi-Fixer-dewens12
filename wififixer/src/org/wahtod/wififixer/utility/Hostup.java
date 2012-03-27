@@ -48,8 +48,8 @@ public class Hostup {
 	private static URI headURI;
 	private static int reachable;
 	private Context context;
-	private volatile static boolean state;
-	private volatile static boolean finished;
+	protected volatile static boolean state;
+	protected volatile static boolean finished;
 	private Thread self;
 	private static String icmpIP;
 	private static long timer;
@@ -71,12 +71,7 @@ public class Hostup {
 			/*
 			 * Interrupt waiting thread since we have a result
 			 */
-			if (!finished) {
-				state = up;
-				finished = true;
-				self.interrupt();
-			}
-
+			finish(up);
 		}
 	};
 
@@ -89,16 +84,19 @@ public class Hostup {
 			/*
 			 * Interrupt waiting thread since we have a result
 			 */
-			if (!finished) {
-				state = up;
-				finished = true;
-				self.interrupt();
-			}
-
+			finish(up);
 		}
 	};
 
-	public synchronized boolean getHostup(final int timeout, Context ctxt,
+	protected synchronized void finish(final boolean up) {
+		if (!finished) {
+			state = up;
+			finished = true;
+			self.interrupt();
+		}
+	}
+
+	public boolean getHostup(final int timeout, Context ctxt,
 			final String router, boolean log) {
 		finished = false;
 		context = ctxt;
