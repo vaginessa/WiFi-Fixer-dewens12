@@ -79,16 +79,7 @@ public abstract class NotifUtil {
 
 	public abstract void vshow(final Context context, final String message,
 			final String tickerText, final int id, PendingIntent contentIntent);
-
-	public abstract void vsetStatNotifWifiState(final Context ctxt,
-			final boolean wifistate);
-
-	public static void setStatNotifWifiState(final Context ctxt,
-			final boolean wifistate) {
-		cacheSelector();
-		selector.vsetStatNotifWifiState(ctxt.getApplicationContext(), wifistate);
-	}
-
+	
 	public static void setSsidStatus(final int status) {
 		ssidStatus = status;
 	}

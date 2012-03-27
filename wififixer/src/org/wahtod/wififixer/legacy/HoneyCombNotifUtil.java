@@ -16,7 +16,6 @@
 
 package org.wahtod.wififixer.legacy;
 
-import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ui.WifiFixerActivity;
 import org.wahtod.wififixer.utility.NotifUtil;
@@ -29,7 +28,6 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 public class HoneyCombNotifUtil extends NotifUtil {
-	private static boolean mWifiState;
 
 	@Override
 	public void vaddStatNotif(Context ctxt, final String ssid, String status,
@@ -64,7 +62,6 @@ public class HoneyCombNotifUtil extends NotifUtil {
 		}
 		RemoteViews update = new RemoteViews(ctxt.getPackageName(),
 				R.layout.statnotif);
-		drawWifiToggle(ctxt, update);
 		NotifUtil.statnotif.iconLevel = signal;
 		update.setImageViewResource(R.id.signal,
 				getIconfromSignal(signal, NotifUtil.ICON_SET_LARGE));
@@ -140,32 +137,5 @@ public class HoneyCombNotifUtil extends NotifUtil {
 
 		// unique ID
 		nm.notify(id, builder.getNotification());
-
-	}
-
-	@Override
-	public void vsetStatNotifWifiState(Context ctxt, boolean wifistate) {
-		mWifiState = wifistate;
-	}
-
-	private static void drawWifiToggle(final Context ctxt, RemoteViews notif) {
-		/*
-		 * Draw wifi toggle icon and set pendingintent
-		 */
-		PendingIntent pendingIntent;
-		int i;
-		if (mWifiState) {
-			pendingIntent = PendingIntent.getBroadcast(ctxt
-					.getApplicationContext(), 0, new Intent(
-					IntentConstants.ACTION_WIFI_OFF), 0);
-			i = R.drawable.wifi_on;
-		} else {
-			pendingIntent = PendingIntent.getBroadcast(ctxt
-					.getApplicationContext(), 0, new Intent(
-					IntentConstants.ACTION_WIFI_ON), 0);
-			i = R.drawable.wifi_off;
-		}
-		notif.setOnClickPendingIntent(R.id.wifitoggle, pendingIntent);
-		notif.setImageViewResource(R.id.wifitoggle, i);
 	}
 }

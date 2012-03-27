@@ -646,13 +646,6 @@ public class WFConnection extends Object implements
 			setStatNotif(true);
 
 		/*
-		 * Set Wifi State on honeycomb notification
-		 */
-		if (prefs.getFlag(Pref.STATENOT_KEY))
-			NotifUtil.setStatNotifWifiState(ctxt, getWifiManager(ctxt)
-					.isWifiEnabled());
-
-		/*
 		 * Start Main tick
 		 */
 		handlerWrapper(MAIN);
@@ -1749,7 +1742,6 @@ public class WFConnection extends Object implements
 		 * Set Wifi State on honeycomb notification
 		 */
 		if (prefs.getFlag(Pref.STATENOT_KEY)) {
-			NotifUtil.setStatNotifWifiState(ctxt, state);
 			statusdispatcher.sendMessage(context, new StatusMessage(notifSSID,
 					notifStatus, notifSignal, true));
 		}
