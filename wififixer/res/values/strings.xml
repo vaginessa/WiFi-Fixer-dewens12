@@ -138,7 +138,7 @@
 	<string name="low_memory">Low Memory</string>
 	<string name="knownbysignal_empty_exiting">KnownbySignal Empty, Exiting</string>
 	<string name="error_allocating_buffered_writer">Error allocating buffered writer:</string>
-	<string name="mimetype_text_plain">text/plain</string>
+	<string name="log_mimetype">message/rfc882</string>
 	<string name="unmanaged">-U- </string>
 	<string name="scan_mode">Should be in normal scan mode</string>
 	<string name="alert_message">Preparing email to developer:

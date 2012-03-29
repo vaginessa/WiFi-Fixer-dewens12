@@ -313,7 +313,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 						setLogging(false);
 						Intent sendIntent = new Intent(Intent.ACTION_SEND);
 						sendIntent
-								.setType(getString(R.string.mimetype_text_plain));
+								.setType(getString(R.string.log_mimetype));
 						sendIntent.putExtra(Intent.EXTRA_EMAIL,
 								new String[] { getString(R.string.email) });
 						sendIntent.putExtra(Intent.EXTRA_SUBJECT,
