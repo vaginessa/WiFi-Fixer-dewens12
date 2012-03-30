@@ -13,12 +13,12 @@ public class WFScanResult {
 	public int level;
 	public int frequency;
 
-	public static String SSID_BUNDLE_KEY = "SSID";
-	public static String BSSID_BUNDLE_KEY = "BSSID";
-	public static String CAPABILITIES_BUNDLE_KEY = "CAPABILITIES";
-	public static String FREQUENCY_BUNDLE_KEY = "FREQUENCY";
-	public static String LEVEL_BUNDLE_KEY = "LEVEL";
-	public static String BUNDLE_KEY = "WFSCANRESULT";
+	public static final String SSID_BUNDLE_KEY = "SSID";
+	public static final String BSSID_BUNDLE_KEY = "BSSID";
+	public static final String CAPABILITIES_BUNDLE_KEY = "CAPABILITIES";
+	public static final String FREQUENCY_BUNDLE_KEY = "FREQUENCY";
+	public static final String LEVEL_BUNDLE_KEY = "LEVEL";
+	public static final String BUNDLE_KEY = "WFSCANRESULT";
 
 	@Override
 	public int hashCode() {

@@ -27,8 +27,7 @@
 	<string name="donatenag">If you use this software, please donate!</string>
 	<string name="thank_you">Thank You for using Wifi Fixer</string>
 	<string name="emailintent">Select Gmail or alternate email client:</string>
-	<string name="email_footer">What time did the issue occur?:\n\nWhat did you
-		see?:\n\nPlease include any other details:\n\n</string>
+	<string name="email_footer">What time did the issue occur?:\n\nWhat did you see?:\n\nPlease include any other details:\n\n</string>
 	<string name="subject">WifiFixer Log</string>
 	<string name="email">zanshin.g1@gmail.com</string>
 	<string name="sd_card_unavailable">SD Card Unavailable</string>
