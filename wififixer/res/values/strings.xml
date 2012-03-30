@@ -27,7 +27,7 @@
 	<string name="donatenag">If you use this software, please donate!</string>
 	<string name="thank_you">Thank You for using Wifi Fixer</string>
 	<string name="emailintent">Select Gmail or alternate email client:</string>
-	<string name="email_footer">What time did the issue occur?:\n\nWhat did you see?:\n\nPlease include any other details:\n\n</string>
+	<string name="issue_prompt">Please describe the issue.  Be as specific as you can.</string>
 	<string name="subject">WifiFixer Log</string>
 	<string name="email">zanshin.g1@gmail.com</string>
 	<string name="sd_card_unavailable">SD Card Unavailable</string>
@@ -191,7 +191,7 @@
 	<string name="Logging_summary">Enables logging options. </string>
 	<string name="WIDGET_title">Widget Behavior</string>
 	<string name="WIDGET_summary">Selects widget behavior</string>
-	<string name="WiFiLock_title">Enable Wifi Lock</string>
+	<string name="WifiLock_title">Enable Wifi Lock</string>
 	<string name="WifiLock_summary">Enables Wifi Lock: will increase battery use
 	</string>
 	<string name="SLEEP_POLICY_title">Wifi Sleep Policy</string>
@@ -243,5 +243,7 @@
 	<string name="forcephone_summary">Enable if you are seeing the tablet user interface on a phone.</string>
 	<string name="scan_bounce">Scan-Bounce Pattern Detected:Resetting</string>
 	<string name="wifimanager_scan">Requesting WifiManager Scan</string>
+	<string name="issue_report_header">Issue Report</string>
+	<string name="issue_report_nag">Empty issue reports are not useful!</string>
 
 </resources>

@@ -70,7 +70,7 @@
 			android:summary="Please read documentation before changing these settings">
 			<PreferenceCategory android:title="Wifi Usability">
 				<CheckBoxPreference android:key="WiFiLock"
-					android:defaultValue="true" android:summary="@string/WifiLock_summary" android:title="@string/WiFiLock_title"/>
+					android:defaultValue="true" android:summary="@string/WifiLock_summary" android:title="@string/WifiLock_title"/>
 				<CheckBoxPreference android:key="SCREEN"
 					android:defaultValue="true" android:summary="@string/SCREEN_summary" android:title="@string/SCREEN_title"/>
 			</PreferenceCategory>

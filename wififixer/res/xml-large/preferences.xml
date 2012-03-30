@@ -83,7 +83,7 @@
                     android:defaultValue="true"
                     android:key="WiFiLock"
                     android:summary="@string/WifiLock_summary"
-                    android:title="@string/WiFiLock_title" />
+                    android:title="@string/WifiLock_title" />
                 <CheckBoxPreference
                     android:defaultValue="true"
                     android:key="SCREEN"

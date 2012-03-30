@@ -14,8 +14,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 			<PreferenceCategory android:title="Wifi Usability">
 				<CheckBoxPreference android:key="WiFiLock"
-					android:defaultValue="true" android:title="@string/WiFiLock_title"
-					android:summary="@string/WiFiLock_title" />
+					android:defaultValue="true" android:title="@string/WifiLock_title"
+					android:summary="@string/WifiLock_summary" />
 				<CheckBoxPreference android:key="SCREEN"
 					android:defaultValue="true" android:summary="@string/SCREEN_summary" android:title="@string/SCREEN_title"/>
 			</PreferenceCategory>
