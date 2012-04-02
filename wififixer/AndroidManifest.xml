@@ -13,8 +13,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="internalOnly"
     package="org.wahtod.wififixer"
-    android:versionCode="918"
-    android:versionName="0.9.0.2p5" >
+    android:versionCode="921"
+    android:versionName="0.9.0.2b3">
 
     <supports-screens
         android:largeScreens="true"
@@ -48,7 +48,8 @@
             android:value="AEdPqrEAAAAIAGomq--y98O0VHARd55VOdh8CoEphVxKfVXAHw" />
 <!-- 			Main Activity -->
         <activity
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
+            android:clearTaskOnLaunch="true"
             android:name=".ui.WifiFixerActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />

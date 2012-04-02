@@ -50,10 +50,15 @@
 			android:layout_height="wrap_content" android:paddingTop="10dip"
 			android:text="Privacy Disclosure:"
 			style="@style/Wftext.large"/>
+		
+		<TextView android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:paddingTop="10dip"
+			android:text="Information sent via email for support purposes is never shared with any third party.  Your email address will never be used for any purpose other than product support.\n"
+			style="@style/Wftext.header" />
 
 		<TextView android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:paddingTop="10dip"
-			android:text="Logging is not enabled by default.\nThe log will only be enabled and sent to the developer when requested.\nLogging stores some personal information, specifically current timezone and SSID of configured access points and scanned SSIDs during connection.\n\nStack traces are collected upon an uncaught exception.  The stack traces contain no identifying information.  Stack traces are only sent to the developer when requested"
+			android:text="Logging stores some personal information: specifically current timezone and SSID of configured access points and scanned SSIDs during connection.\nLogging is not enabled by default.\nThe log will only be enabled and sent when explicitly requested.\n\nStack traces are collected upon an uncaught exception and added to the log.\nStack traces contain no identifying information."
 			style="@style/Wftext.header" />
 
 	</LinearLayout>

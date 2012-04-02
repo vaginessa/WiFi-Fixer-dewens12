@@ -240,10 +240,10 @@
 	<string name="checking_network">Checking Network</string>
 	<string name="forcephone_title">Force Phone UI</string>
 	<string name="forcephone_key">ForcePhone</string>
-	<string name="forcephone_summary">Enable if you are seeing the tablet user interface on a phone.</string>
+	<string name="forcephone_summary">Enable if you have the tablet user interface on a phone.</string>
 	<string name="scan_bounce">Scan-Bounce Pattern Detected:Resetting</string>
 	<string name="wifimanager_scan">Requesting WifiManager Scan</string>
 	<string name="issue_report_header">Issue Report</string>
-	<string name="issue_report_nag">Empty issue reports are not useful!</string>
+	<string name="issue_report_nag">Issue report must be completed to send log</string>
 
 </resources>
