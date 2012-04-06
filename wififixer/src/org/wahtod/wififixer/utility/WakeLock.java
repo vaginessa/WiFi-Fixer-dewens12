@@ -36,10 +36,11 @@ public class WakeLock {
 	}
 
 	public void lock(final boolean state) {
-		if (state && !wakelock.isHeld()) {
-			wakelock.acquire();
-			onAcquire();
-
+		if (state) {
+			if (!wakelock.isHeld()) {
+				wakelock.acquire();
+				onAcquire();
+			}
 		} else if (wakelock.isHeld()) {
 			wakelock.release();
 			onRelease();
