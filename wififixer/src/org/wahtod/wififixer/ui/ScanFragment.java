@@ -264,7 +264,7 @@ public class ScanFragment extends Fragment {
 			/*
 			 * On Scan result intent refresh ListView
 			 */
-			if (self.isDetached())
+			if (self.getActivity()== null)
 				return;
 			else if (intent.getAction().equals(
 					WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))

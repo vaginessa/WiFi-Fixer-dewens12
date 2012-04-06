@@ -1623,6 +1623,9 @@ public class WFConnection extends Object implements
 		 */
 		if (prefs.getFlag(Pref.SCREEN_KEY))
 			sleepCheck(true);
+		else
+			if(prefs.getFlag(Pref.WIFILOCK_KEY))
+				wifilock.lock(false);
 		/*
 		 * Schedule N1 fix
 		 */
@@ -1640,17 +1643,20 @@ public class WFConnection extends Object implements
 	}
 
 	private void onScreenOn() {
+		/*
+		 * Re-enable lock if it's off
+		 */
+		if(prefs.getFlag(Pref.WIFILOCK_KEY))
+			wifilock.lock(true);
 
 		sleepCheck(false);
 		if (prefs.getFlag(Pref.LOG_KEY)) {
 			LogService.log(ctxt, appname,
 					ctxt.getString(R.string.screen_on_handler));
 		}
-
 		/*
-		 * Set current state on resume
+		 * Notify current state on resume
 		 */
-
 		if (prefs.getFlag(Pref.STATENOT_KEY) && statNotifCheck())
 			setStatNotif(true);
 	}

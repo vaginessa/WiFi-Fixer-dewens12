@@ -33,21 +33,15 @@ public class WifiLock {
 	}
 
 	public void lock(final boolean state) {
-		if (state && !wifilock.isHeld()) {
+		if (state) {
+			if(!wifilock.isHeld()){
 			wifilock.acquire();
 			onAcquire();
-
+			}
 		} else if (wifilock.isHeld()) {
 			wifilock.release();
 			onRelease();
 		}
-	}
-
-	public void onRelease() {
-		/*
-		 * Override
-		 */
-
 	}
 
 	public void onAcquire() {
@@ -56,5 +50,11 @@ public class WifiLock {
 		 */
 
 	}
+	
+	public void onRelease() {
+		/*
+		 * Override
+		 */
 
+	}
 }
