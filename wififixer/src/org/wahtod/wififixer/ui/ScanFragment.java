@@ -286,8 +286,10 @@ public class ScanFragment extends Fragment {
 		w.level = -99;
 		List<WFScanResult> list = new ArrayList<WFScanResult>();
 		list.add(w);
-		refreshArray(list);
-		adapter.notifyDataSetChanged();
+		if (adapter.scanresultArray != null) {
+			refreshArray(list);
+			adapter.notifyDataSetChanged();
+		}
 	}
 
 	/*
@@ -327,7 +329,7 @@ public class ScanFragment extends Fragment {
 	}
 
 	private void refreshArray(List<WFScanResult> scan) {
-		
+
 		/*
 		 * Null check
 		 */
@@ -359,8 +361,8 @@ public class ScanFragment extends Fragment {
 
 		for (WFScanResult network : scan) {
 			/*
-			 * If network isn't in adapter's list
-			 * add it, otherwise update signal level
+			 * If network isn't in adapter's list add it, otherwise update
+			 * signal level
 			 */
 			if (!adapter.scanresultArray.contains(network))
 				adapter.scanresultArray.add(network);
