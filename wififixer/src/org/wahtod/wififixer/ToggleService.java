@@ -66,11 +66,11 @@ public class ToggleService extends Service {
 				switch (msg.what) {
 
 				case ON:
-					WidgetHandler.setWifiState(ctxt, true);
+					sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
 					break;
 
 				case OFF:
-					WidgetHandler.setWifiState(ctxt, false);
+					sendBroadcast(new Intent(WidgetHandler.WIFI_OFF));
 					break;
 
 				case WATCHDOG:

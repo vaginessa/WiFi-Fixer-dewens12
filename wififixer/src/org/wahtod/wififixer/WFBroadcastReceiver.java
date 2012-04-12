@@ -30,5 +30,4 @@ public class WFBroadcastReceiver extends BroadcastReceiver {
 
 		broadcasthandler.handleIntent(context, intent);
 	}
-
 }
