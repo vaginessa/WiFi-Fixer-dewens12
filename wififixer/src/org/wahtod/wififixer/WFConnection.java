@@ -670,29 +670,25 @@ public class WFConnection extends Object implements
 	}
 
 	private void clearHandler() {
-		if (handler.hasMessages(MAIN))
-			handler.removeMessages(MAIN);
-		else if (handler.hasMessages(REPAIR))
-			handler.removeMessages(REPAIR);
-		else if (handler.hasMessages(RECONNECT))
-			handler.removeMessages(RECONNECT);
-		else if (handler.hasMessages(WIFITASK))
-			handler.removeMessages(WIFITASK);
-		else if (handler.hasMessages(SLEEPCHECK))
-			handler.removeMessages(SLEEPCHECK);
-		else if (handler.hasMessages(SCAN))
-			handler.removeMessages(SCAN);
-		else if (handler.hasMessages(N1CHECK))
-			handler.removeMessages(N1CHECK);
-		else if (handler.hasMessages(SIGNALHOP))
-			handler.removeMessages(SIGNALHOP);
-		else if (handler.hasMessages(SCANWATCHDOG))
-			handler.removeMessages(SCANWATCHDOG);
+		clearMessage(MAIN);
+		clearMessage(REPAIR);
+		clearMessage(RECONNECT);
+		clearMessage(WIFITASK);
+		clearMessage(SLEEPCHECK);
+		clearMessage(SCAN);
+		clearMessage(N1CHECK);
+		clearMessage(SIGNALHOP);
+		clearMessage(SCANWATCHDOG);
 		/*
 		 * Also clear all relevant flags
 		 */
 		shouldrepair = false;
 		pendingreconnect = false;
+	}
+	
+	private void clearMessage(int m){
+		if (handler.hasMessages(m))
+			handler.removeMessages(MAIN);
 	}
 
 	private static void clearConnectedStatus(final String state) {
@@ -795,8 +791,11 @@ public class WFConnection extends Object implements
 		 * Create sparse WifiConfiguration with details of desired connectee
 		 */
 		connectee = new WFConfig();
-		getWifiManager(context).enableNetwork(target.networkId, false);
 		connectee.wificonfig = target;
+		target.status=WifiConfiguration.Status.CURRENT;
+		getWifiManager(context).updateNetwork(target);
+		getWifiManager(context).enableNetwork(target.networkId, false);
+		getWifiManager(context).reconnect();
 		/*
 		 * Remove all posts to handler
 		 */
@@ -1727,7 +1726,6 @@ public class WFConnection extends Object implements
 			 * Reset Wifi, scan didn't succeed.
 			 */
 			toggleWifi();
-
 		}
 		if (prefs.getFlag(Pref.LOG_KEY))
 			LogService.log(
