@@ -757,13 +757,11 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 
 	public void wifiToggle(View view) {
 		if (!getIsWifiOn(this)) {
-			Intent intent = new Intent(WidgetHandler.WIFI_ON);
-			sendBroadcast(intent);
+			sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
 			Toast.makeText(this, R.string.enabling_wifi, Toast.LENGTH_LONG)
 					.show();
 		} else {
-			Intent intent = new Intent(WidgetHandler.WIFI_OFF);
-			sendBroadcast(intent);
+			sendBroadcast(new Intent(WidgetHandler.WIFI_OFF));
 			Toast.makeText(this, R.string.disabling_wifi, Toast.LENGTH_LONG)
 					.show();
 		}

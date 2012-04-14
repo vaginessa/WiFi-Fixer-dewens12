@@ -245,5 +245,8 @@
 	<string name="wifimanager_scan">Requesting WifiManager Scan</string>
 	<string name="issue_report_header">Issue Report</string>
 	<string name="issue_report_nag">Issue report must be completed to send log</string>
+	<string name="demoting_network">Demoting network</string>
+	<string name="_to_">" to "</string>
+	<string name="network_at_priority_floor">Network at priority floor:</string>
 
 </resources>

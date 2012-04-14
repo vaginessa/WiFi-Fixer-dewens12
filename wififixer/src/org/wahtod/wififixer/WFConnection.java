@@ -167,6 +167,7 @@ public class WFConnection extends Object implements
 	private static int connecting = 0;
 	private static WifiManager wm_;
 	private static final int CONNECTING_THRESHOLD = 3;
+	private static final long CWDOG_DELAY = 10000;
 
 	// Runnable Constants for handler
 	private static final int INTENT = 37;
@@ -183,6 +184,7 @@ public class WFConnection extends Object implements
 	private static final int UPDATESTATUS = 13;
 	private static final int SCANWATCHDOG = 14;
 	private static final int ASSOCWATCHDOG = 15;
+	private static final int CONNECTWATCHDOG = 16;
 
 	private Handler handler = new Handler() {
 		@Override
@@ -250,6 +252,9 @@ public class WFConnection extends Object implements
 			case ASSOCWATCHDOG:
 				checkAssociateState();
 				break;
+			case CONNECTWATCHDOG:
+				demoteNetwork(ctxt, getWifiManager(ctxt).getConnectionInfo()
+						.getNetworkId());
 
 			}
 		}
@@ -358,8 +363,9 @@ public class WFConnection extends Object implements
 						/*
 						 * Check wifi
 						 */
-						if (getisWifiEnabled(ctxt, false))
+						if (getisWifiEnabled(ctxt, false)) {
 							checkWifi();
+						}
 
 				}
 			}
@@ -456,7 +462,7 @@ public class WFConnection extends Object implements
 	private Runnable rScan = new Runnable() {
 		public void run() {
 			/*
-			 * Start scan if supplicant won't be interrupted
+			 * Start scan
 			 */
 			if (supplicantInterruptCheck(ctxt)) {
 				startScan(true);
@@ -685,8 +691,8 @@ public class WFConnection extends Object implements
 		shouldrepair = false;
 		pendingreconnect = false;
 	}
-	
-	private void clearMessage(int m){
+
+	private void clearMessage(int m) {
 		if (handler.hasMessages(m))
 			handler.removeMessages(MAIN);
 	}
@@ -792,7 +798,7 @@ public class WFConnection extends Object implements
 		 */
 		connectee = new WFConfig();
 		connectee.wificonfig = target;
-		target.status=WifiConfiguration.Status.CURRENT;
+		target.status = WifiConfiguration.Status.CURRENT;
 		getWifiManager(context).updateNetwork(target);
 		getWifiManager(context).enableNetwork(target.networkId, false);
 		getWifiManager(context).reconnect();
@@ -859,6 +865,15 @@ public class WFConnection extends Object implements
 		return best.wificonfig.networkId;
 	}
 
+	private static int containsSSID(final String ssid,
+			final List<WifiConfiguration> wifiConfigs) {
+		for (WifiConfiguration sResult : wifiConfigs) {
+			if (StringUtil.removeQuotes(sResult.SSID).equals(ssid))
+				return sResult.networkId;
+		}
+		return -1;
+	}
+
 	private static boolean containsBSSID(final String bssid,
 			final List<WFConfig> results) {
 		for (WFConfig sResult : results) {
@@ -868,13 +883,23 @@ public class WFConnection extends Object implements
 		return false;
 	}
 
-	private static List<String> createKnownStringList(
-			final List<WifiConfiguration> wificonfigs) {
-		List<String> known = new ArrayList<String>();
-		for (WifiConfiguration w : wificonfigs) {
-			known.add(StringUtil.removeQuotes(w.SSID));
+	private static void demoteNetwork(final Context context, final int n) {
+		WifiConfiguration network = getWifiManager(context)
+				.getConfiguredNetworks().get(n);
+		if (network.priority > -1){
+			network.priority--;
+		getWifiManager(context).updateNetwork(network);
+		if (prefs.getFlag(Pref.LOG_KEY))
+			LogService.log(context, appname,
+					context.getString(R.string.demoting_network) + network.SSID
+							+ context.getString(R.string._to_)
+							+ network.priority);
 		}
-		return known;
+		else{
+			if (prefs.getFlag(Pref.LOG_KEY))
+				LogService.log(context, appname,
+						context.getString(R.string.network_at_priority_floor)+network.SSID);
+		}
 	}
 
 	private void dispatchIntent(final Context context, final Bundle data) {
@@ -912,7 +937,6 @@ public class WFConnection extends Object implements
 
 	private static void fixDisabledNetworks(final Context context,
 			List<WifiConfiguration> wflist) {
-
 		for (WifiConfiguration wfresult : wflist) {
 			/*
 			 * Check for Android 2.x disabled network bug WifiConfiguration
@@ -1030,8 +1054,6 @@ public class WFConnection extends Object implements
 		 */
 		List<WifiConfiguration> wifiConfigs = getWifiManager(ctxt)
 				.getConfiguredNetworks();
-		List<String> known = createKnownStringList(wifiConfigs);
-
 		/*
 		 * Iterate the known networks over the scan results, adding found known
 		 * networks.
@@ -1041,49 +1063,50 @@ public class WFConnection extends Object implements
 			LogService.log(context, appname,
 					context.getString(R.string.parsing_scan_results));
 
+		int index;
 		for (ScanResult sResult : scanResults) {
 			/*
 			 * Look for scan result in our known list
 			 */
-			if (known.contains(sResult.SSID)) {
-				WifiConfiguration wfResult = wifiConfigs.get(known
-						.indexOf(sResult.SSID));
+			index = containsSSID(sResult.SSID, wifiConfigs);
+			if (index > -1) {
+				WifiConfiguration wfResult = wifiConfigs.get(index);
 				/*
-				 * Break if disabled
+				 * Ignore if disabled
 				 */
-				if (!PrefUtil.getNetworkState(context, wfResult.networkId))
-					break;
-				/*
-				 * Log network
-				 */
-				if (prefs.getFlag(Pref.LOG_KEY)) {
-					StringBuilder out = new StringBuilder();
-					out.append(context.getString(R.string.found_ssid));
-					out.append(sResult.SSID);
-					out.append(NEWLINE);
-					out.append(context.getString(R.string.capabilities));
-					out.append(sResult.capabilities);
-					out.append(NEWLINE);
-					out.append(context.getString(R.string.signal_level));
-					out.append(sResult.level);
-					LogService.log(context, appname, out.toString());
-				}
+				if (PrefUtil.getNetworkState(context, wfResult.networkId)) {
 
-				/*
-				 * Add result to knownbysignal containsBSSID to avoid dupes
-				 */
-				if (!containsBSSID(sResult.BSSID, knownbysignal))
-					knownbysignal.add(new WFConfig(sResult, wfResult));
-				else {
 					/*
-					 * Update signal level
+					 * Log network
 					 */
-					for (WFConfig config : knownbysignal) {
-						if (config.wificonfig.BSSID.equals(sResult.BSSID)) {
-							knownbysignal.get(knownbysignal.indexOf(config)).level = sResult.level;
-							break;
-						}
+					if (prefs.getFlag(Pref.LOG_KEY)) {
+						StringBuilder out = new StringBuilder();
+						out.append(context.getString(R.string.found_ssid));
+						out.append(sResult.SSID);
+						out.append(NEWLINE);
+						out.append(context.getString(R.string.capabilities));
+						out.append(sResult.capabilities);
+						out.append(NEWLINE);
+						out.append(context.getString(R.string.signal_level));
+						out.append(sResult.level);
+						LogService.log(context, appname, out.toString());
+					}
 
+					/*
+					 * Add result to knownbysignal containsBSSID to avoid dupes
+					 */
+					if (!containsBSSID(sResult.BSSID, knownbysignal))
+						knownbysignal.add(new WFConfig(sResult, wfResult));
+					else {
+						/*
+						 * Update signal level
+						 */
+						for (WFConfig config : knownbysignal) {
+							if (config.wificonfig.BSSID.equals(sResult.BSSID)) {
+								knownbysignal
+										.get(knownbysignal.indexOf(config)).level = sResult.level;
+							}
+						}
 					}
 				}
 			}
@@ -1446,11 +1469,14 @@ public class WFConnection extends Object implements
 			statusdispatcher.sendMessage(ctxt, new StatusMessage(notifSSID,
 					notifStatus, notifSignal, true));
 		}
+		if (sState.equals(SupplicantState.COMPLETED)) {
+			onNetworkConnecting();
+		}
 
 		/*
 		 * Check for ASSOCIATING bug but first clear check if not ASSOCIATING
 		 */
-		if (!sState.equals(SupplicantState.ASSOCIATING)) {
+		else if (!sState.equals(SupplicantState.ASSOCIATING)) {
 			supplicant_associating = 0;
 			handler.removeMessages(ASSOCWATCHDOG);
 		} else if (sState.equals(SupplicantState.ASSOCIATING)) {
@@ -1560,7 +1586,28 @@ public class WFConnection extends Object implements
 		}
 	}
 
+	private void onNetworkConnecting() {
+		/*
+		 * Check for Android 2.x disabled network bug WifiConfiguration state
+		 * won't match stored state
+		 * 
+		 * Checking onConnecting because auth may complete but IP allocation may
+		 * not, want to bounce to another network if that's the case
+		 */
+		fixDisabledNetworks(ctxt, getWifiManager(ctxt).getConfiguredNetworks());
+		handlerWrapper(CONNECTWATCHDOG, CWDOG_DELAY);
+	}
+
 	private void onNetworkConnected() {
+		/*
+		 * Disable watchdog, we've connected
+		 */
+		handler.removeMessages(CONNECTWATCHDOG);
+		/*
+		 * If this was a bad network before, it's good now.
+		 */
+		restoreNetworkPriority(ctxt, getWifiManager(ctxt).getConnectionInfo()
+				.getNetworkId());
 		icmpCache(ctxt);
 		notifSSID = getSSID();
 
@@ -1568,7 +1615,6 @@ public class WFConnection extends Object implements
 		 * Make sure connectee is null
 		 */
 		connectee = null;
-
 		/*
 		 * Reset supplicant associate check
 		 */
@@ -1578,13 +1624,6 @@ public class WFConnection extends Object implements
 		 * Reset repair_reset flag to false
 		 */
 		repair_reset = false;
-
-		/*
-		 * Check for Android 2.x disabled network bug WifiConfiguration state
-		 * won't match stored state
-		 */
-		fixDisabledNetworks(ctxt, getWifiManager(ctxt).getConfiguredNetworks());
-
 		/*
 		 * restart the Main tick
 		 */
@@ -1622,9 +1661,8 @@ public class WFConnection extends Object implements
 		 */
 		if (prefs.getFlag(Pref.SCREEN_KEY))
 			sleepCheck(true);
-		else
-			if(prefs.getFlag(Pref.WIFILOCK_KEY))
-				wifilock.lock(false);
+		else if (prefs.getFlag(Pref.WIFILOCK_KEY))
+			wifilock.lock(false);
 		/*
 		 * Schedule N1 fix
 		 */
@@ -1645,7 +1683,7 @@ public class WFConnection extends Object implements
 		/*
 		 * Re-enable lock if it's off
 		 */
-		if(prefs.getFlag(Pref.WIFILOCK_KEY))
+		if (prefs.getFlag(Pref.WIFILOCK_KEY))
 			wifilock.lock(true);
 
 		sleepCheck(false);
@@ -1703,6 +1741,14 @@ public class WFConnection extends Object implements
 		boolean state = getWifiManager(context).removeNetwork(network);
 		getWifiManager(context).saveConfiguration();
 		return state;
+	}
+
+	private static void restoreNetworkPriority(final Context context,
+			final int n) {
+		WifiConfiguration network = getWifiManager(context)
+				.getConfiguredNetworks().get(n);
+		network.priority = 2;
+		getWifiManager(context).updateNetwork(network);
 	}
 
 	private void requestScan() {
