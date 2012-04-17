@@ -76,6 +76,7 @@ public class WFConnection extends Object implements
 	private static boolean pendingscan = false;
 	private static boolean pendingreconnect = false;
 	private static boolean repair_reset = false;
+	private static boolean _connected = false;
 
 	// IDs For notifications
 	private static final int ERR_NOTIF = 7972;
@@ -886,19 +887,22 @@ public class WFConnection extends Object implements
 	private static void demoteNetwork(final Context context, final int n) {
 		WifiConfiguration network = getWifiManager(context)
 				.getConfiguredNetworks().get(n);
-		if (network.priority > -1){
+		if (network.priority > -1) {
 			network.priority--;
-		getWifiManager(context).updateNetwork(network);
-		if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(context, appname,
-					context.getString(R.string.demoting_network) + network.SSID
-							+ context.getString(R.string._to_)
-							+ network.priority);
-		}
-		else{
+			getWifiManager(context).updateNetwork(network);
+			if (prefs.getFlag(Pref.LOG_KEY))
+				LogService.log(
+						context,
+						appname,
+						context.getString(R.string.demoting_network)
+								+ network.SSID
+								+ context.getString(R.string._to_)
+								+ network.priority);
+		} else {
 			if (prefs.getFlag(Pref.LOG_KEY))
 				LogService.log(context, appname,
-						context.getString(R.string.network_at_priority_floor)+network.SSID);
+						context.getString(R.string.network_at_priority_floor)
+								+ network.SSID);
 		}
 	}
 
@@ -1339,6 +1343,7 @@ public class WFConnection extends Object implements
 	private void checkWifi() {
 		if (getIsSupplicantConnected(ctxt)) {
 			if (!checkNetwork(ctxt)) {
+				_connected = false;
 				handlerWrapper(TEMPLOCK_OFF);
 				handlerWrapper(SCAN);
 				shouldrepair = true;
@@ -1451,7 +1456,20 @@ public class WFConnection extends Object implements
 		if (sState.equals(lastSupplicantState))
 			return;
 		lastSupplicantState = sState;
-		wedgeCheck();
+		/*
+		 * Supplicant state pattern wedge detection
+		 */
+		if (wedgeCheck())
+			return;
+
+		/*
+		 * Set disconnected
+		 */
+		if (!sState.equals(SupplicantState.COMPLETED)
+				&& !sState.equals(SupplicantState.FOUR_WAY_HANDSHAKE)
+				&& !sState.equals(SupplicantState.GROUP_HANDSHAKE))
+			_connected = false;
+
 		/*
 		 * Check for auth error
 		 */
@@ -1469,7 +1487,7 @@ public class WFConnection extends Object implements
 			statusdispatcher.sendMessage(ctxt, new StatusMessage(notifSSID,
 					notifStatus, notifSignal, true));
 		}
-		if (sState.equals(SupplicantState.COMPLETED)) {
+		if (sState.equals(SupplicantState.COMPLETED) && !_connected) {
 			onNetworkConnecting();
 		}
 
@@ -1510,14 +1528,16 @@ public class WFConnection extends Object implements
 		handleSupplicantState(sState.name());
 	}
 
-	private static void wedgeCheck() {
+	private static boolean wedgeCheck() {
 		_supplicantFifo.add(lastSupplicantState);
 		if (!_supplicantFifo.containsPatterns(
 				SupplicantPatterns.SCAN_BOUNCE_CLUSTER).isEmpty()) {
 			LogService.log(ctxt, appname, ctxt.getString(R.string.scan_bounce));
 			_supplicantFifo.clear();
 			toggleWifi();
-		}
+			return true;
+		} else
+			return false;
 	}
 
 	private void handleSupplicantState(final String sState) {
@@ -1587,6 +1607,7 @@ public class WFConnection extends Object implements
 	}
 
 	private void onNetworkConnecting() {
+
 		/*
 		 * Check for Android 2.x disabled network bug WifiConfiguration state
 		 * won't match stored state
@@ -1609,6 +1630,7 @@ public class WFConnection extends Object implements
 		restoreNetworkPriority(ctxt, getWifiManager(ctxt).getConnectionInfo()
 				.getNetworkId());
 		icmpCache(ctxt);
+		_connected = true;
 		notifSSID = getSSID();
 
 		/*

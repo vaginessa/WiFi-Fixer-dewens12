@@ -40,7 +40,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -381,7 +380,6 @@ public class KnownNetworksFragment extends Fragment {
 		WifiManager wm = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);
 		List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
-		Log.i(KnownNetworksFragment.class.getName(), wifiConfigs.toString());
 		if (wifiConfigs == null || wifiConfigs.isEmpty())
 			return new ArrayList<String>();
 
