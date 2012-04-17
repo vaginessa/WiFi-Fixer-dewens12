@@ -40,6 +40,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -158,18 +159,15 @@ public class KnownNetworksFragment extends Fragment {
 				break;
 
 			case CONTEXT_REMOVE:
+				String ssid = (String) lv.getItemAtPosition(clicked_position);
+				int nid = getNidFromSSID(getContext(), ssid);
 				Toast.makeText(
 						getContext(),
 						getContext().getString(R.string.removing_network)
-								+ PrefUtil.getSSIDfromNetwork(getContext(),
-										clicked_position), Toast.LENGTH_SHORT)
-						.show();
-				PrefUtil.getWifiManager(getActivity()).removeNetwork(
-						clicked_position);
+								+ ssid, Toast.LENGTH_SHORT).show();
+				PrefUtil.getWifiManager(getActivity()).removeNetwork(nid);
 				PrefUtil.getWifiManager(getActivity()).saveConfiguration();
-				adapter.ssidArray.remove(clicked_position);
-				knownnetworks.remove(clicked_position);
-				adapter.notifyDataSetChanged();
+				scanhandler.sendEmptyMessage(SCAN_MESSAGE);
 				break;
 			}
 		}
@@ -379,10 +377,11 @@ public class KnownNetworksFragment extends Fragment {
 		return known_in_range;
 	}
 
-	public static final List<String> getNetworks(final Context context) {
+	public static List<String> getNetworks(final Context context) {
 		WifiManager wm = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);
 		List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+		Log.i(KnownNetworksFragment.class.getName(), wifiConfigs.toString());
 		if (wifiConfigs == null || wifiConfigs.isEmpty())
 			return new ArrayList<String>();
 
@@ -392,12 +391,23 @@ public class KnownNetworksFragment extends Fragment {
 			 * Make sure there's a 1:1 correlation between
 			 * getConfiguredNetworks() and the array
 			 */
-			if (wfResult.SSID != null && wfResult.SSID.length() > 0)
+			if (wfResult.SSID != null && !wfResult.SSID.isEmpty())
 				networks.add(StringUtil.removeQuotes(wfResult.SSID));
 			else
 				networks.add(context.getString(R.string.null_ssid));
 		}
 		return networks;
+	}
+
+	private static int getNidFromSSID(final Context context, final String ssid) {
+		WifiManager wm = (WifiManager) context
+				.getSystemService(Context.WIFI_SERVICE);
+		List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+		for (WifiConfiguration network : wifiConfigs) {
+			if (StringUtil.removeQuotes(network.SSID).equals(ssid))
+				return network.networkId;
+		}
+		return -1;
 	}
 
 	private void registerContextMenu() {

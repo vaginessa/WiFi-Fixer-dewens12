@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Copyright [2010-2011] [David Van de Ven]
+<!--
+   Copyright [2010-2011] [David Van de Ven]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,46 +13,45 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
-
 -->
 
 <resources>
-   
+
     <string-array name="entries">
         <item>Max Wifi</item>
         <item>Balanced</item>
         <item>Max Battery</item>
     </string-array>
-    
     <string-array name="entryValues">
         <item>1</item>
         <item>2</item>
         <item>3</item>
     </string-array>
-    
     <string-array name="wfsleep">
         <item>When Screen is Off</item>
         <item>Never While Plugged In</item>
         <item>Never</item>
     </string-array>
-    
     <string-array name="wfsleepValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>
     </string-array>
-    
-     <string-array name="widget">
+    <string-array name="widget">
         <item>Reassociate</item>
         <item>Reset Wifi</item>
         <item>Show App</item>
     </string-array>
-    
     <string-array name="widgetValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>
     </string-array>
-    
+    <string-array name="hopThreshold">
+        <item>-90</item>
+        <item>-80</item>
+        <item>-70</item>
+        <item>-60</item>
+    </string-array>
+
 </resources>
