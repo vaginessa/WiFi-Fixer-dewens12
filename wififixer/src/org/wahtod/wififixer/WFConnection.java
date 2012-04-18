@@ -885,6 +885,8 @@ public class WFConnection extends Object implements
 	}
 
 	private static void demoteNetwork(final Context context, final int n) {
+		if (!getWifiManager(context).isWifiEnabled())
+			return;
 		WifiConfiguration network = getWifiManager(context)
 				.getConfiguredNetworks().get(n);
 		if (network.priority > -1) {
