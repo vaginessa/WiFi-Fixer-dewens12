@@ -1032,10 +1032,16 @@ public class WFConnection extends Object implements
 			@Override
 			public int compare(WFConfig o2, WFConfig o1) {
 				/*
-				 * Sort by signal
+				 * Sort by signal and priority
 				 */
-				return (o1.level < o2.level ? -1 : (o1.level == o2.level ? 0
-						: 1));
+				if (o1.level < o2.level
+						|| o1.wificonfig.priority < o2.wificonfig.priority)
+					return -1;
+				else if (o1.level > o2.level
+						|| o1.wificonfig.priority > o2.wificonfig.priority)
+					return 1;
+				else
+					return 0;
 			}
 		}
 
@@ -1093,6 +1099,9 @@ public class WFConnection extends Object implements
 						out.append(NEWLINE);
 						out.append(context.getString(R.string.signal_level));
 						out.append(sResult.level);
+						out.append(NEWLINE);
+						out.append(context.getString(R.string.priority));
+						out.append(wfResult.priority);
 						LogService.log(context, appname, out.toString());
 					}
 
@@ -1477,6 +1486,9 @@ public class WFConnection extends Object implements
 			NotifUtil.show(ctxt, ctxt.getString(R.string.authentication_error),
 					ctxt.getString(R.string.authentication_error), 2432, null);
 
+		/*
+		 * Status notification updating supplicant state
+		 */
 		if (statNotifCheck()) {
 			if (sState.equals(SupplicantState.COMPLETED)) {
 				notifStatus = SupplicantState.COMPLETED.name();
@@ -1523,7 +1535,7 @@ public class WFConnection extends Object implements
 		}
 
 		/*
-		 * The actual meat of the supplicant fixes
+		 * Supplicant un-wedging
 		 */
 		handleSupplicantState(sState.name());
 	}

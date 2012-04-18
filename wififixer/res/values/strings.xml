@@ -248,5 +248,6 @@
 	<string name="demoting_network">Demoting network</string>
 	<string name="_to_">" to "</string>
 	<string name="network_at_priority_floor">Network at priority floor:</string>
+	<string name="priority">Priority:</string>
 
 </resources>
