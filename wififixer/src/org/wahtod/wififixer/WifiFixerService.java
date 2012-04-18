@@ -24,7 +24,6 @@ import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ScreenStateDetector;
 import org.wahtod.wififixer.utility.ServiceAlarm;
-import org.wahtod.wififixer.utility.WakeLock;
 import org.wahtod.wififixer.utility.ScreenStateDetector.OnScreenStateChangedListener;
 import org.wahtod.wififixer.widget.FixerWidget;
 
@@ -65,7 +64,6 @@ public class WifiFixerService extends Service implements
 	// Version
 	private static int version = 0;
 
-	private WakeLock wakelock;
 	private WFConnection wifi;
 	private static ScreenStateDetector screenstateHandler;
 	/*
@@ -95,7 +93,6 @@ public class WifiFixerService extends Service implements
 	}
 
 	private void cleanup() {
-		wakelock.lock(false);
 		wifi.wifiLock(false);
 		screenstateHandler.unregister(this);
 	}
@@ -159,27 +156,6 @@ public class WifiFixerService extends Service implements
 		 * Cache context for notifications
 		 */
 		notifcontext = this;
-
-		// Initialize WakeLock
-		wakelock = new WakeLock(this) {
-
-			@Override
-			public void onAcquire() {
-				if (logging)
-					LogService.log(getBaseContext(), APP_NAME,
-							getString(R.string.acquiring_wake_lock));
-				super.onAcquire();
-			}
-
-			@Override
-			public void onRelease() {
-				if (logging)
-					LogService.log(getBaseContext(), APP_NAME,
-							getString(R.string.releasing_wake_lock));
-				super.onRelease();
-			}
-
-		};
 
 		getPackageInfo();
 
@@ -384,7 +360,6 @@ public class WifiFixerService extends Service implements
 
 		prefs.loadPrefs();
 		NotifUtil.cancel(notifcontext, NOTIFID);
-		wakelock.lock(false);
 	}
 
 	private void setInitialScreenState(final Context context) {

@@ -32,7 +32,7 @@ import android.os.IBinder;
 import android.os.Message;
 
 public class ToggleService extends Service {
-	private static WakeLock wlock;
+	private WakeLock wlock;
 	private Context ctxt;
 	private ToggleService toggleservice;
 

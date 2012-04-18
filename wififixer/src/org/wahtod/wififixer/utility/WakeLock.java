@@ -21,7 +21,6 @@ import android.os.PowerManager;
 
 public class WakeLock {
 	private PowerManager.WakeLock wakelock;
-	private static final String WAKELOCK_NAME = "WFWAKELOCK";
 
 	public WakeLock(final Context context) {
 		PowerManager pm = (PowerManager) context
@@ -31,8 +30,8 @@ public class WakeLock {
 		 * change screen state, we just want to rev up the CPU so the wifi
 		 * commands work right
 		 */
-		wakelock = pm
-				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_NAME);
+		wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+				context.toString());
 	}
 
 	public void lock(final boolean state) {

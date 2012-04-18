@@ -21,7 +21,6 @@ import android.net.wifi.WifiManager;
 
 public class WifiLock {
 	static WifiManager.WifiLock wifilock;
-	private static final String WIFILOCK_TAG = "WFWIFILOCK";
 
 	public WifiLock(final Context context) {
 		WifiManager wm = (WifiManager) context
@@ -29,7 +28,7 @@ public class WifiLock {
 		/*
 		 * We want WifiManager.WIFI_MODE_FULL as we're not just scanning
 		 */
-		wifilock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, WIFILOCK_TAG);
+		wifilock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, context.toString());
 	}
 
 	public void lock(final boolean state) {
