@@ -254,9 +254,10 @@ public class WFConnection extends Object implements
 				checkAssociateState();
 				break;
 			case CONNECTWATCHDOG:
-				demoteNetwork(ctxt, getWifiManager(ctxt).getConnectionInfo()
-						.getNetworkId());
-
+				int n = getWifiManager(ctxt).getConnectionInfo().getNetworkId();
+				if (n != -1)
+					demoteNetwork(ctxt, n);
+				break;
 			}
 		}
 	};
@@ -1641,8 +1642,9 @@ public class WFConnection extends Object implements
 		/*
 		 * If this was a bad network before, it's good now.
 		 */
-		restoreNetworkPriority(ctxt, getWifiManager(ctxt).getConnectionInfo()
-				.getNetworkId());
+		int n = getWifiManager(ctxt).getConnectionInfo().getNetworkId();
+		if (n != -1)
+			restoreNetworkPriority(ctxt, n);
 		icmpCache(ctxt);
 		_connected = true;
 		notifSSID = getSSID();

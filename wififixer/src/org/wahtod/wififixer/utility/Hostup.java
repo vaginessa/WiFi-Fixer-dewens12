@@ -211,8 +211,9 @@ public class Hostup {
 			/*
 			 * Get response
 			 */
-			HttpResponse response = httpclient.execute(new HttpHead(headURI));
-			status = response.getStatusLine().getStatusCode();
+			HttpResponse hr = httpclient.execute(new HttpHead(headURI));
+			status = hr.getStatusLine().getStatusCode();
+			
 		} catch (IllegalStateException e) {
 			// httpclient in bad state, reset
 			httpclient = null;
@@ -223,6 +224,7 @@ public class Hostup {
 			 */
 			status = -1;
 		}
+		
 		if (status == HttpURLConnection.HTTP_OK) {
 			if (!finished)
 				response = target + context.getString(R.string.http_ok);
