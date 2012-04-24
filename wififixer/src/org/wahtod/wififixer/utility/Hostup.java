@@ -74,7 +74,7 @@ public class Hostup {
 			} catch (IOException e) {
 
 			} catch (URISyntaxException e) {
-				
+
 			}
 			/*
 			 * Interrupt waiting thread since we have a result
@@ -191,14 +191,16 @@ public class Hostup {
 		 */
 		if (httpclient == null) {
 			SchemeRegistry scheme = new SchemeRegistry();
-	        scheme.register(new Scheme(HTTPSCHEME, PlainSocketFactory.getSocketFactory(), 80));
-	        BasicHttpParams httpparams = new BasicHttpParams();
+			scheme.register(new Scheme(HTTPSCHEME, PlainSocketFactory
+					.getSocketFactory(), 80));
+			BasicHttpParams httpparams = new BasicHttpParams();
 			HttpConnectionParams.setConnectionTimeout(httpparams,
 					Integer.valueOf(reachable));
 			HttpConnectionParams.setSoTimeout(httpparams, reachable);
 			HttpConnectionParams.setLinger(httpparams, 1);
 			HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
-	        ClientConnectionManager cm = new ThreadSafeClientConnManager(httpparams, scheme);
+			ClientConnectionManager cm = new ThreadSafeClientConnManager(
+					httpparams, scheme);
 			httpclient = new DefaultHttpClient(cm, httpparams);
 		}
 		/*
@@ -232,7 +234,7 @@ public class Hostup {
 			 */
 			status = -1;
 		}
-		
+
 		if (status == HttpURLConnection.HTTP_OK) {
 			if (!finished)
 				response = target + context.getString(R.string.http_ok);
