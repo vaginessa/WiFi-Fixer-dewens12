@@ -24,14 +24,21 @@ import java.net.UnknownHostException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpHead;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.wahtod.wififixer.R;
+
 import android.content.Context;
 
 public class Hostup {
 
+	private static final String HTTPSCHEME = "http";
 	/*
 	 * getHostUp method: Executes 2 threads, icmp check and http check first
 	 * thread to return state "wins"
@@ -67,6 +74,7 @@ public class Hostup {
 			} catch (IOException e) {
 
 			} catch (URISyntaxException e) {
+				
 			}
 			/*
 			 * Interrupt waiting thread since we have a result
@@ -146,7 +154,6 @@ public class Hostup {
 			}
 			return state;
 		}
-
 	}
 
 	/*
@@ -183,14 +190,16 @@ public class Hostup {
 		 * Reusing Httpclient, since it's expensive
 		 */
 		if (httpclient == null) {
-			httpclient = new DefaultHttpClient();
-			BasicHttpParams httpparams = new BasicHttpParams();
+			SchemeRegistry scheme = new SchemeRegistry();
+	        scheme.register(new Scheme(HTTPSCHEME, PlainSocketFactory.getSocketFactory(), 80));
+	        BasicHttpParams httpparams = new BasicHttpParams();
 			HttpConnectionParams.setConnectionTimeout(httpparams,
 					Integer.valueOf(reachable));
 			HttpConnectionParams.setSoTimeout(httpparams, reachable);
 			HttpConnectionParams.setLinger(httpparams, 1);
 			HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
-			httpclient.setParams(httpparams);
+	        ClientConnectionManager cm = new ThreadSafeClientConnManager(httpparams, scheme);
+			httpclient = new DefaultHttpClient(cm, httpparams);
 		}
 		/*
 		 * get URI
@@ -213,7 +222,6 @@ public class Hostup {
 			 */
 			HttpResponse hr = httpclient.execute(new HttpHead(headURI));
 			status = hr.getStatusLine().getStatusCode();
-			
 		} catch (IllegalStateException e) {
 			// httpclient in bad state, reset
 			httpclient = null;

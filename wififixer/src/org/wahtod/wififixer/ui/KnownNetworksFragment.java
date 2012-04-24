@@ -389,7 +389,7 @@ public class KnownNetworksFragment extends Fragment {
 			 * Make sure there's a 1:1 correlation between
 			 * getConfiguredNetworks() and the array
 			 */
-			if (wfResult.SSID != null && !wfResult.SSID.isEmpty())
+			if (wfResult.SSID != null && wfResult.SSID.length() > 0)
 				networks.add(StringUtil.removeQuotes(wfResult.SSID));
 			else
 				networks.add(context.getString(R.string.null_ssid));
