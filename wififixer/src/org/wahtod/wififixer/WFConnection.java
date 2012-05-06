@@ -29,6 +29,7 @@ import org.wahtod.wififixer.utility.Hostup;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ScreenStateDetector;
+import org.wahtod.wififixer.utility.ServiceAlarm;
 import org.wahtod.wififixer.utility.StatusDispatcher;
 import org.wahtod.wififixer.utility.StatusMessage;
 import org.wahtod.wififixer.utility.StringUtil;
@@ -90,6 +91,9 @@ public class WFConnection extends Object implements
 
 	// For blank SSIDs
 	private static final String NULL_SSID = "None";
+
+	// Sleep Check Intent for Alarm
+	public static final String SLEEPCHECKINTENT = "org.wahtod.wififixer.SLEEPCHECK";
 
 	// Wifi Connect Intent
 	public static final String CONNECTINTENT = "org.wahtod.wififixer.CONNECT";
@@ -448,14 +452,9 @@ public class WFConnection extends Object implements
 					wakelock.lock(true);
 					checkWifi();
 				}
-				/*
-				 * Post next run
-				 */
 			}
-			handlerWrapper(SLEEPCHECK, SLEEPWAIT);
 			wakelock.lock(false);
 		}
-
 	};
 
 	/*
@@ -597,6 +596,9 @@ public class WFConnection extends Object implements
 
 		// User Event
 		filter.addAction(USEREVENT);
+
+		// Sleep Check
+		filter.addAction(SLEEPCHECKINTENT);
 
 		context.registerReceiver(receiver, filter);
 
@@ -940,6 +942,11 @@ public class WFConnection extends Object implements
 			handleConnectIntent(context, data);
 		else if (iAction.equals(USEREVENT))
 			handleUserEvent();
+		else if (iAction.equals(SLEEPCHECKINTENT)) {
+			handler.sendEmptyMessageDelayed(SLEEPCHECK, REALLYSHORTWAIT);
+		} else if (prefs.getFlag(Pref.LOG_KEY))
+			LogService.log(context, appname, iAction.toString());
+
 	}
 
 	private static void fixDisabledNetworks(final Context context,
@@ -1667,8 +1674,8 @@ public class WFConnection extends Object implements
 		 */
 		if (screenstate)
 			handlerWrapper(MAIN, REALLYSHORTWAIT);
-		else
-			handlerWrapper(SLEEPCHECK, SLEEPWAIT);
+		else if (prefs.getFlag(Pref.SCREEN_KEY) && !ctxt.equals(null))
+			sleepCheck(screenstate);
 
 		/*
 		 * Clear any error/new network notifications
@@ -1913,17 +1920,20 @@ public class WFConnection extends Object implements
 	}
 
 	private void sleepCheck(final boolean state) {
+		Intent i = new Intent(SLEEPCHECKINTENT);
+		PendingIntent p = PendingIntent.getBroadcast(ctxt, 0, i,
+				PendingIntent.FLAG_CANCEL_CURRENT);
 		if (state && getisWifiEnabled(ctxt, false)) {
 			/*
 			 * Start sleep check
 			 */
-			handlerWrapper(SLEEPCHECK, SLEEPWAIT);
 			handler.removeMessages(MAIN);
-
+			ServiceAlarm.addAlarm(ctxt, SHORTWAIT, true, SLEEPWAIT, p);
 		} else {
 			/*
 			 * Screen is on, remove any posts
 			 */
+			ServiceAlarm.unsetAlarm(ctxt, p);
 			handler.removeMessages(SLEEPCHECK);
 			/*
 			 * Check state

@@ -13,8 +13,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="internalOnly"
     package="org.wahtod.wififixer"
-    android:versionCode="931"
-    android:versionName="0.9.0.3">
+    android:versionCode="932"
+    android:versionName="0.9.5p1">
 
     <supports-screens
         android:largeScreens="true"
@@ -128,8 +128,7 @@
             class="WifiFixerService"
             android:exported="false"
             android:name=".WifiFixerService"
-            android:persistent="true"
-            >
+            android:persistent="true">
         </service>
 
 <!-- 			Provides LogService.log services -->

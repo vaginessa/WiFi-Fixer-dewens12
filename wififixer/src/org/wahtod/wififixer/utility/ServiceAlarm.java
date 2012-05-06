@@ -42,7 +42,7 @@ public final class ServiceAlarm extends Object {
 	private static final long NODELAY = 0;
 
 	public static boolean alarmExists(final Context c) {
-		return (createPendingIntent(c, PendingIntent.FLAG_NO_CREATE) != null);
+		return (createPendingIntent(c, 0) != null);
 	}
 
 	private static PendingIntent createPendingIntent(final Context context,
@@ -89,23 +89,29 @@ public final class ServiceAlarm extends Object {
 	}
 
 	public static void setAlarm(final Context c, final boolean initialdelay) {
-		addAlarm(c, initialdelay, true, createPendingIntent(c, 0));
+		addAlarm(c, initialdelay, true, PERIOD, createPendingIntent(c, 0));
+	}
+
+	public static void addAlarm(final Context c, final long delay,
+			final boolean repeating, final long period, PendingIntent p) {
+		registerAlarm(c, delay, repeating, period, p);
 	}
 
 	public static void addAlarm(final Context c, final boolean initialdelay,
-			final boolean repeating, PendingIntent p) {
-		Long delay;
-
+			final boolean repeating, final long period, PendingIntent p) {
 		if (initialdelay)
-			delay = PERIOD;
+			registerAlarm(c, PERIOD, repeating, period, p);
 		else
-			delay = NODELAY;
+			registerAlarm(c, NODELAY, repeating, period, p);
+	}
 
+	private static void registerAlarm(final Context c, final long delay,
+			final boolean repeating, final long period, PendingIntent p) {
 		AlarmManager mgr = (AlarmManager) c
 				.getSystemService(Context.ALARM_SERVICE);
 		if (repeating)
 			mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-					SystemClock.elapsedRealtime() + delay, PERIOD, p);
+					SystemClock.elapsedRealtime() + delay, period, p);
 		else
 			mgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
 					SystemClock.elapsedRealtime() + delay, p);
@@ -115,5 +121,11 @@ public final class ServiceAlarm extends Object {
 		AlarmManager mgr = (AlarmManager) c
 				.getSystemService(Context.ALARM_SERVICE);
 		mgr.cancel(createPendingIntent(c, 0));
+	}
+
+	public static void unsetAlarm(final Context c, PendingIntent p) {
+		AlarmManager mgr = (AlarmManager) c
+				.getSystemService(Context.ALARM_SERVICE);
+		mgr.cancel(p);
 	}
 }
