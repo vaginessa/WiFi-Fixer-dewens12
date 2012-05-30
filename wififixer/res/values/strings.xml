@@ -167,8 +167,8 @@
 	<string name="scanfragment_header">Local Networks</string>
 	<string name="open_network">Open</string>
 	<string name="logservice">LogService</string>
-	<string name="link_speed">Link Speed:</string>
-	<string name="signal_strength">Signal Strength:</string>
+	<string name="link_speed">Link:</string>
+	<string name="signal_strength">Signal:</string>
 	<string name="state">State:</string>
 	<string name="resource">resource</string>
 	<string name="xml">xml</string>
@@ -249,5 +249,6 @@
 	<string name="_to_">" to "</string>
 	<string name="network_at_priority_floor">Network at priority floor:</string>
 	<string name="priority">Priority:</string>
+	<string name="error">error</string>
 
 </resources>

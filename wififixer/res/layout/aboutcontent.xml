@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<!--
+<!--
 		Copyright [2010-2011] [David Van de Ven] Licensed under the Apache
 		License, Version 2.0 (the "License"); you may not use this file except
 		in compliance with the License. You may obtain a copy of the License
@@ -8,59 +8,141 @@
 		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 		CONDITIONS OF ANY KIND, either express or implied. See the License for
 		the specific language governing permissions and limitations under the
-		License.
-	-->
+		License.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/aboutview"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical" >
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="wrap_content"
-	android:layout_weight="1" android:gravity="center" android:padding="20dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
-	<LinearLayout android:orientation="vertical"
-		android:layout_width="wrap_content" android:layout_height="wrap_content">
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:paddingTop="10dip"
-			android:text="This software is provided free under the terms of the Apache 2.0 license: see\n http://www.apache.org/licenses/LICENSE-2.0\n\"
-			android:autoLink="web" style="@style/Wftext" />
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:paddingTop="10dip"
-			android:text="Wifi Fixer is a low-resource service that works around several problems with Android wifi.\n"
-			style="@style/Wftext.large" />
-			
-			<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:paddingTop="10dip"
-			android:text="Wifi Fixer should help immediately, but may need preferences adjusted to work best.\n\nPlease read the documentation for specifics.\n"
-			style="@style/Wftext.header" />
+        <TextView
+            android:id="@+id/widget39"
+            style="@style/Wftext.header"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="@string/app_name" >
+        </TextView>
 
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:paddingTop="10dip"
-			android:text="For problems or comments:\n email zanshin.g1@gmail.com\nwith specific details, or use the in-app logging feature.\n\nVisit the development blog\n at http://wififixer.wordpress.com\n"
-			style="@style/Wftext.header" android:autoLink="web|email" />
+        <RelativeLayout
+            android:id="@+id/logowrap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:gravity="right" >
 
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:paddingTop="10dip"
-			android:text="Wifi Fixer is an Open Source project"
-			style="@style/Wftext.large"/>
-		
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:paddingTop="10dip"
-			android:text="Visit the git repository at\nhttp://github.com/Zanshinmu/Wifi-Fixer\n"
-			style="@style/Wftext.header" android:autoLink="web" />
-		
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:paddingTop="10dip"
-			android:text="Privacy Disclosure:"
-			style="@style/Wftext.large"/>
-		
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:paddingTop="10dip"
-			android:text="Information sent via email for support purposes is never shared with any third party.  Your email address will never be used for any purpose other than product support.\n"
-			style="@style/Wftext.header" />
+            <ImageView
+                android:id="@+id/wficon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="@dimen/service_wficon_padding_bottom"
+                android:src="@drawable/icon" >
+            </ImageView>
 
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:paddingTop="10dip"
-			android:text="Logging stores some personal information: specifically current timezone and SSID of configured access points and scanned SSIDs during connection.\nLogging is not enabled by default.\nThe log will only be enabled and sent when explicitly requested.\n\nStack traces are collected upon an uncaught exception and added to the log.\nStack traces contain no identifying information."
-			style="@style/Wftext.header" />
+            <TextView
+                android:id="@+id/version"
+                style="@style/Wftext"
+                android:layout_width="@dimen/service_version_layout_width"
+                android:layout_gravity="right"
+                android:layout_marginLeft="@dimen/service_version_margin_left"
+                android:layout_toRightOf="@+id/wficon"
+                android:paddingBottom="@dimen/service_version_padding_bottom"
+                android:paddingTop="@dimen/service_version_padding_top"
+                android:text="@string/error" >
+            </TextView>
+        </RelativeLayout>
+    </LinearLayout>
 
-	</LinearLayout>
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="1.0"
+        android:gravity="center"
+        android:padding="20dp" >
 
-</ScrollView>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/Wftext"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:paddingTop="10dip"
+                android:text="This software is provided free under the terms of the Apache 2.0 license: see\n http://www.apache.org/licenses/LICENSE-2.0\n\" />
+
+            <TextView
+                style="@style/Wftext.large"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dip"
+                android:text="Wifi Fixer is a low-resource service that works around several problems with Android wifi.\n" />
+
+            <TextView
+                style="@style/Wftext.header"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dip"
+                android:text="Wifi Fixer should help immediately, but may need preferences adjusted to work best.\n\nPlease read the documentation for specifics.\n" />
+
+            <TextView
+                style="@style/Wftext.header"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web|email"
+                android:paddingTop="10dip"
+                android:text="For problems or comments:\n email zanshin.g1@gmail.com\nwith specific details, or use the in-app logging feature.\n\nVisit the development blog\n at http://wififixer.wordpress.com\n" />
+
+            <TextView
+                style="@style/Wftext.large"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dip"
+                android:text="Wifi Fixer is an Open Source project" />
+
+            <TextView
+                style="@style/Wftext.header"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:paddingTop="10dip"
+                android:text="Visit the git repository at\nhttp://github.com/Zanshinmu/Wifi-Fixer\n" />
+
+            <TextView
+                style="@style/Wftext.large"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dip"
+                android:text="Privacy Disclosure:" />
+
+            <TextView
+                style="@style/Wftext.header"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dip"
+                android:text="Information sent via email for support purposes is never shared with any third party.  Your email address will never be used for any purpose other than product support.\n" />
+
+            <TextView
+                style="@style/Wftext.header"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dip"
+                android:text="Logging stores some personal information: specifically current timezone and SSID of configured access points and scanned SSIDs during connection.\nLogging is not enabled by default.\nThe log will only be enabled and sent when explicitly requested.\n\nStack traces are collected upon an uncaught exception and added to the log.\nStack traces contain no identifying information." />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

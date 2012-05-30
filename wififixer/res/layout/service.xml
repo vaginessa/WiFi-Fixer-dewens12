@@ -5,127 +5,52 @@
     android:gravity="left"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/widget39"
-        style="@style/Wftext.header"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:text="@string/app_name" >
-    </TextView>
-
-    <RelativeLayout
-        android:id="@+id/logowrap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:gravity="right" >
-
-        <ImageView
-            android:id="@+id/wficon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:paddingBottom="@dimen/service_wficon_padding_bottom"
-            android:src="@drawable/icon" >
-        </ImageView>
-
-        <TextView
-            android:id="@+id/version"
-            style="@style/Wftext"
-            android:layout_width="@dimen/service_version_layout_width"
-            android:layout_gravity="right"
-            android:layout_marginLeft="@dimen/service_version_margin_left"
-            android:layout_toRightOf="@+id/wficon"
-            android:paddingBottom="@dimen/service_version_padding_bottom"
-            android:paddingTop="@dimen/service_version_padding_top"
-            android:text="@+id/TextView02" >
-        </TextView>
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/aboutText"
-        style="@style/Wftext"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/logowrap"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/service_abouttext_margin_left"
-        android:layout_marginRight="@dimen/service_abouttext_margin_right"
-        android:paddingBottom="@dimen/service_abouttext_padding_bottom"
-        android:text="@string/blurb" >
-    </TextView>
-
     <LinearLayout
-        android:id="@+id/buttonscontainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" >
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/service_fragment_height"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <fragment
+            android:id="@+id/about"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight=".8"
+            class="org.wahtod.wififixer.ui.StatusFragment" />
 
         <LinearLayout
-            android:id="@+id/servicecontainer"
-            android:layout_width="@dimen/service_container_layout_width"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:id="@+id/buttonscontainer"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight=".4"
+            android:gravity="center_vertical"
             android:orientation="vertical" >
 
-            <ImageButton
-                android:id="@+id/ImageButton01"
-                android:layout_width="@dimen/service_imagebutton_dimensions"
-                android:layout_height="@dimen/service_imagebutton_dimensions"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/buttons"
+            <ToggleButton
+                android:id="@+id/ToggleButton1"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
+                android:layout_marginTop="@dimen/service_imagebutton_margin_top"
                 android:clickable="true"
                 android:onClick="serviceToggle"
+                android:textOff="@string/service_status"
+                android:textOn="@string/service_status"
+                />
+
+            <ToggleButton
+                android:id="@+id/ToggleButton2"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
                 android:layout_marginTop="@dimen/service_imagebutton_margin_top"
-                android:src="@drawable/buttons" >
-
-            </ImageButton>
-
-            <TextView
-                android:id="@+id/TextView01"
-                style="@style/Wftext"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
-                android:text="@string/service_status" >
-            </TextView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/wificontainer"
-            android:layout_width="@dimen/service_container_layout_width"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:orientation="vertical" >
-
-            <ImageButton
-                android:id="@+id/ImageButton02"
-                android:layout_width="@dimen/service_imagebutton_dimensions"
-                android:layout_height="@dimen/service_imagebutton_dimensions"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/buttons"
                 android:clickable="true"
                 android:onClick="wifiToggle"
-                android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
-                android:layout_marginTop="@dimen/service_imagebutton_margin_top"
-                android:src="@drawable/buttons" >
-
-            </ImageButton>
-
-            <TextView
-                android:id="@+id/TextView02"
-                style="@style/Wftext"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
-                android:text="@string/wifi" >
-            </TextView>
+                android:textOff="@string/wifi"
+                android:textOn="@string/wifi" />
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

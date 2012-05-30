@@ -24,6 +24,7 @@
 	<dimen name ="scannetworks_list_padding">15dp</dimen>
 	<dimen name ="scannetworks_title_padding_bottom">15dp</dimen>
 	<dimen name ="scannetworks_title_padding_top">10dp</dimen>
+	<dimen name ="service_fragment_height">200dp</dimen>
 	<dimen name ="service_wficon_padding_bottom">10dp</dimen>
 	<dimen name ="service_version_layout_width">80dp</dimen>
 	<dimen name ="service_version_margin_left">100dp</dimen>
@@ -33,9 +34,8 @@
 	<dimen name ="service_abouttext_margin_left">50dp</dimen>
 	<dimen name ="service_abouttext_padding_bottom">10dp</dimen>
 	<dimen name ="service_container_layout_width">100dp</dimen>
-	<dimen name ="service_imagebutton_dimensions">32dp</dimen>
-	<dimen name ="service_imagebutton_margin_bottom">5dp</dimen>
-	<dimen name ="service_imagebutton_margin_top">10dp</dimen>
+	<dimen name ="service_imagebutton_margin_bottom">1dp</dimen>
+	<dimen name ="service_imagebutton_margin_top">1dp</dimen>
 	<dimen name ="status_padding">5dp</dimen>
 	<dimen name ="status_layout_padding">5dp</dimen>
 	<dimen name ="status_layout_height">40dp</dimen>

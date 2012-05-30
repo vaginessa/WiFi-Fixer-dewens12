@@ -18,8 +18,10 @@ package org.wahtod.wififixer.utility;
 
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
+import org.wahtod.wififixer.ui.StatusFragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
@@ -65,9 +67,16 @@ public class StatusDispatcher {
 			 * widget
 			 */
 			m = message;
+			
 			/*
-			 * Dispatch Status Notification update
+			 * Fast supplicant state update if WifiFixerService is running
 			 */
+			 Intent i = new Intent(StatusFragment.STATUS_ACTION);
+			 i.putExtra(StatusFragment.STATUS_KEY,m.status);
+			 context.sendBroadcast(i);
+			 /*
+				 * Dispatch Status Notification update
+				 */
 			if (prefs.getFlag(Pref.STATENOT_KEY))
 				NotifUtil.addStatNotif(context, m);
 			/*

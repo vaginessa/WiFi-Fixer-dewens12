@@ -81,7 +81,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 
 		@Override
 		public int getCount() {
-			return 3;
+			return 2;
 		}
 
 		@Override
@@ -92,9 +92,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 
 			case 1:
 				return ScanFragment.newInstance(position);
-
-			case 2:
-				return StatusFragment.newInstance(position);
 			}
 			return null;
 		}
@@ -169,9 +166,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		tabletvp = (ViewPager) findViewById(R.id.tpager);
 		tadapter = new TabletAdapter(getSupportFragmentManager());
 		tabletvp.setAdapter(tadapter);
-		if (tadapter.getCount() == 0)
-			tadapter.add(new StatusFragment());
-
 		tabletvp.setCurrentItem(fragments.size() - 1, true);
 		onPageSelected(fragments.size() - 1);
 		if (!onpagechangeRegistered) {
@@ -716,9 +710,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			f = fm.findFragmentByTag(tag);
 			if (f == null)
 				break;
-			if (f.getArguments() == null)
-				fragments.add(new StatusFragment());
-			else
+			if (f.getArguments() != null)
 				fragments
 						.add(FragmentSwitchboard.newInstance(f.getArguments()));
 			ft.remove(f);

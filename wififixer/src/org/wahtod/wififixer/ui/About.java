@@ -18,22 +18,55 @@ package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
+
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class About extends FragmentActivity {
+	private TextView version;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.about);
+		setContentView(R.layout.aboutcontent);
 		ActionBarDetector.setUp(this, true,
 				getString(R.string.about_activity_title));
+		// Set layout version code
+		version = (TextView) findViewById(R.id.version);
+		setText();
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		ActionBarDetector.handleHome(this, item);
 		return super.onOptionsItemSelected(item);
+	}
+
+	void setText() {
+		PackageManager pm = this.getPackageManager();
+		String vers = null;
+		try {
+			/*
+			 * Get PackageInfo object
+			 */
+			PackageInfo pi = pm.getPackageInfo(this.getPackageName(), 0);
+			/*
+			 * get version code string
+			 */
+			vers = pi.versionName;
+		} catch (NameNotFoundException e) {
+			/*
+			 * shouldn't ever be not found
+			 */
+			vers = getString(R.string.error);
+			e.printStackTrace();
+		}
+
+		version.setText(vers.toCharArray(), 0, vers.length());
 	}
 }

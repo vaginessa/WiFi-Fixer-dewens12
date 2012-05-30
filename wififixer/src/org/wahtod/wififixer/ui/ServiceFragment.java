@@ -17,18 +17,13 @@
 package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
+import org.wahtod.wififixer.prefs.PrefUtil;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,14 +32,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class ServiceFragment extends Fragment {
 	public static final String REFRESH_ACTION = "org.wahtod.wififixer.ui.ServiceFragment.REFRESH";
-	private TextView version;
-	private ImageButton servicebutton;
-	private ImageButton wifibutton;
+	private ToggleButton servicebutton;
+	private ToggleButton wifibutton;
 
 	private Handler handler = new Handler() {
 		@Override
@@ -106,11 +99,8 @@ public class ServiceFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.service, null);
-		// Set layout version code
-		version = (TextView) v.findViewById(R.id.version);
-		servicebutton = (ImageButton) v.findViewById(R.id.ImageButton01);
-		wifibutton = (ImageButton) v.findViewById(R.id.ImageButton02);
-		setText();
+		servicebutton = (ToggleButton) v.findViewById(R.id.ToggleButton1);
+		wifibutton = (ToggleButton) v.findViewById(R.id.ToggleButton2);
 		return v;
 	}
 
@@ -119,54 +109,22 @@ public class ServiceFragment extends Fragment {
 	}
 
 	private void setIcon() {
-
-		servicebutton.setClickable(true);
-		servicebutton.setFocusable(false);
-		servicebutton.setFocusableInTouchMode(false);
-
-		wifibutton.setClickable(true);
-		wifibutton.setFocusable(false);
-		wifibutton.setFocusableInTouchMode(false);
-
 		/*
 		 * Draw icon
 		 */
 
 		if (PrefUtil.readBoolean(getContext(), Pref.DISABLE_KEY.key())) {
-			servicebutton.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+			servicebutton.setChecked(false);
 		} else {
-			servicebutton.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_ATOP);
+			servicebutton.setChecked(true);
 		}
 
 		if (!WifiFixerActivity.getIsWifiOn(getContext())) {
-			wifibutton.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+			wifibutton.setChecked(false);
 		} else {
-			wifibutton.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_ATOP);
+			wifibutton.setChecked(true);
 		}
 
-	}
-
-	void setText() {
-		PackageManager pm = getContext().getPackageManager();
-		String vers = "";
-		try {
-			/*
-			 * Get PackageInfo object
-			 */
-			PackageInfo pi = pm
-					.getPackageInfo(getContext().getPackageName(), 0);
-			/*
-			 * get version code string
-			 */
-			vers = pi.versionName;
-		} catch (NameNotFoundException e) {
-			/*
-			 * shouldn't ever be not found
-			 */
-			e.printStackTrace();
-		}
-
-		version.setText(vers.toCharArray(), 0, vers.length());
 	}
 
 }
