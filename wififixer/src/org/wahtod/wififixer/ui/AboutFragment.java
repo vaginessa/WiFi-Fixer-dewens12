@@ -92,6 +92,7 @@ public class AboutFragment extends FragmentSwitchboard {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.about_fragment, null);
+		setDialog(this);
 		return v;
 	}
 
@@ -132,7 +133,7 @@ public class AboutFragment extends FragmentSwitchboard {
 	}
 
 	private Context getContext() {
-		return getActivity().getApplicationContext();
+		return getActivity();
 	}
 
 	private void drawView() {

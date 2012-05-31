@@ -17,8 +17,6 @@
 package org.wahtod.wififixer.ui;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import org.wahtod.wififixer.R;
 
 import org.wahtod.wififixer.DefaultExceptionHandler;
@@ -47,6 +45,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -70,9 +69,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	public boolean phoneFlag;
 
 	private ViewPager tabletvp;
-	private TabletAdapter tadapter;
-	protected List<Fragment> fragments = new ArrayList<Fragment>();
-	private boolean onpagechangeRegistered;
 
 	public class PhoneAdapter extends FragmentPagerAdapter {
 		public PhoneAdapter(FragmentManager fm) {
@@ -96,27 +92,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			return null;
 		}
 	}
-
-	public class TabletAdapter extends FragmentPagerAdapter {
-		public TabletAdapter(FragmentManager fm) {
-			super(fm);
-		}
-
-		@Override
-		public int getCount() {
-			return fragments.size();
-		}
-
-		@Override
-		public Fragment getItem(int position) {
-			return fragments.get(position);
-		}
-
-		public void add(Fragment f) {
-			fragments.add(f);
-		}
-	}
-
+	
 	private Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
@@ -149,9 +125,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	public static final String KNOWNNETWORKSFRAG_TAG = "KNOWNNETWORKS";
 	public static final String SCANFRAG_TAG = "SCAN";
 	public static final String STATUSFRAG_TAG = "STATUS";
-	public static final String ABOUTFRAG_TAG = "ABOUT";
-	public static final String TABLETPAGERFRAG_TAG = "TPFT";
-	private static final String FRAGMENTS_INSTANCE_STATE = "FRAGMENTS_INSTANCE_STATE";
 	private static final String RUN_TUTORIAL = "RUN_TUTORIAL";
 
 	void authCheck() {
@@ -161,19 +134,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			nagNotification(this);
 		}
 	}
-
-	private void createTabletAdapter() {
-		tabletvp = (ViewPager) findViewById(R.id.tpager);
-		tadapter = new TabletAdapter(getSupportFragmentManager());
-		tabletvp.setAdapter(tadapter);
-		tabletvp.setCurrentItem(fragments.size() - 1, true);
-		onPageSelected(fragments.size() - 1);
-		if (!onpagechangeRegistered) {
-			tabletvp.setOnPageChangeListener(this);
-			onpagechangeRegistered = true;
-		}
-	}
-
+	
 	private void deleteLog() {
 		/*
 		 * Delete old log
@@ -216,11 +177,11 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		 */
 		if (data.containsKey(SHOW_FRAGMENT)) {
 			data.remove(SHOW_FRAGMENT);
-			if (phoneFlag) {
-				Intent i = new Intent(this, GenericFragmentActivity.class);
-				i.putExtras(data);
-				startActivity(i);
-			} else
+//			if (phoneFlag) {
+//				Intent i = new Intent(this, GenericFragmentActivity.class);
+//				i.putExtras(data);
+//				startActivity(i);
+//			} else
 				showFragment(data);
 		}
 		/*
@@ -229,10 +190,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		else if (data.containsKey(DELETE_LOG)) {
 			data.remove(DELETE_LOG);
 			deleteLog();
-		} else if (data.containsKey(REMOVE_CONNECT_FRAGMENTS)) {
-			data.remove(REMOVE_CONNECT_FRAGMENTS);
-			removeConnectFragments(tabletvp.getCurrentItem());
-		} else if (data.containsKey(RUN_TUTORIAL)) {
+		} 
+		else if (data.containsKey(RUN_TUTORIAL)) {
 			data.remove(RUN_TUTORIAL);
 			if (findViewById(R.id.pager) != null)
 				phoneTutNag();
@@ -470,24 +429,14 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			drawFragment(R.id.knownnetworksfragment,
 					KnownNetworksFragment.class);
 			drawFragment(R.id.scanfragment, ScanFragment.class);
-			createTabletAdapter();
 		}
 	}
 
 	@Override
 	public void onBackPressed() {
 		if (!phoneFlag) {
-			if (getSupportFragmentManager().getBackStackEntryCount() == 1)
+			if (getSupportFragmentManager().getBackStackEntryCount() == 0)
 				ActionBarDetector.setUp(this, false, null);
-			int tabletvpItem = tabletvp.getCurrentItem();
-			if (tabletvpItem > 0) {
-				if (tadapter.getItem(tabletvpItem).getClass()
-						.equals(ConnectFragment.class))
-					removeConnectFragments(tabletvpItem);
-				else
-					tabletvp.setCurrentItem(tabletvpItem - 1);
-			} else
-				super.onBackPressed();
 		} else
 			super.onBackPressed();
 	}
@@ -508,9 +457,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			setContentView(R.layout.mainalt);
 		else
 			setContentView(R.layout.main);
-		restoreOrphanedFragments(savedInstanceState);
 		drawUI(savedInstanceState);
-
 		oncreate_setup();
 		/*
 		 * Handle intent command if destroyed or first start
@@ -538,20 +485,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 				.readBoolean(this, PrefConstants.LOGGING_MENU);
 		loggingFlag = getLogging(this);
 		startwfService(this);
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		ArrayList<String> tags = new ArrayList<String>();
-		if (!phoneFlag) {
-			for (Fragment f : fragments) {
-				if (f.getTag() != null) {
-					tags.add(f.getTag());
-				}
-			}
-			outState.putStringArrayList(FRAGMENTS_INSTANCE_STATE, tags);
-		}
-		super.onSaveInstanceState(outState);
 	}
 
 	@Override
@@ -603,13 +536,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			return true;
 
 		case android.R.id.home:
-			if (!phoneFlag) {
-				if (tadapter.getItem(tabletvp.getCurrentItem()).getClass()
-						.equals(ConnectFragment.class))
-					removeConnectFragments(tabletvp.getCurrentItem());
-				tabletvp.setCurrentItem(0);
+			if (!phoneFlag)
 				ActionBarDetector.setUp(this, false, null);
-			}
 			return true;
 		}
 		return false;
@@ -628,10 +556,10 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			onPrepareOptionsMenu(optionsmenu);
 		/*
 		 * Make sure Action Bar has current fragment title
-		 */
+		 
 		if (ActionBarDetector.checkHasActionBar() && !phoneFlag) {
 			setTitleFromFragment(this, tabletvp);
-		}
+		}*/
 	}
 
 	@Override
@@ -683,41 +611,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 
 	}
 
-	private void removeConnectFragments(int n) {
-		FragmentManager fm = getSupportFragmentManager();
-		FragmentTransaction ft = fm.beginTransaction();
-		Fragment f = tadapter.getItem(n);
-		tadapter.destroyItem(tabletvp, n, f);
-		fragments.remove(f);
-		ft.remove(f);
-		tabletvp.setCurrentItem(n - 1);
-		ft.commit();
-	}
-
-	/*
-	 * Necessary to work around
-	 * http://code.google.com/p/android/issues/detail?id=19211
-	 */
-	private void restoreOrphanedFragments(Bundle savedInstanceState) {
-		if (savedInstanceState == null
-				|| !savedInstanceState.containsKey(FRAGMENTS_INSTANCE_STATE))
-			return;
-		FragmentManager fm = getSupportFragmentManager();
-		Fragment f;
-		FragmentTransaction ft = fm.beginTransaction();
-		for (String tag : savedInstanceState
-				.getStringArrayList(FRAGMENTS_INSTANCE_STATE)) {
-			f = fm.findFragmentByTag(tag);
-			if (f == null)
-				break;
-			if (f.getArguments() != null)
-				fragments
-						.add(FragmentSwitchboard.newInstance(f.getArguments()));
-			ft.remove(f);
-		}
-		ft.commit();
-	}
-
 	private void drawFragment(int id, Class<?> f) {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		if (getSupportFragmentManager().findFragmentByTag(
@@ -736,9 +629,11 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	}
 
 	private void showFragment(Bundle bundle) {
-		Fragment f = FragmentSwitchboard.newInstance(bundle);
-		tadapter.add(f);
-		tabletvp.setCurrentItem(tadapter.getCount() - 1);
+		/*
+		 * Now using DialogFragments
+		 */
+		DialogFragment d = FragmentSwitchboard.newInstance(bundle);
+		d.show(getSupportFragmentManager(), this.getClass().getName());
 	}
 
 	public void wifiToggle(View view) {

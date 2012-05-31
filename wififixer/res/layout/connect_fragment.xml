@@ -11,13 +11,14 @@
 		License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:alpha=".8"
-    android:orientation="vertical"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:weightSum="1" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:minHeight="200dp"
+    android:minWidth="400dp"
+    android:alpha=".95"
+    android:background="@drawable/dialog"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/SSID"
@@ -25,18 +26,16 @@
         android:layout_gravity="center"
         android:layout_weight="0.04"
         android:gravity="center"
-        android:text="SSID"
-      	>
+        android:text="SSID" >
     </TextView>
 
     <TextView
         android:id="@+id/password_summary"
         style="@style/Wftext"
         android:layout_gravity="center_horizontal"
-        android:gravity = "center"
+        android:gravity="center"
         android:paddingBottom="20dp"
-        android:text="@string/passwd_entry_text"
-       	 />
+        android:text="@string/passwd_entry_text" />
 
     <EditText
         android:id="@+id/password"
@@ -45,6 +44,7 @@
         android:inputType="textPassword"
         android:password="true"
         android:singleLine="true" >
+
         <requestFocus />
     </EditText>
 

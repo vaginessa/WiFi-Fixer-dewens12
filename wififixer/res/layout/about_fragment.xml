@@ -11,14 +11,15 @@
 		License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:alpha=".8"
-    android:gravity="center"
-    android:layout_gravity ="center_horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:minHeight="200dp"
+    android:minWidth="400dp"
+    android:alpha=".95"
     android:orientation="vertical"
-    android:paddingRight="20dp"
-    android:weightSum="1" >
+    android:gravity="center"
+    android:background="@drawable/dialog"
+    >
 
     <TextView
         android:id="@+id/ssid"

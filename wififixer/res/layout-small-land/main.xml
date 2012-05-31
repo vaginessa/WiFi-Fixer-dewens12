@@ -20,6 +20,7 @@
         android:id="@+id/servicefragment"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         org.wahtod.wififixer.ui.ServiceFragment=""
         android:paddingRight="15dp" >

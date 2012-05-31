@@ -106,6 +106,8 @@ public class ScanFragment extends Fragment {
 		menu.add(4, CONTEXT_CONNECT, 2,
 				getConnectMenuStringFromClicked(getContext(), clicked));
 		menu.add(4, CONTEXT_INFO, 3, R.string.about);
+		int[] location = new int[2];
+		v.getLocationOnScreen(location);
 	}
 
 	@Override
@@ -264,7 +266,7 @@ public class ScanFragment extends Fragment {
 			/*
 			 * On Scan result intent refresh ListView
 			 */
-			if (self.getActivity()== null)
+			if (self.getActivity() == null)
 				return;
 			else if (intent.getAction().equals(
 					WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
