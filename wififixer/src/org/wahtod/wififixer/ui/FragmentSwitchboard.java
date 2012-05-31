@@ -18,6 +18,8 @@ package org.wahtod.wififixer.ui;
 
 import java.lang.reflect.Method;
 
+import org.wahtod.wififixer.legacy.ActionBarDetector;
+
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -54,4 +56,11 @@ public abstract class FragmentSwitchboard extends DialogFragment {
 			d.getWindow().setAttributes(wset);
 		}
 	}
+
+	@Override
+	public void onPause() {
+		ActionBarDetector.setUp(getActivity(), false, null);
+		super.onPause();
+	}
+	
 }

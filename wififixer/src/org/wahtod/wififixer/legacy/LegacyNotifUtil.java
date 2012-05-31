@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 
 public class LegacyNotifUtil extends NotifUtil {
+	@SuppressWarnings("deprecation")
 	@Override
 	public void vaddStatNotif(Context ctxt, final String ssid, String status,
 			final int signal, final boolean flag) {
@@ -72,6 +73,7 @@ public class LegacyNotifUtil extends NotifUtil {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void vaddLogNotif(final Context context, final boolean flag) {
 
@@ -109,6 +111,7 @@ public class LegacyNotifUtil extends NotifUtil {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void vshow(final Context context, final String message,
 			final String tickerText, final int id, PendingIntent contentIntent) {

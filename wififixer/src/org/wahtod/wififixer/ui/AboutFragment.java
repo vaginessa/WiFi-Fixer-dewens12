@@ -113,11 +113,10 @@ public class AboutFragment extends FragmentSwitchboard {
 		registerReceiver();
 		if (this.getArguments() != null) {
 			drawView();
-			if (getActivity().getClass().equals(GenericFragmentActivity.class)) {
+		
 				ActionBarDetector.setUp(getActivity(), true, getActivity()
 						.getString(R.string.about_fragment_title_)
 						+ network.SSID);
-			}
 		}
 		super.onResume();
 	}

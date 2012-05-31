@@ -224,6 +224,7 @@ public class LogService extends Service {
 	 * 
 	 * @see android.app.Service#onStart(android.content.Intent, int)
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onStart(Intent intent, int startId) {
 		handleIntent(intent);

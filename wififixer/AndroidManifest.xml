@@ -13,8 +13,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="internalOnly"
     package="org.wahtod.wififixer"
-    android:versionCode="933"
-    android:versionName="0.9.5p2">
+    android:versionCode="934"
+    android:versionName="0.9.5p3">
 
     <supports-screens
         android:largeScreens="true"
@@ -63,7 +63,7 @@
         <activity android:name=".ui.PrefActivity" />
         <activity android:name=".ui.PrefActivityHC" />
         <activity android:name=".ui.HelpActivity" />
-        <activity android:name=".ui.GenericFragmentActivity" />
+        <activity android:name=".ui.GenericFragmentPOO" />
 
 <!-- 			Starts Boot thread service which waits 30s to run WifiFixerService -->
         <receiver android:name=".boot.BootReceiver" >

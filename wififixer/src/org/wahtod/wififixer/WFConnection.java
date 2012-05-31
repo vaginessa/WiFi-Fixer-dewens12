@@ -661,6 +661,7 @@ public class WFConnection extends Object implements
 		handlerWrapper(MAIN);
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void checkBackgroundDataSetting(final Context context) {
 		ConnectivityManager cm = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -1297,6 +1298,7 @@ public class WFConnection extends Object implements
 		return isUp;
 	}
 
+	@SuppressWarnings("deprecation")
 	private static void icmpCache(final Context context) {
 		/*
 		 * Caches DHCP gateway IP for ICMP check

@@ -33,6 +33,7 @@ import android.preference.PreferenceActivity;
 public class PrefActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setTheme(android.R.style.Theme_Black);
@@ -41,6 +42,7 @@ public class PrefActivity extends PreferenceActivity implements
 		addPreferencesFromResource(R.xml.preferences);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -51,6 +53,7 @@ public class PrefActivity extends PreferenceActivity implements
 		PrefUtil.setPolicyfromSystem(this);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onPause() {
 		super.onPause();

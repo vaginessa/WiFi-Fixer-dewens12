@@ -226,6 +226,7 @@ public class WifiFixerService extends Service implements
 		super.onLowMemory();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void onScreenOff() {
 
 		/*
@@ -236,6 +237,7 @@ public class WifiFixerService extends Service implements
 		screenstate = false;
 	}
 
+	@SuppressWarnings("deprecation")
 	private void onScreenOn() {
 
 		/*

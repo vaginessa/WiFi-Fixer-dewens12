@@ -102,8 +102,6 @@ public class TutorialFragmentActivity extends FragmentActivity {
 				/*
 				 * Change page to Status fragment
 				 */
-				m3 = handler.obtainMessage(PAGE, 2, 0);
-				handler.sendMessageDelayed(m3, 0);
 				m3 = handler.obtainMessage(TOAST, R.string.tutorial_toast_6, 0);
 				handler.sendMessageDelayed(m3, 0);
 				m3 = handler.obtainMessage(TOAST, R.string.tutorial_toast_7, 0);

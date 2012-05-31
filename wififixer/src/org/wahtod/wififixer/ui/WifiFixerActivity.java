@@ -68,7 +68,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	private Menu optionsmenu;
 	public boolean phoneFlag;
 
-	private ViewPager tabletvp;
+	private ViewPager phonevp;
 
 	public class PhoneAdapter extends FragmentPagerAdapter {
 		public PhoneAdapter(FragmentManager fm) {
@@ -92,7 +92,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			return null;
 		}
 	}
-	
+
 	private Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
@@ -134,7 +134,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			nagNotification(this);
 		}
 	}
-	
+
 	private void deleteLog() {
 		/*
 		 * Delete old log
@@ -177,12 +177,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		 */
 		if (data.containsKey(SHOW_FRAGMENT)) {
 			data.remove(SHOW_FRAGMENT);
-//			if (phoneFlag) {
-//				Intent i = new Intent(this, GenericFragmentActivity.class);
-//				i.putExtras(data);
-//				startActivity(i);
-//			} else
-				showFragment(data);
+			showFragment(data);
 		}
 		/*
 		 * Delete Log if called by preference
@@ -190,8 +185,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		else if (data.containsKey(DELETE_LOG)) {
 			data.remove(DELETE_LOG);
 			deleteLog();
-		} 
-		else if (data.containsKey(RUN_TUTORIAL)) {
+		} else if (data.containsKey(RUN_TUTORIAL)) {
 			data.remove(RUN_TUTORIAL);
 			if (findViewById(R.id.pager) != null)
 				phoneTutNag();
@@ -556,10 +550,10 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			onPrepareOptionsMenu(optionsmenu);
 		/*
 		 * Make sure Action Bar has current fragment title
-		 
-		if (ActionBarDetector.checkHasActionBar() && !phoneFlag) {
-			setTitleFromFragment(this, tabletvp);
-		}*/
+		 * 
+		 * if (ActionBarDetector.checkHasActionBar() && !phoneFlag) {
+		 * setTitleFromFragment(this, tabletvp); }
+		 */
 	}
 
 	@Override
@@ -580,6 +574,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	private void phoneTutNag() {
 		AlertDialog dialog = new AlertDialog.Builder(this).create();
 
@@ -676,6 +671,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 
 	@Override
 	public void onPageSelected(int arg0) {
-		setTitleFromFragment(this, tabletvp);
+		setTitleFromFragment(this, phonevp);
 	}
 }

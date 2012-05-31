@@ -222,11 +222,11 @@
 	<string name="tutorial_toast_2">Known Networks shows networks you\'ve added
 	</string>
 	<string name="tutorial_toast_4">This is Local Networks</string>
-	<string name="tutorial_toast_3">You can swipe left here to get to the next page
+	<string name="tutorial_toast_3">You can tap, hold and swipe left in the bottom pane to get to Local Networks"
 	</string>
-	<string name="tutorial_toast_5">Local Networks shows scanned networks around you
+	<string name="tutorial_toast_5">Local Networks shows scanned networks around you"
 	</string>
-	<string name="tutorial_toast_6">This is the Status view</string>
+	<string name="tutorial_toast_6">At the top is the Status view</string>
 	<string name="tutorial_toast_7">Status shows you what Wifi is doing</string>
 	<string name="tutorial_toast_8">That\'s it!\n\nIf you want to run the tutorial
 		again, go to preferences.</string>

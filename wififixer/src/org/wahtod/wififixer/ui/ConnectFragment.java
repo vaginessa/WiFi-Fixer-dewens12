@@ -51,6 +51,7 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	private static final String PROXY_SETTINGS = "proxySettings";
 	private static final String WPA = "WPA";
 	private static final String WEP = "WEP";
+	protected static final int CANCEL = 1;
 	private WFScanResult network;
 
 	@Override
@@ -84,11 +85,8 @@ public class ConnectFragment extends FragmentSwitchboard implements
 		if (this.getArguments() != null) {
 			TextView ssid = (TextView) this.getView().findViewById(R.id.SSID);
 			ssid.setText(network.SSID);
-			if (getActivity().getClass().equals(GenericFragmentActivity.class)) {
-				ActionBarDetector.setUp(getActivity(), true, getActivity()
-						.getString(R.string.connect_fragment_title)
-						+ network.SSID);
-			}
+			ActionBarDetector.setUp(getActivity(), true, getActivity()
+					.getString(R.string.connect_fragment_title) + network.SSID);
 		}
 		super.onResume();
 	}
@@ -198,13 +196,10 @@ public class ConnectFragment extends FragmentSwitchboard implements
 		InputMethodManager imm = (InputMethodManager) getActivity()
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(e.getWindowToken(), 0);
-		if (getActivity().getClass().equals(GenericFragmentActivity.class))
-			getActivity().finish();
-		else {
-			Intent i = new Intent(getActivity(), WifiFixerActivity.class);
-			i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			i.putExtra(WifiFixerActivity.REMOVE_CONNECT_FRAGMENTS, true);
-			getActivity().startActivity(i);
-		}
+		getDialog().cancel();
+		Intent i = new Intent(getActivity(), WifiFixerActivity.class);
+		i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		i.putExtra(WifiFixerActivity.REMOVE_CONNECT_FRAGMENTS, true);
+		getActivity().startActivity(i);
 	}
 }
