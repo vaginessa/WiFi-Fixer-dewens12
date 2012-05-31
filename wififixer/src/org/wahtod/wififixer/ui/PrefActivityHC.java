@@ -21,6 +21,7 @@ import java.util.List;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
 
+import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.MenuItem;
 
@@ -35,8 +36,12 @@ public class PrefActivityHC extends PreferenceActivity {
 	@Override
 	public void onBuildHeaders(List<Header> target) {
 		loadHeadersFromResource(R.xml.preference_headers, target);
-		ActionBarDetector.setUp(this, true,
-				getString(R.string.preferences_activity_title));
 		super.onBuildHeaders(target);
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		ActionBarDetector.setDisplayHomeAsUpEnabled(this, true);
+		super.onCreate(savedInstanceState);
 	}
 }

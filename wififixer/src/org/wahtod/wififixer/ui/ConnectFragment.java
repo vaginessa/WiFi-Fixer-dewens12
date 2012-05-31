@@ -20,7 +20,6 @@ import java.lang.reflect.Field;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFConnection;
-import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
@@ -85,8 +84,6 @@ public class ConnectFragment extends FragmentSwitchboard implements
 		if (this.getArguments() != null) {
 			TextView ssid = (TextView) this.getView().findViewById(R.id.SSID);
 			ssid.setText(network.SSID);
-			ActionBarDetector.setUp(getActivity(), true, getActivity()
-					.getString(R.string.connect_fragment_title) + network.SSID);
 		}
 		super.onResume();
 	}

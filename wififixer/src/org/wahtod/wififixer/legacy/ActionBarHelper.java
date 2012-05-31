@@ -15,21 +15,14 @@
  */
 package org.wahtod.wififixer.legacy;
 
-import org.wahtod.wififixer.R;
-
-import android.app.ActionBar;
 import android.app.Activity;
 
-public class UpSetter extends ActionBarDetector {
+
+public class ActionBarHelper extends ActionBarDetector {
+
 
 	@Override
-	public void vSetUp(Activity a, boolean state, String title) {
-		ActionBar actionBar = a.getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(state);
-		if (title != null)
-			actionBar.setTitle(title);
-		else
-			actionBar.setTitle(a.getString(R.string.app_name));
-		return;
+	public void vsetDisplayHomeAsUpEnabled(Activity a, boolean state) {
+		a.getActionBar().setDisplayHomeAsUpEnabled(state);
 	}
 }

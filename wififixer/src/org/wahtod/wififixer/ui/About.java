@@ -34,8 +34,7 @@ public class About extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.aboutcontent);
-		ActionBarDetector.setUp(this, true,
-				getString(R.string.about_activity_title));
+		ActionBarDetector.setDisplayHomeAsUpEnabled(this, true);   
 		// Set layout version code
 		version = (TextView) findViewById(R.id.version);
 		setText();

@@ -30,7 +30,6 @@ import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
-import org.wahtod.wififixer.utility.WFScanResult;
 import org.wahtod.wififixer.widget.WidgetHandler;
 
 import android.app.AlertDialog;
@@ -426,14 +425,14 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		}
 	}
 
-	@Override
+	/*@Override
 	public void onBackPressed() {
 		if (!phoneFlag) {
 			if (getSupportFragmentManager().getBackStackEntryCount() == 0)
 				ActionBarDetector.setUp(this, false, null);
 		} else
 			super.onBackPressed();
-	}
+	}*/
 
 	// On Create
 	@Override
@@ -445,6 +444,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		/*
 		 * Do startup
 		 */
+		ActionBarDetector.setDisplayHomeAsUpEnabled(this, false);
 		super.onCreate(savedInstanceState);
 		setTitle(R.string.app_name);
 		if (PrefUtil.readBoolean(this, getString(R.string.forcephone_key)))
@@ -461,8 +461,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		 * Make sure service settings are enforced.
 		 */
 		ServiceAlarm.enforceServicePrefs(this);
-
-	};
+	}
 
 	private void oncreate_setup() {
 		loggingmenuFlag = PrefUtil
@@ -527,11 +526,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		case R.id.menu_about:
 			Intent myIntent = new Intent(this, About.class);
 			startActivity(myIntent);
-			return true;
-
-		case android.R.id.home:
-			if (!phoneFlag)
-				ActionBarDetector.setUp(this, false, null);
 			return true;
 		}
 		return false;
@@ -659,14 +653,14 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 
 	private static void setTitleFromFragment(TutorialFragmentActivity a,
 			ViewPager f) {
-		FragmentPagerAdapter fp = (FragmentPagerAdapter) f.getAdapter();
-		int i = f.getCurrentItem();
-		if (i == 0) {
-			ActionBarDetector.setUp(a, false, null);
-		} else {
-			ActionBarDetector.setUp(a, true,
-					WFScanResult.fromBundle(fp.getItem(i).getArguments()).SSID);
-		}
+//		FragmentPagerAdapter fp = (FragmentPagerAdapter) f.getAdapter();
+//		int i = f.getCurrentItem();
+//		if (i == 0) {
+//			ActionBarDetector.setUp(a, false, null);
+//		} else {
+//			ActionBarDetector.setUp(a, true,
+//					WFScanResult.fromBundle(fp.getItem(i).getArguments()).SSID);
+//		}
 	}
 
 	@Override

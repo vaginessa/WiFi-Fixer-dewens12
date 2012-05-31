@@ -16,32 +16,33 @@
 package org.wahtod.wififixer.legacy;
 
 import org.wahtod.wififixer.ui.WifiFixerActivity;
+import org.wahtod.wififixer.legacy.ActionBarHelper;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 public abstract class ActionBarDetector {
 	private static ActionBarDetector selector;
 
-	public abstract void vSetUp(Activity a, boolean state, String title);
+	public abstract void vsetDisplayHomeAsUpEnabled(Activity a, boolean state);
 
-	public static void setUp(Activity a, boolean state, String title) {
+	public static void setDisplayHomeAsUpEnabled(Activity a, boolean state) {
 		/*
 		 * Add Action Bar home up
 		 */
 		if (selector == null) {
 			if (checkHasActionBar()) {
-				selector = new UpSetter();
+				selector = new ActionBarHelper();
 			} else
 				return;
 		}
 		/*
-		 * If API exists, set policy
+		 * If API exists, set
 		 */
-		selector.vSetUp(a, state, title);
+		selector.vsetDisplayHomeAsUpEnabled(a, state);
 		return;
 	}
 
@@ -49,13 +50,12 @@ public abstract class ActionBarDetector {
 		return Build.VERSION.SDK_INT >= 11;
 	}
 
-	public static void handleHome(Context context, MenuItem item) {
+	public static void handleHome(Activity a, MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// app icon in Action Bar clicked; go home
-			Intent intent = new Intent(context, WifiFixerActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			context.startActivity(intent);
+			Intent intent = new Intent(a, WifiFixerActivity.class);
+			NavUtils.navigateUpTo(a, intent);
 		}
 	}
 }

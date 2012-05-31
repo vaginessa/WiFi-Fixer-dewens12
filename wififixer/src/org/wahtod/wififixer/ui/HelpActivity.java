@@ -42,6 +42,7 @@ public class HelpActivity extends FragmentActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		ActionBarDetector.setDisplayHomeAsUpEnabled(this, true);
 		setContentView(R.layout.help);
 		webview = (WebView) findViewById(R.id.helpwebview);
 		WebSettings websettings = webview.getSettings();
@@ -57,8 +58,6 @@ public class HelpActivity extends FragmentActivity {
 		else
 			webview.loadUrl("file:///android_asset/index.html");
 
-		ActionBarDetector.setUp(this, true,
-				getString(R.string.help_activity_title));
 		super.onCreate(savedInstanceState);
 	}
 

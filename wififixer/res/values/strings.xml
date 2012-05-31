@@ -222,7 +222,7 @@
 	<string name="tutorial_toast_2">Known Networks shows networks you\'ve added
 	</string>
 	<string name="tutorial_toast_4">This is Local Networks</string>
-	<string name="tutorial_toast_3">You can tap, hold and swipe left in the bottom pane to get to Local Networks"
+	<string name="tutorial_toast_3">You can tap, hold and swipe left or right in the bottom pane to navigate"
 	</string>
 	<string name="tutorial_toast_5">Local Networks shows scanned networks around you"
 	</string>
