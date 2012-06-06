@@ -1091,33 +1091,20 @@ public class WFConnection extends Object implements
 			 */
 			index = containsSSID(sResult.SSID, wifiConfigs);
 			if (index > -1) {
-				WifiConfiguration wfResult = wifiConfigs.get(index);
+				WifiConfiguration wfResult = getNetworkByNID(context, index);
 				/*
 				 * Ignore if disabled
 				 */
 				if (PrefUtil.getNetworkState(context, wfResult.networkId)) {
-
 					/*
 					 * Log network
 					 */
 					if (prefs.getFlag(Pref.LOG_KEY)) {
-						StringBuilder out = new StringBuilder();
-						out.append(context.getString(R.string.found_ssid));
-						out.append(sResult.SSID);
-						out.append(NEWLINE);
-						out.append(context.getString(R.string.capabilities));
-						out.append(sResult.capabilities);
-						out.append(NEWLINE);
-						out.append(context.getString(R.string.signal_level));
-						out.append(sResult.level);
-						out.append(NEWLINE);
-						out.append(context.getString(R.string.priority));
-						out.append(wfResult.priority);
-						LogService.log(context, appname, out.toString());
+						logScanResult(context, sResult, wfResult);
 					}
-
 					/*
-					 * Add result to knownbysignal containsBSSID to avoid dupes
+					 * Add result to knownbysignal Using containsBSSID to avoid
+					 * dupes if results bugged
 					 */
 					if (!containsBSSID(sResult.BSSID, knownbysignal))
 						knownbysignal.add(new WFConfig(sResult, wfResult));
@@ -1172,6 +1159,17 @@ public class WFConnection extends Object implements
 
 	private static int getNetworkID() {
 		return getWifiManager(ctxt).getConnectionInfo().getNetworkId();
+	}
+
+	private static WifiConfiguration getNetworkByNID(Context context,
+			final int network) {
+		List<WifiConfiguration> configs = getWifiManager(context)
+				.getConfiguredNetworks();
+		for (WifiConfiguration w : configs) {
+			if (w.networkId == network)
+				return w;
+		}
+		return null;
 	}
 
 	private static String getSSID() {
@@ -1242,7 +1240,7 @@ public class WFConnection extends Object implements
 		 */
 		if (!getWifiManager(ctxt).isWifiEnabled() || !getIsOnWifi(ctxt))
 			return;
-		else
+		else if (!_connected)
 			onNetworkConnected();
 	}
 
@@ -1268,6 +1266,24 @@ public class WFConnection extends Object implements
 				return false;
 		}
 		return true;
+	}
+
+	private static void logScanResult(final Context context,
+			final ScanResult sResult, final WifiConfiguration wfResult) {
+		StringBuilder out = new StringBuilder();
+		out.append(context.getString(R.string.found_ssid));
+		out.append(sResult.SSID);
+		out.append(NEWLINE);
+		out.append(context.getString(R.string.capabilities));
+		out.append(sResult.capabilities);
+		out.append(NEWLINE);
+		out.append(context.getString(R.string.signal_level));
+		out.append(sResult.level);
+		out.append(NEWLINE);
+		out.append(context.getString(R.string.priority));
+		out.append(wfResult.priority);
+		LogService.log(context, appname, out.toString());
+
 	}
 
 	private static boolean networkUp(final Context context) {
@@ -1496,7 +1512,8 @@ public class WFConnection extends Object implements
 		 */
 		if (data.containsKey(WifiManager.EXTRA_SUPPLICANT_ERROR))
 			NotifUtil.show(ctxt, ctxt.getString(R.string.authentication_error),
-					ctxt.getString(R.string.authentication_error), 2432, null);
+					ctxt.getString(R.string.authentication_error), ERR_NOTIF,
+					null);
 
 		/*
 		 * Status notification updating supplicant state
