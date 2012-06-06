@@ -796,8 +796,7 @@ public class WFConnection extends Object implements
 		if (n == -1)
 			return;
 
-		WifiConfiguration target = getWifiManager(ctxt).getConfiguredNetworks()
-				.get(n);
+		WifiConfiguration target = getNetworkByNID(context,n);
 		/*
 		 * Create sparse WifiConfiguration with details of desired connectee
 		 */
