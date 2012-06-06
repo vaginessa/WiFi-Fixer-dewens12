@@ -248,6 +248,17 @@ public class PrefUtil extends Object {
 		}
 		return null;
 	}
+	
+	private static WifiConfiguration getNetworkByNID(Context context,
+			final int network) {
+		List<WifiConfiguration> configs = getWifiManager(context)
+				.getConfiguredNetworks();
+		for (WifiConfiguration w : configs) {
+			if (w.networkId == network)
+				return w;
+		}
+		return null;
+	}
 
 	public static String getSafeFileName(final Context ctxt, String filename) {
 		if (filename == null)
@@ -386,9 +397,10 @@ public class PrefUtil extends Object {
 
 	public static boolean getNetworkState(final Context context,
 			final int network) {
+		WifiConfiguration w = getNetworkByNID(context, network);
 		if (!getWifiManager(context).isWifiEnabled())
 			return !readNetworkState(context, network);
-		else if (getWifiManager(context).getConfiguredNetworks().get(network).status == WifiConfiguration.Status.DISABLED)
+		else if (w != null && w.status == WifiConfiguration.Status.DISABLED)
 			return false;
 		else
 			return true;

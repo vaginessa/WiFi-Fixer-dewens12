@@ -891,8 +891,7 @@ public class WFConnection extends Object implements
 	private static void demoteNetwork(final Context context, final int n) {
 		if (!getWifiManager(context).isWifiEnabled())
 			return;
-		WifiConfiguration network = getWifiManager(context)
-				.getConfiguredNetworks().get(n);
+		WifiConfiguration network = getNetworkByNID(context, n);
 		if (network.priority > -1) {
 			network.priority--;
 			getWifiManager(context).updateNetwork(network);
@@ -1251,8 +1250,7 @@ public class WFConnection extends Object implements
 		if (connectee == null)
 			return;
 
-		connectee.wificonfig = getWifiManager(ctxt).getConfiguredNetworks()
-				.get(lastAP);
+		connectee.wificonfig = getNetworkByNID(ctxt, lastAP);
 
 		clearHandler();
 	}
@@ -1809,8 +1807,7 @@ public class WFConnection extends Object implements
 
 	private static void restoreNetworkPriority(final Context context,
 			final int n) {
-		WifiConfiguration network = getWifiManager(context)
-				.getConfiguredNetworks().get(n);
+		WifiConfiguration network = getNetworkByNID(context, n);
 		network.priority = 2;
 		getWifiManager(context).updateNetwork(network);
 	}

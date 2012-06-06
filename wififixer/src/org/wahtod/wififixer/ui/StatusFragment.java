@@ -37,7 +37,7 @@ import android.widget.TextView;
 
 public class StatusFragment extends Fragment {
 	protected static final int REFRESH = 0;
-	private static final int STATUS_MESSAGE=337;
+	private static final int STATUS_MESSAGE = 337;
 	protected static final int REFRESH_DELAY = 5000;
 	private static final String EMPTYSTRING = "";
 	private static final String DBM = "dBm";
@@ -53,25 +53,25 @@ public class StatusFragment extends Fragment {
 	private Handler drawhandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
-				/*
-				 * handle SCAN_RESULTS_AVAILABLE intents to refresh ListView
-				 * asynchronously (to avoid ANR)
-				 */
-				switch (message.what) {
-				case REFRESH:
-					if (getActivity() != null)
-						refresh();
-					break;
-					
-				case STATUS_MESSAGE:
-					/*
-					 * Change status text
-					 */
-					if(!message.getData().isEmpty())
-						status.setText(message.getData().getString(STATUS_KEY));
-					break;
+			/*
+			 * handle SCAN_RESULTS_AVAILABLE intents to refresh ListView
+			 * asynchronously (to avoid ANR)
+			 */
+			switch (message.what) {
+			case REFRESH:
+				if (getActivity() != null)
+					refresh();
+				break;
 
-				}
+			case STATUS_MESSAGE:
+				/*
+				 * Change status text
+				 */
+				if (!message.getData().isEmpty())
+					status.setText(message.getData().getString(STATUS_KEY));
+				break;
+
+			}
 		}
 	};
 
@@ -150,6 +150,12 @@ public class StatusFragment extends Fragment {
 			signal.setText(EMPTYSTRING);
 			linkspeed.setText(EMPTYSTRING);
 			status.setText(EMPTYSTRING);
+			icon.setImageDrawable(getResources()
+					.getDrawable(R.drawable.signal0));
+		} else if (info.getRssi() == -200) {
+			ssid.setText(EMPTYSTRING);
+			signal.setText(EMPTYSTRING);
+			linkspeed.setText(EMPTYSTRING);
 			icon.setImageDrawable(getResources()
 					.getDrawable(R.drawable.signal0));
 		} else {

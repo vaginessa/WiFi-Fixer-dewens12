@@ -335,7 +335,7 @@ public class ScanFragment extends Fragment {
 		/*
 		 * Null check
 		 */
-		if (scan == null)
+		if (scan == null || adapter.scanresultArray == null)
 			return;
 
 		/*
