@@ -54,7 +54,7 @@ public class TutorialFragmentActivity extends FragmentActivity {
 		public void handleMessage(Message message) {
 			switch (message.what) {
 			case TOAST:
-				showToast(message.arg1);
+				showTutorialToast(message.arg1);
 				break;
 
 			case PAGE:
@@ -158,9 +158,9 @@ public class TutorialFragmentActivity extends FragmentActivity {
 		PrefUtil.writeBoolean(this, PrefConstants.TUTORIAL, true);
 	}
 
-	private void showToast(final int id) {
+	private void showTutorialToast(final int id) {
 		LayoutInflater inflater = getLayoutInflater();
-		View layout = inflater.inflate(R.layout.toast_layout,
+		View layout = inflater.inflate(R.layout.tutorial,
 				(ViewGroup) findViewById(R.id.toast_root));
 		ImageView image = (ImageView) layout.findViewById(R.id.icon);
 		image.setImageResource(R.drawable.icon);

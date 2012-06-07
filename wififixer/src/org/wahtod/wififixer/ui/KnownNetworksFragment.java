@@ -24,6 +24,7 @@ import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.R.id;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
+import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StringUtil;
 
 import android.app.Activity;
@@ -51,7 +52,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 public class KnownNetworksFragment extends Fragment {
@@ -160,10 +160,10 @@ public class KnownNetworksFragment extends Fragment {
 			case CONTEXT_REMOVE:
 				String ssid = (String) lv.getItemAtPosition(clicked_position);
 				int nid = getNidFromSSID(getContext(), ssid);
-				Toast.makeText(
+				NotifUtil.showToast(
 						getContext(),
 						getContext().getString(R.string.removing_network)
-								+ ssid, Toast.LENGTH_SHORT).show();
+								+ ssid);
 				PrefUtil.getWifiManager(getActivity()).removeNetwork(nid);
 				PrefUtil.getWifiManager(getActivity()).saveConfiguration();
 				scanhandler.sendEmptyMessage(SCAN_MESSAGE);

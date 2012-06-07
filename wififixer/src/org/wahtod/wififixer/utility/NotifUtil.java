@@ -20,6 +20,7 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.HoneyCombNotifUtil;
 import org.wahtod.wififixer.legacy.LegacyNotifUtil;
 import org.wahtod.wififixer.legacy.VersionedFile;
+import org.wahtod.wififixer.ui.ToastActivity;
 import org.wahtod.wififixer.utility.StatusMessage;
 
 import android.app.Notification;
@@ -58,10 +59,16 @@ public abstract class NotifUtil {
 	public static final String SIGNAL_KEY = "SIGNAL";
 
 	/*
+	 * Intent Keys for Toast
+	 */
+	public static final String TOAST_RESID_KEY = "TOAST_ID";
+	public static final String TOAST_STRING_KEY = "TOAST_STRING";
+	/*
 	 * Icon type for getIconfromSignal()
 	 */
 	public static final int ICON_SET_SMALL = 0;
 	public static final int ICON_SET_LARGE = 1;
+
 
 	/*
 	 * Cache appropriate NotifUtil
@@ -79,7 +86,7 @@ public abstract class NotifUtil {
 
 	public abstract void vshow(final Context context, final String message,
 			final String tickerText, final int id, PendingIntent contentIntent);
-	
+
 	public static void setSsidStatus(final int status) {
 		ssidStatus = status;
 	}
@@ -191,4 +198,16 @@ public abstract class NotifUtil {
 		nm.cancel(notif);
 	}
 
+	public static void showToast(final Context context, final int resID) {
+		Intent i = new Intent(context, ToastActivity.class);
+		i.putExtra(TOAST_RESID_KEY, resID);
+		context.startActivity(i);
+	}
+	
+	public static void showToast(final Context context, final String message){
+		Intent i = new Intent(context, ToastActivity.class);
+		i.putExtra(TOAST_STRING_KEY, message);
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(i);
+	}
 }

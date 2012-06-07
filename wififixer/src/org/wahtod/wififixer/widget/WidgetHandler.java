@@ -20,6 +20,7 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ToggleService;
 import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.NotifUtil;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +28,6 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.widget.Toast;
 
 public class WidgetHandler {
 
@@ -57,8 +57,7 @@ public class WidgetHandler {
 			 * If Wifi is disabled, notify
 			 */
 			if (!getWifiManager(ctxt).isWifiEnabled()) {
-				Toast.makeText(ctxt, ctxt.getString(R.string.wifi_is_disabled),
-						Toast.LENGTH_LONG).show();
+				NotifUtil.showToast(ctxt, ctxt.getString(R.string.wifi_is_disabled));
 				return;
 			}
 			/*
@@ -76,8 +75,7 @@ public class WidgetHandler {
 			 * Reassociate
 			 */
 			else if (action.equals(REASSOCIATE)) {
-				Toast.makeText(ctxt, ctxt.getString(R.string.reassociating),
-						Toast.LENGTH_LONG).show();
+				NotifUtil.showToast(ctxt, ctxt.getString(R.string.reassociating));
 				ctxt.sendBroadcast(new Intent(WFConnection.USEREVENT));
 				getWifiManager(ctxt).reassociate();
 			}

@@ -21,6 +21,7 @@ import java.lang.reflect.Field;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
 
@@ -37,7 +38,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ConnectFragment extends FragmentSwitchboard implements
 		OnClickListener {
@@ -52,7 +52,7 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	private static final String WEP = "WEP";
 	protected static final int CANCEL = 1;
 	private WFScanResult network;
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -165,10 +165,10 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	}
 
 	private void notifyConnecting() {
-		Toast.makeText(
+		NotifUtil.showToast(
 				getActivity(),
 				getActivity().getString(R.string.connecting_to_network)
-						+ network.SSID, Toast.LENGTH_SHORT).show();
+						+ network.SSID);
 	}
 
 	public void onClick(View v) {

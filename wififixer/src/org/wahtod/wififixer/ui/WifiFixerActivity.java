@@ -141,12 +141,11 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		File file = VersionedFile.getFile(this, LogService.LOGFILE);
 
 		if (file.delete())
-			Toast.makeText(WifiFixerActivity.this,
-					R.string.logfile_delete_toast, Toast.LENGTH_LONG).show();
+			NotifUtil.showToast(WifiFixerActivity.this,
+					R.string.logfile_delete_toast);
 		else
-			Toast.makeText(WifiFixerActivity.this,
-					R.string.logfile_delete_err_toast, Toast.LENGTH_LONG)
-					.show();
+			NotifUtil.showToast(WifiFixerActivity.this,
+					R.string.logfile_delete_err_toast);
 	}
 
 	private static boolean getLogging(final Context context) {
@@ -217,16 +216,15 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		if (Environment.getExternalStorageState() != null
 				&& !(Environment.getExternalStorageState()
 						.contains(Environment.MEDIA_MOUNTED))) {
-			Toast.makeText(WifiFixerActivity.this,
-					R.string.sd_card_unavailable, Toast.LENGTH_LONG).show();
+			NotifUtil.showToast(WifiFixerActivity.this,
+					R.string.sd_card_unavailable);
 			return;
 		} else if (!file.exists()) {
 			file = VersionedFile.getFile(this,
 					DefaultExceptionHandler.EXCEPTIONS_FILENAME);
 			if (!file.exists()) {
-				Toast.makeText(WifiFixerActivity.this,
-						R.string.logfile_delete_err_toast, Toast.LENGTH_LONG)
-						.show();
+				NotifUtil.showToast(WifiFixerActivity.this,
+						R.string.logfile_delete_err_toast);
 				return;
 			}
 		}
@@ -257,9 +255,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 							showSendLogDialog(input.getText().toString(),
 									fileuri);
 						else
-							Toast.makeText(WifiFixerActivity.this,
-									R.string.issue_report_nag,
-									Toast.LENGTH_LONG).show();
+						 NotifUtil.showToast(WifiFixerActivity.this,
+									R.string.issue_report_nag);
 					}
 				});
 
@@ -322,14 +319,12 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			Intent intent = new Intent(
 					IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
 			sendBroadcast(intent);
-			Toast.makeText(this, R.string.enabling_wififixerservice,
-					Toast.LENGTH_LONG).show();
+			NotifUtil.showToast(this, R.string.enabling_wififixerservice);
 		} else {
 			Intent intent = new Intent(
 					IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
 			sendBroadcast(intent);
-			Toast.makeText(this, R.string.disabling_wififixerservice,
-					Toast.LENGTH_LONG).show();
+			NotifUtil.showToast(this, R.string.disabling_wififixerservice);
 		}
 
 		this.sendBroadcast(new Intent(ServiceFragment.REFRESH_ACTION));
@@ -389,14 +384,12 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			if (Environment.getExternalStorageState() != null
 					&& !(Environment.getExternalStorageState()
 							.contains(Environment.MEDIA_MOUNTED))) {
-				Toast.makeText(WifiFixerActivity.this,
-						R.string.sd_card_unavailable, Toast.LENGTH_SHORT)
-						.show();
+				NotifUtil.showToast(WifiFixerActivity.this,
+						R.string.sd_card_unavailable);
 				return;
 			}
 
-			Toast.makeText(WifiFixerActivity.this, R.string.enabling_logging,
-					Toast.LENGTH_SHORT).show();
+			NotifUtil.showToast(WifiFixerActivity.this, R.string.enabling_logging);
 			setLogging(true);
 		}
 	}
@@ -425,14 +418,12 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		}
 	}
 
-	/*@Override
-	public void onBackPressed() {
-		if (!phoneFlag) {
-			if (getSupportFragmentManager().getBackStackEntryCount() == 0)
-				ActionBarDetector.setUp(this, false, null);
-		} else
-			super.onBackPressed();
-	}*/
+	/*
+	 * @Override public void onBackPressed() { if (!phoneFlag) { if
+	 * (getSupportFragmentManager().getBackStackEntryCount() == 0)
+	 * ActionBarDetector.setUp(this, false, null); } else super.onBackPressed();
+	 * }
+	 */
 
 	// On Create
 	@Override
@@ -625,18 +616,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		d.show(getSupportFragmentManager(), this.getClass().getName());
 	}
 
-	public void wifiToggle(View view) {
-		if (!getIsWifiOn(this)) {
-			sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
-			Toast.makeText(this, R.string.enabling_wifi, Toast.LENGTH_LONG)
-					.show();
-		} else {
-			sendBroadcast(new Intent(WidgetHandler.WIFI_OFF));
-			Toast.makeText(this, R.string.disabling_wifi, Toast.LENGTH_LONG)
-					.show();
-		}
-	}
-
 	@Override
 	public void onPageScrollStateChanged(int arg0) {
 		/*
@@ -653,18 +632,28 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 
 	private static void setTitleFromFragment(TutorialFragmentActivity a,
 			ViewPager f) {
-//		FragmentPagerAdapter fp = (FragmentPagerAdapter) f.getAdapter();
-//		int i = f.getCurrentItem();
-//		if (i == 0) {
-//			ActionBarDetector.setUp(a, false, null);
-//		} else {
-//			ActionBarDetector.setUp(a, true,
-//					WFScanResult.fromBundle(fp.getItem(i).getArguments()).SSID);
-//		}
+		// FragmentPagerAdapter fp = (FragmentPagerAdapter) f.getAdapter();
+		// int i = f.getCurrentItem();
+		// if (i == 0) {
+		// ActionBarDetector.setUp(a, false, null);
+		// } else {
+		// ActionBarDetector.setUp(a, true,
+		// WFScanResult.fromBundle(fp.getItem(i).getArguments()).SSID);
+		// }
 	}
 
 	@Override
 	public void onPageSelected(int arg0) {
 		setTitleFromFragment(this, phonevp);
+	}
+	
+	public void wifiToggle(View view) {
+		if (!getIsWifiOn(this)) {
+			sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
+			NotifUtil.showToast(this, R.string.enabling_wifi);
+		} else {
+			sendBroadcast(new Intent(WidgetHandler.WIFI_OFF));
+			NotifUtil.showToast(this, R.string.disabling_wifi);
+		}
 	}
 }
