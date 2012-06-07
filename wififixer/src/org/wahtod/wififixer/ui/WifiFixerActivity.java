@@ -50,15 +50,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
-public class WifiFixerActivity extends TutorialFragmentActivity implements
-		OnPageChangeListener {
+public class WifiFixerActivity extends TutorialFragmentActivity {
 	public boolean isauthedFlag;
 	public boolean aboutFlag;
 	public boolean loggingmenuFlag;
@@ -66,8 +65,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 
 	private Menu optionsmenu;
 	public boolean phoneFlag;
-
-	private ViewPager phonevp;
 
 	public class PhoneAdapter extends FragmentPagerAdapter {
 		public PhoneAdapter(FragmentManager fm) {
@@ -125,6 +122,11 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	public static final String SCANFRAG_TAG = "SCAN";
 	public static final String STATUSFRAG_TAG = "STATUS";
 	private static final String RUN_TUTORIAL = "RUN_TUTORIAL";
+	
+	/*
+	 * Delay for Wifi Toggle button check
+	 */
+	private static final long WIFI_TOGGLE_CHECK_DELAY = 3000;
 
 	void authCheck() {
 		if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
@@ -615,36 +617,21 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		DialogFragment d = FragmentSwitchboard.newInstance(bundle);
 		d.show(getSupportFragmentManager(), this.getClass().getName());
 	}
-
-	@Override
-	public void onPageScrollStateChanged(int arg0) {
-		/*
-		 * Part of the interface, unneeded
-		 */
-	}
-
-	@Override
-	public void onPageScrolled(int arg0, float arg1, int arg2) {
-		/*
-		 * Part of the interface, unneeded
-		 */
-	}
-
-	private static void setTitleFromFragment(TutorialFragmentActivity a,
-			ViewPager f) {
-		// FragmentPagerAdapter fp = (FragmentPagerAdapter) f.getAdapter();
-		// int i = f.getCurrentItem();
-		// if (i == 0) {
-		// ActionBarDetector.setUp(a, false, null);
-		// } else {
-		// ActionBarDetector.setUp(a, true,
-		// WFScanResult.fromBundle(fp.getItem(i).getArguments()).SSID);
-		// }
-	}
-
-	@Override
-	public void onPageSelected(int arg0) {
-		setTitleFromFragment(this, phonevp);
+	
+	private Runnable WifiToggleCheck = new Runnable(){
+		public void run() {
+			Context c = getApplicationContext();
+			WifiManager wm = (WifiManager) c.getSystemService(Context.WIFI_SERVICE);
+			if(!wm.isWifiEnabled()){
+				setWifiButtonState(false);
+			}
+				
+		}
+	};
+	
+	protected void setWifiButtonState(final boolean state){
+		ToggleButton tb = (ToggleButton) findViewById(R.id.ToggleButton2);
+		tb.setChecked(state);
 	}
 	
 	public void wifiToggle(View view) {
@@ -653,6 +640,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			NotifUtil.showToast(this, R.string.enabling_wifi);
 		} else {
 			sendBroadcast(new Intent(WidgetHandler.WIFI_OFF));
+			handler.postDelayed(WifiToggleCheck, WIFI_TOGGLE_CHECK_DELAY);
 			NotifUtil.showToast(this, R.string.disabling_wifi);
 		}
 	}

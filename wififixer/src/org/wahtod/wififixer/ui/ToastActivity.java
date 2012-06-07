@@ -42,13 +42,7 @@ public class ToastActivity extends FragmentActivity {
 		this.finish();
 		super.onCreate(arg0);
 	}
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-	}
-
+	
 	private void showToast(final String message) {
 		LayoutInflater inflater = getLayoutInflater();
 		View layout = inflater.inflate(R.layout.toast,
