@@ -122,7 +122,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	public static final String SCANFRAG_TAG = "SCAN";
 	public static final String STATUSFRAG_TAG = "STATUS";
 	private static final String RUN_TUTORIAL = "RUN_TUTORIAL";
-	
+
 	/*
 	 * Delay for Wifi Toggle button check
 	 */
@@ -257,7 +257,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 							showSendLogDialog(input.getText().toString(),
 									fileuri);
 						else
-						 NotifUtil.showToast(WifiFixerActivity.this,
+							NotifUtil.showToast(WifiFixerActivity.this,
 									R.string.issue_report_nag);
 					}
 				});
@@ -391,7 +391,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 				return;
 			}
 
-			NotifUtil.showToast(WifiFixerActivity.this, R.string.enabling_logging);
+			NotifUtil.showToast(WifiFixerActivity.this,
+					R.string.enabling_logging);
 			setLogging(true);
 		}
 	}
@@ -419,13 +420,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 			drawFragment(R.id.scanfragment, ScanFragment.class);
 		}
 	}
-
-	/*
-	 * @Override public void onBackPressed() { if (!phoneFlag) { if
-	 * (getSupportFragmentManager().getBackStackEntryCount() == 0)
-	 * ActionBarDetector.setUp(this, false, null); } else super.onBackPressed();
-	 * }
-	 */
 
 	// On Create
 	@Override
@@ -561,7 +555,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		return true;
 	}
 
-	@SuppressWarnings("deprecation")
 	private void phoneTutNag() {
 		AlertDialog dialog = new AlertDialog.Builder(this).create();
 
@@ -571,7 +564,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 
 		dialog.setIcon(R.drawable.icon);
 
-		dialog.setButton(getString(R.string.ok_button),
+		dialog.setButton(AlertDialog.BUTTON_POSITIVE,
+				getString(R.string.ok_button),
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int which) {
@@ -579,18 +573,14 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 					}
 				});
 
-		dialog.setButton2(getString(R.string.later_button),
+		dialog.setButton(AlertDialog.BUTTON_NEGATIVE,
+				getString(R.string.later_button),
 				new DialogInterface.OnClickListener() {
-
 					public void onClick(DialogInterface dialog, int which) {
-
 						return;
-
 					}
 				});
-
 		dialog.show();
-
 	}
 
 	private void drawFragment(int id, Class<?> f) {
@@ -617,23 +607,23 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		DialogFragment d = FragmentSwitchboard.newInstance(bundle);
 		d.show(getSupportFragmentManager(), this.getClass().getName());
 	}
-	
-	private Runnable WifiToggleCheck = new Runnable(){
+
+	private Runnable WifiToggleCheck = new Runnable() {
 		public void run() {
 			Context c = getApplicationContext();
-			WifiManager wm = (WifiManager) c.getSystemService(Context.WIFI_SERVICE);
-			if(!wm.isWifiEnabled()){
+			WifiManager wm = (WifiManager) c
+					.getSystemService(Context.WIFI_SERVICE);
+			if (!wm.isWifiEnabled()) {
 				setWifiButtonState(false);
 			}
-				
 		}
 	};
-	
-	protected void setWifiButtonState(final boolean state){
+
+	protected void setWifiButtonState(final boolean state) {
 		ToggleButton tb = (ToggleButton) findViewById(R.id.ToggleButton2);
 		tb.setChecked(state);
 	}
-	
+
 	public void wifiToggle(View view) {
 		if (!getIsWifiOn(this)) {
 			sendBroadcast(new Intent(WidgetHandler.WIFI_ON));

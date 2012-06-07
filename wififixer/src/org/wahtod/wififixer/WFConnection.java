@@ -2048,9 +2048,7 @@ public class WFConnection extends Object implements
 				LogService.log(ctxt, appname,
 						ctxt.getString(R.string.wifi_repair_post_failed));
 		}
-
 		shouldrepair = false;
-
 	}
 
 	public void wifiLock(final boolean state) {
