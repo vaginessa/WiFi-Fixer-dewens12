@@ -94,7 +94,7 @@ public class WifiFixerService extends Service implements
 
 	private void cleanup() {
 		wifi.wifiLock(false);
-		screenstateHandler.unregister(this);
+		screenstateHandler.unsetOnScreenStateChangedListener(this);
 	}
 
 	private void getPackageInfo() {
@@ -216,7 +216,6 @@ public class WifiFixerService extends Service implements
 			LogService.log(this, APP_NAME, getString(R.string.ondestroy));
 		cleanup();
 		super.onDestroy();
-
 	}
 
 	@Override
@@ -226,24 +225,22 @@ public class WifiFixerService extends Service implements
 		super.onLowMemory();
 	}
 
-	@SuppressWarnings("deprecation")
 	private void onScreenOff() {
 
 		/*
 		 * Set shared pref state for non-Eclair clients
 		 */
-		if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.ECLAIR_MR1)
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ECLAIR_MR1)
 			PrefUtil.writeBoolean(this, SCREENOFF, true);
 		screenstate = false;
 	}
 
-	@SuppressWarnings("deprecation")
 	private void onScreenOn() {
 
 		/*
 		 * Set shared pref state
 		 */
-		if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.ECLAIR_MR1)
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ECLAIR_MR1)
 			PrefUtil.writeBoolean(this, SCREENOFF, false);
 		screenstate = true;
 	}

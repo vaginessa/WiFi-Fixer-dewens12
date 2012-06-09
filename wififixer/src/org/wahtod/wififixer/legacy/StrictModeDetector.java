@@ -16,6 +16,7 @@
 package org.wahtod.wififixer.legacy;
 
 public abstract class StrictModeDetector {
+	private static final String ANDROID_OS_STRICT_MODE = "android.os.StrictMode";
 	private static StrictModeDetector selector;
 
 	public abstract boolean vSetPolicy(final boolean flag);
@@ -39,7 +40,7 @@ public abstract class StrictModeDetector {
 
 	public static boolean checkHasStrictMode() {
 		try {
-			Class.forName("android.os.StrictMode", true, Thread.currentThread()
+			Class.forName(ANDROID_OS_STRICT_MODE, true, Thread.currentThread()
 					.getContextClassLoader());
 			return true;
 		} catch (Exception ex) {

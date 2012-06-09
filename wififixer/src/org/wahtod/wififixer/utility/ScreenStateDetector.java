@@ -27,6 +27,11 @@ import android.os.Handler;
 import android.os.Message;
 
 public class ScreenStateDetector {
+	/*
+	 * This should only ever be instantiated from a service. Clients can be
+	 * whatever, so long as they implement the interface, and use the
+	 * setOnScreenStateListener and unsetOnScreenStateListener methods
+	 */
 
 	private static final int SCREEN_EVENT_OFF = 0;
 	private static final int SCREEN_EVENT_ON = 1;
@@ -50,7 +55,7 @@ public class ScreenStateDetector {
 		}
 	};
 
-	private static ArrayList<OnScreenStateChangedListener> onScreenStateChangedListener = new ArrayList<OnScreenStateChangedListener>();
+	private static ArrayList<OnScreenStateChangedListener> _clients = new ArrayList<OnScreenStateChangedListener>();
 	private static boolean registered;
 
 	public static boolean getScreenState(final Context context) {
@@ -58,7 +63,7 @@ public class ScreenStateDetector {
 	}
 
 	private static void onScreenEvent(final boolean state) {
-		for (OnScreenStateChangedListener listener : onScreenStateChangedListener) {
+		for (OnScreenStateChangedListener listener : _clients) {
 			if (listener != null)
 				listener.onScreenStateChanged(state);
 		}
@@ -66,8 +71,8 @@ public class ScreenStateDetector {
 
 	public static void setOnScreenStateChangedListener(
 			OnScreenStateChangedListener listener) {
-		if (!onScreenStateChangedListener.contains(listener))
-			onScreenStateChangedListener.add(listener);
+		if (!_clients.contains(listener))
+			_clients.add(listener);
 	}
 
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -103,5 +108,11 @@ public class ScreenStateDetector {
 		if (registered)
 			context.unregisterReceiver(receiver);
 		registered = false;
+	}
+
+	public void unsetOnScreenStateChangedListener(
+			OnScreenStateChangedListener listener) {
+		if (_clients.contains(listener))
+			_clients.remove(listener);
 	}
 }
