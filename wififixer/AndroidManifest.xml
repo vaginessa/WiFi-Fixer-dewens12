@@ -50,10 +50,10 @@
         <activity
             android:launchMode="singleTask"
             android:clearTaskOnLaunch="true"
-            android:name=".ui.WifiFixerActivity" >
+            android:name=".ui.WifiFixerActivity"
+           >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

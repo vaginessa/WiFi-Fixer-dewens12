@@ -24,7 +24,7 @@
         android:layout_height="30dp"
         android:gravity="center_horizontal"
         android:text="SSID"
-        android:textAppearance="?android:attr/textAppearanceMedium" >
+        style="@style/Wftext.header" >
     </TextView>
 
     <LinearLayout
@@ -46,7 +46,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:text="-99dBm"
-                android:textAppearance="?android:attr/textAppearanceSmall" >
+                 style="@style/Wftext" >
             </TextView>
 
             <TextView
@@ -55,7 +55,7 @@
                 android:layout_height="30dp"
                 android:gravity="center_horizontal"
                 android:text="65mb"
-                android:textAppearance="?android:attr/textAppearanceSmall" >
+                 style="@style/Wftext" >
             </TextView>
 
             <TextView
@@ -64,7 +64,7 @@
                 android:layout_height="30dp"
                 android:gravity="center_horizontal"
                 android:text="COMPLETED"
-                android:textAppearance="?android:attr/textAppearanceSmall" >
+                 style="@style/Wftext" >
             </TextView>
         </LinearLayout>
     </LinearLayout>

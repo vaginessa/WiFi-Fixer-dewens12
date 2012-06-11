@@ -397,7 +397,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		}
 	}
 
-	public void drawUI(Bundle savedinstanceState) {
+	public void drawUI() {
 		/*
 		 * Set up Fragments, ViewPagers and FragmentPagerAdapters for phone and
 		 * tablet
@@ -418,7 +418,9 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 			drawFragment(R.id.knownnetworksfragment,
 					KnownNetworksFragment.class);
 			drawFragment(R.id.scanfragment, ScanFragment.class);
+			drawFragment(R.id.logfragment, LogFragment.class);
 		}
+		getSupportFragmentManager().executePendingTransactions();
 	}
 
 	// On Create
@@ -438,7 +440,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 			setContentView(R.layout.mainalt);
 		else
 			setContentView(R.layout.main);
-		drawUI(savedInstanceState);
+		drawUI();
 		oncreate_setup();
 		/*
 		 * Handle intent command if destroyed or first start
@@ -585,19 +587,19 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 
 	private void drawFragment(int id, Class<?> f) {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		if (getSupportFragmentManager().findFragmentByTag(
-				f.getClass().getName()) == null) {
-			Fragment fn = null;
+		Fragment found = getSupportFragmentManager().findFragmentByTag(
+				String.valueOf(id));
+		if (found == null) {
 			try {
-				fn = (Fragment) f.newInstance();
+				found = (Fragment) f.newInstance();
 			} catch (InstantiationException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
-			ft.replace(id, fn, f.getClass().getName());
+			ft.add(id, found, String.valueOf(id));
 			ft.commit();
-		}
+		} 
 	}
 
 	private void showFragment(Bundle bundle) {

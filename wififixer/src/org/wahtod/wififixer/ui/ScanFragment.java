@@ -51,7 +51,6 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 public class ScanFragment extends Fragment {
-	private boolean receiverRegistered;
 	private WFScanResult clicked;
 	private ScanListAdapter adapter;
 	private ListView lv;
@@ -60,7 +59,6 @@ public class ScanFragment extends Fragment {
 	private static final int CONTEXT_INFO = 15;
 	protected static final int REFRESH_LIST_ADAPTER = 0;
 	protected static final int CLEAR_LIST_ADAPTER = 1;
-	protected static Fragment self;
 
 	private Handler drawhandler = new Handler() {
 		@Override
@@ -84,6 +82,13 @@ public class ScanFragment extends Fragment {
 		}
 	};
 
+	
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -91,7 +96,6 @@ public class ScanFragment extends Fragment {
 		lv = (ListView) v.findViewById(R.id.scanlist);
 		registerContextMenu();
 		registerReceiver();
-		self = this;
 		return v;
 	}
 
@@ -111,9 +115,9 @@ public class ScanFragment extends Fragment {
 	}
 
 	@Override
-	public void onDestroy() {
+	public void onDestroyView() {
 		unregisterReceiver();
-		super.onDestroy();
+		super.onDestroyView();
 	}
 
 	public static int getConnectMenuStringFromClicked(final Context context,
@@ -149,14 +153,6 @@ public class ScanFragment extends Fragment {
 		i.putExtra(FragmentSwitchboard.FRAGMENT_KEY, classname);
 		i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		getActivity().startActivity(i);
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		List<WFScanResult> scan = getNetworks(getContext());
-		if (adapter == null)
-			createAdapter(getView(), scan);
 	}
 
 	/*
@@ -266,7 +262,7 @@ public class ScanFragment extends Fragment {
 			/*
 			 * On Scan result intent refresh ListView
 			 */
-			if (self.getActivity() == null)
+			if (getActivity() == null)
 				return;
 			else if (intent.getAction().equals(
 					WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
@@ -303,7 +299,7 @@ public class ScanFragment extends Fragment {
 	}
 
 	private Context getContext() {
-		return getActivity().getApplicationContext();
+		return getActivity();
 	}
 
 	/*
@@ -387,25 +383,18 @@ public class ScanFragment extends Fragment {
 				clicked = adapter.scanresultArray.get(position);
 				return false;
 			}
-
 		});
 		registerForContextMenu(lv);
 	}
 
 	private void registerReceiver() {
-		if (receiverRegistered == true)
-			return;
 		IntentFilter filter = new IntentFilter(
 				WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 		filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 		getContext().registerReceiver(receiver, filter);
-		receiverRegistered = true;
 	}
 
 	private void unregisterReceiver() {
-		if (receiverRegistered) {
-			getContext().unregisterReceiver(receiver);
-			receiverRegistered = false;
-		}
+		getContext().unregisterReceiver(receiver);
 	}
 }

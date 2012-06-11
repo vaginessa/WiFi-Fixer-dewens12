@@ -32,6 +32,7 @@ import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.legacy.VersionedScreenState;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
+import org.wahtod.wififixer.ui.LogFragment;
 
 import android.app.Service;
 import android.content.Context;
@@ -48,6 +49,7 @@ import android.os.Message;
 import android.util.Log;
 
 public class LogService extends Service {
+	private static final String IGNORE_PREFIX = "Build";
 	public static final String LOGFILE = "wififixer_log.txt";
 	public static final String APPNAME = "APPNAME";
 	public static final String MESSAGE = "MESSAGE";
@@ -333,15 +335,24 @@ public class LogService extends Service {
 	}
 
 	private static void processLogIntent(final Context context,
-			final String command, final String Message) {
+			final String command, final String message) {
 		if (processCommands(context, command))
 			return;
 		else {
 			/*
 			 * Write to syslog and our log file on sdcard
 			 */
-			Log.i(command, Message);
-			writeToFileLog(context, Message);
+			Log.i(command, message);
+			writeToFileLog(context, message);
+			/*
+			 * See if there's a live logging fragment
+			 */
+			if (PrefUtil.readBoolean(context, LogFragment.HAS_LOGFRAGMENT)
+					&& !message.startsWith(IGNORE_PREFIX)){
+				Intent i = new Intent(LogFragment.LOG_MESSAGE_INTENT);
+				i.putExtra(LogFragment.LOG_MESSAGE, message);
+				context.sendBroadcast(i);
+			}
 		}
 	}
 
