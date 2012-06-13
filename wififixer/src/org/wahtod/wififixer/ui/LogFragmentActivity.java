@@ -25,12 +25,16 @@ import android.support.v4.app.FragmentTransaction;
 public class LogFragmentActivity extends FragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_container);
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		Fragment f=LogFragment.newInstance(null);
-		f.setRetainInstance(true);
-			ft.replace(R.id.fragment_target, f, null);
+		super.onCreate(savedInstanceState);
+		if (savedInstanceState == null) {
+			
+			FragmentTransaction ft = getSupportFragmentManager()
+					.beginTransaction();
+			Fragment f = LogFragment.newInstance(savedInstanceState);
+			f.setRetainInstance(true);
+			ft.add(R.id.fragment_target, f, null);
 			ft.commit();
+		}
 	}
 }
