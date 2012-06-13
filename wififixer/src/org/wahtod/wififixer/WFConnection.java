@@ -1070,7 +1070,7 @@ public class WFConnection extends Object implements
 				knownbysignal.remove(marked);
 			}
 		}
-
+		pruneKnown(context);
 		log(context, context.getString(R.string.number_of_known)
 				+ knownbysignal.size());
 
@@ -1080,6 +1080,19 @@ public class WFConnection extends Object implements
 		Collections.sort(knownbysignal, new SortBySignal());
 
 		return knownbysignal.size();
+	}
+	
+	private static void pruneKnown(final Context c){
+		List<WifiConfiguration> configs = getWifiManager(c).getConfiguredNetworks();
+		List<WFConfig> toremove = new ArrayList<WFConfig>();
+		for (WFConfig w: knownbysignal){
+			if (!configs.contains(w.wificonfig))
+				toremove.add(w);	
+		}
+		
+		for(WFConfig w2: toremove){
+			knownbysignal.remove(w2);
+		}
 	}
 
 	private static int getNetworkID() {
@@ -1198,7 +1211,6 @@ public class WFConnection extends Object implements
 		out.append(context.getString(R.string.priority));
 		out.append(wfResult.priority);
 		log(context, out.toString());
-
 	}
 
 	private static boolean networkUp(final Context context) {

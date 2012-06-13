@@ -276,13 +276,9 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		 * Now, prepare and send the log
 		 */
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
 		dialog.setTitle(getString(R.string.send_log));
-
 		dialog.setMessage(getString(R.string.alert_message));
-
 		dialog.setIcon(R.drawable.icon);
-
 		dialog.setPositiveButton(getString(R.string.ok_button),
 				new DialogInterface.OnClickListener() {
 
@@ -478,13 +474,9 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 
 	private void phoneTutNag() {
 		AlertDialog dialog = new AlertDialog.Builder(this).create();
-
 		dialog.setTitle(getString(R.string.phone_ui_tutorial));
-
 		dialog.setMessage(getString(R.string.phone_tutorial_q));
-
 		dialog.setIcon(R.drawable.icon);
-
 		dialog.setButton(AlertDialog.BUTTON_POSITIVE,
 				getString(R.string.ok_button),
 				new DialogInterface.OnClickListener() {

@@ -152,14 +152,11 @@ public class PrefUtil extends Object {
 		 * Pre-prefs load
 		 */
 		preLoad();
-
 		/*
 		 * Load
 		 */
 		for (Pref prefkey : Pref.values()) {
-
 			handleLoadPref(prefkey);
-
 		}
 		specialCase();
 	}
@@ -177,7 +174,6 @@ public class PrefUtil extends Object {
 		 * Setting the value from prefs
 		 */
 		setFlag(p, flagval);
-
 		/*
 		 * After value changes from loading
 		 */

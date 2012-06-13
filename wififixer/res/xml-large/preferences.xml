@@ -53,8 +53,8 @@
                     android:title="@string/SLOG_title" />
 
                 <Preference
-                    android:summary="Send Log to Developer"
-                    android:title="Send Log" >
+                    android:summary="@string/sendlog_summary"
+                    android:title="@string/sendlog_title" >
                     <intent
                         android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity"
                         android:targetPackage="org.wahtod.wififixer" >
@@ -65,8 +65,8 @@
                     </intent>
                 </Preference>
                 <Preference
-                    android:summary="Deletes Existing Log"
-                    android:title="Delete Log" >
+                    android:summary="@string/deletelog_summary"
+                    android:title="@string/deletelog_title" >
                     <intent
                         android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity"
                         android:targetPackage="org.wahtod.wififixer" >

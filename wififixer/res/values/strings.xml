@@ -175,9 +175,8 @@
 	<string name="Disable_title">Disable Service</string>
 	<string name="Disable_summary">Causes the Wifi Fixer service to stop running
 	</string>
-	<string name="Perf_Mode_title">Set Wifi Usability</string>
-	<string name="Perf_Mode_summary">Allows setting from max wifi usability to minimal
-		battery use</string>
+	<string name="Perf_Mode_title">Set Wifi Profile</string>
+	<string name="Perf_Mode_summary">Allows profile selection</string>
 	<string name="StateNotif_title">Status Notification</string>
 	<string name="StateNotif_summary">Displays an ongoing notification showing connection
 		state</string>
@@ -185,7 +184,7 @@
 	<string name="Notifications_summary">Displays a notification when Wifi Fixer repairs a
 		problem</string>
 	<string name="SLOG_title">Enable Logging</string>
-	<string name="SLOG_summary">Enables logservice, which writes current log to sdcard</string>
+	<string name="SLOG_summary">Enables LogService, which writes log to sdcard</string>
 	<string name="WIDGET_title">Widget Behavior</string>
 	<string name="WIDGET_summary">Selects widget behavior</string>
 	<string name="WifiLock_title">Enable Wifi Lock</string>
@@ -248,5 +247,11 @@
 	<string name="priority">Priority:</string>
 	<string name="error">error</string>
 	<string name="log">Log</string>
+	<string name="service_status_summary">Service Status</string>
+	<string name="service_status_title">Show Service Status</string>
+	<string name="sendlog_summary">Send Log to Developer</string>
+	<string name="sendlog_title">Send Log</string>
+	<string name="deletelog_summary">Deletes Existing Log</string>
+	<string name="deletelog_title">Delete Log</string>
 
 </resources>

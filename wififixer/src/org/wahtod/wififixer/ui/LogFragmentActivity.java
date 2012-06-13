@@ -28,7 +28,6 @@ public class LogFragmentActivity extends FragmentActivity {
 		setContentView(R.layout.fragment_container);
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState == null) {
-			
 			FragmentTransaction ft = getSupportFragmentManager()
 					.beginTransaction();
 			Fragment f = LogFragment.newInstance(savedInstanceState);
