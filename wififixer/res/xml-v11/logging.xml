@@ -12,16 +12,37 @@
 		License.
 	-->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-			<PreferenceCategory android:title="Logging">
-				<CheckBoxPreference android:key="Logging"
-					android:summary="@string/Logging_summary" android:title="@string/Logging_title"/>
-				<PreferenceScreen android:title="Delete Log"
-					android:summary="Deletes Existing Log">
-					<intent android:targetPackage="org.wahtod.wififixer"
-						android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity">
-						<extra android:name="DELETE_LOG" android:value="pi">
-						</extra>
-					</intent>
-			</PreferenceScreen>
-			</PreferenceCategory>
+           <PreferenceCategory
+            android:summary="Logging Preferences"
+            android:title="Logging" >
+                <CheckBoxPreference
+                    android:key="SLOG"
+                    android:summary="@string/SLOG_summary"
+                    android:title="@string/SLOG_title" />
+                <Preference
+                    android:summary="Send Log to Developer"
+                    android:title="Send Log" 
+                    >
+                    <intent
+                        android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity"
+                        android:targetPackage="org.wahtod.wififixer" >
+                        <extra
+                            android:name="SEND_LOG"
+                            android:value="pi" >
+                        </extra>
+                    </intent>
+                </Preference>
+                <Preference
+                    android:summary="Deletes Existing Log"
+                    android:title="Delete Log" >
+                    <intent
+                        android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity"
+                        android:targetPackage="org.wahtod.wififixer" >
+                        <extra
+                            android:name="DELETE_LOG"
+                            android:value="pi" >
+                        </extra>
+                    </intent>
+                </Preference>
+            </PreferenceCategory>
 </PreferenceScreen>

@@ -59,7 +59,9 @@ public class LogFragment extends Fragment {
 
 	private void addText(Bundle b) {
 		if (getActivity() != null) {
-			log = log + b.getString(LOG_MESSAGE) + "\n";
+			String message = b.getString(LOG_MESSAGE);
+			message.replaceAll("\\n", "");
+			log = log + message  + "\n";
 			myTV.setText(log);
 			mySV.fullScroll(View.FOCUS_DOWN);
 		}

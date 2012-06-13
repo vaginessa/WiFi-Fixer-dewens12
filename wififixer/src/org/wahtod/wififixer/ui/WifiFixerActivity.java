@@ -287,7 +287,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 
 					public void onClick(DialogInterface dialog, int which) {
 
-						setLogging(false);
+						//setLogging(false);
 						Intent sendIntent = new Intent(Intent.ACTION_SEND);
 						sendIntent.setType(getString(R.string.log_mimetype));
 						sendIntent.putExtra(Intent.EXTRA_EMAIL,
@@ -314,6 +314,14 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		dialog.show();
 
 	}
+	
+	void setLogging(boolean state) {
+		loggingFlag = state;
+		PrefUtil.writeBoolean(this, Pref.LOG_KEY.key(), state);
+		if (!state)
+			ServiceAlarm.setServiceEnabled(this, LogService.class, false);
+		PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), state);
+	}
 
 	public void serviceToggle(View view) {
 		if (PrefUtil.readBoolean(getApplicationContext(),
@@ -330,28 +338,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		}
 
 		this.sendBroadcast(new Intent(ServiceFragment.REFRESH_ACTION));
-	}
-
-	void setLogging(boolean state) {
-		loggingFlag = state;
-		setToggleIcon(optionsmenu);
-		PrefUtil.writeBoolean(this, Pref.LOG_KEY.key(), state);
-		if (!state)
-			ServiceAlarm.setServiceEnabled(this, LogService.class, false);
-		PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), state);
-	}
-
-	void setToggleIcon(Menu menu) {
-		MenuItem logging = menu.findItem(R.id.menu_logging);
-		if (loggingFlag) {
-			logging.setIcon(R.drawable.logging_enabled);
-			logging.setTitle(R.string.turn_logging_off);
-		} else {
-			logging.setIcon(R.drawable.logging_disabled);
-			logging.setTitle(R.string.turn_logging_on);
-		}
-
-	}
+	}	
 
 	private static void startwfService(final Context context) {
 		context.startService(new Intent(context, WifiFixerService.class));
@@ -381,7 +368,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		if (loggingFlag) {
 			Toast.makeText(WifiFixerActivity.this, R.string.disabling_logging,
 					Toast.LENGTH_SHORT).show();
-			setLogging(false);
+			//setLogging(false);
 		} else {
 			if (Environment.getExternalStorageState() != null
 					&& !(Environment.getExternalStorageState()
@@ -393,7 +380,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 
 			NotifUtil.showToast(WifiFixerActivity.this,
 					R.string.enabling_logging);
-			setLogging(true);
+			//setLogging(true);
 		}
 	}
 
@@ -480,8 +467,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.logging, menu);
-		getMenuInflater().inflate(R.menu.sendlog, menu);
 		getMenuInflater().inflate(R.menu.help, menu);
 		getMenuInflater().inflate(R.menu.about, menu);
 		getMenuInflater().inflate(R.menu.prefs, menu);
@@ -495,15 +480,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		super.onOptionsItemSelected(item);
 
 		switch (item.getItemId()) {
-
-		case R.id.menu_logging:
-			toggleLog();
-			return true;
-
-		case R.id.menu_send:
-			sendLog();
-			return true;
-
 		case R.id.menu_prefs:
 			launchPrefs();
 			return true;
@@ -531,30 +507,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		super.onResume();
 		if (optionsmenu != null)
 			onPrepareOptionsMenu(optionsmenu);
-		/*
-		 * Make sure Action Bar has current fragment title
-		 * 
-		 * if (ActionBarDetector.checkHasActionBar() && !phoneFlag) {
-		 * setTitleFromFragment(this, tabletvp); }
-		 */
-	}
-
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		super.onPrepareOptionsMenu(menu);
-		// Menu drawing stuffs
-
-		if (loggingmenuFlag) {
-			menu.findItem(R.id.menu_logging).setVisible(true);
-			menu.findItem(R.id.menu_send).setVisible(true);
-			setToggleIcon(menu);
-
-		} else {
-			menu.findItem(R.id.menu_logging).setVisible(false);
-			menu.findItem(R.id.menu_send).setVisible(false);
-		}
-
-		return true;
 	}
 
 	private void phoneTutNag() {

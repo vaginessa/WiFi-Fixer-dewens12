@@ -201,6 +201,7 @@ public abstract class NotifUtil {
 	public static void showToast(final Context context, final int resID) {
 		Intent i = new Intent(context, ToastActivity.class);
 		i.putExtra(TOAST_RESID_KEY, resID);
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(i);
 	}
 	

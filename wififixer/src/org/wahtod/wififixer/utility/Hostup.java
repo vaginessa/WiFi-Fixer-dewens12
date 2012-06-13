@@ -46,7 +46,6 @@ public class Hostup {
 
 	// Target for header check
 	private static final String H_TARGET = "http://www.google.com";
-	private static final String SERVICE_TAG = "WifiFixerService";
 	private static final String INET_LOOPBACK = "127.0.0.1";
 	private static final String INET_INVALID = "0.0.0.0";
 	private static String target;
@@ -104,8 +103,7 @@ public class Hostup {
 		}
 	}
 
-	public boolean getHostup(final int timeout, Context ctxt,
-			final String router, boolean log) {
+	public String getHostup(final int timeout, Context ctxt, final String router) {
 		finished = false;
 		context = ctxt;
 		/*
@@ -137,22 +135,15 @@ public class Hostup {
 			 * Oh no, looks like rHttpHead has timed out longer than it should
 			 * have
 			 */
-			if (log)
-				LogService.log(ctxt, SERVICE_TAG,
-						ctxt.getString(R.string.critical_timeout));
-			return false;
+			return ctxt.getString(R.string.critical_timeout);
 		} catch (InterruptedException e) {
 			finished = true;
 			/*
 			 * interrupted by a result: this is desired behavior
 			 */
-			if (log) {
-				LogService.log(ctxt, SERVICE_TAG, response);
-				LogService.log(ctxt, SERVICE_TAG,
-						String.valueOf(System.currentTimeMillis() - timer)
-								+ ctxt.getString(R.string.ms));
-			}
-			return state;
+			return response + "\n"
+					+ String.valueOf(System.currentTimeMillis() - timer)
+					+ ctxt.getString(R.string.ms);
 		}
 	}
 

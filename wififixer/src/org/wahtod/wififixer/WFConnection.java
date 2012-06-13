@@ -24,6 +24,7 @@ import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
+import org.wahtod.wififixer.ui.LogFragment;
 import org.wahtod.wififixer.utility.FifoList;
 import org.wahtod.wififixer.utility.Hostup;
 import org.wahtod.wififixer.utility.LogService;
@@ -218,16 +219,12 @@ public class WFConnection extends Object implements
 
 			case TEMPLOCK_ON:
 				templock = true;
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(ctxt, appname,
-							ctxt.getString(R.string.setting_temp_lock));
+				log(ctxt, ctxt.getString(R.string.setting_temp_lock));
 				break;
 
 			case TEMPLOCK_OFF:
 				templock = false;
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(ctxt, appname,
-							ctxt.getString(R.string.removing_temp_lock));
+				log(ctxt, ctxt.getString(R.string.removing_temp_lock));
 				break;
 
 			case SLEEPCHECK:
@@ -273,9 +270,7 @@ public class WFConnection extends Object implements
 		public void run() {
 			if (!getWifiManager(ctxt).isWifiEnabled()) {
 				handlerWrapper(TEMPLOCK_OFF);
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(ctxt, appname, ctxt
-							.getString(R.string.wifi_off_aborting_reconnect));
+				log(ctxt, ctxt.getString(R.string.wifi_off_aborting_reconnect));
 				return;
 			}
 			if (getKnownAPsBySignal(ctxt) > 0 && connectToBest(ctxt) != NULLVAL) {
@@ -283,11 +278,8 @@ public class WFConnection extends Object implements
 			} else {
 				wifirepair = W_REASSOCIATE;
 				requestScan();
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService
-							.log(ctxt,
-									appname,
-									ctxt.getString(R.string.exiting_supplicant_fix_thread_starting_scan));
+				log(ctxt,
+						ctxt.getString(R.string.exiting_supplicant_fix_thread_starting_scan));
 			}
 
 		}
@@ -301,9 +293,7 @@ public class WFConnection extends Object implements
 		public void run() {
 			if (!getWifiManager(ctxt).isWifiEnabled()) {
 				handlerWrapper(TEMPLOCK_OFF);
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(ctxt, appname,
-							ctxt.getString(R.string.wifi_off_aborting_repair));
+				log(ctxt, ctxt.getString(R.string.wifi_off_aborting_repair));
 				return;
 			}
 
@@ -313,18 +303,14 @@ public class WFConnection extends Object implements
 				pendingreconnect = true;
 				toggleWifi();
 				repair_reset = true;
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(ctxt, appname,
-							ctxt.getString(R.string.toggling_wifi));
+				log(ctxt, ctxt.getString(R.string.toggling_wifi));
 
 			}
 			/*
 			 * If repair_reset is true we should be in normal scan mode until
 			 * connected
 			 */
-			else if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.scan_mode));
+			log(ctxt, ctxt.getString(R.string.scan_mode));
 
 		}
 
@@ -338,12 +324,9 @@ public class WFConnection extends Object implements
 			/*
 			 * Check for disabled state
 			 */
-			if (prefs.getFlag(Pref.DISABLE_KEY)) {
-				if (prefs.getFlag(Pref.LOG_KEY)) {
-					LogService.log(ctxt, appname,
-							ctxt.getString(R.string.shouldrun_false_dying));
-				}
-			} else {
+			if (prefs.getFlag(Pref.DISABLE_KEY))
+				log(ctxt, ctxt.getString(R.string.shouldrun_false_dying));
+			else {
 				// Queue next run of main runnable
 				handlerWrapper(MAIN, LOOPWAIT);
 				/*
@@ -359,11 +342,8 @@ public class WFConnection extends Object implements
 					// Check Supplicant
 					if (getisWifiEnabled(ctxt, false)
 							&& !getWifiManager(ctxt).pingSupplicant()) {
-						if (prefs.getFlag(Pref.LOG_KEY))
-							LogService
-									.log(ctxt,
-											appname,
-											ctxt.getString(R.string.supplicant_nonresponsive_toggling_wifi));
+						log(ctxt,
+								ctxt.getString(R.string.supplicant_nonresponsive_toggling_wifi));
 						toggleWifi();
 					} else if (!templock && screenstate)
 						/*
@@ -390,9 +370,7 @@ public class WFConnection extends Object implements
 				// Let's try to reassociate first..
 				tempLock(SHORTWAIT);
 				getWifiManager(ctxt).reassociate();
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(ctxt, appname,
-							ctxt.getString(R.string.reassociating));
+				log(ctxt, ctxt.getString(R.string.reassociating));
 				wifirepair++;
 				notifyWrap(ctxt, ctxt.getString(R.string.reassociating));
 				break;
@@ -401,9 +379,7 @@ public class WFConnection extends Object implements
 				// Ok, now force reconnect..
 				tempLock(SHORTWAIT);
 				getWifiManager(ctxt).reconnect();
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(ctxt, appname,
-							ctxt.getString(R.string.reconnecting));
+				log(ctxt, ctxt.getString(R.string.reconnecting));
 				wifirepair++;
 				notifyWrap(ctxt, ctxt.getString(R.string.reconnecting));
 				break;
@@ -417,9 +393,7 @@ public class WFConnection extends Object implements
 				 * Reset state
 				 */
 				wifirepair = W_REASSOCIATE;
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(ctxt, appname,
-							ctxt.getString(R.string.repairing));
+				log(ctxt, ctxt.getString(R.string.repairing));
 				notifyWrap(ctxt, ctxt.getString(R.string.repairing));
 				break;
 			}
@@ -428,13 +402,9 @@ public class WFConnection extends Object implements
 			 */
 			wakelock.lock(false);
 
-			if (prefs.getFlag(Pref.LOG_KEY)) {
-				LogService.log(
-						ctxt,
-						appname,
-						ctxt.getString(R.string.fix_algorithm)
-								+ Integer.toString(wifirepair));
-			}
+			log(ctxt,
+					ctxt.getString(R.string.fix_algorithm)
+							+ Integer.toString(wifirepair));
 		}
 	};
 
@@ -468,14 +438,10 @@ public class WFConnection extends Object implements
 			if (supplicantInterruptCheck(ctxt)) {
 				startScan(true);
 				_last_scan_request = SystemClock.elapsedRealtime();
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(ctxt, appname,
-							ctxt.getString(R.string.wifimanager_scan));
+				log(ctxt, ctxt.getString(R.string.wifimanager_scan));
 				handlerWrapper(SCANWATCHDOG, SCAN_WATCHDOG_DELAY);
 			} else {
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(ctxt, appname,
-							ctxt.getString(R.string.scan_interrupt));
+				log(ctxt, ctxt.getString(R.string.scan_interrupt));
 			}
 		}
 	};
@@ -607,17 +573,13 @@ public class WFConnection extends Object implements
 
 			@Override
 			public void onAcquire() {
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(context, appname,
-							context.getString(R.string.acquiring_wake_lock));
+				log(context, context.getString(R.string.acquiring_wake_lock));
 				super.onAcquire();
 			}
 
 			@Override
 			public void onRelease() {
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(context, appname,
-							context.getString(R.string.releasing_wake_lock));
+				log(context, context.getString(R.string.releasing_wake_lock));
 				super.onRelease();
 			}
 
@@ -627,17 +589,13 @@ public class WFConnection extends Object implements
 		wifilock = new WifiLock(context) {
 			@Override
 			public void onAcquire() {
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(context, appname,
-							context.getString(R.string.acquiring_wifi_lock));
+				log(context, context.getString(R.string.acquiring_wifi_lock));
 				super.onAcquire();
 			}
 
 			@Override
 			public void onRelease() {
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(context, appname,
-							context.getString(R.string.releasing_wifi_lock));
+				log(context, context.getString(R.string.releasing_wifi_lock));
 				super.onRelease();
 			}
 
@@ -716,9 +674,7 @@ public class WFConnection extends Object implements
 		 */
 
 		if (!getIsOnWifi(context)) {
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(context, appname,
-						context.getString(R.string.wifi_not_current_network));
+			log(context, context.getString(R.string.wifi_not_current_network));
 			notifSignal = 0;
 			return false;
 		}
@@ -779,9 +735,7 @@ public class WFConnection extends Object implements
 			getWifiManager(ctxt).startScan();
 		}
 
-		if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(context, appname,
-					context.getString(R.string.current_dbm) + signal);
+		log(context, context.getString(R.string.current_dbm) + signal);
 	}
 
 	private void connectToAP(final Context context, final String ssid) {
@@ -796,7 +750,7 @@ public class WFConnection extends Object implements
 		if (n == -1)
 			return;
 
-		WifiConfiguration target = getNetworkByNID(context,n);
+		WifiConfiguration target = getNetworkByNID(context, n);
 		/*
 		 * Create sparse WifiConfiguration with details of desired connectee
 		 */
@@ -816,10 +770,8 @@ public class WFConnection extends Object implements
 		getWifiManager(ctxt)
 				.enableNetwork(connectee.wificonfig.networkId, true);
 
-		if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(context, appname,
-					context.getString(R.string.connecting_to_network)
-							+ connectee.wificonfig.SSID);
+		log(context, context.getString(R.string.connecting_to_network)
+				+ connectee.wificonfig.SSID);
 
 	}
 
@@ -828,11 +780,8 @@ public class WFConnection extends Object implements
 		 * Make sure knownbysignal is populated first
 		 */
 		if (knownbysignal.isEmpty()) {
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService
-						.log(context,
-								appname,
-								context.getString(R.string.knownbysignal_empty_exiting));
+			log(context,
+					context.getString(R.string.knownbysignal_empty_exiting));
 			return NULLVAL;
 		}
 		/*
@@ -844,10 +793,8 @@ public class WFConnection extends Object implements
 					logBestNetwork(context, network);
 					connecting++;
 					if (connecting >= CONNECTING_THRESHOLD) {
-						LogService
-								.log(context,
-										appname,
-										context.getString(R.string.connection_threshold_exceeded));
+						log(context,
+								context.getString(R.string.connection_threshold_exceeded));
 						restoreandReset(context, network);
 					} else
 						connectToAP(context, connectee.wificonfig.SSID);
@@ -895,18 +842,12 @@ public class WFConnection extends Object implements
 			network.priority--;
 			getWifiManager(context).updateNetwork(network);
 			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(
-						context,
-						appname,
-						context.getString(R.string.demoting_network)
-								+ network.SSID
-								+ context.getString(R.string._to_)
-								+ network.priority);
+				log(context, context.getString(R.string.demoting_network)
+						+ network.SSID + context.getString(R.string._to_)
+						+ network.priority);
 		} else {
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(context, appname,
-						context.getString(R.string.network_at_priority_floor)
-								+ network.SSID);
+			log(context, context.getString(R.string.network_at_priority_floor)
+					+ network.SSID);
 		}
 	}
 
@@ -943,8 +884,8 @@ public class WFConnection extends Object implements
 			handleUserEvent();
 		else if (iAction.equals(SLEEPCHECKINTENT)) {
 			handler.sendEmptyMessageDelayed(SLEEPCHECK, REALLYSHORTWAIT);
-		} else if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(context, appname, iAction.toString());
+		} else
+			log(context, iAction.toString());
 
 	}
 
@@ -963,10 +904,8 @@ public class WFConnection extends Object implements
 				PrefUtil.setNetworkState(context, wfresult.networkId, true);
 				getWifiManager(context)
 						.enableNetwork(wfresult.networkId, false);
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(context, appname,
-							context.getString(R.string.reenablenetwork)
-									+ wfresult.SSID);
+				log(context, context.getString(R.string.reenablenetwork)
+						+ wfresult.SSID);
 
 			}
 		}
@@ -1021,13 +960,11 @@ public class WFConnection extends Object implements
 	private static boolean getisWifiEnabled(final Context context, boolean log) {
 
 		if (wifistate) {
-			if (log && prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(context, appname,
-						context.getString(R.string.wifi_is_enabled));
+			if (log)
+				log(context, context.getString(R.string.wifi_is_enabled));
 		} else {
-			if (log && prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(context, appname,
-						context.getString(R.string.wifi_is_disabled));
+			if (log)
+				log(context, context.getString(R.string.wifi_is_disabled));
 		}
 		return wifistate;
 	}
@@ -1063,9 +1000,7 @@ public class WFConnection extends Object implements
 		 * in intermediate state
 		 */
 		if (scanResults == null) {
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(context, appname,
-						context.getString(R.string.null_scan_results));
+			log(context, context.getString(R.string.null_scan_results));
 			return NULLVAL;
 		}
 		/*
@@ -1078,9 +1013,7 @@ public class WFConnection extends Object implements
 		 * networks.
 		 */
 
-		if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(context, appname,
-					context.getString(R.string.parsing_scan_results));
+		log(context, context.getString(R.string.parsing_scan_results));
 
 		int index;
 		for (ScanResult sResult : scanResults) {
@@ -1120,14 +1053,12 @@ public class WFConnection extends Object implements
 				}
 			}
 		}
-
 		/*
 		 * Prune non-scanned BSSIDs
 		 */
 		List<WFConfig> toremove = new ArrayList<WFConfig>();
 		for (WFConfig network : knownbysignal) {
-			if (network != null
-					&& !scancontainsBSSID(network.wificonfig.BSSID, scanResults))
+			if (!scancontainsBSSID(network.wificonfig.BSSID, scanResults))
 				/*
 				 * Mark for removal
 				 */
@@ -1140,12 +1071,8 @@ public class WFConnection extends Object implements
 			}
 		}
 
-		if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(
-					context,
-					appname,
-					context.getString(R.string.number_of_known)
-							+ knownbysignal.size());
+		log(context, context.getString(R.string.number_of_known)
+				+ knownbysignal.size());
 
 		/*
 		 * Sort by ScanResult.level which is signal
@@ -1195,23 +1122,17 @@ public class WFConnection extends Object implements
 		 */
 		if (wm_ == null) {
 			wm_ = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(context, LogService.getLogTag(context),
-						context.getString(R.string.cachewfinst));
+			log(context, context.getString(R.string.cachewfinst));
 		}
 		return wm_;
 	}
 
 	private void handleConnect() {
 		if (connectee.wificonfig.SSID.contains(getSSID())) {
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.connected_to_network)
-								+ connectee.wificonfig.SSID);
+			log(ctxt, ctxt.getString(R.string.connected_to_network)
+					+ connectee.wificonfig.SSID);
 		} else {
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.connect_failed));
+			log(ctxt, ctxt.getString(R.string.connect_failed));
 
 			if (supplicantInterruptCheck(ctxt))
 				toggleWifi();
@@ -1222,12 +1143,9 @@ public class WFConnection extends Object implements
 	}
 
 	private void handleConnectIntent(Context context, Bundle data) {
-		if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(
-					context,
-					appname,
-					context.getString(R.string.connecting_to_network)
-							+ data.getString(NETWORKNAME));
+		log(context,
+				context.getString(R.string.connecting_to_network)
+						+ data.getString(NETWORKNAME));
 		connectToAP(ctxt, data.getString(NETWORKNAME));
 	}
 
@@ -1279,12 +1197,11 @@ public class WFConnection extends Object implements
 		out.append(NEWLINE);
 		out.append(context.getString(R.string.priority));
 		out.append(wfResult.priority);
-		LogService.log(context, appname, out.toString());
+		log(context, out.toString());
 
 	}
 
 	private static boolean networkUp(final Context context) {
-		boolean isUp = false;
 		/*
 		 * Instantiate hostup if it's not already instantiated
 		 */
@@ -1293,22 +1210,33 @@ public class WFConnection extends Object implements
 		/*
 		 * hostup.getHostup does all the heavy lifting
 		 */
-		if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(context, appname,
-					context.getString(R.string.network_check));
+		log(context, context.getString(R.string.network_check));
 
 		/*
 		 * Launches ICMP/HTTP HEAD check threads which compete for successful
 		 * state return.
 		 */
-		isUp = hostup.getHostup(REACHABLE, context,
-				context.getString(R.string.http) + accesspointIP,
-				prefs.getFlag(Pref.LOG_KEY));
-		if (!isUp)
-			isUp = hostup.getHostup(REACHABLE, context, null,
-					prefs.getFlag(Pref.LOG_KEY));
+		String response = hostup.getHostup(REACHABLE, context,
+				context.getString(R.string.http) + accesspointIP);
+		log(context, response);
+		if (response.contains(context.getString(R.string.icmp_ok))
+				|| response.contains(context.getString(R.string.http_ok)))
+			return true;
+		else
+			return false;
+	}
 
-		return isUp;
+	private static void log(final Context c, final String message) {
+		/*
+		 * handle live logging fragment
+		 */
+		if (PrefUtil.readBoolean(c, LogFragment.HAS_LOGFRAGMENT)) {
+			Intent i = new Intent(LogFragment.LOG_MESSAGE_INTENT);
+			i.putExtra(LogFragment.LOG_MESSAGE, message);
+			c.sendBroadcast(i);
+		}
+		if (prefs.getFlag(Pref.LOG_KEY))
+			LogService.log(c, appname, message);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -1318,9 +1246,7 @@ public class WFConnection extends Object implements
 		 */
 		DhcpInfo info = getWifiManager(ctxt).getDhcpInfo();
 		accesspointIP = Formatter.formatIpAddress(info.gateway);
-		if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(context, appname,
-					context.getString(R.string.cached_ip) + accesspointIP);
+		log(context, context.getString(R.string.cached_ip) + accesspointIP);
 	}
 
 	private static void logBestNetwork(final Context context,
@@ -1337,14 +1263,8 @@ public class WFConnection extends Object implements
 			output.append(NEWLINE);
 			output.append(context.getString(R.string.nid));
 			output.append(best.wificonfig.networkId);
-			LogService.log(context, appname, output.toString());
+			log(context, output.toString());
 		}
-	}
-
-	private static void logSupplicant(final Context context, final String state) {
-
-		LogService.log(context, appname,
-				context.getString(R.string.supplicant_state) + state);
 	}
 
 	private static void notifyWrap(final Context context, final String message) {
@@ -1365,11 +1285,8 @@ public class WFConnection extends Object implements
 			 */
 			toggleWifi();
 			supplicant_associating = 0;
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService
-						.log(ctxt,
-								appname,
-								ctxt.getString(R.string.supplicant_associate_threshold_exceeded));
+			log(ctxt,
+					ctxt.getString(R.string.supplicant_associate_threshold_exceeded));
 		} else
 			handlerWrapper(ASSOCWATCHDOG, SHORTWAIT);
 	}
@@ -1467,15 +1384,11 @@ public class WFConnection extends Object implements
 			pendingscan = false;
 			handlerWrapper(TEMPLOCK_OFF);
 			handlerWrapper(REPAIR);
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.repairhandler));
+			log(ctxt, ctxt.getString(R.string.repairhandler));
 		} else {
 			pendingscan = false;
 			handlerWrapper(RECONNECT);
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.reconnecthandler));
+			log(ctxt, ctxt.getString(R.string.reconnecthandler));
 		}
 
 	}
@@ -1508,9 +1421,7 @@ public class WFConnection extends Object implements
 		 * Check for auth error
 		 */
 		if (data.containsKey(WifiManager.EXTRA_SUPPLICANT_ERROR))
-			NotifUtil.show(ctxt, ctxt.getString(R.string.authentication_error),
-					ctxt.getString(R.string.authentication_error), ERR_NOTIF,
-					null);
+			NotifUtil.showToast(ctxt, R.string.authentication_error);
 
 		/*
 		 * Status notification updating supplicant state
@@ -1570,7 +1481,7 @@ public class WFConnection extends Object implements
 		_supplicantFifo.add(lastSupplicantState);
 		if (!_supplicantFifo.containsPatterns(
 				SupplicantPatterns.SCAN_BOUNCE_CLUSTER).isEmpty()) {
-			LogService.log(ctxt, appname, ctxt.getString(R.string.scan_bounce));
+			log(ctxt, ctxt.getString(R.string.scan_bounce));
 			_supplicantFifo.clear();
 			toggleWifi();
 			return true;
@@ -1597,7 +1508,7 @@ public class WFConnection extends Object implements
 		}
 
 		if (prefs.getFlag(Pref.LOG_KEY) && screenstate)
-			logSupplicant(ctxt, sState);
+			log(ctxt, ctxt.getString(R.string.supplicant_state) + sState);
 	}
 
 	private void handleWifiState(final Bundle data) {
@@ -1606,31 +1517,21 @@ public class WFConnection extends Object implements
 				WifiManager.WIFI_STATE_UNKNOWN);
 		switch (state) {
 		case WifiManager.WIFI_STATE_ENABLED:
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.wifi_state_enabled));
+			log(ctxt, ctxt.getString(R.string.wifi_state_enabled));
 			onWifiEnabled();
 			break;
 		case WifiManager.WIFI_STATE_ENABLING:
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.wifi_state_enabling));
+			log(ctxt, ctxt.getString(R.string.wifi_state_enabling));
 			break;
 		case WifiManager.WIFI_STATE_DISABLED:
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.wifi_state_disabled));
+			log(ctxt, ctxt.getString(R.string.wifi_state_disabled));
 			onWifiDisabled();
 			break;
 		case WifiManager.WIFI_STATE_DISABLING:
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.wifi_state_disabling));
+			log(ctxt, ctxt.getString(R.string.wifi_state_disabling));
 			break;
 		case WifiManager.WIFI_STATE_UNKNOWN:
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.wifi_state_unknown));
+			log(ctxt, ctxt.getString(R.string.wifi_state_unknown));
 			break;
 		}
 	}
@@ -1700,16 +1601,13 @@ public class WFConnection extends Object implements
 		/*
 		 * Log Non-Managed network
 		 */
-		if (!shouldManage(ctxt) && prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(ctxt, appname,
-					ctxt.getString(R.string.not_managing_network) + notifSSID);
+		if (!shouldManage(ctxt))
+			log(ctxt, ctxt.getString(R.string.not_managing_network) + notifSSID);
 
 		/*
 		 * Log connection
 		 */
-		if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(ctxt, appname,
-					ctxt.getString(R.string.connected_to_network) + getSSID());
+		log(ctxt, ctxt.getString(R.string.connected_to_network) + getSSID());
 	}
 
 	private void onScreenOff() {
@@ -1729,15 +1627,9 @@ public class WFConnection extends Object implements
 		 */
 		if (prefs.getFlag(Pref.N1FIX2_KEY)) {
 			handlerWrapper(N1CHECK, REACHABLE);
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.scheduling_n1_fix));
+			log(ctxt, ctxt.getString(R.string.scheduling_n1_fix));
 		}
-
-		if (prefs.getFlag(Pref.LOG_KEY)) {
-			LogService.log(ctxt, appname,
-					ctxt.getString(R.string.screen_off_handler));
-		}
+		log(ctxt, ctxt.getString(R.string.screen_off_handler));
 	}
 
 	private void onScreenOn() {
@@ -1748,10 +1640,7 @@ public class WFConnection extends Object implements
 			wifilock.lock(true);
 
 		sleepCheck(false);
-		if (prefs.getFlag(Pref.LOG_KEY)) {
-			LogService.log(ctxt, appname,
-					ctxt.getString(R.string.screen_on_handler));
-		}
+		log(ctxt, ctxt.getString(R.string.screen_on_handler));
 		/*
 		 * Notify current state on resume
 		 */
@@ -1833,14 +1722,11 @@ public class WFConnection extends Object implements
 			 */
 			toggleWifi();
 		}
-		if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(
-					ctxt,
-					appname,
-					ctxt.getString(R.string.scan_failed)
-							+ ":"
-							+ String.valueOf(SystemClock.elapsedRealtime()
-									- _last_scan_request) + "ms");
+		log(ctxt,
+				ctxt.getString(R.string.scan_failed)
+						+ ":"
+						+ String.valueOf(SystemClock.elapsedRealtime()
+								- _last_scan_request) + "ms");
 		if (screenstate)
 			handlerWrapper(SCAN, NORMAL_SCAN_DELAY);
 		else
@@ -1906,26 +1792,15 @@ public class WFConnection extends Object implements
 			bestap = connectToBest(ctxt);
 
 			if (bestap == NULLVAL) {
-				if (prefs.getFlag(Pref.LOG_KEY))
-					LogService.log(ctxt, appname,
-							ctxt.getString(R.string.signalhop_no_result));
+				log(ctxt, ctxt.getString(R.string.signalhop_no_result));
 				handlerWrapper(TEMPLOCK_OFF);
 				wifiRepair();
-				return;
 			} else {
-				if (prefs.getFlag(Pref.LOG_KEY)) {
-					LogService.log(ctxt, appname,
-							ctxt.getString(R.string.hopping) + bestap);
-					LogService.log(ctxt, appname, ctxt.getString(R.string.nid)
-							+ lastAP);
-				}
+				log(ctxt, ctxt.getString(R.string.hopping) + bestap);
+				log(ctxt, ctxt.getString(R.string.nid) + lastAP);
 			}
-			return;
 		}
-
-		if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(ctxt, appname,
-					ctxt.getString(R.string.signalhop_nonetworks));
+		log(ctxt, ctxt.getString(R.string.signalhop_nonetworks));
 		handlerWrapper(TEMPLOCK_OFF);
 		if (connectee == null) {
 			shouldrepair = true;
@@ -1964,18 +1839,14 @@ public class WFConnection extends Object implements
 		// gets its own wake lock
 		wakelock.lock(true);
 		if (getWifiManager(ctxt).startScan()) {
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.initiating_scan));
+			log(ctxt, ctxt.getString(R.string.initiating_scan));
 			tempLock(LOCKWAIT);
 		} else {
 			/*
 			 * Reset supplicant, log
 			 */
 			toggleWifi();
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.scan_failed));
+			log(ctxt, ctxt.getString(R.string.scan_failed));
 		}
 		wakelock.lock(false);
 	}
@@ -1984,9 +1855,7 @@ public class WFConnection extends Object implements
 		// Toggling wifi resets the supplicant
 		toggleWifi();
 
-		if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(ctxt, appname,
-					ctxt.getString(R.string.running_supplicant_fix));
+		log(ctxt, ctxt.getString(R.string.running_supplicant_fix));
 	}
 
 	private static boolean supplicantInterruptCheck(final Context context) {
@@ -2016,9 +1885,7 @@ public class WFConnection extends Object implements
 		/*
 		 * Send Toggle request to broadcastreceiver
 		 */
-		if (prefs.getFlag(Pref.LOG_KEY))
-			LogService.log(ctxt, appname,
-					ctxt.getString(R.string.toggling_wifi));
+		log(ctxt, ctxt.getString(R.string.toggling_wifi));
 		ctxt.sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
 		statusdispatcher.sendMessage(
 				ctxt,
@@ -2035,18 +1902,14 @@ public class WFConnection extends Object implements
 			 * Start Wifi Task
 			 */
 			handlerWrapper(WIFITASK);
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.running_wifi_repair));
+			log(ctxt, ctxt.getString(R.string.running_wifi_repair));
 		} else {
 			/*
 			 * if screen off, try wake lock then resubmit to handler
 			 */
 			wakelock.lock(true);
 			handlerWrapper(WIFITASK);
-			if (prefs.getFlag(Pref.LOG_KEY))
-				LogService.log(ctxt, appname,
-						ctxt.getString(R.string.wifi_repair_post_failed));
+			log(ctxt, ctxt.getString(R.string.wifi_repair_post_failed));
 		}
 		shouldrepair = false;
 	}

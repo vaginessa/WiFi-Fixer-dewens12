@@ -224,7 +224,6 @@ public class PrefUtil extends Object {
 	}
 
 	public void postValChanged(final Pref p) {
-
 	}
 
 	public static String getnetworkSSID(final Context context, final int network) {

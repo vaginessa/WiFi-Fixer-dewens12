@@ -26,7 +26,7 @@
 	<string name="disabling_logging">Disabling Logging</string>
 	<string name="donatenag">If you use this software, please donate!</string>
 	<string name="thank_you">Thank You for using Wifi Fixer</string>
-	<string name="emailintent">Select Gmail or alternate email client:</string>
+	<string name="emailintent">Select Gmail: other apps may not attach log</string>
 	<string name="issue_prompt">Please describe the issue.  Be as specific as you can.</string>
 	<string name="subject">WifiFixer Log</string>
 	<string name="email">zanshin.g1@gmail.com</string>
@@ -119,8 +119,7 @@
 	<string name="removing_temp_lock">Removing Temp Lock</string>
 	<string name="setting_temp_lock">Setting Temp Lock</string>
 	<string name="app_name">Wifi Fixer</string>
-	<string name="app_desc">Wifi health monitoring service with integrated wifi
-		lock option. </string>
+	<string name="app_desc">Wifi health monitoring service</string>
 	<string name="widget_name">WifiFixerWidget</string>
 	<string name="passed">PASSED</string>
 	<string name="failed">FAILED</string>
@@ -187,8 +186,8 @@
 	<string name="Notifications_title">Repair Notifications</string>
 	<string name="Notifications_summary">Displays a notification when Wifi Fixer repairs a
 		problem</string>
-	<string name="Logging_title">Enable Log Menu</string>
-	<string name="Logging_summary">Enables logging options. </string>
+	<string name="SLOG_title">Enable Logging</string>
+	<string name="SLOG_summary">Enables logservice, which writes current log to sdcard</string>
 	<string name="WIDGET_title">Widget Behavior</string>
 	<string name="WIDGET_summary">Selects widget behavior</string>
 	<string name="WifiLock_title">Enable Wifi Lock</string>

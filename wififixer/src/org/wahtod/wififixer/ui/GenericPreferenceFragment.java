@@ -54,6 +54,7 @@ public class GenericPreferenceFragment extends PreferenceFragment implements
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		PrefActivity.processPrefChange(getActivity(), sharedPreferences, key);
+		PrefActivity.processPrefChange(this.getPreferenceScreen(),
+				sharedPreferences, key);
 	}
 }

@@ -19,16 +19,15 @@ package org.wahtod.wififixer.ui;
 import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefConstants;
-import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
+import org.wahtod.wififixer.prefs.PrefUtil;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 
 public class PrefActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
@@ -46,7 +45,6 @@ public class PrefActivity extends PreferenceActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-
 		// Set up a listener for when key changes
 		getPreferenceScreen().getSharedPreferences()
 				.registerOnSharedPreferenceChangeListener(this);
@@ -63,12 +61,13 @@ public class PrefActivity extends PreferenceActivity implements
 				.unregisterOnSharedPreferenceChangeListener(this);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-		processPrefChange(this, prefs, key);
+		processPrefChange(getPreferenceScreen(), prefs, key);
 	}
 
-	public static void processPrefChange(final Context context,
+	public static void processPrefChange(PreferenceScreen p,
 			SharedPreferences prefs, String key) {
 		if (key.length() == 0)
 			return;
@@ -80,18 +79,18 @@ public class PrefActivity extends PreferenceActivity implements
 			 * First handle Service enable case
 			 */
 			if (key.equals(Pref.DISABLE_KEY.key())) {
-				if (!PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key())) {
+				if (!PrefUtil.readBoolean(p.getContext(),
+						Pref.DISABLE_KEY.key())) {
 					Intent intent = new Intent(
 							IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
-					context.sendBroadcast(intent);
+					p.getContext().sendBroadcast(intent);
 				}
 
 				else {
 					Intent intent = new Intent(
 							IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
-					context.sendBroadcast(intent);
+					p.getContext().sendBroadcast(intent);
 				}
-
 				return;
 			}
 			/*
@@ -99,58 +98,61 @@ public class PrefActivity extends PreferenceActivity implements
 			 * interested in.
 			 */
 
-			PrefUtil.notifyPrefChange(context, key,
+			PrefUtil.notifyPrefChange(p.getContext(), key,
 					prefs.getBoolean(key, false));
 
-		} else if (key.contains(PrefConstants.PERF_KEY)) {
+		}
+		else if (key.contains(PrefConstants.PERF_KEY)) {
 
-			int pVal = Integer.valueOf(PrefUtil.readString(context,
+			int pVal = Integer.valueOf(PrefUtil.readString(p.getContext(),
 					PrefConstants.PERF_KEY));
 
 			switch (pVal) {
 			case 1:
-				PrefUtil.writeBoolean(context, Pref.WIFILOCK_KEY.key(), true);
-				PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(),
+				PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK_KEY.key(),
 						true);
-				PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), true);
-				PrefUtil.notifyPrefChange(context, Pref.SCREEN_KEY.key(), true);
+				PrefUtil.notifyPrefChange(p.getContext(),
+						Pref.WIFILOCK_KEY.key(), true);
+				PrefUtil.writeBoolean(p.getContext(), Pref.SCREEN_KEY.key(),
+						true);
+				PrefUtil.notifyPrefChange(p.getContext(),
+						Pref.SCREEN_KEY.key(), true);
 				/*
 				 * Set Wifi Sleep policy to Never
 				 */
-				PrefUtil.setPolicy(context, 2);
+				PrefUtil.setPolicy(p.getContext(), 2);
 				break;
 
 			case 2:
-				PrefUtil.writeBoolean(context, Pref.WIFILOCK_KEY.key(), true);
-				PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(),
+				PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK_KEY.key(),
 						true);
-				PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), false);
-				PrefUtil.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
+				PrefUtil.notifyPrefChange(p.getContext(),
+						Pref.WIFILOCK_KEY.key(), true);
+				PrefUtil.writeBoolean(p.getContext(), Pref.SCREEN_KEY.key(),
+						false);
+				PrefUtil.notifyPrefChange(p.getContext(),
+						Pref.SCREEN_KEY.key(), false);
 				break;
 
 			case 3:
-				PrefUtil.writeBoolean(context, Pref.WIFILOCK_KEY.key(), false);
-				PrefUtil.notifyPrefChange(context, Pref.WIFILOCK_KEY.key(),
+				PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK_KEY.key(),
 						false);
-				PrefUtil.writeBoolean(context, Pref.SCREEN_KEY.key(), false);
-				PrefUtil.notifyPrefChange(context, Pref.SCREEN_KEY.key(), false);
+				PrefUtil.notifyPrefChange(p.getContext(),
+						Pref.WIFILOCK_KEY.key(), false);
+				PrefUtil.writeBoolean(p.getContext(), Pref.SCREEN_KEY.key(),
+						false);
+				PrefUtil.notifyPrefChange(p.getContext(),
+						Pref.SCREEN_KEY.key(), false);
 				break;
 			}
-			/*
-			 * Return to main activity so checkboxes aren't stale Only need to
-			 * do this on phone
-			 */
-			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-				context.startActivity(new Intent(context,
-						WifiFixerActivity.class));
 
 		} else if (key.contains(PrefConstants.SLPOLICY_KEY)) {
-			int wfsleep = Integer.valueOf(PrefUtil.readString(context,
+			int wfsleep = Integer.valueOf(PrefUtil.readString(p.getContext(),
 					PrefConstants.SLPOLICY_KEY));
 			if (wfsleep != 3) {
-				PrefUtil.setPolicy(context, wfsleep);
+				PrefUtil.setPolicy(p.getContext(), wfsleep);
 			} else {
-				PrefUtil.setPolicyfromSystem(context);
+				PrefUtil.setPolicyfromSystem(p.getContext());
 			}
 		}
 	}
