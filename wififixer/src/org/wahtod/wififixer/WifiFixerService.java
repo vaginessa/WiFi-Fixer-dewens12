@@ -296,10 +296,6 @@ public class WifiFixerService extends Service implements
 					break;
 
 				case LOG_KEY:
-					if(!logPrefLoad){
-						logPrefLoad=true;
-						return;
-					}
 					logging = getFlag(Pref.LOG_KEY);
 					if (logging) {
 						ServiceAlarm.setServiceEnabled(getBaseContext(),
@@ -307,13 +303,19 @@ public class WifiFixerService extends Service implements
 						LogService.setLogTS(getBaseContext(), logging, 0);
 						LogService.log(getBaseContext(), LogService.DUMPBUILD,
 								EMPTYSTRING);
-						NotifUtil.showToast(getBaseContext(), R.string.enabling_logging);
+						if (logPrefLoad)
+							NotifUtil.showToast(getBaseContext(),
+									R.string.enabling_logging);
 						log();
-					}
-					else{
-						NotifUtil.showToast(getBaseContext(), R.string.disabling_logging);
+					} else {
+						if (logPrefLoad)
+							NotifUtil.showToast(getBaseContext(),
+									R.string.disabling_logging);
 						ServiceAlarm.setServiceEnabled(getBaseContext(),
 								LogService.class, false);
+					}
+					if (!logPrefLoad) {
+						logPrefLoad = true;
 					}
 					break;
 
