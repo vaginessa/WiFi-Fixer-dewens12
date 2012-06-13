@@ -64,6 +64,18 @@
                     android:title="@string/SLOG_title" />
 
                 <Preference
+                    android:summary="Show Service Status pane"
+                    android:title="Show Service Status" >
+                    <intent
+                        android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity"
+                        android:targetPackage="org.wahtod.wififixer" >
+                        <extra
+                            android:name="SHOW_STATUS"
+                            android:value="pi" >
+                        </extra>
+                    </intent>
+                </Preference>
+                <Preference
                     android:summary="Send Log to Developer"
                     android:title="Send Log" >
                     <intent

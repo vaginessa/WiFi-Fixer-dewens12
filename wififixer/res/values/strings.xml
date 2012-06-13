@@ -52,8 +52,6 @@
 	<string name="signal_poor">Signal poor: scanning for better network.</string>
 	<string name="current_dbm">Current dBm:</string>
 	<string name="hopping">Found better signal: hopping to network  </string>
-	<string name="turn_logging_off">Disable Logging</string>
-	<string name="turn_logging_on">Enable Logging</string>
 	<string name="wifi_repair_post_failed">Wifi Repair:Screen Off</string>
 	<string name="icmp_success">ICMP Success</string>
 	<string name="wifi_not_current_network">Wifi Not Current Network</string>
@@ -249,5 +247,6 @@
 	<string name="network_at_priority_floor">Network at priority floor:</string>
 	<string name="priority">Priority:</string>
 	<string name="error">error</string>
+	<string name="log">Log</string>
 
 </resources>

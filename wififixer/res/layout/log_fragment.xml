@@ -13,27 +13,65 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:alpha=".95"
-    android:background="@drawable/boxbg"
-    android:gravity="center"
     android:orientation="vertical" >
 
-    <ScrollView
-        android:id="@+id/SCROLLER"
+    <LinearLayout
+        android:id="@+id/logwrapper"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
-        android:fillViewport="true"
-        android:scrollbars="vertical" >
+        android:layout_marginTop="5dp" >
 
-        <TextView
-            android:id="@+id/logText"
-            style="@style/Wftext"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
-    </ScrollView>
+        <ScrollView
+            android:id="@+id/SCROLLER"
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_weight=".7"
+            android:alpha=".95"
+            android:background="@drawable/boxbg"
+            android:fillViewport="true"
+            android:scrollbars="vertical" >
+
+            <TextView
+                android:id="@+id/logText"
+                style="@style/Wftext"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" />
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/buttonscontainer"
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight=".3"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingLeft="8dp" >
+
+            <ToggleButton
+                android:id="@+id/logToggle"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
+                android:layout_marginTop="@dimen/service_imagebutton_margin_top"
+                android:clickable="true"
+                android:textOff="@string/log"
+                android:textOn="@string/log" />
+
+            <ImageButton
+                android:id="@+id/sendLog"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
+                android:layout_marginTop="@dimen/service_imagebutton_margin_top"
+                android:clickable="true"
+                android:src="@drawable/ic_menu_send" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

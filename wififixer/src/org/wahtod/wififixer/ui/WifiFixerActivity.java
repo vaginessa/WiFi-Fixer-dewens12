@@ -54,14 +54,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class WifiFixerActivity extends TutorialFragmentActivity {
 	public boolean isauthedFlag;
 	public boolean aboutFlag;
-	public boolean loggingmenuFlag;
-	public boolean loggingFlag;
 
 	private Menu optionsmenu;
 	public boolean phoneFlag;
@@ -122,6 +119,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	public static final String SCANFRAG_TAG = "SCAN";
 	public static final String STATUSFRAG_TAG = "STATUS";
 	private static final String RUN_TUTORIAL = "RUN_TUTORIAL";
+	public static final String SHOW_STATUS = "SHOW_STATUS";
+	public static final String SEND_LOG = "SEND_LOG";
 
 	/*
 	 * Delay for Wifi Toggle button check
@@ -150,10 +149,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 					R.string.logfile_delete_err_toast);
 	}
 
-	private static boolean getLogging(final Context context) {
-		return PrefUtil.readBoolean(context, Pref.LOG_KEY.key());
-	}
-
 	private void bundleIntent(final Intent intent) {
 		/*
 		 * Dispatch intent commands to handler
@@ -178,6 +173,9 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		if (data.containsKey(SHOW_FRAGMENT)) {
 			data.remove(SHOW_FRAGMENT);
 			showFragment(data);
+		} else if (data.containsKey(SEND_LOG)) {
+			data.remove(SEND_LOG);
+			sendLog();
 		}
 		/*
 		 * Delete Log if called by preference
@@ -189,6 +187,9 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 			data.remove(RUN_TUTORIAL);
 			if (findViewById(R.id.pager) != null)
 				phoneTutNag();
+		} else if (data.containsKey(SHOW_STATUS)) {
+			data.remove(SHOW_STATUS);
+			startActivity(new Intent(this, LogFragmentActivity.class));
 		}
 		/*
 		 * Set Activity intent to one without commands we've "consumed"
@@ -287,7 +288,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 
 					public void onClick(DialogInterface dialog, int which) {
 
-						//setLogging(false);
+						// setLogging(false);
 						Intent sendIntent = new Intent(Intent.ACTION_SEND);
 						sendIntent.setType(getString(R.string.log_mimetype));
 						sendIntent.putExtra(Intent.EXTRA_EMAIL,
@@ -314,14 +315,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		dialog.show();
 
 	}
-	
-	void setLogging(boolean state) {
-		loggingFlag = state;
-		PrefUtil.writeBoolean(this, Pref.LOG_KEY.key(), state);
-		if (!state)
-			ServiceAlarm.setServiceEnabled(this, LogService.class, false);
-		PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), state);
-	}
 
 	public void serviceToggle(View view) {
 		if (PrefUtil.readBoolean(getApplicationContext(),
@@ -338,7 +331,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		}
 
 		this.sendBroadcast(new Intent(ServiceFragment.REFRESH_ACTION));
-	}	
+	}
 
 	private static void startwfService(final Context context) {
 		context.startService(new Intent(context, WifiFixerService.class));
@@ -362,26 +355,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		WifiManager wm = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);
 		return wm.isWifiEnabled();
-	}
-
-	void toggleLog() {
-		if (loggingFlag) {
-			Toast.makeText(WifiFixerActivity.this, R.string.disabling_logging,
-					Toast.LENGTH_SHORT).show();
-			//setLogging(false);
-		} else {
-			if (Environment.getExternalStorageState() != null
-					&& !(Environment.getExternalStorageState()
-							.contains(Environment.MEDIA_MOUNTED))) {
-				NotifUtil.showToast(WifiFixerActivity.this,
-						R.string.sd_card_unavailable);
-				return;
-			}
-
-			NotifUtil.showToast(WifiFixerActivity.this,
-					R.string.enabling_logging);
-			//setLogging(true);
-		}
 	}
 
 	public void drawUI() {
@@ -440,9 +413,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	}
 
 	private void oncreate_setup() {
-		loggingmenuFlag = PrefUtil
-				.readBoolean(this, PrefConstants.LOGGING_MENU);
-		loggingFlag = getLogging(this);
 		// Here's where we fire the nag
 		authCheck();
 	}
@@ -450,9 +420,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		loggingmenuFlag = PrefUtil
-				.readBoolean(this, PrefConstants.LOGGING_MENU);
-		loggingFlag = getLogging(this);
 		startwfService(this);
 	}
 
@@ -551,7 +518,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 			}
 			ft.add(id, found, String.valueOf(id));
 			ft.commit();
-		} 
+		}
 	}
 
 	private void showFragment(Bundle bundle) {

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<!--
+		Copyright [2010-2011] [David Van de Ven] Licensed under the Apache License,
+		Version 2.0 (the "License"); you may not use this file except in
+		compliance with the License. You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+           <PreferenceCategory
+            android:summary="Logging Preferences"
+            android:title="Logging" >
+                <CheckBoxPreference
+                    android:key="SLOG"
+                    android:summary="@string/SLOG_summary"
+                    android:title="@string/SLOG_title" />
+                <Preference
+                    android:summary="Show Service Status pane"
+                    android:title="Show Service Status" >
+                    <intent
+                        android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity"
+                        android:targetPackage="org.wahtod.wififixer" >
+                        <extra
+                            android:name="SHOW_STATUS"
+                            android:value="pi" >
+                        </extra>
+                    </intent>
+                </Preference>
+                <Preference
+                    android:summary="Send Log to Developer"
+                    android:title="Send Log" 
+                    >
+                    <intent
+                        android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity"
+                        android:targetPackage="org.wahtod.wififixer" >
+                        <extra
+                            android:name="SEND_LOG"
+                            android:value="pi" >
+                        </extra>
+                    </intent>
+                </Preference>
+                <Preference
+                    android:summary="Deletes Existing Log"
+                    android:title="Delete Log" >
+                    <intent
+                        android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity"
+                        android:targetPackage="org.wahtod.wififixer" >
+                        <extra
+                            android:name="DELETE_LOG"
+                            android:value="pi" >
+                        </extra>
+                    </intent>
+                </Preference>
+            </PreferenceCategory>
+</PreferenceScreen>
