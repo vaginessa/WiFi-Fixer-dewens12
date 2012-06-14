@@ -17,10 +17,13 @@
 package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.legacy.ActionBarDetector;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.view.MenuItem;
 
 public class LogFragmentActivity extends FragmentActivity {
 	@Override
@@ -35,5 +38,12 @@ public class LogFragmentActivity extends FragmentActivity {
 			ft.add(R.id.fragment_target, f, null);
 			ft.commit();
 		}
+		ActionBarDetector.setDisplayHomeAsUpEnabled(this, true); 
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		ActionBarDetector.handleHome(this, item);
+		return super.onOptionsItemSelected(item);
 	}
 }
