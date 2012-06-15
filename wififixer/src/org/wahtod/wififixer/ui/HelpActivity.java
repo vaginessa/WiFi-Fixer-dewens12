@@ -22,14 +22,13 @@ import org.wahtod.wififixer.legacy.ActionBarDetector;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class HelpActivity extends FragmentActivity {
+public class HelpActivity extends AppFragmentActivity {
 
 	private static final String CURRENT_URL = "CURRENT_URL";
 	WebView webview;

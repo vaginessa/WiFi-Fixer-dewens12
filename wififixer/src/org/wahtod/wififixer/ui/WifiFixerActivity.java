@@ -39,7 +39,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -50,8 +49,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ToggleButton;
@@ -59,8 +56,6 @@ import android.widget.ToggleButton;
 public class WifiFixerActivity extends TutorialFragmentActivity {
 	public boolean isauthedFlag;
 	public boolean aboutFlag;
-
-	private Menu optionsmenu;
 	public boolean phoneFlag;
 
 	public class PhoneAdapter extends FragmentPagerAdapter {
@@ -197,17 +192,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		Intent i = new Intent(data.getString(PrefUtil.INTENT_ACTION));
 		i.putExtras(data);
 		setIntent(i);
-	}
-
-	void launchHelp() {
-		startActivity(new Intent(this, HelpActivity.class));
-	}
-
-	void launchPrefs() {
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-			startActivity(new Intent(this, PrefActivity.class));
-		else
-			startActivity(new Intent(this, PrefActivityHC.class));
 	}
 
 	void sendLog() {
@@ -426,39 +410,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		bundleIntent(intent);
 	}
 
-	// Create menus
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.help, menu);
-		getMenuInflater().inflate(R.menu.about, menu);
-		getMenuInflater().inflate(R.menu.prefs, menu);
-		optionsmenu = menu;
-		return true;
-	}
-
-	/* Handles item selections */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
-
-		switch (item.getItemId()) {
-		case R.id.menu_prefs:
-			launchPrefs();
-			return true;
-
-		case R.id.menu_help:
-			launchHelp();
-			return true;
-
-		case R.id.menu_about:
-			Intent myIntent = new Intent(this, About.class);
-			startActivity(myIntent);
-			return true;
-		}
-		return false;
-	}
-
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -468,8 +419,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (optionsmenu != null)
-			onPrepareOptionsMenu(optionsmenu);
 	}
 
 	private void phoneTutNag() {

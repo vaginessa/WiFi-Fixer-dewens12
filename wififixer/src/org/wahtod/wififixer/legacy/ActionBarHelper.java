@@ -19,8 +19,6 @@ import android.app.Activity;
 
 
 public class ActionBarHelper extends ActionBarDetector {
-
-
 	@Override
 	public void vsetDisplayHomeAsUpEnabled(Activity a, boolean state) {
 		a.getActionBar().setDisplayHomeAsUpEnabled(state);

@@ -23,7 +23,6 @@ import org.wahtod.wififixer.prefs.PrefUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,7 +32,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class TutorialFragmentActivity extends FragmentActivity {
+public class TutorialFragmentActivity extends AppFragmentActivity {
 	protected static final int TOAST = 0;
 	protected static final int PAGE = 4;
 	protected static final int PART1 = 1;
@@ -45,8 +44,7 @@ public class TutorialFragmentActivity extends FragmentActivity {
 	private static final String CURRENT_PART = "TutorialFragmentActivity:CURRENT_PART";
 	private static final long RESTORE_DELAY = 1000;
 
-	private int part = -1;
-
+	private int part = -1;	
 	ViewPager pv;
 
 	private Handler handler = new Handler() {

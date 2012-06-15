@@ -21,11 +21,10 @@ import org.wahtod.wififixer.legacy.ActionBarDetector;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 
-public class LogFragmentActivity extends FragmentActivity {
+public class LogFragmentActivity extends AppFragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.fragment_container);

@@ -37,5 +37,4 @@ public class StrictModeSetter extends StrictModeDetector {
 		}
 		return true;
 	}
-
 }
