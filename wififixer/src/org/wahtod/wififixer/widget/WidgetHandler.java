@@ -54,10 +54,9 @@ public class WidgetHandler {
 				setWifiState(ctxt, true);
 			else
 			/*
-			 * If Wifi is disabled, notify
+			 * If Wifi is disabled, return
 			 */
 			if (!getWifiManager(ctxt).isWifiEnabled()) {
-				NotifUtil.showToast(ctxt, ctxt.getString(R.string.wifi_is_disabled));
 				return;
 			}
 			/*

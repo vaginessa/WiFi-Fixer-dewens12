@@ -759,7 +759,7 @@ public class WFConnection extends Object implements
 		target.status = WifiConfiguration.Status.CURRENT;
 		getWifiManager(context).updateNetwork(target);
 		getWifiManager(context).enableNetwork(target.networkId, false);
-		getWifiManager(context).reconnect();
+		//getWifiManager(context).reconnect();
 		/*
 		 * Remove all posts to handler
 		 */
