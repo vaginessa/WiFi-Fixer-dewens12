@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<!--
+<!--
 		Copyright [2010-2011] [David Van de Ven] Licensed under the Apache License,
 		Version 2.0 (the "License"); you may not use this file except in
 		compliance with the License. You may obtain a copy of the License at
@@ -10,23 +10,43 @@
 		CONDITIONS OF ANY KIND, either express or implied. See the License for
 		the specific language governing permissions and limitations under the
 		License.
-	-->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-			<PreferenceCategory android:title="Wifi Usability">
-				<CheckBoxPreference android:key="WiFiLock"
-					android:defaultValue="true" android:title="@string/WifiLock_title"
-					android:summary="@string/WifiLock_summary" />
-				<CheckBoxPreference android:key="SCREEN"
-					android:defaultValue="true" android:summary="@string/SCREEN_summary" android:title="@string/SCREEN_title"/>
-			</PreferenceCategory>
-			<PreferenceCategory android:title="Specialized Fixes">
-				<ListPreference android:title="@string/SLEEP_POLICY_title"
-					android:defaultValue="3"
-					android:summary="@string/SLEEP_POLICY_summary"
-					android:key="SLEEP_POLICY" android:entries="@array/wfsleep"
-					android:entryValues="@array/wfsleepValues" />
-				<CheckBoxPreference android:key="N1FIX2"
-					android:title="@string/N1FIX2_title"
-					android:summary="@string/N1FIX2_summary" />
-			</PreferenceCategory>
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/dbmfloor_title" >
+        <ListPreference
+            android:defaultValue="-90"
+            android:entries="@array/dbmfloor"
+            android:entryValues="@array/dbmfloorValues"
+            android:key="@string/dbmfloor_key"
+            android:summary="@string/dbmfloor_summary"
+            android:title="@string/dbmfloor_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Wifi Usability" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="WiFiLock"
+            android:summary="@string/WifiLock_summary"
+            android:title="@string/WifiLock_title" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="SCREEN"
+            android:summary="@string/SCREEN_summary"
+            android:title="@string/SCREEN_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Specialized Fixes" >
+        <ListPreference
+            android:defaultValue="3"
+            android:entries="@array/wfsleep"
+            android:entryValues="@array/wfsleepValues"
+            android:key="SLEEP_POLICY"
+            android:summary="@string/SLEEP_POLICY_summary"
+            android:title="@string/SLEEP_POLICY_title" />
+
+        <CheckBoxPreference
+            android:key="N1FIX2"
+            android:summary="@string/N1FIX2_summary"
+            android:title="@string/N1FIX2_title" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

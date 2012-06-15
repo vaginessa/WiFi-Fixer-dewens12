@@ -121,7 +121,7 @@ public class WifiFixerService extends Service implements
 						.log(this, APP_NAME, getString(R.string.alarm_intent));
 			else
 				LogService.log(this, APP_NAME,
-						getString(R.string.normal_startup_or_reload));
+						getString(R.string.start_intent));
 		}
 	}
 

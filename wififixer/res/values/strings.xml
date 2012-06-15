@@ -87,7 +87,7 @@
 	</string>
 	<string name="nopendingscan">No Pending Scan.</string>
 	<string name="widgetaction">***Widget Action***</string>
-	<string name="normal_startup_or_reload">Normal Startup or reload</string>
+	<string name="start_intent">Normal Startup or reload</string>
 	<string name="alarm_intent">Alarm Intent</string>
 	<string name="screen_on_handler">SCREEN_ON handler</string>
 	<string name="screen_off_handler">SCREEN_OFF handler</string>
@@ -98,7 +98,7 @@
 	<string name="packagename">org.wahtod.wififixer</string>
 	<string name="wifi_is_disabled">Wifi Off</string>
 	<string name="wifi_is_enabled">Wifi On</string>
-	<string name="connecting_to_network">Connecting to Network:</string>
+	<string name="connecting_to_network">Connecting to:</string>
 	<string name="releasing_wifi_lock">Releasing Wifi Lock</string>
 	<string name="acquiring_wifi_lock">Acquiring Wifi Lock</string>
 	<string name="nid"> NID:</string>
@@ -253,5 +253,8 @@
 	<string name="sendlog_title">Send Log</string>
 	<string name="deletelog_summary">Deletes Existing Log</string>
 	<string name="deletelog_title">Delete Log</string>
+	<string name="dbmfloor_title">Signal Floor</string>
+	<string name="dbmfloor_summary">Changes signal floor at which Wifi Fixer scans for a better known network</string>
+	<string name="dbmfloor_key">DBMFLOOR</string>
 
 </resources>

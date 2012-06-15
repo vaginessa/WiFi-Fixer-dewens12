@@ -64,6 +64,7 @@ import android.text.format.Formatter;
  */
 public class WFConnection extends Object implements
 		OnScreenStateChangedListener {
+	private static final int DEFAULT_DBM_FLOOR = -90;
 	private static String accesspointIP;
 	private static String appname;
 	private static PrefUtil prefs;
@@ -79,6 +80,7 @@ public class WFConnection extends Object implements
 	private static boolean pendingreconnect = false;
 	private static boolean repair_reset = false;
 	private static boolean _connected = false;
+	private static boolean _signalhopping = false;
 
 	// IDs For notifications
 	private static final int ERR_NOTIF = 7972;
@@ -118,6 +120,8 @@ public class WFConnection extends Object implements
 	 */
 	private static int notifSignal = R.drawable.signal0;
 
+	// ms for signalhop check
+	private static final long SIGNAL_CHECK_INTERVAL = 30000;
 	// ms for network checks
 	private final static int REACHABLE = 4000;
 	// ms for main loop sleep
@@ -135,9 +139,6 @@ public class WFConnection extends Object implements
 	private static final int SCAN_WATCHDOG_DELAY = 15000;
 	private static final int NORMAL_SCAN_DELAY = 15000;
 
-	// for Dbm
-	private static final int DBM_FLOOR = -90;
-
 	// various
 	private static final int NULLVAL = -1;
 	private static int lastAP = NULLVAL;
@@ -148,6 +149,7 @@ public class WFConnection extends Object implements
 	private static SupplicantState lastSupplicantState;
 	private static int signalcache;
 	private static boolean wifistate;
+	private static long _signalCheckTime;
 
 	// deprecated
 	static boolean templock = false;
@@ -465,9 +467,6 @@ public class WFConnection extends Object implements
 			 * run the signal hop check
 			 */
 			signalHop();
-			/*
-			 * Then restore main tick
-			 */
 			handler.sendEmptyMessageDelayed(TEMPLOCK_OFF, SHORTWAIT);
 			wakelock.lock(false);
 		}
@@ -729,10 +728,27 @@ public class WFConnection extends Object implements
 			}
 
 		}
-
-		if (signal < DBM_FLOOR) {
-			notifyWrap(context, context.getString(R.string.signal_poor));
-			getWifiManager(ctxt).startScan();
+		/*
+		 * Signal Hop Check
+		 */
+		int detected = DEFAULT_DBM_FLOOR;
+		try {
+			detected = Integer.valueOf(PrefUtil.readString(context,
+					context.getString(R.string.dbmfloor_key)));
+		} catch (NumberFormatException e) {
+			/*
+			 * pref is null, that's ok we have the default
+			 */
+		} finally {
+			if (_signalCheckTime < System.currentTimeMillis()
+					&& Math.abs(signal) > Math.abs(detected)) {
+				notifyWrap(context.getApplicationContext(),
+						context.getString(R.string.signal_poor));
+				getWifiManager(ctxt).startScan();
+				_signalhopping = true;
+				_signalCheckTime = System.currentTimeMillis()
+						+ SIGNAL_CHECK_INTERVAL;
+			}
 		}
 
 		log(context, context.getString(R.string.current_dbm) + signal);
@@ -759,7 +775,7 @@ public class WFConnection extends Object implements
 		target.status = WifiConfiguration.Status.CURRENT;
 		getWifiManager(context).updateNetwork(target);
 		getWifiManager(context).enableNetwork(target.networkId, false);
-		//getWifiManager(context).reconnect();
+		getWifiManager(context).disconnect();
 		/*
 		 * Remove all posts to handler
 		 */
@@ -1070,7 +1086,7 @@ public class WFConnection extends Object implements
 				knownbysignal.remove(marked);
 			}
 		}
-		pruneKnown(context);
+		pruneKnown(wifiConfigs);
 		log(context, context.getString(R.string.number_of_known)
 				+ knownbysignal.size());
 
@@ -1081,16 +1097,21 @@ public class WFConnection extends Object implements
 
 		return knownbysignal.size();
 	}
-	
-	private static void pruneKnown(final Context c){
-		List<WifiConfiguration> configs = getWifiManager(c).getConfiguredNetworks();
+
+	private static void pruneKnown(final List<WifiConfiguration> configs) {
 		List<WFConfig> toremove = new ArrayList<WFConfig>();
-		for (WFConfig w: knownbysignal){
-			if (!configs.contains(w.wificonfig))
-				toremove.add(w);	
+		for (WFConfig w : knownbysignal) {
+			boolean found = false;
+			for (WifiConfiguration c : configs) {
+				if (c.SSID.equals(w.wificonfig.SSID)) {
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				toremove.add(w);
 		}
-		
-		for(WFConfig w2: toremove){
+		for (WFConfig w2 : toremove) {
 			knownbysignal.remove(w2);
 		}
 	}
@@ -1156,9 +1177,6 @@ public class WFConnection extends Object implements
 	}
 
 	private void handleConnectIntent(Context context, Bundle data) {
-		log(context,
-				context.getString(R.string.connecting_to_network)
-						+ data.getString(NETWORKNAME));
 		connectToAP(ctxt, data.getString(NETWORKNAME));
 	}
 
@@ -1370,11 +1388,14 @@ public class WFConnection extends Object implements
 		 */
 		handler.removeMessages(SCANWATCHDOG);
 		/*
-		 * Sanity checks
+		 * Sanity check
 		 */
 		if (!getWifiManager(ctxt).isWifiEnabled())
 			return;
-		if (!pendingscan) {
+		else if (_signalhopping) {
+			_signalhopping = false;
+			handlerWrapper(SIGNALHOP);
+		} else if (!pendingscan) {
 			if (getIsOnWifi(ctxt)) {
 				/*
 				 * Signalhop code out
@@ -1788,37 +1809,22 @@ public class WFConnection extends Object implements
 		 * Connect To best will always find best signal/availability
 		 */
 
-		if (getisWifiEnabled(ctxt, false))
-			if (getIsSupplicantConnected(ctxt))
-				if (checkNetwork(ctxt)) {
-					/*
-					 * Network is fine
-					 */
-					return;
-				}
+		if (!getisWifiEnabled(ctxt, false))
+			return;
 		/*
 		 * Switch to best
 		 */
 		int bestap = NULLVAL;
-		if (getKnownAPsBySignal(ctxt) > 1) {
+		int numKnown = getKnownAPsBySignal(ctxt);
+		if (numKnown > 1) {
 			bestap = connectToBest(ctxt);
-
-			if (bestap == NULLVAL) {
-				log(ctxt, ctxt.getString(R.string.signalhop_no_result));
-				handlerWrapper(TEMPLOCK_OFF);
-				wifiRepair();
-			} else {
-				log(ctxt, ctxt.getString(R.string.hopping) + bestap);
-				log(ctxt, ctxt.getString(R.string.nid) + lastAP);
-			}
-		}
-		log(ctxt, ctxt.getString(R.string.signalhop_nonetworks));
-		handlerWrapper(TEMPLOCK_OFF);
-		if (connectee == null) {
-			shouldrepair = true;
+			log(ctxt, ctxt.getString(R.string.hopping) + bestap);
+			log(ctxt, ctxt.getString(R.string.nid) + lastAP);
+		} else {
+			log(ctxt, ctxt.getString(R.string.signalhop_no_result));
+			handlerWrapper(TEMPLOCK_OFF);
 			wifiRepair();
 		}
-
 	}
 
 	private void sleepCheck(final boolean state) {
