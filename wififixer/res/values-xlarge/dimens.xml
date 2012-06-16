@@ -19,7 +19,6 @@
 	<dimen name ="scan_list_ssid_width">150dp</dimen>
 	<dimen name ="scan_list_neticon_width">32dp</dimen>
 	<dimen name ="scan_list_securicon_width">16dp</dimen>
-	<dimen name ="scan_list_encryption_margin">5dp</dimen>
 	<dimen name ="scan_list_encryption_width">50dp</dimen>
 	<dimen name ="scannetworks_list_padding">20dp</dimen>
 	<dimen name ="scannetworks_title_padding_bottom">15dp</dimen>
@@ -30,8 +29,6 @@
 	<dimen name ="service_version_margin_left">100dp</dimen>
 	<dimen name ="service_version_padding_bottom">15dp</dimen>
 	<dimen name ="service_version_padding_top">25dp</dimen>
-	<dimen name ="service_abouttext_margin_right">50dp</dimen>
-	<dimen name ="service_abouttext_margin_left">50dp</dimen>
 	<dimen name ="service_abouttext_padding_bottom">10dp</dimen>
 	<dimen name ="service_container_layout_width">100dp</dimen>
 	<dimen name ="service_imagebutton_dimensions">36dp</dimen>
@@ -40,6 +37,4 @@
 	<dimen name ="status_padding">5dp</dimen>
 	<dimen name ="status_layout_padding">5dp</dimen>
 	<dimen name ="status_layout_height">40dp</dimen>
-	<dimen name="status_text_padding_right">50dp</dimen>
-	
 </resources>

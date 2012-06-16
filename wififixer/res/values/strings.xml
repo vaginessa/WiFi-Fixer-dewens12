@@ -11,7 +11,6 @@
 		License.
 	-->
 <resources>
-
 	<string name="network_status">Network Status</string>
 	<string name="bdata_ticker">Service Disabled</string>
 	<string name="bdata_nag">Background Data Disabled</string>
@@ -36,24 +35,17 @@
 	<string name="help">Help</string>
 	<string name="preferences">Preferences</string>
 	<string name="send_log">Send Log</string>
-	<string name="toggle_logging">Toggle Logging</string>
 	<string name="ondestroy">onDestroy, killed by Android</string>
 	<string name="colon">:</string>
 	<string name="prefs_change">Prefs Change:</string>
 	<string name="connect_failed">Connect Failed</string>
-	<string name="connect_succeeded">Connect Succeeded</string>
 	<string name="initiating_scan">Initiating Scan</string>
-	<string name="instantiating_httpclient">Instantiating httpclient</string>
 	<string name="signalhop_no_result">Signalhop: No best network result</string>
-	<string name="signalhop_nonetworks">SignalHop: No alternate networks</string>
 	<string name="number_of_known">Number of known networks:</string>
-	<string name="known_networks_found">Known Networks Found: </string>
-	<string name="dying">Dying</string>
-	<string name="signal_poor">Signal poor: scanning for better network.</string>
+	<string name="signal_poor">Signal poor: scanning for better network</string>
 	<string name="current_dbm">Current dBm:</string>
 	<string name="hopping">Found better signal: hopping to network  </string>
 	<string name="wifi_repair_post_failed">Wifi Repair:Screen Off</string>
-	<string name="icmp_success">ICMP Success</string>
 	<string name="wifi_not_current_network">Wifi Not Current Network</string>
 	<string name="running_wifi_repair">Running Wifi Repair</string>
 	<string name="releasing_wake_lock">Releasing Wake Lock</string>
@@ -62,13 +54,8 @@
 	<string name="oncreate">OnCreate</string>
 	<string name="wififixerservice_build">WifiFixerService Build:</string>
 	<string name="wifi_connection_problem">Wifi Status:</string>
-	<string name="ssid">SSID:</string>
-	<string name="supplicant_nonresponsive">Supplicant Nonresponsive</string>
-	<string name="supplicant_responded">Supplicant Responded</string>
 	<string name="supplicant_state">Supplicant State:</string>
 	<string name="loading_settings">Loading Settings</string>
-	<string name="version">Version:</string>
-	<string name="no_known_networks_found">No known networks found</string>
 	<string name="best_signal_ssid">Best Signal: SSID: </string>
 	<string name="signal_level">Signal Level:</string>
 	<string name="capabilities">Capabilities:</string>
@@ -85,8 +72,6 @@
 	</string>
 	<string name="repairhandler">Scan Results Acquired:Running Repair_Handler
 	</string>
-	<string name="nopendingscan">No Pending Scan.</string>
-	<string name="widgetaction">***Widget Action***</string>
 	<string name="start_intent">Normal Startup or reload</string>
 	<string name="alarm_intent">Alarm Intent</string>
 	<string name="screen_on_handler">SCREEN_ON handler</string>
@@ -118,14 +103,12 @@
 	<string name="setting_temp_lock">Setting Temp Lock</string>
 	<string name="app_name">Wifi Fixer</string>
 	<string name="app_desc">Wifi health monitoring service</string>
-	<string name="widget_name">WifiFixerWidget</string>
 	<string name="passed">PASSED</string>
 	<string name="failed">FAILED</string>
 	<string name="reenablenetwork">Disabled network re-enabled:</string>
 	<string name="authentication_error">Authentication Error</string>
 	<string name="set_non_managed">Toggle Non-Managed</string>
 	<string name="cachewfinst">Caching WifiManager Instance</string>
-	<string name="last_scan">Last scan:</string>
 	<string name="scan_interrupt">Scan would interrupt supplicant</string>
 	<string name="not_managing_network">Not managing network:</string>
 	<string name="supplicant_associate_threshold_exceeded">Supplicant Associate Threshold Exceeded: resetting
@@ -144,7 +127,6 @@
 		</string>
 	<string name="ok_button">OK</string>
 	<string name="cancel_button">Cancel</string>
-	<string name="t_interrupt">Startup Thread Interrupted</string>
 	<string name="null_ssid">None</string>
 	<string name="http">http://</string>
 	<string name="responded">:RESPONDED</string>
@@ -152,8 +134,6 @@
 	<string name="k"> KB</string>
 	<string name="strict_mode_extant">Strict Mode Extant</string>
 	<string name="strict_mode_unavailable">Strict Mode Unavailable</string>
-	<string name="blurb">Wifi Fixer is a low-resource service that maintains
-		your wifi connection.</string>
 	<string name="service_status">Service</string>
 	<string name="enabling_wififixerservice">Enabling WifiFixerService</string>
 	<string name="disabling_wififixerservice">Disabling WifiFixerService</string>
@@ -164,9 +144,6 @@
 	<string name="scanfragment_header">Local Networks</string>
 	<string name="open_network">Open</string>
 	<string name="logservice">LogService</string>
-	<string name="link_speed">Link:</string>
-	<string name="signal_strength">Signal:</string>
-	<string name="state">State:</string>
 	<string name="resource">resource</string>
 	<string name="xml">xml</string>
 	<string name="SCREEN_summary">Network checks when screen is off: will use
@@ -197,14 +174,8 @@
 	<string name="N1FIX2_summary">Experimental: please read Wifi Sleep Policy section of Known Issues in
 		Help.</string>
 	<string name="remove">Remove</string>
-	<string name="removing_network">Removing Network:</string>
-	<string name="about_activity_title">About</string>
-	<string name="help_activity_title">Help</string>
-	<string name="preferences_activity_title">Preferences</string>
-	<string name="about_fragment_title_">"About: "</string>
+	<string name="removing_network">Removing:</string>
 	<string name="passwd_entry_text">Enter wifi key</string>
-	<string name="connect_fragment_title">"Connect: "</string>
-	<string name="dns_check_target">google.com</string>
 	<string name="network_check">Network Check:</string>
 	<string name="http_ok">:HTTP_OK</string>
 	<string name="http_fail">:HTTP_FAIL</string>
@@ -218,7 +189,7 @@
 	<string name="tutorial_toast_2">Known Networks shows networks you\'ve added
 	</string>
 	<string name="tutorial_toast_4">This is Local Networks</string>
-	<string name="tutorial_toast_3">You can tap, hold and swipe left or right in the bottom pane to navigate"
+	<string name="tutorial_toast_3">You can tap, hold and swipe left or right in the network pane to navigate"
 	</string>
 	<string name="tutorial_toast_5">Local Networks shows scanned networks around you"
 	</string>
@@ -231,7 +202,6 @@
 	</string>
 	<string name="ms">ms</string>
 	<string name="later_button">Later</string>
-	<string name="about_actionbar">"About: "</string>
 	<string name="scan_failed">Scan Failed: Resetting Wifi</string>
 	<string name="checking_network">Checking Network</string>
 	<string name="forcephone_title">Force Phone UI</string>
