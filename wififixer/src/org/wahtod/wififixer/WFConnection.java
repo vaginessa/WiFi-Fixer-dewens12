@@ -1622,10 +1622,7 @@ public class WFConnection extends Object implements
 		/*
 		 * restart the Main tick
 		 */
-		if (screenstate)
-			handlerWrapper(MAIN, REALLYSHORTWAIT);
-		else if (prefs.getFlag(Pref.SCREEN_KEY) && !ctxt.equals(null))
-			sleepCheck(screenstate);
+		sleepCheck(!screenstate);
 
 		/*
 		 * Clear any error/new network notifications
@@ -1848,7 +1845,6 @@ public class WFConnection extends Object implements
 			 */
 			handlerWrapper(MAIN, SHORTWAIT);
 		}
-
 	}
 
 	public void startScan(final boolean pending) {

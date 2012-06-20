@@ -19,6 +19,7 @@ package org.wahtod.wififixer;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.WifiFixerActivity;
+import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.WakeLock;
 import org.wahtod.wififixer.widget.WidgetHandler;
@@ -83,14 +84,14 @@ public class ToggleService extends Service {
 						PrefUtil.writeBoolean(ctxt,
 								PrefConstants.WIFI_STATE_LOCK, false);
 						/*
-						 * Release Wake Lock
-						 */
-						wlock.lock(false);
-						/*
 						 * Stop service: toggle done
 						 */
 						toggleservice.stopSelf();
 					}
+					/*
+					 * Release Wake Lock
+					 */
+					wlock.lock(false);
 					break;
 
 				case TOGGLE:
@@ -130,7 +131,23 @@ public class ToggleService extends Service {
 		 * initialize wake lock
 		 */
 		if (wlock == null)
-			wlock = new WakeLock(this);
+			wlock = new WakeLock(this) {
+
+				@Override
+				public void onAcquire() {
+					LogService.log(ctxt, getString(R.string.wififixerservice),
+							ctxt.getString(R.string.acquiring_wake_lock));
+					super.onAcquire();
+				}
+
+				@Override
+				public void onRelease() {
+					LogService.log(ctxt, getString(R.string.wififixerservice),
+							ctxt.getString(R.string.releasing_wake_lock));
+					super.onRelease();
+				}
+
+			};
 
 		/*
 		 * Start toggle thread

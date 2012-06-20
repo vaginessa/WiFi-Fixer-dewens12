@@ -226,5 +226,6 @@
 	<string name="dbmfloor_title">Signal Floor</string>
 	<string name="dbmfloor_summary">Changes signal floor at which Wifi Fixer scans for a better known network</string>
 	<string name="dbmfloor_key">DBMFLOOR</string>
+	<string name="wififixerservice">WifiFixerService</string>
 
 </resources>

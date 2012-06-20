@@ -32,6 +32,7 @@ public class WakeLock {
 		 */
 		wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
 				context.toString());
+		wakelock.setReferenceCounted(false);
 	}
 
 	public void lock(final boolean state) {

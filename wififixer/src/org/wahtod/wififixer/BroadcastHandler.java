@@ -89,10 +89,11 @@ public class BroadcastHandler {
 		Message message = handler.obtainMessage();
 		Bundle data = new Bundle();
 		data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
-		if (intent.getExtras() != null)
+		if (intent.getExtras() != null) {
 			data.putAll(intent.getExtras());
-		message.setData(data);
-		handler.sendMessage(message);
+			message.setData(data);
+			handler.sendMessage(message);
+		}
 	}
 
 	private void dispatchIntent(final Bundle data) {
@@ -154,8 +155,7 @@ public class BroadcastHandler {
 				}
 
 			}
-		} else if (PrefUtil.readBoolean(ctxt.getApplicationContext(),
-				PrefConstants.WIFI_STATE_LOCK))
+		} else if (PrefUtil.readBoolean(ctxt, PrefConstants.WIFI_STATE_LOCK))
 			return;
 		else if (action.equals(IntentConstants.ACTION_WIFI_ON))
 			ctxt.sendBroadcast(new Intent(WidgetHandler.WIFI_ON));

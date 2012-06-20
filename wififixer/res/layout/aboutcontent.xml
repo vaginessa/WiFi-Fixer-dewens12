@@ -98,7 +98,13 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dip"
                 android:text="Wifi Fixer should help immediately, but may need preferences adjusted to work best.\n\nPlease read the documentation for specifics.\n" />
-
+			<TextView
+                style="@style/Wftext.header"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dip"
+                android:text="Wifi Fixer cannot prevent disconnections, it can only recover from them.  Disconnections are caused by protocol errors in the driver or in the wifi access point's software.\n" />
+            
             <TextView
                 style="@style/Wftext.header"
                 android:layout_width="fill_parent"

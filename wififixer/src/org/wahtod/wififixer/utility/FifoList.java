@@ -44,8 +44,8 @@ public class FifoList extends ArrayList<Object> {
 	}
 
 	public boolean containsPattern(Collection<?> collection) {
-		if (this.toString()
-				.contains(StringUtil.trimStringEnds(collection.toString())))
+		if (this.toString().contains(
+				StringUtil.trimStringEnds(collection.toString())))
 			return true;
 		else
 			return false;
