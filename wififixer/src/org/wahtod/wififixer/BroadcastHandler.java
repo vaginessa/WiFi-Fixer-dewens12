@@ -89,11 +89,10 @@ public class BroadcastHandler {
 		Message message = handler.obtainMessage();
 		Bundle data = new Bundle();
 		data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
-		if (intent.getExtras() != null) {
+		if (intent.getExtras() != null)
 			data.putAll(intent.getExtras());
-			message.setData(data);
-			handler.sendMessage(message);
-		}
+		message.setData(data);
+		handler.sendMessage(message);
 	}
 
 	private void dispatchIntent(final Bundle data) {
