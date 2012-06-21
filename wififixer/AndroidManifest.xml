@@ -164,7 +164,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <!-- For http head check as backup for icmp echo/ping to AP -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- For waking the phone/radio up -->
+    <!-- For waking the phone/radio up to do network checks-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- For storing the log so user can send it to me -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
