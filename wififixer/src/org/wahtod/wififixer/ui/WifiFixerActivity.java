@@ -133,15 +133,20 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	private void deleteLog() {
 		/*
 		 * Delete old log
+		 * if logging currently enabled, disable it briefly
+		 * for deletion
 		 */
 		File file = VersionedFile.getFile(this, LogService.LOGFILE);
-
+		if(PrefUtil.readBoolean(this, Pref.LOG_KEY.key()))
+			PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), false);
 		if (file.delete())
 			NotifUtil.showToast(WifiFixerActivity.this,
 					R.string.logfile_delete_toast);
 		else
 			NotifUtil.showToast(WifiFixerActivity.this,
 					R.string.logfile_delete_err_toast);
+		if(PrefUtil.readBoolean(this, Pref.LOG_KEY.key()))
+			PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), true);
 	}
 
 	private void bundleIntent(final Intent intent) {
