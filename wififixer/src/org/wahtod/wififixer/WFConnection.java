@@ -103,7 +103,7 @@ public class WFConnection extends Object implements
 	public static final String NETWORKNAME = "net#";
 
 	// User Event Intent
-	public static final String USEREVENT = "org.wahtod.wififixer.USEREVENT";
+	public static final String REASSOCIATE_INTENT = "org.wahtod.wififixer.USEREVENT";
 
 	// Empty string
 	private static final String EMPTYSTRING = "";
@@ -560,7 +560,7 @@ public class WFConnection extends Object implements
 		filter.addAction(CONNECTINTENT);
 
 		// User Event
-		filter.addAction(USEREVENT);
+		filter.addAction(REASSOCIATE_INTENT);
 
 		// Sleep Check
 		filter.addAction(SLEEPCHECKINTENT);
@@ -896,7 +896,7 @@ public class WFConnection extends Object implements
 			checkBackgroundDataSetting(context);
 		else if (iAction.equals(CONNECTINTENT))
 			handleConnectIntent(context, data);
-		else if (iAction.equals(USEREVENT))
+		else if (iAction.equals(REASSOCIATE_INTENT))
 			handleUserEvent();
 		else if (iAction.equals(SLEEPCHECKINTENT)) {
 			handler.sendEmptyMessageDelayed(SLEEPCHECK, REALLYSHORTWAIT);

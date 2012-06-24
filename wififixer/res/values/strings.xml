@@ -227,5 +227,6 @@
 	<string name="dbmfloor_summary">Changes signal floor at which Wifi Fixer scans for a better known network</string>
 	<string name="dbmfloor_key">DBMFLOOR</string>
 	<string name="wififixerservice">WifiFixerService</string>
+	<string name="no_stack_trace_found">No Stack Trace Found</string>
 
 </resources>

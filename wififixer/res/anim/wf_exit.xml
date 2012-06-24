@@ -5,8 +5,8 @@
 	android:shareInterpolator="true">
 
 	<translate android:fromYDelta="0" android:toYDelta="50%p"
-		android:duration="250" />
+		android:duration="350" />
 
-	<scale android:fromYScale="1.0" android:toYScale=".5"
-		android:fromXScale="1" android:toXScale=".5" android:duration="250" />
+	<scale android:fromYScale="1.0" android:toYScale="0.0"
+		android:fromXScale="1" android:toXScale="0.0" android:duration="450" />
 </set>

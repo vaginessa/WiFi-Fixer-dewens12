@@ -125,7 +125,7 @@ public class LogService extends Service {
 			d = new DataInputStream(
 					context.openFileInput(DefaultExceptionHandler.EXCEPTIONS_FILENAME));
 		} catch (FileNotFoundException e1) {
-			return "No Stack Trace Found";
+			return context.getString(R.string.no_stack_trace_found);
 		}
 		for (;;) {
 			try {

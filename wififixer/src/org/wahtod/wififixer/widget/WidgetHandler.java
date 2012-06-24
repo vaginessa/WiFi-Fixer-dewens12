@@ -76,7 +76,7 @@ public class WidgetHandler {
 			else if (action.equals(REASSOCIATE)) {
 				NotifUtil.showToast(ctxt,
 						ctxt.getString(R.string.reassociating));
-				ctxt.sendBroadcast(new Intent(WFConnection.USEREVENT));
+				ctxt.sendBroadcast(new Intent(WFConnection.REASSOCIATE_INTENT));
 				getWifiManager(ctxt).reassociate();
 			}
 
