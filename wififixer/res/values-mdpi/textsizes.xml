@@ -13,4 +13,7 @@
      <style name="Wftext.large">
         <item name="android:textSize">18sp</item>
     </style>
+     <style name="Wftext.small">
+        <item name="android:textSize">9sp</item>
+    </style>
 </resources>

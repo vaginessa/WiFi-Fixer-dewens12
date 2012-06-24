@@ -15,27 +15,23 @@
  */
 package org.wahtod.wififixer;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
 
-import org.wahtod.wififixer.legacy.VersionedFile;
-
 import android.content.Context;
 
 public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 	public static final String EXCEPTIONS_FILENAME = "exceptions.txt";
-	private UncaughtExceptionHandler defaultExceptionHandler;
-	private static Context context;
+	private static UncaughtExceptionHandler defaultExceptionHandler;
+	private static DataOutputStream _data;
 
 	// constructor
-	public DefaultExceptionHandler(
-			UncaughtExceptionHandler pDefaultExceptionHandler) {
-		defaultExceptionHandler = pDefaultExceptionHandler;
+	public DefaultExceptionHandler() {
 	}
 
 	// Default exception handler
@@ -46,27 +42,36 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 		e.printStackTrace(printWriter);
 		String stacktrace = result.toString();
 		printWriter.close();
-
 		try {
-			File file = VersionedFile.getFile(context, EXCEPTIONS_FILENAME);
-			if (!file.exists())
-				file.createNewFile();
-			BufferedWriter b = new BufferedWriter(new FileWriter(file));
-			b.write(stacktrace);
-			b.flush();
-			b.close();
-		} catch (Exception e1) {
+			_data.writeUTF(stacktrace);
+			_data.flush();
+			_data.close();
+		} catch (IOException e1) {
+			/*
+			 * Yoinks, but this shouldn't evar happen
+			 */
 			e1.printStackTrace();
 		}
-
+		/*
+		 * Chain to prior DefaultExceptionHandler so Android handles report,
+		 * etc.
+		 */
 		defaultExceptionHandler.uncaughtException(t, e);
 	}
 
 	public static void register(Context ctxt) {
-		context = ctxt;
-		UncaughtExceptionHandler currentHandler = Thread
-				.getDefaultUncaughtExceptionHandler();
-		Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler(
-				new DefaultExceptionHandler(currentHandler)));
+		try {
+			_data = new DataOutputStream(ctxt.openFileOutput(
+					EXCEPTIONS_FILENAME, Context.MODE_WORLD_READABLE
+							| Context.MODE_APPEND));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		if (defaultExceptionHandler == null) {
+			UncaughtExceptionHandler currentHandler = Thread
+					.getDefaultUncaughtExceptionHandler();
+			defaultExceptionHandler = currentHandler;
+			Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler());
+		}
 	}
 }

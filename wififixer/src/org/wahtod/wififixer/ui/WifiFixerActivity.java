@@ -207,9 +207,9 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 					R.string.sd_card_unavailable);
 			return;
 		} else if (!file.exists()) {
-			file = VersionedFile.getFile(this,
-					DefaultExceptionHandler.EXCEPTIONS_FILENAME);
-			if (!file.exists()) {
+			file = this
+					.getFileStreamPath(DefaultExceptionHandler.EXCEPTIONS_FILENAME);
+			if (file.length() == 0) {
 				NotifUtil.showToast(WifiFixerActivity.this,
 						R.string.logfile_delete_err_toast);
 				return;

@@ -17,66 +17,43 @@
 
     <ImageView
         android:id="@+id/signal"
-        android:layout_width="80dp"
+        android:layout_width="0px"
         android:layout_height="fill_parent"
-        android:layout_gravity="left"
-        android:maxWidth="80dp"
-        android:paddingLeft="15dp"
+        android:layout_gravity="fill_horizontal"
+        android:layout_weight=".2"
+        android:alpha=".90"
+        android:background="@drawable/boxbg"
         android:src="@drawable/signal0" />
 
     <LinearLayout
         android:id="@+id/wrapper3"
-        android:layout_width="match_parent"
+        android:layout_width="0px"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="5dp"
+        android:layout_weight=".8"
         android:alpha=".90"
-        android:background="@drawable/bg"
-        android:orientation="horizontal" >
+        android:background="@drawable/boxbg"
+        android:orientation="horizontal"
+        android:weightSum="1" >
 
         <TextView
-            android:id="@+id/logo"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:gravity="center_vertical"
+            android:id="@+id/ssid"
+            style="@style/Wftext.header"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight=".6"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="@string/app_name"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:text="Service Inactive" />
 
-        <LinearLayout
-            android:id="@+id/statustext"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="right"
-            android:gravity="center_vertical"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/ssid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="right"
-                android:paddingRight="10dp"
-                android:text="SSID"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="right"
-                android:paddingTop="5dp"
-                android:paddingRight="10dp"
-                android:text="STATUS"
-                android:textSize="10sp" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/status"
+            style="@style/Wftext.small"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity = "right"
+            android:layout_weight=".4"
+            android:paddingRight="10dp" />
     </LinearLayout>
 
 </LinearLayout>

@@ -146,13 +146,12 @@ public class FixerWidget extends AppWidgetProvider {
 				context.getApplicationContext(), 0, new Intent(W_INTENT), 0);
 		/*
 		 * Don't have to worry about pre-cupcake clients because they won't run
-		 * the widget code setting onclick on the view directly
+		 * the widget code 
+		 * setting onclick on the view directly
 		 */
 		RemoteViews views = new RemoteViews(context.getPackageName(),
 				R.layout.widget);
-		;
 		views.setOnClickPendingIntent(R.id.widget_target, pendingIntent);
-
 		return views;
 	}
 };

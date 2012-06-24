@@ -16,11 +16,11 @@
 
 package org.wahtod.wififixer.utility;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
@@ -106,23 +106,42 @@ public class LogService extends Service {
 	};
 
 	private static void addStackTrace(final Context context) {
-		BufferedReader b;
-		try {
-			File f = VersionedFile.getFile(context,
-					DefaultExceptionHandler.EXCEPTIONS_FILENAME);
-			b = new BufferedReader(new FileReader(f), WRITE_BUFFER_SIZE);
-			String line;
-			while ((line = b.readLine()) != null) {
-				writeToFileLog(context, line);
-			}
-			b.close();
-			f.delete();
-		} catch (FileNotFoundException e1) {
-			return;
-		} catch (IOException e) {
-			return;
+		if (hasStackTrace(context)) {
+			writeToFileLog(context, getStackTrace(context));
+			context.deleteFile(DefaultExceptionHandler.EXCEPTIONS_FILENAME);
 		}
+	}
 
+	private static boolean hasStackTrace(final Context context) {
+		file = context
+				.getFileStreamPath(DefaultExceptionHandler.EXCEPTIONS_FILENAME);
+		return file.length() > 0;
+	}
+
+	private static String getStackTrace(final Context context) {
+		StringBuilder trace = new StringBuilder();
+		DataInputStream d;
+		try {
+			d = new DataInputStream(
+					context.openFileInput(DefaultExceptionHandler.EXCEPTIONS_FILENAME));
+		} catch (FileNotFoundException e1) {
+			return "No Stack Trace Found";
+		}
+		for (;;) {
+			try {
+				trace.append(d.readUTF());
+			} catch (EOFException e) {
+				return trace.toString();
+			} catch (IOException e) {
+				return e.toString();
+			} finally {
+				try {
+					d.close();
+				} catch (IOException e) {
+					return e.toString();
+				}
+			}
+		}
 	}
 
 	private void dispatchIntent(final Bundle data) {
