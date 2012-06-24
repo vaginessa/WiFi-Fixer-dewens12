@@ -4,5 +4,10 @@
     <style name="ThemeWifiFixer" parent="android:Theme.Holo">
     <item name="android:windowAnimationStyle">@style/WifiFixerAnimation</item>
      <item name="android:windowBackground">@drawable/bg</item>
+      <item name="android:windowTitleBackgroundStyle">@color/titlebg</item>
+       <item name="android:actionBarStyle">@style/ActionBar</item>
+</style>
+<style name="ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+    <item name="android:background">@color/titlebg</item>
 </style>
 </resources>
