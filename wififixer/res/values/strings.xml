@@ -33,7 +33,7 @@
 	<string name="donateservice">com.wahtod.wififixer.WFDonateService</string>
 	<string name="about">About</string>
 	<string name="help">Help</string>
-	<string name="preferences">Preferences</string>
+	<string name="preferences">Prefs</string>
 	<string name="send_log">Send Log</string>
 	<string name="ondestroy">onDestroy, killed by Android</string>
 	<string name="colon">:</string>

@@ -25,10 +25,6 @@
         android:layout_width="@dimen/scan_list_ssid_width"
         android:gravity="left"
         android:maxLength="13"
-        android:shadowColor="#FFFF00"
-        android:shadowDx="1"
-        android:shadowDy="1"
-        android:shadowRadius="1"
         android:text="default" >
     </TextView>
 

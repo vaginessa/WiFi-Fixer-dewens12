@@ -237,11 +237,12 @@ public class KnownNetworksFragment extends Fragment {
 			 * Set SSID text and color
 			 */
 			holder.text.setText(ssidArray.get(position));
-
+			if (ssidArray.get(position) != null){
 			if (known_in_range.contains(ssidArray.get(position)))
 				holder.text.setTextColor(Color.GREEN);
 			else
 				holder.text.setTextColor(Color.WHITE);
+			}
 
 			/*
 			 * Set State icon

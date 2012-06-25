@@ -50,7 +50,7 @@ public class GenericPreferenceFragment extends PreferenceFragment implements
 				getActivity().getPackageName());
 		addPreferencesFromResource(res);
 	}
-
+	
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
