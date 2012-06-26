@@ -15,12 +15,30 @@
  */
 package org.wahtod.wififixer.legacy;
 
-import android.app.Activity;
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.ui.TabListener;
 
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.Activity;
 
 public class ActionBarHelper extends ActionBarDetector {
 	@Override
 	public void vsetDisplayHomeAsUpEnabled(Activity a, boolean state) {
+		ActionBar actionBar = a.getActionBar();
+		if ( a.findViewById(R.id.pager) != null) {
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		actionBar.setDisplayShowTitleEnabled(false);
+		TabListener tl = new TabListener(a);
+		Tab tab = actionBar.newTab().setText(R.string.known_networks)
+				.setTabListener(tl);
+		actionBar.addTab(tab);
+		tab = actionBar
+				.newTab()
+				.setText(R.string.local_networks)
+				.setTabListener(tl);
+		actionBar.addTab(tab);
+		}
 		a.getActionBar().setDisplayHomeAsUpEnabled(state);
 	}
 }

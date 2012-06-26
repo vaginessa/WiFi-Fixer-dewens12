@@ -378,7 +378,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		/*
 		 * Do startup
 		 */
-		ActionBarDetector.setDisplayHomeAsUpEnabled(this, false);
 		super.onCreate(savedInstanceState);
 		setTitle(R.string.app_name);
 		if (PrefUtil.readBoolean(this, getString(R.string.forcephone_key)))
@@ -386,6 +385,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		else
 			setContentView(R.layout.main);
 		drawUI();
+		ActionBarDetector.setDisplayHomeAsUpEnabled(this, false);
 		oncreate_setup();
 		/*
 		 * Handle intent command if destroyed or first start

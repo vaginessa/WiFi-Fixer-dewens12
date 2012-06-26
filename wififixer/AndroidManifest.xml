@@ -13,8 +13,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.wahtod.wififixer"
     android:installLocation="internalOnly"
-    android:versionCode="939"
-    android:versionName="0.9.5b2" >
+    android:versionCode="940"
+    android:versionName="0.9.5b3" >
 
     <supports-screens
         android:largeScreens="true"
@@ -36,6 +36,7 @@
     </uses-feature>
 
     <application
+        uiOptions="splitActionBarWhenNarrow"
         android:backupAgent=".prefs.PrefsBackupAgent"
         android:description="@string/app_desc"
         android:hardwareAccelerated="true"

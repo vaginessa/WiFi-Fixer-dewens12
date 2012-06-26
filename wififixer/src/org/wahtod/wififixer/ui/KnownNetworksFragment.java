@@ -160,8 +160,7 @@ public class KnownNetworksFragment extends Fragment {
 			case CONTEXT_REMOVE:
 				String ssid = (String) lv.getItemAtPosition(clicked_position);
 				int nid = getNidFromSSID(getContext(), ssid);
-				NotifUtil.showToast(
-						getContext(),
+				NotifUtil.showToast(getContext(),
 						getContext().getString(R.string.removing_network)
 								+ ssid);
 				PrefUtil.getWifiManager(getActivity()).removeNetwork(nid);
@@ -237,11 +236,11 @@ public class KnownNetworksFragment extends Fragment {
 			 * Set SSID text and color
 			 */
 			holder.text.setText(ssidArray.get(position));
-			if (ssidArray.get(position) != null){
-			if (known_in_range.contains(ssidArray.get(position)))
-				holder.text.setTextColor(Color.GREEN);
-			else
-				holder.text.setTextColor(Color.WHITE);
+			if (ssidArray.get(position) != null) {
+				if (known_in_range.contains(ssidArray.get(position)))
+					holder.text.setTextColor(Color.GREEN);
+				else
+					holder.text.setTextColor(Color.WHITE);
 			}
 
 			/*

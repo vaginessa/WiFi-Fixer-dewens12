@@ -228,5 +228,7 @@
 	<string name="dbmfloor_key">DBMFLOOR</string>
 	<string name="wififixerservice">WifiFixerService</string>
 	<string name="no_stack_trace_found">No Stack Trace Found</string>
+	<string name="known_networks">Known</string>
+	<string name="local_networks">Local</string>
 
 </resources>
