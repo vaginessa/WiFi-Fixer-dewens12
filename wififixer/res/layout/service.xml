@@ -7,14 +7,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/service_fragment_height"
-        android:gravity="center_horizontal"
+        android:layout_height="fill_parent"
+        android:gravity="center"
         android:orientation="horizontal" >
 
         <fragment
             android:id="@+id/about"
             android:layout_width="0px"
-            android:layout_height="match_parent"
+            android:layout_height="fill_parent"
             android:layout_weight=".8"
             class="org.wahtod.wififixer.ui.StatusFragment" />
 

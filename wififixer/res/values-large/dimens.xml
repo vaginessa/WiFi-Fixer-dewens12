@@ -29,7 +29,6 @@
 	<dimen name ="service_version_margin_left">100dp</dimen>
 	<dimen name ="service_version_padding_bottom">15dp</dimen>
 	<dimen name ="service_version_padding_top">25dp</dimen>
-	
 	<dimen name ="service_abouttext_padding_bottom">10dp</dimen>
 	<dimen name ="service_container_layout_width">100dp</dimen>
 	<dimen name ="service_imagebutton_margin_bottom">1dp</dimen>

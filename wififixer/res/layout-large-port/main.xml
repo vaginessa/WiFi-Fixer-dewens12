@@ -34,6 +34,7 @@
             android:layout_weight=".4"
             android:paddingBottom="5dp"
             android:paddingTop="5dp" >
+
         </FrameLayout>
          <FrameLayout
             android:id="@+id/logfragment"
