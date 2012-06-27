@@ -29,7 +29,7 @@
 
             <ToggleButton
                 android:id="@+id/ToggleButton1"
-                android:layout_width="70dp"
+                android:layout_width="72dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
@@ -38,11 +38,12 @@
                 android:onClick="serviceToggle"
                 android:textOff="@string/service_status"
                 android:textOn="@string/service_status"
+                android:textSize="10sp"
                 />
 
             <ToggleButton
                 android:id="@+id/ToggleButton2"
-                android:layout_width="70dp"
+                android:layout_width="72dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
@@ -50,7 +51,8 @@
                 android:clickable="true"
                 android:onClick="wifiToggle"
                 android:textOff="@string/wifi"
-                android:textOn="@string/wifi" />
+                android:textOn="@string/wifi"
+                android:textSize="10sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -22,7 +22,8 @@
         android:layout_gravity="center_vertical"
         android:layout_marginBottom="@dimen/scan_list_ssid_margin_bottom"
         android:layout_marginLeft="@dimen/scan_list_ssid_margin_left"
-        android:layout_width="@dimen/scan_list_ssid_width"
+        android:layout_width="0px"
+        android:layout_weight="5"
         android:gravity="left"
         android:maxLength="13"
         android:text="default" >
@@ -30,16 +31,18 @@
 
     <ImageView
         android:id="@+id/NETWORK_ICON"
-        android:layout_width="@dimen/scan_list_neticon_width"
         android:layout_height="fill_parent"
         android:layout_gravity="bottom"
         android:gravity="left"
+        android:layout_width="0px"
+        android:layout_weight=".5"
         android:src="@drawable/icon" >
     </ImageView>
 
     <ImageView
         android:id="@+id/SECURE_ICON"
-        android:layout_width="@dimen/scan_list_securicon_width"
+        android:layout_width="0px"
+        android:layout_weight=".5"
         android:layout_height="fill_parent"
         android:layout_gravity="bottom"
         android:gravity="left"
@@ -48,10 +51,11 @@
 
     <TextView
         android:id="@+id/encryption"
-        style="@style/Wftext"
+        style="@style/Wftext.small"
         android:layout_gravity="bottom"
         android:layout_margin="2dp"
-        android:layout_width="@dimen/scan_list_encryption_width"
+        android:layout_width="0px"
+        android:layout_weight="1"
         android:gravity="left"
         android:text="encryption"
       	 >
