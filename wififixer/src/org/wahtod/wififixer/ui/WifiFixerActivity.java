@@ -54,10 +54,6 @@ import android.widget.EditText;
 import android.widget.ToggleButton;
 
 public class WifiFixerActivity extends TutorialFragmentActivity {
-	public boolean isauthedFlag;
-	public boolean aboutFlag;
-	public boolean phoneFlag;
-
 	public class PhoneAdapter extends FragmentPagerAdapter {
 		public PhoneAdapter(FragmentManager fm) {
 			super(fm);
@@ -132,12 +128,11 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 
 	private void deleteLog() {
 		/*
-		 * Delete old log
-		 * if logging currently enabled, disable it briefly
-		 * for deletion
+		 * Delete old log if logging currently enabled, disable it briefly for
+		 * deletion
 		 */
 		File file = VersionedFile.getFile(this, LogService.LOGFILE);
-		if(PrefUtil.readBoolean(this, Pref.LOG_KEY.key()))
+		if (PrefUtil.readBoolean(this, Pref.LOG_KEY.key()))
 			PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), false);
 		if (file.delete())
 			NotifUtil.showToast(WifiFixerActivity.this,
@@ -145,7 +140,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		else
 			NotifUtil.showToast(WifiFixerActivity.this,
 					R.string.logfile_delete_err_toast);
-		if(PrefUtil.readBoolean(this, Pref.LOG_KEY.key()))
+		if (PrefUtil.readBoolean(this, Pref.LOG_KEY.key()))
 			PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), true);
 	}
 
@@ -348,9 +343,11 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		 * tablet
 		 */
 		ViewPager phonevp = (ViewPager) findViewById(R.id.pager);
-		if (phonevp != null) {
+		if (phonevp != null
+				|| PrefUtil.readBoolean(this,
+						getString(R.string.forcephone_key))) {
 			drawFragment(R.id.servicefragment, ServiceFragment.class);
-			phoneFlag = true;
+			removeFragment(R.id.logfragment);
 			if (phonevp.getAdapter() == null) {
 				PhoneAdapter fadapter = new PhoneAdapter(
 						getSupportFragmentManager());
@@ -386,7 +383,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 			setContentView(R.layout.main);
 		drawUI();
 		ActionBarDetector.setDisplayHomeAsUpEnabled(this, false);
-		oncreate_setup();
+		// Here's where we fire the nag
+		authCheck();
 		/*
 		 * Handle intent command if destroyed or first start
 		 */
@@ -395,11 +393,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		 * Make sure service settings are enforced.
 		 */
 		ServiceAlarm.enforceServicePrefs(this);
-	}
-
-	private void oncreate_setup() {
-		// Here's where we fire the nag
-		authCheck();
 	}
 
 	@Override
@@ -463,6 +456,16 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 				e.printStackTrace();
 			}
 			ft.add(id, found, String.valueOf(id));
+			ft.commit();
+		}
+	}
+
+	private void removeFragment(int id) {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		Fragment found = getSupportFragmentManager().findFragmentByTag(
+				String.valueOf(id));
+		if (found != null) {
+			ft.remove(found);
 			ft.commit();
 		}
 	}

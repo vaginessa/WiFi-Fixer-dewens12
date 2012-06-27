@@ -82,8 +82,6 @@ public class ScanFragment extends Fragment {
 		}
 	};
 
-	
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -147,6 +145,8 @@ public class ScanFragment extends Fragment {
 	}
 
 	private void dispatchContextMenuSelected(String classname) {
+		if (clicked == null)
+			return;
 		Intent i = new Intent(getContext(), WifiFixerActivity.class);
 		i.putExtra(WifiFixerActivity.SHOW_FRAGMENT, true);
 		i.putExtra(WFScanResult.BUNDLE_KEY, clicked.toBundle());
