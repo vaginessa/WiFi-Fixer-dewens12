@@ -16,7 +16,6 @@
 package org.wahtod.wififixer.legacy;
 
 import android.os.StrictMode;
-import android.os.StrictMode.ThreadPolicy;
 
 public class StrictModeSetter extends StrictModeDetector {
 
@@ -31,10 +30,7 @@ public class StrictModeSetter extends StrictModeDetector {
 					// detectable
 					// problems
 					.penaltyLog().build());
-		} else {
-			StrictMode.enableDefaults();
-			StrictMode.setThreadPolicy(ThreadPolicy.LAX);
-		}
+		} 
 		return true;
 	}
 }

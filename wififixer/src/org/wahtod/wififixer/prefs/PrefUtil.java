@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.legacy.EditorDetector;
 import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
@@ -63,7 +64,7 @@ public class PrefUtil extends Object {
 	private static Context context;
 	private static WifiManager wm_;
 	private HashMap<String, int[]> netprefs;
-
+	
 	private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
 		public void onReceive(final Context context, final Intent intent) {
 			String valuekey = intent.getStringExtra(VALUE_KEY);
@@ -282,7 +283,7 @@ public class PrefUtil extends Object {
 			 */
 			SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
 			editor.putInt(NETPREFIX + network + pref.key(), value);
-			editor.commit();
+			EditorDetector.commit(editor);
 			/*
 			 * notify
 			 */
@@ -298,7 +299,7 @@ public class PrefUtil extends Object {
 			final boolean value) {
 		SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
 		editor.putBoolean(key, value);
-		editor.commit();
+		EditorDetector.commit(editor);;
 	}
 
 	public static String readString(final Context ctxt, final String key) {
@@ -309,7 +310,7 @@ public class PrefUtil extends Object {
 			final String value) {
 		SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
 		editor.putString(key, value);
-		editor.commit();
+		EditorDetector.commit(editor);
 	}
 
 	public static int readInt(final Context ctxt, final String key) {
@@ -320,13 +321,13 @@ public class PrefUtil extends Object {
 			final int value) {
 		SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
 		editor.putInt(key, value);
-		editor.commit();
+		EditorDetector.commit(editor);
 	}
 
 	public static void removeKey(final Context ctxt, final String key) {
 		SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
 		editor.remove(key);
-		editor.commit();
+		EditorDetector.commit(editor);
 	}
 
 	public void specialCase() {

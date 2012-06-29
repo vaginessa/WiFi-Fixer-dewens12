@@ -37,8 +37,6 @@ import org.wahtod.wififixer.R;
 import android.content.Context;
 
 public class Hostup {
-
-	private static final String HTTPSCHEME = "http";
 	/*
 	 * getHostUp method: Executes 2 threads, icmp check and http check first
 	 * thread to return state "wins"
@@ -46,6 +44,7 @@ public class Hostup {
 
 	// Target for header check
 	private static final String H_TARGET = "http://www.google.com";
+	private static final String HTTPSCHEME = "http";
 	private static final String INET_LOOPBACK = "127.0.0.1";
 	private static final String INET_INVALID = "0.0.0.0";
 	private static String target;
