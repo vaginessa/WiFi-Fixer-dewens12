@@ -27,11 +27,18 @@ import android.content.Context;
 
 public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 	public static final String EXCEPTIONS_FILENAME = "exceptions.txt";
-	private static UncaughtExceptionHandler defaultExceptionHandler;
-	private static DataOutputStream _data;
+	private final UncaughtExceptionHandler _default;
+	private final DataOutputStream _data;
 
-	// constructor
-	public DefaultExceptionHandler() {
+	public DefaultExceptionHandler(final Context context)
+			throws FileNotFoundException {
+		UncaughtExceptionHandler currentHandler = Thread
+				.getDefaultUncaughtExceptionHandler();
+		_default = currentHandler;
+		_data = new DataOutputStream(context.openFileOutput(
+				EXCEPTIONS_FILENAME, Context.MODE_WORLD_READABLE
+						| Context.MODE_APPEND));
+		Thread.setDefaultUncaughtExceptionHandler(this);
 	}
 
 	// Default exception handler
@@ -44,34 +51,31 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 		printWriter.close();
 		try {
 			_data.writeUTF(stacktrace);
-			_data.flush();
-			_data.close();
 		} catch (IOException e1) {
 			/*
 			 * Yoinks, but this shouldn't evar happen
 			 */
 			e1.printStackTrace();
+		} finally {
+			try {
+				_data.flush();
+				_data.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
 		/*
 		 * Chain to prior DefaultExceptionHandler so Android handles report,
 		 * etc.
 		 */
-		defaultExceptionHandler.uncaughtException(t, e);
+		_default.uncaughtException(t, e);
 	}
 
-	public static void register(Context ctxt) {
+	public static void register(final Context ctxt) {
 		try {
-			_data = new DataOutputStream(ctxt.openFileOutput(
-					EXCEPTIONS_FILENAME, Context.MODE_WORLD_READABLE
-							| Context.MODE_APPEND));
+			new DefaultExceptionHandler(ctxt);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}
-		if (defaultExceptionHandler == null) {
-			UncaughtExceptionHandler currentHandler = Thread
-					.getDefaultUncaughtExceptionHandler();
-			defaultExceptionHandler = currentHandler;
-			Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler());
 		}
 	}
 }

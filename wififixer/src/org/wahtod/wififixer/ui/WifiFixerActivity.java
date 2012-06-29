@@ -414,11 +414,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		removeNag(this);
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
 	private void phoneTutNag() {
 		AlertDialog dialog = new AlertDialog.Builder(this).create();
 		dialog.setTitle(getString(R.string.phone_ui_tutorial));
@@ -427,7 +422,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		dialog.setButton(AlertDialog.BUTTON_POSITIVE,
 				getString(R.string.ok_button),
 				new DialogInterface.OnClickListener() {
-
 					public void onClick(DialogInterface dialog, int which) {
 						runTutorial();
 					}

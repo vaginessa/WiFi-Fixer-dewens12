@@ -140,7 +140,7 @@ public class WifiFixerService extends Service implements
 		 * Strict Mode check
 		 */
 
-		if (StrictModeDetector.setPolicy(false))
+		if (StrictModeDetector.setPolicy(true))
 			LogService.log(this, APP_NAME,
 					getString(R.string.strict_mode_extant));
 		else

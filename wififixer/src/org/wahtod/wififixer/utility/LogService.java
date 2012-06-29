@@ -55,7 +55,7 @@ public class LogService extends Service {
 	private static final String SPACE = " ";
 	private static final String COLON = ":";
 	private static final String NEWLINE = "\n";
-	public static int version = 0;
+	private static int version = 0;
 	private static String vstring = SPACE;
 	private static String tsheader;
 	private static BufferedWriter bwriter;
@@ -133,7 +133,7 @@ public class LogService extends Service {
 			} catch (EOFException e) {
 				return trace.toString();
 			} catch (IOException e) {
-				return e.toString();
+				return trace.toString();
 			} finally {
 				try {
 					d.close();

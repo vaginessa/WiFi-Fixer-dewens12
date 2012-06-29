@@ -136,7 +136,7 @@ public class AboutFragment extends FragmentSwitchboard {
 		t = (TextView) getView().findViewById(R.id.bssid);
 		t.setText(network.BSSID);
 		t = (TextView) getView().findViewById(R.id.capabilities);
-		t.setText(StringUtil.getCapabilitiesString(network.capabilities));
+		t.setText(StringUtil.getLongCapabilitiesString(network.capabilities));
 		t = (TextView) getView().findViewById(R.id.frequency);
 		t.setText(String.valueOf(network.frequency));
 		t = (TextView) getView().findViewById(R.id.level);

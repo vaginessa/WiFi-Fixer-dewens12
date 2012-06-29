@@ -54,9 +54,7 @@ public class TabListener implements ActionBar.TabListener {
 	}
 
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		if (mPager != null) {
 			mPager.setCurrentItem(tab.getPosition());
-		}
 	}
 
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {

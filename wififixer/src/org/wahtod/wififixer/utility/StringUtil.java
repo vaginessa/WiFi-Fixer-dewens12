@@ -52,6 +52,13 @@ public class StringUtil {
 		return s;
 	}
 
+	public static String getLongCapabilitiesString(final String capabilities) {
+		if (capabilities.length() == 0)
+			return OPEN;
+		else
+			return capabilities;
+	}
+
 	public static String getCapabilitiesString(final String capabilities) {
 		if (capabilities.length() == 0)
 			return OPEN;

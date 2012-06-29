@@ -20,16 +20,22 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.HoneyCombNotifUtil;
 import org.wahtod.wififixer.legacy.LegacyNotifUtil;
 import org.wahtod.wififixer.legacy.VersionedFile;
-import org.wahtod.wififixer.ui.ToastActivity;
 import org.wahtod.wififixer.utility.StatusMessage;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public abstract class NotifUtil {
 	public static final int STATNOTIFID = 2392;
@@ -68,7 +74,6 @@ public abstract class NotifUtil {
 	 */
 	public static final int ICON_SET_SMALL = 0;
 	public static final int ICON_SET_LARGE = 1;
-
 
 	/*
 	 * Cache appropriate NotifUtil
@@ -199,16 +204,23 @@ public abstract class NotifUtil {
 	}
 
 	public static void showToast(final Context context, final int resID) {
-		Intent i = new Intent(context, ToastActivity.class);
-		i.putExtra(TOAST_RESID_KEY, resID);
-		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		context.startActivity(i);
+		showToast(context, context.getString(resID));
 	}
-	
-	public static void showToast(final Context context, final String message){
-		Intent i = new Intent(context, ToastActivity.class);
-		i.putExtra(TOAST_STRING_KEY, message);
-		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		context.startActivity(i);
+
+	public static void showToast(final Context context, final String message) {
+
+		LayoutInflater inflater = (LayoutInflater) context
+				.getSystemService(Service.LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.toast, null);
+		ImageView image = (ImageView) layout.findViewById(R.id.icon);
+		image.setImageResource(R.drawable.icon);
+		TextView text = (TextView) layout.findViewById(R.id.text);
+		text.setText(message);
+		Toast toast = new Toast(context.getApplicationContext());
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setView(layout);
+		toast.show();
+
 	}
 }
