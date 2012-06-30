@@ -524,12 +524,10 @@ public class WFConnection extends Object implements
 		 * Cache Context from consumer
 		 */
 		ctxt = context;
-
 		/*
 		 * Set current AP int
 		 */
 		lastAP = getNetworkID();
-
 		/*
 		 * Set current supplicant state
 		 */
@@ -538,7 +536,6 @@ public class WFConnection extends Object implements
 		 * Set current wifi radio state
 		 */
 		wifistate = getWifiManager(context).isWifiEnabled();
-
 		/*
 		 * Set up Intent filters
 		 */
@@ -546,27 +543,17 @@ public class WFConnection extends Object implements
 				WifiManager.WIFI_STATE_CHANGED_ACTION);
 		// Supplicant State filter
 		filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
-
 		// Network State filter
 		filter.addAction(android.net.ConnectivityManager.CONNECTIVITY_ACTION);
-
 		// wifi scan results available callback
 		filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-
-		// Background Data enable/disable
-		filter.addAction(ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED);
-
 		// Connect intent
 		filter.addAction(CONNECTINTENT);
-
 		// User Event
 		filter.addAction(REASSOCIATE_INTENT);
-
 		// Sleep Check
 		filter.addAction(SLEEPCHECKINTENT);
-
 		context.registerReceiver(receiver, filter);
-
 		// Initialize WakeLock
 		wakelock = new WakeLock(context) {
 
@@ -616,25 +603,6 @@ public class WFConnection extends Object implements
 		 * Start Main tick
 		 */
 		handlerWrapper(MAIN);
-	}
-
-	@SuppressWarnings("deprecation")
-	public static void checkBackgroundDataSetting(final Context context) {
-		ConnectivityManager cm = (ConnectivityManager) context
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (cm.getBackgroundDataSetting() == false) {
-			/*
-			 * Background data has been disabled. Notify the user and disable
-			 * service
-			 */
-			NotifUtil.show(context, context.getString(R.string.bdata_nag),
-					context.getString(R.string.bdata_ticker), ERR_NOTIF,
-					PendingIntent.getActivity(context, 0, new Intent(), 0));
-			PrefUtil.writeBoolean(context, Pref.DISABLE_KEY.key(), true);
-
-			context.sendBroadcast(new Intent(
-					IntentConstants.ACTION_WIFI_SERVICE_DISABLE));
-		}
 	}
 
 	private void clearHandler() {
@@ -891,9 +859,6 @@ public class WFConnection extends Object implements
 			 * IP connectivity established
 			 */
 			handleNetworkAction();
-		else if (iAction
-				.equals(android.net.ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED))
-			checkBackgroundDataSetting(context);
 		else if (iAction.equals(CONNECTINTENT))
 			handleConnectIntent(context, data);
 		else if (iAction.equals(REASSOCIATE_INTENT))

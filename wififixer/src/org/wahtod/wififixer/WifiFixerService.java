@@ -171,11 +171,6 @@ public class WifiFixerService extends Service implements
 		preferenceInitialize(this);
 
 		/*
-		 * If BG data is off, we should quit.
-		 */
-		WFConnection.checkBackgroundDataSetting(this);
-
-		/*
 		 * Set initial screen state
 		 */
 		setInitialScreenState(this);
