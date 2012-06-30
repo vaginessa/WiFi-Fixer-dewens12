@@ -16,21 +16,15 @@
 	<dimen name ="scan_list_padding">5dp</dimen>
 	<dimen name ="scan_list_ssid_margin_bottom">2dp</dimen>
 	<dimen name ="scan_list_ssid_margin_left">10dp</dimen>
-	<dimen name ="scan_list_ssid_width">150dp</dimen>
-	<dimen name ="scan_list_neticon_width">32dp</dimen>
-	<dimen name ="scan_list_securicon_width">16dp</dimen>
-	<dimen name ="scan_list_encryption_width">50dp</dimen>
 	<dimen name ="scannetworks_list_padding">15dp</dimen>
 	<dimen name ="scannetworks_title_padding_bottom">15dp</dimen>
 	<dimen name ="scannetworks_title_padding_top">10dp</dimen>
-	
 	<dimen name ="service_wficon_padding_bottom">10dp</dimen>
 	<dimen name ="service_version_layout_width">80dp</dimen>
 	<dimen name ="service_version_margin_left">100dp</dimen>
 	<dimen name ="service_version_padding_bottom">15dp</dimen>
 	<dimen name ="service_version_padding_top">25dp</dimen>
 	<dimen name ="service_abouttext_padding_bottom">10dp</dimen>
-	<dimen name ="service_container_layout_width">100dp</dimen>
 	<dimen name ="service_imagebutton_margin_bottom">1dp</dimen>
 	<dimen name ="service_imagebutton_margin_top">1dp</dimen>
 	<dimen name ="status_padding">5dp</dimen>
