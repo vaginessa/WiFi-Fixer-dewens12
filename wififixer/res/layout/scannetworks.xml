@@ -17,7 +17,6 @@
         android:id="@+id/scanlist"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_centerHorizontal="true"
         android:cacheColorHint="#00000000"
         android:divider="#00000000"
         android:dividerHeight="0dp"

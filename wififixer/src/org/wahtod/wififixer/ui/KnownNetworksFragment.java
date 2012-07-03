@@ -16,12 +16,11 @@
 
 package org.wahtod.wififixer.ui;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFConnection;
-import org.wahtod.wififixer.R.id;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.NotifUtil;
@@ -55,13 +54,15 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 public class KnownNetworksFragment extends Fragment {
+	private static WeakReference<KnownNetworksFragment> self;
 	private String clicked;
 	private int clicked_position;
-	private View listviewitem;
-	private NetworkListAdapter adapter;
-	private List<String> knownnetworks;
-	private List<String> known_in_range;
-	private ListView lv;
+	private static NetworkListAdapter adapter;
+	private static List<String> knownnetworks;
+	private static List<String> known_in_range;
+	private static ListView lv;
+	private WifiConfiguration undo;
+
 	private static final int SCAN_MESSAGE = 31337;
 	private static final int REFRESH_MESSAGE = 2944;
 	private static final int SCAN_DELAY = 15000;
@@ -70,7 +71,14 @@ public class KnownNetworksFragment extends Fragment {
 	private static final int CONTEXT_CONNECT = 113;
 	private static final int CONTEXT_NONMANAGE = 114;
 	private static final int CONTEXT_REMOVE = 116;
+
 	private static final String NETWORKS_KEY = "NETWORKS_KEY";
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		self = new WeakReference<KnownNetworksFragment>(this);
+		super.onCreate(savedInstanceState);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,59 +123,44 @@ public class KnownNetworksFragment extends Fragment {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		if (listviewitem != null) {
-			ImageView iv = (ImageView) listviewitem
-					.findViewById(id.NETWORK_ICON);
-			switch (item.getItemId()) {
-			case CONTEXT_ENABLE:
-				iv.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-				PrefUtil.setNetworkState(getContext(), clicked_position, true);
-				PrefUtil.writeNetworkState(getContext(), clicked_position,
+		switch (item.getItemId()) {
+		case CONTEXT_ENABLE:
+			PrefUtil.setNetworkState(getContext(), clicked_position, true);
+			PrefUtil.writeNetworkState(getContext(), clicked_position, false);
+			adapter.notifyDataSetChanged();
+			break;
+		case CONTEXT_DISABLE:
+			PrefUtil.setNetworkState(getContext(), clicked_position, false);
+			PrefUtil.writeNetworkState(getContext(), clicked_position, true);
+			adapter.notifyDataSetChanged();
+			break;
+		case CONTEXT_CONNECT:
+			Intent intent = new Intent(WFConnection.CONNECTINTENT);
+			intent.putExtra(WFConnection.NETWORKNAME,
+					PrefUtil.getSSIDfromNetwork(getContext(), clicked_position));
+			getContext().sendBroadcast(intent);
+			break;
+
+		case CONTEXT_NONMANAGE:
+			if (!PrefUtil.readManagedState(getContext(), clicked_position)) {
+				PrefUtil.writeManagedState(getContext(), clicked_position, true);
+			} else {
+				PrefUtil.writeManagedState(getContext(), clicked_position,
 						false);
-				adapter.notifyDataSetChanged();
-				break;
-			case CONTEXT_DISABLE:
-				iv.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
-				PrefUtil.setNetworkState(getContext(), clicked_position, false);
-				PrefUtil.writeNetworkState(getContext(), clicked_position, true);
-				adapter.notifyDataSetChanged();
-				break;
-			case CONTEXT_CONNECT:
-				Intent intent = new Intent(WFConnection.CONNECTINTENT);
-				intent.putExtra(WFConnection.NETWORKNAME, PrefUtil
-						.getSSIDfromNetwork(getContext(), clicked_position));
-				getContext().sendBroadcast(intent);
-				break;
-
-			case CONTEXT_NONMANAGE:
-				if (!PrefUtil.readManagedState(getContext(), clicked_position)) {
-					iv.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
-					PrefUtil.writeManagedState(getContext(), clicked_position,
-							true);
-				} else {
-					if (PrefUtil
-							.getNetworkState(getContext(), clicked_position))
-						iv.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-					else
-						iv.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
-
-					PrefUtil.writeManagedState(getContext(), clicked_position,
-							false);
-				}
-				adapter.notifyDataSetChanged();
-				break;
-
-			case CONTEXT_REMOVE:
-				String ssid = (String) lv.getItemAtPosition(clicked_position);
-				int nid = getNidFromSSID(getContext(), ssid);
-				NotifUtil.showToast(getContext(),
-						getContext().getString(R.string.removing_network)
-								+ ssid);
-				PrefUtil.getWifiManager(getActivity()).removeNetwork(nid);
-				PrefUtil.getWifiManager(getActivity()).saveConfiguration();
-				scanhandler.sendEmptyMessage(SCAN_MESSAGE);
-				break;
 			}
+			adapter.notifyDataSetChanged();
+			break;
+
+		case CONTEXT_REMOVE:
+			String ssid = (String) lv.getItemAtPosition(clicked_position);
+			int nid = getNidFromSSID(getContext(), ssid);
+			NotifUtil.showToast(getContext(),
+					getContext().getString(R.string.removing_network) + ssid);
+			undo = PrefUtil.getNetworkByNID(getContext(), nid);
+			PrefUtil.getWifiManager(getActivity()).removeNetwork(nid);
+			PrefUtil.getWifiManager(getActivity()).saveConfiguration();
+			scanhandler.sendEmptyMessage(SCAN_MESSAGE);
+			break;
 		}
 		return super.onContextItemSelected(item);
 	}
@@ -192,6 +185,13 @@ public class KnownNetworksFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		registerReceiver();
+	}
+
+	private void undoRemoveNetwork() {
+		PrefUtil.getWifiManager(getActivity()).addNetwork(undo);
+		PrefUtil.getWifiManager(getActivity()).saveConfiguration();
+		undo = null;
+		adapter.notifyDataSetChanged();
 	}
 
 	/*
@@ -243,12 +243,8 @@ public class KnownNetworksFragment extends Fragment {
 					holder.text.setTextColor(Color.WHITE);
 			}
 
-			/*
-			 * Set State icon
-			 */
 			if (PrefUtil.readManagedState(getContext(), position))
-				holder.icon
-						.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
+				holder.text.setTextColor(Color.BLACK);
 			else {
 				if (PrefUtil.getNetworkState(getContext(), position))
 					holder.icon.setColorFilter(Color.WHITE,
@@ -267,10 +263,10 @@ public class KnownNetworksFragment extends Fragment {
 
 	}
 
-	private Handler scanhandler = new Handler() {
+	private static Handler scanhandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
-			if (getActivity() == null)
+			if (self.get().getActivity() == null)
 				return;
 
 			switch (message.what) {
@@ -280,11 +276,10 @@ public class KnownNetworksFragment extends Fragment {
 				 * If wifi is on, scan if not, make sure no networks shown in
 				 * range
 				 */
-				WifiManager wm = (WifiManager) getContext().getSystemService(
-						Context.WIFI_SERVICE);
-
-				if (wm.isWifiEnabled())
-					wm.startScan();
+				if (PrefUtil.getWifiManager(self.get().getActivity())
+						.isWifiEnabled())
+					PrefUtil.getWifiManager(self.get().getActivity())
+							.startScan();
 				else {
 					if (known_in_range != null && known_in_range.size() >= 1) {
 						known_in_range.clear();
@@ -323,8 +318,8 @@ public class KnownNetworksFragment extends Fragment {
 	/*
 	 * Create adapter
 	 */
-	private void createAdapter(ListView v) {
-		adapter = new NetworkListAdapter(knownnetworks);
+	private static void createAdapter(ListView v) {
+		adapter = self.get().new NetworkListAdapter(knownnetworks);
 		v.setAdapter(adapter);
 	}
 
@@ -415,7 +410,6 @@ public class KnownNetworksFragment extends Fragment {
 					int position, long id) {
 				clicked = lv.getItemAtPosition(position).toString();
 				clicked_position = position;
-				listviewitem = v;
 				return false;
 			}
 
@@ -423,11 +417,11 @@ public class KnownNetworksFragment extends Fragment {
 		registerForContextMenu(lv);
 	}
 
-	private void refreshNetworkAdapter(final ArrayList<String> networks) {
+	private static void refreshNetworkAdapter(final ArrayList<String> networks) {
 		/*
 		 * Don't refresh if knownnetworks is empty (wifi is off)
 		 */
-		knownnetworks = getNetworks(getContext());
+		knownnetworks = getNetworks(self.get().getActivity());
 		if (knownnetworks.size() > 0) {
 			known_in_range = networks;
 			if (adapter == null) {
@@ -443,7 +437,7 @@ public class KnownNetworksFragment extends Fragment {
 		return getActivity().getApplicationContext();
 	}
 
-	private void refreshArray() {
+	private static void refreshArray() {
 		if (knownnetworks.equals(adapter.ssidArray))
 			return;
 

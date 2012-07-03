@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.Date;
 
 import org.wahtod.wififixer.DefaultExceptionHandler;
@@ -75,6 +76,7 @@ public class LogService extends Service {
 	private static final int BUFFER_FLUSH_DELAY = 30000;
 	private static File file;
 	private static Context ctxt;
+	private static WeakReference<LogService> self;
 
 	/*
 	 * Handler constants
@@ -84,23 +86,22 @@ public class LogService extends Service {
 	private static final int FLUSH_MESSAGE = 2;
 	private static final int INTENT = 3;
 
-	private Handler handler = new Handler() {
+	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			switch (message.what) {
 
 			case TS_MESSAGE:
-				timeStamp(ctxt);
+				self.get().timeStamp(ctxt);
 				break;
 
 			case FLUSH_MESSAGE:
-				flushBwriter();
+				self.get().flushBwriter();
 				break;
 
 			case INTENT:
-				dispatchIntent(message.getData());
+				self.get().dispatchIntent(message.getData());
 				break;
-
 			}
 		}
 	};
@@ -271,6 +272,7 @@ public class LogService extends Service {
 
 	@Override
 	public void onCreate() {
+		self = new WeakReference<LogService>(this);
 		super.onCreate();
 		ctxt = this;
 		file = VersionedFile.getFile(ctxt, LOGFILE);

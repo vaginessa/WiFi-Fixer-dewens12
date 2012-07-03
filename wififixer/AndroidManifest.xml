@@ -16,6 +16,27 @@
     android:versionCode="941"
     android:versionName="0.9.5b3" >
 
+    <!-- Documenting permissions here -->
+    <!-- For service start (30 seconds from boot_completed) -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- For wifi state -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- For detecting ip connectivity and caching IP of router -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--
+		For switching wifi off/on, doing reassociate/reconnect, requesting
+		connections, etc.
+    -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- For http head check as backup for icmp echo/ping to AP -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- For waking the phone/radio up to do network checks -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- For storing the log so user can send it to me -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- For setting Wifi Sleep Policy -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
     <supports-screens
         android:largeScreens="true"
         android:normalScreens="true"
@@ -137,7 +158,6 @@
         <service
             android:name=".utility.LogService"
             class="LogService" >
->
         </service>
 
         <!-- Handles asynchronous toggling of wifi state -->
@@ -147,26 +167,5 @@
             class="ToggleService" >
         </service>
     </application>
-
-    <!-- Documenting permissions here -->
-    <!-- For service start (30 seconds from boot_completed) -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <!-- For wifi state -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- For detecting ip connectivity and caching IP of router -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!--
-		For switching wifi off/on, doing reassociate/reconnect, requesting
-		connections, etc.
-    -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <!-- For http head check as backup for icmp echo/ping to AP -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- For waking the phone/radio up to do network checks -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- For storing the log so user can send it to me -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- For setting Wifi Sleep Policy -->
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
 </manifest>

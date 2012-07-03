@@ -120,8 +120,8 @@ public class WifiFixerService extends Service implements
 				LogService
 						.log(this, APP_NAME, getString(R.string.alarm_intent));
 			else
-				LogService.log(this, APP_NAME,
-						getString(R.string.start_intent));
+				LogService
+						.log(this, APP_NAME, getString(R.string.start_intent));
 		}
 	}
 

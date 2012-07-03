@@ -21,6 +21,9 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpHead;
@@ -50,6 +53,7 @@ public class Hostup {
 	private static String target;
 	private static String response;
 	private static final int TIMEOUT_EXTRA = 2000;
+	private static final int THREAD_KEEPALIVE = 4;
 	private static URI headURI;
 	private static int reachable;
 	private Context context;
@@ -57,45 +61,72 @@ public class Hostup {
 	protected volatile static boolean finished;
 	private Thread self;
 	private static String icmpIP;
-	private static long timer;
-	private static DefaultHttpClient httpclient;
+	private static long _timer_start;
+	private static long _timer_stop;
+
+	private static ThreadPoolExecutor _executor = new ThreadPoolExecutor(1, 2,
+			THREAD_KEEPALIVE, TimeUnit.SECONDS,
+			new ArrayBlockingQueue<Runnable>(4));
+
+	private static class HttpClientFactory {
+		private static DefaultHttpClient httpclient;
+
+		public synchronized static DefaultHttpClient getThreadSafeClient() {
+			if (httpclient != null)
+				return httpclient;
+			SchemeRegistry scheme = new SchemeRegistry();
+			scheme.register(new Scheme(HTTPSCHEME, PlainSocketFactory
+					.getSocketFactory(), 80));
+			BasicHttpParams httpparams = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpparams,
+					Integer.valueOf(reachable));
+			HttpConnectionParams.setSoTimeout(httpparams, reachable);
+			HttpConnectionParams.setLinger(httpparams, 1);
+			HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
+			ClientConnectionManager cm = new ThreadSafeClientConnManager(
+					httpparams, scheme);
+			httpclient = new DefaultHttpClient(cm, httpparams);
+			return httpclient;
+		}
+	};
 
 	/*
-	 * for http header check thread
+	 * http header check thread
 	 */
 	private class GetHeaders implements Runnable {
+		@Override
 		public void run() {
 			boolean up = false;
 			try {
 				up = getHttpHeaders(context);
 
 			} catch (IOException e) {
-
+				/*
+				 * fail, up is false
+				 */
 			} catch (URISyntaxException e) {
-
+				/*
+				 * fail, up is false
+				 */
 			}
-			/*
-			 * Interrupt waiting thread since we have a result
-			 */
 			finish(up);
 		}
 	};
 
 	/*
-	 * for icmp check thread
+	 * icmp check thread
 	 */
 	private class GetICMP implements Runnable {
+		@Override
 		public void run() {
 			boolean up = icmpHostup(context);
-			/*
-			 * Interrupt waiting thread since we have a result
-			 */
 			finish(up);
 		}
 	};
 
 	protected synchronized void finish(final boolean up) {
 		if (!finished) {
+			_timer_stop = System.currentTimeMillis();
 			state = up;
 			finished = true;
 			self.interrupt();
@@ -120,14 +151,10 @@ public class Hostup {
 		 * Start Check Threads
 		 */
 		self = Thread.currentThread();
-		Thread tgetHeaders = new Thread(new GetHeaders());
-		if (!icmpIP.equals(INET_LOOPBACK) && !icmpIP.equals(INET_INVALID)) {
-			Thread tgetICMP = new Thread(new GetICMP());
-			tgetICMP.start();
-		}
-		tgetHeaders.start();
-		timer = System.currentTimeMillis();
-
+		if (!icmpIP.equals(INET_LOOPBACK) && !icmpIP.equals(INET_INVALID))
+			_executor.execute(new GetICMP());
+		_executor.execute(new GetHeaders());
+		_timer_start = System.currentTimeMillis();
 		try {
 			Thread.sleep(reachable);
 			/*
@@ -140,8 +167,7 @@ public class Hostup {
 			/*
 			 * interrupted by a result: this is desired behavior
 			 */
-			return response + "\n"
-					+ String.valueOf(System.currentTimeMillis() - timer)
+			return response + String.valueOf(_timer_stop - _timer_start)
 					+ ctxt.getString(R.string.ms);
 		}
 	}
@@ -176,23 +202,7 @@ public class Hostup {
 	private static boolean getHttpHeaders(final Context context)
 			throws IOException, URISyntaxException {
 
-		/*
-		 * Reusing Httpclient, since it's expensive
-		 */
-		if (httpclient == null) {
-			SchemeRegistry scheme = new SchemeRegistry();
-			scheme.register(new Scheme(HTTPSCHEME, PlainSocketFactory
-					.getSocketFactory(), 80));
-			BasicHttpParams httpparams = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpparams,
-					Integer.valueOf(reachable));
-			HttpConnectionParams.setSoTimeout(httpparams, reachable);
-			HttpConnectionParams.setLinger(httpparams, 1);
-			HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
-			ClientConnectionManager cm = new ThreadSafeClientConnManager(
-					httpparams, scheme);
-			httpclient = new DefaultHttpClient(cm, httpparams);
-		}
+		DefaultHttpClient httpclient = HttpClientFactory.getThreadSafeClient();
 		/*
 		 * get URI
 		 */
@@ -234,5 +244,11 @@ public class Hostup {
 				response = target + context.getString(R.string.http_fail);
 			return false;
 		}
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		_executor.shutdown();
+		super.finalize();
 	}
 }

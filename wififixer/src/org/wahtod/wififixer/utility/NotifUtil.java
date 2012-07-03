@@ -38,13 +38,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public abstract class NotifUtil {
-	public static final int STATNOTIFID = 2392;
-	public static final int MAX_SSID_LENGTH = 16;
-	public static final int LOGNOTIFID = 2494;
-	public static int ssidStatus = 0;
-	public static Notification statnotif;
-	public static Notification lognotif;
-	public static PendingIntent contentIntent;
+	protected static final int STATNOTIFID = 2392;
+	protected static final int MAX_SSID_LENGTH = 16;
+	protected static final int LOGNOTIFID = 2494;
+	protected static int ssidStatus = 0;
+	protected static Notification statnotif;
+	protected static Notification lognotif;
+	protected static PendingIntent contentIntent;
 
 	/*
 	 * for SSID status in status notification

@@ -28,14 +28,15 @@ public class WifiLock {
 		/*
 		 * We want WifiManager.WIFI_MODE_FULL as we're not just scanning
 		 */
-		wifilock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, context.toString());
+		wifilock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL,
+				context.toString());
 	}
 
 	public void lock(final boolean state) {
 		if (state) {
-			if(!wifilock.isHeld()){
-			wifilock.acquire();
-			onAcquire();
+			if (!wifilock.isHeld()) {
+				wifilock.acquire();
+				onAcquire();
 			}
 		} else if (wifilock.isHeld()) {
 			wifilock.release();
@@ -49,7 +50,7 @@ public class WifiLock {
 		 */
 
 	}
-	
+
 	public void onRelease() {
 		/*
 		 * Override

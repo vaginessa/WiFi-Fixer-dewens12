@@ -52,7 +52,7 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	private static final String WEP = "WEP";
 	protected static final int CANCEL = 1;
 	private WFScanResult network;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -165,8 +165,7 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	}
 
 	private void notifyConnecting() {
-		NotifUtil.showToast(
-				getActivity(),
+		NotifUtil.showToast(getActivity(),
 				getActivity().getString(R.string.connecting_to_network)
 						+ network.SSID);
 	}

@@ -19,7 +19,7 @@ public class StatusMessage {
 	String ssid;
 	String status;
 	int signal;
-	boolean show;
+	final boolean show;
 
 	public StatusMessage(final String ss, final String st, final int si,
 			final boolean sh) {

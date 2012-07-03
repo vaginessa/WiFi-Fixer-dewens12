@@ -37,9 +37,9 @@ public class LogFragmentActivity extends AppFragmentActivity {
 			ft.add(R.id.fragment_target, f, null);
 			ft.commit();
 		}
-		ActionBarDetector.setDisplayHomeAsUpEnabled(this, true); 
+		ActionBarDetector.setDisplayHomeAsUpEnabled(this, true);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		ActionBarDetector.handleHome(this, item);

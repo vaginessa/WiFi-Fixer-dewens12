@@ -43,7 +43,7 @@ public class WidgetHandler {
 
 	private static WifiManager wm;
 
-	private Handler handler = new Handler() {
+	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			String action = message.getData().getString(PrefUtil.INTENT_ACTION);

@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer.ui;
 
+import java.lang.ref.WeakReference;
+
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
@@ -38,20 +40,21 @@ public class ServiceFragment extends Fragment {
 	public static final String REFRESH_ACTION = "org.wahtod.wififixer.ui.ServiceFragment.REFRESH";
 	private ToggleButton servicebutton;
 	private ToggleButton wifibutton;
+	private static WeakReference<ServiceFragment> self;
 
-	private Handler handler = new Handler() {
+	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
-			if (getActivity() == null)
+			if (self.get().getActivity() == null)
 				return;
 			int state = -1;
 			if (message.getData().isEmpty())
-				setIcon();
+				self.get().setIcon();
 			else
 				state = message.getData().getInt(WifiManager.EXTRA_WIFI_STATE);
 			if (state == WifiManager.WIFI_STATE_DISABLED
 					|| state == WifiManager.WIFI_STATE_ENABLED)
-				setIcon();
+				self.get().setIcon();
 		}
 	};
 	private BroadcastReceiver wifireceiver = new BroadcastReceiver() {
@@ -70,6 +73,12 @@ public class ServiceFragment extends Fragment {
 			handler.sendMessage(message);
 		}
 	};
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		self = new WeakReference<ServiceFragment>(this);
+		super.onCreate(savedInstanceState);
+	}
 
 	@Override
 	public void onPause() {

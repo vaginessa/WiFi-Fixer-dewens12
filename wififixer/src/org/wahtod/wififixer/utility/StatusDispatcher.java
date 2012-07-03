@@ -16,6 +16,8 @@ limitations under the License.
 
 package org.wahtod.wififixer.utility;
 
+import java.lang.ref.WeakReference;
+
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.ui.StatusFragment;
@@ -26,25 +28,24 @@ import android.os.Handler;
 import android.os.Message;
 
 public class StatusDispatcher {
-	private StatusMessage m;
+	private static StatusMessage m;
 	private static final int MESSAGE_DELAY = 10000;
 	private static final int MESSAGE = 42;
-	private Context c;
-	private PrefUtil prefs;
+	private static Context c;
+	private static WeakReference<PrefUtil> prefs;
 
 	public StatusDispatcher(final Context context, PrefUtil p) {
 		c = context.getApplicationContext();
-		prefs = p;
+		prefs = new WeakReference<PrefUtil>(p);
 	}
-
 	/*
 	 * Essentially, a Leaky Bucket Widget messages throttled to once every 10
 	 * seconds
 	 */
-	private Handler messagehandler = new Handler() {
+	private static Handler messagehandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
-			if (prefs.getFlag(Pref.HASWIDGET_KEY))
+			if (prefs.get().getFlag(Pref.HASWIDGET_KEY))
 				NotifUtil.broadcastStatNotif(c, m);
 		}
 
@@ -67,17 +68,17 @@ public class StatusDispatcher {
 			 * widget
 			 */
 			m = message;
-			
+
 			/*
 			 * Fast supplicant state update if WifiFixerService is running
 			 */
-			 Intent i = new Intent(StatusFragment.STATUS_ACTION);
-			 i.putExtra(StatusFragment.STATUS_KEY,m.status);
-			 context.sendBroadcast(i);
-			 /*
-				 * Dispatch Status Notification update
-				 */
-			if (prefs.getFlag(Pref.STATENOT_KEY))
+			Intent i = new Intent(StatusFragment.STATUS_ACTION);
+			i.putExtra(StatusFragment.STATUS_KEY, m.status);
+			context.sendBroadcast(i);
+			/*
+			 * Dispatch Status Notification update
+			 */
+			if (prefs.get().getFlag(Pref.STATENOT_KEY))
 				NotifUtil.addStatNotif(context, m);
 			/*
 			 * queue update for widget

@@ -24,7 +24,6 @@
         android:id="@+id/SSID"
         style="@style/Wftext.large"
         android:layout_gravity="center"
-        android:layout_weight="0.04"
         android:gravity="center"
         android:text="SSID" >
     </TextView>

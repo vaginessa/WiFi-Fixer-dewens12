@@ -26,7 +26,7 @@ public class FifoList extends ArrayList<Object> {
 	 * Behaves as fixed-size FIFO
 	 */
 	private static final long serialVersionUID = -9019587832538873253L;
-	private int length;
+	private final int length;
 
 	public FifoList(int s) {
 		length = s;
@@ -51,13 +51,11 @@ public class FifoList extends ArrayList<Object> {
 			return false;
 	}
 
-	public List<List<SupplicantState>> containsPatterns(
-			List<List<SupplicantState>> patterns) {
-		List<List<SupplicantState>> matches = new ArrayList<List<SupplicantState>>();
+	public boolean containsPatterns(final List<List<SupplicantState>> patterns) {
 		for (List<SupplicantState> n : patterns) {
 			if (this.containsPattern(n))
-				matches.add(n);
+				return true;
 		}
-		return matches;
+		return false;
 	}
 }

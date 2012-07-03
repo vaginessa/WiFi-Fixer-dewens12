@@ -40,7 +40,7 @@ public class ScreenStateDetector {
 		public abstract void onScreenStateChanged(boolean state);
 	}
 
-	private Handler statehandler = new Handler() {
+	private static Handler statehandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			switch (message.what) {

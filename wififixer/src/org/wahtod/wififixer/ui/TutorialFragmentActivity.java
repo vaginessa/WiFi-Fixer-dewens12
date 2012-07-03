@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer.ui;
 
+import java.lang.ref.WeakReference;
+
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
@@ -44,23 +46,24 @@ public class TutorialFragmentActivity extends AppFragmentActivity {
 	private static final String CURRENT_PART = "TutorialFragmentActivity:CURRENT_PART";
 	private static final long RESTORE_DELAY = 1000;
 
-	private int part = -1;	
-	ViewPager pv;
+	private int part = -1;
+	private ViewPager pv;
+	private static WeakReference<TutorialFragmentActivity> self;
 
-	private Handler handler = new Handler() {
+	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			switch (message.what) {
 			case TOAST:
-				showTutorialToast(message.arg1);
+				self.get().showTutorialToast(message.arg1);
 				break;
 
 			case PAGE:
-				pv.setCurrentItem(message.arg1);
+				self.get().pv.setCurrentItem(message.arg1);
 				break;
 
 			case SET_PART:
-				part = message.arg1;
+				self.get().part = message.arg1;
 				break;
 
 			case PART1:
@@ -117,6 +120,12 @@ public class TutorialFragmentActivity extends AppFragmentActivity {
 			}
 		}
 	};
+
+	@Override
+	protected void onCreate(Bundle arg0) {
+		self = new WeakReference<TutorialFragmentActivity>(this);
+		super.onCreate(arg0);
+	}
 
 	private void removeAllMessages() {
 		for (int n = 0; n < 6; n++) {

@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer.ui;
 
+import java.lang.ref.WeakReference;
+
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
@@ -40,6 +42,7 @@ public class LogFragment extends Fragment {
 	public static final String HAS_LOGFRAGMENT = "HAS_LF";
 	public static final String LOG_MESSAGE_INTENT = "org.wahtod.wififixer.LOG_MESSAGE";
 	public static final String LOG_MESSAGE = "LOG_MESSAGE_KEY";
+	private static WeakReference<LogFragment> self;
 	private TextView myTV;
 	private ScrollView mySV;
 	private String log;
@@ -55,10 +58,10 @@ public class LogFragment extends Fragment {
 		}
 	};
 
-	private Handler handler = new Handler() {
+	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
-			addText(message.getData());
+			self.get().addText(message.getData());
 		}
 	};
 
@@ -100,6 +103,7 @@ public class LogFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		self = new WeakReference<LogFragment>(this);
 		log = "";
 		if (!this.getRetainInstance())
 			this.setRetainInstance(true);

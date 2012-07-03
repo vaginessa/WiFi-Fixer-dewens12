@@ -16,6 +16,7 @@
 
 package org.wahtod.wififixer.ui;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -51,6 +52,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 public class ScanFragment extends Fragment {
+	private static WeakReference<ScanFragment> self;
 	private WFScanResult clicked;
 	private ScanListAdapter adapter;
 	private ListView lv;
@@ -60,7 +62,7 @@ public class ScanFragment extends Fragment {
 	protected static final int REFRESH_LIST_ADAPTER = 0;
 	protected static final int CLEAR_LIST_ADAPTER = 1;
 
-	private Handler drawhandler = new Handler() {
+	private static Handler drawhandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			/*
@@ -69,13 +71,13 @@ public class ScanFragment extends Fragment {
 			 */
 			switch (message.what) {
 			case REFRESH_LIST_ADAPTER:
-				if (getActivity() != null)
-					refreshScanListAdapter();
+				if (self.get().getActivity() != null)
+					self.get().refreshScanListAdapter();
 				break;
 
 			case CLEAR_LIST_ADAPTER:
-				if (getActivity() != null)
-					clearScanListAdapter();
+				if (self.get().getActivity() != null)
+					self.get().clearScanListAdapter();
 				break;
 			}
 
@@ -84,6 +86,7 @@ public class ScanFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		self = new WeakReference<ScanFragment>(this);
 		super.onCreate(savedInstanceState);
 	}
 

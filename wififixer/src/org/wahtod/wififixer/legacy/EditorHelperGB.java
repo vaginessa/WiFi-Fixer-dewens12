@@ -17,8 +17,7 @@ package org.wahtod.wififixer.legacy;
 
 import android.content.SharedPreferences.Editor;
 
-public class EditorHelperGB extends
-		EditorDetector {
+public class EditorHelperGB extends EditorDetector {
 
 	@Override
 	public void vcommit(final Editor e) {

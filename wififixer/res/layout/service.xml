@@ -2,57 +2,50 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
-    android:gravity="left"
-    android:orientation="vertical" >
+    android:gravity="center"
+    android:orientation="horizontal" >
+
+    <fragment
+        android:id="@+id/about"
+        android:layout_width="0px"
+        android:layout_height="fill_parent"
+        android:layout_weight=".8"
+        class="org.wahtod.wififixer.ui.StatusFragment" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:orientation="horizontal" >
+        android:id="@+id/buttonscontainer"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight=".4"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
 
-        <fragment
-            android:id="@+id/about"
-            android:layout_width="0px"
-            android:layout_height="fill_parent"
-            android:layout_weight=".8"
-            class="org.wahtod.wififixer.ui.StatusFragment" />
+        <ToggleButton
+            android:id="@+id/ToggleButton1"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
+            android:layout_marginTop="@dimen/service_imagebutton_margin_top"
+            android:clickable="true"
+            android:onClick="serviceToggle"
+            android:textOff="@string/service_status"
+            android:textOn="@string/service_status"
+            android:textSize="10sp" />
 
-        <LinearLayout
-            android:id="@+id/buttonscontainer"
-            android:layout_width="0px"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight=".4"
-            android:gravity="center_vertical"
-            android:orientation="vertical" >
-
-            <ToggleButton
-                android:id="@+id/ToggleButton1"
-                android:layout_width="72dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
-                android:layout_marginTop="@dimen/service_imagebutton_margin_top"
-                android:clickable="true"
-                android:onClick="serviceToggle"
-                android:textOff="@string/service_status"
-                android:textOn="@string/service_status"
-                android:textSize="10sp"
-                />
-
-            <ToggleButton
-                android:id="@+id/ToggleButton2"
-                android:layout_width="72dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
-                android:layout_marginTop="@dimen/service_imagebutton_margin_top"
-                android:clickable="true"
-                android:onClick="wifiToggle"
-                android:textOff="@string/wifi"
-                android:textOn="@string/wifi"
-                android:textSize="10sp" />
-        </LinearLayout>
+        <ToggleButton
+            android:id="@+id/ToggleButton2"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/service_imagebutton_margin_bottom"
+            android:layout_marginTop="@dimen/service_imagebutton_margin_top"
+            android:clickable="true"
+            android:onClick="wifiToggle"
+            android:textOff="@string/wifi"
+            android:textOn="@string/wifi"
+            android:textSize="10sp" />
     </LinearLayout>
+
 </LinearLayout>

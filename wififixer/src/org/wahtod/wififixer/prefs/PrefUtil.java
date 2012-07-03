@@ -16,6 +16,7 @@
 
 package org.wahtod.wififixer.prefs;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,7 +41,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings.SettingNotFoundException;
 
 public class PrefUtil extends Object {
-
+	private static WeakReference<PrefUtil> self;
 	private static final String COLON = ":";
 	/*
 	 * Intent Constants
@@ -64,7 +65,7 @@ public class PrefUtil extends Object {
 	private static Context context;
 	private static WifiManager wm_;
 	private HashMap<String, int[]> netprefs;
-	
+
 	private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
 		public void onReceive(final Context context, final Intent intent) {
 			String valuekey = intent.getStringExtra(VALUE_KEY);
@@ -84,16 +85,18 @@ public class PrefUtil extends Object {
 		}
 	};
 
-	private Handler receiverExecutor = new Handler() {
+	private static Handler receiverExecutor = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			Bundle data = message.getData();
 			String action = data.getString(INTENT_ACTION);
 			if (action.equals(VALUE_CHANGED_ACTION))
-				handlePrefChange(Pref.get(data.getString(VALUE_KEY)),
+				self.get().handlePrefChange(
+						Pref.get(data.getString(VALUE_KEY)),
 						data.getBoolean(DATA_KEY));
 			else if (action.equals(NETVALUE_CHANGED_ACTION)) {
-				handleNetPrefChange(NetPref.get(data.getString(VALUE_KEY)),
+				self.get().handleNetPrefChange(
+						NetPref.get(data.getString(VALUE_KEY)),
 						data.getString(NET_KEY), data.getInt(INT_KEY));
 			}
 		}
@@ -105,6 +108,7 @@ public class PrefUtil extends Object {
 	}
 
 	public PrefUtil(final Context c) {
+		self = new WeakReference<PrefUtil>(this);
 		context = c;
 		keyVals = new boolean[Pref.values().length];
 		IntentFilter filter = new IntentFilter(VALUE_CHANGED_ACTION);
@@ -244,8 +248,8 @@ public class PrefUtil extends Object {
 		}
 		return null;
 	}
-	
-	private static WifiConfiguration getNetworkByNID(Context context,
+
+	public static WifiConfiguration getNetworkByNID(Context context,
 			final int network) {
 		List<WifiConfiguration> configs = getWifiManager(context)
 				.getConfiguredNetworks();
@@ -299,7 +303,8 @@ public class PrefUtil extends Object {
 			final boolean value) {
 		SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
 		editor.putBoolean(key, value);
-		EditorDetector.commit(editor);;
+		EditorDetector.commit(editor);
+		;
 	}
 
 	public static String readString(final Context ctxt, final String key) {

@@ -25,7 +25,7 @@
         android:layout_weight="3"
         android:gravity="center"
         android:orientation="horizontal"
-        android:weightSum="1" >
+        android:weightSum="1" android:baselineAligned="false">
 
         <FrameLayout
             android:id="@+id/servicefragment"
@@ -52,6 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="7"
+        android:baselineAligned="false"
         android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="1" >

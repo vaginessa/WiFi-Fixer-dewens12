@@ -101,8 +101,7 @@ public class PrefActivity extends PreferenceActivity implements
 			PrefUtil.notifyPrefChange(p.getContext(), key,
 					prefs.getBoolean(key, false));
 
-		}
-		else if (key.contains(PrefConstants.PERF_KEY)) {
+		} else if (key.contains(PrefConstants.PERF_KEY)) {
 
 			int pVal = Integer.valueOf(PrefUtil.readString(p.getContext(),
 					PrefConstants.PERF_KEY));

@@ -35,7 +35,7 @@ import android.os.Message;
 import android.util.Log;
 
 public class BroadcastHandler {
-	private Context ctxt;
+	private static Context ctxt;
 
 	// For Auth
 	private static final String AUTHEXTRA = "IRRADIATED";
@@ -44,7 +44,7 @@ public class BroadcastHandler {
 
 	private static final int AUTH_NOTIF_ID = 2934;
 
-	private Handler handler = new Handler() {
+	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			dispatchIntent(message.getData());
@@ -95,7 +95,7 @@ public class BroadcastHandler {
 		handler.sendMessage(message);
 	}
 
-	private void dispatchIntent(final Bundle data) {
+	private static void dispatchIntent(final Bundle data) {
 		/*
 		 * Respond to manifest intents
 		 */

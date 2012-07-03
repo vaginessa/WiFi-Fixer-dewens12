@@ -17,6 +17,8 @@
 package org.wahtod.wififixer.ui;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
+
 import org.wahtod.wififixer.R;
 
 import org.wahtod.wififixer.DefaultExceptionHandler;
@@ -54,6 +56,8 @@ import android.widget.EditText;
 import android.widget.ToggleButton;
 
 public class WifiFixerActivity extends TutorialFragmentActivity {
+	private static WeakReference<WifiFixerActivity> self;
+
 	public class PhoneAdapter extends FragmentPagerAdapter {
 		public PhoneAdapter(FragmentManager fm) {
 			super(fm);
@@ -77,10 +81,10 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		}
 	}
 
-	private Handler handler = new Handler() {
+	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
-			handleIntentMessage(message);
+			self.get().handleIntentMessage(message);
 		}
 	};
 
@@ -368,6 +372,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	// On Create
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		self = new WeakReference<WifiFixerActivity>(this);
 		/*
 		 * Set Default Exception handler
 		 */

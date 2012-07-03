@@ -33,7 +33,7 @@ public class TabListener implements ActionBar.TabListener {
 		mPager = (ViewPager) mActivity.findViewById(R.id.pager);
 		/*
 		 * Throwing in a page change listener so the viewpager can keep the
-		 * currently selected tab synched with its current page 
+		 * currently selected tab synched with its current page
 		 */
 		if (mPager != null) {
 			mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -54,7 +54,7 @@ public class TabListener implements ActionBar.TabListener {
 	}
 
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-			mPager.setCurrentItem(tab.getPosition());
+		mPager.setCurrentItem(tab.getPosition());
 	}
 
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {

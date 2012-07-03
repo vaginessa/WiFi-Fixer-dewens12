@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer.ui;
 
+import java.lang.ref.WeakReference;
+
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.utility.NotifUtil;
 
@@ -44,13 +46,14 @@ public class StatusFragment extends Fragment {
 	private static final String MB = "mb";
 	public static final String STATUS_ACTION = "org.wahtod.wififixer.ACTION.STATUS_UPDATE";
 	public static final String STATUS_KEY = "STATUS_KEY";
+	private static WeakReference<StatusFragment> self;
 	private TextView linkspeed;
 	private TextView ssid;
 	private TextView signal;
 	private TextView status;
 	private ImageView icon;
 
-	private Handler drawhandler = new Handler() {
+	private static Handler drawhandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			/*
@@ -59,8 +62,8 @@ public class StatusFragment extends Fragment {
 			 */
 			switch (message.what) {
 			case REFRESH:
-				if (getActivity() != null)
-					refresh();
+				if (self.get().getActivity() != null)
+					self.get().refresh();
 				break;
 
 			case STATUS_MESSAGE:
@@ -68,9 +71,9 @@ public class StatusFragment extends Fragment {
 				 * Change status text
 				 */
 				if (!message.getData().isEmpty())
-					status.setText(message.getData().getString(STATUS_KEY));
+					self.get().status.setText(message.getData().getString(
+							STATUS_KEY));
 				break;
-
 			}
 		}
 	};
@@ -90,6 +93,12 @@ public class StatusFragment extends Fragment {
 			drawhandler.sendMessage(message);
 		}
 	};
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		self = new WeakReference<StatusFragment>(this);
+		super.onCreate(savedInstanceState);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
