@@ -132,20 +132,19 @@ public class PrefUtil extends Object {
 			logstring.append(network);
 			logstring.append(COLON);
 			logstring.append(intTemp[pref.ordinal()]);
-			LogService.log(context, LogService.getLogTag(context),
-					logstring.toString());
+			LogService.log(context, LogService.getLogTag(context), logstring);
 		}
 
 		netprefs.put(network, intTemp);
 	}
 
 	public int getnetPref(final Context context, final NetPref pref,
-			final String network) {
+			final StringBuilder network) {
 		int ordinal = pref.ordinal();
 		if (!netprefs.containsKey(network)) {
 			int[] intarray = new int[PrefConstants.NUMNETPREFS];
 			intarray[ordinal] = readNetworkPref(context, network, pref);
-			netprefs.put(network, intarray);
+			netprefs.put(network.toString(), intarray);
 			return intarray[ordinal];
 		} else
 			return netprefs.get(network)[ordinal];
@@ -199,10 +198,11 @@ public class PrefUtil extends Object {
 	}
 
 	public static void notifyNetPrefChange(final Context c,
-			final NetPref netpref, final String network, final int value) {
+			final NetPref netpref, final StringBuilder netstring,
+			final int value) {
 		Intent intent = new Intent(NETVALUE_CHANGED_ACTION);
 		intent.putExtra(VALUE_KEY, netpref.key());
-		intent.putExtra(NET_KEY, network);
+		intent.putExtra(NET_KEY, netstring.toString());
 		intent.putExtra(INT_KEY, value);
 		c.sendBroadcast(intent);
 	}
@@ -227,11 +227,12 @@ public class PrefUtil extends Object {
 	public void postValChanged(final Pref p) {
 	}
 
-	public static String getnetworkSSID(final Context context, final int network) {
+	public static StringBuilder getnetworkSSID(final Context context,
+			final int network) {
 		WifiManager wm = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);
 		if (!wm.isWifiEnabled())
-			return context.getString(R.string.none);
+			return new StringBuilder(context.getString(R.string.none));
 		else
 			return getSafeFileName(context,
 					getSSIDfromNetwork(context, network));
@@ -260,16 +261,17 @@ public class PrefUtil extends Object {
 		return null;
 	}
 
-	public static String getSafeFileName(final Context ctxt, String filename) {
+	public static StringBuilder getSafeFileName(final Context ctxt,
+			String filename) {
 		if (filename == null)
 			filename = ctxt.getString(R.string.none);
 
-		return filename.replaceAll("[^a-zA-Z0-9]", "");
+		return new StringBuilder(filename.replaceAll("[^a-zA-Z0-9]", ""));
 	}
 
-	public static int readNetworkPref(final Context ctxt, final String network,
-			final NetPref pref) {
-		String key = NETPREFIX + network + pref.key();
+	public static int readNetworkPref(final Context ctxt,
+			final StringBuilder netstring, final NetPref pref) {
+		String key = NETPREFIX + netstring + pref.key();
 		if (getSharedPreferences(ctxt).contains(key))
 			return getSharedPreferences(ctxt).getInt(key, 0);
 		else
@@ -277,21 +279,21 @@ public class PrefUtil extends Object {
 	}
 
 	public static void writeNetworkPref(final Context ctxt,
-			final String network, final NetPref pref, final int value) {
+			final StringBuilder netstring, final NetPref pref, final int value) {
 		/*
 		 * Check for actual changed value if changed, notify
 		 */
-		if (value != readNetworkPref(ctxt, network, pref)) {
+		if (value != readNetworkPref(ctxt, netstring, pref)) {
 			/*
 			 * commit changes
 			 */
 			SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
-			editor.putInt(NETPREFIX + network + pref.key(), value);
+			editor.putInt(NETPREFIX + netstring + pref.key(), value);
 			EditorDetector.commit(editor);
 			/*
 			 * notify
 			 */
-			notifyNetPrefChange(ctxt, pref, network, value);
+			notifyNetPrefChange(ctxt, pref, netstring, value);
 		}
 	}
 
@@ -409,7 +411,7 @@ public class PrefUtil extends Object {
 
 	public static void writeNetworkState(final Context context,
 			final int network, final boolean state) {
-		String netstring = getnetworkSSID(context, network);
+		StringBuilder netstring = getnetworkSSID(context, network);
 		if (state)
 			PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY,
 					1);
@@ -430,7 +432,7 @@ public class PrefUtil extends Object {
 
 	public static void writeManagedState(final Context context,
 			final int network, final boolean state) {
-		String netstring = getnetworkSSID(context, network);
+		StringBuilder netstring = getnetworkSSID(context, network);
 		if (state)
 			PrefUtil.writeNetworkPref(context, netstring,
 					NetPref.NONMANAGED_KEY, 1);

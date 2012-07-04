@@ -134,7 +134,7 @@ public class BroadcastHandler {
 		else if (action.equals(AUTH_ACTION)) {
 			if (data.containsKey(AUTHEXTRA)
 					&& data.getString(AUTHEXTRA).contains(AUTHSTRING)) {
-				Log.i(LogService.getLogTag(ctxt),
+				Log.i(LogService.getLogTag(ctxt).toString(),
 						ctxt.getString(R.string.authed));
 				Intent intent = new Intent(ctxt, WifiFixerActivity.class)
 						.setAction(Intent.ACTION_MAIN).setFlags(

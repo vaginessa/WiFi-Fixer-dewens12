@@ -26,7 +26,6 @@ import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.WakeLock;
 import org.wahtod.wififixer.widget.WidgetHandler;
 
-
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -64,7 +63,7 @@ public class ToggleService extends Service {
 		private static Handler hWifiState = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				 final Context lc = self.get().getApplicationContext();
+				final Context lc = self.get().getApplicationContext();
 				/*
 				 * Process MESSAGE
 				 */
@@ -75,7 +74,8 @@ public class ToggleService extends Service {
 					break;
 
 				case OFF:
-					self.get().sendBroadcast(new Intent(WidgetHandler.WIFI_OFF));
+					self.get()
+							.sendBroadcast(new Intent(WidgetHandler.WIFI_OFF));
 					break;
 
 				case WATCHDOG:
@@ -99,14 +99,16 @@ public class ToggleService extends Service {
 					break;
 
 				case TOGGLE:
-					if (!PrefUtil.readBoolean(lc,
-							PrefConstants.WIFI_STATE_LOCK)) {
+					if (!PrefUtil
+							.readBoolean(lc, PrefConstants.WIFI_STATE_LOCK)) {
 						wlock.lock(true);
-						NotifUtil.show(lc, lc
-								.getString(R.string.toggling_wifi), self.get()
-								.getString(R.string.toggling_wifi), TOGGLE_ID,
-								PendingIntent.getActivity(self.get(), 0, new Intent(
-										lc, WifiFixerActivity.class), 0));
+						NotifUtil.show(lc,
+								lc.getString(R.string.toggling_wifi), self
+										.get()
+										.getString(R.string.toggling_wifi),
+								TOGGLE_ID, PendingIntent.getActivity(
+										self.get(), 0, new Intent(lc,
+												WifiFixerActivity.class), 0));
 						PrefUtil.writeBoolean(lc,
 								PrefConstants.WIFI_STATE_LOCK, true);
 						hWifiState.sendEmptyMessageDelayed(OFF, SHORT);
@@ -139,15 +141,23 @@ public class ToggleService extends Service {
 
 				@Override
 				public void onAcquire() {
-					LogService.log(ctxt, getString(R.string.wififixerservice),
-							ctxt.getString(R.string.acquiring_wake_lock));
+					LogService.log(
+							ctxt,
+							new StringBuilder(
+									getString(R.string.wififixerservice)),
+							new StringBuilder(ctxt
+									.getString(R.string.acquiring_wake_lock)));
 					super.onAcquire();
 				}
 
 				@Override
 				public void onRelease() {
-					LogService.log(ctxt, getString(R.string.wififixerservice),
-							ctxt.getString(R.string.releasing_wake_lock));
+					LogService.log(
+							ctxt,
+							new StringBuilder(ctxt
+									.getString(R.string.wififixerservice)),
+							new StringBuilder(ctxt
+									.getString(R.string.releasing_wake_lock)));
 					super.onRelease();
 				}
 			};

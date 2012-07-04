@@ -223,7 +223,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		/*
 		 * Make sure LogService's buffer is flushed
 		 */
-		LogService.log(this, LogService.FLUSH, null);
+		LogService.log(this, new StringBuilder(LogService.FLUSH), null);
 
 		final String fileuri = file.toURI().toString();
 

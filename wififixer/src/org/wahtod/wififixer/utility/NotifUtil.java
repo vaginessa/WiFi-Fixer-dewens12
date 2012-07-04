@@ -84,8 +84,8 @@ public abstract class NotifUtil {
 	 * API
 	 */
 
-	public abstract void vaddStatNotif(Context ctxt, final String ssid,
-			String status, final int signal, final boolean flag);
+	public abstract void vaddStatNotif(Context ctxt, final StringBuilder ssid,
+			StringBuilder status, final int signal, final boolean flag);
 
 	public abstract void vaddLogNotif(final Context context, final boolean flag);
 
@@ -111,8 +111,8 @@ public abstract class NotifUtil {
 			final StatusMessage m) {
 		Intent intent = new Intent(ACTION_STATUS_NOTIFICATION);
 		Bundle message = new Bundle();
-		message.putString(SSID_KEY, m.ssid);
-		message.putString(STATUS_KEY, m.status);
+		message.putString(SSID_KEY, m.ssid.toString());
+		message.putString(STATUS_KEY, m.status.toString());
 		message.putInt(SIGNAL_KEY, m.signal);
 		intent.putExtra(STATUS_DATA_KEY, message);
 		ctxt.sendBroadcast(intent);
@@ -187,14 +187,13 @@ public abstract class NotifUtil {
 		return logstring;
 	}
 
-	public static String truncateSSID(String ssid) {
+	public static StringBuilder truncateSSID(StringBuilder ssid) {
 		if (ssid == null || ssid.length() < 1)
-			return NULL_SSID;
+			return new StringBuilder(NULL_SSID);
 		else if (ssid.length() < MAX_SSID_LENGTH)
 			return ssid;
 		else
-			return ssid.substring(0, MAX_SSID_LENGTH);
-
+			return new StringBuilder(ssid.substring(0, MAX_SSID_LENGTH));
 	}
 
 	public static void cancel(final Context context, final int notif) {

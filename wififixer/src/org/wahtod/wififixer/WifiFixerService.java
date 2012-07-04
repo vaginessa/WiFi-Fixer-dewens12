@@ -52,7 +52,6 @@ public class WifiFixerService extends Service implements
 	public static final String SCREENOFF = "SCREENOFF";
 
 	// *****************************
-	final static String APP_NAME = "WifiFixerService";
 	private final static String EMPTYSTRING = "";
 
 	// Flags
@@ -117,11 +116,11 @@ public class WifiFixerService extends Service implements
 
 		if (intent != null && logging) {
 			if (intent.hasExtra(ServiceAlarm.ALARM_START))
-				LogService
-						.log(this, APP_NAME, getString(R.string.alarm_intent));
+				LogService.log(this, LogService.getLogTag(this),
+						new StringBuilder(getString(R.string.alarm_intent)));
 			else
-				LogService
-						.log(this, APP_NAME, getString(R.string.start_intent));
+				LogService.log(this, LogService.getLogTag(this),
+						new StringBuilder(getString(R.string.start_intent)));
 		}
 	}
 
@@ -141,11 +140,11 @@ public class WifiFixerService extends Service implements
 		 */
 
 		if (StrictModeDetector.setPolicy(false))
-			LogService.log(this, APP_NAME,
-					getString(R.string.strict_mode_extant));
+			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
+					getString(R.string.strict_mode_extant)));
 		else
-			LogService.log(this, APP_NAME,
-					getString(R.string.strict_mode_unavailable));
+			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
+					getString(R.string.strict_mode_unavailable)));
 
 		/*
 		 * Make sure service settings are enforced.
@@ -161,8 +160,8 @@ public class WifiFixerService extends Service implements
 		getPackageInfo();
 
 		if (logging) {
-			LogService.log(this, APP_NAME,
-					getString(R.string.wififixerservice_build) + version);
+			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
+					getString(R.string.wififixerservice_build) + version));
 		}
 
 		/*
@@ -199,7 +198,8 @@ public class WifiFixerService extends Service implements
 			registered = true;
 
 		if (logging)
-			LogService.log(this, APP_NAME, getString(R.string.oncreate));
+			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
+					getString(R.string.oncreate)));
 
 	}
 
@@ -209,7 +209,8 @@ public class WifiFixerService extends Service implements
 		if (prefs.getFlag(Pref.STATENOT_KEY))
 			wifi.setStatNotif(false);
 		if (logging)
-			LogService.log(this, APP_NAME, getString(R.string.ondestroy));
+			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
+					getString(R.string.ondestroy)));
 		cleanup();
 		super.onDestroy();
 	}
@@ -217,7 +218,8 @@ public class WifiFixerService extends Service implements
 	@Override
 	public void onLowMemory() {
 		if (logging)
-			LogService.log(this, APP_NAME, getString(R.string.low_memory));
+			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
+					getString(R.string.low_memory)));
 		super.onLowMemory();
 	}
 
@@ -265,12 +267,16 @@ public class WifiFixerService extends Service implements
 			@Override
 			public void log() {
 				if (logging) {
-					LogService.log(getBaseContext(), APP_NAME, getBaseContext()
-							.getString(R.string.loading_settings));
+					LogService.log(
+							getBaseContext(),
+							LogService.getLogTag(context),
+							new StringBuilder(getBaseContext().getString(
+									R.string.loading_settings)));
 					for (Pref prefkey : Pref.values()) {
 						if (getFlag(prefkey))
-							LogService.log(getBaseContext(), APP_NAME,
-									prefkey.key());
+							LogService.log(getBaseContext(),
+									LogService.getLogTag(context),
+									new StringBuilder(prefkey.key()));
 					}
 
 				}
@@ -296,8 +302,9 @@ public class WifiFixerService extends Service implements
 						ServiceAlarm.setServiceEnabled(getBaseContext(),
 								LogService.class, true);
 						LogService.setLogTS(getBaseContext(), logging, 0);
-						LogService.log(getBaseContext(), LogService.DUMPBUILD,
-								EMPTYSTRING);
+						LogService.log(getBaseContext(), new StringBuilder(
+								LogService.DUMPBUILD), new StringBuilder(
+								EMPTYSTRING));
 						if (logPrefLoad)
 							NotifUtil.showToast(getBaseContext(),
 									R.string.enabling_logging);
@@ -326,10 +333,15 @@ public class WifiFixerService extends Service implements
 				/*
 				 * Log change of preference state
 				 */
-				if (logging)
-					LogService.log(getBaseContext(), APP_NAME,
-							getString(R.string.prefs_change) + p.key()
-									+ getString(R.string.colon) + getFlag(p));
+				if (logging) {
+					StringBuilder l = new StringBuilder(
+							getString(R.string.prefs_change));
+					l.append(p.key());
+					l.append(getString(R.string.colon));
+					l.append(getFlag(p));
+					LogService.log(getBaseContext(),
+							LogService.getLogTag(getBaseContext()), l);
+				}
 			}
 
 			@Override

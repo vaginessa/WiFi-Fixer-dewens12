@@ -29,8 +29,8 @@ import android.content.Intent;
 public class LegacyNotifUtil extends NotifUtil {
 	@SuppressWarnings("deprecation")
 	@Override
-	public void vaddStatNotif(Context ctxt, final String ssid, String status,
-			final int signal, final boolean flag) {
+	public void vaddStatNotif(Context ctxt, final StringBuilder ssid,
+			StringBuilder status, final int signal, final boolean flag) {
 		ctxt = ctxt.getApplicationContext();
 		NotificationManager nm = (NotificationManager) ctxt
 				.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -56,15 +56,17 @@ public class LegacyNotifUtil extends NotifUtil {
 		}
 
 		if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
-			status = ctxt.getString(R.string.unmanaged) + status;
+			status = new StringBuilder(ctxt.getString(R.string.unmanaged))
+					.append(status);
 		}
 		NotifUtil.statnotif.icon = getIconfromSignal(signal,
 				NotifUtil.ICON_SET_SMALL);
 		NotifUtil.statnotif.iconLevel = signal;
-		NotifUtil.statnotif
-				.setLatestEventInfo(ctxt, ctxt.getString(R.string.app_name),
-						truncateSSID(ssid) + NotifUtil.SEPARATOR + status,
-						NotifUtil.contentIntent);
+		StringBuilder ss = new StringBuilder(truncateSSID(ssid));
+		ss.append(NotifUtil.SEPARATOR);
+		ss.append(status);
+		NotifUtil.statnotif.setLatestEventInfo(ctxt,
+				ctxt.getString(R.string.app_name), ss, NotifUtil.contentIntent);
 
 		/*
 		 * Fire the notification

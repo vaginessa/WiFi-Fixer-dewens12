@@ -133,7 +133,8 @@ public class Hostup {
 		}
 	}
 
-	public String getHostup(final int timeout, Context ctxt, final String router) {
+	public StringBuilder getHostup(final int timeout, Context ctxt,
+			final String router) {
 		finished = false;
 		context = ctxt;
 		/*
@@ -161,14 +162,16 @@ public class Hostup {
 			 * Oh no, looks like rHttpHead has timed out longer than it should
 			 * have
 			 */
-			return ctxt.getString(R.string.critical_timeout);
+			return new StringBuilder(ctxt.getString(R.string.critical_timeout));
 		} catch (InterruptedException e) {
 			finished = true;
 			/*
 			 * interrupted by a result: this is desired behavior
 			 */
-			return response + String.valueOf(_timer_stop - _timer_start)
-					+ ctxt.getString(R.string.ms);
+			StringBuilder status = new StringBuilder(response);
+			status.append(String.valueOf(_timer_stop - _timer_start));
+			status.append(ctxt.getString(R.string.ms));
+			return status;
 		}
 	}
 

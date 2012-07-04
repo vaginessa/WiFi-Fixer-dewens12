@@ -119,27 +119,28 @@ public class LogService extends Service {
 		return file.length() > 0;
 	}
 
-	private static String getStackTrace(final Context context) {
+	private static StringBuilder getStackTrace(final Context context) {
 		StringBuilder trace = new StringBuilder();
 		DataInputStream d;
 		try {
 			d = new DataInputStream(
 					context.openFileInput(DefaultExceptionHandler.EXCEPTIONS_FILENAME));
 		} catch (FileNotFoundException e1) {
-			return context.getString(R.string.no_stack_trace_found);
+			return new StringBuilder(
+					context.getString(R.string.no_stack_trace_found));
 		}
 		for (;;) {
 			try {
 				trace.append(d.readUTF());
 			} catch (EOFException e) {
-				return trace.toString();
+				return new StringBuilder(trace.toString());
 			} catch (IOException e) {
-				return trace.toString();
+				return new StringBuilder(trace.toString());
 			} finally {
 				try {
 					d.close();
 				} catch (IOException e) {
-					return e.toString();
+					return new StringBuilder(e.toString());
 				}
 			}
 		}
@@ -148,8 +149,8 @@ public class LogService extends Service {
 	private void dispatchIntent(final Bundle data) {
 
 		if (data.containsKey(APPNAME) && data.containsKey(MESSAGE)) {
-			String app_name = data.getString(APPNAME);
-			String sMessage = data.getString(MESSAGE);
+			StringBuilder app_name = new StringBuilder(data.getString(APPNAME));
+			StringBuilder sMessage = new StringBuilder(data.getString(MESSAGE));
 			if (app_name.equals(TIMESTAMP)) {
 				handleTSCommand(data);
 			} else if (app_name.equals(FLUSH)) {
@@ -176,9 +177,13 @@ public class LogService extends Service {
 		}
 	}
 
-	public static String getBuildInfo() {
-
-		return Build.MODEL + NEWLINE + Build.VERSION.RELEASE + NEWLINE;
+	public static StringBuilder getBuildInfo() {
+		StringBuilder out = new StringBuilder();
+		out.append(Build.MODEL);
+		out.append(NEWLINE);
+		out.append(Build.VERSION.RELEASE);
+		out.append(NEWLINE);
+		return out;
 	}
 
 	void getPackageInfo() {
@@ -196,10 +201,11 @@ public class LogService extends Service {
 		}
 	}
 
-	public static String getLogTag(final Context context) {
+	public static StringBuilder getLogTag(final Context context) {
 		if (context == null)
-			return WifiFixerService.class.getSimpleName();
-		return context.getClass().getSimpleName();
+			return new StringBuilder(WifiFixerService.class.getSimpleName());
+		else
+			return new StringBuilder(context.getClass().getSimpleName());
 	}
 
 	private void handleIntent(Intent intent) {
@@ -261,12 +267,12 @@ public class LogService extends Service {
 		return START_STICKY;
 	}
 
-	public static void log(final Context context, final String APP_NAME,
-			final String message) {
+	public static void log(final Context context, final StringBuilder appname,
+			final StringBuilder message) {
 		Intent sendIntent = new Intent(context, LogService.class);
 		sendIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
-		sendIntent.putExtra(APPNAME, APP_NAME);
-		sendIntent.putExtra(MESSAGE, message);
+		sendIntent.putExtra(APPNAME, appname.toString());
+		sendIntent.putExtra(MESSAGE, message.toString());
 		context.startService(sendIntent);
 	}
 
@@ -287,11 +293,11 @@ public class LogService extends Service {
 	}
 
 	public static boolean processCommands(final Context context,
-			final String command) {
+			final StringBuilder stringBuilder) {
 		/*
 		 * Incoming intents might have a command to process
 		 */
-		if (command.equals(DUMPBUILD)) {
+		if (stringBuilder.equals(DUMPBUILD)) {
 			processLogIntent(context, getLogTag(context), getBuildInfo());
 			return true;
 		} else
@@ -338,9 +344,8 @@ public class LogService extends Service {
 			message.append(COLON);
 			tsheader = message.toString();
 		}
-		processLogIntent(context, WifiFixerService.class.getSimpleName(),
-				tsheader + time.toString());
-
+		processLogIntent(context, getLogTag(context), new StringBuilder(
+				tsheader).append(time.toString()));
 		/*
 		 * Schedule next timestamp or terminate
 		 */
@@ -353,19 +358,19 @@ public class LogService extends Service {
 	}
 
 	private static void processLogIntent(final Context context,
-			final String command, final String message) {
-		if (processCommands(context, command))
+			final StringBuilder stringBuilder, final StringBuilder sMessage) {
+		if (processCommands(context, stringBuilder))
 			return;
 		else {
 			/*
 			 * Write to syslog and our log file on sdcard
 			 */
-			Log.i(command, message);
-			writeToFileLog(context, message);
+			Log.i(stringBuilder.toString(), sMessage.toString());
+			writeToFileLog(context, sMessage);
 		}
 	}
 
-	static void writeToFileLog(final Context context, String message) {
+	static void writeToFileLog(final Context context, StringBuilder sMessage) {
 		if (Environment.getExternalStorageState() != null
 				&& !(Environment.getExternalStorageState()
 						.contains(Environment.MEDIA_MOUNTED))) {
@@ -382,7 +387,7 @@ public class LogService extends Service {
 			if (bwriter == null)
 				bwriter = new BufferedWriter(new FileWriter(
 						file.getAbsolutePath(), true), WRITE_BUFFER_SIZE);
-			bwriter.write(message + NEWLINE);
+			bwriter.write(sMessage + NEWLINE);
 		} catch (Exception e) {
 			if (e.getMessage() != null)
 				Log.i(LogService.class.getSimpleName(),

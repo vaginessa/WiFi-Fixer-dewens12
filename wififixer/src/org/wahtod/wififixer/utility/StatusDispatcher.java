@@ -38,6 +38,7 @@ public class StatusDispatcher {
 		c = context.getApplicationContext();
 		prefs = new WeakReference<PrefUtil>(p);
 	}
+
 	/*
 	 * Essentially, a Leaky Bucket Widget messages throttled to once every 10
 	 * seconds
@@ -73,7 +74,7 @@ public class StatusDispatcher {
 			 * Fast supplicant state update if WifiFixerService is running
 			 */
 			Intent i = new Intent(StatusFragment.STATUS_ACTION);
-			i.putExtra(StatusFragment.STATUS_KEY, m.status);
+			i.putExtra(StatusFragment.STATUS_KEY, m.status.toString());
 			context.sendBroadcast(i);
 			/*
 			 * Dispatch Status Notification update

@@ -19,8 +19,6 @@ package org.wahtod.wififixer.widget;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
-import org.wahtod.wififixer.prefs.PrefConstants.Pref;
-import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 
 import android.app.IntentService;
@@ -104,9 +102,6 @@ public class FixerWidget extends AppWidgetProvider {
 		/*
 		 * Send Update To Widgets
 		 */
-		if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
-			LogService.log(context, LogService.getLogTag(context),
-					context.getString(R.string.widget_update_called));
 		context.startService(new Intent(context, UpdateService.class));
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}

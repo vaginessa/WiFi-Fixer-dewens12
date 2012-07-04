@@ -30,8 +30,8 @@ import android.widget.RemoteViews;
 public class HoneyCombNotifUtil extends NotifUtil {
 
 	@Override
-	public void vaddStatNotif(Context ctxt, final String ssid, String status,
-			final int signal, final boolean flag) {
+	public void vaddStatNotif(Context ctxt, final StringBuilder ssid,
+			StringBuilder status, final int signal, final boolean flag) {
 		ctxt = ctxt.getApplicationContext();
 		NotificationManager nm = (NotificationManager) ctxt
 				.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -58,7 +58,8 @@ public class HoneyCombNotifUtil extends NotifUtil {
 		}
 
 		if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
-			status = ctxt.getString(R.string.unmanaged) + status;
+			status = new StringBuilder(ctxt.getString(R.string.unmanaged))
+					.append(status);
 		}
 		RemoteViews update = new RemoteViews(ctxt.getPackageName(),
 				R.layout.widget);
