@@ -16,6 +16,7 @@
 package org.wahtod.wififixer.utility;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URI;
@@ -51,25 +52,25 @@ public class Hostup {
 	private static final String INET_LOOPBACK = "127.0.0.1";
 	private static final String INET_INVALID = "0.0.0.0";
 	private static String target;
-	private static String response;
+	private static volatile StringBuilder response;
 	private static final int TIMEOUT_EXTRA = 2000;
-	private static final int THREAD_KEEPALIVE = 4;
+	private static final int THREAD_KEEPALIVE = 10;
 	private static URI headURI;
 	private static int reachable;
-	private Context context;
+	private static WeakReference<Context> context;
 	protected volatile static boolean state;
 	protected volatile static boolean finished;
-	private Thread self;
+	private WeakReference<Thread> self;
 	private static String icmpIP;
-	private static long _timer_start;
-	private static long _timer_stop;
+	private volatile static long _timer_start;
+	private volatile static long _timer_stop;
 
 	private static ThreadPoolExecutor _executor = new ThreadPoolExecutor(1, 2,
 			THREAD_KEEPALIVE, TimeUnit.SECONDS,
 			new ArrayBlockingQueue<Runnable>(4));
 
 	private static class HttpClientFactory {
-		private static DefaultHttpClient httpclient;
+		private static volatile DefaultHttpClient httpclient;
 
 		public synchronized static DefaultHttpClient getThreadSafeClient() {
 			if (httpclient != null)
@@ -96,9 +97,9 @@ public class Hostup {
 	private class GetHeaders implements Runnable {
 		@Override
 		public void run() {
-			boolean up = false;
+			boolean c = false;
 			try {
-				up = getHttpHeaders(context);
+				c = getHttpHeaders(context.get());
 
 			} catch (IOException e) {
 				/*
@@ -108,8 +109,9 @@ public class Hostup {
 				/*
 				 * fail, up is false
 				 */
+			} finally {
+				finish(c);
 			}
-			finish(up);
 		}
 	};
 
@@ -119,7 +121,7 @@ public class Hostup {
 	private class GetICMP implements Runnable {
 		@Override
 		public void run() {
-			boolean up = icmpHostup(context);
+			boolean up = icmpHostup(context.get());
 			finish(up);
 		}
 	};
@@ -129,14 +131,14 @@ public class Hostup {
 			_timer_stop = System.currentTimeMillis();
 			state = up;
 			finished = true;
-			self.interrupt();
+			self.get().interrupt();
 		}
 	}
 
-	public StringBuilder getHostup(final int timeout, Context ctxt,
-			final String router) {
+	public final StringBuilder getHostup(final int timeout,
+			Context ctxt, final String router) {
 		finished = false;
-		context = ctxt;
+		context = new WeakReference<Context>(ctxt);
 		/*
 		 * If null, use H_TARGET else construct URL from router string
 		 */
@@ -151,7 +153,7 @@ public class Hostup {
 		/*
 		 * Start Check Threads
 		 */
-		self = Thread.currentThread();
+		self = new WeakReference<Thread>(Thread.currentThread());
 		if (!icmpIP.equals(INET_LOOPBACK) && !icmpIP.equals(INET_INVALID))
 			_executor.execute(new GetICMP());
 		_executor.execute(new GetHeaders());
@@ -168,10 +170,9 @@ public class Hostup {
 			/*
 			 * interrupted by a result: this is desired behavior
 			 */
-			StringBuilder status = new StringBuilder(response);
-			status.append(String.valueOf(_timer_stop - _timer_start));
-			status.append(ctxt.getString(R.string.ms));
-			return status;
+			response.append(_timer_stop - _timer_start);
+			response.append(ctxt.getString(R.string.ms));
+			return response;
 		}
 	}
 
@@ -192,10 +193,11 @@ public class Hostup {
 		}
 
 		if (isUp && !finished)
-			response = icmpIP + context.getString(R.string.icmp_ok);
+			response = new StringBuilder(icmpIP).append(context
+					.getString(R.string.icmp_ok));
 		else
-			response = icmpIP + context.getString(R.string.icmp_fail);
-
+			response = new StringBuilder(icmpIP).append(context
+					.getString(R.string.icmp_fail));
 		return isUp;
 	}
 
@@ -240,11 +242,13 @@ public class Hostup {
 
 		if (status == HttpURLConnection.HTTP_OK) {
 			if (!finished)
-				response = target + context.getString(R.string.http_ok);
+				response = new StringBuilder(target).append(context
+						.getString(R.string.http_ok));
 			return true;
 		} else {
 			if (!finished)
-				response = target + context.getString(R.string.http_fail);
+				response = new StringBuilder(target).append(context
+						.getString(R.string.http_fail));
 			return false;
 		}
 	}

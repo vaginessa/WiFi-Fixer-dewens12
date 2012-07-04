@@ -318,7 +318,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	}
 
 	private static void startwfService(final Context context) {
-		context.startService(new Intent(context, WifiFixerService.class));
+		context.getApplicationContext().startService(
+				new Intent(context, WifiFixerService.class));
 	}
 
 	private static void nagNotification(final Context context) {

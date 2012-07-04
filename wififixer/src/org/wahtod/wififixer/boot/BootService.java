@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer.boot;
 
+import java.lang.ref.WeakReference;
+
 import org.wahtod.wififixer.WifiFixerService;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 
@@ -25,8 +27,8 @@ import android.content.Intent;
 import android.os.IBinder;
 
 public class BootService extends Service {
-	private Context ctxt;
-	private BootService bootservice;
+	private WeakReference<Context> ctxt;
+	private WeakReference<BootService> bootservice;
 
 	/*
 	 * Runnable for boot service start
@@ -45,15 +47,16 @@ public class BootService extends Service {
 			/**
 			 * Start Service
 			 */
-			ctxt.startService(new Intent(ctxt, WifiFixerService.class));
-			bootservice.stopSelf();
+			ctxt.get().startService(
+					new Intent(ctxt.get(), WifiFixerService.class));
+			bootservice.get().stopSelf();
 		}
 	};
 
 	@Override
 	public void onCreate() {
-		bootservice = this;
-		ctxt = this;
+		bootservice = new WeakReference<BootService>(this);
+		ctxt = new WeakReference<Context>(this);
 		Thread serviceStart = new Thread(new TStartService());
 		serviceStart.start();
 		super.onCreate();
@@ -66,5 +69,4 @@ public class BootService extends Service {
 		 */
 		return null;
 	}
-
 }

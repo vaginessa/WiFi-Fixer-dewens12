@@ -62,7 +62,7 @@ public class PrefUtil extends Object {
 	 * Fields
 	 */
 	private boolean[] keyVals;
-	private static Context context;
+	private static WeakReference<Context> context;
 	private static WifiManager wm_;
 	private HashMap<String, int[]> netprefs;
 
@@ -109,11 +109,11 @@ public class PrefUtil extends Object {
 
 	public PrefUtil(final Context c) {
 		self = new WeakReference<PrefUtil>(this);
-		context = c;
+		context = new WeakReference<Context>(c);
 		keyVals = new boolean[Pref.values().length];
 		IntentFilter filter = new IntentFilter(VALUE_CHANGED_ACTION);
 		filter.addAction(NETVALUE_CHANGED_ACTION);
-		context.registerReceiver(changeReceiver, filter);
+		c.registerReceiver(changeReceiver, filter);
 		netprefs = new HashMap<String, int[]>();
 	}
 
@@ -132,7 +132,7 @@ public class PrefUtil extends Object {
 			logstring.append(network);
 			logstring.append(COLON);
 			logstring.append(intTemp[pref.ordinal()]);
-			LogService.log(context, LogService.getLogTag(context), logstring);
+			LogService.log(context.get(), LogService.getLogTag(context.get()), logstring);
 		}
 
 		netprefs.put(network, intTemp);
@@ -166,7 +166,7 @@ public class PrefUtil extends Object {
 	}
 
 	void handleLoadPref(final Pref p) {
-		setFlag(p, readBoolean(context, p.key()));
+		setFlag(p, readBoolean(context.get(), p.key()));
 	}
 
 	void handlePrefChange(final Pref p, final boolean flagval) {
@@ -357,7 +357,7 @@ public class PrefUtil extends Object {
 	}
 
 	public void unRegisterReciever() {
-		context.unregisterReceiver(changeReceiver);
+		context.get().unregisterReceiver(changeReceiver);
 	}
 
 	public static void setPolicyfromSystem(final Context context) {

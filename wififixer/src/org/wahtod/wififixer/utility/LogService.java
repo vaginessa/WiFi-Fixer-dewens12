@@ -75,7 +75,7 @@ public class LogService extends Service {
 	private static final int WRITE_BUFFER_SIZE = 8192;
 	private static final int BUFFER_FLUSH_DELAY = 30000;
 	private static File file;
-	private static Context ctxt;
+	private static WeakReference<Context> ctxt;
 	private static WeakReference<LogService> self;
 
 	/*
@@ -92,7 +92,7 @@ public class LogService extends Service {
 			switch (message.what) {
 
 			case TS_MESSAGE:
-				self.get().timeStamp(ctxt);
+				self.get().timeStamp(ctxt.get());
 				break;
 
 			case FLUSH_MESSAGE:
@@ -280,8 +280,8 @@ public class LogService extends Service {
 	public void onCreate() {
 		self = new WeakReference<LogService>(this);
 		super.onCreate();
-		ctxt = this;
-		file = VersionedFile.getFile(ctxt, LOGFILE);
+		ctxt = new WeakReference<Context>(this);
+		file = VersionedFile.getFile(ctxt.get(), LOGFILE);
 		if (version == 0)
 			getPackageInfo();
 		handler.sendEmptyMessageDelayed(FLUSH_MESSAGE, BUFFER_FLUSH_DELAY);
@@ -378,7 +378,7 @@ public class LogService extends Service {
 		}
 
 		if (file == null)
-			file = VersionedFile.getFile(ctxt, LOGFILE);
+			file = VersionedFile.getFile(ctxt.get(), LOGFILE);
 
 		try {
 			if (!file.exists()) {

@@ -16,6 +16,7 @@
 
 package org.wahtod.wififixer.ui;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import org.wahtod.wififixer.R;
@@ -40,24 +41,25 @@ import android.widget.TextView;
 public class AboutFragment extends FragmentSwitchboard {
 
 	private WFScanResult network;
+	protected static WeakReference<AboutFragment> self;
 
-	private Handler handler = new Handler() {
+	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
-			if (getActivity() == null)
+			if (self.get().getActivity() == null)
 				return;
-			WifiManager wm = (WifiManager) getContext().getSystemService(
-					Context.WIFI_SERVICE);
+			WifiManager wm = (WifiManager) self.get().getContext()
+					.getSystemService(Context.WIFI_SERVICE);
 			List<ScanResult> results = wm.getScanResults();
 			boolean found = false;
 			for (ScanResult n : results) {
-				if (n.SSID.contains(network.SSID)) {
+				if (n.SSID.contains(self.get().network.SSID)) {
 					found = true;
 					/*
 					 * Refresh values
 					 */
-					network = new WFScanResult(n);
-					drawView();
+					self.get().network = new WFScanResult(n);
+					self.get().drawView();
 					break;
 				}
 			}
@@ -97,6 +99,7 @@ public class AboutFragment extends FragmentSwitchboard {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		self = new WeakReference<AboutFragment>(this);
 		network = WFScanResult.fromBundle(this.getArguments());
 		super.onCreate(savedInstanceState);
 	}
@@ -127,7 +130,7 @@ public class AboutFragment extends FragmentSwitchboard {
 	}
 
 	private Context getContext() {
-		return getActivity();
+		return getActivity().getApplicationContext();
 	}
 
 	private void drawView() {

@@ -45,18 +45,18 @@ public class AppFragmentActivity extends FragmentActivity {
 		switch (item.getItemId()) {
 		case R.id.menu_prefs:
 			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-				startActivity(new Intent(this, PrefActivity.class)
+				this.startActivity(new Intent(this, PrefActivity.class)
 						.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			else
-				startActivity(new Intent(this, PrefActivityHC.class)
+				this.startActivity(new Intent(this, PrefActivityHC.class)
 						.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			return true;
 		case R.id.menu_help:
-			startActivity(new Intent(this, HelpActivity.class)
+			this.startActivity(new Intent(this, HelpActivity.class)
 					.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			return true;
 		case R.id.menu_about:
-			startActivity(new Intent(this, About.class)
+			this.startActivity(new Intent(this, About.class)
 					.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			return true;
 		}

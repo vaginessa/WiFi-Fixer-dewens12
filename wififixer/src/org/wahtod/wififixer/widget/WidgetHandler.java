@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer.widget;
 
+import java.lang.ref.WeakReference;
+
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ToggleService;
 import org.wahtod.wififixer.WFConnection;
@@ -31,7 +33,7 @@ import android.os.Message;
 
 public class WidgetHandler {
 
-	private static Context ctxt;
+	private static WeakReference<Context> ctxt;
 
 	/*
 	 * Intent Constants
@@ -51,33 +53,33 @@ public class WidgetHandler {
 			 * Turn on WIFI
 			 */
 			if (action.equals(WIFI_ON))
-				setWifiState(ctxt, true);
+				setWifiState(ctxt.get(), true);
 			else
 			/*
 			 * If Wifi is disabled, return
 			 */
-			if (!getWifiManager(ctxt).isWifiEnabled()) {
+			if (!getWifiManager(ctxt.get()).isWifiEnabled()) {
 				return;
 			}
 			/*
 			 * Turn off Wifi
 			 */
 			else if (action.equals(WIFI_OFF))
-				setWifiState(ctxt, false);
+				setWifiState(ctxt.get(), false);
 			/*
 			 * Toggle Wifi
 			 */
 			else if (action.equals(TOGGLE_WIFI)) {
-				ctxt.startService(new Intent(ctxt, ToggleService.class));
+				ctxt.get().startService(new Intent(ctxt.get(), ToggleService.class));
 			}
 			/*
 			 * Reassociate
 			 */
 			else if (action.equals(REASSOCIATE)) {
-				NotifUtil.showToast(ctxt,
-						ctxt.getString(R.string.reassociating));
-				ctxt.sendBroadcast(new Intent(WFConnection.REASSOCIATE_INTENT));
-				getWifiManager(ctxt).reassociate();
+				NotifUtil.showToast(ctxt.get(),
+						ctxt.get().getString(R.string.reassociating));
+				ctxt.get().sendBroadcast(new Intent(WFConnection.REASSOCIATE_INTENT));
+				getWifiManager(ctxt.get()).reassociate();
 			}
 
 		}
@@ -105,7 +107,7 @@ public class WidgetHandler {
 	}
 
 	public WidgetHandler(final Context context) {
-		ctxt = context;
+		ctxt = new WeakReference<Context>(context);
 	}
 
 }

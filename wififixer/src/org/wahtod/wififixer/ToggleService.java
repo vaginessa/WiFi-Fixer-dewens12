@@ -36,7 +36,7 @@ import android.os.Message;
 
 public class ToggleService extends Service {
 	private static WakeLock wlock;
-	private Context ctxt;
+	private static WeakReference<Context> ctxt;
 	private static WeakReference<ToggleService> self;
 
 	/*
@@ -132,7 +132,7 @@ public class ToggleService extends Service {
 	@Override
 	public void onCreate() {
 		self = new WeakReference<ToggleService>(this);
-		ctxt = getApplicationContext();
+		ctxt = new WeakReference<Context>(getApplicationContext());
 		/*
 		 * initialize wake lock
 		 */
@@ -142,10 +142,10 @@ public class ToggleService extends Service {
 				@Override
 				public void onAcquire() {
 					LogService.log(
-							ctxt,
+							ctxt.get(),
 							new StringBuilder(
 									getString(R.string.wififixerservice)),
-							new StringBuilder(ctxt
+							new StringBuilder(ctxt.get()
 									.getString(R.string.acquiring_wake_lock)));
 					super.onAcquire();
 				}
@@ -153,10 +153,10 @@ public class ToggleService extends Service {
 				@Override
 				public void onRelease() {
 					LogService.log(
-							ctxt,
-							new StringBuilder(ctxt
+							ctxt.get(),
+							new StringBuilder(ctxt.get()
 									.getString(R.string.wififixerservice)),
-							new StringBuilder(ctxt
+							new StringBuilder(ctxt.get()
 									.getString(R.string.releasing_wake_lock)));
 					super.onRelease();
 				}

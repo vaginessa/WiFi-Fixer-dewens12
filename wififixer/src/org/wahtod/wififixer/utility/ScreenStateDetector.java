@@ -15,6 +15,7 @@
  */
 package org.wahtod.wififixer.utility;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import org.wahtod.wififixer.legacy.VersionedScreenState;
@@ -55,7 +56,7 @@ public class ScreenStateDetector {
 		}
 	};
 
-	private static ArrayList<OnScreenStateChangedListener> _clients = new ArrayList<OnScreenStateChangedListener>();
+	private static ArrayList<WeakReference<OnScreenStateChangedListener>> _clients = new ArrayList<WeakReference<OnScreenStateChangedListener>>();
 	private static boolean registered;
 
 	public static boolean getScreenState(final Context context) {
@@ -63,16 +64,17 @@ public class ScreenStateDetector {
 	}
 
 	private static void onScreenEvent(final boolean state) {
-		for (OnScreenStateChangedListener listener : _clients) {
-			if (listener != null)
-				listener.onScreenStateChanged(state);
+		for (WeakReference<OnScreenStateChangedListener> listener : _clients) {
+			if (listener.get() != null)
+				listener.get().onScreenStateChanged(state);
 		}
 	}
 
 	public static void setOnScreenStateChangedListener(
 			OnScreenStateChangedListener listener) {
 		if (!_clients.contains(listener))
-			_clients.add(listener);
+			_clients.add(new WeakReference<OnScreenStateChangedListener>(
+					listener));
 	}
 
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -85,7 +87,6 @@ public class ScreenStateDetector {
 			else
 				statehandler.sendEmptyMessage(SCREEN_EVENT_OFF);
 		}
-
 	};
 
 	public ScreenStateDetector(final Context context) {
