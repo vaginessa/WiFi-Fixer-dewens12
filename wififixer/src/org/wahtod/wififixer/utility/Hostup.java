@@ -51,21 +51,24 @@ public class Hostup {
 	private static final String HTTPSCHEME = "http";
 	private static final String INET_LOOPBACK = "127.0.0.1";
 	private static final String INET_INVALID = "0.0.0.0";
-	private static String target;
+	private static volatile String target;
 	private static volatile StringBuilder response;
 	private static final int TIMEOUT_EXTRA = 2000;
-	private static final int THREAD_KEEPALIVE = 10;
-	private static URI headURI;
-	private static int reachable;
-	private static WeakReference<Context> context;
+	private static final int THREAD_KEEPALIVE = 4;
+	private static volatile URI headURI;
+	private static volatile int reachable;
+	private static volatile WeakReference<Context> context;
 	protected volatile static boolean state;
 	protected volatile static boolean finished;
-	private WeakReference<Thread> self;
-	private static String icmpIP;
-	private volatile static long _timer_start;
-	private volatile static long _timer_stop;
+	private volatile WeakReference<Thread> self;
+	private static volatile String icmpIP;
+	private static volatile StopWatch timer;
 
-	private static ThreadPoolExecutor _executor = new ThreadPoolExecutor(1, 2,
+	public Hostup() {
+		timer = new StopWatch();
+	}
+
+	private static ThreadPoolExecutor _executor = new ThreadPoolExecutor(2, 2,
 			THREAD_KEEPALIVE, TimeUnit.SECONDS,
 			new ArrayBlockingQueue<Runnable>(4));
 
@@ -128,15 +131,15 @@ public class Hostup {
 
 	protected synchronized void finish(final boolean up) {
 		if (!finished) {
-			_timer_stop = System.currentTimeMillis();
+			timer.stop();
 			state = up;
 			finished = true;
 			self.get().interrupt();
 		}
 	}
 
-	public final StringBuilder getHostup(final int timeout,
-			Context ctxt, final String router) {
+	public final StringBuilder getHostup(final int timeout, Context ctxt,
+			final String router) {
 		finished = false;
 		context = new WeakReference<Context>(ctxt);
 		/*
@@ -154,10 +157,10 @@ public class Hostup {
 		 * Start Check Threads
 		 */
 		self = new WeakReference<Thread>(Thread.currentThread());
+		timer.start();
 		if (!icmpIP.equals(INET_LOOPBACK) && !icmpIP.equals(INET_INVALID))
 			_executor.execute(new GetICMP());
 		_executor.execute(new GetHeaders());
-		_timer_start = System.currentTimeMillis();
 		try {
 			Thread.sleep(reachable);
 			/*
@@ -170,7 +173,7 @@ public class Hostup {
 			/*
 			 * interrupted by a result: this is desired behavior
 			 */
-			response.append(_timer_stop - _timer_start);
+			response.append(timer.getElapsed());
 			response.append(ctxt.getString(R.string.ms));
 			return response;
 		}

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
@@ -145,13 +144,13 @@ public class WFConnection extends Object implements
 	private static final int NULLVAL = -1;
 	private static int lastAP = NULLVAL;
 
+
 	private static WFConfig connectee;
 	private static Hostup hostup;
 	private static List<WFConfig> knownbysignal;
 	private static SupplicantState lastSupplicantState;
 	private static int signalcache;
 	private static boolean wifistate;
-	private static long _signalCheckTime;
 
 	// deprecated
 	static boolean templock = false;
@@ -526,6 +525,7 @@ public class WFConnection extends Object implements
 		}
 
 	};
+	private static long _signalCheckTime;
 
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 		public void onReceive(final Context context, final Intent intent) {
