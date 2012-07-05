@@ -57,8 +57,9 @@ public class LogService extends Service {
 	private static final String COLON = ":";
 	private static final String NEWLINE = "\n";
 	private static int version = 0;
-	private static String vstring = SPACE;
-	private static String tsheader;
+	private Date time;
+	private String vstring = SPACE;
+	private static StringBuilder tsheader;
 	private static BufferedWriter bwriter;
 	public static final String DUMPBUILD = "DUMPBUILD";
 	public static final String LOG = "LOG";
@@ -151,9 +152,9 @@ public class LogService extends Service {
 		if (data.containsKey(APPNAME) && data.containsKey(MESSAGE)) {
 			StringBuilder app_name = new StringBuilder(data.getString(APPNAME));
 			StringBuilder sMessage = new StringBuilder(data.getString(MESSAGE));
-			if (app_name.equals(TIMESTAMP)) {
+			if (app_name.toString().equals(TIMESTAMP)) {
 				handleTSCommand(data);
-			} else if (app_name.equals(FLUSH)) {
+			} else if (app_name.toString().equals(FLUSH)) {
 				if (bwriter != null) {
 					try {
 						bwriter.flush();
@@ -202,10 +203,7 @@ public class LogService extends Service {
 	}
 
 	public static StringBuilder getLogTag(final Context context) {
-		if (context == null)
-			return new StringBuilder(WifiFixerService.class.getSimpleName());
-		else
-			return new StringBuilder(context.getClass().getSimpleName());
+		return new StringBuilder(WifiFixerService.class.getSimpleName());
 	}
 
 	private void handleIntent(Intent intent) {
@@ -219,11 +217,9 @@ public class LogService extends Service {
 	}
 
 	private void handleStart(final Intent intent) {
-
 		/*
 		 * Dispatches the broadcast intent to the handler for processing
 		 */
-
 		Message message = handler.obtainMessage();
 		Bundle data = new Bundle();
 		message.what = INTENT;
@@ -297,7 +293,7 @@ public class LogService extends Service {
 		/*
 		 * Incoming intents might have a command to process
 		 */
-		if (stringBuilder.equals(DUMPBUILD)) {
+		if (stringBuilder.toString().equals(DUMPBUILD)) {
 			processLogIntent(context, getLogTag(context), getBuildInfo());
 			return true;
 		} else
@@ -330,9 +326,9 @@ public class LogService extends Service {
 		 */
 		addStackTrace(context);
 
-		Date time = new Date();
+		time = new Date();
 		/*
-		 * Construct timestamp header if null
+		 * Construct timestamp header if empty
 		 */
 		if (tsheader == null) {
 			StringBuilder message = new StringBuilder();
@@ -342,7 +338,7 @@ public class LogService extends Service {
 			message.append(version);
 			message.append(SPACE);
 			message.append(COLON);
-			tsheader = message.toString();
+			tsheader = message;
 		}
 		processLogIntent(context, getLogTag(context), new StringBuilder(
 				tsheader).append(time.toString()));

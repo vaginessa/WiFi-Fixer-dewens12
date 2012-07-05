@@ -227,5 +227,6 @@
 	<string name="no_stack_trace_found">No Stack Trace Found</string>
 	<string name="known_networks">Known</string>
 	<string name="local_networks">Local</string>
+	<string name="not_connected">Not Connected</string>
 
 </resources>

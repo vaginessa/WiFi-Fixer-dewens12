@@ -66,7 +66,7 @@ public class PrefUtil extends Object {
 	private static WifiManager wm_;
 	private static HashMap<String, int[]> netprefs;
 
-	private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
+	private static BroadcastReceiver changeReceiver = new BroadcastReceiver() {
 		public void onReceive(final Context context, final Intent intent) {
 			String valuekey = intent.getStringExtra(VALUE_KEY);
 			Message message = receiverExecutor.obtainMessage();

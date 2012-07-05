@@ -76,7 +76,7 @@ public class WifiFixerService extends Service implements
 	/*
 	 * Preferences
 	 */
-	static PrefUtil prefs;
+	private PrefUtil prefs;
 
 	private static void refreshWidget(final Context context) {
 		Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -345,14 +345,12 @@ public class WifiFixerService extends Service implements
 
 			@Override
 			public void preLoad() {
-
 				/*
 				 * Set defaults. Doing here instead of activity because service
 				 * may be started first due to boot intent.
 				 */
 				PreferenceManager.setDefaultValues(context, R.xml.preferences,
 						false);
-
 				/*
 				 * Set default: Status Notification on
 				 */

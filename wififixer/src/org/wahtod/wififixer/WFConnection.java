@@ -908,7 +908,7 @@ public class WFConnection extends Object implements
 		else if (iAction.equals(CONNECTINTENT))
 			handleConnectIntent(context, data);
 		else if (iAction.equals(REASSOCIATE_INTENT))
-			handleUserEvent();
+			handleReassociateEvent();
 		else if (iAction.equals(SLEEPCHECKINTENT)) {
 			handler.sendEmptyMessageDelayed(SLEEPCHECK, REALLYSHORTWAIT);
 		} else
@@ -1227,16 +1227,13 @@ public class WFConnection extends Object implements
 			onNetworkConnected();
 	}
 
-	private void handleUserEvent() {
-		/*
-		 * Connect to last known valid network entry
-		 */
-		if (connectee == null)
-			return;
-
-		connectee.wificonfig = getNetworkByNID(ctxt.get(), lastAP);
-
-		clearHandler();
+	private void handleReassociateEvent() {
+		if (getNetworkID() != -1) {
+			getWifiManager(ctxt.get()).reassociate();
+			log(ctxt.get(),
+					new StringBuilder(ctxt.get().getString(R.string.repairing)));
+		} else
+			NotifUtil.showToast(ctxt.get(), R.string.not_connected);
 	}
 
 	private static boolean handlerCheck(final int hmain) {
