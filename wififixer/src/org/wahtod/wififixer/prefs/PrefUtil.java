@@ -61,10 +61,10 @@ public class PrefUtil extends Object {
 	/*
 	 * Fields
 	 */
-	private boolean[] keyVals;
+	private static boolean[] keyVals;
 	private static WeakReference<Context> context;
 	private static WifiManager wm_;
-	private HashMap<String, int[]> netprefs;
+	private static HashMap<String, int[]> netprefs;
 
 	private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
 		public void onReceive(final Context context, final Intent intent) {
@@ -348,11 +348,11 @@ public class PrefUtil extends Object {
 
 	}
 
-	public boolean getFlag(final Pref pref) {
+	public static boolean getFlag(final Pref pref) {
 		return keyVals[pref.ordinal()];
 	}
 
-	public void setFlag(final Pref pref, final boolean flag) {
+	public static void setFlag(final Pref pref, final boolean flag) {
 		keyVals[pref.ordinal()] = flag;
 	}
 

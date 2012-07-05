@@ -32,11 +32,9 @@ public class StatusDispatcher {
 	private static final int MESSAGE_DELAY = 10000;
 	private static final int MESSAGE = 42;
 	private static WeakReference<Context> c;
-	private static WeakReference<PrefUtil> prefs;
 
-	public StatusDispatcher(final Context context, PrefUtil p) {
+	public StatusDispatcher(final Context context) {
 		c = new WeakReference<Context>(context.getApplicationContext());
-		prefs = new WeakReference<PrefUtil>(p);
 	}
 
 	/*
@@ -46,7 +44,7 @@ public class StatusDispatcher {
 	private static Handler messagehandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
-			if (prefs.get().getFlag(Pref.HASWIDGET_KEY))
+			if (PrefUtil.getFlag(Pref.HASWIDGET_KEY))
 				NotifUtil.broadcastStatNotif(c.get(), m);
 		}
 
@@ -79,7 +77,7 @@ public class StatusDispatcher {
 			/*
 			 * Dispatch Status Notification update
 			 */
-			if (prefs.get().getFlag(Pref.STATENOT_KEY))
+			if (PrefUtil.getFlag(Pref.STATENOT_KEY))
 				NotifUtil.addStatNotif(context, m);
 			/*
 			 * queue update for widget

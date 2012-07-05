@@ -16,10 +16,10 @@ limitations under the License.
 package org.wahtod.wififixer.utility;
 
 public class StatusMessage {
-	StringBuilder ssid;
-	StringBuilder status;
-	int signal;
-	final boolean show;
+	public StringBuilder ssid;
+	public StringBuilder status;
+	public int signal;
+	public boolean show;
 
 	public StatusMessage(final StringBuilder notifSSID,
 			final StringBuilder notifStatus, final int si, final boolean sh) {
@@ -31,5 +31,10 @@ public class StatusMessage {
 
 	public StatusMessage(final boolean sh) {
 		show = sh;
+	}
+
+	public StatusMessage getShow(final boolean sh) {
+		this.show = sh;
+		return this;
 	}
 }

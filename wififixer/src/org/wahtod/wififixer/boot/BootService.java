@@ -27,13 +27,13 @@ import android.content.Intent;
 import android.os.IBinder;
 
 public class BootService extends Service {
-	private WeakReference<Context> ctxt;
-	private WeakReference<BootService> bootservice;
+	private static WeakReference<Context> ctxt;
+	private static WeakReference<BootService> bootservice;
 
 	/*
 	 * Runnable for boot service start
 	 */
-	private class TStartService implements Runnable {
+	private static class TStartService implements Runnable {
 		@Override
 		public void run() {
 			try {
@@ -54,7 +54,7 @@ public class BootService extends Service {
 	};
 
 	@Override
-	public void onCreate() {
+	public void onCreate(){
 		bootservice = new WeakReference<BootService>(this);
 		ctxt = new WeakReference<Context>(this);
 		Thread serviceStart = new Thread(new TStartService());

@@ -178,11 +178,10 @@ public class WifiFixerService extends Service implements
 		 * Refresh Widget
 		 */
 		refreshWidget(this);
-
 		/*
 		 * Initialize Wifi Connection class
 		 */
-		wifi = new WFConnection(this, prefs);
+		wifi = new WFConnection(this);
 
 		/*
 		 * Start Service watchdog alarm
@@ -206,7 +205,7 @@ public class WifiFixerService extends Service implements
 	@Override
 	public void onDestroy() {
 		unregisterReceivers();
-		if (prefs.getFlag(Pref.STATENOT_KEY))
+		if (PrefUtil.getFlag(Pref.STATENOT_KEY))
 			wifi.setStatNotif(false);
 		if (logging)
 			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
@@ -287,11 +286,11 @@ public class WifiFixerService extends Service implements
 				switch (p) {
 
 				case WIFILOCK_KEY:
-					if (wifi != null && prefs.getFlag(Pref.WIFILOCK_KEY)) {
+					if (wifi != null && PrefUtil.getFlag(Pref.WIFILOCK_KEY)) {
 						// generate new lock
 						wifi.wifiLock(true);
 					} else if (wifi != null
-							&& !prefs.getFlag(Pref.WIFILOCK_KEY)) {
+							&& !PrefUtil.getFlag(Pref.WIFILOCK_KEY)) {
 						wifi.wifiLock(false);
 					}
 					break;

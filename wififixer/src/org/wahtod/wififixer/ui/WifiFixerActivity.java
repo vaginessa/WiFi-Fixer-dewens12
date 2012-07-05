@@ -264,7 +264,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		/*
 		 * Now, prepare and send the log
 		 */
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		AlertDialog.Builder dialog = new AlertDialog.Builder(
+				this.getApplicationContext());
 		dialog.setTitle(getString(R.string.send_log));
 		dialog.setMessage(getString(R.string.alert_message));
 		dialog.setIcon(R.drawable.icon);
@@ -307,12 +308,14 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 			Intent intent = new Intent(
 					IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
 			sendBroadcast(intent);
-			NotifUtil.showToast(this, R.string.enabling_wififixerservice);
+			NotifUtil.showToast(this.getApplicationContext(),
+					R.string.enabling_wififixerservice);
 		} else {
 			Intent intent = new Intent(
 					IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
 			sendBroadcast(intent);
-			NotifUtil.showToast(this, R.string.disabling_wififixerservice);
+			NotifUtil.showToast(this.getApplicationContext(),
+					R.string.disabling_wififixerservice);
 		}
 
 		this.sendBroadcast(new Intent(ServiceFragment.REFRESH_ACTION));
@@ -405,7 +408,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		startwfService(this);
+		startwfService(this.getApplicationContext());
 	}
 
 	@Override
@@ -422,7 +425,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	}
 
 	private void phoneTutNag() {
-		AlertDialog dialog = new AlertDialog.Builder(this).create();
+		AlertDialog dialog = new AlertDialog.Builder(
+				this.getApplicationContext()).create();
 		dialog.setTitle(getString(R.string.phone_ui_tutorial));
 		dialog.setMessage(getString(R.string.phone_tutorial_q));
 		dialog.setIcon(R.drawable.icon);
@@ -498,11 +502,13 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	public void wifiToggle(View view) {
 		if (!getIsWifiOn(this)) {
 			sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
-			NotifUtil.showToast(this, R.string.enabling_wifi);
+			NotifUtil.showToast(this.getApplicationContext(),
+					R.string.enabling_wifi);
 		} else {
 			sendBroadcast(new Intent(WidgetHandler.WIFI_OFF));
 			handler.postDelayed(WifiToggleCheck, WIFI_TOGGLE_CHECK_DELAY);
-			NotifUtil.showToast(this, R.string.disabling_wifi);
+			NotifUtil.showToast(this.getApplicationContext(),
+					R.string.disabling_wifi);
 		}
 	}
 }

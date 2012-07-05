@@ -22,10 +22,8 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.conn.ClientConnectionManager;
@@ -54,7 +52,6 @@ public class Hostup {
 	private static volatile String target;
 	private static volatile StringBuilder response;
 	private static final int TIMEOUT_EXTRA = 2000;
-	private static final int THREAD_KEEPALIVE = 4;
 	private static volatile URI headURI;
 	private static volatile int reachable;
 	private static volatile WeakReference<Context> context;
@@ -68,9 +65,7 @@ public class Hostup {
 		timer = new StopWatch();
 	}
 
-	private static ThreadPoolExecutor _executor = new ThreadPoolExecutor(2, 2,
-			THREAD_KEEPALIVE, TimeUnit.SECONDS,
-			new ArrayBlockingQueue<Runnable>(4));
+	private static ExecutorService _executor = Executors.newFixedThreadPool(2);
 
 	private static class HttpClientFactory {
 		private static volatile DefaultHttpClient httpclient;
