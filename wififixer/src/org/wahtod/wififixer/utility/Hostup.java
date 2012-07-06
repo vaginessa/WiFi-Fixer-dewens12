@@ -44,25 +44,31 @@ public class Hostup {
 	 * thread to return state "wins"
 	 */
 
+	protected static final String NEWLINE = "\n";
 	// Target for header check
-	private static final String H_TARGET = "http://www.google.com";
-	private static final String HTTPSCHEME = "http";
-	private static final String INET_LOOPBACK = "127.0.0.1";
-	private static final String INET_INVALID = "0.0.0.0";
-	private static volatile String target;
-	private static volatile StringBuilder response;
-	private static final int TIMEOUT_EXTRA = 2000;
-	private static volatile URI headURI;
-	private static volatile int reachable;
-	private static volatile WeakReference<Context> context;
+	protected static final String H_TARGET = "http://www.google.com";
+	protected static final String HTTPSCHEME = "http";
+	protected static final String INET_LOOPBACK = "127.0.0.1";
+	protected static final String INET_INVALID = "0.0.0.0";
+	protected static volatile String target;
+	public static volatile StringBuilder response;
+	protected static final int TIMEOUT_EXTRA = 2000;
+	protected static volatile URI headURI;
+	protected static volatile int reachable;
+	protected static volatile WeakReference<Context> context;
 	protected volatile static boolean state;
 	protected volatile static boolean finished;
-	private volatile WeakReference<Thread> self;
-	private static volatile String icmpIP;
-	private static volatile StopWatch timer;
+	protected volatile WeakReference<Thread> self;
+	private volatile String icmpIP;
+	protected static volatile StopWatch timer;
 
-	public Hostup() {
+	@SuppressWarnings("unused")
+	private Hostup() {
+	}
+
+	public Hostup(final Context c) {
 		timer = new StopWatch();
+		context = new WeakReference<Context>(c);
 	}
 
 	private static ExecutorService _executor = Executors.newFixedThreadPool(2);
@@ -77,8 +83,7 @@ public class Hostup {
 			scheme.register(new Scheme(HTTPSCHEME, PlainSocketFactory
 					.getSocketFactory(), 80));
 			BasicHttpParams httpparams = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpparams,
-					Integer.valueOf(reachable));
+			HttpConnectionParams.setConnectionTimeout(httpparams, reachable);
 			HttpConnectionParams.setSoTimeout(httpparams, reachable);
 			HttpConnectionParams.setLinger(httpparams, 1);
 			HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
@@ -108,7 +113,15 @@ public class Hostup {
 				 * fail, up is false
 				 */
 			} finally {
-				finish(c);
+				StringBuilder r = new StringBuilder(context.get().getString(
+						R.string.http));
+				r.append(target);
+				if (c)
+					r.append(context.get().getString(R.string.http_ok));
+				else
+					r.append(context.get().getString(R.string.http_fail));
+				r.append(NEWLINE);
+				finish(c, r);
 			}
 		}
 	};
@@ -120,23 +133,30 @@ public class Hostup {
 		@Override
 		public void run() {
 			boolean up = icmpHostup(context.get());
-			finish(up);
+
+			StringBuilder r = new StringBuilder(icmpIP);
+			if (up)
+				r.append(context.get().getString(R.string.icmp_ok));
+			else
+				r.append(context.get().getString(R.string.icmp_fail));
+			finish(up, r);
 		}
 	};
 
-	protected synchronized void finish(final boolean up) {
+	protected synchronized void finish(final boolean up,
+			final StringBuilder output) {
 		if (!finished) {
 			timer.stop();
 			state = up;
+			response = output;
 			finished = true;
 			self.get().interrupt();
 		}
 	}
 
-	public final StringBuilder getHostup(final int timeout, Context ctxt,
+	public final String getHostup(final int timeout, Context ctxt,
 			final String router) {
-		finished = false;
-		context = new WeakReference<Context>(ctxt);
+		response = new StringBuilder();
 		/*
 		 * If null, use H_TARGET else construct URL from router string
 		 */
@@ -153,31 +173,30 @@ public class Hostup {
 		 */
 		self = new WeakReference<Thread>(Thread.currentThread());
 		timer.start();
+		finished = false;
 		if (!icmpIP.equals(INET_LOOPBACK) && !icmpIP.equals(INET_INVALID))
 			_executor.execute(new GetICMP());
 		_executor.execute(new GetHeaders());
 		try {
 			Thread.sleep(reachable);
 			/*
-			 * Oh no, looks like rHttpHead has timed out longer than it should
-			 * have
+			 * Oh no, looks like both threads have passed the timeout
 			 */
-			return new StringBuilder(ctxt.getString(R.string.critical_timeout));
+			return ctxt.getString(R.string.critical_timeout);
 		} catch (InterruptedException e) {
-			finished = true;
 			/*
 			 * interrupted by a result: this is desired behavior
 			 */
 			response.append(timer.getElapsed());
 			response.append(ctxt.getString(R.string.ms));
-			return response;
+			return response.toString();
 		}
 	}
 
 	/*
 	 * Performs ICMP ping/echo and returns boolean success or failure
 	 */
-	private static boolean icmpHostup(final Context context) {
+	private boolean icmpHostup(final Context context) {
 		boolean isUp = false;
 
 		try {
@@ -189,13 +208,6 @@ public class Hostup {
 		} catch (IOException e) {
 
 		}
-
-		if (isUp && !finished)
-			response = new StringBuilder(icmpIP).append(context
-					.getString(R.string.icmp_ok));
-		else
-			response = new StringBuilder(icmpIP).append(context
-					.getString(R.string.icmp_fail));
 		return isUp;
 	}
 
@@ -238,17 +250,10 @@ public class Hostup {
 			status = -1;
 		}
 
-		if (status == HttpURLConnection.HTTP_OK) {
-			if (!finished)
-				response = new StringBuilder(target).append(context
-						.getString(R.string.http_ok));
+		if (status == HttpURLConnection.HTTP_OK)
 			return true;
-		} else {
-			if (!finished)
-				response = new StringBuilder(target).append(context
-						.getString(R.string.http_fail));
+		else
 			return false;
-		}
 	}
 
 	@Override

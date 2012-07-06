@@ -1269,7 +1269,7 @@ public class WFConnection extends Object implements
 		 * Instantiate hostup if it's not already instantiated
 		 */
 		if (hostup == null)
-			hostup = new Hostup();
+			hostup = new Hostup(context);
 		/*
 		 * hostup.getHostup does all the heavy lifting
 		 */
@@ -1280,10 +1280,11 @@ public class WFConnection extends Object implements
 		 * Launches ICMP/HTTP HEAD check threads which compete for successful
 		 * state return.
 		 */
-		StringBuilder response = hostup.getHostup(REACHABLE, context,
-				context.getString(R.string.http)).append(accesspointIP);
-		log(context, response);
-		if (response.indexOf(OK) == -1)
+		StringBuilder host = new StringBuilder(context.getString(R.string.http));
+		host.append(accesspointIP);
+		String out = hostup.getHostup(REACHABLE, context, host.toString());
+		log(context, new StringBuilder(out));
+		if (!out.contains(OK))
 			return false;
 		else
 			return true;
