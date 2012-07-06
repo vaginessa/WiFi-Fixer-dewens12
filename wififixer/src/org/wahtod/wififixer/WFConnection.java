@@ -32,6 +32,7 @@ import org.wahtod.wififixer.utility.ScreenStateDetector;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 import org.wahtod.wififixer.utility.StatusDispatcher;
 import org.wahtod.wififixer.utility.StatusMessage;
+import org.wahtod.wififixer.utility.StopWatch;
 import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFConfig;
 import org.wahtod.wififixer.utility.WakeLock;
@@ -54,7 +55,6 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.text.format.Formatter;
 
 /*
@@ -71,6 +71,10 @@ public class WFConnection extends Object implements
 	private WakeLock wakelock;
 	private WifiLock wifilock;
 	static boolean screenstate;
+	/*
+	 * For Status Messages
+	 */
+	protected static StatusMessage _status;
 	private static StatusDispatcher statusdispatcher;
 
 	// flags
@@ -109,11 +113,6 @@ public class WFConnection extends Object implements
 	private static final String COLON = ":";
 	private static final String NEWLINE = "\n";
 
-	/*
-	 * For Status Messages
-	 */
-	protected static StatusMessage _status;
-
 	// ms for signalhop check
 	private static final long SIGNAL_CHECK_INTERVAL = 30000;
 	// ms for network checks
@@ -129,9 +128,9 @@ public class WFConnection extends Object implements
 	private static final int REALLYSHORTWAIT = 200;
 
 	// Last Scan
-	private static long _last_scan_request;
-	private static final int SCAN_WATCHDOG_DELAY = 15000;
-	private static final int NORMAL_SCAN_DELAY = 15000;
+	private static StopWatch _scantimer;
+	private static final int SCAN_WATCHDOG_DELAY = 25000;
+	private static final int NORMAL_SCAN_DELAY = 20000;
 
 	// various
 	private static final int NULLVAL = -1;
@@ -460,7 +459,6 @@ public class WFConnection extends Object implements
 			 */
 			if (supplicantInterruptCheck(ctxt.get())) {
 				self.get().startScan(true);
-				_last_scan_request = SystemClock.elapsedRealtime();
 				log(ctxt.get(),
 						new StringBuilder(ctxt.get().getString(
 								R.string.wifimanager_scan)));
@@ -536,6 +534,7 @@ public class WFConnection extends Object implements
 	};
 
 	public WFConnection(final Context context) {
+		_scantimer = new StopWatch();
 		_status = new StatusMessage(false);
 		accesspointIP = new StringBuilder();
 		appname = new StringBuilder();
@@ -745,7 +744,7 @@ public class WFConnection extends Object implements
 		} finally {
 			if (_signalCheckTime < System.currentTimeMillis()
 					&& Math.abs(signal) > Math.abs(detected)) {
-				notifyWrap(context.getApplicationContext(),
+				notifyWrap(context,
 						context.getString(R.string.signal_poor));
 				getWifiManager(ctxt.get()).startScan();
 				_signalhopping = true;
@@ -1486,7 +1485,6 @@ public class WFConnection extends Object implements
 		 */
 		if (wedgeCheck())
 			return;
-
 		/*
 		 * Set disconnected
 		 */
@@ -1517,7 +1515,6 @@ public class WFConnection extends Object implements
 		if (sState.equals(SupplicantState.COMPLETED) && !_connected) {
 			onNetworkConnecting();
 		}
-
 		/*
 		 * Check for ASSOCIATING bug but first clear check if not ASSOCIATING
 		 */
@@ -1533,6 +1530,8 @@ public class WFConnection extends Object implements
 		 * 
 		 * Also clear any error notifications
 		 */
+		else if (sState.equals(SupplicantState.SCANNING))
+			_scantimer.start();
 		else if (sState.equals(SupplicantState.ASSOCIATED)
 				|| sState.equals(SupplicantState.COMPLETED)) {
 
@@ -1832,7 +1831,7 @@ public class WFConnection extends Object implements
 	public static void scanwatchdog() {
 		if (getWifiManager(ctxt.get()).isWifiEnabled()
 				&& !getIsOnWifi(ctxt.get())
-				&& (SystemClock.elapsedRealtime() - _last_scan_request) > SCAN_WATCHDOG_DELAY) {
+				&& _scantimer.getElapsed() > SCAN_WATCHDOG_DELAY) {
 			/*
 			 * Reset Wifi, scan didn't succeed.
 			 */
@@ -1841,7 +1840,7 @@ public class WFConnection extends Object implements
 		StringBuilder scanfail = new StringBuilder(ctxt.get().getString(
 				R.string.scan_failed));
 		scanfail.append(":");
-		scanfail.append(SystemClock.elapsedRealtime() - _last_scan_request);
+		scanfail.append(System.currentTimeMillis() - _scantimer.getElapsed());
 		scanfail.append(ctxt.get().getString(R.string.ms));
 		log(ctxt.get(), scanfail);
 		if (screenstate)

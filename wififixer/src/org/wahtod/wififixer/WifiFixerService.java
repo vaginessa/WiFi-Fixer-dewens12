@@ -84,7 +84,7 @@ public class WifiFixerService extends Service implements
 		 * Doing this right.
 		 */
 		AppWidgetManager appWidgetManager = AppWidgetManager
-				.getInstance(context.getApplicationContext());
+				.getInstance(context);
 		int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context,
 				FixerWidget.class));
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);

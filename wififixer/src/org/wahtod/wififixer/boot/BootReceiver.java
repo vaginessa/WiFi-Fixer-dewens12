@@ -43,8 +43,7 @@ public class BootReceiver extends BroadcastReceiver {
 		 * loader run
 		 */
 		if (!PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key())) {
-			context.getApplicationContext().startService(
-					new Intent(context, BootService.class));
+			context.startService(new Intent(context, BootService.class));
 		}
 	}
 }

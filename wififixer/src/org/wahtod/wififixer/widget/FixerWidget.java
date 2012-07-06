@@ -72,7 +72,7 @@ public class FixerWidget extends AppWidgetProvider {
 			if (intent != null) {
 				Bundle data = intent.getBundleExtra(NotifUtil.STATUS_DATA_KEY);
 				AppWidgetManager appWidgetManager = AppWidgetManager
-						.getInstance(this.getApplicationContext());
+						.getInstance(this);
 				RemoteViews remoteViews = new RemoteViews(getPackageName(),
 						R.layout.widget);
 				// Create an Intent to send widget command to WidgetReceiver
@@ -125,10 +125,8 @@ public class FixerWidget extends AppWidgetProvider {
 			/*
 			 * Set HAS_WIDGET true if not already
 			 */
-			if (!PrefUtil.readBoolean(this.getApplicationContext(),
-					PrefConstants.HAS_WIDGET))
-				PrefUtil.writeBoolean(this.getApplicationContext(),
-						PrefConstants.HAS_WIDGET, true);
+			if (!PrefUtil.readBoolean(this, PrefConstants.HAS_WIDGET))
+				PrefUtil.writeBoolean(this, PrefConstants.HAS_WIDGET, true);
 
 		}
 
@@ -137,8 +135,8 @@ public class FixerWidget extends AppWidgetProvider {
 	public static RemoteViews doUpdate(Context context) {
 
 		// Create an Intent to send widget command to WidgetReceiver
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(
-				context.getApplicationContext(), 0, new Intent(W_INTENT), 0);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
+				new Intent(W_INTENT), 0);
 		/*
 		 * Don't have to worry about pre-cupcake clients because they won't run
 		 * the widget code setting onclick on the view directly

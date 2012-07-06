@@ -90,8 +90,7 @@ public class ConnectFragment extends FragmentSwitchboard implements
 
 	private int addNetwork(final String password) {
 		WifiConfiguration wf = getKeyAppropriateConfig(password);
-		WifiManager wm = PrefUtil.getWifiManager(getActivity()
-				.getApplicationContext());
+		WifiManager wm = PrefUtil.getWifiManager(getActivity());
 		int n = wm.addNetwork(wf);
 		if (n != -1) {
 			wm.enableNetwork(n, false);

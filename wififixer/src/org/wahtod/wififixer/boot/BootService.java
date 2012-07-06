@@ -29,6 +29,8 @@ import android.os.IBinder;
 public class BootService extends Service {
 	private static WeakReference<Context> ctxt;
 	private static WeakReference<BootService> bootservice;
+	public static final String FLAG_NO_DELAY = "F-NO";
+	public static boolean nodelay;
 
 	/*
 	 * Runnable for boot service start
@@ -36,14 +38,15 @@ public class BootService extends Service {
 	private static class TStartService implements Runnable {
 		@Override
 		public void run() {
-			try {
-				Thread.sleep(ServiceAlarm.STARTDELAY);
-			} catch (InterruptedException e) {
-				/*
-				 * Doesn't happen
-				 */
+			if (!nodelay) {
+				try {
+					Thread.sleep(ServiceAlarm.STARTDELAY);
+				} catch (InterruptedException e) {
+					/*
+					 * Doesn't happen
+					 */
+				}
 			}
-
 			/**
 			 * Start Service
 			 */
@@ -54,12 +57,30 @@ public class BootService extends Service {
 	};
 
 	@Override
-	public void onCreate(){
+	public void onCreate() {
 		bootservice = new WeakReference<BootService>(this);
 		ctxt = new WeakReference<Context>(this);
+		super.onCreate();
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onStart(Intent intent, int startId) {
+		handleIntent(intent);
+		super.onStart(intent, startId);
+	}
+
+	private void handleIntent(Intent intent) {
+		if (intent.getExtras() != null && intent.hasExtra(FLAG_NO_DELAY));
+		nodelay =true;
 		Thread serviceStart = new Thread(new TStartService());
 		serviceStart.start();
-		super.onCreate();
+	}
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		handleIntent(intent);
+		return Service.START_NOT_STICKY;
 	}
 
 	@Override

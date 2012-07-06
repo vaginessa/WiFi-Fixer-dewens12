@@ -23,7 +23,7 @@ import org.wahtod.wififixer.R;
 
 import org.wahtod.wififixer.DefaultExceptionHandler;
 import org.wahtod.wififixer.IntentConstants;
-import org.wahtod.wififixer.WifiFixerService;
+import org.wahtod.wififixer.boot.BootService;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.prefs.PrefConstants;
@@ -57,7 +57,6 @@ import android.widget.ToggleButton;
 
 public class WifiFixerActivity extends TutorialFragmentActivity {
 	private static WeakReference<WifiFixerActivity> self;
-
 	public class PhoneAdapter extends FragmentPagerAdapter {
 		public PhoneAdapter(FragmentManager fm) {
 			super(fm);
@@ -264,8 +263,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		/*
 		 * Now, prepare and send the log
 		 */
-		AlertDialog.Builder dialog = new AlertDialog.Builder(
-				this.getApplicationContext());
+		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 		dialog.setTitle(getString(R.string.send_log));
 		dialog.setMessage(getString(R.string.alert_message));
 		dialog.setIcon(R.drawable.icon);
@@ -299,7 +297,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 					}
 				});
 		dialog.show();
-
 	}
 
 	public void serviceToggle(View view) {
@@ -322,8 +319,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	}
 
 	private static void startwfService(final Context context) {
-		context.getApplicationContext().startService(
-				new Intent(context, WifiFixerService.class));
+		context.startService(new Intent(context, BootService.class).putExtra(
+				BootService.FLAG_NO_DELAY, true));
 	}
 
 	private static void nagNotification(final Context context) {
@@ -408,7 +405,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		startwfService(this.getApplicationContext());
+		startwfService(this);
 	}
 
 	@Override
@@ -425,8 +422,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	}
 
 	private void phoneTutNag() {
-		AlertDialog dialog = new AlertDialog.Builder(
-				this.getApplicationContext()).create();
+		AlertDialog dialog = new AlertDialog.Builder(this).create();
 		dialog.setTitle(getString(R.string.phone_ui_tutorial));
 		dialog.setMessage(getString(R.string.phone_tutorial_q));
 		dialog.setIcon(R.drawable.icon);

@@ -136,7 +136,7 @@ public class StatusFragment extends Fragment {
 	}
 
 	private Context getContext() {
-		return getActivity().getApplicationContext();
+		return getActivity();
 	}
 
 	/*

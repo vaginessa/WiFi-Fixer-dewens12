@@ -130,7 +130,7 @@ public class AboutFragment extends FragmentSwitchboard {
 	}
 
 	private Context getContext() {
-		return getActivity().getApplicationContext();
+		return getActivity();
 	}
 
 	private void drawView() {

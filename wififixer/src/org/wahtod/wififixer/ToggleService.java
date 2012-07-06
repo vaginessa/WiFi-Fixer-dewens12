@@ -63,7 +63,7 @@ public class ToggleService extends Service {
 		private static Handler hWifiState = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				final Context lc = self.get().getApplicationContext();
+				final Context lc = self.get();
 				/*
 				 * Process MESSAGE
 				 */
@@ -132,7 +132,7 @@ public class ToggleService extends Service {
 	@Override
 	public void onCreate() {
 		self = new WeakReference<ToggleService>(this);
-		ctxt = new WeakReference<Context>(getApplicationContext());
+		ctxt = new WeakReference<Context>(this);
 		/*
 		 * initialize wake lock
 		 */
@@ -145,8 +145,8 @@ public class ToggleService extends Service {
 							ctxt.get(),
 							new StringBuilder(
 									getString(R.string.wififixerservice)),
-							new StringBuilder(ctxt.get()
-									.getString(R.string.acquiring_wake_lock)));
+							new StringBuilder(ctxt.get().getString(
+									R.string.acquiring_wake_lock)));
 					super.onAcquire();
 				}
 
@@ -154,10 +154,10 @@ public class ToggleService extends Service {
 				public void onRelease() {
 					LogService.log(
 							ctxt.get(),
-							new StringBuilder(ctxt.get()
-									.getString(R.string.wififixerservice)),
-							new StringBuilder(ctxt.get()
-									.getString(R.string.releasing_wake_lock)));
+							new StringBuilder(ctxt.get().getString(
+									R.string.wififixerservice)),
+							new StringBuilder(ctxt.get().getString(
+									R.string.releasing_wake_lock)));
 					super.onRelease();
 				}
 			};

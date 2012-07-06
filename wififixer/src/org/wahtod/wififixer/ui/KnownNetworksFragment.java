@@ -434,7 +434,7 @@ public class KnownNetworksFragment extends Fragment {
 	}
 
 	private Context getContext() {
-		return getActivity().getApplicationContext();
+		return getActivity();
 	}
 
 	private static void refreshArray() {

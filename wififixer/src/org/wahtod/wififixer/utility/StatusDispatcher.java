@@ -34,7 +34,7 @@ public class StatusDispatcher {
 	private static WeakReference<Context> c;
 
 	public StatusDispatcher(final Context context) {
-		c = new WeakReference<Context>(context.getApplicationContext());
+		c = new WeakReference<Context>(context);
 	}
 
 	/*

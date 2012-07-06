@@ -54,8 +54,7 @@ public abstract class ActionBarDetector {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// app icon in Action Bar clicked; go home
-			Intent intent = new Intent(a.getApplicationContext(),
-					WifiFixerActivity.class);
+			Intent intent = new Intent(a, WifiFixerActivity.class);
 			NavUtils.navigateUpTo(a, intent);
 		}
 	}
