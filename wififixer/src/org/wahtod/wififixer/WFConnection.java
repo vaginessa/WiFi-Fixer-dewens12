@@ -280,7 +280,7 @@ public class WFConnection extends Object implements
 				pendingreconnect = false;
 			} else {
 				wifirepair = W_REASSOCIATE;
-				self.get().requestScan();
+				self.get().handlerWrapper(SCANWATCHDOG, SHORTWAIT);
 				log(ctxt.get(),
 						new StringBuilder(
 								ctxt.get()
@@ -408,7 +408,7 @@ public class WFConnection extends Object implements
 				// Start Scan
 				self.get().tempLock(SHORTWAIT);
 				getWifiManager(ctxt.get()).disconnect();
-				self.get().requestScan();
+				self.get().handlerWrapper(SCANWATCHDOG, SHORTWAIT);
 				/*
 				 * Reset state
 				 */
@@ -744,8 +744,7 @@ public class WFConnection extends Object implements
 		} finally {
 			if (_signalCheckTime < System.currentTimeMillis()
 					&& Math.abs(signal) > Math.abs(detected)) {
-				notifyWrap(context,
-						context.getString(R.string.signal_poor));
+				notifyWrap(context, context.getString(R.string.signal_poor));
 				getWifiManager(ctxt.get()).startScan();
 				_signalhopping = true;
 				_signalCheckTime = System.currentTimeMillis()
@@ -1366,15 +1365,14 @@ public class WFConnection extends Object implements
 			if (!checkNetwork(ctxt.get())) {
 				_connected = false;
 				handlerWrapper(TEMPLOCK_OFF);
-				handlerWrapper(SCAN);
 				shouldrepair = true;
 				wifiRepair();
 			}
 		} else {
 			/*
-			 * start scan, we know we're disconnected.
+			 * Make sure scan happens in a reasonable amount of time
 			 */
-			requestScan();
+			handlerWrapper(SCANWATCHDOG, SHORTWAIT);
 		}
 	}
 
@@ -1424,6 +1422,10 @@ public class WFConnection extends Object implements
 
 	private void handleScanResults() {
 		/*
+		 * Reset timer: we've successfully scanned
+		 */
+			_scantimer.start();
+		/*
 		 * Scan results received. Remove Scan Watchdog.
 		 */
 		handler.removeMessages(SCANWATCHDOG);
@@ -1471,7 +1473,6 @@ public class WFConnection extends Object implements
 	}
 
 	private void handleSupplicantIntent(final Bundle data) {
-
 		/*
 		 * Get Supplicant New State but first make sure it's new
 		 */
@@ -1498,7 +1499,6 @@ public class WFConnection extends Object implements
 		 */
 		if (data.containsKey(WifiManager.EXTRA_SUPPLICANT_ERROR))
 			NotifUtil.showToast(ctxt.get(), R.string.authentication_error);
-
 		/*
 		 * Status notification updating supplicant state
 		 */
@@ -1512,26 +1512,21 @@ public class WFConnection extends Object implements
 
 			statusdispatcher.sendMessage(ctxt.get(), _status.getShow(true));
 		}
-		if (sState.equals(SupplicantState.COMPLETED) && !_connected) {
+		if (sState.equals(SupplicantState.COMPLETED) && !_connected)
 			onNetworkConnecting();
-		}
 		/*
 		 * Check for ASSOCIATING bug but first clear check if not ASSOCIATING
 		 */
 		else if (!sState.equals(SupplicantState.ASSOCIATING)) {
 			supplicant_associating = 0;
 			handler.removeMessages(ASSOCWATCHDOG);
-		} else if (sState.equals(SupplicantState.ASSOCIATING)) {
+		} else if (sState.equals(SupplicantState.ASSOCIATING))
 			handlerWrapper(ASSOCWATCHDOG, SHORTWAIT);
-
-		}
 		/*
 		 * Flush queue if connected
 		 * 
 		 * Also clear any error notifications
 		 */
-		else if (sState.equals(SupplicantState.SCANNING))
-			_scantimer.start();
 		else if (sState.equals(SupplicantState.ASSOCIATED)
 				|| sState.equals(SupplicantState.COMPLETED)) {
 
@@ -1543,12 +1538,9 @@ public class WFConnection extends Object implements
 			pendingreconnect = false;
 			lastAP = getNetworkID();
 			return;
-		} else {
-
-			if (PrefUtil.getFlag(Pref.STATENOT_KEY)) {
-				_status.status = new StringBuilder(EMPTYSTRING);
-				_status.signal = 0;
-			}
+		} else if (PrefUtil.getFlag(Pref.STATENOT_KEY)) {
+			_status.status = new StringBuilder(EMPTYSTRING);
+			_status.signal = 0;
 		}
 
 		/*
@@ -1584,7 +1576,9 @@ public class WFConnection extends Object implements
 			if (!screenstate && !PrefUtil.getFlag(Pref.SCREEN_KEY))
 				return;
 			else if (sState == SupplicantState.DISCONNECTED.name()) {
-				requestScan();
+				/*
+				 * Wait for scan
+				 */
 				notifyWrap(ctxt.get(), sState);
 			} else if (sState == INVALID) {
 				supplicantFix();
@@ -1815,10 +1809,6 @@ public class WFConnection extends Object implements
 		getWifiManager(context).updateNetwork(network);
 	}
 
-	private void requestScan() {
-		handlerWrapper(SCAN);
-	}
-
 	private static boolean scancontainsBSSID(final String bssid,
 			final List<ScanResult> results) {
 		for (ScanResult sResult : results) {
@@ -1833,16 +1823,16 @@ public class WFConnection extends Object implements
 				&& !getIsOnWifi(ctxt.get())
 				&& _scantimer.getElapsed() > SCAN_WATCHDOG_DELAY) {
 			/*
-			 * Reset Wifi, scan didn't succeed.
+			 * Reset and log
 			 */
 			toggleWifi();
+			StringBuilder scanfail = new StringBuilder(ctxt.get().getString(
+					R.string.scan_failed));
+			scanfail.append(":");
+			scanfail.append(_scantimer.getElapsed());
+			scanfail.append(ctxt.get().getString(R.string.ms));
+			log(ctxt.get(), scanfail);
 		}
-		StringBuilder scanfail = new StringBuilder(ctxt.get().getString(
-				R.string.scan_failed));
-		scanfail.append(":");
-		scanfail.append(System.currentTimeMillis() - _scantimer.getElapsed());
-		scanfail.append(ctxt.get().getString(R.string.ms));
-		log(ctxt.get(), scanfail);
 		if (screenstate)
 			self.get().handlerWrapper(SCAN, NORMAL_SCAN_DELAY);
 		else

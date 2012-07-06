@@ -47,7 +47,8 @@ public final class ServiceAlarm extends Object {
 
 	private static PendingIntent createPendingIntent(final Context context,
 			final int flag) {
-		Intent intent = new Intent(context, WifiFixerService.class);
+		Intent intent = new Intent(context.getApplicationContext(),
+				WifiFixerService.class);
 		intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 		intent.putExtra(ALARM_START, ALARM_START);
 		PendingIntent pendingintent = PendingIntent.getService(context, 0,
@@ -89,20 +90,23 @@ public final class ServiceAlarm extends Object {
 	}
 
 	public static void setAlarm(final Context c, final boolean initialdelay) {
-		addAlarm(c, initialdelay, true, PERIOD, createPendingIntent(c, 0));
+		addAlarm(c.getApplicationContext(), initialdelay, true, PERIOD,
+				createPendingIntent(c, 0));
 	}
 
 	public static void addAlarm(final Context c, final long delay,
 			final boolean repeating, final long period, PendingIntent p) {
-		registerAlarm(c, delay, repeating, period, p);
+		registerAlarm(c.getApplicationContext(), delay, repeating, period, p);
 	}
 
 	public static void addAlarm(final Context c, final boolean initialdelay,
 			final boolean repeating, final long period, PendingIntent p) {
 		if (initialdelay)
-			registerAlarm(c, PERIOD, repeating, period, p);
+			registerAlarm(c.getApplicationContext(), PERIOD, repeating, period,
+					p);
 		else
-			registerAlarm(c, NODELAY, repeating, period, p);
+			registerAlarm(c.getApplicationContext(), NODELAY, repeating,
+					period, p);
 	}
 
 	private static void registerAlarm(final Context c, final long delay,
