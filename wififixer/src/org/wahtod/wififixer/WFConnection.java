@@ -1280,9 +1280,9 @@ public class WFConnection extends Object implements
 		 */
 		StringBuilder host = new StringBuilder(context.getString(R.string.http));
 		host.append(accesspointIP);
-		String out = hostup.getHostup(REACHABLE, context, host.toString());
-		log(context, new StringBuilder(out));
-		if (!out.contains(OK))
+		StringBuilder out = hostup.getHostup(REACHABLE, context, host.toString());
+		log(context, out);
+		if (!out.toString().contains(OK))
 			return false;
 		else
 			return true;
@@ -1381,6 +1381,7 @@ public class WFConnection extends Object implements
 		clearQueue();
 		clearHandler();
 		wifilock.lock(false);
+		hostup.finish();
 	}
 
 	private void clearQueue() {

@@ -30,6 +30,8 @@ public class StatusMessage {
 	}
 
 	public StatusMessage(final boolean sh) {
+		ssid = new StringBuilder();
+		status = new StringBuilder();
 		show = sh;
 	}
 

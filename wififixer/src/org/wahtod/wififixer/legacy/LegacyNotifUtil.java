@@ -31,7 +31,6 @@ public class LegacyNotifUtil extends NotifUtil {
 	@Override
 	public void vaddStatNotif(Context ctxt, final StringBuilder ssid,
 			StringBuilder status, final int signal, final boolean flag) {
-		ctxt = ctxt.getApplicationContext();
 		NotificationManager nm = (NotificationManager) ctxt
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 

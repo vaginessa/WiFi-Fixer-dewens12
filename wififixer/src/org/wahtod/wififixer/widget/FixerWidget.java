@@ -77,7 +77,7 @@ public class FixerWidget extends AppWidgetProvider {
 						R.layout.widget);
 				// Create an Intent to send widget command to WidgetReceiver
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(
-						this.getApplicationContext(), 0, new Intent(W_INTENT),
+						this, 0, new Intent(W_INTENT),
 						0);
 				remoteViews.setOnClickPendingIntent(R.id.widget_target,
 						pendingIntent);

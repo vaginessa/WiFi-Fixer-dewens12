@@ -65,10 +65,6 @@ public class WifiFixerService extends Service implements
 
 	private WFConnection wifi;
 	private static ScreenStateDetector screenstateHandler;
-	/*
-	 * Cache context for notifications
-	 */
-	private Context notifcontext;
 	protected boolean logPrefLoad;
 
 	static boolean screenstate;
@@ -145,35 +141,25 @@ public class WifiFixerService extends Service implements
 		else
 			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
 					getString(R.string.strict_mode_unavailable)));
-
 		/*
 		 * Make sure service settings are enforced.
 		 */
 		ServiceAlarm.enforceServicePrefs(this);
-
 		super.onCreate();
-		/*
-		 * Cache context for notifications
-		 */
-		notifcontext = this;
-
 		getPackageInfo();
-
+		/*
+		 * Load Preferences
+		 */
+		preferenceInitialize(this);
 		if (logging) {
 			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
 					getString(R.string.wififixerservice_build) + version));
 		}
 
 		/*
-		 * Load Preferences
-		 */
-		preferenceInitialize(this);
-
-		/*
 		 * Set initial screen state
 		 */
-		setInitialScreenState(this);
-
+		setInitialScreenState();
 		/*
 		 * Refresh Widget
 		 */
@@ -182,12 +168,10 @@ public class WifiFixerService extends Service implements
 		 * Initialize Wifi Connection class
 		 */
 		wifi = new WFConnection(this);
-
 		/*
 		 * Start Service watchdog alarm
 		 */
-		if (!ServiceAlarm.alarmExists(this))
-			ServiceAlarm.setAlarm(this, true);
+		ServiceAlarm.setServiceAlarm(this.getApplicationContext(), false);
 		/*
 		 * Set registered flag true so unregister code runs later
 		 */
@@ -195,11 +179,9 @@ public class WifiFixerService extends Service implements
 			stopSelf();
 		else
 			registered = true;
-
 		if (logging)
 			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
 					getString(R.string.oncreate)));
-
 	}
 
 	@Override
@@ -375,12 +357,13 @@ public class WifiFixerService extends Service implements
 		};
 
 		prefs.loadPrefs();
-		NotifUtil.cancel(notifcontext, NOTIFID);
+		logging = PrefUtil.getFlag(Pref.LOG_KEY);
+		NotifUtil.cancel(this, NOTIFID);
 	}
 
-	private void setInitialScreenState(final Context context) {
+	private void setInitialScreenState() {
 		screenstateHandler = new ScreenStateDetector(this);
-		screenstate = ScreenStateDetector.getScreenState(context);
+		screenstate = ScreenStateDetector.getScreenState(this);
 		ScreenStateDetector.setOnScreenStateChangedListener(this);
 	}
 

@@ -154,7 +154,7 @@ public class Hostup {
 		}
 	}
 
-	public final String getHostup(final int timeout, Context ctxt,
+	public final StringBuilder getHostup(final int timeout, Context ctxt,
 			final String router) {
 		response = new StringBuilder();
 		/*
@@ -182,14 +182,14 @@ public class Hostup {
 			/*
 			 * Oh no, looks like both threads have passed the timeout
 			 */
-			return ctxt.getString(R.string.critical_timeout);
+			return new StringBuilder(ctxt.getString(R.string.critical_timeout));
 		} catch (InterruptedException e) {
 			/*
 			 * interrupted by a result: this is desired behavior
 			 */
 			response.append(timer.getElapsed());
 			response.append(ctxt.getString(R.string.ms));
-			return response.toString();
+			return response;
 		}
 	}
 
@@ -255,10 +255,8 @@ public class Hostup {
 		else
 			return false;
 	}
-
-	@Override
-	protected void finalize() throws Throwable {
+	
+	public void finish()  {
 		_executor.shutdown();
-		super.finalize();
 	}
 }
