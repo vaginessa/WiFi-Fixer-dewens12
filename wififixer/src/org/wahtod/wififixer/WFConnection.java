@@ -25,6 +25,7 @@ import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.ui.LogFragment;
 import org.wahtod.wififixer.utility.FifoList;
+import org.wahtod.wififixer.utility.HostMessage;
 import org.wahtod.wififixer.utility.Hostup;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
@@ -63,7 +64,6 @@ import android.text.format.Formatter;
  */
 public class WFConnection extends Object implements
 		OnScreenStateChangedListener {
-	private static final String OK = "OK";
 	private static final int DEFAULT_DBM_FLOOR = -90;
 	private static StringBuilder accesspointIP;
 	private static StringBuilder appname;
@@ -116,7 +116,7 @@ public class WFConnection extends Object implements
 	// ms for signalhop check
 	private static final long SIGNAL_CHECK_INTERVAL = 30000;
 	// ms for network checks
-	private final static int REACHABLE = 4000;
+	private final static int REACHABLE = 6000;
 	// ms for main loop sleep
 	private final static int LOOPWAIT = 10000;
 	// ms for sleep loop check
@@ -663,8 +663,7 @@ public class WFConnection extends Object implements
 	private static void clearConnectedStatus(final StringBuilder state) {
 		_status.status = state;
 		_status.signal = 0;
-		_status.ssid = new StringBuilder(ctxt.get().getString(
-				R.string.null_ssid));
+		_status.ssid = new StringBuilder("");
 	}
 
 	private static boolean checkNetwork(final Context context) {
@@ -1162,7 +1161,7 @@ public class WFConnection extends Object implements
 		if (ssid.length() > 0)
 			return ssid;
 		else
-			return new StringBuilder(NULL_SSID);
+			return new StringBuilder("");
 	}
 
 	private static SupplicantState getSupplicantState() {
@@ -1277,12 +1276,18 @@ public class WFConnection extends Object implements
 		/*
 		 * Launches ICMP/HTTP HEAD check threads which compete for successful
 		 * state return.
+		 * 
+		 * If we fail the first check, try again with hostup default to be sure
 		 */
-		StringBuilder host = new StringBuilder(context.getString(R.string.http));
-		host.append(accesspointIP);
-		StringBuilder out = hostup.getHostup(REACHABLE, context, host.toString());
-		log(context, out);
-		if (!out.toString().contains(OK))
+		HostMessage out = hostup.getHostup(REACHABLE, context,
+				accesspointIP.toString());
+		/*
+		 * Try #2 with default if #1 fails
+		 */
+		if (!out.state)
+			out = hostup.getHostup(REACHABLE, context, null);
+		log(context, out.status);
+		if (!out.state)
 			return false;
 		else
 			return true;
@@ -1523,7 +1528,7 @@ public class WFConnection extends Object implements
 		if (!getWifiManager(ctxt.get()).isWifiEnabled()) {
 			return;
 		} else {
-			
+
 			/*
 			 * Set disconnected
 			 */
@@ -1582,10 +1587,11 @@ public class WFConnection extends Object implements
 				/*
 				 * ensure scan
 				 */
+				notifyWrap(ctxt.get(), sState.name());
 				handlerWrapper(SCANWATCHDOG, SHORTWAIT);
 			} else if (sState.equals(SupplicantState.INVALID))
 				supplicantFix();
-			notifyWrap(ctxt.get(), sState.name());
+
 		}
 
 		if (PrefUtil.getFlag(Pref.LOG_KEY) && screenstate)

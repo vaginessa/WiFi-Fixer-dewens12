@@ -110,7 +110,7 @@ public class ScanFragment extends Fragment {
 		menu.setHeaderTitle(clicked.SSID);
 		menu.add(4, CONTEXT_CONNECT, 2,
 				getConnectMenuStringFromClicked(getContext(), clicked));
-		menu.add(4, CONTEXT_INFO, 3, R.string.about);
+		menu.add(4, CONTEXT_INFO, 3, R.string.info);
 		int[] location = new int[2];
 		v.getLocationOnScreen(location);
 	}

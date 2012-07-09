@@ -24,8 +24,11 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.HttpHead;
+import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -34,6 +37,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
 import org.wahtod.wififixer.R;
 
 import android.content.Context;
@@ -46,21 +51,20 @@ public class Hostup {
 
 	protected static final String NEWLINE = "\n";
 	// Target for header check
-	protected static final String H_TARGET = "http://www.google.com";
+	protected static final String FAILOVER_TARGET = "www.google.com";
 	protected static final String HTTPSCHEME = "http";
 	protected static final String INET_LOOPBACK = "127.0.0.1";
 	protected static final String INET_INVALID = "0.0.0.0";
 	protected static volatile String target;
-	public static volatile StringBuilder response;
+	public static volatile HostMessage response;
 	protected static final int TIMEOUT_EXTRA = 2000;
 	protected static volatile URI headURI;
 	protected static volatile int reachable;
 	protected static volatile WeakReference<Context> context;
-	protected volatile static boolean state;
 	protected volatile static boolean finished;
 	protected volatile WeakReference<Thread> self;
-	private volatile String icmpIP;
 	protected static volatile StopWatch timer;
+	private static volatile DefaultHttpClient httpclient;
 
 	@SuppressWarnings("unused")
 	private Hostup() {
@@ -72,27 +76,6 @@ public class Hostup {
 	}
 
 	private static ExecutorService _executor = Executors.newFixedThreadPool(2);
-
-	private static class HttpClientFactory {
-		private static volatile DefaultHttpClient httpclient;
-
-		public synchronized static DefaultHttpClient getThreadSafeClient() {
-			if (httpclient != null)
-				return httpclient;
-			SchemeRegistry scheme = new SchemeRegistry();
-			scheme.register(new Scheme(HTTPSCHEME, PlainSocketFactory
-					.getSocketFactory(), 80));
-			BasicHttpParams httpparams = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpparams, reachable);
-			HttpConnectionParams.setSoTimeout(httpparams, reachable);
-			HttpConnectionParams.setLinger(httpparams, 1);
-			HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
-			ClientConnectionManager cm = new ThreadSafeClientConnManager(
-					httpparams, scheme);
-			httpclient = new DefaultHttpClient(cm, httpparams);
-			return httpclient;
-		}
-	};
 
 	/*
 	 * http header check thread
@@ -120,7 +103,6 @@ public class Hostup {
 					r.append(context.get().getString(R.string.http_ok));
 				else
 					r.append(context.get().getString(R.string.http_fail));
-				r.append(NEWLINE);
 				finish(c, r);
 			}
 		}
@@ -134,7 +116,7 @@ public class Hostup {
 		public void run() {
 			boolean up = icmpHostup(context.get());
 
-			StringBuilder r = new StringBuilder(icmpIP);
+			StringBuilder r = new StringBuilder(target);
 			if (up)
 				r.append(context.get().getString(R.string.icmp_ok));
 			else
@@ -147,25 +129,23 @@ public class Hostup {
 			final StringBuilder output) {
 		if (!finished) {
 			timer.stop();
-			state = up;
-			response = output;
+			response.state = up;
+			response.status = output;
 			finished = true;
 			self.get().interrupt();
 		}
 	}
 
-	public final StringBuilder getHostup(final int timeout, Context ctxt,
+	public final HostMessage getHostup(final int timeout, Context ctxt,
 			final String router) {
-		response = new StringBuilder();
+		response = new HostMessage();
 		/*
 		 * If null, use H_TARGET else construct URL from router string
 		 */
 		if (router == null)
-			target = H_TARGET;
+			target = FAILOVER_TARGET;
 		else
 			target = router;
-
-		icmpIP = target.substring(7, target.length());
 
 		reachable = timeout + TIMEOUT_EXTRA;
 		/*
@@ -174,7 +154,7 @@ public class Hostup {
 		self = new WeakReference<Thread>(Thread.currentThread());
 		timer.start();
 		finished = false;
-		if (!icmpIP.equals(INET_LOOPBACK) && !icmpIP.equals(INET_INVALID))
+		if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID))
 			_executor.execute(new GetICMP());
 		_executor.execute(new GetHeaders());
 		try {
@@ -182,13 +162,14 @@ public class Hostup {
 			/*
 			 * Oh no, looks like both threads have passed the timeout
 			 */
-			return new StringBuilder(ctxt.getString(R.string.critical_timeout));
+			return new HostMessage(ctxt.getString(R.string.critical_timeout),
+					false);
 		} catch (InterruptedException e) {
 			/*
 			 * interrupted by a result: this is desired behavior
 			 */
-			response.append(timer.getElapsed());
-			response.append(ctxt.getString(R.string.ms));
+			response.status.append(timer.getElapsed());
+			response.status.append(ctxt.getString(R.string.ms));
 			return response;
 		}
 	}
@@ -200,7 +181,7 @@ public class Hostup {
 		boolean isUp = false;
 
 		try {
-			if (InetAddress.getByName(icmpIP).isReachable(reachable))
+			if (InetAddress.getByName(target).isReachable(reachable))
 				isUp = true;
 
 		} catch (UnknownHostException e) {
@@ -216,47 +197,55 @@ public class Hostup {
 	 */
 	private static boolean getHttpHeaders(final Context context)
 			throws IOException, URISyntaxException {
-
-		DefaultHttpClient httpclient = HttpClientFactory.getThreadSafeClient();
+		/*
+		 * Create context for this thread
+		 */
+		BasicHttpContext httpctxt = new BasicHttpContext();
+		/*
+		 * Prepare httpclient
+		 */
+		if (httpclient == null) {
+			SchemeRegistry scheme = new SchemeRegistry();
+			scheme.register(new Scheme(HTTPSCHEME, PlainSocketFactory
+					.getSocketFactory(), 80));
+			HttpParams httpparams = new BasicHttpParams();
+			HttpProtocolParams.setVersion(httpparams, HttpVersion.HTTP_1_1);
+			HttpConnectionParams.setConnectionTimeout(httpparams, reachable);
+			HttpConnectionParams.setSoTimeout(httpparams, reachable);
+			HttpConnectionParams.setLinger(httpparams, 1);
+			HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
+			ClientConnectionManager cm = new ThreadSafeClientConnManager(
+					httpparams, scheme);
+			httpclient = new DefaultHttpClient(cm, httpparams);
+		}
 		/*
 		 * get URI
 		 */
 		try {
-			headURI = new URI(target);
+			headURI = new URI(context.getString(R.string.http) + target);
 		} catch (URISyntaxException e1) {
 			try {
-				headURI = new URI(H_TARGET);
+				headURI = new URI(context.getString(R.string.http)
+						+ FAILOVER_TARGET);
 			} catch (URISyntaxException e) {
 				// Should not ever happen since H_TARGET is a valid URL
 				e.printStackTrace();
 			}
 		}
-
 		int status;
-		try {
-			/*
-			 * Get response
-			 */
-			HttpResponse hr = httpclient.execute(new HttpHead(headURI));
-			status = hr.getStatusLine().getStatusCode();
-		} catch (IllegalStateException e) {
-			// httpclient in bad state, reset
-			httpclient = null;
-			status = -1;
-		} catch (NullPointerException e) {
-			/*
-			 * httpConnection null
-			 */
-			status = -1;
-		}
 
+		/*
+		 * Get response
+		 */
+		HttpResponse hr = httpclient.execute(new HttpHead(headURI), httpctxt);
+		status = hr.getStatusLine().getStatusCode();
 		if (status == HttpURLConnection.HTTP_OK)
 			return true;
 		else
 			return false;
 	}
-	
-	public void finish()  {
+
+	public void finish() {
 		_executor.shutdown();
 	}
 }

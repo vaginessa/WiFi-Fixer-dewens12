@@ -23,7 +23,7 @@
         android:layout_weight=".2"
         android:alpha=".90"
         android:background="@drawable/boxbg"
-        android:src="@drawable/signal0" />
+        android:src="@drawable/largesignal" />
 
     <LinearLayout
         android:id="@+id/wrapper3"
@@ -43,7 +43,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight=".6"
             android:paddingLeft="10dp"
-            android:text="Service Inactive" />
+            android:text="@string/service_inactive" />
 
         <TextView
             android:id="@+id/status"

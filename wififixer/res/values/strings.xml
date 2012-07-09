@@ -228,5 +228,7 @@
 	<string name="known_networks">Known</string>
 	<string name="local_networks">Local</string>
 	<string name="not_connected">Not Connected</string>
+	<string name="service_inactive">Service Inactive</string>
+	<string name="info">Info</string>
 
 </resources>
