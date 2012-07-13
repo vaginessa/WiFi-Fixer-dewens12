@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
@@ -255,7 +256,7 @@ public class ScanFragment extends Fragment {
 		return f;
 	}
 
-	private  BroadcastReceiver receiver = new BroadcastReceiver() {
+	private BroadcastReceiver receiver = new BroadcastReceiver() {
 		public void onReceive(final Context context, final Intent intent) {
 			/*
 			 * On Scan result intent refresh ListView
@@ -389,10 +390,10 @@ public class ScanFragment extends Fragment {
 		IntentFilter filter = new IntentFilter(
 				WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 		filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-		getContext().registerReceiver(receiver, filter);
+		BroadcastHelper.registerReceiver(getContext(), receiver, filter, false);
 	}
 
 	private void unregisterReceiver() {
-		getContext().unregisterReceiver(receiver);
+		BroadcastHelper.unregisterReceiver(getContext(), receiver);
 	}
 }

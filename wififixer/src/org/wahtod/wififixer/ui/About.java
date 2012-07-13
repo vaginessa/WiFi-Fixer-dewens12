@@ -64,7 +64,6 @@ public class About extends AppFragmentActivity {
 			vers = getString(R.string.error);
 			e.printStackTrace();
 		}
-
 		version.setText(vers.toCharArray(), 0, vers.length());
 	}
 }

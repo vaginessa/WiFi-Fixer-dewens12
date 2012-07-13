@@ -23,6 +23,7 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
+import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StringUtil;
 
@@ -138,7 +139,7 @@ public class KnownNetworksFragment extends Fragment {
 			Intent intent = new Intent(WFConnection.CONNECTINTENT);
 			intent.putExtra(WFConnection.NETWORKNAME,
 					PrefUtil.getSSIDfromNetwork(getContext(), clicked_position));
-			getContext().sendBroadcast(intent);
+			BroadcastHelper.sendBroadcast(getContext(), intent, true);
 			break;
 
 		case CONTEXT_NONMANAGE:
@@ -305,7 +306,6 @@ public class KnownNetworksFragment extends Fragment {
 			/*
 			 * we know this is going to be a scan result notification
 			 */
-
 			Message msg = Message.obtain();
 			msg.what = REFRESH_MESSAGE;
 			Bundle data = new Bundle();
@@ -313,7 +313,6 @@ public class KnownNetworksFragment extends Fragment {
 			msg.setData(data);
 			scanhandler.sendMessage(msg);
 		}
-
 	};
 
 	/*
@@ -462,12 +461,12 @@ public class KnownNetworksFragment extends Fragment {
 	private void registerReceiver() {
 		IntentFilter filter = new IntentFilter(
 				WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-		getContext().registerReceiver(receiver, filter);
+		BroadcastHelper.registerReceiver(getContext(), receiver, filter, false);
 		scanhandler.sendEmptyMessage(SCAN_MESSAGE);
 	}
 
 	private void unregisterReceiver() {
-		getContext().unregisterReceiver(receiver);
+		BroadcastHelper.unregisterReceiver(getContext(),receiver);
 		scanhandler.removeMessages(SCAN_MESSAGE);
 		scanhandler.removeMessages(REFRESH_MESSAGE);
 	}

@@ -24,6 +24,7 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.EditorDetector;
 import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
+import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.LogService;
 
 import android.content.BroadcastReceiver;
@@ -113,7 +114,8 @@ public class PrefUtil extends Object {
 		keyVals = new boolean[Pref.values().length];
 		IntentFilter filter = new IntentFilter(VALUE_CHANGED_ACTION);
 		filter.addAction(NETVALUE_CHANGED_ACTION);
-		c.registerReceiver(changeReceiver, filter);
+		BroadcastHelper.registerReceiver(context.get(), changeReceiver, filter,
+				true);
 		netprefs = new HashMap<String, int[]>();
 	}
 
@@ -195,7 +197,7 @@ public class PrefUtil extends Object {
 		Intent intent = new Intent(VALUE_CHANGED_ACTION);
 		intent.putExtra(VALUE_KEY, pref);
 		intent.putExtra(DATA_KEY, b);
-		c.sendBroadcast(intent);
+		BroadcastHelper.sendBroadcast(c, intent, true);
 	}
 
 	public static void notifyNetPrefChange(final Context c,
@@ -205,7 +207,7 @@ public class PrefUtil extends Object {
 		intent.putExtra(VALUE_KEY, netpref.key());
 		intent.putExtra(NET_KEY, netstring.toString());
 		intent.putExtra(INT_KEY, value);
-		c.sendBroadcast(intent);
+		BroadcastHelper.sendBroadcast(c, intent, true);
 	}
 
 	public void preLoad() {
@@ -255,6 +257,8 @@ public class PrefUtil extends Object {
 			final int network) {
 		List<WifiConfiguration> configs = getWifiManager(context)
 				.getConfiguredNetworks();
+		if (configs == null)
+			return null;
 		for (WifiConfiguration w : configs) {
 			if (w.networkId == network)
 				return w;
@@ -358,7 +362,7 @@ public class PrefUtil extends Object {
 	}
 
 	public void unRegisterReciever() {
-		context.get().unregisterReceiver(changeReceiver);
+		BroadcastHelper.unregisterReceiver(context.get(), changeReceiver);
 	}
 
 	public static void setPolicyfromSystem(final Context context) {

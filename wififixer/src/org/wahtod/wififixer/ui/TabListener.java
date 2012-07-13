@@ -28,17 +28,17 @@ import android.support.v4.view.ViewPager;
 
 public class TabListener implements ActionBar.TabListener {
 	private final WeakReference<Activity> mActivity;
-	private final ViewPager mPager;
+	private final WeakReference<ViewPager> mPager;
 
 	public TabListener(Activity activity) {
 		mActivity = new WeakReference<Activity>(activity);
-		mPager = (ViewPager) mActivity.get().findViewById(R.id.pager);
+		mPager = new WeakReference<ViewPager> ((ViewPager) mActivity.get().findViewById(R.id.pager));
 		/*
 		 * Throwing in a page change listener so the viewpager can keep the
 		 * currently selected tab synched with its current page
 		 */
-		if (mPager != null) {
-			mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+		if (mPager.get() != null) {
+			mPager.get().setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 				@Override
 				public void onPageScrollStateChanged(int arg0) {
 				}
@@ -57,7 +57,7 @@ public class TabListener implements ActionBar.TabListener {
 	}
 
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		mPager.setCurrentItem(tab.getPosition());
+		mPager.get().setCurrentItem(tab.getPosition());
 	}
 
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {

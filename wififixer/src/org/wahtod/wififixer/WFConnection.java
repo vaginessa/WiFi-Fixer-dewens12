@@ -24,6 +24,7 @@ import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.ui.LogFragment;
+import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.FifoList;
 import org.wahtod.wififixer.utility.HostMessage;
 import org.wahtod.wififixer.utility.Hostup;
@@ -518,20 +519,29 @@ public class WFConnection extends Object implements
 
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 		public void onReceive(final Context context, final Intent intent) {
-
-			/*
-			 * Dispatches the broadcast intent to the handler for processing
-			 */
-			Message message = handler.obtainMessage();
-			Bundle data = new Bundle();
-			message.what = INTENT;
-			data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
-			if (intent.getExtras() != null)
-				data.putAll(intent.getExtras());
-			message.setData(data);
-			handler.sendMessage(message);
+			handleBroadcast(context, intent);
 		}
 	};
+
+	private BroadcastReceiver localreceiver = new BroadcastReceiver() {
+		public void onReceive(final Context context, final Intent intent) {
+			handleBroadcast(context, intent);
+		}
+	};
+
+	private void handleBroadcast(final Context context, final Intent intent) {
+		/*
+		 * Dispatches the broadcast intent to the handler for processing
+		 */
+		Message message = handler.obtainMessage();
+		Bundle data = new Bundle();
+		message.what = INTENT;
+		data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
+		if (intent.getExtras() != null)
+			data.putAll(intent.getExtras());
+		message.setData(data);
+		handler.sendMessage(message);
+	}
 
 	public WFConnection(final Context context) {
 		_scantimer = new StopWatch();
@@ -562,7 +572,7 @@ public class WFConnection extends Object implements
 		 */
 		wifistate = getWifiManager(context).isWifiEnabled();
 		/*
-		 * Set up Intent filters
+		 * Set up system Intent filters
 		 */
 		IntentFilter filter = new IntentFilter(
 				WifiManager.WIFI_STATE_CHANGED_ACTION);
@@ -572,13 +582,17 @@ public class WFConnection extends Object implements
 		filter.addAction(android.net.ConnectivityManager.CONNECTIVITY_ACTION);
 		// wifi scan results available callback
 		filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-		// Connect intent
-		filter.addAction(CONNECTINTENT);
-		// User Event
-		filter.addAction(REASSOCIATE_INTENT);
 		// Sleep Check
 		filter.addAction(SLEEPCHECKINTENT);
-		context.registerReceiver(receiver, filter);
+		BroadcastHelper.registerReceiver(context, receiver, filter, false);
+		/*
+		 * Local Intent filters
+		 */
+		// Connect intent
+		filter = new IntentFilter(CONNECTINTENT);
+		// User Event
+		filter.addAction(REASSOCIATE_INTENT);
+		BroadcastHelper.registerReceiver(context, localreceiver, filter, true);
 		// Initialize WakeLock
 		wakelock = new WakeLock(context) {
 
@@ -1300,7 +1314,7 @@ public class WFConnection extends Object implements
 		if (PrefUtil.readBoolean(c, LogFragment.HAS_LOGFRAGMENT)) {
 			Intent i = new Intent(LogFragment.LOG_MESSAGE_INTENT);
 			i.putExtra(LogFragment.LOG_MESSAGE, message.toString());
-			c.sendBroadcast(i);
+			BroadcastHelper.sendBroadcast(c, i, true);
 		}
 
 		if (PrefUtil.getFlag(Pref.LOG_KEY))

@@ -21,6 +21,7 @@ import java.lang.reflect.Field;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
@@ -154,7 +155,7 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	private void connectNetwork() {
 		Intent intent = new Intent(WFConnection.CONNECTINTENT);
 		intent.putExtra(WFConnection.NETWORKNAME, network.SSID);
-		getActivity().sendBroadcast(intent);
+		BroadcastHelper.sendBroadcast(getActivity(),intent,true);
 	}
 
 	public static ConnectFragment newInstance(Bundle bundle) {

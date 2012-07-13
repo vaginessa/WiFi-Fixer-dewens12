@@ -51,7 +51,6 @@ public abstract class NotifUtil {
 	 */
 	public static final int SSID_STATUS_UNMANAGED = 3;
 	public static final int SSID_STATUS_MANAGED = 7;
-	public static final String NULL_SSID = "empty";
 	public static final String SEPARATOR = " : ";
 
 	public static final String ACTION_STATUS_NOTIFICATION = "org.wahtod.wififixer.STATNOTIF";
@@ -189,7 +188,7 @@ public abstract class NotifUtil {
 
 	public static StringBuilder truncateSSID(StringBuilder ssid) {
 		if (ssid == null || ssid.length() < 1)
-			return new StringBuilder(NULL_SSID);
+			return new StringBuilder(" ");
 		else if (ssid.length() < MAX_SSID_LENGTH)
 			return ssid;
 		else

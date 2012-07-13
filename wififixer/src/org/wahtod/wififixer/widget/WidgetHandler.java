@@ -22,6 +22,7 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ToggleService;
 import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
 
 import android.content.Context;
@@ -70,7 +71,8 @@ public class WidgetHandler {
 			 * Toggle Wifi
 			 */
 			else if (action.equals(TOGGLE_WIFI)) {
-				ctxt.get().startService(new Intent(ctxt.get(), ToggleService.class));
+				ctxt.get().startService(
+						new Intent(ctxt.get(), ToggleService.class));
 			}
 			/*
 			 * Reassociate
@@ -78,7 +80,8 @@ public class WidgetHandler {
 			else if (action.equals(REASSOCIATE)) {
 				NotifUtil.showToast(ctxt.get(),
 						ctxt.get().getString(R.string.reassociating));
-				ctxt.get().sendBroadcast(new Intent(WFConnection.REASSOCIATE_INTENT));
+				BroadcastHelper.sendBroadcast(ctxt.get(), new Intent(
+						WFConnection.REASSOCIATE_INTENT), true);
 				getWifiManager(ctxt.get()).reassociate();
 			}
 

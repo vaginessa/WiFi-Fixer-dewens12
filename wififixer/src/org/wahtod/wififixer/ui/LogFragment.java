@@ -21,6 +21,7 @@ import java.lang.ref.WeakReference;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.BroadcastHelper;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -156,12 +157,10 @@ public class LogFragment extends Fragment {
 
 	public void registerReceiver() {
 		IntentFilter filter = new IntentFilter(LOG_MESSAGE_INTENT);
-		if (getActivity() != null)
-			getActivity().registerReceiver(receiver, filter);
+		BroadcastHelper.registerReceiver(getActivity(), receiver, filter, true);
 	}
 
 	public void unregisterReceiver() {
-		if (getActivity() != null)
-			getActivity().unregisterReceiver(receiver);
+		BroadcastHelper.unregisterReceiver(getActivity(), receiver);
 	}
 }
