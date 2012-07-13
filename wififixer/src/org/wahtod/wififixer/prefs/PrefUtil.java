@@ -66,7 +66,7 @@ public class PrefUtil extends Object {
 	private static WifiManager wm_;
 	private static HashMap<String, int[]> netprefs;
 
-	private static BroadcastReceiver changeReceiver = new BroadcastReceiver() {
+	private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
 		public void onReceive(final Context context, final Intent intent) {
 			String valuekey = intent.getStringExtra(VALUE_KEY);
 			Message message = receiverExecutor.obtainMessage();
@@ -132,7 +132,8 @@ public class PrefUtil extends Object {
 			logstring.append(network);
 			logstring.append(COLON);
 			logstring.append(intTemp[pref.ordinal()]);
-			LogService.log(context.get(), LogService.getLogTag(context.get()), logstring);
+			LogService.log(context.get(), LogService.getLogTag(context.get()),
+					logstring);
 		}
 
 		netprefs.put(network, intTemp);

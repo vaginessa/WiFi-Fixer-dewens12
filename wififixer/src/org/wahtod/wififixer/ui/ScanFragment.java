@@ -255,7 +255,7 @@ public class ScanFragment extends Fragment {
 		return f;
 	}
 
-	private static BroadcastReceiver receiver = new BroadcastReceiver() {
+	private  BroadcastReceiver receiver = new BroadcastReceiver() {
 		public void onReceive(final Context context, final Intent intent) {
 			/*
 			 * On Scan result intent refresh ListView
