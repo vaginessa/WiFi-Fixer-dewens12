@@ -61,7 +61,7 @@ public class KnownNetworksFragment extends Fragment {
 	private static List<String> knownnetworks;
 	private static List<String> known_in_range;
 	private static ListView lv;
-	//private WifiConfiguration undo;
+	// private WifiConfiguration undo;
 
 	private static final int SCAN_MESSAGE = 31337;
 	private static final int REFRESH_MESSAGE = 2944;
@@ -156,7 +156,7 @@ public class KnownNetworksFragment extends Fragment {
 			int nid = getNidFromSSID(getContext(), ssid);
 			NotifUtil.showToast(getContext(),
 					getContext().getString(R.string.removing_network) + ssid);
-			//undo = PrefUtil.getNetworkByNID(getContext(), nid);
+			// undo = PrefUtil.getNetworkByNID(getContext(), nid);
 			PrefUtil.getWifiManager(getActivity()).removeNetwork(nid);
 			PrefUtil.getWifiManager(getActivity()).saveConfiguration();
 			scanhandler.sendEmptyMessage(SCAN_MESSAGE);
@@ -188,13 +188,12 @@ public class KnownNetworksFragment extends Fragment {
 	}
 
 	/*
-	 * Someday, when I can figure out how to do the UI
-	 * private void undoRemoveNetwork() {
-		PrefUtil.getWifiManager(getActivity()).addNetwork(undo);
-		PrefUtil.getWifiManager(getActivity()).saveConfiguration();
-		undo = null;
-		adapter.notifyDataSetChanged();
-	}*/
+	 * Someday, when I can figure out how to do the UI private void
+	 * undoRemoveNetwork() {
+	 * PrefUtil.getWifiManager(getActivity()).addNetwork(undo);
+	 * PrefUtil.getWifiManager(getActivity()).saveConfiguration(); undo = null;
+	 * adapter.notifyDataSetChanged(); }
+	 */
 
 	/*
 	 * custom adapter for Network List ListView

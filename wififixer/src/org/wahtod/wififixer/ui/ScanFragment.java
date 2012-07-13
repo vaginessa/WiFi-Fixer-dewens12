@@ -56,12 +56,10 @@ public class ScanFragment extends Fragment {
 	private WFScanResult clicked;
 	private ScanListAdapter adapter;
 	private ListView lv;
-
 	private static final int CONTEXT_CONNECT = 13;
 	private static final int CONTEXT_INFO = 15;
 	protected static final int REFRESH_LIST_ADAPTER = 0;
 	protected static final int CLEAR_LIST_ADAPTER = 1;
-
 	private static Handler drawhandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
@@ -80,7 +78,6 @@ public class ScanFragment extends Fragment {
 					self.get().clearScanListAdapter();
 				break;
 			}
-
 		}
 	};
 
@@ -97,6 +94,7 @@ public class ScanFragment extends Fragment {
 		lv = (ListView) v.findViewById(R.id.scanlist);
 		registerContextMenu();
 		registerReceiver();
+		drawhandler.sendEmptyMessage(REFRESH_LIST_ADAPTER);
 		return v;
 	}
 
@@ -133,17 +131,14 @@ public class ScanFragment extends Fragment {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-
 		switch (item.getItemId()) {
 		case CONTEXT_CONNECT:
 			dispatchContextMenuSelected(ConnectFragment.class.getName());
 			break;
-
 		case CONTEXT_INFO:
 			dispatchContextMenuSelected(AboutFragment.class.getName());
 			break;
 		}
-
 		return super.onContextItemSelected(item);
 	}
 
@@ -260,12 +255,12 @@ public class ScanFragment extends Fragment {
 		return f;
 	}
 
-	private BroadcastReceiver receiver = new BroadcastReceiver() {
+	private static BroadcastReceiver receiver = new BroadcastReceiver() {
 		public void onReceive(final Context context, final Intent intent) {
 			/*
 			 * On Scan result intent refresh ListView
 			 */
-			if (getActivity() == null)
+			if (self.get().getActivity() == null)
 				return;
 			else if (intent.getAction().equals(
 					WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
@@ -274,7 +269,7 @@ public class ScanFragment extends Fragment {
 				/*
 				 * clear list
 				 */
-				if (!(adapter == null)) {
+				if (!(self.get().adapter == null)) {
 					drawhandler.sendEmptyMessage(CLEAR_LIST_ADAPTER);
 				}
 			}

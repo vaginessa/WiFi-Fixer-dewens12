@@ -140,8 +140,11 @@ public class LogFragment extends Fragment {
 
 	@Override
 	public void onResume() {
-		if (getActivity() != null)
+		if (getActivity() != null) {
 			PrefUtil.writeBoolean(this.getActivity(), HAS_LOGFRAGMENT, true);
+			logToggle.setChecked(PrefUtil.readBoolean(this.getActivity(),
+					Pref.LOG_KEY.name()));
+		}
 		super.onResume();
 	}
 

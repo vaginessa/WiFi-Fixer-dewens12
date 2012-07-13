@@ -24,6 +24,7 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -154,9 +155,13 @@ public class Hostup {
 		self = new WeakReference<Thread>(Thread.currentThread());
 		timer.start();
 		finished = false;
-		if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID))
-			_executor.execute(new GetICMP());
-		_executor.execute(new GetHeaders());
+		try {
+			if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID))
+				_executor.execute(new GetICMP());
+			_executor.execute(new GetHeaders());
+		} catch (RejectedExecutionException e1) {
+			response.status.append(ctxt.getString(R.string.rejected_execution));
+		}
 		try {
 			Thread.sleep(reachable);
 			/*
