@@ -108,9 +108,6 @@ public class WFConnection extends Object implements
 
 	// User Event Intent
 	public static final String REASSOCIATE_INTENT = "org.wahtod.wififixer.USEREVENT";
-
-	// Empty string
-	private static final String EMPTYSTRING = "";
 	private static final String COLON = ":";
 	private static final String NEWLINE = "\n";
 
@@ -1412,6 +1409,21 @@ public class WFConnection extends Object implements
 		shouldrepair = false;
 	}
 
+	private void prepareConnect() {
+		/*
+		 * Flush queue if connected
+		 * 
+		 * Also clear any error notifications
+		 */
+		if (connectee != null) {
+			handleConnect();
+		}
+		clearQueue();
+		pendingscan = false;
+		pendingreconnect = false;
+		lastAP = getNetworkID();
+	}
+
 	/*
 	 * Lets us control duplicate posts and odd handler behavior when screen is
 	 * off
@@ -1534,84 +1546,63 @@ public class WFConnection extends Object implements
 	}
 
 	private void handleSupplicantState(final SupplicantState sState) {
-
-		/*
-		 * Supplicant state-specific logic
-		 */
-
-		if (!getWifiManager(ctxt.get()).isWifiEnabled()) {
+		if (!getWifiManager(ctxt.get()).isWifiEnabled())
 			return;
-		} else {
-
-			/*
-			 * Set disconnected
-			 */
-			if (!sState.equals(SupplicantState.COMPLETED)
-					&& !sState.equals(SupplicantState.FOUR_WAY_HANDSHAKE)
-					&& !sState.equals(SupplicantState.GROUP_HANDSHAKE))
-				_connected = false;
-			/*
-			 * Status notification updating supplicant state
-			 */
-			if (statNotifCheck()) {
-				if (sState.equals(SupplicantState.COMPLETED)) {
-					_status.status = new StringBuilder(
-							SupplicantState.COMPLETED.name());
-					_status.ssid = getSSID();
-				} else if (!getIsOnWifi(ctxt.get()))
-					clearConnectedStatus(new StringBuilder(sState.name()));
-
-				statusdispatcher.sendMessage(ctxt.get(), _status.getShow(true));
-			}
-			if (sState.equals(SupplicantState.COMPLETED) && !_connected)
-				onNetworkConnecting();
-			/*
-			 * Check for ASSOCIATING bug but first clear check if not
-			 * ASSOCIATING
-			 */
-			else if (!sState.equals(SupplicantState.ASSOCIATING)) {
-				supplicant_associating = 0;
-				handler.removeMessages(ASSOCWATCHDOG);
-			} else if (sState.equals(SupplicantState.ASSOCIATING))
-				handlerWrapper(ASSOCWATCHDOG, SHORTWAIT);
-			/*
-			 * Flush queue if connected
-			 * 
-			 * Also clear any error notifications
-			 */
-			else if (sState.equals(SupplicantState.ASSOCIATED)
-					|| sState.equals(SupplicantState.COMPLETED)) {
-
-				if (connectee != null) {
-					handleConnect();
-				}
-				clearQueue();
-				pendingscan = false;
-				pendingreconnect = false;
-				lastAP = getNetworkID();
-				return;
-			} else if (PrefUtil.getFlag(Pref.STATENOT_KEY)) {
-				_status.status = new StringBuilder(EMPTYSTRING);
-				_status.signal = 0;
-			}
-
-			if (!screenstate && !PrefUtil.getFlag(Pref.SCREEN_KEY))
-				return;
-			else if (sState.equals(SupplicantState.DISCONNECTED)) {
-				/*
-				 * ensure scan
-				 */
-				notifyWrap(ctxt.get(), sState.name());
-				handlerWrapper(SCANWATCHDOG, SHORTWAIT);
-			} else if (sState.equals(SupplicantState.INVALID))
-				supplicantFix();
-
+		/*
+		 * Disconnect check
+		 */
+		if (_connected && !sState.equals(SupplicantState.COMPLETED)
+				&& !sState.equals(SupplicantState.FOUR_WAY_HANDSHAKE)
+				&& !sState.equals(SupplicantState.GROUP_HANDSHAKE))
+			onNetworkDisconnected();
+		/*
+		 * Check for ASSOCIATING bug but first clear check if not ASSOCIATING
+		 */
+		if (!sState.equals(SupplicantState.ASSOCIATING)) {
+			supplicant_associating = 0;
+			handler.removeMessages(ASSOCWATCHDOG);
 		}
-
+		/*
+		 * Status notification updating supplicant state
+		 */
+		if (statNotifCheck()) {
+			_status.status = new StringBuilder(sState.name());
+			_status.ssid = getSSID();
+			statusdispatcher.sendMessage(ctxt.get(), _status.getShow(true));
+		}
+		/*
+		 * Log new supplicant state
+		 */
 		if (PrefUtil.getFlag(Pref.LOG_KEY) && screenstate)
 			log(ctxt.get(),
 					new StringBuilder(ctxt.get().getString(
 							R.string.supplicant_state)).append(sState));
+		/*
+		 * If/then/else list of supplicant states
+		 */
+		if (sState.equals(SupplicantState.ASSOCIATED)) {
+			prepareConnect();
+		} else if (sState.equals(SupplicantState.ASSOCIATING)) {
+			handlerWrapper(ASSOCWATCHDOG, SHORTWAIT);
+		} else if (sState.equals(SupplicantState.COMPLETED)) {
+			if (!_connected)
+				onNetworkConnecting();
+		} else if (sState.equals(SupplicantState.DISCONNECTED)) {
+			if (_connected)
+				/*
+				 * ensure scan
+				 */
+				notifyWrap(ctxt.get(), sState.name());
+			handlerWrapper(SCANWATCHDOG, SHORTWAIT);
+		} else if (sState.equals(SupplicantState.DORMANT)) {
+		} else if (sState.equals(SupplicantState.FOUR_WAY_HANDSHAKE)) {
+		} else if (sState.equals(SupplicantState.GROUP_HANDSHAKE)) {
+		} else if (sState.equals(SupplicantState.INACTIVE)) {
+		} else if (sState.equals(SupplicantState.INVALID)) {
+			supplicantFix();
+		} else if (sState.equals(SupplicantState.SCANNING)) {
+		} else if (sState.equals(SupplicantState.UNINITIALIZED)) {
+		}
 	}
 
 	private void handleWifiState(final Bundle data) {
@@ -1656,6 +1647,12 @@ public class WFConnection extends Object implements
 		if (getWifiManager(ctxt.get()).isWifiEnabled() && !screenstate) {
 			toggleWifi();
 		}
+	}
+
+	private void onNetworkDisconnected() {
+		_connected = false;
+		clearConnectedStatus(new StringBuilder(ctxt.get().getString(
+				R.string.disconnected)));
 	}
 
 	private void onNetworkConnecting() {

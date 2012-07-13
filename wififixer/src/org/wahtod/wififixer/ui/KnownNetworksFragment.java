@@ -57,7 +57,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 public class KnownNetworksFragment extends Fragment {
 	private static WeakReference<KnownNetworksFragment> self;
 	private String clicked;
-	private int clicked_position;
 	private static NetworkListAdapter adapter;
 	private static List<String> knownnetworks;
 	private static List<String> known_in_range;
@@ -112,7 +111,8 @@ public class KnownNetworksFragment extends Fragment {
 		menu.add(5, CONTEXT_REMOVE, 5, R.string.remove);
 		menu.setGroupEnabled(3, known_in_range.contains(clicked));
 
-		if (!PrefUtil.getNetworkState(getContext(), clicked_position)) {
+		if (!PrefUtil.getNetworkState(getContext(),
+				getNidFromSSID(getContext(), clicked))) {
 			menu.setGroupEnabled(3, false);
 			menu.setGroupEnabled(2, false);
 		} else
@@ -126,34 +126,46 @@ public class KnownNetworksFragment extends Fragment {
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case CONTEXT_ENABLE:
-			PrefUtil.setNetworkState(getContext(), clicked_position, true);
-			PrefUtil.writeNetworkState(getContext(), clicked_position, false);
+			PrefUtil.setNetworkState(getContext(),
+					getNidFromSSID(getContext(), clicked), true);
+			PrefUtil.writeNetworkState(getContext(),
+					getNidFromSSID(getContext(), clicked), false);
 			adapter.notifyDataSetChanged();
 			break;
 		case CONTEXT_DISABLE:
-			PrefUtil.setNetworkState(getContext(), clicked_position, false);
-			PrefUtil.writeNetworkState(getContext(), clicked_position, true);
+			PrefUtil.setNetworkState(getContext(),
+					getNidFromSSID(getContext(), clicked), false);
+			PrefUtil.writeNetworkState(getContext(),
+					getNidFromSSID(getContext(), clicked), true);
 			adapter.notifyDataSetChanged();
 			break;
 		case CONTEXT_CONNECT:
-			Intent intent = new Intent(WFConnection.CONNECTINTENT);
-			intent.putExtra(WFConnection.NETWORKNAME,
-					PrefUtil.getSSIDfromNetwork(getContext(), clicked_position));
-			BroadcastHelper.sendBroadcast(getContext(), intent, true);
+			if (PrefUtil.readBoolean(getContext(), Pref.DISABLE_KEY.name())) {
+				Intent intent = new Intent(WFConnection.CONNECTINTENT);
+				intent.putExtra(WFConnection.NETWORKNAME, PrefUtil
+						.getSSIDfromNetwork(getContext(),
+								getNidFromSSID(getContext(), clicked)));
+				BroadcastHelper.sendBroadcast(getContext(), intent, true);
+			} else {
+				PrefUtil.getWifiManager(getContext()).enableNetwork(
+						getNidFromSSID(getContext(), clicked), true);
+			}
 			break;
 
 		case CONTEXT_NONMANAGE:
-			if (!PrefUtil.readManagedState(getContext(), clicked_position)) {
-				PrefUtil.writeManagedState(getContext(), clicked_position, true);
+			if (!PrefUtil.readManagedState(getContext(),
+					getNidFromSSID(getContext(), clicked))) {
+				PrefUtil.writeManagedState(getContext(),
+						getNidFromSSID(getContext(), clicked), true);
 			} else {
-				PrefUtil.writeManagedState(getContext(), clicked_position,
-						false);
+				PrefUtil.writeManagedState(getContext(),
+						getNidFromSSID(getContext(), clicked), false);
 			}
 			adapter.notifyDataSetChanged();
 			break;
 
 		case CONTEXT_REMOVE:
-			String ssid = (String) lv.getItemAtPosition(clicked_position);
+			String ssid = clicked;
 			int nid = getNidFromSSID(getContext(), ssid);
 			NotifUtil.showToast(getContext(),
 					getContext().getString(R.string.removing_network) + ssid);
@@ -409,10 +421,8 @@ public class KnownNetworksFragment extends Fragment {
 			public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 					int position, long id) {
 				clicked = lv.getItemAtPosition(position).toString();
-				clicked_position = position;
 				return false;
 			}
-
 		});
 		registerForContextMenu(lv);
 	}
@@ -466,7 +476,7 @@ public class KnownNetworksFragment extends Fragment {
 	}
 
 	private void unregisterReceiver() {
-		BroadcastHelper.unregisterReceiver(getContext(),receiver);
+		BroadcastHelper.unregisterReceiver(getContext(), receiver);
 		scanhandler.removeMessages(SCAN_MESSAGE);
 		scanhandler.removeMessages(REFRESH_MESSAGE);
 	}
