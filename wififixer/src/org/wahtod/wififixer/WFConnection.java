@@ -76,7 +76,7 @@ public class WFConnection extends Object implements
 	 * For Status Messages
 	 */
 	protected static StatusMessage _status;
-	private static StatusDispatcher statusdispatcher;
+	private static StatusDispatcher _statusdispatcher;
 
 	// flags
 	private static boolean shouldrepair = false;
@@ -508,7 +508,7 @@ public class WFConnection extends Object implements
 				NotifUtil.setSsidStatus(NotifUtil.SSID_STATUS_UNMANAGED);
 			else
 				NotifUtil.setSsidStatus(NotifUtil.SSID_STATUS_MANAGED);
-			statusdispatcher.sendMessage(ctxt.get(), _status.getShow(true));
+			_statusdispatcher.sendMessage(ctxt.get(), _status.getShow(true));
 		}
 
 	};
@@ -547,7 +547,7 @@ public class WFConnection extends Object implements
 		appname = new StringBuilder();
 		self = new WeakReference<WFConnection>(this);
 		_supplicantFifo = new FifoList(FIFO_LENGTH);
-		statusdispatcher = new StatusDispatcher(context);
+		_statusdispatcher = new StatusDispatcher(context);
 		ScreenStateDetector.setOnScreenStateChangedListener(this);
 		appname = LogService.getLogTag(context);
 		screenstate = ScreenStateDetector.getScreenState(context);
@@ -718,7 +718,7 @@ public class WFConnection extends Object implements
 			else
 				_status.status = new StringBuilder(
 						context.getString(R.string.failed));
-			statusdispatcher.sendMessage(context, _status.getShow(true));
+			_statusdispatcher.sendMessage(context, _status.getShow(true));
 		}
 		return isup;
 	}
@@ -736,7 +736,7 @@ public class WFConnection extends Object implements
 				 */
 				_status.status = new StringBuilder(
 						context.getString(R.string.checking_network));
-				statusdispatcher.sendMessage(context, _status.getShow(true));
+				_statusdispatcher.sendMessage(context, _status.getShow(true));
 			}
 
 		}
@@ -802,7 +802,6 @@ public class WFConnection extends Object implements
 				new StringBuilder(context
 						.getString(R.string.connecting_to_network))
 						.append(connectee.wificonfig.SSID));
-
 	}
 
 	private int connectToBest(final Context context) {
@@ -1167,7 +1166,9 @@ public class WFConnection extends Object implements
 			ssid.append(getWifiManager(ctxt.get()).getConnectionInfo()
 					.getSSID());
 		} catch (Exception NullPointerException) {
-
+			/*
+			 * null
+			 */
 		}
 		if (ssid.length() > 0)
 			return ssid;
@@ -1568,7 +1569,7 @@ public class WFConnection extends Object implements
 		if (statNotifCheck()) {
 			_status.status = new StringBuilder(sState.name());
 			_status.ssid = getSSID();
-			statusdispatcher.sendMessage(ctxt.get(), _status.getShow(true));
+			_statusdispatcher.sendMessage(ctxt.get(), _status.getShow(true));
 		}
 		/*
 		 * Log new supplicant state
@@ -1727,7 +1728,7 @@ public class WFConnection extends Object implements
 		/*
 		 * Clear StatusDispatcher
 		 */
-		statusdispatcher.clearQueue();
+		_statusdispatcher.clearQueue();
 
 		/*
 		 * Disable Sleep check
@@ -1787,13 +1788,12 @@ public class WFConnection extends Object implements
 		clearHandler();
 		clearConnectedStatus(new StringBuilder(ctxt.get().getString(
 				R.string.wifi_is_disabled)));
-		statusdispatcher.sendMessage(ctxt.get(), new StatusMessage(
+		_statusdispatcher.sendMessage(ctxt.get(), new StatusMessage(
 				new StringBuilder(NULL_SSID), new StringBuilder(ctxt.get()
 						.getString(R.string.wifi_is_disabled)), 0, true));
 
 		if (PrefUtil.getFlag(Pref.LOG_KEY))
 			LogService.setLogTS(ctxt.get(), false, 0);
-		setWifiState(ctxt.get(), false);
 	}
 
 	private void onWifiEnabled() {
@@ -1812,7 +1812,6 @@ public class WFConnection extends Object implements
 		if (PrefUtil.readBoolean(ctxt.get(), PrefConstants.WIFI_STATE_LOCK))
 			PrefUtil.writeBoolean(ctxt.get(), PrefConstants.WIFI_STATE_LOCK,
 					false);
-		setWifiState(ctxt.get(), true);
 	}
 
 	public static boolean removeNetwork(final Context context, final int network) {
@@ -1858,23 +1857,13 @@ public class WFConnection extends Object implements
 			self.get().handlerWrapper(SCAN, SLEEPWAIT);
 	}
 
-	private static void setWifiState(final Context context, final boolean state) {
-
-		/*
-		 * Set Wifi State on honeycomb notification
-		 */
-		if (PrefUtil.getFlag(Pref.STATENOT_KEY)) {
-			statusdispatcher.sendMessage(context, _status.getShow(true));
-		}
-	}
-
 	protected void setStatNotif(final boolean state) {
 		if (state) {
 			_status.status = getSupplicantStateString(lastSupplicantState);
 			_status.ssid = getSSID();
-			statusdispatcher.sendMessage(ctxt.get(), _status.getShow(true));
+			_statusdispatcher.sendMessage(ctxt.get(), _status.getShow(true));
 		} else {
-			statusdispatcher.sendMessage(ctxt.get(), new StatusMessage(false));
+			_statusdispatcher.sendMessage(ctxt.get(), new StatusMessage(false));
 		}
 	}
 
@@ -2004,7 +1993,7 @@ public class WFConnection extends Object implements
 		log(ctxt.get(),
 				new StringBuilder(ctxt.get().getString(R.string.toggling_wifi)));
 		ctxt.get().sendBroadcast(new Intent(WidgetHandler.TOGGLE_WIFI));
-		statusdispatcher.sendMessage(ctxt.get(), new StatusMessage(
+		_statusdispatcher.sendMessage(ctxt.get(), new StatusMessage(
 				new StringBuilder(NULL_SSID), new StringBuilder(ctxt.get()
 						.getString(R.string.toggling_wifi)), 0, true));
 	}
