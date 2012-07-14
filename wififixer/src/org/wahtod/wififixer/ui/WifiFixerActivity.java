@@ -57,6 +57,7 @@ import android.widget.ToggleButton;
 
 public class WifiFixerActivity extends TutorialFragmentActivity {
 	private static WeakReference<WifiFixerActivity> self;
+
 	public class PhoneAdapter extends FragmentPagerAdapter {
 		public PhoneAdapter(FragmentManager fm) {
 			super(fm);
@@ -444,7 +445,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		dialog.show();
 	}
 
-	private void drawFragment(int id, Class<?> f) {
+	private void drawFragment(int id, Class<? extends Fragment> f) {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		Fragment found = getSupportFragmentManager().findFragmentByTag(
 				String.valueOf(id));

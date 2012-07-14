@@ -1579,30 +1579,26 @@ public class WFConnection extends Object implements
 					new StringBuilder(ctxt.get().getString(
 							R.string.supplicant_state)).append(sState));
 		/*
-		 * If/then/else list of supplicant states
+		 * Supplicant States
 		 */
-		if (sState.equals(SupplicantState.ASSOCIATED)) {
+		switch (sState) {
+		case ASSOCIATED:
 			prepareConnect();
-		} else if (sState.equals(SupplicantState.ASSOCIATING)) {
+			break;
+
+		case ASSOCIATING:
 			handlerWrapper(ASSOCWATCHDOG, SHORTWAIT);
-		} else if (sState.equals(SupplicantState.COMPLETED)) {
+			break;
+
+		case COMPLETED:
+		case DISCONNECTED:
 			if (!_connected)
 				onNetworkConnecting();
-		} else if (sState.equals(SupplicantState.DISCONNECTED)) {
-			if (_connected)
-				/*
-				 * ensure scan
-				 */
-				notifyWrap(ctxt.get(), sState.name());
-			handlerWrapper(SCANWATCHDOG, SHORTWAIT);
-		} else if (sState.equals(SupplicantState.DORMANT)) {
-		} else if (sState.equals(SupplicantState.FOUR_WAY_HANDSHAKE)) {
-		} else if (sState.equals(SupplicantState.GROUP_HANDSHAKE)) {
-		} else if (sState.equals(SupplicantState.INACTIVE)) {
-		} else if (sState.equals(SupplicantState.INVALID)) {
+			break;
+
+		case INVALID:
 			supplicantFix();
-		} else if (sState.equals(SupplicantState.SCANNING)) {
-		} else if (sState.equals(SupplicantState.UNINITIALIZED)) {
+			break;
 		}
 	}
 

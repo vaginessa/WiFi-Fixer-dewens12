@@ -89,7 +89,6 @@ public class LogFragment extends Fragment {
 		logToggle.setChecked(PrefUtil.readBoolean(getActivity(),
 				Pref.LOG_KEY.key()));
 		sendLog.setOnClickListener(onClick);
-		registerReceiver();
 		return v;
 	}
 
@@ -130,13 +129,8 @@ public class LogFragment extends Fragment {
 		 */
 		if (getActivity() != null)
 			PrefUtil.writeBoolean(this.getActivity(), HAS_LOGFRAGMENT, false);
-		super.onPause();
-	}
-
-	@Override
-	public void onDestroyView() {
 		unregisterReceiver();
-		super.onDestroyView();
+		super.onPause();
 	}
 
 	@Override
@@ -145,6 +139,7 @@ public class LogFragment extends Fragment {
 			PrefUtil.writeBoolean(this.getActivity(), HAS_LOGFRAGMENT, true);
 			logToggle.setChecked(PrefUtil.readBoolean(this.getActivity(),
 					Pref.LOG_KEY.name()));
+			registerReceiver();
 		}
 		super.onResume();
 	}

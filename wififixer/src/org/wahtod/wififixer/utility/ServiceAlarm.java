@@ -22,6 +22,7 @@ import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -73,7 +74,7 @@ public final class ServiceAlarm extends Object {
 	}
 
 	public static void setServiceEnabled(final Context context,
-			final Class<?> cls, final Boolean state) {
+			final Class<? extends Service> cls, final Boolean state) {
 		PackageManager pm = context.getPackageManager();
 		ComponentName service = new ComponentName(context, cls);
 		if (state)

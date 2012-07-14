@@ -146,7 +146,7 @@ public abstract class NotifUtil {
 			if (iconset == ICON_SET_SMALL)
 				signal = R.drawable.statsignal0;
 			else
-				signal = R.drawable.signal0;
+				signal = R.drawable.icon;
 			break;
 		case 1:
 			if (iconset == ICON_SET_SMALL)

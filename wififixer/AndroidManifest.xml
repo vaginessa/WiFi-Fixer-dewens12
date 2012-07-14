@@ -13,8 +13,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.wahtod.wififixer"
     android:installLocation="internalOnly"
-    android:versionCode="945"
-    android:versionName="0.9.5b7" >
+    android:versionCode="946"
+    android:versionName="0.9.5b8" >
 
     <!-- Documenting permissions here -->
     <!-- For service start (30 seconds from boot_completed) -->

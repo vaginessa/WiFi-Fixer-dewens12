@@ -42,13 +42,17 @@ public class FifoList extends ArrayList<Object> {
 		}
 		return true;
 	}
-
-	public boolean containsPattern(Collection<?> collection) {
-		if (this.toString().contains(
-				StringUtil.trimStringEnds(collection.toString())))
-			return true;
-		else
+	
+	public boolean containsPattern(Collection<SupplicantState> collection) {
+		if (this.size() < collection.size())
 			return false;
+		int idx = 0; 
+		while (idx < this.size() - collection.size()) {
+			if (this.subList(idx, idx + collection.size()).equals(collection))
+				return true;
+			idx++;
+		}
+		return false;
 	}
 
 	public boolean containsPatterns(final List<List<SupplicantState>> patterns) {

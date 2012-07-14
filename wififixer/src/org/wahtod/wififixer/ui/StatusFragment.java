@@ -160,13 +160,13 @@ public class StatusFragment extends Fragment {
 			linkspeed.setText(EMPTYSTRING);
 			status.setText(EMPTYSTRING);
 			icon.setImageDrawable(getResources()
-					.getDrawable(R.drawable.signal0));
+					.getDrawable(R.drawable.icon));
 		} else if (info.getRssi() == -200) {
 			ssid.setText(EMPTYSTRING);
 			signal.setText(EMPTYSTRING);
 			linkspeed.setText(EMPTYSTRING);
 			icon.setImageDrawable(getResources()
-					.getDrawable(R.drawable.signal0));
+					.getDrawable(R.drawable.icon));
 		} else {
 			ssid.setText(info.getSSID());
 			signal.setText(String.valueOf(info.getRssi()) + DBM);
