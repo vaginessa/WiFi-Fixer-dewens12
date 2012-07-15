@@ -121,6 +121,18 @@ public class LogFragment extends Fragment {
 		i.putExtra(WifiFixerActivity.SEND_LOG, true);
 		getActivity().startActivity(i);
 	}
+	
+	private void setIcon() {
+		/*
+		 * Draw icon
+		 */
+		if (PrefUtil.readBoolean(getActivity(), Pref.LOG_KEY.key())) {
+			logToggle.setChecked(true);
+		} else {
+			logToggle.setChecked(false);
+		}
+		logToggle.refreshDrawableState();
+	}
 
 	@Override
 	public void onPause() {
@@ -140,6 +152,7 @@ public class LogFragment extends Fragment {
 			logToggle.setChecked(PrefUtil.readBoolean(this.getActivity(),
 					Pref.LOG_KEY.name()));
 			registerReceiver();
+			setIcon();
 		}
 		super.onResume();
 	}

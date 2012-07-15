@@ -128,7 +128,7 @@ public class ServiceFragment extends Fragment {
 			servicebutton.setChecked(true);
 		}
 
-		if (!WifiFixerActivity.getIsWifiOn(getContext())) {
+		if (!PrefUtil.getWifiManager(getContext()).isWifiEnabled()) {
 			wifibutton.setChecked(false);
 		} else {
 			wifibutton.setChecked(true);

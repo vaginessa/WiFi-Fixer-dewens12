@@ -314,6 +314,12 @@ public class WFConnection extends Object implements
 			}
 			return isup;
 		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			wifiCheckResult(result);
+		}
+
 	}
 
 	/*
@@ -1398,7 +1404,7 @@ public class WFConnection extends Object implements
 	}
 
 	protected void wifiCheckResult(final boolean state) {
-		if (state) {
+		if (!state) {
 			_connected = false;
 			handlerWrapper(TEMPLOCK_OFF);
 			shouldrepair = true;

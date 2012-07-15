@@ -338,12 +338,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		NotifUtil.cancel(context, 3337);
 	}
 
-	public static boolean getIsWifiOn(final Context context) {
-		WifiManager wm = (WifiManager) context
-				.getSystemService(Context.WIFI_SERVICE);
-		return wm.isWifiEnabled();
-	}
-
 	public void drawUI() {
 		/*
 		 * Set up Fragments, ViewPagers and FragmentPagerAdapters for phone and
@@ -497,7 +491,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	}
 
 	public void wifiToggle(View view) {
-		if (!getIsWifiOn(this)) {
+		if (!PrefUtil.getWifiManager(this).isWifiEnabled()) {
 			sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
 			NotifUtil.showToast(this.getApplicationContext(),
 					R.string.enabling_wifi);

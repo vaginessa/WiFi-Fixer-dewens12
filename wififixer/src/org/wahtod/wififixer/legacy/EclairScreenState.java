@@ -16,11 +16,13 @@
 
 package org.wahtod.wififixer.legacy;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.PowerManager;
 
 public class EclairScreenState extends VersionedScreenState {
 
+	@SuppressLint("NewApi")
 	@Override
 	public boolean vgetScreenState(Context context) {
 		PowerManager pm = (PowerManager) context
