@@ -18,11 +18,13 @@ package org.wahtod.wififixer.legacy;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ui.TabListener;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
 
 public class ActionBarHelper extends ActionBarDetector {
+	@SuppressLint("NewApi")
 	@Override
 	public void vsetDisplayHomeAsUpEnabled(Activity a, boolean state) {
 		ActionBar actionBar = a.getActionBar();

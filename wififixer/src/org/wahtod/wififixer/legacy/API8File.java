@@ -16,10 +16,12 @@
 package org.wahtod.wififixer.legacy;
 
 import java.io.File;
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 public class API8File extends VersionedFile {
 
+	@SuppressLint("NewApi")
 	public File vgetLogFile(Context context, String filename) {
 		/*
 		 * Whee

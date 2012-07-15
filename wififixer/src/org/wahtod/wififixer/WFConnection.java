@@ -54,6 +54,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -260,6 +261,60 @@ public class WFConnection extends Object implements
 			}
 		}
 	};
+
+	/*
+	 * For network check
+	 */
+
+	private class NetworkCheckTask extends AsyncTask<Void, Void, Boolean> {
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			boolean isup = false;
+
+			/*
+			 * First check if wifi is current network
+			 */
+
+			if (!getIsOnWifi(ctxt.get())) {
+				log(ctxt.get(),
+						new StringBuilder(ctxt.get().getString(
+								R.string.wifi_not_current_network)));
+				_status.signal = 0;
+				return false;
+			}
+
+			/*
+			 * Check for network connectivity
+			 * 
+			 * First with router, then with google
+			 */
+
+			isup = networkUp(ctxt.get());
+			if (isup && wifirepair != W_REASSOCIATE)
+				wifirepair = W_REASSOCIATE;
+
+			/*
+			 * Signal check
+			 */
+
+			checkSignal(ctxt.get());
+
+			/*
+			 * Notify state
+			 */
+			if (screenstate) {
+				if (isup)
+					_status.status = new StringBuilder(ctxt.get().getString(
+							R.string.passed));
+				else
+					_status.status = new StringBuilder(ctxt.get().getString(
+							R.string.failed));
+				_statusdispatcher
+						.sendMessage(ctxt.get(), _status.getShow(true));
+			}
+			return isup;
+		}
+	}
 
 	/*
 	 * Runs first time supplicant nonresponsive
@@ -675,52 +730,6 @@ public class WFConnection extends Object implements
 		_status.status = state;
 		_status.signal = 0;
 		_status.ssid = new StringBuilder("");
-	}
-
-	private static boolean checkNetwork(final Context context) {
-		boolean isup = false;
-
-		/*
-		 * First check if wifi is current network
-		 */
-
-		if (!getIsOnWifi(context)) {
-			log(context,
-					new StringBuilder(context
-							.getString(R.string.wifi_not_current_network)));
-			_status.signal = 0;
-			return false;
-		}
-
-		/*
-		 * Check for network connectivity
-		 * 
-		 * First with router, then with google
-		 */
-
-		isup = networkUp(context);
-		if (isup && wifirepair != W_REASSOCIATE)
-			wifirepair = W_REASSOCIATE;
-
-		/*
-		 * Signal check
-		 */
-
-		checkSignal(context);
-
-		/*
-		 * Notify state
-		 */
-		if (screenstate) {
-			if (isup)
-				_status.status = new StringBuilder(
-						context.getString(R.string.passed));
-			else
-				_status.status = new StringBuilder(
-						context.getString(R.string.failed));
-			_statusdispatcher.sendMessage(context, _status.getShow(true));
-		}
-		return isup;
 	}
 
 	private static void checkSignal(final Context context) {
@@ -1379,17 +1388,21 @@ public class WFConnection extends Object implements
 
 	private void checkWifi() {
 		if (getIsSupplicantConnected(ctxt.get())) {
-			if (!checkNetwork(ctxt.get())) {
-				_connected = false;
-				handlerWrapper(TEMPLOCK_OFF);
-				shouldrepair = true;
-				wifiRepair();
-			}
+			new NetworkCheckTask().execute();
 		} else {
 			/*
 			 * Make sure scan happens in a reasonable amount of time
 			 */
 			handlerWrapper(SCANWATCHDOG, SHORTWAIT);
+		}
+	}
+
+	protected void wifiCheckResult(final boolean state) {
+		if (state) {
+			_connected = false;
+			handlerWrapper(TEMPLOCK_OFF);
+			shouldrepair = true;
+			wifiRepair();
 		}
 	}
 

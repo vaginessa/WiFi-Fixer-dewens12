@@ -33,8 +33,12 @@ public class SupplicantPatterns {
 			.asList(new SupplicantState[] { SupplicantState.DISCONNECTED,
 					SupplicantState.INACTIVE, SupplicantState.SCANNING,
 					SupplicantState.DISCONNECTED, SupplicantState.INACTIVE });
+	public static final List<SupplicantState> CONNECT_FAIL_1 = Arrays
+			.asList(new SupplicantState[] { SupplicantState.ASSOCIATED,
+					SupplicantState.FOUR_WAY_HANDSHAKE,
+					SupplicantState.DISCONNECTED });
 
 	@SuppressWarnings("unchecked")
 	public static final List<List<SupplicantState>> SCAN_BOUNCE_CLUSTER = Arrays
-			.asList(SCAN_BOUNCE_1, SCAN_BOUNCE_2);
+			.asList(SCAN_BOUNCE_1, SCAN_BOUNCE_2, CONNECT_FAIL_1);
 }
