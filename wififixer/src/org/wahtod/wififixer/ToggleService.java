@@ -23,6 +23,7 @@ import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.WifiFixerActivity;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
+import org.wahtod.wififixer.utility.ScreenStateDetector;
 import org.wahtod.wififixer.utility.WakeLock;
 import org.wahtod.wififixer.widget.WidgetHandler;
 
@@ -36,7 +37,6 @@ import android.os.Message;
 
 public class ToggleService extends Service {
 	private static WakeLock wlock;
-	private static WeakReference<Context> ctxt;
 	private static WeakReference<ToggleService> self;
 
 	/*
@@ -68,7 +68,7 @@ public class ToggleService extends Service {
 				 * Process MESSAGE
 				 */
 				switch (msg.what) {
-
+				
 				case ON:
 					self.get().sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
 					break;
@@ -101,7 +101,8 @@ public class ToggleService extends Service {
 				case TOGGLE:
 					if (!PrefUtil
 							.readBoolean(lc, PrefConstants.WIFI_STATE_LOCK)) {
-						wlock.lock(true);
+						if (ScreenStateDetector.getScreenState(lc))
+							wlock.lock(true);
 						NotifUtil.show(lc,
 								lc.getString(R.string.toggling_wifi), self
 										.get()
@@ -132,7 +133,6 @@ public class ToggleService extends Service {
 	@Override
 	public void onCreate() {
 		self = new WeakReference<ToggleService>(this);
-		ctxt = new WeakReference<Context>(this);
 		/*
 		 * initialize wake lock
 		 */
@@ -142,10 +142,10 @@ public class ToggleService extends Service {
 				@Override
 				public void onAcquire() {
 					LogService.log(
-							ctxt.get(),
+							self.get(),
 							new StringBuilder(
 									getString(R.string.wififixerservice)),
-							new StringBuilder(ctxt.get().getString(
+							new StringBuilder(self.get().getString(
 									R.string.acquiring_wake_lock)));
 					super.onAcquire();
 				}
@@ -153,10 +153,10 @@ public class ToggleService extends Service {
 				@Override
 				public void onRelease() {
 					LogService.log(
-							ctxt.get(),
-							new StringBuilder(ctxt.get().getString(
+							self.get(),
+							new StringBuilder(self.get().getString(
 									R.string.wififixerservice)),
-							new StringBuilder(ctxt.get().getString(
+							new StringBuilder(self.get().getString(
 									R.string.releasing_wake_lock)));
 					super.onRelease();
 				}
@@ -167,7 +167,6 @@ public class ToggleService extends Service {
 		 */
 		Thread toggleThread = new Thread(new RToggleRunnable());
 		toggleThread.start();
-
 		super.onCreate();
 	}
 

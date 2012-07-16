@@ -22,14 +22,16 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.HttpHead;
-import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -40,6 +42,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.BasicHttpContext;
 import org.wahtod.wififixer.R;
 
 import android.content.Context;
@@ -56,16 +59,17 @@ public class Hostup {
 	protected static final String HTTPSCHEME = "http";
 	protected static final String INET_LOOPBACK = "127.0.0.1";
 	protected static final String INET_INVALID = "0.0.0.0";
-	protected static volatile String target;
-	public static volatile HostMessage response;
 	protected static final int TIMEOUT_EXTRA = 2000;
-	protected static volatile URI headURI;
-	protected static volatile int reachable;
-	protected static volatile WeakReference<Context> context;
-	protected volatile static boolean finished;
+	protected volatile String target;
+	protected volatile HostMessage response;
+	protected volatile URI headURI;
+	protected volatile int reachable;
+	protected volatile WeakReference<Context> context;
 	protected volatile WeakReference<Thread> self;
-	protected static volatile StopWatch timer;
-	private static volatile DefaultHttpClient httpclient;
+	protected volatile boolean finished;
+	protected volatile StopWatch timer;
+	private volatile DefaultHttpClient httpclient;
+	private  ExecutorService _executor = Executors.newCachedThreadPool();
 
 	@SuppressWarnings("unused")
 	private Hostup() {
@@ -76,18 +80,18 @@ public class Hostup {
 		context = new WeakReference<Context>(c);
 	}
 
-	private static ExecutorService _executor = Executors.newFixedThreadPool(2);
+	
 
 	/*
 	 * http header check thread
 	 */
-	private class GetHeaders implements Runnable {
+	@SuppressWarnings("rawtypes")
+	private class GetHeaders implements Callable {
 		@Override
-		public void run() {
+		public Object call() throws Exception {
 			boolean c = false;
 			try {
 				c = getHttpHeaders(context.get());
-
 			} catch (IOException e) {
 				/*
 				 * fail, up is false
@@ -96,25 +100,26 @@ public class Hostup {
 				/*
 				 * fail, up is false
 				 */
-			} finally {
-				StringBuilder r = new StringBuilder(context.get().getString(
-						R.string.http));
-				r.append(target);
-				if (c)
-					r.append(context.get().getString(R.string.http_ok));
-				else
-					r.append(context.get().getString(R.string.http_fail));
-				finish(c, r);
 			}
+			StringBuilder r = new StringBuilder(context.get().getString(
+					R.string.http));
+			r.append(target);
+			if (c)
+				r.append(context.get().getString(R.string.http_ok));
+			else
+				r.append(context.get().getString(R.string.http_fail));
+			finish(c, r);
+			return null;
 		}
 	};
 
 	/*
 	 * icmp check thread
 	 */
-	private class GetICMP implements Runnable {
+	@SuppressWarnings("rawtypes")
+	private class GetICMP implements Callable {
 		@Override
-		public void run() {
+		public Object call() throws Exception {
 			boolean up = icmpHostup(context.get());
 
 			StringBuilder r = new StringBuilder(target);
@@ -123,6 +128,7 @@ public class Hostup {
 			else
 				r.append(context.get().getString(R.string.icmp_fail));
 			finish(up, r);
+			return null;
 		}
 	};
 
@@ -137,9 +143,11 @@ public class Hostup {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public final HostMessage getHostup(final int timeout, Context ctxt,
 			final String router) {
 		response = new HostMessage();
+		self = new WeakReference<Thread>(Thread.currentThread());
 		/*
 		 * If null, use H_TARGET else construct URL from router string
 		 */
@@ -152,31 +160,25 @@ public class Hostup {
 		/*
 		 * Start Check Threads
 		 */
-		self = new WeakReference<Thread>(Thread.currentThread());
 		timer.start();
 		finished = false;
+		ArrayList<Callable<Object>> torun = new ArrayList<Callable<Object>>();
+		if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID))
+			torun.add(new GetICMP());
+		torun.add(new GetHeaders());
 		try {
-			if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID))
-				_executor.execute(new GetICMP());
-			_executor.execute(new GetHeaders());
-		} catch (RejectedExecutionException e1) {
-			response.status.append(ctxt.getString(R.string.rejected_execution));
-		}
-		try {
-			Thread.sleep(reachable);
-			/*
-			 * Oh no, looks like both threads have passed the timeout
-			 */
-			return new HostMessage(ctxt.getString(R.string.critical_timeout),
-					false);
+			_executor.invokeAll(torun, reachable, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e) {
 			/*
-			 * interrupted by a result: this is desired behavior
+			 * We have a response
 			 */
 			response.status.append(timer.getElapsed());
 			response.status.append(ctxt.getString(R.string.ms));
 			return response;
+		} catch (RejectedExecutionException e) {
+			response.status.append(ctxt.getString(R.string.rejected_execution));
 		}
+		return new HostMessage(ctxt.getString(R.string.critical_timeout), false);
 	}
 
 	/*
@@ -200,8 +202,8 @@ public class Hostup {
 	/*
 	 * Performs HTTP HEAD request and returns boolean success or failure
 	 */
-	private static boolean getHttpHeaders(final Context context)
-			throws IOException, URISyntaxException {
+	private boolean getHttpHeaders(final Context context) throws IOException,
+			URISyntaxException {
 		/*
 		 * Create context for this thread
 		 */
@@ -251,6 +253,7 @@ public class Hostup {
 	}
 
 	public void finish() {
-		_executor.shutdown();
+		_executor.shutdownNow();
 	}
+
 }
