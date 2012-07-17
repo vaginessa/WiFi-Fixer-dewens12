@@ -50,6 +50,15 @@ public class LogFragment extends Fragment {
 	private ToggleButton logToggle;
 	private ImageButton sendLog;
 
+	private class ScrollToBottom implements Runnable {
+
+		@Override
+		public void run() {
+			mySV.fullScroll(ScrollView.FOCUS_DOWN);
+		}
+
+	};
+
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -72,7 +81,7 @@ public class LogFragment extends Fragment {
 			message.replaceAll("\\n", "");
 			log = log + message + "\n";
 			myTV.setText(log);
-			mySV.fullScroll(View.FOCUS_DOWN);
+			mySV.post(new ScrollToBottom());
 		}
 	}
 
@@ -121,7 +130,7 @@ public class LogFragment extends Fragment {
 		i.putExtra(WifiFixerActivity.SEND_LOG, true);
 		getActivity().startActivity(i);
 	}
-	
+
 	private void setIcon() {
 		/*
 		 * Draw icon
@@ -154,6 +163,7 @@ public class LogFragment extends Fragment {
 			registerReceiver();
 			setIcon();
 		}
+		mySV.post(new ScrollToBottom());
 		super.onResume();
 	}
 

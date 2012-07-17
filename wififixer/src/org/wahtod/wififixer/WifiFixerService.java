@@ -16,6 +16,7 @@
 
 package org.wahtod.wififixer;
 
+import org.ahmadsoft.ropes.Rope;
 import org.wahtod.wififixer.legacy.StrictModeDetector;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
@@ -113,10 +114,10 @@ public class WifiFixerService extends Service implements
 		if (intent != null && logging) {
 			if (intent.hasExtra(ServiceAlarm.ALARM_START))
 				LogService.log(this, LogService.getLogTag(this),
-						new StringBuilder(getString(R.string.alarm_intent)));
+						Rope.BUILDER.build(getString(R.string.alarm_intent)));
 			else
 				LogService.log(this, LogService.getLogTag(this),
-						new StringBuilder(getString(R.string.start_intent)));
+						Rope.BUILDER.build(getString(R.string.start_intent)));
 		}
 	}
 
@@ -136,10 +137,10 @@ public class WifiFixerService extends Service implements
 		 */
 
 		if (StrictModeDetector.setPolicy(false))
-			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
+			LogService.log(this, LogService.getLogTag(this), Rope.BUILDER.build(
 					getString(R.string.strict_mode_extant)));
 		else
-			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
+			LogService.log(this, LogService.getLogTag(this), Rope.BUILDER.build(
 					getString(R.string.strict_mode_unavailable)));
 		/*
 		 * Make sure service settings are enforced.
@@ -152,7 +153,7 @@ public class WifiFixerService extends Service implements
 		 */
 		preferenceInitialize(this);
 		if (logging) {
-			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
+			LogService.log(this, LogService.getLogTag(this), Rope.BUILDER.build(
 					getString(R.string.wififixerservice_build) + version));
 		}
 
@@ -180,7 +181,7 @@ public class WifiFixerService extends Service implements
 		else
 			registered = true;
 		if (logging)
-			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
+			LogService.log(this, LogService.getLogTag(this), Rope.BUILDER.build(
 					getString(R.string.oncreate)));
 	}
 
@@ -190,7 +191,7 @@ public class WifiFixerService extends Service implements
 		if (PrefUtil.getFlag(Pref.STATENOT_KEY))
 			wifi.setStatNotif(false);
 		if (logging)
-			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
+			LogService.log(this, LogService.getLogTag(this), Rope.BUILDER.build(
 					getString(R.string.ondestroy)));
 		cleanup();
 		super.onDestroy();
@@ -199,7 +200,7 @@ public class WifiFixerService extends Service implements
 	@Override
 	public void onLowMemory() {
 		if (logging)
-			LogService.log(this, LogService.getLogTag(this), new StringBuilder(
+			LogService.log(this, LogService.getLogTag(this), Rope.BUILDER.build(
 					getString(R.string.low_memory)));
 		super.onLowMemory();
 	}
@@ -251,13 +252,13 @@ public class WifiFixerService extends Service implements
 					LogService.log(
 							getBaseContext(),
 							LogService.getLogTag(context),
-							new StringBuilder(getBaseContext().getString(
+							Rope.BUILDER.build(getBaseContext().getString(
 									R.string.loading_settings)));
 					for (Pref prefkey : Pref.values()) {
 						if (getFlag(prefkey))
 							LogService.log(getBaseContext(),
 									LogService.getLogTag(context),
-									new StringBuilder(prefkey.key()));
+									Rope.BUILDER.build(prefkey.key()));
 					}
 
 				}
@@ -283,8 +284,8 @@ public class WifiFixerService extends Service implements
 						ServiceAlarm.setServiceEnabled(getBaseContext(),
 								LogService.class, true);
 						LogService.setLogTS(getBaseContext(), logging, 0);
-						LogService.log(getBaseContext(), new StringBuilder(
-								LogService.DUMPBUILD), new StringBuilder(
+						LogService.log(getBaseContext(), Rope.BUILDER.build(
+								LogService.DUMPBUILD), Rope.BUILDER.build(
 								EMPTYSTRING));
 						if (logPrefLoad)
 							NotifUtil.showToast(getBaseContext(),
@@ -315,11 +316,11 @@ public class WifiFixerService extends Service implements
 				 * Log change of preference state
 				 */
 				if (logging) {
-					StringBuilder l = new StringBuilder(
+					Rope l = Rope.BUILDER.build(
 							getString(R.string.prefs_change));
 					l.append(p.key());
 					l.append(getString(R.string.colon));
-					l.append(getFlag(p));
+					l.append(String.valueOf(getFlag(p)));
 					LogService.log(getBaseContext(),
 							LogService.getLogTag(getBaseContext()), l);
 				}

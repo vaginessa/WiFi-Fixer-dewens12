@@ -15,14 +15,16 @@ limitations under the License.
  */
 package org.wahtod.wififixer.utility;
 
+import org.ahmadsoft.ropes.Rope;
+
 public class StatusMessage {
-	public StringBuilder ssid;
-	public StringBuilder status;
+	public Rope ssid;
+	public Rope status;
 	public int signal;
 	public boolean show;
 
-	public StatusMessage(final StringBuilder notifSSID,
-			final StringBuilder notifStatus, final int si, final boolean sh) {
+	public StatusMessage(final Rope notifSSID,
+			final Rope notifStatus, final int si, final boolean sh) {
 		ssid = notifSSID;
 		status = notifStatus;
 		signal = si;
@@ -30,11 +32,11 @@ public class StatusMessage {
 	}
 
 	public StatusMessage(final boolean sh) {
-		ssid = new StringBuilder("");
-		status = new StringBuilder("");
+		ssid = Rope.BUILDER.build("");
+		status = Rope.BUILDER.build("");
 		show = sh;
 	}
-
+	
 	public StatusMessage getShow(final boolean sh) {
 		this.show = sh;
 		return this;

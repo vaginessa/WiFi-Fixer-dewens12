@@ -18,6 +18,7 @@ package org.wahtod.wififixer;
 
 import java.lang.ref.WeakReference;
 
+import org.ahmadsoft.ropes.Rope;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.WifiFixerActivity;
@@ -68,7 +69,7 @@ public class ToggleService extends Service {
 				 * Process MESSAGE
 				 */
 				switch (msg.what) {
-				
+
 				case ON:
 					self.get().sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
 					break;
@@ -141,11 +142,9 @@ public class ToggleService extends Service {
 
 				@Override
 				public void onAcquire() {
-					LogService.log(
-							self.get(),
-							new StringBuilder(
-									getString(R.string.wififixerservice)),
-							new StringBuilder(self.get().getString(
+					LogService.log(self.get(), Rope.BUILDER
+							.build(getString(R.string.wififixerservice)),
+							Rope.BUILDER.build(self.get().getString(
 									R.string.acquiring_wake_lock)));
 					super.onAcquire();
 				}
@@ -154,9 +153,9 @@ public class ToggleService extends Service {
 				public void onRelease() {
 					LogService.log(
 							self.get(),
-							new StringBuilder(self.get().getString(
+							Rope.BUILDER.build(self.get().getString(
 									R.string.wififixerservice)),
-							new StringBuilder(self.get().getString(
+							Rope.BUILDER.build(self.get().getString(
 									R.string.releasing_wake_lock)));
 					super.onRelease();
 				}

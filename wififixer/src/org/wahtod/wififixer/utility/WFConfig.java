@@ -16,6 +16,8 @@
 
 package org.wahtod.wififixer.utility;
 
+import org.ahmadsoft.ropes.Rope;
+
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 
@@ -47,7 +49,7 @@ public class WFConfig extends Object {
 
 	@Override
 	public String toString() {
-		StringBuilder result = new StringBuilder();
+		Rope result = Rope.BUILDER.build("");
 		String NEW_LINE = System.getProperty("line.separator");
 
 		result.append(this.getClass().getName() + " Object {" + NEW_LINE);

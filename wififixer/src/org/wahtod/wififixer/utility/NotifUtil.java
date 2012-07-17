@@ -16,6 +16,7 @@
 
 package org.wahtod.wififixer.utility;
 
+import org.ahmadsoft.ropes.Rope;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.HoneyCombNotifUtil;
 import org.wahtod.wififixer.legacy.LegacyNotifUtil;
@@ -83,8 +84,8 @@ public abstract class NotifUtil {
 	 * API
 	 */
 
-	public abstract void vaddStatNotif(Context ctxt, final StringBuilder ssid,
-			StringBuilder status, final int signal, final boolean flag);
+	public abstract void vaddStatNotif(Context ctxt, final Rope ssid,
+			Rope status, final int signal, final boolean flag);
 
 	public abstract void vaddLogNotif(final Context context, final boolean flag);
 
@@ -176,23 +177,21 @@ public abstract class NotifUtil {
 		return signal;
 	}
 
-	public static StringBuilder getLogString(final Context context) {
-		StringBuilder logstring = new StringBuilder(
+	public static Rope getLogString(final Context context) {
+		Rope logstring = Rope.BUILDER.build(
 				context.getString(R.string.writing_to_log));
 		logstring.append(NotifUtil.SEPARATOR);
-		logstring.append(VersionedFile.getFile(context, LogService.LOGFILE)
-				.length() / 1024);
+		logstring.append(String.valueOf(VersionedFile.getFile(context, LogService.LOGFILE)
+				.length() / 1024));
 		logstring.append(context.getString(R.string.k));
 		return logstring;
 	}
 
-	public static StringBuilder truncateSSID(StringBuilder ssid) {
-		if (ssid == null || ssid.length() < 1)
-			return new StringBuilder(" ");
-		else if (ssid.length() < MAX_SSID_LENGTH)
-			return ssid;
-		else
-			return new StringBuilder(ssid.substring(0, MAX_SSID_LENGTH));
+	public static Rope truncateSSID(Rope ssid) {
+		if (ssid.isEmpty() || ssid.length() < 1)
+			return Rope.BUILDER.build(" ");
+		else 
+			return Rope.BUILDER.build(ssid);
 	}
 
 	public static void cancel(final Context context, final int notif) {

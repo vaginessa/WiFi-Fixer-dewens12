@@ -15,16 +15,18 @@ limitations under the License.
  */
 package org.wahtod.wififixer.utility;
 
+import org.ahmadsoft.ropes.Rope;
+
 public class HostMessage {
-	public StringBuilder status;
+	public Rope status;
 	public boolean state;
 
 	public HostMessage(String sl, boolean s) {
-		status = new StringBuilder(sl);
+		status = Rope.BUILDER.build("");
 		state = s;
 	}
 
 	public HostMessage() {
-		status = new StringBuilder();
+		status = Rope.BUILDER.build("");
 	}
 }

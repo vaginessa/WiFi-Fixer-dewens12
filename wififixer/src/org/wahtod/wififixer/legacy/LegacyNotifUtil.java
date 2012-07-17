@@ -16,6 +16,7 @@
 
 package org.wahtod.wififixer.legacy;
 
+import org.ahmadsoft.ropes.Rope;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ui.WifiFixerActivity;
 import org.wahtod.wififixer.utility.NotifUtil;
@@ -29,8 +30,8 @@ import android.content.Intent;
 public class LegacyNotifUtil extends NotifUtil {
 	@SuppressWarnings("deprecation")
 	@Override
-	public void vaddStatNotif(Context ctxt, final StringBuilder ssid,
-			StringBuilder status, final int signal, final boolean flag) {
+	public void vaddStatNotif(Context ctxt, final Rope ssid,
+			Rope status, final int signal, final boolean flag) {
 		NotificationManager nm = (NotificationManager) ctxt
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -55,13 +56,13 @@ public class LegacyNotifUtil extends NotifUtil {
 		}
 
 		if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
-			status = new StringBuilder(ctxt.getString(R.string.unmanaged))
+			status = Rope.BUILDER.build(ctxt.getString(R.string.unmanaged))
 					.append(status);
 		}
 		NotifUtil.statnotif.icon = getIconfromSignal(signal,
 				NotifUtil.ICON_SET_SMALL);
 		NotifUtil.statnotif.iconLevel = signal;
-		StringBuilder ss = new StringBuilder(truncateSSID(ssid));
+		Rope ss = Rope.BUILDER.build(truncateSSID(ssid));
 		ss.append(NotifUtil.SEPARATOR);
 		ss.append(status);
 		NotifUtil.statnotif.setLatestEventInfo(ctxt,

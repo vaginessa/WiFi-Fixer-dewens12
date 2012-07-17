@@ -19,6 +19,7 @@ package org.wahtod.wififixer.ui;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
+import org.ahmadsoft.ropes.Rope;
 import org.wahtod.wififixer.R;
 
 import org.wahtod.wififixer.DefaultExceptionHandler;
@@ -223,8 +224,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		/*
 		 * Make sure LogService's buffer is flushed
 		 */
-		LogService.log(this, new StringBuilder(LogService.FLUSH),
-				new StringBuilder());
+		LogService.log(this, Rope.BUILDER.build(LogService.FLUSH),
+				Rope.BUILDER.build(""));
 
 		final String fileuri = file.toURI().toString();
 

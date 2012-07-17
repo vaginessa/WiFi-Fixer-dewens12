@@ -23,12 +23,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import org.ahmadsoft.ropes.Rope;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.HttpHead;
@@ -101,7 +103,7 @@ public class Hostup {
 				 * fail, up is false
 				 */
 			}
-			StringBuilder r = new StringBuilder(context.get().getString(
+			Rope r = Rope.BUILDER.build(context.get().getString(
 					R.string.http));
 			r.append(target);
 			if (c)
@@ -122,7 +124,7 @@ public class Hostup {
 		public Object call() throws Exception {
 			boolean up = icmpHostup(context.get());
 
-			StringBuilder r = new StringBuilder(target);
+			Rope r =Rope.BUILDER.build(target);
 			if (up)
 				r.append(context.get().getString(R.string.icmp_ok));
 			else
@@ -133,7 +135,7 @@ public class Hostup {
 	};
 
 	protected synchronized void finish(final boolean up,
-			final StringBuilder output) {
+			final Rope output) {
 		if (!finished) {
 			timer.stop();
 			response.state = up;
@@ -162,7 +164,7 @@ public class Hostup {
 		 */
 		timer.start();
 		finished = false;
-		ArrayList<Callable<Object>> torun = new ArrayList<Callable<Object>>();
+		List<Callable<Object>> torun = new ArrayList<Callable<Object>>();
 		if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID))
 			torun.add(new GetICMP());
 		torun.add(new GetHeaders());
@@ -172,7 +174,7 @@ public class Hostup {
 			/*
 			 * We have a response
 			 */
-			response.status.append(timer.getElapsed());
+			response.status.append(String.valueOf(timer.getElapsed()));
 			response.status.append(ctxt.getString(R.string.ms));
 			return response;
 		} catch (RejectedExecutionException e) {
