@@ -1182,13 +1182,13 @@ public class WFConnection extends Object implements
 		return null;
 	}
 
-	private static CharSequence getSSID() {
+	private static Rope getSSID() {
 		Rope s = Rope.BUILDER.build(getWifiManager(self.get().ctxt.get())
 				.getConnectionInfo().getSSID());
 		if (s!=null)
-			return s.toString();
+			return s;
 		else
-			return (" ");
+			return Rope.BUILDER.build(" ");
 	}
 
 	private static SupplicantState getSupplicantState() {
@@ -1591,7 +1591,7 @@ public class WFConnection extends Object implements
 		 */
 		if (statNotifCheck()) {
 			_status.status = Rope.BUILDER.build(sState.name());
-			_status.ssid = Rope.BUILDER.build(getSSID());
+			_status.ssid = getSSID();
 			_statusdispatcher.sendMessage(self.get().ctxt.get(),
 					_status.getShow(true));
 		}
@@ -1705,7 +1705,7 @@ public class WFConnection extends Object implements
 		restoreNetworkPriority(self.get().ctxt.get(), n);
 		icmpCache(self.get().ctxt.get());
 		_connected = true;
-		_status.ssid = Rope.BUILDER.build(getSSID());
+		_status.ssid = getSSID();
 
 		/*
 		 * Make sure connectee is null
@@ -1888,7 +1888,7 @@ public class WFConnection extends Object implements
 	protected void setStatNotif(final boolean state) {
 		if (state) {
 			_status.status = getSupplicantStateString(lastSupplicantState);
-			_status.ssid = Rope.BUILDER.build(getSSID());
+			_status.ssid = getSSID();
 			_statusdispatcher.sendMessage(self.get().ctxt.get(),
 					_status.getShow(true));
 		} else {
