@@ -29,6 +29,8 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 public class LegacyNotifUtil extends NotifUtil {
+	private NotificationCompat.Builder statbuilder;
+
 	@Override
 	public void vaddStatNotif(final Context ctxt, final StatusMessage m) {
 		validateStrings(m);
@@ -38,27 +40,32 @@ public class LegacyNotifUtil extends NotifUtil {
 			nm.cancel(NotifUtil.STATNOTIFID);
 			return;
 		}
-		NotificationCompat.Builder stat = new NotificationCompat.Builder(ctxt);
-		stat.setOngoing(true);
-		Intent intent = new Intent(ctxt, WifiFixerActivity.class).setAction(
-				Intent.ACTION_MAIN).setFlags(
-				Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-		stat.setContentIntent(PendingIntent.getActivity(ctxt, 0, intent, 0));
-		stat.setSmallIcon(R.drawable.notifsignal, m.getSignal());
-		stat.setSmallIcon(getIconfromSignal(m.getSignal(), NotifUtil.ICON_SET_SMALL));
-		stat.setWhen(0);
+		if (statbuilder == null) {
+			statbuilder = new NotificationCompat.Builder(ctxt);
+			statbuilder.setOngoing(true);
+			Intent intent = new Intent(ctxt, WifiFixerActivity.class)
+					.setAction(Intent.ACTION_MAIN).setFlags(
+							Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+			statbuilder.setContentIntent(PendingIntent.getActivity(ctxt, 0,
+					intent, 0));
+			statbuilder.setWhen(0);
+		}
+		statbuilder.setSmallIcon(R.drawable.notifsignal, m.getSignal());
+		statbuilder.setSmallIcon(getIconfromSignal(m.getSignal(),
+				NotifUtil.ICON_SET_SMALL));
+
 		StringBuilder out = new StringBuilder(m.getSSID());
 		if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
 			out.append(ctxt.getString(R.string.unmanaged));
 		}
 		out.append(NotifUtil.SEPARATOR);
 		out.append(m.getStatus());
-		stat.setContentText(out.toString());
-		stat.setContentTitle(ctxt.getString(R.string.app_name));
+		statbuilder.setContentText(out.toString());
+		statbuilder.setContentTitle(ctxt.getString(R.string.app_name));
 		/*
 		 * Fire the notification
 		 */
-		nm.notify(NotifUtil.STATNOTIFID, stat.getNotification());
+		nm.notify(NotifUtil.STATNOTIFID, statbuilder.getNotification());
 	}
 
 	@SuppressWarnings("deprecation")

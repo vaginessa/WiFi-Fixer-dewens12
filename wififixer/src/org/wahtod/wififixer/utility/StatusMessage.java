@@ -69,9 +69,13 @@ public class StatusMessage {
 	}
 
 	public static void send(final Context context, final StatusMessage tosend) {
+		if(!ScreenStateDetector.getScreenState(context))
+			return;
+		else{
 		Intent i = new Intent(StatusDispatcher.REFRESH_INTENT);
 		i.putExtras(tosend.status);
 		BroadcastHelper.sendBroadcast(context, i, true);
+		}
 	}
 
 	public StatusMessage setSSID(String s) {

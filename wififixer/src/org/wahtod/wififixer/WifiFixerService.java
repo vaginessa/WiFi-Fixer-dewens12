@@ -56,16 +56,16 @@ public class WifiFixerService extends Service implements
 
 	// Flags
 	private static boolean registered = false;
-	
+
 	private static boolean logging = false;
 
 	private static final int WIDGET_RESET_DELAY = 20000;
-	
+
 	// Version
 	private static int version = 0;
 
 	private WFConnection wifi;
-	private static ScreenStateDetector screenstateHandler;
+	private ScreenStateDetector screenstateHandler;
 	protected boolean logPrefLoad;
 
 	static boolean screenstate;
@@ -74,7 +74,7 @@ public class WifiFixerService extends Service implements
 	 * Preferences
 	 */
 	private static PrefUtil prefs;
-	
+
 	private void cleanup() {
 		wifi.wifiLock(false);
 		screenstateHandler.unsetOnScreenStateChangedListener(this);
@@ -343,7 +343,7 @@ public class WifiFixerService extends Service implements
 		logging = PrefUtil.getFlag(Pref.LOG_KEY);
 		NotifUtil.cancel(this, NOTIFID);
 	}
-	
+
 	private static void resetWidget(final Context context) {
 		final Handler h = new Handler();
 		h.postDelayed(new Runnable() {

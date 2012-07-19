@@ -114,7 +114,7 @@ public class WFConnection extends Object implements
 	// ms for network checks
 	private final static int REACHABLE = 6000;
 	// ms for main loop sleep
-	private final static int LOOPWAIT = 10000;
+	private final static int LOOPWAIT = 15000;
 	// ms for sleep loop check
 	private final static long SLEEPWAIT = 60000;
 	// ms for lock delays
@@ -273,7 +273,7 @@ public class WFConnection extends Object implements
 						R.string.wifi_not_current_network));
 				return false;
 			}
-
+			else{
 			/*
 			 * Check for network connectivity
 			 */
@@ -281,6 +281,7 @@ public class WFConnection extends Object implements
 			if (isup && wifirepair != W_REASSOCIATE)
 				wifirepair = W_REASSOCIATE;
 			return isup;
+			}
 		}
 
 		@Override
@@ -690,9 +691,21 @@ public class WFConnection extends Object implements
 			m.setSignal(WifiManager.calculateSignalLevel(signal, 5));
 			StatusMessage.send(context, m);
 		}
-		/*
-		 * Signal Hop Check
-		 */
+	
+		if (_signalCheckTime < System.currentTimeMillis()
+				&& Math.abs(signal) > Math.abs(getSignalThreshold(context))) {
+			notifyWrap(context, context.getString(R.string.signal_poor));
+			getWifiManager(ctxt.get()).startScan();
+			_signalhopping = true;
+			_signalCheckTime = System.currentTimeMillis()
+					+ SIGNAL_CHECK_INTERVAL;
+		}
+		log(context,
+				(new StringBuilder(context.getString(R.string.current_dbm))
+						.append(String.valueOf(signal))).toString());
+	}
+
+	private static int getSignalThreshold(final Context context) {
 		int detected = DEFAULT_DBM_FLOOR;
 		try {
 			detected = Integer.valueOf(PrefUtil.readString(context,
@@ -701,19 +714,8 @@ public class WFConnection extends Object implements
 			/*
 			 * pref is null, that's ok we have the default
 			 */
-		} finally {
-			if (_signalCheckTime < System.currentTimeMillis()
-					&& Math.abs(signal) > Math.abs(detected)) {
-				notifyWrap(context, context.getString(R.string.signal_poor));
-				getWifiManager(ctxt.get()).startScan();
-				_signalhopping = true;
-				_signalCheckTime = System.currentTimeMillis()
-						+ SIGNAL_CHECK_INTERVAL;
-			}
 		}
-		log(context,
-				(new StringBuilder(context.getString(R.string.current_dbm))
-						.append(String.valueOf(signal))).toString());
+		return detected;
 	}
 
 	private void connectToAP(final Context context, final String ssid) {
