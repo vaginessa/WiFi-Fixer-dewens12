@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Date;
 
-import org.ahmadsoft.ropes.Rope;
 import org.wahtod.wififixer.DefaultExceptionHandler;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WifiFixerService;
@@ -58,10 +57,10 @@ public class LogService extends Service {
 	private static final String COLON = ":";
 	private static final String NEWLINE = "\n";
 	private static int version = 0;
-	private Date time;
-	private Rope vstring = Rope.BUILDER.build(SPACE);
-	private static Rope tsheader;
-	private static BufferedWriter bwriter;
+	private static Date time;
+	private static String vstring;
+	private static StringBuilder tsheader;
+	private BufferedWriter bwriter;
 	public static final String DUMPBUILD = "DUMPBUILD";
 	public static final String LOG = "LOG";
 
@@ -108,7 +107,7 @@ public class LogService extends Service {
 		}
 	};
 
-	private static void addStackTrace(final Context context) {
+	private void addStackTrace(final Context context) {
 		if (hasStackTrace(context)) {
 			writeToFileLog(context, getStackTrace(context));
 			context.deleteFile(DefaultExceptionHandler.EXCEPTIONS_FILENAME);
@@ -121,28 +120,29 @@ public class LogService extends Service {
 		return file.length() > 0;
 	}
 
-	private static Rope getStackTrace(final Context context) {
-		Rope trace = Rope.BUILDER.build("");
+	private static String getStackTrace(final Context context) {
+		StringBuilder trace = new StringBuilder();
 		DataInputStream d;
 		try {
 			d = new DataInputStream(
 					context.openFileInput(DefaultExceptionHandler.EXCEPTIONS_FILENAME));
 		} catch (FileNotFoundException e1) {
-			return Rope.BUILDER.build(
-					context.getString(R.string.no_stack_trace_found));
-			}
+			return trace.append(
+					context.getString(R.string.no_stack_trace_found))
+					.toString();
+		}
 		for (;;) {
 			try {
 				trace.append(d.readUTF());
 			} catch (EOFException e) {
-				return Rope.BUILDER.build(trace.toString());
+				return trace.toString();
 			} catch (IOException e) {
-				return Rope.BUILDER.build(trace.toString());
+				return trace.toString();
 			} finally {
 				try {
 					d.close();
 				} catch (IOException e) {
-					return Rope.BUILDER.build(e.toString());
+					return e.toString();
 				}
 			}
 		}
@@ -151,9 +151,9 @@ public class LogService extends Service {
 	private void dispatchIntent(final Bundle data) {
 
 		if (data.containsKey(APPNAME) && data.containsKey(MESSAGE)) {
-			Rope app_name = Rope.BUILDER.build(data.getString(APPNAME));
-			Rope sMessage = Rope.BUILDER.build(data.getString(MESSAGE));
-			if (app_name.toString().equals(TIMESTAMP)) {
+			String app_name = data.getString(APPNAME);
+			String sMessage = data.getString(MESSAGE);
+			if (app_name.equals(TIMESTAMP)) {
 				handleTSCommand(data);
 			} else if (app_name.toString().equals(FLUSH)) {
 				if (bwriter != null) {
@@ -179,13 +179,13 @@ public class LogService extends Service {
 		}
 	}
 
-	public static Rope getBuildInfo() {
-		Rope out = Rope.BUILDER.build("");
+	public static String getBuildInfo() {
+		StringBuilder out = new StringBuilder("");
 		out.append(Build.MODEL);
 		out.append(NEWLINE);
 		out.append(Build.VERSION.RELEASE);
 		out.append(NEWLINE);
-		return out;
+		return out.toString();
 	}
 
 	void getPackageInfo() {
@@ -195,7 +195,7 @@ public class LogService extends Service {
 			PackageInfo pi = pm.getPackageInfo(this.getPackageName(), 0);
 			// ---display the versioncode--
 			version = pi.versionCode;
-			vstring = Rope.BUILDER.build(pi.versionName);
+			vstring = pi.versionName;
 		} catch (NameNotFoundException e) {
 			/*
 			 * We will always find our own package name
@@ -203,8 +203,8 @@ public class LogService extends Service {
 		}
 	}
 
-	public static Rope getLogTag(final Context context) {
-		return Rope.BUILDER.build(WifiFixerService.class.getSimpleName());
+	public static String getLogTag(final Context context) {
+		return WifiFixerService.class.getSimpleName();
 	}
 
 	private void handleIntent(Intent intent) {
@@ -264,12 +264,12 @@ public class LogService extends Service {
 		return START_STICKY;
 	}
 
-	public static void log(final Context context, final Rope appname2,
-			final Rope rope) {
+	public static void log(final Context context,
+			final String an, final String m) {
 		Intent sendIntent = new Intent(context, LogService.class);
 		sendIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
-		sendIntent.putExtra(APPNAME, appname2.toString());
-		sendIntent.putExtra(MESSAGE, rope.toString());
+		sendIntent.putExtra(APPNAME, an);
+		sendIntent.putExtra(MESSAGE, m);
 		context.startService(sendIntent);
 	}
 
@@ -290,11 +290,11 @@ public class LogService extends Service {
 	}
 
 	public static boolean processCommands(final Context context,
-			final Rope rope) {
+			final String rope) {
 		/*
 		 * Incoming intents might have a command to process
 		 */
-		if (rope.toString().equals(DUMPBUILD)) {
+		if (rope.equals(DUMPBUILD)) {
 			processLogIntent(context, getLogTag(context), getBuildInfo());
 			return true;
 		} else
@@ -332,7 +332,7 @@ public class LogService extends Service {
 		 * Construct timestamp header if empty
 		 */
 		if (tsheader == null) {
-			Rope message = Rope.BUILDER.build("");
+			StringBuilder message = new StringBuilder();
 			message.append(BUILD);
 			message.append(vstring);
 			message.append(COLON);
@@ -341,8 +341,8 @@ public class LogService extends Service {
 			message.append(COLON);
 			tsheader = message;
 		}
-		processLogIntent(context, getLogTag(context), Rope.BUILDER.build(
-				tsheader).append(time.toString()));
+		processLogIntent(context, getLogTag(context),
+				tsheader + time.toString());
 		/*
 		 * Schedule next timestamp or terminate
 		 */
@@ -355,7 +355,7 @@ public class LogService extends Service {
 	}
 
 	private static void processLogIntent(final Context context,
-			final Rope rope, final Rope rope2) {
+			final String rope, final String rope2) {
 		if (processCommands(context, rope))
 			return;
 		else {
@@ -363,11 +363,11 @@ public class LogService extends Service {
 			 * Write to syslog and our log file on sdcard
 			 */
 			Log.i(rope.toString(), rope2.toString());
-			writeToFileLog(context, rope2);
+			self.get().writeToFileLog(context, rope2);
 		}
 	}
 
-	static void writeToFileLog(final Context context, Rope rope) {
+	void writeToFileLog(final Context context, String rope2) {
 		if (Environment.getExternalStorageState() != null
 				&& !(Environment.getExternalStorageState()
 						.contains(Environment.MEDIA_MOUNTED))) {
@@ -384,7 +384,7 @@ public class LogService extends Service {
 			if (bwriter == null)
 				bwriter = new BufferedWriter(new FileWriter(
 						file.getAbsolutePath(), true), WRITE_BUFFER_SIZE);
-			bwriter.write(rope + NEWLINE);
+			bwriter.write(rope2 + NEWLINE);
 		} catch (Exception e) {
 			if (e.getMessage() != null)
 				Log.i(LogService.class.getSimpleName(),

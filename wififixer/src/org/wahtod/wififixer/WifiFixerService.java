@@ -16,27 +16,26 @@
 
 package org.wahtod.wififixer;
 
-import org.ahmadsoft.ropes.Rope;
 import org.wahtod.wififixer.legacy.StrictModeDetector;
 import org.wahtod.wififixer.prefs.PrefConstants;
-import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
+import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ScreenStateDetector;
-import org.wahtod.wififixer.utility.ServiceAlarm;
+import org.wahtod.wififixer.utility.StatusDispatcher;
+import org.wahtod.wififixer.utility.StatusMessage;
 import org.wahtod.wififixer.utility.ScreenStateDetector.OnScreenStateChangedListener;
-import org.wahtod.wififixer.widget.FixerWidget;
+import org.wahtod.wififixer.utility.ServiceAlarm;
 
 import android.app.Service;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 
@@ -57,10 +56,11 @@ public class WifiFixerService extends Service implements
 
 	// Flags
 	private static boolean registered = false;
-
-	// logging flag, local for performance
+	
 	private static boolean logging = false;
 
+	private static final int WIDGET_RESET_DELAY = 20000;
+	
 	// Version
 	private static int version = 0;
 
@@ -73,22 +73,8 @@ public class WifiFixerService extends Service implements
 	/*
 	 * Preferences
 	 */
-	private PrefUtil prefs;
-
-	private static void refreshWidget(final Context context) {
-		Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-		/*
-		 * Doing this right.
-		 */
-		AppWidgetManager appWidgetManager = AppWidgetManager
-				.getInstance(context);
-		int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context,
-				FixerWidget.class));
-		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-		intent.setClass(context, FixerWidget.class);
-		context.sendBroadcast(intent);
-	}
-
+	private static PrefUtil prefs;
+	
 	private void cleanup() {
 		wifi.wifiLock(false);
 		screenstateHandler.unsetOnScreenStateChangedListener(this);
@@ -114,10 +100,10 @@ public class WifiFixerService extends Service implements
 		if (intent != null && logging) {
 			if (intent.hasExtra(ServiceAlarm.ALARM_START))
 				LogService.log(this, LogService.getLogTag(this),
-						Rope.BUILDER.build(getString(R.string.alarm_intent)));
+						getString(R.string.alarm_intent));
 			else
 				LogService.log(this, LogService.getLogTag(this),
-						Rope.BUILDER.build(getString(R.string.start_intent)));
+						getString(R.string.start_intent));
 		}
 	}
 
@@ -137,11 +123,11 @@ public class WifiFixerService extends Service implements
 		 */
 
 		if (StrictModeDetector.setPolicy(false))
-			LogService.log(this, LogService.getLogTag(this), Rope.BUILDER.build(
-					getString(R.string.strict_mode_extant)));
+			LogService.log(this, LogService.getLogTag(this),
+					(getString(R.string.strict_mode_extant)));
 		else
-			LogService.log(this, LogService.getLogTag(this), Rope.BUILDER.build(
-					getString(R.string.strict_mode_unavailable)));
+			LogService.log(this, LogService.getLogTag(this),
+					(getString(R.string.strict_mode_unavailable)));
 		/*
 		 * Make sure service settings are enforced.
 		 */
@@ -153,18 +139,14 @@ public class WifiFixerService extends Service implements
 		 */
 		preferenceInitialize(this);
 		if (logging) {
-			LogService.log(this, LogService.getLogTag(this), Rope.BUILDER.build(
-					getString(R.string.wififixerservice_build) + version));
+			LogService.log(this, LogService.getLogTag(this),
+					(getString(R.string.wififixerservice_build) + version));
 		}
 
 		/*
 		 * Set initial screen state
 		 */
 		setInitialScreenState();
-		/*
-		 * Refresh Widget
-		 */
-		refreshWidget(this);
 		/*
 		 * Initialize Wifi Connection class
 		 */
@@ -181,18 +163,20 @@ public class WifiFixerService extends Service implements
 		else
 			registered = true;
 		if (logging)
-			LogService.log(this, LogService.getLogTag(this), Rope.BUILDER.build(
-					getString(R.string.oncreate)));
+			LogService.log(this, LogService.getLogTag(this),
+					(getString(R.string.oncreate)));
 	}
 
 	@Override
 	public void onDestroy() {
+		if (PrefUtil.readBoolean(this, Pref.HASWIDGET_KEY.key()))
+			resetWidget(this);
 		unregisterReceivers();
 		if (PrefUtil.getFlag(Pref.STATENOT_KEY))
 			wifi.setStatNotif(false);
 		if (logging)
-			LogService.log(this, LogService.getLogTag(this), Rope.BUILDER.build(
-					getString(R.string.ondestroy)));
+			LogService.log(this, LogService.getLogTag(this),
+					(getString(R.string.ondestroy)));
 		cleanup();
 		super.onDestroy();
 	}
@@ -200,8 +184,8 @@ public class WifiFixerService extends Service implements
 	@Override
 	public void onLowMemory() {
 		if (logging)
-			LogService.log(this, LogService.getLogTag(this), Rope.BUILDER.build(
-					getString(R.string.low_memory)));
+			LogService.log(this, LogService.getLogTag(this),
+					(getString(R.string.low_memory)));
 		super.onLowMemory();
 	}
 
@@ -249,16 +233,14 @@ public class WifiFixerService extends Service implements
 			@Override
 			public void log() {
 				if (logging) {
-					LogService.log(
-							getBaseContext(),
-							LogService.getLogTag(context),
-							Rope.BUILDER.build(getBaseContext().getString(
-									R.string.loading_settings)));
+					LogService.log(getBaseContext(), LogService
+							.getLogTag(context), (getBaseContext()
+							.getString(R.string.loading_settings)));
 					for (Pref prefkey : Pref.values()) {
 						if (getFlag(prefkey))
 							LogService.log(getBaseContext(),
 									LogService.getLogTag(context),
-									Rope.BUILDER.build(prefkey.key()));
+									(prefkey.key()));
 					}
 
 				}
@@ -281,12 +263,11 @@ public class WifiFixerService extends Service implements
 				case LOG_KEY:
 					logging = getFlag(Pref.LOG_KEY);
 					if (logging) {
-						ServiceAlarm.setServiceEnabled(getBaseContext(),
+						ServiceAlarm.setComponentEnabled(getBaseContext(),
 								LogService.class, true);
 						LogService.setLogTS(getBaseContext(), logging, 0);
-						LogService.log(getBaseContext(), Rope.BUILDER.build(
-								LogService.DUMPBUILD), Rope.BUILDER.build(
-								EMPTYSTRING));
+						LogService.log(getBaseContext(),
+								(LogService.DUMPBUILD), (EMPTYSTRING));
 						if (logPrefLoad)
 							NotifUtil.showToast(getBaseContext(),
 									R.string.enabling_logging);
@@ -295,7 +276,7 @@ public class WifiFixerService extends Service implements
 						if (logPrefLoad)
 							NotifUtil.showToast(getBaseContext(),
 									R.string.disabling_logging);
-						ServiceAlarm.setServiceEnabled(getBaseContext(),
+						ServiceAlarm.setComponentEnabled(getBaseContext(),
 								LogService.class, false);
 					}
 					if (!logPrefLoad) {
@@ -316,13 +297,14 @@ public class WifiFixerService extends Service implements
 				 * Log change of preference state
 				 */
 				if (logging) {
-					Rope l = Rope.BUILDER.build(
+					StringBuilder l = new StringBuilder(
 							getString(R.string.prefs_change));
 					l.append(p.key());
 					l.append(getString(R.string.colon));
 					l.append(String.valueOf(getFlag(p)));
 					LogService.log(getBaseContext(),
-							LogService.getLogTag(getBaseContext()), l);
+							LogService.getLogTag(getBaseContext()),
+							l.toString());
 				}
 			}
 
@@ -360,6 +342,21 @@ public class WifiFixerService extends Service implements
 		prefs.loadPrefs();
 		logging = PrefUtil.getFlag(Pref.LOG_KEY);
 		NotifUtil.cancel(this, NOTIFID);
+	}
+	
+	private static void resetWidget(final Context context) {
+		final Handler h = new Handler();
+		h.postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				StatusMessage m = StatusMessage.getNew()
+						.setSSID(context.getString(R.string.service_inactive))
+						.setSignal(0);
+				StatusDispatcher.broadcastWidgetNotif(context, m);
+			}
+
+		}, WIDGET_RESET_DELAY);
 	}
 
 	private void setInitialScreenState() {

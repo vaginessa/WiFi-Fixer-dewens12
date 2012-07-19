@@ -16,63 +16,49 @@
 
 package org.wahtod.wififixer.legacy;
 
-import org.ahmadsoft.ropes.Rope;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ui.WifiFixerActivity;
 import org.wahtod.wififixer.utility.NotifUtil;
+import org.wahtod.wififixer.utility.StatusMessage;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 
 public class LegacyNotifUtil extends NotifUtil {
-	@SuppressWarnings("deprecation")
 	@Override
-	public void vaddStatNotif(Context ctxt, final Rope ssid,
-			Rope status, final int signal, final boolean flag) {
+	public void vaddStatNotif(final Context ctxt, final StatusMessage m) {
+		validateStrings(m);
 		NotificationManager nm = (NotificationManager) ctxt
 				.getSystemService(Context.NOTIFICATION_SERVICE);
-
-		if (!flag) {
+		if (m.getShow() != 1) {
 			nm.cancel(NotifUtil.STATNOTIFID);
-			NotifUtil.statnotif = null;
 			return;
 		}
-
-		if (NotifUtil.statnotif == null) {
-			NotifUtil.statnotif = new Notification(R.drawable.notifsignal,
-					ctxt.getString(R.string.network_status), 0);
-
-			Intent intent = new Intent(ctxt, WifiFixerActivity.class)
-					.setAction(Intent.ACTION_MAIN).setFlags(
-							Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-
-			NotifUtil.contentIntent = PendingIntent.getActivity(ctxt, 0,
-					intent, 0);
-			NotifUtil.statnotif.contentIntent = NotifUtil.contentIntent;
-			NotifUtil.statnotif.flags = Notification.FLAG_ONGOING_EVENT;
-		}
-
+		NotificationCompat.Builder stat = new NotificationCompat.Builder(ctxt);
+		stat.setOngoing(true);
+		Intent intent = new Intent(ctxt, WifiFixerActivity.class).setAction(
+				Intent.ACTION_MAIN).setFlags(
+				Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		stat.setContentIntent(PendingIntent.getActivity(ctxt, 0, intent, 0));
+		stat.setSmallIcon(R.drawable.notifsignal, m.getSignal());
+		stat.setSmallIcon(getIconfromSignal(m.getSignal(), NotifUtil.ICON_SET_SMALL));
+		stat.setWhen(0);
+		StringBuilder out = new StringBuilder(m.getSSID());
 		if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
-			status = Rope.BUILDER.build(ctxt.getString(R.string.unmanaged))
-					.append(status);
+			out.append(ctxt.getString(R.string.unmanaged));
 		}
-		NotifUtil.statnotif.icon = getIconfromSignal(signal,
-				NotifUtil.ICON_SET_SMALL);
-		NotifUtil.statnotif.iconLevel = signal;
-		Rope ss = Rope.BUILDER.build(truncateSSID(ssid));
-		ss.append(NotifUtil.SEPARATOR);
-		ss.append(status);
-		NotifUtil.statnotif.setLatestEventInfo(ctxt,
-				ctxt.getString(R.string.app_name), ss, NotifUtil.contentIntent);
-
+		out.append(NotifUtil.SEPARATOR);
+		out.append(m.getStatus());
+		stat.setContentText(out.toString());
+		stat.setContentTitle(ctxt.getString(R.string.app_name));
 		/*
 		 * Fire the notification
 		 */
-		nm.notify(NotifUtil.STATNOTIFID, NotifUtil.statnotif);
-
+		nm.notify(NotifUtil.STATNOTIFID, stat.getNotification());
 	}
 
 	@SuppressWarnings("deprecation")

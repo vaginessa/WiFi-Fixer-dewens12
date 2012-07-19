@@ -19,7 +19,9 @@ package org.wahtod.wififixer.ui;
 import java.lang.ref.WeakReference;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
+import org.wahtod.wififixer.utility.StatusMessage;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -45,7 +47,6 @@ public class StatusFragment extends Fragment {
 	private static final String DBM = "dBm";
 	private static final String MB = "mb";
 	public static final String STATUS_ACTION = "org.wahtod.wififixer.ACTION.STATUS_UPDATE";
-	public static final String STATUS_KEY = "STATUS_KEY";
 	private static WeakReference<StatusFragment> self;
 	private TextView linkspeed;
 	private TextView ssid;
@@ -71,8 +72,8 @@ public class StatusFragment extends Fragment {
 				 * Change status text
 				 */
 				if (!message.getData().isEmpty())
-					self.get().status.setText(message.getData().getString(
-							STATUS_KEY));
+					self.get().status.setText(StatusMessage
+							.fromMessage(message).getStatus());
 				break;
 			}
 		}
@@ -159,14 +160,12 @@ public class StatusFragment extends Fragment {
 			signal.setText(EMPTYSTRING);
 			linkspeed.setText(EMPTYSTRING);
 			status.setText(EMPTYSTRING);
-			icon.setImageDrawable(getResources()
-					.getDrawable(R.drawable.icon));
+			icon.setImageDrawable(getResources().getDrawable(R.drawable.icon));
 		} else if (info.getRssi() == -200) {
 			ssid.setText(EMPTYSTRING);
 			signal.setText(EMPTYSTRING);
 			linkspeed.setText(EMPTYSTRING);
-			icon.setImageDrawable(getResources()
-					.getDrawable(R.drawable.icon));
+			icon.setImageDrawable(getResources().getDrawable(R.drawable.icon));
 		} else {
 			ssid.setText(info.getSSID());
 			signal.setText(String.valueOf(info.getRssi()) + DBM);
@@ -184,11 +183,12 @@ public class StatusFragment extends Fragment {
 	}
 
 	private void unregisterReceiver() {
-		getContext().unregisterReceiver(statusreceiver);
+		BroadcastHelper.unregisterReceiver(getContext(), statusreceiver);
 	}
 
 	private void registerReceiver() {
 		IntentFilter filter = new IntentFilter(STATUS_ACTION);
-		getContext().registerReceiver(statusreceiver, filter);
+		BroadcastHelper.registerReceiver(getContext(), statusreceiver, filter,
+				true);
 	}
 }

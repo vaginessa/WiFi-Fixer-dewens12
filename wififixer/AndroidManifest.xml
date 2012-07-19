@@ -14,7 +14,8 @@
     package="org.wahtod.wififixer"
     android:installLocation="internalOnly"
     android:versionCode="948"
-    android:versionName="0.9.5b8" xmlns:tools="http://schemas.android.com/tools">
+    android:versionName="0.9.5b8" 
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Documenting permissions here -->
     <!-- For service start (30 seconds from boot_completed) -->
@@ -130,7 +131,7 @@
         <receiver android:name=".widget.FixerWidget" tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="org.wahtod.wififixer.STATNOTIF" >
+                <action android:name="org.wahtod.wififixer.WNOTIF" >
                 </action>
             </intent-filter>
 

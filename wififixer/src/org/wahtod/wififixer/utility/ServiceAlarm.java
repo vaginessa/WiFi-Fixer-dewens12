@@ -22,7 +22,6 @@ import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -62,19 +61,19 @@ public final class ServiceAlarm extends Object {
 	 */
 	public static void enforceServicePrefs(final Context context) {
 		if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
-			setServiceEnabled(context, WifiFixerService.class, false);
+			setComponentEnabled(context, WifiFixerService.class, false);
 		else
-			setServiceEnabled(context, WifiFixerService.class, true);
+			setComponentEnabled(context, WifiFixerService.class, true);
 
 		if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
-			setServiceEnabled(context, LogService.class, true);
+			setComponentEnabled(context, LogService.class, true);
 		else
-			setServiceEnabled(context, LogService.class, false);
+			setComponentEnabled(context, LogService.class, false);
 
 	}
 
-	public static void setServiceEnabled(final Context context,
-			final Class<? extends Service> cls, final Boolean state) {
+	public static void setComponentEnabled(final Context context,
+			final Class<?> cls, final Boolean state) {
 		PackageManager pm = context.getPackageManager();
 		ComponentName service = new ComponentName(context, cls);
 		if (state)

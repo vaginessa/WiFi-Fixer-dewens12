@@ -20,7 +20,6 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 
-import org.ahmadsoft.ropes.Rope;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.EditorDetector;
 import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
@@ -129,21 +128,20 @@ public class PrefUtil extends Object {
 		intTemp[pref.ordinal()] = value;
 
 		if (getFlag(Pref.LOG_KEY)) {
-			Rope logstring =  Rope.BUILDER.build("");
-			logstring.append(pref.key());
+			StringBuilder logstring =  new StringBuilder(pref.key());
 			logstring.append(COLON);
 			logstring.append(network);
 			logstring.append(COLON);
 			logstring.append(String.valueOf(intTemp[pref.ordinal()]));
 			LogService.log(context.get(), LogService.getLogTag(context.get()),
-					logstring);
+					logstring.toString());
 		}
 
 		netprefs.put(network, intTemp);
 	}
 
 	public int getnetPref(final Context context, final NetPref pref,
-			final Rope network) {
+			final String network) {
 		int ordinal = pref.ordinal();
 		if (!netprefs.containsKey(network)) {
 			int[] intarray = new int[PrefConstants.NUMNETPREFS];
@@ -202,7 +200,7 @@ public class PrefUtil extends Object {
 	}
 
 	public static void notifyNetPrefChange(final Context c,
-			final NetPref netpref, final Rope netstring,
+			final NetPref netpref, final String netstring,
 			final int value) {
 		Intent intent = new Intent(NETVALUE_CHANGED_ACTION);
 		intent.putExtra(VALUE_KEY, netpref.key());
@@ -231,12 +229,12 @@ public class PrefUtil extends Object {
 	public void postValChanged(final Pref p) {
 	}
 
-	public static Rope getnetworkSSID(final Context context,
+	public static String getnetworkSSID(final Context context,
 			final int network) {
 		WifiManager wm = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);
 		if (!wm.isWifiEnabled())
-			return Rope.BUILDER.build(context.getString(R.string.none));
+			return context.getString(R.string.none);
 		else
 			return getSafeFileName(context,
 					getSSIDfromNetwork(context, network));
@@ -267,16 +265,15 @@ public class PrefUtil extends Object {
 		return null;
 	}
 
-	public static Rope getSafeFileName(final Context ctxt,
+	public static String getSafeFileName(final Context ctxt,
 			String filename) {
 		if (filename == null)
 			filename = ctxt.getString(R.string.none);
-
-		return Rope.BUILDER.build(filename.replaceAll("[^a-zA-Z0-9]", ""));
+		return filename.replaceAll("[^a-zA-Z0-9]", "");
 	}
 
 	public static int readNetworkPref(final Context ctxt,
-			final Rope network, final NetPref pref) {
+			final String network, final NetPref pref) {
 		String key = NETPREFIX + network + pref.key();
 		if (getSharedPreferences(ctxt).contains(key))
 			return getSharedPreferences(ctxt).getInt(key, 0);
@@ -285,7 +282,7 @@ public class PrefUtil extends Object {
 	}
 
 	public static void writeNetworkPref(final Context ctxt,
-			final Rope netstring, final NetPref pref, final int value) {
+			final String netstring, final NetPref pref, final int value) {
 		/*
 		 * Check for actual changed value if changed, notify
 		 */
@@ -417,7 +414,7 @@ public class PrefUtil extends Object {
 
 	public static void writeNetworkState(final Context context,
 			final int network, final boolean state) {
-		Rope netstring = getnetworkSSID(context, network);
+		String netstring = getnetworkSSID(context, network);
 		if (state)
 			PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY,
 					1);
@@ -438,7 +435,7 @@ public class PrefUtil extends Object {
 
 	public static void writeManagedState(final Context context,
 			final int network, final boolean state) {
-		Rope netstring = getnetworkSSID(context, network);
+		String netstring = getnetworkSSID(context, network);
 		if (state)
 			PrefUtil.writeNetworkPref(context, netstring,
 					NetPref.NONMANAGED_KEY, 1);

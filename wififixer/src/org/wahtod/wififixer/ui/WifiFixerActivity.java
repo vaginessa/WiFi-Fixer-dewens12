@@ -19,7 +19,6 @@ package org.wahtod.wififixer.ui;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
-import org.ahmadsoft.ropes.Rope;
 import org.wahtod.wififixer.R;
 
 import org.wahtod.wififixer.DefaultExceptionHandler;
@@ -33,7 +32,7 @@ import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
-import org.wahtod.wififixer.widget.WidgetHandler;
+import org.wahtod.wififixer.widget.WidgetReceiver;
 
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -224,8 +223,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		/*
 		 * Make sure LogService's buffer is flushed
 		 */
-		LogService.log(this, Rope.BUILDER.build(LogService.FLUSH),
-				Rope.BUILDER.build(""));
+		LogService.log(this, LogService.FLUSH, "");
 
 		final String fileuri = file.toURI().toString();
 
@@ -493,11 +491,11 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 
 	public void wifiToggle(View view) {
 		if (!PrefUtil.getWifiManager(this).isWifiEnabled()) {
-			sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
+			sendBroadcast(new Intent(WidgetReceiver.WIFI_ON));
 			NotifUtil.showToast(this.getApplicationContext(),
 					R.string.enabling_wifi);
 		} else {
-			sendBroadcast(new Intent(WidgetHandler.WIFI_OFF));
+			sendBroadcast(new Intent(WidgetReceiver.WIFI_OFF));
 			handler.postDelayed(WifiToggleCheck, WIFI_TOGGLE_CHECK_DELAY);
 			NotifUtil.showToast(this.getApplicationContext(),
 					R.string.disabling_wifi);

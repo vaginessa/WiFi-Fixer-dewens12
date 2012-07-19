@@ -18,7 +18,6 @@ package org.wahtod.wififixer;
 
 import java.lang.ref.WeakReference;
 
-import org.ahmadsoft.ropes.Rope;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.WifiFixerActivity;
@@ -26,7 +25,7 @@ import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ScreenStateDetector;
 import org.wahtod.wififixer.utility.WakeLock;
-import org.wahtod.wififixer.widget.WidgetHandler;
+import org.wahtod.wififixer.widget.WidgetReceiver;
 
 import android.app.PendingIntent;
 import android.app.Service;
@@ -71,12 +70,12 @@ public class ToggleService extends Service {
 				switch (msg.what) {
 
 				case ON:
-					self.get().sendBroadcast(new Intent(WidgetHandler.WIFI_ON));
+					self.get().sendBroadcast(new Intent(WidgetReceiver.WIFI_ON));
 					break;
 
 				case OFF:
 					self.get()
-							.sendBroadcast(new Intent(WidgetHandler.WIFI_OFF));
+							.sendBroadcast(new Intent(WidgetReceiver.WIFI_OFF));
 					break;
 
 				case WATCHDOG:
@@ -142,21 +141,17 @@ public class ToggleService extends Service {
 
 				@Override
 				public void onAcquire() {
-					LogService.log(self.get(), Rope.BUILDER
-							.build(getString(R.string.wififixerservice)),
-							Rope.BUILDER.build(self.get().getString(
-									R.string.acquiring_wake_lock)));
+					LogService.log(self.get(),
+							getString(R.string.wififixerservice), self.get()
+									.getString(R.string.acquiring_wake_lock));
 					super.onAcquire();
 				}
 
 				@Override
 				public void onRelease() {
-					LogService.log(
-							self.get(),
-							Rope.BUILDER.build(self.get().getString(
-									R.string.wififixerservice)),
-							Rope.BUILDER.build(self.get().getString(
-									R.string.releasing_wake_lock)));
+					LogService.log(self.get(),
+							self.get().getString(R.string.wififixerservice),
+							self.get().getString(R.string.releasing_wake_lock));
 					super.onRelease();
 				}
 			};

@@ -30,7 +30,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import org.ahmadsoft.ropes.Rope;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.HttpHead;
@@ -71,7 +70,7 @@ public class Hostup {
 	protected volatile boolean finished;
 	protected volatile StopWatch timer;
 	private volatile DefaultHttpClient httpclient;
-	private  ExecutorService _executor = Executors.newCachedThreadPool();
+	private ExecutorService _executor = Executors.newCachedThreadPool();
 
 	@SuppressWarnings("unused")
 	private Hostup() {
@@ -81,8 +80,6 @@ public class Hostup {
 		timer = new StopWatch();
 		context = new WeakReference<Context>(c);
 	}
-
-	
 
 	/*
 	 * http header check thread
@@ -103,7 +100,7 @@ public class Hostup {
 				 * fail, up is false
 				 */
 			}
-			Rope r = Rope.BUILDER.build(context.get().getString(
+			StringBuilder r = new StringBuilder(context.get().getString(
 					R.string.http));
 			r.append(target);
 			if (c)
@@ -124,7 +121,7 @@ public class Hostup {
 		public Object call() throws Exception {
 			boolean up = icmpHostup(context.get());
 
-			Rope r =Rope.BUILDER.build(target);
+			StringBuilder r = new StringBuilder(target);
 			if (up)
 				r.append(context.get().getString(R.string.icmp_ok));
 			else
@@ -135,7 +132,7 @@ public class Hostup {
 	};
 
 	protected synchronized void finish(final boolean up,
-			final Rope output) {
+			final StringBuilder output) {
 		if (!finished) {
 			timer.stop();
 			response.state = up;

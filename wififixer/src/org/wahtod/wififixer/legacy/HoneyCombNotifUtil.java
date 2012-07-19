@@ -16,10 +16,10 @@
 
 package org.wahtod.wififixer.legacy;
 
-import org.ahmadsoft.ropes.Rope;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ui.WifiFixerActivity;
 import org.wahtod.wififixer.utility.NotifUtil;
+import org.wahtod.wififixer.utility.StatusMessage;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -31,12 +31,12 @@ import android.widget.RemoteViews;
 public class HoneyCombNotifUtil extends NotifUtil {
 
 	@Override
-	public void vaddStatNotif(Context ctxt, final Rope ssid,
-			Rope status, final int signal, final boolean flag) {
+	public void vaddStatNotif(final Context ctxt,final StatusMessage in) {
+		StatusMessage m = validateStrings(in);
 		NotificationManager nm = (NotificationManager) ctxt
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		if (!flag) {
+		if (m.getShow() != 1) {
 			nm.cancel(NotifUtil.STATNOTIFID);
 			NotifUtil.statnotif = null;
 			return;
@@ -52,22 +52,22 @@ public class HoneyCombNotifUtil extends NotifUtil {
 			builder.setContentIntent(NotifUtil.contentIntent);
 			builder.setOngoing(true);
 			builder.setOnlyAlertOnce(true);
-			builder.setSmallIcon(R.drawable.notifsignal, signal);
+			builder.setSmallIcon(R.drawable.notifsignal, m.getSignal());
 			builder.setContentTitle(ctxt.getString(R.string.network_status));
 			NotifUtil.statnotif = builder.getNotification();
 		}
 
 		if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
-			status = Rope.BUILDER.build(ctxt.getString(R.string.unmanaged))
-					.append(status);
+			m.setStatus(new StringBuilder(ctxt.getString(R.string.unmanaged))
+					.append(m.getStatus()).toString());
 		}
 		RemoteViews update = new RemoteViews(ctxt.getPackageName(),
 				R.layout.widget);
-		NotifUtil.statnotif.iconLevel = signal;
+		NotifUtil.statnotif.iconLevel = m.getSignal();
 		update.setImageViewResource(R.id.signal,
-				getIconfromSignal(signal, NotifUtil.ICON_SET_LARGE));
-		update.setTextViewText(R.id.ssid, truncateSSID(ssid));
-		update.setTextViewText(R.id.status, status);
+				getIconfromSignal(m.getSignal(), NotifUtil.ICON_SET_LARGE));
+		update.setTextViewText(R.id.ssid, m.getSSID());
+		update.setTextViewText(R.id.status, m.getStatus());
 		NotifUtil.statnotif.contentView = update;
 		/*
 		 * Fire the notification

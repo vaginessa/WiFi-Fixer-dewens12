@@ -16,7 +16,6 @@
 
 package org.wahtod.wififixer.utility;
 
-import org.ahmadsoft.ropes.Rope;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.HoneyCombNotifUtil;
 import org.wahtod.wififixer.legacy.LegacyNotifUtil;
@@ -28,9 +27,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +37,6 @@ import android.widget.Toast;
 
 public abstract class NotifUtil {
 	protected static final int STATNOTIFID = 2392;
-	protected static final int MAX_SSID_LENGTH = 16;
 	protected static final int LOGNOTIFID = 2494;
 	protected static int ssidStatus = 0;
 	protected static Notification statnotif;
@@ -53,16 +49,6 @@ public abstract class NotifUtil {
 	public static final int SSID_STATUS_UNMANAGED = 3;
 	public static final int SSID_STATUS_MANAGED = 7;
 	public static final String SEPARATOR = " : ";
-
-	public static final String ACTION_STATUS_NOTIFICATION = "org.wahtod.wififixer.STATNOTIF";
-	public static final String STATUS_DATA_KEY = "STATUS_DATA_KEY";
-
-	/*
-	 * Field keys for status bundle
-	 */
-	public static final String SSID_KEY = "SSID";
-	public static final String STATUS_KEY = "STATUS";
-	public static final String SIGNAL_KEY = "SIGNAL";
 
 	/*
 	 * Intent Keys for Toast
@@ -84,8 +70,7 @@ public abstract class NotifUtil {
 	 * API
 	 */
 
-	public abstract void vaddStatNotif(Context ctxt, final Rope ssid,
-			Rope status, final int signal, final boolean flag);
+	public abstract void vaddStatNotif(final Context ctxt, final StatusMessage m);
 
 	public abstract void vaddLogNotif(final Context context, final boolean flag);
 
@@ -104,18 +89,16 @@ public abstract class NotifUtil {
 		/*
 		 * Show (or cancel) notification
 		 */
-		selector.vaddStatNotif(ctxt, m.ssid, m.status, m.signal, m.show);
+		selector.vaddStatNotif(ctxt, m);
 	}
-
-	public static void broadcastStatNotif(final Context ctxt,
-			final StatusMessage m) {
-		Intent intent = new Intent(ACTION_STATUS_NOTIFICATION);
-		Bundle message = new Bundle();
-		message.putString(SSID_KEY, m.ssid.toString());
-		message.putString(STATUS_KEY, m.status.toString());
-		message.putInt(SIGNAL_KEY, m.signal);
-		intent.putExtra(STATUS_DATA_KEY, message);
-		ctxt.sendBroadcast(intent);
+	
+	public static StatusMessage validateStrings(final StatusMessage in){
+		StatusMessage s = in;
+		if (s.getSSID() == null)
+			s.setSSID(StatusMessage.EMPTY);
+		if(s.getStatus() == null)
+			s.setStatus(StatusMessage.EMPTY);
+		return s;
 	}
 
 	public static void addLogNotif(final Context context, final boolean flag) {
@@ -177,21 +160,14 @@ public abstract class NotifUtil {
 		return signal;
 	}
 
-	public static Rope getLogString(final Context context) {
-		Rope logstring = Rope.BUILDER.build(
-				context.getString(R.string.writing_to_log));
+	public static String getLogString(final Context context) {
+		StringBuilder logstring = new StringBuilder(context
+				.getString(R.string.writing_to_log));
 		logstring.append(NotifUtil.SEPARATOR);
-		logstring.append(String.valueOf(VersionedFile.getFile(context, LogService.LOGFILE)
-				.length() / 1024));
+		logstring.append(String.valueOf(VersionedFile.getFile(context,
+				LogService.LOGFILE).length() / 1024));
 		logstring.append(context.getString(R.string.k));
-		return logstring;
-	}
-
-	public static Rope truncateSSID(Rope ssid) {
-		if (ssid.isEmpty() || ssid.length() < 1)
-			return Rope.BUILDER.build(" ");
-		else 
-			return Rope.BUILDER.build(ssid);
+		return logstring.toString();
 	}
 
 	public static void cancel(final Context context, final int notif) {

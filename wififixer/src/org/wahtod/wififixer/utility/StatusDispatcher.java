@@ -22,71 +22,94 @@ import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.ui.StatusFragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
 
 public class StatusDispatcher {
-	private static StatusMessage m;
-	private static final int MESSAGE_DELAY = 10000;
-	private static final int MESSAGE = 42;
+	protected static StatusMessage m;
+	public static final String REFRESH_INTENT = "org.wahtod.wififixer.STATUS_REFRESH";
+	private static final int WIDGET_REFRESH_DELAY = 10000;
+	private static final int WIDGET_REFRESH = 115;
+	private static final int REFRESH = 1233;
+	public static final String ACTION_WIDGET_NOTIFICATION = "org.wahtod.wififixer.WNOTIF";
+	public static final String STATUS_DATA_KEY = "WDATA";
 	private static WeakReference<Context> c;
 
 	public StatusDispatcher(final Context context) {
+		m = new StatusMessage();
 		c = new WeakReference<Context>(context);
+		BroadcastHelper.registerReceiver(context, messagereceiver,
+				new IntentFilter(REFRESH_INTENT), true);
 	}
 
+	private BroadcastReceiver messagereceiver = new BroadcastReceiver() {
+		public void onReceive(final Context context, final Intent intent) {
+			Message in = messagehandler.obtainMessage(REFRESH);
+			in.setData(intent.getExtras());
+			messagehandler.sendMessage(in);
+		}
+	};
+
 	/*
-	 * Essentially, a Leaky Bucket Widget messages throttled to once every 10
-	 * seconds
+	 * Essentially, a Leaky Bucket that throttles Widget messages to once every
+	 * 10 seconds
 	 */
 	private static Handler messagehandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
-			if (PrefUtil.getFlag(Pref.HASWIDGET_KEY))
-				NotifUtil.broadcastStatNotif(c.get(), m);
-		}
+			switch (message.what) {
+			case WIDGET_REFRESH:
+				if (PrefUtil.getFlag(Pref.HASWIDGET_KEY))
+					broadcastWidgetNotif(c.get(), m);
+				break;
 
+			case REFRESH:
+				StatusMessage.updateFromMessage(m, message);
+				send(m);
+				break;
+			}
+		}
 	};
 
 	public void clearQueue() {
-		messagehandler.removeMessages(MESSAGE);
+		messagehandler.removeMessages(WIDGET_REFRESH);
+		messagehandler.removeMessages(REFRESH);
 	}
 
-	public void sendMessage(final Context context, final StatusMessage message) {
-		if (!message.show) {
-			/*
-			 * Handle notification cancel case
-			 */
-			NotifUtil.addStatNotif(context, message);
-			clearQueue();
-		} else {
-			/*
-			 * Only if not a cancel (i.e. show = false) do we want to display on
-			 * widget
-			 */
-			m = message;
+	public static void broadcastWidgetNotif(final Context ctxt,
+			final StatusMessage n) {
+		Intent intent = new Intent(ACTION_WIDGET_NOTIFICATION);
+		intent.putExtra(STATUS_DATA_KEY, n.status);
+		ctxt.sendBroadcast(intent);
+	}
 
-			/*
-			 * Fast supplicant state update if WifiFixerService is running
-			 */
-			Intent i = new Intent(StatusFragment.STATUS_ACTION);
-			i.putExtra(StatusFragment.STATUS_KEY, m.status.toString());
-			context.sendBroadcast(i);
-			/*
-			 * Dispatch Status Notification update
-			 */
-			if (PrefUtil.getFlag(Pref.STATENOT_KEY))
-				NotifUtil.addStatNotif(context, m);
-			/*
-			 * queue update for widget
-			 */
+	private static void send(final StatusMessage n) {
+		/*
+		 * Fast supplicant state update if WifiFixerService is running
+		 */
+		Intent i = new Intent(StatusFragment.STATUS_ACTION);
+		i.putExtras(n.status);
+		BroadcastHelper.sendBroadcast(c.get(), i, true);
+		/*
+		 * Dispatch Status Notification update
+		 */
+		NotifUtil.addStatNotif(c.get(), n);
+		/*
+		 * queue update for widget
+		 */
+		if (messagehandler.hasMessages(WIDGET_REFRESH))
+			return;
+		else
+			messagehandler.sendEmptyMessageDelayed(WIDGET_REFRESH,
+					WIDGET_REFRESH_DELAY);
+	}
 
-			if (!messagehandler.hasMessages(MESSAGE)) {
-				messagehandler.sendEmptyMessage(MESSAGE);
-				messagehandler.sendEmptyMessageDelayed(MESSAGE, MESSAGE_DELAY);
-			}
-		}
+	public void unregister() {
+		clearQueue();
+		BroadcastHelper.unregisterReceiver(c.get(), messagereceiver);
 	}
 }
