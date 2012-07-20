@@ -23,34 +23,45 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 	public static final String EXCEPTIONS_FILENAME = "exceptions.txt";
 	private final UncaughtExceptionHandler _default;
-	private final DataOutputStream _data;
+	private final Context appcontext;
 
-	public DefaultExceptionHandler(final Context context)
-			throws FileNotFoundException {
+	@SuppressLint("WorldReadableFiles")
+	public DefaultExceptionHandler(final Context context) {
+		appcontext = context.getApplicationContext();
 		UncaughtExceptionHandler currentHandler = Thread
 				.getDefaultUncaughtExceptionHandler();
 		_default = currentHandler;
-		_data = new DataOutputStream(context.openFileOutput(
-				EXCEPTIONS_FILENAME, Context.MODE_WORLD_READABLE
-						| Context.MODE_APPEND));
 		Thread.setDefaultUncaughtExceptionHandler(this);
 	}
 
 	// Default exception handler
+	@SuppressLint("WorldReadableFiles")
 	public void uncaughtException(Thread t, Throwable e) {
 
 		final Writer result = new StringWriter();
 		final PrintWriter printWriter = new PrintWriter(result);
 		e.printStackTrace(printWriter);
 		String stacktrace = result.toString();
+		DataOutputStream data;
+		try {
+			data = new DataOutputStream(appcontext.openFileOutput(
+					EXCEPTIONS_FILENAME, Context.MODE_WORLD_READABLE
+							| Context.MODE_APPEND));
+		} catch (FileNotFoundException e2) {
+			/*
+			 * Yeah, this sucks but it's best to be safe
+			 */
+			return;
+		}
 		printWriter.close();
 		try {
-			_data.writeUTF(stacktrace);
+			data.writeUTF(stacktrace);
 		} catch (IOException e1) {
 			/*
 			 * Yoinks, but this shouldn't evar happen
@@ -58,24 +69,20 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 			e1.printStackTrace();
 		} finally {
 			try {
-				_data.flush();
-				_data.close();
+				data.flush();
+				data.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 		}
 		/*
-		 * Chain to prior DefaultExceptionHandler so Android handles report,
-		 * etc.
+		 * Chain to prior DefaultExceptionHandler so Android crash report form
+		 * comes up on 2.2+
 		 */
 		_default.uncaughtException(t, e);
 	}
 
 	public static void register(final Context ctxt) {
-		try {
-			new DefaultExceptionHandler(ctxt);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		new DefaultExceptionHandler(ctxt);
 	}
 }

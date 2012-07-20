@@ -29,51 +29,47 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 public class HoneyCombNotifUtil extends NotifUtil {
+	private static Notification stat;
+	private static Notification log;
 
 	@Override
-	public void vaddStatNotif(final Context ctxt,final StatusMessage in) {
+	public void vaddStatNotif(final Context ctxt, final StatusMessage in) {
 		StatusMessage m = validateStrings(in);
 		NotificationManager nm = (NotificationManager) ctxt
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
 		if (m.getShow() != 1) {
 			nm.cancel(NotifUtil.STATNOTIFID);
-			NotifUtil.statnotif = null;
+			stat = null;
 			return;
 		}
-
-		if (NotifUtil.statnotif == null) {
-			Notification.Builder builder = new Notification.Builder(ctxt);
-			Intent intent = new Intent(ctxt, WifiFixerActivity.class)
-					.setAction(Intent.ACTION_MAIN).setFlags(
-							Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-			NotifUtil.contentIntent = PendingIntent.getActivity(ctxt, 0,
-					intent, 0);
-			builder.setContentIntent(NotifUtil.contentIntent);
-			builder.setOngoing(true);
-			builder.setOnlyAlertOnce(true);
-			builder.setSmallIcon(R.drawable.notifsignal, m.getSignal());
-			builder.setContentTitle(ctxt.getString(R.string.network_status));
-			NotifUtil.statnotif = builder.getNotification();
+		if(stat == null) {
+		Notification.Builder builder = new Notification.Builder(ctxt);
+		Intent intent = new Intent(ctxt, WifiFixerActivity.class).setAction(
+				Intent.ACTION_MAIN).setFlags(
+				Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		builder.setContentIntent(PendingIntent.getActivity(ctxt, 0, intent, 0));
+		builder.setOngoing(true);
+		builder.setSmallIcon(R.drawable.notifsignal, m.getSignal());
+		builder.setContentTitle(ctxt.getString(R.string.network_status));
+		stat = builder.getNotification();
 		}
-
 		if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
 			m.setStatus(new StringBuilder(ctxt.getString(R.string.unmanaged))
 					.append(m.getStatus()).toString());
 		}
 		RemoteViews update = new RemoteViews(ctxt.getPackageName(),
 				R.layout.widget);
-		NotifUtil.statnotif.iconLevel = m.getSignal();
 		update.setImageViewResource(R.id.signal,
 				getIconfromSignal(m.getSignal(), NotifUtil.ICON_SET_LARGE));
 		update.setTextViewText(R.id.ssid, m.getSSID());
 		update.setTextViewText(R.id.status, m.getStatus());
-		NotifUtil.statnotif.contentView = update;
+		stat.iconLevel = m.getSignal();
+		stat.contentView = update;
 		/*
 		 * Fire the notification
 		 */
-		nm.notify(NotifUtil.STATNOTIFID, NotifUtil.statnotif);
-
+		nm.notify(NotifUtil.STATNOTIFID, stat);
 	}
 
 	@Override
@@ -84,33 +80,28 @@ public class HoneyCombNotifUtil extends NotifUtil {
 
 		if (!flag) {
 			nm.cancel(NotifUtil.LOGNOTIFID);
+			log = null;
 			return;
 		}
-		if (NotifUtil.lognotif == null) {
-			Notification.Builder builder = new Notification.Builder(ctxt);
-			Intent intent = new Intent(ctxt, WifiFixerActivity.class)
-					.setAction(Intent.ACTION_MAIN).setFlags(
-							Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-			NotifUtil.contentIntent = PendingIntent.getActivity(ctxt, 0,
-					intent, 0);
-			builder.setContentIntent(NotifUtil.contentIntent);
-			builder.setOngoing(true);
-			builder.setOnlyAlertOnce(true);
-			builder.setSmallIcon(R.drawable.logging_enabled);
-			builder.setContentTitle(ctxt.getString(R.string.logservice));
-			NotifUtil.lognotif = builder.getNotification();
+		if(log == null){
+		Notification.Builder builder = new Notification.Builder(ctxt);
+		Intent intent = new Intent(ctxt, WifiFixerActivity.class).setAction(
+				Intent.ACTION_MAIN).setFlags(
+				Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		builder.setContentIntent(PendingIntent.getActivity(ctxt, 0, intent, 0));
+		builder.setOngoing(true);
+		builder.setSmallIcon(R.drawable.logging_enabled);
+		builder.setContentTitle(ctxt.getString(R.string.logservice));
+		log = builder.getNotification();
 		}
 		RemoteViews update = new RemoteViews(ctxt.getPackageName(),
 				R.layout.lognotif);
-
 		update.setTextViewText(R.id.status, getLogString(ctxt).toString());
-		lognotif.contentView = update;
-
+		log.contentView = update;
 		/*
 		 * Fire the notification
 		 */
-		nm.notify(NotifUtil.LOGNOTIFID, NotifUtil.lognotif);
-
+		nm.notify(NotifUtil.LOGNOTIFID, log);
 	}
 
 	@Override

@@ -23,7 +23,6 @@ import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ScreenStateDetector;
-import org.wahtod.wififixer.utility.StatusDispatcher;
 import org.wahtod.wififixer.utility.StatusMessage;
 import org.wahtod.wififixer.utility.ScreenStateDetector.OnScreenStateChangedListener;
 import org.wahtod.wififixer.utility.ServiceAlarm;
@@ -35,7 +34,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 
@@ -58,8 +56,6 @@ public class WifiFixerService extends Service implements
 	private static boolean registered = false;
 
 	private static boolean logging = false;
-
-	private static final int WIDGET_RESET_DELAY = 20000;
 
 	// Version
 	private static int version = 0;
@@ -170,7 +166,7 @@ public class WifiFixerService extends Service implements
 	@Override
 	public void onDestroy() {
 		if (PrefUtil.readBoolean(this, Pref.HASWIDGET_KEY.key()))
-			resetWidget(this);
+			resetWidget();
 		unregisterReceivers();
 		if (PrefUtil.getFlag(Pref.STATENOT_KEY))
 			wifi.setStatNotif(false);
@@ -344,19 +340,10 @@ public class WifiFixerService extends Service implements
 		NotifUtil.cancel(this, NOTIFID);
 	}
 
-	private static void resetWidget(final Context context) {
-		final Handler h = new Handler();
-		h.postDelayed(new Runnable() {
-
-			@Override
-			public void run() {
-				StatusMessage m = StatusMessage.getNew()
-						.setSSID(context.getString(R.string.service_inactive))
-						.setSignal(0);
-				StatusDispatcher.broadcastWidgetNotif(context, m);
-			}
-
-		}, WIDGET_RESET_DELAY);
+	private void resetWidget() {
+		wifi._statusdispatcher.refreshWidget(StatusMessage.getNew()
+				.setSSID(this.getString(R.string.service_inactive))
+				.setSignal(0));
 	}
 
 	private void setInitialScreenState() {

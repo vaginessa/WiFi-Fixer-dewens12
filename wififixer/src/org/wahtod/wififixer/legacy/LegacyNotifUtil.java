@@ -21,7 +21,6 @@ import org.wahtod.wififixer.ui.WifiFixerActivity;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StatusMessage;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -29,8 +28,6 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 public class LegacyNotifUtil extends NotifUtil {
-	private NotificationCompat.Builder statbuilder;
-
 	@Override
 	public void vaddStatNotif(final Context ctxt, final StatusMessage m) {
 		validateStrings(m);
@@ -40,18 +37,17 @@ public class LegacyNotifUtil extends NotifUtil {
 			nm.cancel(NotifUtil.STATNOTIFID);
 			return;
 		}
-		if (statbuilder == null) {
-			statbuilder = new NotificationCompat.Builder(ctxt);
-			statbuilder.setOngoing(true);
-			Intent intent = new Intent(ctxt, WifiFixerActivity.class)
-					.setAction(Intent.ACTION_MAIN).setFlags(
-							Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-			statbuilder.setContentIntent(PendingIntent.getActivity(ctxt, 0,
-					intent, 0));
-			statbuilder.setWhen(0);
-		}
-		statbuilder.setSmallIcon(R.drawable.notifsignal, m.getSignal());
-		statbuilder.setSmallIcon(getIconfromSignal(m.getSignal(),
+		NotificationCompat.Builder statnotif = new NotificationCompat.Builder(
+				ctxt);
+		statnotif.setOngoing(true);
+		Intent intent = new Intent(ctxt, WifiFixerActivity.class).setAction(
+				Intent.ACTION_MAIN).setFlags(
+				Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		statnotif.setContentIntent(PendingIntent
+				.getActivity(ctxt, 0, intent, 0));
+		statnotif.setWhen(0);
+		statnotif.setSmallIcon(R.drawable.notifsignal, m.getSignal());
+		statnotif.setSmallIcon(getIconfromSignal(m.getSignal(),
 				NotifUtil.ICON_SET_SMALL));
 
 		StringBuilder out = new StringBuilder(m.getSSID());
@@ -60,76 +56,56 @@ public class LegacyNotifUtil extends NotifUtil {
 		}
 		out.append(NotifUtil.SEPARATOR);
 		out.append(m.getStatus());
-		statbuilder.setContentText(out.toString());
-		statbuilder.setContentTitle(ctxt.getString(R.string.app_name));
+		statnotif.setContentText(out.toString());
+		statnotif.setContentTitle(ctxt.getString(R.string.app_name));
 		/*
 		 * Fire the notification
 		 */
-		nm.notify(NotifUtil.STATNOTIFID, statbuilder.getNotification());
+		nm.notify(NotifUtil.STATNOTIFID, statnotif.getNotification());
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void vaddLogNotif(final Context context, final boolean flag) {
-
-		NotificationManager nm = (NotificationManager) context
+	public void vaddLogNotif(final Context ctxt, final boolean flag) {
+		NotificationManager nm = (NotificationManager) ctxt
 				.getSystemService(Context.NOTIFICATION_SERVICE);
-
 		if (!flag) {
 			nm.cancel(NotifUtil.LOGNOTIFID);
 			return;
 		}
-		if (NotifUtil.lognotif == null) {
-			NotifUtil.lognotif = new Notification(R.drawable.logging_enabled,
-					context.getString(R.string.app_name),
-					System.currentTimeMillis());
-			NotifUtil.lognotif.flags = Notification.FLAG_ONGOING_EVENT;
-
-			Intent intent = new Intent(context, WifiFixerActivity.class)
-					.setAction(Intent.ACTION_MAIN).setFlags(
-							Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-
-			NotifUtil.contentIntent = PendingIntent.getActivity(context, 0,
-					intent, 0);
-
-		}
-
-		NotifUtil.lognotif.contentIntent = NotifUtil.contentIntent;
-		NotifUtil.lognotif.setLatestEventInfo(context, context
-				.getString(R.string.app_name),
-				getLogString(context).toString(), NotifUtil.contentIntent);
-
+		NotificationCompat.Builder lognotif = new NotificationCompat.Builder(
+				ctxt);
+		lognotif.setSmallIcon(R.drawable.logging_enabled);
+		lognotif.setContentTitle(ctxt.getString(R.string.app_name));
+		lognotif.setOngoing(true);
+		lognotif.setContentText(getLogString(ctxt).toString());
+		Intent intent = new Intent(ctxt, WifiFixerActivity.class).setAction(
+				Intent.ACTION_MAIN).setFlags(
+				Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		lognotif.setContentIntent(PendingIntent.getActivity(ctxt, 0, intent, 0));
 		/*
 		 * Fire the notification
 		 */
-		nm.notify(NotifUtil.LOGNOTIFID, NotifUtil.lognotif);
-
+		nm.notify(NotifUtil.LOGNOTIFID, lognotif.getNotification());
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void vshow(final Context context, final String message,
+	public void vshow(final Context ctxt, final String message,
 			final String tickerText, final int id, PendingIntent contentIntent) {
-
 		/*
 		 * If contentIntent is NULL, create valid contentIntent
 		 */
 		if (contentIntent == null)
-			contentIntent = PendingIntent.getActivity(context, 0, new Intent(),
-					0);
-
-		NotificationManager nm = (NotificationManager) context
+			contentIntent = PendingIntent.getActivity(ctxt, 0, new Intent(), 0);
+		NotificationManager nm = (NotificationManager) ctxt
 				.getSystemService(Context.NOTIFICATION_SERVICE);
-
-		CharSequence from = context.getText(R.string.app_name);
-
-		Notification notif = new Notification(R.drawable.icon, tickerText,
-				System.currentTimeMillis());
-
-		notif.setLatestEventInfo(context, from, message, contentIntent);
-		notif.flags = Notification.FLAG_AUTO_CANCEL;
-		// unique ID
-		nm.notify(id, notif);
-
+		NotificationCompat.Builder n = new NotificationCompat.Builder(ctxt);
+		n.setWhen(System.currentTimeMillis());
+		n.setAutoCancel(true);
+		n.setTicker(tickerText);
+		n.setContentText(message);
+		n.setSmallIcon(R.drawable.icon);
+		n.setContentTitle(ctxt.getString(R.string.app_name));
+		n.setContentIntent(contentIntent);
+		nm.notify(id, n.getNotification());
 	}
 }

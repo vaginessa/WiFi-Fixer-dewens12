@@ -20,9 +20,7 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.HoneyCombNotifUtil;
 import org.wahtod.wififixer.legacy.LegacyNotifUtil;
 import org.wahtod.wififixer.legacy.VersionedFile;
-import org.wahtod.wififixer.utility.StatusMessage;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -39,9 +37,7 @@ public abstract class NotifUtil {
 	protected static final int STATNOTIFID = 2392;
 	protected static final int LOGNOTIFID = 2494;
 	protected static int ssidStatus = 0;
-	protected static Notification statnotif;
-	protected static Notification lognotif;
-	protected static PendingIntent contentIntent;
+
 
 	/*
 	 * for SSID status in status notification
@@ -91,12 +87,12 @@ public abstract class NotifUtil {
 		 */
 		selector.vaddStatNotif(ctxt, m);
 	}
-	
-	public static StatusMessage validateStrings(final StatusMessage in){
+
+	public static StatusMessage validateStrings(final StatusMessage in) {
 		StatusMessage s = in;
 		if (s.getSSID() == null)
 			s.setSSID(StatusMessage.EMPTY);
-		if(s.getStatus() == null)
+		if (s.getStatus() == null)
 			s.setStatus(StatusMessage.EMPTY);
 		return s;
 	}
@@ -117,7 +113,7 @@ public abstract class NotifUtil {
 		 * Instantiate and cache appropriate NotifUtil implementation
 		 */
 		if (selector == null) {
-			if (Build.VERSION.SDK_INT > 10) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 				selector = new HoneyCombNotifUtil();
 			} else
 				selector = new LegacyNotifUtil();
@@ -161,8 +157,8 @@ public abstract class NotifUtil {
 	}
 
 	public static String getLogString(final Context context) {
-		StringBuilder logstring = new StringBuilder(context
-				.getString(R.string.writing_to_log));
+		StringBuilder logstring = new StringBuilder(
+				context.getString(R.string.writing_to_log));
 		logstring.append(NotifUtil.SEPARATOR);
 		logstring.append(String.valueOf(VersionedFile.getFile(context,
 				LogService.LOGFILE).length() / 1024));

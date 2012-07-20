@@ -24,6 +24,7 @@ import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.ui.LogFragment;
+import org.wahtod.wififixer.ui.WifiFixerActivity;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.FifoList;
 import org.wahtod.wififixer.utility.HostMessage;
@@ -529,7 +530,7 @@ public class WFConnection extends Object implements
 		_scantimer = new StopWatch();
 		self = new WeakReference<WFConnection>(this);
 		_supplicantFifo = new FifoList(FIFO_LENGTH);
-		_statusdispatcher = new StatusDispatcher(context);
+		_statusdispatcher = new StatusDispatcher(context, handler);
 		ScreenStateDetector.setOnScreenStateChangedListener(this);
 		appname = LogService.getLogTag(context);
 		screenstate = ScreenStateDetector.getScreenState(context);
@@ -1254,8 +1255,9 @@ public class WFConnection extends Object implements
 		if (PrefUtil.getFlag(Pref.NOTIF_KEY)) {
 			NotifUtil.show(context,
 					context.getString(R.string.wifi_connection_problem)
-							+ string, string, ERR_NOTIF,
-					PendingIntent.getActivity(context, 0, new Intent(), 0));
+							+ string, string, ERR_NOTIF, PendingIntent
+							.getActivity(context, 0, new Intent(context,
+									WifiFixerActivity.class), 0));
 		}
 
 	}
@@ -1574,6 +1576,7 @@ public class WFConnection extends Object implements
 		icmpCache(ctxt.get());
 		_connected = true;
 		StatusMessage.send(ctxt.get(), new StatusMessage().setSSID(getSSID()));
+		_statusdispatcher.refreshWidget(null);
 		/*
 		 * Make sure connectee is null
 		 */
@@ -1642,7 +1645,6 @@ public class WFConnection extends Object implements
 	}
 
 	private void onScreenOn() {
-
 		/*
 		 * Re-enable lock if it's off
 		 */
@@ -1657,6 +1659,7 @@ public class WFConnection extends Object implements
 		 */
 		if (PrefUtil.getFlag(Pref.STATENOT_KEY) && statNotifCheck())
 			setStatNotif(true);
+		_statusdispatcher.refreshWidget(null);
 	}
 
 	public void onScreenStateChanged(boolean state) {
@@ -1671,7 +1674,7 @@ public class WFConnection extends Object implements
 		wifistate = false;
 		clearHandler();
 		clearConnectedStatus(ctxt.get().getString(R.string.wifi_is_disabled));
-
+		_statusdispatcher.refreshWidget(null);
 		if (PrefUtil.getFlag(Pref.LOG_KEY))
 			LogService.setLogTS(ctxt.get(), false, 0);
 	}

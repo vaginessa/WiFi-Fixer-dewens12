@@ -38,10 +38,12 @@ public class StatusDispatcher {
 	public static final String ACTION_WIDGET_NOTIFICATION = "org.wahtod.wififixer.WNOTIF";
 	public static final String STATUS_DATA_KEY = "WDATA";
 	private static WeakReference<Context> c;
+	private static WeakReference<Handler> host;
 
-	public StatusDispatcher(final Context context) {
+	public StatusDispatcher(final Context context, final Handler myhost) {
 		m = new StatusMessage();
 		c = new WeakReference<Context>(context);
+		host = new WeakReference<Handler>(myhost);
 		BroadcastHelper.registerReceiver(context, messagereceiver,
 				new IntentFilter(REFRESH_INTENT), true);
 	}
@@ -64,54 +66,87 @@ public class StatusDispatcher {
 			switch (message.what) {
 			case WIDGET_REFRESH:
 				if (PrefUtil.getFlag(Pref.HASWIDGET_KEY))
-					broadcastWidgetNotif(c.get(), m);
+					if (message.peekData() == null)
+						host.get().post(new Widget(m));
+					else
+						host.get().post(
+								new Widget(StatusMessage.fromMessage(message)));
 				break;
 
 			case REFRESH:
-				StatusMessage.updateFromMessage(m, message);
-				send(m);
+				if (ScreenStateDetector.getScreenState(c.get())) {
+					StatusMessage.updateFromMessage(m, message);
+					host.get().post(new FastStatus(m));
+					host.get().post(new StatNotif(m));
+					if (!this.hasMessages(WIDGET_REFRESH))
+						this.sendEmptyMessageDelayed(WIDGET_REFRESH,
+								WIDGET_REFRESH_DELAY);
+				}
 				break;
 			}
 		}
 	};
 
+	private static class StatNotif implements Runnable {
+		private final StatusMessage message;
+
+		StatNotif(final StatusMessage message) {
+			this.message = message;
+		}
+
+		public void run() {
+			NotifUtil.addStatNotif(c.get(), message);
+		}
+	};
+
+	private static class FastStatus implements Runnable {
+		private final StatusMessage message;
+
+		FastStatus(final StatusMessage message) {
+			this.message = message;
+		}
+
+		public void run() {
+			Intent i = new Intent(StatusFragment.STATUS_ACTION);
+			i.putExtras(message.status);
+			BroadcastHelper.sendBroadcast(c.get(), i, true);
+		}
+	};
+
+	private static class Widget implements Runnable {
+		private final StatusMessage message;
+
+		Widget(final StatusMessage message) {
+			this.message = message;
+		}
+
+		public void run() {
+			Intent intent = new Intent(ACTION_WIDGET_NOTIFICATION);
+			intent.putExtra(STATUS_DATA_KEY, message.status);
+			c.get().sendBroadcast(intent);
+		}
+	};
+
 	public void clearQueue() {
+		if (messagehandler.hasMessages(REFRESH))
+			messagehandler.removeMessages(REFRESH);
 		if (messagehandler.hasMessages(WIDGET_REFRESH))
 			messagehandler.removeMessages(WIDGET_REFRESH);
-		else if (messagehandler.hasMessages(REFRESH))
-			messagehandler.removeMessages(REFRESH);
-	}
-
-	public static void broadcastWidgetNotif(final Context ctxt,
-			final StatusMessage n) {
-		Intent intent = new Intent(ACTION_WIDGET_NOTIFICATION);
-		intent.putExtra(STATUS_DATA_KEY, n.status);
-		ctxt.sendBroadcast(intent);
-	}
-
-	private static void send(final StatusMessage n) {
-		/*
-		 * Fast supplicant state update if WifiFixerService is running
-		 */
-		Intent i = new Intent(StatusFragment.STATUS_ACTION);
-		i.putExtras(n.status);
-		BroadcastHelper.sendBroadcast(c.get(), i, true);
-		/*
-		 * Dispatch Status Notification update
-		 */
-		NotifUtil.addStatNotif(c.get(), n);
-		/*
-		 * queue update for widget
-		 */
-		if (messagehandler.hasMessages(WIDGET_REFRESH))
-			return;
-		else
-			messagehandler.sendEmptyMessageDelayed(WIDGET_REFRESH,
-					WIDGET_REFRESH_DELAY);
 	}
 
 	public void unregister() {
 		BroadcastHelper.unregisterReceiver(c.get(), messagereceiver);
 		clearQueue();
+	}
+
+	public void refreshWidget(final StatusMessage n) {
+		clearQueue();
+		if (n == null)
+			messagehandler.sendEmptyMessage(WIDGET_REFRESH);
+		else {
+			Message send = messagehandler.obtainMessage(WIDGET_REFRESH);
+			send.setData(n.status);
+			messagehandler.sendMessage(send);
+		}
 	}
 }
