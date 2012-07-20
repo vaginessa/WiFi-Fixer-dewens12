@@ -117,8 +117,6 @@ public class WFConnection extends Object implements
 	private final static int LOOPWAIT = 15000;
 	// ms for sleep loop check
 	private final static long SLEEPWAIT = 60000;
-	// ms for lock delays
-	private final static int LOCKWAIT = 5000;
 	private static final int SHORTWAIT = 1500;
 	// just long enough to avoid sleep bug with handler posts
 	private static final int REALLYSHORTWAIT = 200;
@@ -137,9 +135,6 @@ public class WFConnection extends Object implements
 	private List<WFConfig> knownbysignal;
 	private SupplicantState lastSupplicantState;
 	private boolean wifistate;
-
-	// deprecated
-	static boolean templock = false;
 
 	/*
 	 * Constants for wifirepair values
@@ -171,8 +166,6 @@ public class WFConnection extends Object implements
 	private static final int REPAIR = 1;
 	private static final int RECONNECT = 2;
 	private static final int WIFITASK = 3;
-	private static final int TEMPLOCK_ON = 4;
-	private static final int TEMPLOCK_OFF = 5;
 	private static final int SLEEPCHECK = 8;
 	private static final int SCAN = 9;
 	private static final int N1CHECK = 10;
@@ -205,18 +198,6 @@ public class WFConnection extends Object implements
 
 			case WIFITASK:
 				handler.post(rWifiTask);
-				break;
-
-			case TEMPLOCK_ON:
-				templock = true;
-				log(ctxt.get(), ctxt.get()
-						.getString(R.string.setting_temp_lock));
-				break;
-
-			case TEMPLOCK_OFF:
-				templock = false;
-				log(ctxt.get(),
-						ctxt.get().getString(R.string.removing_temp_lock));
 				break;
 
 			case SLEEPCHECK:
@@ -298,7 +279,7 @@ public class WFConnection extends Object implements
 				StatusMessage.send(ctxt.get(), m);
 			}
 			checkSignal(ctxt.get());
-			wifiCheckResult(result);
+			handleNetworkResult(result);
 			handler.postDelayed(new Runnable() {
 
 				@Override
@@ -317,7 +298,6 @@ public class WFConnection extends Object implements
 	private static Runnable rReconnect = new Runnable() {
 		public void run() {
 			if (!getWifiManager(ctxt.get()).isWifiEnabled()) {
-				self.get().handlerWrapper(TEMPLOCK_OFF);
 				log(ctxt.get(),
 						(ctxt.get()
 								.getString(R.string.wifi_off_aborting_reconnect)));
@@ -342,7 +322,6 @@ public class WFConnection extends Object implements
 	private static Runnable rRepair = new Runnable() {
 		public void run() {
 			if (!getWifiManager(ctxt.get()).isWifiEnabled()) {
-				self.get().handlerWrapper(TEMPLOCK_OFF);
 				log(ctxt.get(),
 						(ctxt.get()
 								.getString(R.string.wifi_off_aborting_repair)));
@@ -399,7 +378,7 @@ public class WFConnection extends Object implements
 								(ctxt.get()
 										.getString(R.string.supplicant_nonresponsive_toggling_wifi)));
 						toggleWifi();
-					} else if (!templock && self.get().screenstate)
+					} else if (self.get().screenstate)
 						/*
 						 * Check wifi
 						 */
@@ -422,7 +401,6 @@ public class WFConnection extends Object implements
 
 			case W_REASSOCIATE:
 				// Let's try to reassociate first..
-				self.get().tempLock(SHORTWAIT);
 				getWifiManager(ctxt.get()).reassociate();
 				log(ctxt.get(), (ctxt.get().getString(R.string.reassociating)));
 				wifirepair++;
@@ -432,7 +410,6 @@ public class WFConnection extends Object implements
 
 			case W_RECONNECT:
 				// Ok, now force reconnect..
-				self.get().tempLock(SHORTWAIT);
 				getWifiManager(ctxt.get()).reconnect();
 				log(ctxt.get(), (ctxt.get().getString(R.string.reconnecting)));
 				wifirepair++;
@@ -442,7 +419,6 @@ public class WFConnection extends Object implements
 
 			case W_REPAIR:
 				// Start Scan
-				self.get().tempLock(SHORTWAIT);
 				getWifiManager(ctxt.get()).disconnect();
 				self.get().handlerWrapper(SCANWATCHDOG, SHORTWAIT);
 				/*
@@ -475,7 +451,7 @@ public class WFConnection extends Object implements
 				 * This is all we want to do.
 				 */
 
-				if (!templock && getisWifiEnabled(ctxt.get(), true)) {
+				if (getisWifiEnabled(ctxt.get(), true)) {
 					self.get().checkWifi();
 				}
 			}
@@ -512,16 +488,10 @@ public class WFConnection extends Object implements
 			if (!self.get().screenstate)
 				self.get().wakelock.lock(true);
 			self.get().clearQueue();
-			handler.removeMessages(TEMPLOCK_OFF);
-			/*
-			 * Set Lock
-			 */
-			self.get().handlerWrapper(TEMPLOCK_ON, SHORTWAIT);
 			/*
 			 * run the signal hop check
 			 */
 			self.get().signalHop();
-			handler.sendEmptyMessageDelayed(TEMPLOCK_OFF, SHORTWAIT);
 			self.get().wakelock.lock(false);
 		}
 
@@ -654,7 +624,7 @@ public class WFConnection extends Object implements
 		 * Start Main tick
 		 */
 		handlerWrapper(MAIN);
-		
+
 		/*
 		 * Instantiate network checker
 		 */
@@ -1183,14 +1153,13 @@ public class WFConnection extends Object implements
 	}
 
 	private static boolean handlerCheck(final int hmain) {
-		if (templock) {
-			/*
-			 * Check if is appropriate post and if lock exists
-			 */
-			if (hmain == RECONNECT || hmain == REPAIR || hmain == WIFITASK)
-				return false;
-		}
-		return true;
+		/*
+		 * Check if is appropriate post and if lock exists
+		 */
+		if (hmain == RECONNECT || hmain == REPAIR || hmain == WIFITASK)
+			return false;
+		else
+			return true;
 	}
 
 	private static void logScanResult(final Context context,
@@ -1310,6 +1279,9 @@ public class WFConnection extends Object implements
 		if (getIsSupplicantConnected(ctxt.get())) {
 			if (!screenstate)
 				wakelock.lock(true);
+			/*
+			 * Returns result to handleNetworkResult method
+			 */
 			new NetworkCheckTask().execute();
 		} else {
 			/*
@@ -1319,10 +1291,9 @@ public class WFConnection extends Object implements
 		}
 	}
 
-	protected void wifiCheckResult(final boolean state) {
+	protected void handleNetworkResult(final boolean state) {
 		if (!state) {
 			_connected = false;
-			handlerWrapper(TEMPLOCK_OFF);
 			shouldrepair = true;
 			wifiRepair();
 		}
@@ -1428,7 +1399,6 @@ public class WFConnection extends Object implements
 			 * Service called the scan: dispatch appropriate runnable
 			 */
 			pendingscan = false;
-			handlerWrapper(TEMPLOCK_OFF);
 			handlerWrapper(REPAIR);
 			log(ctxt.get(), (ctxt.get().getString(R.string.repairhandler)));
 		} else {
@@ -1815,7 +1785,6 @@ public class WFConnection extends Object implements
 		} else {
 			log(ctxt.get(),
 					(ctxt.get().getString(R.string.signalhop_no_result)));
-			handlerWrapper(TEMPLOCK_OFF);
 			wifiRepair();
 		}
 	}
@@ -1850,7 +1819,7 @@ public class WFConnection extends Object implements
 			wakelock.lock(true);
 		if (getWifiManager(ctxt.get()).startScan()) {
 			log(ctxt.get(), (ctxt.get().getString(R.string.initiating_scan)));
-			tempLock(LOCKWAIT);
+			getWifiManager(ctxt.get()).startScan();
 		} else {
 			/*
 			 * Reset supplicant, log
@@ -1882,13 +1851,6 @@ public class WFConnection extends Object implements
 			return false;
 		else
 			return true;
-	}
-
-	private void tempLock(final int time) {
-
-		handlerWrapper(TEMPLOCK_ON);
-		// Queue for later
-		handlerWrapper(TEMPLOCK_OFF, time);
 	}
 
 	private static void toggleWifi() {

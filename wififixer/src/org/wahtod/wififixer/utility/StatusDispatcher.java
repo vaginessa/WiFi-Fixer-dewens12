@@ -32,7 +32,7 @@ import android.os.Message;
 public class StatusDispatcher {
 	protected static StatusMessage m;
 	public static final String REFRESH_INTENT = "org.wahtod.wififixer.STATUS_REFRESH";
-	private static final int WIDGET_REFRESH_DELAY = 10000;
+	private static final int WIDGET_REFRESH_DELAY = 60000;
 	private static final int WIDGET_REFRESH = 115;
 	private static final int REFRESH = 1233;
 	public static final String ACTION_WIDGET_NOTIFICATION = "org.wahtod.wififixer.WNOTIF";
@@ -76,8 +76,10 @@ public class StatusDispatcher {
 	};
 
 	public void clearQueue() {
-		messagehandler.removeMessages(WIDGET_REFRESH);
-		messagehandler.removeMessages(REFRESH);
+		if (messagehandler.hasMessages(WIDGET_REFRESH))
+			messagehandler.removeMessages(WIDGET_REFRESH);
+		else if (messagehandler.hasMessages(REFRESH))
+			messagehandler.removeMessages(REFRESH);
 	}
 
 	public static void broadcastWidgetNotif(final Context ctxt,
@@ -109,7 +111,7 @@ public class StatusDispatcher {
 	}
 
 	public void unregister() {
-		clearQueue();
 		BroadcastHelper.unregisterReceiver(c.get(), messagereceiver);
+		clearQueue();
 	}
 }

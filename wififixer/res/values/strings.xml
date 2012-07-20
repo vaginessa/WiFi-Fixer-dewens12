@@ -38,7 +38,7 @@
 	<string name="prefs_change">Prefs Change:</string>
 	<string name="connect_failed">Connect Failed</string>
 	<string name="initiating_scan">Initiating Scan</string>
-	<string name="signalhop_no_result">Signalhop: No best network result</string>
+	<string name="signalhop_no_result">Signalhop: No better network</string>
 	<string name="number_of_known">Number of known networks:</string>
 	<string name="signal_poor">Signal poor: scanning for better network</string>
 	<string name="current_dbm">Current dBm:</string>

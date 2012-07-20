@@ -71,5 +71,7 @@ public class BroadcastHelper {
 			final boolean local) {
 		if (local)
 			LocalBroadcastManager.getInstance(c).sendBroadcast(i);
+		else
+			c.sendBroadcast(i);
 	}
 }
