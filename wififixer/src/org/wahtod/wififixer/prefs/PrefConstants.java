@@ -35,6 +35,7 @@ public class PrefConstants {
 	public static final String LOGGING_MENU = "Logging";
 	public static final String HAS_WIDGET = "HASWIDGET";
 	public static final String TUTORIAL = "TUTORIAL";
+	public static final String SERVICEWARNED = "SWARNED";
 
 	/*
 	 * PrefsList enum

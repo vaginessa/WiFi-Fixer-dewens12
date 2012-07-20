@@ -229,5 +229,7 @@
 	<string name="info">Info</string>
 	<string name="rejected_execution">Hostup:ThreadPoolExecutor Rejected Execution</string>
 	<string name="disconnected">Disconnected</string>
+	<string name="note">Note</string>
+	<string name="servicealert_message">When the service is disabled, your wifi is no longer being monitored or repaired</string>
 
 </resources>

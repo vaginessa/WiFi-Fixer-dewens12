@@ -113,6 +113,8 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 		 * For WIFI_SERVICE_ENABLE intent, set service enabled and run
 		 */
 		if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)) {
+			NotifUtil.showToast(ctxt.get().getApplicationContext(),
+					R.string.enabling_wififixerservice);
 			ServiceAlarm.setComponentEnabled(ctxt.get(),
 					WifiFixerService.class, true);
 			PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLE_KEY.key(), false);
@@ -125,13 +127,23 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 		 * logging and service alarms.
 		 */
 		else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_DISABLE)) {
-			ctxt.get().stopService(
-					new Intent(ctxt.get(), WifiFixerService.class));
-			ServiceAlarm.setComponentEnabled(ctxt.get(),
-					WifiFixerService.class, false);
-			PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLE_KEY.key(), true);
-			ServiceAlarm.unsetAlarm(ctxt.get());
-			ctxt.get().stopService(new Intent(ctxt.get(), LogService.class));
+			if (PrefUtil.readBoolean(ctxt.get(), PrefConstants.SERVICEWARNED)) {
+				NotifUtil.showToast(ctxt.get().getApplicationContext(),
+						R.string.disabling_wififixerservice);
+				ctxt.get().stopService(
+						new Intent(ctxt.get(), WifiFixerService.class));
+				ServiceAlarm.setComponentEnabled(ctxt.get(),
+						WifiFixerService.class, false);
+				PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLE_KEY.key(), true);
+				ServiceAlarm.unsetAlarm(ctxt.get());
+				ctxt.get()
+						.stopService(new Intent(ctxt.get(), LogService.class));
+			} else {
+				ctxt.get().startActivity(
+						new Intent(ctxt.get(), WifiFixerActivity.class)
+								.putExtra(PrefConstants.SERVICEWARNED, true)
+								.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+			}
 		}
 		/*
 		 * Handle Widget intent

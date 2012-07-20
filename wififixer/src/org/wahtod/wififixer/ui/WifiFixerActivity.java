@@ -167,7 +167,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 			return;
 		Bundle data = message.getData();
 		/*
-		 * Show About Fragment either via fragment or otherwise
+		 * Show About Fragment either via fragment or activity
 		 */
 		if (data.containsKey(SHOW_FRAGMENT)) {
 			data.remove(SHOW_FRAGMENT);
@@ -175,6 +175,9 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		} else if (data.containsKey(SEND_LOG)) {
 			data.remove(SEND_LOG);
 			sendLog();
+		} else if (data.containsKey(PrefConstants.SERVICEWARNED)) {
+			data.remove(PrefConstants.SERVICEWARNED);
+			showServiceAlert();
 		}
 		/*
 		 * Delete Log if called by preference
@@ -259,6 +262,24 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		issueDialog.show();
 	}
 
+	@SuppressWarnings("deprecation")
+	public void showServiceAlert() {
+		final Context c;
+		c = this;
+		AlertDialog alert = new AlertDialog.Builder(this).create();
+		alert.setTitle(getString(R.string.note));
+		alert.setIcon(R.drawable.icon);
+		alert.setMessage(getString(R.string.servicealert_message));
+		alert.setButton(getString(R.string.ok_button),
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						PrefUtil.writeBoolean(c, PrefConstants.SERVICEWARNED,
+								true);
+					}
+				});
+		alert.show();
+	}
+
 	public void showSendLogDialog(final String report, final String fileuri) {
 		/*
 		 * Now, prepare and send the log
@@ -305,14 +326,10 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 			Intent intent = new Intent(
 					IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
 			sendBroadcast(intent);
-			NotifUtil.showToast(this.getApplicationContext(),
-					R.string.enabling_wififixerservice);
 		} else {
 			Intent intent = new Intent(
 					IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
 			sendBroadcast(intent);
-			NotifUtil.showToast(this.getApplicationContext(),
-					R.string.disabling_wififixerservice);
 		}
 
 		this.sendBroadcast(new Intent(ServiceFragment.REFRESH_ACTION));
@@ -354,7 +371,14 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 				phonevp.setAdapter(fadapter);
 			}
 			if (!PrefUtil.readBoolean(this, PrefConstants.TUTORIAL))
-				phoneTutNag();
+				handler.postDelayed(new Runnable() {
+
+					@Override
+					public void run() {
+						phoneTutNag();
+					}
+				}, WIFI_TOGGLE_CHECK_DELAY);
+
 		} else {
 			drawFragment(R.id.servicefragment, ServiceFragment.class);
 			drawFragment(R.id.knownnetworksfragment,
