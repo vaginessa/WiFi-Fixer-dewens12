@@ -69,7 +69,7 @@ public class LogService extends Service {
 	public static final String TS_DELAY = "TSDELAY";
 
 	// Log Timestamp
-	private static final long TS_WAIT_SCREENON = 10000;
+	private static final long TS_WAIT_SCREENON = 15000;
 	private static final long TS_WAIT_SCREENOFF = 60000;
 
 	// Write buffer constants

@@ -259,28 +259,28 @@ public class WFConnection extends Object implements
 	private class NetworkCheckTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			boolean isup = false;
+			try {
+				boolean isup = false;
 
-			/*
-			 * First check if wifi is current network
-			 */
+				/*
+				 * First check if wifi is current network
+				 */
 
-			if (!getIsOnWifi(ctxt.get())) {
-				log(ctxt.get(),
-						(ctxt.get()
-								.getString(R.string.wifi_not_current_network)));
-				clearConnectedStatus(ctxt.get().getString(
-						R.string.wifi_not_current_network));
+				if (!getIsOnWifi(ctxt.get())) {
+					log(ctxt.get(),
+							(ctxt.get()
+									.getString(R.string.wifi_not_current_network)));
+					clearConnectedStatus(ctxt.get().getString(
+							R.string.wifi_not_current_network));
+					return false;
+				} else {
+					isup = networkUp(ctxt.get());
+					if (isup && wifirepair != W_REASSOCIATE)
+						wifirepair = W_REASSOCIATE;
+					return isup;
+				}
+			} catch (Exception e) {
 				return false;
-			}
-			else{
-			/*
-			 * Check for network connectivity
-			 */
-			isup = networkUp(ctxt.get());
-			if (isup && wifirepair != W_REASSOCIATE)
-				wifirepair = W_REASSOCIATE;
-			return isup;
 			}
 		}
 
@@ -654,6 +654,12 @@ public class WFConnection extends Object implements
 		 * Start Main tick
 		 */
 		handlerWrapper(MAIN);
+		
+		/*
+		 * Instantiate network checker
+		 */
+		if (self.get().hostup == null)
+			self.get().hostup = new Hostup(context);
 	}
 
 	private void clearHandler() {
@@ -691,7 +697,7 @@ public class WFConnection extends Object implements
 			m.setSignal(WifiManager.calculateSignalLevel(signal, 5));
 			StatusMessage.send(context, m);
 		}
-	
+
 		if (_signalCheckTime < System.currentTimeMillis()
 				&& Math.abs(signal) > Math.abs(getSignalThreshold(context))) {
 			notifyWrap(context, context.getString(R.string.signal_poor));
@@ -1205,11 +1211,6 @@ public class WFConnection extends Object implements
 	}
 
 	private static boolean networkUp(final Context context) {
-		/*
-		 * Instantiate hostup if it's not already instantiated
-		 */
-		if (self.get().hostup == null)
-			self.get().hostup = new Hostup(context);
 		/*
 		 * hostup.getHostup does all the heavy lifting
 		 */
