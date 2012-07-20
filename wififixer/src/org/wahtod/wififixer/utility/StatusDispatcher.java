@@ -30,9 +30,9 @@ import android.os.Handler;
 import android.os.Message;
 
 public class StatusDispatcher {
-	protected static StatusMessage m;
+	public static StatusMessage m;
 	public static final String REFRESH_INTENT = "org.wahtod.wififixer.STATUS_REFRESH";
-	private static final int WIDGET_REFRESH_DELAY = 60000;
+	private static final int WIDGET_REFRESH_DELAY = 30000;
 	private static final int WIDGET_REFRESH = 115;
 	private static final int REFRESH = 1233;
 	public static final String ACTION_WIDGET_NOTIFICATION = "org.wahtod.wififixer.WNOTIF";
@@ -63,34 +63,36 @@ public class StatusDispatcher {
 	private static Handler messagehandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
-			switch (message.what) {
-			case WIDGET_REFRESH:
-				if (PrefUtil.getFlag(Pref.HASWIDGET_KEY))
-					if (message.peekData() == null)
-						host.get().post(new Widget(m));
-					else
-						host.get().post(
-								new Widget(StatusMessage.fromMessage(message)));
-				break;
+			if (m != null)
+				switch (message.what) {
+				case WIDGET_REFRESH:
+					if (PrefUtil.getFlag(Pref.HASWIDGET_KEY))
+						if (message.peekData() == null)
+							host.get().post(new Widget(m));
+						else
+							host.get().post(
+									new Widget(StatusMessage
+											.fromMessage(message)));
+					break;
 
-			case REFRESH:
-				if (ScreenStateDetector.getScreenState(c.get())) {
-					StatusMessage.updateFromMessage(m, message);
-					host.get().post(new FastStatus(m));
-					host.get().post(new StatNotif(m));
-					if (!this.hasMessages(WIDGET_REFRESH))
-						this.sendEmptyMessageDelayed(WIDGET_REFRESH,
-								WIDGET_REFRESH_DELAY);
+				case REFRESH:
+					if (ScreenStateDetector.getScreenState(c.get())) {
+						StatusMessage.updateFromMessage(m, message);
+						host.get().post(new FastStatus(m));
+						host.get().post(new StatNotif(m));
+						if (!this.hasMessages(WIDGET_REFRESH))
+							this.sendEmptyMessageDelayed(WIDGET_REFRESH,
+									WIDGET_REFRESH_DELAY);
+					}
+					break;
 				}
-				break;
-			}
 		}
 	};
 
-	private static class StatNotif implements Runnable {
+	public static class StatNotif implements Runnable {
 		private final StatusMessage message;
 
-		StatNotif(final StatusMessage message) {
+		public StatNotif(final StatusMessage message) {
 			this.message = message;
 		}
 
@@ -113,10 +115,10 @@ public class StatusDispatcher {
 		}
 	};
 
-	private static class Widget implements Runnable {
+	public static class Widget implements Runnable {
 		private final StatusMessage message;
 
-		Widget(final StatusMessage message) {
+		public Widget(final StatusMessage message) {
 			this.message = message;
 		}
 

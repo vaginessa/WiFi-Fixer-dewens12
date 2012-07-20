@@ -23,6 +23,7 @@ import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ScreenStateDetector;
+import org.wahtod.wififixer.utility.StatusDispatcher;
 import org.wahtod.wififixer.utility.StatusMessage;
 import org.wahtod.wififixer.utility.ScreenStateDetector.OnScreenStateChangedListener;
 import org.wahtod.wififixer.utility.ServiceAlarm;
@@ -34,6 +35,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 
@@ -341,9 +343,17 @@ public class WifiFixerService extends Service implements
 	}
 
 	private void resetWidget() {
-		wifi._statusdispatcher.refreshWidget(StatusMessage.getNew()
-				.setSSID(this.getString(R.string.service_inactive))
-				.setSignal(0));
+		final Handler h = new Handler();
+		/*
+		 * Shut down handler
+		 * set widget to default
+		 * make sure notification is cancelled
+		 */
+		StatusDispatcher.m= null;
+		h.post(new StatusDispatcher.Widget(StatusMessage.getNew()
+				.setSSID(this.getString(R.string.service_inactive))));
+		h.post(new StatusDispatcher.StatNotif(StatusMessage.getNew()
+				.setShow(-1)));
 	}
 
 	private void setInitialScreenState() {
