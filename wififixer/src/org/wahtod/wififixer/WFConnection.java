@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.RejectedExecutionException;
+
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
@@ -238,49 +240,57 @@ public class WFConnection extends Object implements
 	 * For network check
 	 */
 
-	private class NetworkCheckTask extends AsyncTask<Void, Void, Boolean> {
+	private class NetworkCheckTask extends AsyncTask<Void, Void, boolean[]> {
+		private static final int POST_NETCHECK_DELAY = 3000;
+
 		@Override
-		protected Boolean doInBackground(Void... params) {
-			try {
-				boolean isup = false;
-
-				/*
-				 * First check if wifi is current network
-				 */
-
-				if (!getIsOnWifi(ctxt.get())) {
-					log(ctxt.get(),
-							(ctxt.get()
-									.getString(R.string.wifi_not_current_network)));
-					clearConnectedStatus(ctxt.get().getString(
-							R.string.wifi_not_current_network));
-					return false;
-				} else {
-					isup = networkUp(ctxt.get());
-					if (isup && wifirepair != W_REASSOCIATE)
-						wifirepair = W_REASSOCIATE;
+		protected boolean[] doInBackground(Void... params) {
+			boolean[] isup = new boolean[1];
+			/*
+			 * First check if wifi is current network
+			 */
+			if (!getIsOnWifi(ctxt.get())) {
+				log(ctxt.get(),
+						(ctxt.get()
+								.getString(R.string.wifi_not_current_network)));
+				clearConnectedStatus(ctxt.get().getString(
+						R.string.wifi_not_current_network));
+				return isup;
+			} else {
+				try {
+					isup[0] = networkUp(ctxt.get());
+				} catch (IllegalStateException e) {
 					return isup;
 				}
-			} catch (Exception e) {
-				return false;
+				if (isup[0] && wifirepair != W_REASSOCIATE)
+					wifirepair = W_REASSOCIATE;
+				return isup;
 			}
 		}
 
 		@Override
-		protected void onPostExecute(Boolean result) {
+		protected void onPostExecute(boolean[] result) {
+			final boolean r = result[0];
 			/*
 			 * Notify state
 			 */
 			if (self.get().screenstate) {
 				StatusMessage m = new StatusMessage();
-				if (result)
+				if (result[0])
 					m.setStatus(ctxt.get().getString(R.string.passed));
 				else
 					m.setStatus(ctxt.get().getString(R.string.failed));
 				StatusMessage.send(ctxt.get(), m);
 			}
-			checkSignal(ctxt.get());
-			handleNetworkResult(result);
+			handler.post(new Runnable() {
+
+				@Override
+				public void run() {
+					checkSignal(ctxt.get());
+					handleNetworkResult(r);
+				}
+
+			});
 			handler.postDelayed(new Runnable() {
 
 				@Override
@@ -288,8 +298,7 @@ public class WFConnection extends Object implements
 					StatusMessage.send(ctxt.get(), StatusMessage.getNew()
 							.setStatus(getSupplicantState().name()));
 				}
-			}, 3000);
-
+			}, POST_NETCHECK_DELAY);
 		}
 	}
 
@@ -738,8 +747,7 @@ public class WFConnection extends Object implements
 		 * Make sure knownbysignal is populated first
 		 */
 		if (knownbysignal.isEmpty()) {
-			log(context,
-					(context.getString(R.string.knownbysignal_empty_exiting)));
+			log(context, context.getString((R.string.signalhop_no_result)));
 			return NULLVAL;
 		}
 		/*
@@ -902,7 +910,7 @@ public class WFConnection extends Object implements
 					return true;
 		} catch (NullPointerException e) {
 			/*
-			 * Need this catch because NetworkInfo can return null
+			 * NetworkInfo can return null
 			 */
 		}
 		return false;
@@ -1107,7 +1115,6 @@ public class WFConnection extends Object implements
 		 */
 		if (wm_ == null) {
 			wm_ = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-			log(context, (context.getString(R.string.cachewfinst)));
 		}
 		return wm_;
 	}
@@ -1284,7 +1291,17 @@ public class WFConnection extends Object implements
 			/*
 			 * Returns result to handleNetworkResult method
 			 */
-			new NetworkCheckTask().execute();
+			try {
+				new NetworkCheckTask().execute();
+			} catch (RejectedExecutionException e) {
+				StatusMessage.send(
+						ctxt.get(),
+						StatusMessage.getNew()
+								.setStatus(
+										ctxt.get().getString(
+												R.string.critical_timeout)));
+				handleNetworkResult(false);
+			}
 		} else {
 			/*
 			 * Make sure scan happens in a reasonable amount of time

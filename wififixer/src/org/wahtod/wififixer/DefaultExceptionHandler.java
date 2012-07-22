@@ -55,7 +55,8 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 							| Context.MODE_APPEND));
 		} catch (FileNotFoundException e2) {
 			/*
-			 * Yeah, this sucks but it's best to be safe
+			 * This can't happen: openFileOutput creates the file if it doesn't
+			 * exist.
 			 */
 			return;
 		}
@@ -64,7 +65,7 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 			data.writeUTF(stacktrace);
 		} catch (IOException e1) {
 			/*
-			 * Yoinks, but this shouldn't evar happen
+			 * Yoinks, but this shouldn't ever happen
 			 */
 			e1.printStackTrace();
 		} finally {

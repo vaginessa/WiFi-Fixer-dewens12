@@ -246,26 +246,25 @@ public class KnownNetworksFragment extends Fragment {
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
-			/*
-			 * Set SSID text and color
-			 */
-			holder.text.setText(ssidArray.get(position));
 			if (ssidArray.get(position) != null) {
 				if (known_in_range.contains(ssidArray.get(position)))
 					holder.text.setTextColor(Color.GREEN);
 				else
 					holder.text.setTextColor(Color.WHITE);
-			}
-
-			if (PrefUtil.readManagedState(getContext(), position))
-				holder.text.setTextColor(Color.BLACK);
-			else {
-				if (PrefUtil.getNetworkState(getContext(), position))
-					holder.icon.setColorFilter(Color.WHITE,
-							PorterDuff.Mode.SRC_ATOP);
-				else
-					holder.icon.setColorFilter(Color.BLACK,
-							PorterDuff.Mode.SRC_ATOP);
+				/*
+				 * Set SSID text and color
+				 */
+				holder.text.setText(ssidArray.get(position));
+				if (PrefUtil.readManagedState(getContext(), position))
+					holder.text.setTextColor(Color.BLACK);
+				else {
+					if (PrefUtil.getNetworkState(getContext(), position))
+						holder.icon.setColorFilter(Color.WHITE,
+								PorterDuff.Mode.SRC_ATOP);
+					else
+						holder.icon.setColorFilter(Color.BLACK,
+								PorterDuff.Mode.SRC_ATOP);
+				}
 			}
 			return convertView;
 		}
@@ -274,7 +273,6 @@ public class KnownNetworksFragment extends Fragment {
 			TextView text;
 			ImageView icon;
 		}
-
 	}
 
 	private static Handler scanhandler = new Handler() {

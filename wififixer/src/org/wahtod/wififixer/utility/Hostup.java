@@ -49,11 +49,13 @@ import org.wahtod.wififixer.R;
 import android.content.Context;
 
 public class Hostup {
+	private static final int HTTP_TIMEOUT = 8000;
 	/*
 	 * getHostUp method: Executes 2 threads, icmp check and http check first
 	 * thread to return state "wins"
 	 */
 
+	private static final String REJECTED_EXECUTION = "Rejected Execution";
 	protected static final String NEWLINE = "\n";
 	// Target for header check
 	protected static final String FAILOVER_TARGET = "www.google.com";
@@ -69,7 +71,7 @@ public class Hostup {
 	protected volatile WeakReference<Thread> self;
 	protected volatile boolean finished;
 	protected volatile StopWatch timer;
-	private volatile DefaultHttpClient httpclient;
+	private static DefaultHttpClient httpclient;
 	private ExecutorService _executor = Executors.newCachedThreadPool();
 
 	@SuppressWarnings("unused")
@@ -79,6 +81,7 @@ public class Hostup {
 	public Hostup(final Context c) {
 		timer = new StopWatch();
 		context = new WeakReference<Context>(c);
+		prepareHttpClient();
 	}
 
 	/*
@@ -175,7 +178,7 @@ public class Hostup {
 			response.status.append(ctxt.getString(R.string.ms));
 			return response;
 		} catch (RejectedExecutionException e) {
-			response.status.append(ctxt.getString(R.string.rejected_execution));
+			response.status.append(REJECTED_EXECUTION);
 		}
 		return new HostMessage(ctxt.getString(R.string.critical_timeout), false);
 	}
@@ -208,23 +211,6 @@ public class Hostup {
 		 */
 		BasicHttpContext httpctxt = new BasicHttpContext();
 		/*
-		 * Prepare httpclient
-		 */
-		if (httpclient == null) {
-			SchemeRegistry scheme = new SchemeRegistry();
-			scheme.register(new Scheme(HTTPSCHEME, PlainSocketFactory
-					.getSocketFactory(), 80));
-			HttpParams httpparams = new BasicHttpParams();
-			HttpProtocolParams.setVersion(httpparams, HttpVersion.HTTP_1_1);
-			HttpConnectionParams.setConnectionTimeout(httpparams, reachable);
-			HttpConnectionParams.setSoTimeout(httpparams, reachable);
-			HttpConnectionParams.setLinger(httpparams, 1);
-			HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
-			ClientConnectionManager cm = new ThreadSafeClientConnManager(
-					httpparams, scheme);
-			httpclient = new DefaultHttpClient(cm, httpparams);
-		}
-		/*
 		 * get URI
 		 */
 		try {
@@ -249,6 +235,24 @@ public class Hostup {
 			return true;
 		else
 			return false;
+	}
+
+	private static void prepareHttpClient() {
+		/*
+		 * Prepare httpclient
+		 */
+		SchemeRegistry scheme = new SchemeRegistry();
+		scheme.register(new Scheme(HTTPSCHEME, PlainSocketFactory
+				.getSocketFactory(), 80));
+		HttpParams httpparams = new BasicHttpParams();
+		HttpProtocolParams.setVersion(httpparams, HttpVersion.HTTP_1_1);
+		HttpConnectionParams.setConnectionTimeout(httpparams, HTTP_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpparams, HTTP_TIMEOUT);
+		HttpConnectionParams.setLinger(httpparams, 1);
+		HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
+		ClientConnectionManager cm = new ThreadSafeClientConnManager(
+				httpparams, scheme);
+		httpclient = new DefaultHttpClient(cm, httpparams);
 	}
 
 	public void finish() {

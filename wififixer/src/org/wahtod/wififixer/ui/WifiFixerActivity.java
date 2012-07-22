@@ -216,7 +216,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		} else if (!file.exists()) {
 			file = this
 					.getFileStreamPath(DefaultExceptionHandler.EXCEPTIONS_FILENAME);
-			if (file.length() == 0) {
+			if (!file.exists()) {
 				NotifUtil.showToast(WifiFixerActivity.this,
 						R.string.logfile_delete_err_toast);
 				return;
@@ -227,9 +227,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		 * Make sure LogService's buffer is flushed
 		 */
 		LogService.log(this, LogService.FLUSH, "");
-
 		final String fileuri = file.toURI().toString();
-
 		/*
 		 * Get the issue report, then start send log dialog
 		 */
