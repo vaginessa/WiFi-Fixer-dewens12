@@ -216,7 +216,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		} else if (!file.exists()) {
 			file = this
 					.getFileStreamPath(DefaultExceptionHandler.EXCEPTIONS_FILENAME);
-			if (!file.exists()) {
+			if (file.length() < 10) {
 				NotifUtil.showToast(WifiFixerActivity.this,
 						R.string.logfile_delete_err_toast);
 				return;

@@ -22,6 +22,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.Date;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -62,7 +63,7 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 		}
 		printWriter.close();
 		try {
-			data.writeUTF(stacktrace);
+			data.writeUTF(new Date().toString() + stacktrace);
 		} catch (IOException e1) {
 			/*
 			 * Yoinks, but this shouldn't ever happen

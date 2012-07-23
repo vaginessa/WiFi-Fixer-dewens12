@@ -115,9 +115,8 @@ public class LogService extends Service {
 	}
 
 	private static boolean hasStackTrace(final Context context) {
-		file = context
-				.getFileStreamPath(DefaultExceptionHandler.EXCEPTIONS_FILENAME);
-		return file.length() > 0;
+		return context.getFileStreamPath(
+				DefaultExceptionHandler.EXCEPTIONS_FILENAME).exists();
 	}
 
 	private static String getStackTrace(final Context context) {
@@ -264,8 +263,8 @@ public class LogService extends Service {
 		return START_STICKY;
 	}
 
-	public static void log(final Context context,
-			final String an, final String m) {
+	public static void log(final Context context, final String an,
+			final String m) {
 		Intent sendIntent = new Intent(context, LogService.class);
 		sendIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 		sendIntent.putExtra(APPNAME, an);

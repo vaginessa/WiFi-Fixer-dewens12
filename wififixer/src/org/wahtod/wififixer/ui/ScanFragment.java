@@ -25,6 +25,7 @@ import java.util.List;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
+import org.wahtod.wififixer.utility.StatusMessage;
 import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
 
@@ -57,6 +58,7 @@ public class ScanFragment extends Fragment {
 	private WFScanResult clicked;
 	private ScanListAdapter adapter;
 	private ListView lv;
+	private static final String WIFIOFF = "WIFIOFF";
 	private static final int CONTEXT_CONNECT = 13;
 	private static final int CONTEXT_INFO = 15;
 	protected static final int REFRESH_LIST_ADAPTER = 0;
@@ -204,36 +206,39 @@ public class ScanFragment extends Fragment {
 			 * Set SSID text and color
 			 */
 			holder.text.setText(scanresultArray.get(position).SSID);
-
-			/*
-			 * Set signal icon
-			 */
-			int adjusted = WifiManager.calculateSignalLevel(
-					scanresultArray.get(position).level, 5);
-
-			holder.icon.setImageResource(NotifUtil.getIconfromSignal(adjusted,
-					NotifUtil.ICON_SET_SMALL));
-
-			/*
-			 * Set security icon and encryption text
-			 */
-			if (StringUtil.getCapabilitiesString(
-					scanresultArray.get(position).capabilities).equals(
-					StringUtil.OPEN)) {
-				holder.security.setImageResource(R.drawable.buttons);
-				holder.security.setColorFilter(Color.GREEN,
-						PorterDuff.Mode.SRC_ATOP);
-				holder.encryption.setText(R.string.open_network);
+			if (holder.encryption.equals(WIFIOFF)) {
+				holder.icon.setImageDrawable(null);
+				holder.encryption.setText(StatusMessage.EMPTY);
+				holder.security.setImageDrawable(null);
 			} else {
-				holder.security.setColorFilter(Color.TRANSPARENT,
-						PorterDuff.Mode.SRC_ATOP);
-				holder.security.setImageResource(R.drawable.secure);
-				holder.encryption
-						.setText(StringUtil
-								.getCapabilitiesString(scanresultArray
-										.get(position).capabilities));
-			}
+				/*
+				 * Set signal icon
+				 */
+				int adjusted = WifiManager.calculateSignalLevel(
+						scanresultArray.get(position).level, 5);
 
+				holder.icon.setImageResource(NotifUtil.getIconfromSignal(
+						adjusted, NotifUtil.ICON_SET_SMALL));
+
+				/*
+				 * Set security icon and encryption text
+				 */
+				if (StringUtil.getCapabilitiesString(
+						scanresultArray.get(position).capabilities).equals(
+						StringUtil.OPEN)) {
+					holder.security.setImageResource(R.drawable.buttons);
+					holder.security.setColorFilter(Color.GREEN,
+							PorterDuff.Mode.SRC_ATOP);
+					holder.encryption.setText(R.string.open_network);
+				} else {
+					holder.security.setColorFilter(Color.TRANSPARENT,
+							PorterDuff.Mode.SRC_ATOP);
+					holder.security.setImageResource(R.drawable.secure);
+					holder.encryption.setText(StringUtil
+							.getCapabilitiesString(scanresultArray
+									.get(position).capabilities));
+				}
+			}
 			return convertView;
 		}
 
@@ -281,6 +286,7 @@ public class ScanFragment extends Fragment {
 		WFScanResult w = new WFScanResult();
 		w.SSID = getString(R.string.wifi_is_disabled);
 		w.level = -99;
+		w.capabilities = WIFIOFF;
 		List<WFScanResult> list = new ArrayList<WFScanResult>();
 		list.add(w);
 		if (adapter.scanresultArray != null) {
@@ -380,6 +386,9 @@ public class ScanFragment extends Fragment {
 			public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 					int position, long id) {
 				clicked = adapter.scanresultArray.get(position);
+				if (clicked.capabilities.equals(WIFIOFF))
+					return true;
+				else
 				return false;
 			}
 		});

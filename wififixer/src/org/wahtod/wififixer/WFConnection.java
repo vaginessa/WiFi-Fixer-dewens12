@@ -270,6 +270,8 @@ public class WFConnection extends Object implements
 
 		@Override
 		protected void onPostExecute(boolean[] result) {
+			if (result == null)
+				return;
 			final boolean r = result[0];
 			/*
 			 * Notify state
@@ -1475,7 +1477,8 @@ public class WFConnection extends Object implements
 		 */
 		if (_connected && !sState.equals(SupplicantState.COMPLETED)
 				&& !sState.equals(SupplicantState.FOUR_WAY_HANDSHAKE)
-				&& !sState.equals(SupplicantState.GROUP_HANDSHAKE))
+				&& !sState.equals(SupplicantState.GROUP_HANDSHAKE)
+				&& !sState.equals(SupplicantState.SCANNING))
 			onNetworkDisconnected();
 		/*
 		 * Check for ASSOCIATING bug but first clear check if not ASSOCIATING
@@ -1509,10 +1512,6 @@ public class WFConnection extends Object implements
 
 		case ASSOCIATING:
 			handlerWrapper(ASSOCWATCHDOG, SHORTWAIT);
-			break;
-
-		case COMPLETED:
-		case DISCONNECTED:
 			if (!_connected)
 				onNetworkConnecting();
 			break;
@@ -1677,6 +1676,7 @@ public class WFConnection extends Object implements
 		if (PrefUtil.getFlag(Pref.STATENOT_KEY) && statNotifCheck())
 			setStatNotif(true);
 		_statusdispatcher.refreshWidget(null);
+
 	}
 
 	public void onScreenStateChanged(boolean state) {
@@ -1760,6 +1760,10 @@ public class WFConnection extends Object implements
 	protected void setStatNotif(final boolean state) {
 		StatusMessage n = new StatusMessage()
 				.setStatus(getSupplicantStateString(getSupplicantState()));
+		if (!getWifiManager(ctxt.get()).isWifiEnabled()
+				|| !getIsOnWifi(ctxt.get()))
+			clearConnectedStatus(StatusMessage.EMPTY);
+		
 		if (state)
 			n.setShow(1);
 		else
