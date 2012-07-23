@@ -30,6 +30,7 @@ import android.webkit.WebViewClient;
 
 public class HelpActivity extends AppFragmentActivity {
 
+	private static final String ASSET_INDEX = "file:///android_asset/index.html";
 	private static final String CURRENT_URL = "CURRENT_URL";
 	WebView webview;
 
@@ -55,7 +56,7 @@ public class HelpActivity extends AppFragmentActivity {
 				&& savedInstanceState.containsKey(CURRENT_URL))
 			webview.loadUrl(savedInstanceState.getString(CURRENT_URL));
 		else
-			webview.loadUrl("file:///android_asset/index.html");
+			webview.loadUrl(ASSET_INDEX);
 
 		super.onCreate(savedInstanceState);
 	}
@@ -77,33 +78,40 @@ public class HelpActivity extends AppFragmentActivity {
 	}
 
 	private class HelpWebViewClient extends WebViewClient {
+		private static final String CYANOGENMOD = "http://cyanogenmod.com";
+		private static final String HTTP_STOP = "stop";
+		private static final String BLOG = "http://wififixer.wordpress.com";
+		private static final String EMAIL = "Email:";
+		private static final String MAILMIME = "text/plain";
+		private static final String MAILTO = "mailto:zanshin.g1@gmail.com";
+
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			if (url.contains("mailto:zanshin.g1@gmail.com")) {
+			if (url.contains(MAILTO)) {
 				Intent sendIntent = new Intent(Intent.ACTION_SEND);
-				sendIntent.setType("text/plain");
+				sendIntent.setType(MAILMIME);
 				sendIntent.putExtra(Intent.EXTRA_EMAIL,
-						new String[] { "zanshin.g1@gmail.com" });
-				startActivity(Intent.createChooser(sendIntent, "Email:"));
-				return true;
-			} else if (url.contains("http://wififixer.wordpress.com")) {
+						new String[] { MAILTO });
+				startActivity(Intent.createChooser(sendIntent, EMAIL));
+				return false;
+			} else if (url.contains(BLOG)) {
 				Intent i = new Intent(Intent.ACTION_VIEW);
-				Uri u = Uri.parse("http://wififixer.wordpress.com");
+				Uri u = Uri.parse(BLOG);
 				i.setData(u);
 				startActivity(i);
-				return true;
-			} else if (url.contains("stop")) {
+				return false;
+			} else if (url.contains(HTTP_STOP)) {
 				HelpActivity.this.finish();
-				return true;
-			} else if (url.contains("http://cyanogenmod.com")) {
+				return false;
+			} else if (url.contains(CYANOGENMOD)) {
 				Intent i = new Intent(Intent.ACTION_VIEW);
-				Uri u = Uri.parse("http://cyanogenmod.com");
+				Uri u = Uri.parse(CYANOGENMOD);
 				i.setData(u);
 				startActivity(i);
-				return true;
+				return false;
 			}
 			view.loadUrl(url);
-			return true;
+			return false;
 		}
 
 	}
