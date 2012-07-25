@@ -419,7 +419,10 @@ public class KnownNetworksFragment extends Fragment {
 			public boolean onItemLongClick(AdapterView<?> adapterview, View v,
 					int position, long id) {
 				clicked = lv.getItemAtPosition(position).toString();
-				return false;
+				if (isWifiOn(getContext()))
+					return false;
+				else
+					return true;
 			}
 		});
 		registerForContextMenu(lv);
@@ -439,6 +442,12 @@ public class KnownNetworksFragment extends Fragment {
 				adapter.notifyDataSetChanged();
 			}
 		}
+	}
+
+	private static boolean isWifiOn(final Context ctxt) {
+		WifiManager wm = (WifiManager) ctxt
+				.getSystemService(Context.WIFI_SERVICE);
+		return wm.isWifiEnabled();
 	}
 
 	private Context getContext() {

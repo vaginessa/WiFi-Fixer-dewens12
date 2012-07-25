@@ -170,8 +170,7 @@ public class WifiFixerService extends Service implements
 		if (PrefUtil.readBoolean(this, Pref.HASWIDGET_KEY.key()))
 			resetWidget();
 		unregisterReceivers();
-		if (PrefUtil.getFlag(Pref.STATENOT_KEY))
-			wifi.setStatNotif(false);
+		wifi.setStatNotif(false);
 		if (logging)
 			LogService.log(this, LogService.getLogTag(this),
 					(getString(R.string.ondestroy)));
@@ -345,13 +344,12 @@ public class WifiFixerService extends Service implements
 	private void resetWidget() {
 		final Handler h = new Handler();
 		/*
-		 * Shut down handler
-		 * set widget to default
-		 * make sure notification is cancelled
+		 * Shut down handler set widget to default make sure notification is
+		 * cancelled
 		 */
-		StatusDispatcher.m= null;
-		h.post(new StatusDispatcher.Widget(StatusMessage.getNew()
-				.setSSID(this.getString(R.string.service_inactive))));
+		StatusDispatcher.m = null;
+		h.post(new StatusDispatcher.Widget(StatusMessage.getNew().setSSID(
+				this.getString(R.string.service_inactive))));
 		h.post(new StatusDispatcher.StatNotif(StatusMessage.getNew()
 				.setShow(-1)));
 	}

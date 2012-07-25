@@ -14,7 +14,7 @@
     package="org.wahtod.wififixer"
     android:installLocation="internalOnly"
     android:versionCode="950"
-    android:versionName="0.9.5b10" 
+    android:versionName="0.9.5RC1" 
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Documenting permissions here -->
