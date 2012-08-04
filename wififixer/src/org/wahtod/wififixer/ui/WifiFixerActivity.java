@@ -102,11 +102,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	private static final String DELETE_LOG = "DELETE_LOG";
 
 	/*
-	 * Remove Connect fragment key
-	 */
-	static final String REMOVE_CONNECT_FRAGMENTS = "RMCNCTFRGMTS";
-
-	/*
 	 * Fragment Tags
 	 */
 	public static final String SERVICEFRAG_TAG = "SERVICE";

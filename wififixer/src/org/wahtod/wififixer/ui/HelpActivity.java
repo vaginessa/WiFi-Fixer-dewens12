@@ -84,34 +84,39 @@ public class HelpActivity extends AppFragmentActivity {
 		private static final String EMAIL = "Email:";
 		private static final String MAILMIME = "text/plain";
 		private static final String MAILTO = "mailto:zanshin.g1@gmail.com";
+		private static final String GOOGLECODE = "http://code.google.com/p/android/issues/detail?id=21469";
 
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
 			if (url.contains(MAILTO)) {
 				Intent sendIntent = new Intent(Intent.ACTION_SEND);
 				sendIntent.setType(MAILMIME);
-				sendIntent.putExtra(Intent.EXTRA_EMAIL,
-						new String[] { MAILTO });
+				sendIntent
+						.putExtra(Intent.EXTRA_EMAIL, new String[] { MAILTO });
 				startActivity(Intent.createChooser(sendIntent, EMAIL));
 				return false;
 			} else if (url.contains(BLOG)) {
-				Intent i = new Intent(Intent.ACTION_VIEW);
-				Uri u = Uri.parse(BLOG);
-				i.setData(u);
-				startActivity(i);
+				displayExternalURI(BLOG);
 				return false;
 			} else if (url.contains(HTTP_STOP)) {
 				HelpActivity.this.finish();
 				return false;
 			} else if (url.contains(CYANOGENMOD)) {
-				Intent i = new Intent(Intent.ACTION_VIEW);
-				Uri u = Uri.parse(CYANOGENMOD);
-				i.setData(u);
-				startActivity(i);
+				displayExternalURI(CYANOGENMOD);
+				return false;
+			} else if (url.contains(GOOGLECODE)) {
+				displayExternalURI(GOOGLECODE);
 				return false;
 			}
 			view.loadUrl(url);
 			return false;
+		}
+
+		private void displayExternalURI(final String uri) {
+			Intent i = new Intent(Intent.ACTION_VIEW);
+			Uri u = Uri.parse(uri);
+			i.setData(u);
+			startActivity(i);
 		}
 
 	}

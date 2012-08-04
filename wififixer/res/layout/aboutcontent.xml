@@ -100,7 +100,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dip"
-                android:text="Wifi Fixer cannot prevent disconnections, it can only recover from them.  Disconnections are caused by protocol errors in the driver or in the wifi access point's software.\n" />
+                android:text="It is not possible to prevent disconnections or low signal in an app.  Wifi Fixer will detect and attempt recovery when these problems are detected.\nSome tuning can be done to the Wifi Acess Point's settings to minimize disconnections.  Please refer to the in-app help documents.\n" />
             
             <TextView
                 style="@style/Wftext.header"
@@ -144,7 +144,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dip"
-                android:text="Logging stores some personal information: specifically current timezone and SSID of configured access points and scanned SSIDs during connection.\nLogging is not enabled by default.\nThe log will only be enabled and sent when explicitly requested.\n\nStack traces are collected upon an uncaught exception and added to the log.\nStack traces contain no identifying information." />
+                android:text="Logging stores some personal information: specifically current timezone and SSID of configured access points and scanned SSIDs during connection.   Logging is not enabled by default.  The log will only be enabled and sent when explicitly requested.\n\nStack traces are collected upon an uncaught exception and added to the log.  Stack traces contain no identifying information." />
         </LinearLayout>
     </ScrollView>
 

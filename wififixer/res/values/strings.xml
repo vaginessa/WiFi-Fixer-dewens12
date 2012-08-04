@@ -197,8 +197,8 @@
     <string name="priority">Priority:</string>
     <string name="error">error</string>
     <string name="log">Log</string>
-    <string name="service_status_summary">Service Status</string>
-    <string name="service_status_title">Show Service Status</string>
+    <string name="service_status_summary">Displays detailed information from WifiFixerService</string>
+    <string name="service_status_title">Service Status</string>
     <string name="sendlog_summary">Send Log to Developer</string>
     <string name="sendlog_title">Send Log</string>
     <string name="deletelog_summary">Deletes Log from sdcard</string>

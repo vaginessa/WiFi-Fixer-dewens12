@@ -195,7 +195,6 @@ public class ConnectFragment extends FragmentSwitchboard implements
 		getDialog().cancel();
 		Intent i = new Intent(getActivity(), WifiFixerActivity.class);
 		i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		i.putExtra(WifiFixerActivity.REMOVE_CONNECT_FRAGMENTS, true);
 		getActivity().startActivity(i);
 	}
 }
