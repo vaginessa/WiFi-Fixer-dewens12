@@ -803,9 +803,9 @@ public class WFConnection extends Object implements
 	}
 
 	private static void demoteNetwork(final Context context, final int n) {
-		if (!getWifiManager(context).isWifiEnabled())
-			return;
 		WifiConfiguration network = getNetworkByNID(context, n);
+		if (network == null)
+			return;
 		if (network.priority > -1) {
 			network.priority--;
 			getWifiManager(context).updateNetwork(network);
@@ -1723,8 +1723,10 @@ public class WFConnection extends Object implements
 	private static void restoreNetworkPriority(final Context context,
 			final int n) {
 		WifiConfiguration network = getNetworkByNID(context, n);
-		network.priority = 2;
-		getWifiManager(context).updateNetwork(network);
+		if (network != null) {
+			network.priority = 2;
+			getWifiManager(context).updateNetwork(network);
+		}
 	}
 
 	private static boolean scancontainsBSSID(final String bssid,
@@ -1763,7 +1765,7 @@ public class WFConnection extends Object implements
 		if (!getWifiManager(ctxt.get()).isWifiEnabled()
 				|| !getIsOnWifi(ctxt.get()))
 			clearConnectedStatus(StatusMessage.EMPTY);
-		
+
 		if (state)
 			n.setShow(1);
 		else
