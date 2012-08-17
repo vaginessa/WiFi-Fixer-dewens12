@@ -285,8 +285,7 @@ public class KnownNetworksFragment extends Fragment {
 
 			case SCAN_MESSAGE:
 				/*
-				 * If wifi is on, scan if not, make sure no networks shown in
-				 * range
+				 * If wifi is on, scan. If not, make sure no networks in range
 				 */
 				if (PrefUtil.getWifiManager(self.get().getActivity())
 						.isWifiEnabled())
@@ -350,7 +349,6 @@ public class KnownNetworksFragment extends Fragment {
 				.getSystemService(Context.WIFI_SERVICE);
 
 		List<ScanResult> scanResults = wm.getScanResults();
-
 		/*
 		 * Catch null if scan results fires after wifi disabled or while wifi is
 		 * in intermediate state
@@ -358,12 +356,10 @@ public class KnownNetworksFragment extends Fragment {
 		if (scanResults == null) {
 			return null;
 		}
-
 		/*
 		 * Iterate the known networks over the scan results, adding found known
 		 * networks.
 		 */
-
 		ArrayList<String> known_in_range = new ArrayList<String>();
 		for (ScanResult sResult : scanResults) {
 			/*

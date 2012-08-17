@@ -56,6 +56,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -1077,7 +1078,11 @@ public class WFConnection extends Object implements
 	}
 
 	private static int getNetworkID() {
-		return getWifiManager(ctxt.get()).getConnectionInfo().getNetworkId();
+		WifiInfo wi = getWifiManager(ctxt.get()).getConnectionInfo();
+		if (wi != null)
+			return wi.getNetworkId();
+		else
+			return -1;
 	}
 
 	private static WifiConfiguration getNetworkByNID(Context context,

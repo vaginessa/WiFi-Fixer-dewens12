@@ -32,6 +32,7 @@ public class HoneyCombNotifUtil extends NotifUtil {
 	private static Notification stat;
 	private static Notification log;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void vaddStatNotif(final Context ctxt, final StatusMessage in) {
 		StatusMessage m = validateStrings(in);
@@ -72,6 +73,7 @@ public class HoneyCombNotifUtil extends NotifUtil {
 		nm.notify(NotifUtil.STATNOTIFID, stat);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void vaddLogNotif(final Context ctxt, final boolean flag) {
 
@@ -104,6 +106,7 @@ public class HoneyCombNotifUtil extends NotifUtil {
 		nm.notify(NotifUtil.LOGNOTIFID, log);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void vshow(final Context context, final String message,
 			final String tickerText, final int id, PendingIntent contentIntent) {
