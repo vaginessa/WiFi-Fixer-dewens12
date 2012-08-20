@@ -1702,6 +1702,7 @@ public class WFConnection extends Object implements
 	}
 
 	private void onWifiEnabled() {
+		clearConnectedStatus(ctxt.get().getString(R.string.wifi_is_enabled));
 		wifistate = true;
 		handlerWrapper(MAIN, LOOPWAIT);
 

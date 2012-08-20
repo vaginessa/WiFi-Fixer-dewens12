@@ -23,7 +23,7 @@ import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 
 /*
- * This class acts as an intermediary to LocalBroadcastManager and Context
+ * BroadcastHelper acts as an intermediary to LocalBroadcastManager and Context
  * allowing selection of local or system for registering and broadcast intents
  * as well as making sure an unregistered receiver can't be unregistered and vice versa
  */

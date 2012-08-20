@@ -13,8 +13,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.wahtod.wififixer"
     android:installLocation="internalOnly"
-    android:versionCode="953"
-    android:versionName="0.9.5.1" 
+    android:versionCode="954"
+    android:versionName="0.9.5.1rc1" 
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Documenting permissions here -->
