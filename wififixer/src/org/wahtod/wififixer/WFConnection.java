@@ -61,7 +61,6 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.text.format.Formatter;
 
 /*
@@ -149,6 +148,8 @@ public class WFConnection extends Object implements
 
 	private static int wifirepair = W_REASSOCIATE;
 
+	private static long _signalCheckTime;
+
 	/*
 	 * For Supplicant ASSOCIATING bug
 	 */
@@ -164,78 +165,7 @@ public class WFConnection extends Object implements
 	private static final int CONNECTING_THRESHOLD = 3;
 	private static final long CWDOG_DELAY = 10000;
 
-	// Runnable Constants for handler
-	private static final int INTENT = 37;
-	private static final int MAIN = 0;
-	private static final int REPAIR = 1;
-	private static final int RECONNECT = 2;
-	private static final int WIFITASK = 3;
-	private static final int SLEEPCHECK = 8;
-	private static final int SCAN = 9;
-	private static final int N1CHECK = 10;
-	private static final int SIGNALHOP = 12;
-	private static final int UPDATESTATUS = 13;
-	private static final int SCANWATCHDOG = 14;
-	private static final int ASSOCWATCHDOG = 15;
-	private static final int CONNECTWATCHDOG = 16;
-
-	private static Handler handler = new Handler() {
-		@Override
-		public void handleMessage(Message message) {
-			switch (message.what) {
-
-			case INTENT:
-				self.get().dispatchIntent(ctxt.get(), message.getData());
-				break;
-
-			case MAIN:
-				handler.post(rMain);
-				break;
-
-			case REPAIR:
-				handler.post(rRepair);
-				break;
-
-			case RECONNECT:
-				handler.post(rReconnect);
-				break;
-
-			case WIFITASK:
-				handler.post(rWifiTask);
-				break;
-
-			case SLEEPCHECK:
-				handler.post(rSleepcheck);
-				break;
-
-			case SCAN:
-				handler.post(rScan);
-				break;
-
-			case N1CHECK:
-				n1Fix();
-				break;
-
-			case SIGNALHOP:
-				handler.post(rSignalhop);
-				break;
-
-			case SCANWATCHDOG:
-				scanwatchdog();
-				break;
-
-			case ASSOCWATCHDOG:
-				checkAssociateState();
-				break;
-			case CONNECTWATCHDOG:
-				int n = getWifiManager(ctxt.get()).getConnectionInfo()
-						.getNetworkId();
-				if (n != -1)
-					demoteNetwork(ctxt.get(), n);
-				break;
-			}
-		}
-	};
+	private static Handler handler = new Handler();
 
 	/*
 	 * For network check
@@ -285,30 +215,60 @@ public class WFConnection extends Object implements
 					m.setStatus(ctxt.get().getString(R.string.failed));
 				StatusMessage.send(ctxt.get(), m);
 			}
-			handler.post(new Runnable() {
-
-				@Override
-				public void run() {
-					checkSignal(ctxt.get());
-					handleNetworkResult(r);
-				}
-
-			});
-			handler.postDelayed(new Runnable() {
-
-				@Override
-				public void run() {
-					StatusMessage.send(ctxt.get(), StatusMessage.getNew()
-							.setStatus(getSupplicantState().name()));
-				}
-			}, POST_NETCHECK_DELAY);
+			handlerWrapper(new PostNetCheckRunnable(r));
+			handlerWrapper(rStatusUpdate, POST_NETCHECK_DELAY);
 		}
 	}
 
 	/*
+	 * Processes intent message
+	 */
+	public static class IntentRunnable implements Runnable {
+		Bundle d;
+
+		@Override
+		public void run() {
+			self.get().dispatchIntent(ctxt.get(), d);
+		}
+
+		public IntentRunnable(Bundle b) {
+			this.d = b;
+		}
+	};
+
+	/*
+	 * Signal Check and Network Result handler for AsyncTask postExcecute
+	 */
+	protected static class PostNetCheckRunnable implements Runnable {
+		Boolean state;
+
+		@Override
+		public void run() {
+			self.get().checkSignal(ctxt.get());
+			self.get().handleNetworkResult(state);
+		}
+
+		public PostNetCheckRunnable(boolean b) {
+			this.state = b;
+		}
+	};
+
+	/*
+	 * Sends status update
+	 */
+	protected static Runnable rStatusUpdate = new Runnable() {
+		public void run() {
+			StatusMessage.send(
+					ctxt.get(),
+					StatusMessage.getNew().setStatus(
+							getSupplicantState().name()));
+		}
+	};
+
+	/*
 	 * Runs first time supplicant nonresponsive
 	 */
-	private static Runnable rReconnect = new Runnable() {
+	protected static Runnable rReconnect = new Runnable() {
 		public void run() {
 			if (!getWifiManager(ctxt.get()).isWifiEnabled()) {
 				log(ctxt.get(),
@@ -321,7 +281,7 @@ public class WFConnection extends Object implements
 				pendingreconnect = false;
 			} else {
 				wifirepair = W_REASSOCIATE;
-				self.get().handlerWrapper(SCANWATCHDOG, SHORTWAIT);
+				self.get().handlerWrapper(rScanWatchDog, SHORTWAIT);
 				log(ctxt.get(),
 						(ctxt.get()
 								.getString(R.string.exiting_supplicant_fix_thread_starting_scan)));
@@ -332,7 +292,7 @@ public class WFConnection extends Object implements
 	/*
 	 * Runs second time supplicant nonresponsive
 	 */
-	private static Runnable rRepair = new Runnable() {
+	protected static Runnable rRepair = new Runnable() {
 		public void run() {
 			if (!getWifiManager(ctxt.get()).isWifiEnabled()) {
 				log(ctxt.get(),
@@ -362,9 +322,8 @@ public class WFConnection extends Object implements
 	/*
 	 * Main tick
 	 */
-	private static Runnable rMain = new Runnable() {
+	protected static Runnable rMain = new Runnable() {
 		public void run() {
-
 			/*
 			 * Check for disabled state
 			 */
@@ -373,13 +332,7 @@ public class WFConnection extends Object implements
 						(ctxt.get().getString(R.string.shouldrun_false_dying)));
 			else {
 				// Queue next run of main runnable
-				self.get().handlerWrapper(MAIN, LOOPWAIT);
-				/*
-				 * Schedule update of status
-				 */
-				if (statNotifCheck())
-					self.get().handlerWrapper(UPDATESTATUS, SHORTWAIT);
-
+				self.get().handlerWrapper(rMain, LOOPWAIT);
 				/*
 				 * First check if we should manage then do wifi checks
 				 */
@@ -407,9 +360,8 @@ public class WFConnection extends Object implements
 	/*
 	 * Handles non-supplicant wifi fixes.
 	 */
-	private static Runnable rWifiTask = new Runnable() {
+	protected static Runnable rWifiTask = new Runnable() {
 		public void run() {
-
 			switch (wifirepair) {
 
 			case W_REASSOCIATE:
@@ -433,7 +385,7 @@ public class WFConnection extends Object implements
 			case W_REPAIR:
 				// Start Scan
 				getWifiManager(ctxt.get()).disconnect();
-				self.get().handlerWrapper(SCANWATCHDOG, SHORTWAIT);
+				self.get().handlerWrapper(rScanWatchDog, SHORTWAIT);
 				/*
 				 * Reset state
 				 */
@@ -451,13 +403,14 @@ public class WFConnection extends Object implements
 					(new StringBuilder(ctxt.get().getString(
 							R.string.fix_algorithm)).append(String
 							.valueOf(wifirepair))).toString());
+
 		}
 	};
 
 	/*
 	 * Sleep tick if wifi is enabled and screenpref
 	 */
-	private static Runnable rSleepcheck = new Runnable() {
+	protected static Runnable rSleepcheck = new Runnable() {
 		public void run() {
 			if (shouldManage(ctxt.get())) {
 				/*
@@ -468,13 +421,14 @@ public class WFConnection extends Object implements
 					self.get().checkWifi();
 				}
 			}
+
 		}
 	};
 
 	/*
 	 * Scanner runnable
 	 */
-	private static Runnable rScan = new Runnable() {
+	protected static Runnable rScan = new Runnable() {
 		public void run() {
 			/*
 			 * Start scan
@@ -483,17 +437,18 @@ public class WFConnection extends Object implements
 				self.get().startScan(true);
 				log(ctxt.get(),
 						(ctxt.get().getString(R.string.wifimanager_scan)));
-				self.get().handlerWrapper(SCANWATCHDOG, SCAN_WATCHDOG_DELAY);
+				self.get().handlerWrapper(rScanWatchDog, SCAN_WATCHDOG_DELAY);
 			} else {
 				log(ctxt.get(), (ctxt.get().getString(R.string.scan_interrupt)));
 			}
+
 		}
 	};
 
 	/*
 	 * SignalHop runnable
 	 */
-	private static Runnable rSignalhop = new Runnable() {
+	protected static Runnable rSignalhop = new Runnable() {
 		public void run() {
 			/*
 			 * Remove all posts first
@@ -506,11 +461,60 @@ public class WFConnection extends Object implements
 			 */
 			self.get().signalHop();
 			self.get().wakelock.lock(false);
+
 		}
 
 	};
 
-	private static long _signalCheckTime;
+	/*
+	 * Makes sure scan happens every X seconds
+	 */
+	protected static Runnable rScanWatchDog = new Runnable() {
+		@Override
+		public void run() {
+			scanwatchdog();
+
+		}
+	};
+
+	/*
+	 * Watches association with AP and resets wifi if it takes too long
+	 */
+	protected static Runnable rN1Fix = new Runnable() {
+
+		@Override
+		public void run() {
+			n1Fix();
+
+		}
+	};
+
+	/*
+	 * Watches association with AP and resets wifi if it takes too long
+	 */
+	protected static Runnable rAssocWatchDog = new Runnable() {
+
+		@Override
+		public void run() {
+			checkAssociateState();
+
+		}
+	};
+
+	/*
+	 * Demotes networks we fail to connect to for one reason or another
+	 */
+
+	protected static Runnable rDemoter = new Runnable() {
+		@Override
+		public void run() {
+			int n = getWifiManager(ctxt.get()).getConnectionInfo()
+					.getNetworkId();
+			if (n != -1)
+				demoteNetwork(ctxt.get(), n);
+
+		}
+	};
 
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 		public void onReceive(final Context context, final Intent intent) {
@@ -528,14 +532,12 @@ public class WFConnection extends Object implements
 		/*
 		 * Dispatches the broadcast intent to the handler for processing
 		 */
-		Message message = handler.obtainMessage();
 		Bundle data = new Bundle();
-		message.what = INTENT;
 		data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
 		if (intent.getExtras() != null)
 			data.putAll(intent.getExtras());
-		message.setData(data);
-		handler.sendMessage(message);
+		IntentRunnable i = new IntentRunnable(data);
+		handler.post(i);
 	}
 
 	public WFConnection(final Context context) {
@@ -636,7 +638,7 @@ public class WFConnection extends Object implements
 		/*
 		 * Start Main tick
 		 */
-		handlerWrapper(MAIN);
+		// handlerWrapper(rMain);
 
 		/*
 		 * Instantiate network checker
@@ -646,15 +648,7 @@ public class WFConnection extends Object implements
 	}
 
 	private void clearHandler() {
-		clearMessage(MAIN);
-		clearMessage(REPAIR);
-		clearMessage(RECONNECT);
-		clearMessage(WIFITASK);
-		clearMessage(SLEEPCHECK);
-		clearMessage(SCAN);
-		clearMessage(N1CHECK);
-		clearMessage(SIGNALHOP);
-		clearMessage(SCANWATCHDOG);
+		handler.removeCallbacksAndMessages(null);
 		/*
 		 * Also clear all relevant flags
 		 */
@@ -662,9 +656,8 @@ public class WFConnection extends Object implements
 		pendingreconnect = false;
 	}
 
-	private void clearMessage(int m) {
-		if (handler.hasMessages(m))
-			handler.removeMessages(MAIN);
+	private void clearMessage(Runnable r) {
+		handler.removeCallbacks(r);
 	}
 
 	private void clearConnectedStatus(final String state) {
@@ -856,7 +849,7 @@ public class WFConnection extends Object implements
 		else if (iAction.equals(REASSOCIATE_INTENT))
 			handleReassociateEvent();
 		else if (iAction.equals(SLEEPCHECKINTENT)) {
-			handler.sendEmptyMessageDelayed(SLEEPCHECK, REALLYSHORTWAIT);
+			handlerWrapper(rSleepcheck, REALLYSHORTWAIT);
 		} else
 			log(context, (iAction.toString()));
 
@@ -1167,16 +1160,6 @@ public class WFConnection extends Object implements
 			NotifUtil.showToast(ctxt.get(), R.string.not_connected);
 	}
 
-	private static boolean handlerCheck(final int hmain) {
-		/*
-		 * Check if is appropriate post and if lock exists
-		 */
-		if (hmain == RECONNECT || hmain == REPAIR || hmain == WIFITASK)
-			return false;
-		else
-			return true;
-	}
-
 	private static void logScanResult(final Context context,
 			final ScanResult sResult, final WifiConfiguration wfResult) {
 		StringBuilder out = new StringBuilder(
@@ -1288,7 +1271,7 @@ public class WFConnection extends Object implements
 					(ctxt.get()
 							.getString(R.string.supplicant_associate_threshold_exceeded)));
 		} else
-			self.get().handlerWrapper(ASSOCWATCHDOG, SHORTWAIT);
+			self.get().handlerWrapper(rAssocWatchDog, SHORTWAIT);
 	}
 
 	private void checkWifi() {
@@ -1313,7 +1296,7 @@ public class WFConnection extends Object implements
 			/*
 			 * Make sure scan happens in a reasonable amount of time
 			 */
-			handlerWrapper(SCANWATCHDOG, SHORTWAIT);
+			handlerWrapper(rScanWatchDog, SHORTWAIT);
 		}
 	}
 
@@ -1337,9 +1320,6 @@ public class WFConnection extends Object implements
 	}
 
 	private void clearQueue() {
-		handler.removeMessages(RECONNECT);
-		handler.removeMessages(REPAIR);
-		handler.removeMessages(WIFITASK);
 		pendingscan = false;
 		pendingreconnect = false;
 		shouldrepair = false;
@@ -1364,28 +1344,17 @@ public class WFConnection extends Object implements
 	 * Lets us control duplicate posts and odd handler behavior when screen is
 	 * off
 	 */
-	private boolean handlerWrapper(final int hmain) {
-		if (handlerCheck(hmain)) {
-			handler.removeMessages(hmain);
-			if (screenstate)
-				return handler.sendEmptyMessage(hmain);
-			else
-				return handler.sendEmptyMessageDelayed(hmain, REALLYSHORTWAIT);
-
-		} else {
-			handler.removeMessages(hmain);
-			return handler.sendEmptyMessageDelayed(hmain, REACHABLE);
-		}
+	private boolean handlerWrapper(Runnable r) {
+		clearMessage(r);
+		if (screenstate)
+			return handler.post(r);
+		else
+			return handler.postDelayed(r, REALLYSHORTWAIT);
 	}
 
-	private boolean handlerWrapper(final int hmain, final long delay) {
-		if (handlerCheck(hmain)) {
-			handler.removeMessages(hmain);
-			return handler.sendEmptyMessageDelayed(hmain, delay);
-		} else {
-			handler.removeMessages(hmain);
-			return handler.sendEmptyMessageDelayed(hmain, delay + REACHABLE);
-		}
+	private boolean handlerWrapper(Runnable r, final long delay) {
+		clearMessage(r);
+		return handler.postDelayed(r, delay);
 	}
 
 	private void handleScanResults() {
@@ -1396,7 +1365,7 @@ public class WFConnection extends Object implements
 		/*
 		 * Scan results received. Remove Scan Watchdog.
 		 */
-		handler.removeMessages(SCANWATCHDOG);
+		clearMessage(rScanWatchDog);
 		/*
 		 * Sanity check
 		 */
@@ -1404,7 +1373,7 @@ public class WFConnection extends Object implements
 			return;
 		else if (_signalhopping) {
 			_signalhopping = false;
-			handlerWrapper(SIGNALHOP);
+			handlerWrapper(rSignalhop);
 		} else if (!pendingscan) {
 			if (getIsOnWifi(ctxt.get())) {
 				/*
@@ -1425,11 +1394,11 @@ public class WFConnection extends Object implements
 			 * Service called the scan: dispatch appropriate runnable
 			 */
 			pendingscan = false;
-			handlerWrapper(REPAIR);
+			handlerWrapper(rRepair);
 			log(ctxt.get(), (ctxt.get().getString(R.string.repairhandler)));
 		} else {
 			pendingscan = false;
-			handlerWrapper(RECONNECT);
+			handlerWrapper(rReconnect);
 			log(ctxt.get(), (ctxt.get().getString(R.string.reconnecthandler)));
 		}
 
@@ -1490,7 +1459,7 @@ public class WFConnection extends Object implements
 		 */
 		if (!sState.equals(SupplicantState.ASSOCIATING)) {
 			supplicant_associating = 0;
-			handler.removeMessages(ASSOCWATCHDOG);
+			clearMessage(rAssocWatchDog);
 		}
 		/*
 		 * Status notification updating supplicant state
@@ -1516,7 +1485,7 @@ public class WFConnection extends Object implements
 			break;
 
 		case ASSOCIATING:
-			handlerWrapper(ASSOCWATCHDOG, SHORTWAIT);
+			handlerWrapper(rAssocWatchDog, SHORTWAIT);
 			if (!_connected)
 				onNetworkConnecting();
 			break;
@@ -1581,14 +1550,14 @@ public class WFConnection extends Object implements
 		 */
 		fixDisabledNetworks(ctxt.get(), getWifiManager(ctxt.get())
 				.getConfiguredNetworks());
-		handlerWrapper(CONNECTWATCHDOG, CWDOG_DELAY);
+		handlerWrapper(rDemoter, CWDOG_DELAY);
 	}
 
 	private void onNetworkConnected() {
 		/*
 		 * Disable watchdog, we've connected
 		 */
-		handler.removeMessages(CONNECTWATCHDOG);
+		clearMessage(rDemoter);
 		/*
 		 * If this was a bad network before, it's good now.
 		 */
@@ -1659,7 +1628,7 @@ public class WFConnection extends Object implements
 		 * Schedule N1 fix
 		 */
 		if (PrefUtil.getFlag(Pref.N1FIX2_KEY)) {
-			handlerWrapper(N1CHECK, REACHABLE);
+			handlerWrapper(rN1Fix, REACHABLE);
 			log(ctxt.get(), (ctxt.get().getString(R.string.scheduling_n1_fix)));
 		}
 		log(ctxt.get(), (ctxt.get().getString(R.string.screen_off_handler)));
@@ -1681,7 +1650,6 @@ public class WFConnection extends Object implements
 		if (PrefUtil.getFlag(Pref.STATENOT_KEY) && statNotifCheck())
 			setStatNotif(true);
 		_statusdispatcher.refreshWidget(null);
-
 	}
 
 	public void onScreenStateChanged(boolean state) {
@@ -1704,7 +1672,7 @@ public class WFConnection extends Object implements
 	private void onWifiEnabled() {
 		clearConnectedStatus(ctxt.get().getString(R.string.wifi_is_enabled));
 		wifistate = true;
-		handlerWrapper(MAIN, LOOPWAIT);
+		handlerWrapper(rMain, LOOPWAIT);
 
 		if (PrefUtil.getFlag(Pref.STATENOT_KEY) && screenstate)
 			setStatNotif(true);
@@ -1760,9 +1728,9 @@ public class WFConnection extends Object implements
 			log(ctxt.get(), scanfail.toString());
 		}
 		if (self.get().screenstate)
-			self.get().handlerWrapper(SCAN, NORMAL_SCAN_DELAY);
+			self.get().handlerWrapper(rScan, NORMAL_SCAN_DELAY);
 		else
-			self.get().handlerWrapper(SCAN, SLEEPWAIT);
+			self.get().handlerWrapper(rScan, SLEEPWAIT);
 	}
 
 	protected void setStatNotif(final boolean state) {
@@ -1829,18 +1797,18 @@ public class WFConnection extends Object implements
 			/*
 			 * Start sleep check
 			 */
-			handler.removeMessages(MAIN);
+			clearMessage(rMain);
 			ServiceAlarm.addAlarm(ctxt.get(), SHORTWAIT, true, SLEEPWAIT, p);
 		} else {
 			/*
 			 * Screen is on, remove any posts
 			 */
 			ServiceAlarm.unsetAlarm(ctxt.get(), p);
-			handler.removeMessages(SLEEPCHECK);
+			clearMessage(rSleepcheck);
 			/*
 			 * Check state
 			 */
-			handlerWrapper(MAIN, SHORTWAIT);
+			handlerWrapper(rMain, SHORTWAIT);
 		}
 	}
 
@@ -1903,7 +1871,7 @@ public class WFConnection extends Object implements
 			/*
 			 * Start Wifi Task
 			 */
-			handlerWrapper(WIFITASK);
+			handlerWrapper(rWifiTask);
 			log(ctxt.get(),
 					(ctxt.get().getString(R.string.running_wifi_repair)));
 		} else {
@@ -1911,7 +1879,7 @@ public class WFConnection extends Object implements
 			 * if screen off, try wake lock then resubmit to handler
 			 */
 			wakelock.lock(true);
-			handlerWrapper(WIFITASK);
+			handlerWrapper(rWifiTask);
 			log(ctxt.get(),
 					(ctxt.get().getString(R.string.wifi_repair_post_failed)));
 		}
