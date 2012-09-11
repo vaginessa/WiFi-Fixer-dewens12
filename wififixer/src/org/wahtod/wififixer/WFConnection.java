@@ -508,11 +508,9 @@ public class WFConnection extends Object implements
 	protected static Runnable rDemoter = new Runnable() {
 		@Override
 		public void run() {
-			int n = getWifiManager(ctxt.get()).getConnectionInfo()
-					.getNetworkId();
+			int n = getNetworkID();
 			if (n != -1)
 				demoteNetwork(ctxt.get(), n);
-
 		}
 	};
 
@@ -1561,7 +1559,7 @@ public class WFConnection extends Object implements
 		/*
 		 * If this was a bad network before, it's good now.
 		 */
-		int n = getWifiManager(ctxt.get()).getConnectionInfo().getNetworkId();
+		int n = getNetworkID();
 		restoreNetworkPriority(ctxt.get(), n);
 		icmpCache(ctxt.get());
 		_connected = true;

@@ -216,5 +216,6 @@
     <string name="disconnected">Disconnected</string>
     <string name="note">Important!</string>
     <string name="servicealert_message">When the service is disabled, your wifi is no longer being monitored or repaired</string>
+    <string name="StateNotif_summary_off">This is the off state</string>
 
 </resources>
