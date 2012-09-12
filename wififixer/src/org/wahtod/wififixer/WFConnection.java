@@ -61,6 +61,7 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.text.format.Formatter;
 
 /*
@@ -165,7 +166,15 @@ public class WFConnection extends Object implements
 	private static final int CONNECTING_THRESHOLD = 3;
 	private static final long CWDOG_DELAY = 10000;
 
-	private static Handler handler = new Handler();
+	private static Handler handler = new Handler() {
+//
+//		@Override
+//		public void handleMessage(Message msg) {
+//			Log.i("Handler", msg.what + msg.getCallback().getClass().getName());
+//			this.post(msg.getCallback());
+//			super.handleMessage(msg);
+//		}
+	};
 
 	/*
 	 * For network check
@@ -1343,16 +1352,22 @@ public class WFConnection extends Object implements
 	 * off
 	 */
 	private boolean handlerWrapper(Runnable r) {
-		clearMessage(r);
+		if (handler.hasMessages(r.hashCode()))
+			return false;
+		Message out = Message.obtain(handler, r);
+		out.what = r.hashCode();
 		if (screenstate)
-			return handler.post(r);
+			return handler.sendMessage(out);
 		else
-			return handler.postDelayed(r, REALLYSHORTWAIT);
+			return handler.sendMessageDelayed(out, REALLYSHORTWAIT);
 	}
 
 	private boolean handlerWrapper(Runnable r, final long delay) {
-		clearMessage(r);
-		return handler.postDelayed(r, delay);
+		if (handler.hasMessages(r.hashCode()))
+			return false;
+		Message out = Message.obtain(handler, r);
+		out.what = r.hashCode();
+		return handler.sendMessageDelayed(out, delay);
 	}
 
 	private void handleScanResults() {
