@@ -99,7 +99,6 @@ public class WFConnection extends Object implements
 	 */
 	private FifoList _supplicantFifo;
 	private static final int FIFO_LENGTH = 10;
-	private static final String INVALID = "INVALID";
 
 	// Sleep Check Intent for Alarm
 	public static final String SLEEPCHECKINTENT = "org.wahtod.wififixer.SLEEPCHECK";
@@ -158,6 +157,14 @@ public class WFConnection extends Object implements
 	private static final int SUPPLICANT_ASSOC_THRESHOLD = 10;
 
 	/*
+	 * Supplicant State triggers Have to use string because SupplicantState
+	 * enums change over Android versions
+	 */
+	private static final String SSTATE_ASSOCIATING = "ASSOCIATING";
+	private static final String SSTATE_ASSOCIATED = "ASSOCIATED";
+	private static final String SSTATE_INVALID = "INVALID";
+
+	/*
 	 * For connectToAP sticking
 	 */
 	private static int connecting = 0;
@@ -166,22 +173,14 @@ public class WFConnection extends Object implements
 	private static final int CONNECTING_THRESHOLD = 3;
 	private static final long CWDOG_DELAY = 10000;
 
-	private static Handler handler = new Handler() {
-//
-//		@Override
-//		public void handleMessage(Message msg) {
-//			Log.i("Handler", msg.what + msg.getCallback().getClass().getName());
-//			this.post(msg.getCallback());
-//			super.handleMessage(msg);
-//		}
-	};
+	private static Handler handler = new Handler();
 
 	/*
 	 * For network check
 	 */
 
 	private class NetworkCheckTask extends AsyncTask<Void, Void, boolean[]> {
-		private static final int POST_NETCHECK_DELAY = 3000;
+		private static final int STATUS_UPDATE_DELAY = 3000;
 
 		@Override
 		protected boolean[] doInBackground(Void... params) {
@@ -225,7 +224,7 @@ public class WFConnection extends Object implements
 				StatusMessage.send(ctxt.get(), m);
 			}
 			handlerWrapper(new PostNetCheckRunnable(r));
-			handlerWrapper(rStatusUpdate, POST_NETCHECK_DELAY);
+			handlerWrapper(rStatusUpdate, STATUS_UPDATE_DELAY);
 		}
 	}
 
@@ -1113,7 +1112,7 @@ public class WFConnection extends Object implements
 		if (SupplicantState.isValidState(sstate))
 			return (sstate.name());
 		else
-			return (INVALID);
+			return (SSTATE_INVALID);
 	}
 
 	public static WifiManager getWifiManager(final Context context) {
@@ -1470,7 +1469,7 @@ public class WFConnection extends Object implements
 		/*
 		 * Check for ASSOCIATING bug but first clear check if not ASSOCIATING
 		 */
-		if (!sState.equals(SupplicantState.ASSOCIATING)) {
+		if (!(sState.name().equals(SSTATE_ASSOCIATING))) {
 			supplicant_associating = 0;
 			clearMessage(rAssocWatchDog);
 		}
@@ -1490,22 +1489,16 @@ public class WFConnection extends Object implements
 							R.string.supplicant_state)).append(
 							String.valueOf(sState)).toString());
 		/*
-		 * Supplicant States
+		 * Supplicant State triggers
 		 */
-		switch (sState) {
-		case ASSOCIATED:
+		if (sState.name().equals(SSTATE_ASSOCIATED))
 			prepareConnect();
-			break;
-
-		case ASSOCIATING:
+		else if (sState.name().equals(SSTATE_INVALID))
+			supplicantFix();
+		else if (sState.name().equals(SSTATE_ASSOCIATING)) {
 			handlerWrapper(rAssocWatchDog, SHORTWAIT);
 			if (!_connected)
 				onNetworkConnecting();
-			break;
-
-		case INVALID:
-			supplicantFix();
-			break;
 		}
 	}
 
@@ -1856,8 +1849,8 @@ public class WFConnection extends Object implements
 		/*
 		 * First, make sure this won't interrupt anything
 		 */
-		if (sstate.equals(SupplicantState.ASSOCIATING)
-				|| sstate.equals(SupplicantState.ASSOCIATED)
+		if (sstate.name().equals(SSTATE_ASSOCIATING)
+				|| sstate.name().equals(SSTATE_ASSOCIATED)
 				|| sstate.equals(SupplicantState.COMPLETED)
 				|| sstate.equals(SupplicantState.GROUP_HANDSHAKE)
 				|| sstate.equals(SupplicantState.FOUR_WAY_HANDSHAKE))
