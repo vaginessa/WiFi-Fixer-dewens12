@@ -1,4 +1,4 @@
-================================
+===============================
     Wifi Fixer for Android
 ================================
 
@@ -26,11 +26,13 @@ Because software which provides utility which should've been in the product it r
 I like developing for Android.  Hope it shows.   
 
 
-Release: 0.9.5.2 Ubermensch Underachiever: Borscht
+Experimental: 0.9.5.3 Ubermensch Underachiever: Carrot
+
+***WARNING!!!  This code may not compile, may eat all the food in your fridge, etc.***
 
 
 Bugfixes and enhancements,
-Better use of the cpu
+1x1 widget
 
 
 

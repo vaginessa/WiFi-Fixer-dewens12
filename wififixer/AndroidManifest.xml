@@ -128,7 +128,9 @@
                 <action android:name="org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".widget.FixerWidget" tools:ignore="ExportedReceiver">
+        
+        <receiver android:name=".widget.FixerWidget"
+            android:label="@string/widget_label_1x4">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="org.wahtod.wififixer.WNOTIF" >
@@ -139,7 +141,25 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_provider" />
         </receiver>
+        
+        <receiver android:name=".widget.FixerWidgetSmall"
+            android:label="@string/widget_label_1x1">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="org.wahtod.wififixer.WNOTIF" >
+                </action>
+            </intent-filter>
 
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider_small" />
+        </receiver>
+
+        <service android:name=".widget.FixerWidgetSmall$SmallUpdateService" >
+        </service>
+        <service android:name=".widget.FixerWidgetSmall$SmallStatusUpdateService" >
+        </service>
+        
         <service android:name=".widget.FixerWidget$UpdateService" >
         </service>
         <service android:name=".widget.FixerWidget$StatusUpdateService" >

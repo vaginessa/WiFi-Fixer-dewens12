@@ -217,5 +217,7 @@
     <string name="note">Important!</string>
     <string name="servicealert_message">When the service is disabled, your wifi is no longer being monitored or repaired</string>
     <string name="StateNotif_summary_off">This is the off state</string>
+    <string name="widget_label_1x4">Wifi Fixer 1x4</string>
+    <string name="widget_label_1x1">Wifi Fixer 1x1</string>
 
 </resources>

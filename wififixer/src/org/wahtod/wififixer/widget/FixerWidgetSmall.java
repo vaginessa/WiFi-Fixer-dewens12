@@ -32,7 +32,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
-public class FixerWidget extends AppWidgetProvider {
+public class FixerWidgetSmall extends AppWidgetProvider {
 	public static final String W_INTENT = "org.wahtod.wififixer.WIDGET";
 
 	@Override
@@ -59,14 +59,14 @@ public class FixerWidget extends AppWidgetProvider {
 	}
 
 	private void doStatusUpdate(final Context context, Intent intent) {
-		Intent start = new Intent(context, StatusUpdateService.class);
+		Intent start = new Intent(context, SmallStatusUpdateService.class);
 		start.fillIn(intent, Intent.FILL_IN_DATA);
 		context.startService(start);
 	}
 
-	public static class StatusUpdateService extends IntentService {
-		public StatusUpdateService() {
-			super("FixerWidget$StatusUpdateService");
+	public static class SmallStatusUpdateService extends IntentService {
+		public SmallStatusUpdateService() {
+			super("FixerWidgetSmall$SmallStatusUpdateService");
 		}
 
 		@Override
@@ -74,15 +74,13 @@ public class FixerWidget extends AppWidgetProvider {
 			if (intent == null)
 				return;
 			RemoteViews remoteViews = new RemoteViews(getPackageName(),
-					R.layout.widget);
+					R.layout.widget_small);
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
 					new Intent(W_INTENT), 0);
 			remoteViews.setOnClickPendingIntent(R.id.widget_target,
 					pendingIntent);
 
 			StatusMessage m = StatusMessage.fromIntent(intent);
-			remoteViews.setTextViewText(R.id.ssid, m.getSSID());
-			remoteViews.setTextViewText(R.id.status, m.getStatus());
 			remoteViews
 					.setImageViewResource(R.id.signal, NotifUtil
 							.getIconfromSignal(m.getSignal(),
@@ -90,7 +88,7 @@ public class FixerWidget extends AppWidgetProvider {
 			AppWidgetManager appWidgetManager = AppWidgetManager
 					.getInstance(this);
 			int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
-					this, FixerWidget.class));
+					this, FixerWidgetSmall.class));
 			for (int n = 0; n < ids.length; n++)
 				appWidgetManager.updateAppWidget(ids[n], remoteViews);
 		}
@@ -102,13 +100,13 @@ public class FixerWidget extends AppWidgetProvider {
 		/*
 		 * Send Update To Widgets
 		 */
-		context.startService(new Intent(context, UpdateService.class));
+		context.startService(new Intent(context, SmallUpdateService.class));
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
 
-	public static class UpdateService extends IntentService {
-		public UpdateService() {
-			super("FixerWidget$UpdateService");
+	public static class SmallUpdateService extends IntentService {
+		public SmallUpdateService() {
+			super("FixerWidgetSmall$SmallUpdateService");
 		}
 
 		@Override
@@ -118,7 +116,7 @@ public class FixerWidget extends AppWidgetProvider {
 
 			// Push update for this widget to the home screen
 			ComponentName thisWidget = new ComponentName(this,
-					FixerWidget.class);
+					FixerWidgetSmall.class);
 			AppWidgetManager manager = AppWidgetManager.getInstance(this);
 			manager.updateAppWidget(thisWidget, updateViews);
 		}
@@ -134,7 +132,7 @@ public class FixerWidget extends AppWidgetProvider {
 		 * the widget code setting onclick on the view directly
 		 */
 		RemoteViews views = new RemoteViews(context.getPackageName(),
-				R.layout.widget);
+				R.layout.widget_small);
 		views.setOnClickPendingIntent(R.id.widget_target, pendingIntent);
 		return views;
 	}

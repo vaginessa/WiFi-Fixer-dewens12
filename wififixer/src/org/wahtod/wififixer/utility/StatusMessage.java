@@ -50,6 +50,12 @@ public class StatusMessage {
 		s.status.putAll(m.getData());
 		return s;
 	}
+	
+	public static StatusMessage fromIntent(final Intent i) {
+		StatusMessage s = new StatusMessage();
+		s.status = i.getBundleExtra(StatusDispatcher.STATUS_DATA_KEY);
+		return s;
+	}
 
 	public static void updateFromMessage(StatusMessage s, final Message m) {
 		Bundle b = m.getData();
