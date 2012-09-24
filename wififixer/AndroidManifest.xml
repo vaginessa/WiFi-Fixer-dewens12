@@ -154,15 +154,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_provider_small" />
         </receiver>
-
-        <service android:name=".widget.FixerWidgetSmall$SmallUpdateService" >
-        </service>
-        <service android:name=".widget.FixerWidgetSmall$SmallStatusUpdateService" >
-        </service>
         
-        <service android:name=".widget.FixerWidget$UpdateService" >
+        <service android:name=".widget.UpdateService" >
         </service>
-        <service android:name=".widget.FixerWidget$StatusUpdateService" >
+        <service android:name=".widget.StatusUpdateService" >
         </service>
 
         <!-- Networking guts: Main Persistent service -->
