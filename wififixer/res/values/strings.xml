@@ -219,5 +219,6 @@
     <string name="StateNotif_summary_off">This is the off state</string>
     <string name="widget_label_1x4">Wifi Fixer 1x4</string>
     <string name="widget_label_1x1">Wifi Fixer 1x1</string>
+    <string name="network_check_blocked">Network Check Blocked</string>
 
 </resources>

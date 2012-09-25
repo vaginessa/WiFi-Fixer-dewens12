@@ -29,11 +29,13 @@ import android.content.Context;
 
 public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 	public static final String EXCEPTIONS_FILENAME = "exceptions.txt";
+	private static boolean isRegistered;
 	private final UncaughtExceptionHandler _default;
 	private final Context appcontext;
 
 	@SuppressLint("WorldReadableFiles")
 	public DefaultExceptionHandler(final Context context) {
+		isRegistered = true;
 		appcontext = context.getApplicationContext();
 		UncaughtExceptionHandler currentHandler = Thread
 				.getDefaultUncaughtExceptionHandler();
@@ -85,6 +87,7 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 	}
 
 	public static void register(final Context ctxt) {
+		if (!isRegistered)
 		new DefaultExceptionHandler(ctxt);
 	}
 }

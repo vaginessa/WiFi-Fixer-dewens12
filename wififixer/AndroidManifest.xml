@@ -13,9 +13,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.wahtod.wififixer"
     android:installLocation="internalOnly"
-    android:versionCode="959"
-    android:versionName="0.9.5.2" 
-    xmlns:tools="http://schemas.android.com/tools">
+    android:versionCode="961"
+    android:versionName="0.9.5.3p2" 
+    >
 
     <!-- Documenting permissions here -->
     <!-- For service start (30 seconds from boot_completed) -->
@@ -89,7 +89,7 @@
         <activity android:name=".ui.HelpActivity" />
 
         <!-- Starts Boot thread service which waits 30s to run WifiFixerService -->
-        <receiver android:name=".boot.BootReceiver" tools:ignore="ExportedReceiver">
+        <receiver android:name=".boot.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -101,7 +101,7 @@
         </service>
 
         <!-- Handles incoming external intents -->
-        <receiver android:name=".WFBroadcastReceiver" tools:ignore="ExportedReceiver">
+        <receiver android:name=".WFBroadcastReceiver">
             <intent-filter>
                 <action android:name="org.wahtod.wififixer.ACTION_WIFI_SERVICE_DISABLE" />
                 <action android:name="org.wahtod.wififixer.ACTION_WIFI_SERVICE_ENABLE" />
