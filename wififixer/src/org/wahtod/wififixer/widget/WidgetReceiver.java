@@ -45,13 +45,12 @@ public class WidgetReceiver extends BroadcastReceiver {
 
 	private static WifiManager wm;
 
-
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		ctxt = new WeakReference<Context>(context);
 		handleIntent(context, intent);
 	}
-	
+
 	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
@@ -77,6 +76,7 @@ public class WidgetReceiver extends BroadcastReceiver {
 			 * Toggle Wifi
 			 */
 			else if (action.equals(TOGGLE_WIFI)) {
+				NotifUtil.showToast(ctxt.get(), R.string.toggling_wifi);
 				ctxt.get().startService(
 						new Intent(ctxt.get(), ToggleService.class));
 			}

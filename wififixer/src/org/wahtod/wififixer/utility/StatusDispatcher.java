@@ -101,7 +101,7 @@ public class StatusDispatcher {
 		}
 	};
 
-	private static class FastStatus implements Runnable {
+	protected static class FastStatus implements Runnable {
 		private final StatusMessage message;
 
 		FastStatus(final StatusMessage message) {
@@ -114,7 +114,7 @@ public class StatusDispatcher {
 			BroadcastHelper.sendBroadcast(c.get(), i, true);
 		}
 	};
-
+	
 	public static class Widget implements Runnable {
 		private final StatusMessage message;
 

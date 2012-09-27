@@ -20,14 +20,11 @@ import java.lang.ref.WeakReference;
 
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
-import org.wahtod.wififixer.ui.WifiFixerActivity;
 import org.wahtod.wififixer.utility.LogService;
-import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ScreenStateDetector;
 import org.wahtod.wififixer.utility.WakeLock;
 import org.wahtod.wififixer.widget.WidgetReceiver;
 
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -38,12 +35,7 @@ import android.os.Message;
 public class ToggleService extends Service {
 	private static WakeLock wlock;
 	private static WeakReference<ToggleService> self;
-
-	/*
-	 * Notification ID
-	 */
-	private static final int TOGGLE_ID = 23497;
-
+	
 	/*
 	 * Delay Constants
 	 */
@@ -84,7 +76,6 @@ public class ToggleService extends Service {
 						hWifiState.sendEmptyMessageDelayed(WATCHDOG,
 								WATCHDOG_DELAY);
 					} else {
-						NotifUtil.cancel(lc, TOGGLE_ID);
 						PrefUtil.writeBoolean(lc,
 								PrefConstants.WIFI_STATE_LOCK, false);
 						/*
@@ -103,13 +94,6 @@ public class ToggleService extends Service {
 							.readBoolean(lc, PrefConstants.WIFI_STATE_LOCK)) {
 						if (ScreenStateDetector.getScreenState(lc))
 							wlock.lock(true);
-						NotifUtil.show(lc,
-								lc.getString(R.string.toggling_wifi), self
-										.get()
-										.getString(R.string.toggling_wifi),
-								TOGGLE_ID, PendingIntent.getActivity(
-										self.get(), 0, new Intent(lc,
-												WifiFixerActivity.class), 0));
 						PrefUtil.writeBoolean(lc,
 								PrefConstants.WIFI_STATE_LOCK, true);
 						hWifiState.sendEmptyMessageDelayed(OFF, SHORT);

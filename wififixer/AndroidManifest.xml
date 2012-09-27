@@ -100,7 +100,7 @@
             class="BootService" >
         </service>
 
-        <!-- Handles incoming external intents -->
+        <!-- Handle incoming external intents -->
         <receiver android:name=".WFBroadcastReceiver">
             <intent-filter>
                 <action android:name="org.wahtod.wififixer.ACTION_WIFI_SERVICE_DISABLE" />
@@ -110,6 +110,7 @@
                 <action android:name="org.wahtod.wififixer.ACTION_WIFI_ON" />
                 <action android:name="org.wahtod.wififixer.ACTION_WIFI_OFF" />
                 <action android:name="org.wahtod.wififixer.ACTION_WIFI_TOGGLE" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
 

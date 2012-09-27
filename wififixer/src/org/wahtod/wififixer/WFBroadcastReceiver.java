@@ -91,7 +91,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 		}
 	}
 
-	public void handleIntent(final Context context, final Intent intent) {
+	private void handleIntent(final Context context, final Intent intent) {
 		/*
 		 * Dispatches the broadcast intent to the handler for processing
 		 */
@@ -113,37 +113,14 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 		 * For WIFI_SERVICE_ENABLE intent, set service enabled and run
 		 */
 		if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)) {
-			NotifUtil.showToast(ctxt.get().getApplicationContext(),
-					R.string.enabling_wififixerservice);
-			ServiceAlarm.setComponentEnabled(ctxt.get(),
-					WifiFixerService.class, true);
-			PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLE_KEY.key(), false);
-			ctxt.get().startService(
-					new Intent(ctxt.get(), BootService.class).putExtra(
-							BootService.FLAG_NO_DELAY, true));
+			handleWifiServiceEnable();
 		}
 		/*
 		 * For WIFI_SERVICE_DISABLE intent, send stop to service and unset
 		 * logging and service alarms.
 		 */
 		else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_DISABLE)) {
-			if (PrefUtil.readBoolean(ctxt.get(), PrefConstants.SERVICEWARNED)) {
-				NotifUtil.showToast(ctxt.get().getApplicationContext(),
-						R.string.disabling_wififixerservice);
-				ctxt.get().stopService(
-						new Intent(ctxt.get(), WifiFixerService.class));
-				ServiceAlarm.setComponentEnabled(ctxt.get(),
-						WifiFixerService.class, false);
-				PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLE_KEY.key(), true);
-				ServiceAlarm.unsetAlarm(ctxt.get());
-				ctxt.get()
-						.stopService(new Intent(ctxt.get(), LogService.class));
-			} else {
-				ctxt.get().startActivity(
-						new Intent(ctxt.get(), WifiFixerActivity.class)
-								.putExtra(PrefConstants.SERVICEWARNED, true)
-								.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-			}
+			handleWifiServiceDisable();
 		}
 		/*
 		 * Handle Widget intent
@@ -158,31 +135,13 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 		 * donate!
 		 */
 		else if (action.equals(AUTH_ACTION)) {
-			if (data.containsKey(AUTHEXTRA)
-					&& data.getString(AUTHEXTRA).contains(AUTHSTRING)) {
-				LogService.log(ctxt.get(), LogService.getLogTag(ctxt.get())
-						.toString(), ctxt.get().getString(R.string.authed));
-				Intent intent = new Intent(ctxt.get(), WifiFixerActivity.class)
-						.setAction(Intent.ACTION_MAIN).setFlags(
-								Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-
-				PendingIntent pending = PendingIntent.getActivity(ctxt.get(),
-						0, intent, 0);
-				// Ok, do the auth
-				if (!PrefUtil.readBoolean(ctxt.get(),
-						ctxt.get().getString(R.string.isauthed))) {
-					PrefUtil.writeBoolean(ctxt.get(),
-							ctxt.get().getString(R.string.isauthed), true);
-					NotifUtil.cancel(ctxt.get(), 3337);
-					NotifUtil.show(ctxt.get(),
-							ctxt.get().getString(R.string.donatethanks), ctxt
-									.get().getString(R.string.authorized),
-							AUTH_NOTIF_ID, pending);
-				}
-
-			}
-		} else if (PrefUtil.readBoolean(ctxt.get(),
-				PrefConstants.WIFI_STATE_LOCK))
+			handleAuthAction(data);
+		}
+		/*
+		 * Lock out wifi state changes if user has initiated change
+		 */
+		else if (PrefUtil
+				.readBoolean(ctxt.get(), PrefConstants.WIFI_STATE_LOCK))
 			return;
 		else if (action.equals(IntentConstants.ACTION_WIFI_ON))
 			ctxt.get().sendBroadcast(new Intent(WidgetReceiver.WIFI_ON));
@@ -190,5 +149,60 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 			ctxt.get().sendBroadcast(new Intent(WidgetReceiver.WIFI_OFF));
 		else if (action.equals(IntentConstants.ACTION_WIFI_TOGGLE))
 			ctxt.get().sendBroadcast(new Intent(WidgetReceiver.TOGGLE_WIFI));
+	}
+
+	private static void handleAuthAction(Bundle data) {
+		if (data.containsKey(AUTHEXTRA)
+				&& data.getString(AUTHEXTRA).contains(AUTHSTRING)) {
+			LogService.log(ctxt.get(), LogService.getLogTag(ctxt.get())
+					.toString(), ctxt.get().getString(R.string.authed));
+			Intent intent = new Intent(ctxt.get(), WifiFixerActivity.class)
+					.setAction(Intent.ACTION_MAIN).setFlags(
+							Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
+			PendingIntent pending = PendingIntent.getActivity(ctxt.get(), 0,
+					intent, 0);
+			// Ok, do the auth
+			if (!PrefUtil.readBoolean(ctxt.get(),
+					ctxt.get().getString(R.string.isauthed))) {
+				PrefUtil.writeBoolean(ctxt.get(),
+						ctxt.get().getString(R.string.isauthed), true);
+				NotifUtil.cancel(ctxt.get(), 3337);
+				NotifUtil.show(ctxt.get(),
+						ctxt.get().getString(R.string.donatethanks), ctxt.get()
+								.getString(R.string.authorized), AUTH_NOTIF_ID,
+						pending);
+			}
+		}
+	}
+
+	private static void handleWifiServiceDisable() {
+		if (PrefUtil.readBoolean(ctxt.get(), PrefConstants.SERVICEWARNED)) {
+			NotifUtil.showToast(ctxt.get().getApplicationContext(),
+					R.string.disabling_wififixerservice);
+			ctxt.get().stopService(
+					new Intent(ctxt.get(), WifiFixerService.class));
+			ServiceAlarm.setComponentEnabled(ctxt.get(),
+					WifiFixerService.class, false);
+			PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLE_KEY.key(), true);
+			ServiceAlarm.unsetAlarm(ctxt.get());
+			ctxt.get().stopService(new Intent(ctxt.get(), LogService.class));
+		} else {
+			ctxt.get().startActivity(
+					new Intent(ctxt.get(), WifiFixerActivity.class).putExtra(
+							PrefConstants.SERVICEWARNED, true).setFlags(
+							Intent.FLAG_ACTIVITY_NEW_TASK));
+		}
+	}
+
+	private static void handleWifiServiceEnable() {
+		NotifUtil.showToast(ctxt.get().getApplicationContext(),
+				R.string.enabling_wififixerservice);
+		ServiceAlarm.setComponentEnabled(ctxt.get(), WifiFixerService.class,
+				true);
+		PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLE_KEY.key(), false);
+		ctxt.get().startService(
+				new Intent(ctxt.get(), BootService.class).putExtra(
+						BootService.FLAG_NO_DELAY, true));
 	}
 }

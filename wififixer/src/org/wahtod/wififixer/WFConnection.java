@@ -134,7 +134,7 @@ public class WFConnection extends Object implements
 	private static int lastAP = NULLVAL;
 
 	private WFConfig connectee;
-	private Hostup hostup;
+	private volatile Hostup hostup;
 	private List<WFConfig> knownbysignal;
 	private SupplicantState lastSupplicantState;
 	private boolean wifistate;
@@ -352,7 +352,6 @@ public class WFConnection extends Object implements
 						if (getisWifiEnabled(ctxt.get(), false)) {
 							self.get().checkWifi();
 						}
-
 				}
 			}
 		}
@@ -1261,7 +1260,6 @@ public class WFConnection extends Object implements
 							.getActivity(context, 0, new Intent(context,
 									WifiFixerActivity.class), 0));
 		}
-
 	}
 
 	private static void checkAssociateState() {
@@ -1775,7 +1773,6 @@ public class WFConnection extends Object implements
 		/*
 		 * Connect To best will always find best signal/availability
 		 */
-
 		if (!getisWifiEnabled(ctxt.get(), false))
 			return;
 		/*
