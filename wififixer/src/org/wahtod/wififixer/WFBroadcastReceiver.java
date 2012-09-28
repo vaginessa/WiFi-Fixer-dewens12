@@ -46,6 +46,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 	private static final String AUTHSTRING = "31415927";
 
 	private static final int AUTH_NOTIF_ID = 2934;
+	public static final String FROMWIDGET = "FRMWDGT";
 
 	private static Handler handler = new Handler() {
 		@Override
@@ -80,7 +81,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 			break;
 
 		case 1:
-			context.sendBroadcast(new Intent(WidgetReceiver.TOGGLE_WIFI));
+			context.sendBroadcast(new Intent(WidgetReceiver.TOGGLE_WIFI).putExtra(FROMWIDGET, true));
 			break;
 
 		case 2:

@@ -179,7 +179,7 @@ public class WFConnection extends Object implements
 	private static volatile boolean isUp;
 	
 	
-	public static class NetCheckRunnable implements Runnable {
+	protected static Runnable NetCheckRunnable = new Runnable(){
 		@Override
 		public void run() {
 			/*
@@ -196,11 +196,11 @@ public class WFConnection extends Object implements
 				if (isUp && wifirepair != W_REASSOCIATE)
 					wifirepair = W_REASSOCIATE;
 			}
-			handler.post(new PostExecuteRunnable ());
+			handler.post( PostExecuteRunnable);
 		}
 	};
 	
-	public static class PostExecuteRunnable implements Runnable {
+	protected static Runnable PostExecuteRunnable = new Runnable() {
 		private static final int STATUS_UPDATE_DELAY = 3000;
 		@Override
 		public void run() {
@@ -225,7 +225,7 @@ public class WFConnection extends Object implements
 	/*
 	 * Processes intent message
 	 */
-	public static class IntentRunnable implements Runnable {
+	protected static class IntentRunnable implements Runnable {
 		Bundle d;
 
 		@Override
@@ -1278,7 +1278,7 @@ public class WFConnection extends Object implements
 			/*
 			 * Starts network check AsyncTask
 			 */
-			_nethandler.post(new NetCheckRunnable());
+			_nethandler.post(NetCheckRunnable);
 		} else {
 			/*
 			 * Make sure scan happens in a reasonable amount of time

@@ -71,8 +71,9 @@ public class Hostup {
 	protected volatile WeakReference<Thread> self;
 	protected volatile boolean finished;
 	protected volatile StopWatch timer;
-	protected volatile static DefaultHttpClient httpclient;
-	private ExecutorService _executor = Executors.newCachedThreadPool();
+	protected volatile DefaultHttpClient httpclient;
+	private volatile ExecutorService _executor = Executors
+			.newCachedThreadPool();
 
 	@SuppressWarnings("unused")
 	private Hostup() {
@@ -238,7 +239,7 @@ public class Hostup {
 			return false;
 	}
 
-	private static void prepareHttpClient() {
+	private void prepareHttpClient() {
 		/*
 		 * Prepare httpclient
 		 */

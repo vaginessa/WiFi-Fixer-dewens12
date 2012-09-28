@@ -16,9 +16,9 @@
 package org.wahtod.wififixer.legacy;
 
 import android.content.SharedPreferences.Editor;
-import android.os.Build;
 
 public abstract class EditorDetector {
+	private static final String APPLY_METHOD = "apply";
 	private static EditorDetector selector;
 
 	public abstract void vcommit(final Editor e);
@@ -28,7 +28,7 @@ public abstract class EditorDetector {
 		 * Select appropriate Class and pass method
 		 */
 		if (selector == null) {
-			if (Build.VERSION.SDK_INT > 8) {
+			if (hasEditorApply()) {
 				selector = new EditorHelperGB();
 			} else
 				selector = new EditorHelperLegacy();
@@ -38,5 +38,20 @@ public abstract class EditorDetector {
 		 */
 		selector.vcommit(e);
 		return;
+	}
+
+	private static boolean hasEditorApply() {
+		Class<Editor> clazz = android.content.SharedPreferences.Editor.class;
+		Class<?>[] sig = new Class<?>[]{};
+		try {
+			if (clazz.getDeclaredMethod(APPLY_METHOD, sig) != null) {
+				return true;
+			}
+		} catch (NoSuchMethodException e) {
+			/*
+			 * false
+			 */
+		}
+		return false;
 	}
 }

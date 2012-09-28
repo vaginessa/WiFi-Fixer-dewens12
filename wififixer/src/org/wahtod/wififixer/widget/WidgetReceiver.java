@@ -20,6 +20,7 @@ import java.lang.ref.WeakReference;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ToggleService;
+import org.wahtod.wififixer.WFBroadcastReceiver;
 import org.wahtod.wififixer.WFConnection;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.BroadcastHelper;
@@ -76,7 +77,9 @@ public class WidgetReceiver extends BroadcastReceiver {
 			 * Toggle Wifi
 			 */
 			else if (action.equals(TOGGLE_WIFI)) {
-				NotifUtil.showToast(ctxt.get(), R.string.toggling_wifi);
+				if (message.getData().containsKey(
+						WFBroadcastReceiver.FROMWIDGET))
+					NotifUtil.showToast(ctxt.get(), R.string.toggling_wifi);
 				ctxt.get().startService(
 						new Intent(ctxt.get(), ToggleService.class));
 			}
@@ -111,6 +114,8 @@ public class WidgetReceiver extends BroadcastReceiver {
 		Message message = handler.obtainMessage();
 		Bundle data = new Bundle();
 		data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
+		if (intent.getExtras() != null)
+			data.putAll(intent.getExtras());
 		message.setData(data);
 		handler.sendMessage(message);
 	}
