@@ -432,6 +432,7 @@ public class LogService extends Service {
 	 */
 	@Override
 	public void onDestroy() {
+		_printthread.quit();
 		/*
 		 * Close out the buffered writer stack trace if it barfs
 		 */
