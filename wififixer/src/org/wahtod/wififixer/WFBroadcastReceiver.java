@@ -152,7 +152,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 			ctxt.get().sendBroadcast(new Intent(WidgetReceiver.TOGGLE_WIFI));
 	}
 
-	private static void handleAuthAction(Bundle data) {
+	private static void handleAuthAction(final Bundle data) {
 		if (data.containsKey(AUTHEXTRA)
 				&& data.getString(AUTHEXTRA).contains(AUTHSTRING)) {
 			LogService.log(ctxt.get(), LogService.getLogTag(ctxt.get())

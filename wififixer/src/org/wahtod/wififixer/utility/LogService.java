@@ -43,7 +43,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -61,6 +63,7 @@ public class LogService extends Service {
 	private static String vstring;
 	private static StringBuilder tsheader;
 	private BufferedWriter bwriter;
+
 	public static final String DUMPBUILD = "DUMPBUILD";
 	public static final String LOG = "LOG";
 
@@ -69,8 +72,8 @@ public class LogService extends Service {
 	public static final String TS_DELAY = "TSDELAY";
 
 	// Log Timestamp
-	private static final long TS_WAIT_SCREENON = 15000;
-	private static final long TS_WAIT_SCREENOFF = 60000;
+	private static final long TS_WAIT_SCREENON = 20000;
+	private static final long TS_WAIT_SCREENOFF = 240000;
 
 	// Write buffer constants
 	private static final int WRITE_BUFFER_SIZE = 8192;
@@ -78,6 +81,8 @@ public class LogService extends Service {
 	private static File file;
 	private static WeakReference<Context> ctxt;
 	private static WeakReference<LogService> self;
+	private static HandlerThread _printthread;
+	private static Handler _printhandler;
 
 	/*
 	 * Handler constants
@@ -109,7 +114,8 @@ public class LogService extends Service {
 
 	private void addStackTrace(final Context context) {
 		if (hasStackTrace(context)) {
-			writeToFileLog(context, getStackTrace(context));
+			_printhandler.post(new LogWriterRunnable(getStackTrace(context)) {
+			});
 			context.deleteFile(DefaultExceptionHandler.EXCEPTIONS_FILENAME);
 		}
 	}
@@ -286,10 +292,16 @@ public class LogService extends Service {
 		 * Add ongoing notification
 		 */
 		NotifUtil.addLogNotif(this, true);
+		/*
+		 * Set up handlerthread
+		 */
+		_printthread = new HandlerThread(getString(R.string.logwriterthread));
+		_printthread.start();
+		Looper loop = _printthread.getLooper();
+		_printhandler = new Handler(loop);
 	}
 
-	public static boolean processCommands(final Context context,
-			final String rope) {
+	public boolean processCommands(final Context context, final String rope) {
 		/*
 		 * Incoming intents might have a command to process
 		 */
@@ -353,48 +365,65 @@ public class LogService extends Service {
 			handler.sendEmptyMessageDelayed(TS_MESSAGE, TS_WAIT_SCREENOFF);
 	}
 
-	private static void processLogIntent(final Context context,
-			final String rope, final String rope2) {
+	private void processLogIntent(final Context context, final String rope,
+			final String rope2) {
 		if (processCommands(context, rope))
 			return;
 		else {
 			/*
 			 * Write to syslog and our log file on sdcard
 			 */
-			Log.i(rope.toString(), rope2.toString());
-			self.get().writeToFileLog(context, rope2);
+			_printhandler.post(new LogWriterRunnable(rope2) {
+			});
 		}
 	}
 
-	void writeToFileLog(final Context context, String rope2) {
-		if (Environment.getExternalStorageState() != null
-				&& !(Environment.getExternalStorageState()
-						.contains(Environment.MEDIA_MOUNTED))) {
-			return;
-		}
+	public class LogWriterRunnable implements Runnable {
+		private String msg;
 
-		if (file == null)
-			file = VersionedFile.getFile(ctxt.get(), LOGFILE);
-
-		try {
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			if (bwriter == null)
-				bwriter = new BufferedWriter(new FileWriter(
-						file.getAbsolutePath(), true), WRITE_BUFFER_SIZE);
-			bwriter.write(rope2 + NEWLINE);
-		} catch (Exception e) {
-			if (e.getMessage() != null)
-				Log.i(LogService.class.getSimpleName(),
-						context.getString(R.string.error_allocating_buffered_writer)
-								+ e.getMessage());
+		@Override
+		public void run() {
 			/*
-			 * Error means we need to release and recreate the file handle
+			 * Write to Android log
 			 */
-			file = null;
+			Log.i(LogService.class.getSimpleName(), msg);
+			/*
+			 * Write to sdcard log
+			 */
+			if (Environment.getExternalStorageState() != null
+					&& !(Environment.getExternalStorageState()
+							.contains(Environment.MEDIA_MOUNTED))) {
+				return;
+			}
+
+			if (file == null)
+				file = VersionedFile.getFile(ctxt.get(), LOGFILE);
+
+			try {
+				if (!file.exists()) {
+					file.createNewFile();
+				}
+				if (bwriter == null)
+					bwriter = new BufferedWriter(new FileWriter(
+							file.getAbsolutePath(), true), WRITE_BUFFER_SIZE);
+				bwriter.write(msg + NEWLINE);
+			} catch (Exception e) {
+				if (e.getMessage() != null)
+					Log.i(LogService.class.getSimpleName(),
+							ctxt.get().getString(
+									R.string.error_allocating_buffered_writer)
+									+ e.getMessage());
+				/*
+				 * Error means we need to release and recreate the file handle
+				 */
+				file = null;
+			}
 		}
-	}
+
+		public LogWriterRunnable(final String message) {
+			msg = message;
+		}
+	};
 
 	/*
 	 * (non-Javadoc)

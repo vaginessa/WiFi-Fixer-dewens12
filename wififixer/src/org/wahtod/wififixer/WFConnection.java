@@ -117,9 +117,9 @@ public class WFConnection extends Object implements
 	// ms for network checks
 	private final static int REACHABLE = 6000;
 	// ms for main loop sleep
-	private final static int LOOPWAIT = 15000;
+	private final static int LOOPWAIT = 20000;
 	// ms for sleep loop check
-	private final static long SLEEPWAIT = 60000;
+	private final static long SLEEPWAIT = 240000;
 	private static final int SHORTWAIT = 1500;
 	// just long enough to avoid sleep bug with handler posts
 	private static final int REALLYSHORTWAIT = 500;
