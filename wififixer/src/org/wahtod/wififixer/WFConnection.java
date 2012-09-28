@@ -20,11 +20,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.RejectedExecutionException;
 
 import org.wahtod.wififixer.prefs.PrefConstants;
-import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
+import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.LogFragment;
 import org.wahtod.wififixer.ui.WifiFixerActivity;
 import org.wahtod.wififixer.utility.BroadcastHelper;
@@ -34,6 +33,7 @@ import org.wahtod.wififixer.utility.Hostup;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ScreenStateDetector;
+import org.wahtod.wififixer.utility.ScreenStateDetector.OnScreenStateChangedListener;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 import org.wahtod.wififixer.utility.StatusDispatcher;
 import org.wahtod.wififixer.utility.StatusMessage;
@@ -42,7 +42,6 @@ import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFConfig;
 import org.wahtod.wififixer.utility.WakeLock;
 import org.wahtod.wififixer.utility.WifiLock;
-import org.wahtod.wififixer.utility.ScreenStateDetector.OnScreenStateChangedListener;
 import org.wahtod.wififixer.widget.WidgetReceiver;
 
 import android.app.PendingIntent;
@@ -58,9 +57,10 @@ import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.Message;
 import android.text.format.Formatter;
 
@@ -73,7 +73,7 @@ public class WFConnection extends Object implements
 	private static final int DEFAULT_DBM_FLOOR = -90;
 	private String accesspointIP;
 	private static String appname;
-	private static WeakReference<Context> ctxt;
+	protected static WeakReference<Context> ctxt;
 	private WakeLock wakelock;
 	private WifiLock wifilock;
 	boolean screenstate;
@@ -134,7 +134,7 @@ public class WFConnection extends Object implements
 	private static int lastAP = NULLVAL;
 
 	private WFConfig connectee;
-	private volatile Hostup hostup;
+	private static volatile Hostup hostup;
 	private List<WFConfig> knownbysignal;
 	private SupplicantState lastSupplicantState;
 	private boolean wifistate;
@@ -174,59 +174,53 @@ public class WFConnection extends Object implements
 	private static final long CWDOG_DELAY = 10000;
 
 	private static Handler handler = new Handler();
-
-	/*
-	 * For network check
-	 */
-	protected static boolean _network_check_flag;
-
-	private class NetworkCheckTask extends AsyncTask<Void, Void, boolean[]> {
-		private static final int STATUS_UPDATE_DELAY = 3000;
-
+	private volatile static Handler _nethandler;
+	private volatile static HandlerThread _netthread;
+	private static volatile boolean isUp;
+	
+	
+	public static class NetCheckRunnable implements Runnable {
 		@Override
-		protected boolean[] doInBackground(Void... params) {
-			boolean[] isup = new boolean[1];
+		public void run() {
 			/*
 			 * First check if wifi is current network
 			 */
 			if (!getIsOnWifi(ctxt.get())) {
 				log(ctxt.get(), (R.string.wifi_not_current_network));
-				clearConnectedStatus(ctxt.get().getString(
+				self.get().clearConnectedStatus(ctxt.get().getString(
 						R.string.wifi_not_current_network));
-				return isup;
 			} else {
-				try {
-					isup[0] = networkUp(ctxt.get());
-				} catch (IllegalStateException e) {
-					return isup;
-				}
-				if (isup[0] && wifirepair != W_REASSOCIATE)
+				
+					isUp = networkUp(ctxt.get());
+					
+				if (isUp && wifirepair != W_REASSOCIATE)
 					wifirepair = W_REASSOCIATE;
-				return isup;
 			}
+			handler.post(new PostExecuteRunnable ());
 		}
-
+	};
+	
+	public static class PostExecuteRunnable implements Runnable {
+		private static final int STATUS_UPDATE_DELAY = 3000;
 		@Override
-		protected void onPostExecute(boolean[] result) {
-			if (result == null)
-				return;
-			final boolean r = result[0];
-			/*
-			 * Notify state
-			 */
-			if (self.get().screenstate) {
-				StatusMessage m = new StatusMessage();
-				if (result[0])
-					m.setStatus(ctxt.get().getString(R.string.passed));
-				else
-					m.setStatus(ctxt.get().getString(R.string.failed));
-				StatusMessage.send(ctxt.get(), m);
-			}
-			handlerWrapper(new PostNetCheckRunnable(r));
-			handlerWrapper(rStatusUpdate, STATUS_UPDATE_DELAY);
-			_network_check_flag = false;
+		public void run() {
+				/*
+				 * Notify state
+				 */
+				if (self.get().screenstate) {
+					StatusMessage m = new StatusMessage();
+					if (isUp)
+						m.setStatus(ctxt.get().getString(R.string.passed));
+					else
+						m.setStatus(ctxt.get().getString(R.string.failed));
+					StatusMessage.send(ctxt.get(), m);
+				}
+				self.get().handlerWrapper(new PostNetCheckRunnable(isUp));
+				self.get().handlerWrapper(rStatusUpdate, STATUS_UPDATE_DELAY);
 		}
-	}
+	};
+	
+	
 
 	/*
 	 * Processes intent message
@@ -632,15 +626,17 @@ public class WFConnection extends Object implements
 			setStatNotif(true);
 
 		/*
-		 * Start Main tick
-		 */
-		// handlerWrapper(rMain);
-
-		/*
 		 * Instantiate network checker
 		 */
-		if (self.get().hostup == null)
-			self.get().hostup = new Hostup(context);
+		hostup = new Hostup(context);
+		prepareNetCheck(context);
+	}
+	
+	private static void prepareNetCheck(final Context context){
+		_netthread = new HandlerThread(context.getString(R.string.netcheckthread));
+		_netthread.start();
+		Looper loop = _netthread.getLooper();
+		_nethandler= new Handler(loop);
 	}
 
 	private void clearHandler() {
@@ -1184,13 +1180,13 @@ public class WFConnection extends Object implements
 		 * 
 		 * If we fail the first check, try again with hostup default to be sure
 		 */
-		HostMessage out = self.get().hostup.getHostup(REACHABLE, context,
+		HostMessage out = hostup.getHostup(REACHABLE, context,
 				self.get().accesspointIP.toString());
 		/*
 		 * Try #2 with default if #1 fails
 		 */
 		if (!out.state)
-			out = self.get().hostup.getHostup(REACHABLE, context, null);
+			out = hostup.getHostup(REACHABLE, context, null);
 		log(context, out.status.toString());
 		if (!out.state)
 			return false;
@@ -1276,32 +1272,13 @@ public class WFConnection extends Object implements
 	}
 
 	private void checkWifi() {
-		/*
-		 * First check if network check task is already running
-		 */
-		if (_network_check_flag) {
-			log(ctxt.get(), R.string.network_check_blocked);
-			return;
-		}
 		if (getIsSupplicantConnected(ctxt.get())) {
 			if (!screenstate)
 				wakelock.lock(true);
 			/*
 			 * Starts network check AsyncTask
 			 */
-			try {
-				new NetworkCheckTask().execute();
-				_network_check_flag = true;
-			} catch (RejectedExecutionException e) {
-				_network_check_flag = false;
-				StatusMessage.send(
-						ctxt.get(),
-						StatusMessage.getNew()
-								.setStatus(
-										ctxt.get().getString(
-												R.string.critical_timeout)));
-				handleNetworkResult(false);
-			}
+			_nethandler.post(new NetCheckRunnable());
 		} else {
 			/*
 			 * Make sure scan happens in a reasonable amount of time
@@ -1320,6 +1297,7 @@ public class WFConnection extends Object implements
 	}
 
 	public void cleanup() {
+		_nethandler.getLooper().quit();
 		ctxt.get().unregisterReceiver(receiver);
 		clearQueue();
 		clearHandler();

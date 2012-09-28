@@ -71,7 +71,7 @@ public class Hostup {
 	protected volatile WeakReference<Thread> self;
 	protected volatile boolean finished;
 	protected volatile StopWatch timer;
-	private static DefaultHttpClient httpclient;
+	protected volatile static DefaultHttpClient httpclient;
 	private ExecutorService _executor = Executors.newCachedThreadPool();
 
 	@SuppressWarnings("unused")
@@ -96,11 +96,11 @@ public class Hostup {
 				c = getHttpHeaders(context.get());
 			} catch (IOException e) {
 				/*
-				 * fail, up is false
+				 * fail, false
 				 */
 			} catch (URISyntaxException e) {
 				/*
-				 * fail, up is false
+				 * fail, false
 				 */
 			}
 			StringBuilder r = new StringBuilder(context.get().getString(
@@ -220,7 +220,8 @@ public class Hostup {
 				headURI = new URI(context.getString(R.string.http)
 						+ FAILOVER_TARGET);
 			} catch (URISyntaxException e) {
-				// Should not ever happen since H_TARGET is a valid URL
+				// Should not ever happen since H_TARGET is guaranteed to be a
+				// valid URL at this point
 				e.printStackTrace();
 			}
 		}
