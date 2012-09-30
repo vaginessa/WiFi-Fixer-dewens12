@@ -50,7 +50,7 @@ public class StatusMessage {
 		s.status.putAll(m.getData());
 		return s;
 	}
-	
+
 	public static StatusMessage fromIntent(final Intent i) {
 		StatusMessage s = new StatusMessage();
 		s.status = i.getBundleExtra(StatusDispatcher.STATUS_DATA_KEY);
@@ -75,12 +75,12 @@ public class StatusMessage {
 	}
 
 	public static void send(final Context context, final StatusMessage tosend) {
-		if(!ScreenStateDetector.getScreenState(context))
+		if (!ScreenStateDetector.getScreenState(context))
 			return;
-		else{
-		Intent i = new Intent(StatusDispatcher.REFRESH_INTENT);
-		i.putExtras(tosend.status);
-		BroadcastHelper.sendBroadcast(context, i, true);
+		else {
+			Intent i = new Intent(StatusDispatcher.REFRESH_INTENT);
+			i.putExtras(tosend.status);
+			BroadcastHelper.sendBroadcast(context, i, true);
 		}
 	}
 

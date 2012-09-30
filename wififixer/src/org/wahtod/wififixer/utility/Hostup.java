@@ -72,7 +72,7 @@ public class Hostup {
 	protected volatile boolean finished;
 	protected volatile StopWatch timer;
 	protected volatile DefaultHttpClient httpclient;
-	private volatile ExecutorService _executor = Executors
+	private ExecutorService _executor = Executors
 			.newCachedThreadPool();
 
 	@SuppressWarnings("unused")

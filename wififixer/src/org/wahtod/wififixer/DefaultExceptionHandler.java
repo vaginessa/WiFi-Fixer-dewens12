@@ -88,6 +88,6 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 
 	public static void register(final Context ctxt) {
 		if (!isRegistered)
-		new DefaultExceptionHandler(ctxt);
+			new DefaultExceptionHandler(ctxt);
 	}
 }

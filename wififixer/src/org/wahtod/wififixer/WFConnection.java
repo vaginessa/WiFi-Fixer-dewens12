@@ -177,9 +177,8 @@ public class WFConnection extends Object implements
 	private volatile static Handler _nethandler;
 	private volatile static HandlerThread _netthread;
 	private static volatile boolean isUp;
-	
-	
-	protected static Runnable NetCheckRunnable = new Runnable(){
+
+	protected static Runnable NetCheckRunnable = new Runnable() {
 		@Override
 		public void run() {
 			/*
@@ -187,40 +186,41 @@ public class WFConnection extends Object implements
 			 */
 			if (!getIsOnWifi(ctxt.get())) {
 				log(ctxt.get(), (R.string.wifi_not_current_network));
-				self.get().clearConnectedStatus(ctxt.get().getString(
-						R.string.wifi_not_current_network));
+				self.get()
+						.clearConnectedStatus(
+								ctxt.get().getString(
+										R.string.wifi_not_current_network));
 			} else {
-				
-					isUp = networkUp(ctxt.get());
-					
+
+				isUp = networkUp(ctxt.get());
+
 				if (isUp && wifirepair != W_REASSOCIATE)
 					wifirepair = W_REASSOCIATE;
 			}
-			handler.post( PostExecuteRunnable);
+			handler.post(PostExecuteRunnable);
 		}
 	};
-	
+
 	protected static Runnable PostExecuteRunnable = new Runnable() {
 		private static final int STATUS_UPDATE_DELAY = 3000;
+
 		@Override
 		public void run() {
-				/*
-				 * Notify state
-				 */
-				if (self.get().screenstate) {
-					StatusMessage m = new StatusMessage();
-					if (isUp)
-						m.setStatus(ctxt.get().getString(R.string.passed));
-					else
-						m.setStatus(ctxt.get().getString(R.string.failed));
-					StatusMessage.send(ctxt.get(), m);
-				}
-				self.get().handlerWrapper(new PostNetCheckRunnable(isUp));
-				self.get().handlerWrapper(rStatusUpdate, STATUS_UPDATE_DELAY);
+			/*
+			 * Notify state
+			 */
+			if (self.get().screenstate) {
+				StatusMessage m = new StatusMessage();
+				if (isUp)
+					m.setStatus(ctxt.get().getString(R.string.passed));
+				else
+					m.setStatus(ctxt.get().getString(R.string.failed));
+				StatusMessage.send(ctxt.get(), m);
+			}
+			self.get().handlerWrapper(new PostNetCheckRunnable(isUp));
+			self.get().handlerWrapper(rStatusUpdate, STATUS_UPDATE_DELAY);
 		}
 	};
-	
-	
 
 	/*
 	 * Processes intent message
@@ -631,12 +631,13 @@ public class WFConnection extends Object implements
 		hostup = new Hostup(context);
 		prepareNetCheck(context);
 	}
-	
-	private static void prepareNetCheck(final Context context){
-		_netthread = new HandlerThread(context.getString(R.string.netcheckthread));
+
+	private static void prepareNetCheck(final Context context) {
+		_netthread = new HandlerThread(
+				context.getString(R.string.netcheckthread));
 		_netthread.start();
 		Looper loop = _netthread.getLooper();
-		_nethandler= new Handler(loop);
+		_nethandler = new Handler(loop);
 	}
 
 	private void clearHandler() {
@@ -1779,6 +1780,7 @@ public class WFConnection extends Object implements
 		if (state && getisWifiEnabled(ctxt.get(), false)) {
 			/*
 			 * Start sleep check
+			 * Using alarm here because some devices seem to not fire handlers in deep sleep.
 			 */
 			clearMessage(rMain);
 			ServiceAlarm.addAlarm(ctxt.get(), SHORTWAIT, true, SLEEPWAIT, p);
@@ -1791,7 +1793,7 @@ public class WFConnection extends Object implements
 			/*
 			 * Check state
 			 */
-			handlerWrapper(rMain, SHORTWAIT);
+			handlerWrapper(rMain);
 		}
 	}
 

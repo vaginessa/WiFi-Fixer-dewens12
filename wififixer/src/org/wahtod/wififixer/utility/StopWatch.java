@@ -22,7 +22,7 @@ public class StopWatch {
 	private long start;
 	private long stop;
 	private boolean running;
-	
+
 	public StopWatch() {
 		start = 0;
 		stop = 0;

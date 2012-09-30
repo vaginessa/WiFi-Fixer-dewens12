@@ -81,7 +81,8 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 			break;
 
 		case 1:
-			context.sendBroadcast(new Intent(WidgetReceiver.TOGGLE_WIFI).putExtra(FROMWIDGET, true));
+			context.sendBroadcast(new Intent(WidgetReceiver.TOGGLE_WIFI)
+					.putExtra(FROMWIDGET, true));
 			break;
 
 		case 2:

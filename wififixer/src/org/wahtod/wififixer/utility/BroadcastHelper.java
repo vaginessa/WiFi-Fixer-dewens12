@@ -29,6 +29,7 @@ import android.support.v4.content.LocalBroadcastManager;
  */
 public class BroadcastHelper {
 	private static HashMap<BroadcastReceiver, Boolean> _clients;
+
 	private BroadcastHelper() {
 		/*
 		 * Singleton

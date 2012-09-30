@@ -42,7 +42,7 @@ public abstract class EditorDetector {
 
 	private static boolean hasEditorApply() {
 		Class<Editor> clazz = android.content.SharedPreferences.Editor.class;
-		Class<?>[] sig = new Class<?>[]{};
+		Class<?>[] sig = new Class<?>[] {};
 		try {
 			if (clazz.getDeclaredMethod(APPLY_METHOD, sig) != null) {
 				return true;

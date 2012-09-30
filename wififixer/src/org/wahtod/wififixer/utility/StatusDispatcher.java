@@ -114,7 +114,7 @@ public class StatusDispatcher {
 			BroadcastHelper.sendBroadcast(c.get(), i, true);
 		}
 	};
-	
+
 	public static class Widget implements Runnable {
 		private final StatusMessage message;
 

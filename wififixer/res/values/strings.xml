@@ -20,8 +20,8 @@
     <string name="connect">Connect</string>
     <string name="disable">Disable</string>
     <string name="enable">Enable</string>
-    <string name="enabling_logging">Enabling Logging</string>
-    <string name="disabling_logging">Disabling Logging</string>
+    <string name="enabling_logging">Logging Enabled</string>
+    <string name="disabling_logging">Logging Disabled</string>
     <string name="donatenag">If you use this software, please donate!</string>
     <string name="thank_you">Thank You for using Wifi Fixer</string>
     <string name="emailintent">Select Gmail: other apps may not attach log</string>
@@ -122,8 +122,8 @@
     <string name="strict_mode_extant">Strict Mode Extant</string>
     <string name="strict_mode_unavailable">Strict Mode Unavailable</string>
     <string name="service_status">Service</string>
-    <string name="enabling_wififixerservice">Enabling WifiFixerService</string>
-    <string name="disabling_wififixerservice">Disabling WifiFixerService</string>
+    <string name="enabling_wififixerservice">WifiFixerService Enabled</string>
+    <string name="disabling_wififixerservice">WifiFixerService Disabled</string>
     <string name="wifi">Wifi</string>
     <string name="enabling_wifi">Enabling Wifi</string>
     <string name="disabling_wifi">Disabling Wifi</string>

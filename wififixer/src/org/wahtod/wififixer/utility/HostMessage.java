@@ -15,17 +15,16 @@ limitations under the License.
  */
 package org.wahtod.wififixer.utility;
 
-
 public class HostMessage {
 	public StringBuilder status;
 	public boolean state;
 
 	public HostMessage(String sl, boolean s) {
-		status =new StringBuilder(sl);
+		status = new StringBuilder(sl);
 		state = s;
 	}
 
 	public HostMessage() {
-		status =new StringBuilder(32);
+		status = new StringBuilder(32);
 	}
 }

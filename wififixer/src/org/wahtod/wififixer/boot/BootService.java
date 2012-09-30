@@ -71,8 +71,9 @@ public class BootService extends Service {
 	}
 
 	private void handleIntent(Intent intent) {
-		if (intent.getExtras() != null && intent.hasExtra(FLAG_NO_DELAY));
-		nodelay =true;
+		if (intent.getExtras() != null && intent.hasExtra(FLAG_NO_DELAY))
+			;
+		nodelay = true;
 		Thread serviceStart = new Thread(new TStartService());
 		serviceStart.start();
 	}

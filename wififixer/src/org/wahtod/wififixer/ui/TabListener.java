@@ -32,27 +32,30 @@ public class TabListener implements ActionBar.TabListener {
 
 	public TabListener(Activity activity) {
 		mActivity = new WeakReference<Activity>(activity);
-		mPager = new WeakReference<ViewPager> ((ViewPager) mActivity.get().findViewById(R.id.pager));
+		mPager = new WeakReference<ViewPager>((ViewPager) mActivity.get()
+				.findViewById(R.id.pager));
 		/*
 		 * Throwing in a page change listener so the viewpager can keep the
 		 * currently selected tab synched with its current page
 		 */
 		if (mPager.get() != null) {
-			mPager.get().setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-				@Override
-				public void onPageScrollStateChanged(int arg0) {
-				}
+			mPager.get().setOnPageChangeListener(
+					new ViewPager.OnPageChangeListener() {
+						@Override
+						public void onPageScrollStateChanged(int arg0) {
+						}
 
-				@Override
-				public void onPageScrolled(int arg0, float arg1, int arg2) {
-				}
+						@Override
+						public void onPageScrolled(int arg0, float arg1,
+								int arg2) {
+						}
 
-				@Override
-				public void onPageSelected(int arg0) {
-					mActivity.get().getActionBar()
-							.setSelectedNavigationItem(arg0);
-				}
-			});
+						@Override
+						public void onPageSelected(int arg0) {
+							mActivity.get().getActionBar()
+									.setSelectedNavigationItem(arg0);
+						}
+					});
 		}
 	}
 

@@ -38,7 +38,6 @@ public abstract class NotifUtil {
 	protected static final int LOGNOTIFID = 2494;
 	protected static int ssidStatus = 0;
 
-
 	/*
 	 * for SSID status in status notification
 	 */

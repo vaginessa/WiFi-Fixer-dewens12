@@ -155,7 +155,7 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	private void connectNetwork() {
 		Intent intent = new Intent(WFConnection.CONNECTINTENT);
 		intent.putExtra(WFConnection.NETWORKNAME, network.SSID);
-		BroadcastHelper.sendBroadcast(getActivity(),intent,true);
+		BroadcastHelper.sendBroadcast(getActivity(), intent, true);
 	}
 
 	public static ConnectFragment newInstance(Bundle bundle) {

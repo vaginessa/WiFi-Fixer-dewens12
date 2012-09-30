@@ -434,7 +434,7 @@ public class LogService extends Service {
 	public void onDestroy() {
 		_printthread.quit();
 		/*
-		 * Close out the buffered writer stack trace if it barfs
+		 * Close out the buffered writer and handler
 		 */
 		handler.removeMessages(TS_MESSAGE);
 		handler.removeMessages(FLUSH_MESSAGE);

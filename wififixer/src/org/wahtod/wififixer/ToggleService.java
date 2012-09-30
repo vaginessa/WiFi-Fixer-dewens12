@@ -35,7 +35,7 @@ import android.os.Message;
 public class ToggleService extends Service {
 	private static WakeLock wlock;
 	private static WeakReference<ToggleService> self;
-	
+
 	/*
 	 * Delay Constants
 	 */
@@ -62,12 +62,13 @@ public class ToggleService extends Service {
 				switch (msg.what) {
 
 				case ON:
-					self.get().sendBroadcast(new Intent(WidgetReceiver.WIFI_ON));
+					self.get()
+							.sendBroadcast(new Intent(WidgetReceiver.WIFI_ON));
 					break;
 
 				case OFF:
-					self.get()
-							.sendBroadcast(new Intent(WidgetReceiver.WIFI_OFF));
+					self.get().sendBroadcast(
+							new Intent(WidgetReceiver.WIFI_OFF));
 					break;
 
 				case WATCHDOG:

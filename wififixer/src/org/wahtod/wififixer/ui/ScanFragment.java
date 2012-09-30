@@ -389,7 +389,7 @@ public class ScanFragment extends Fragment {
 				if (clicked.capabilities.equals(WIFIOFF))
 					return true;
 				else
-				return false;
+					return false;
 			}
 		});
 		registerForContextMenu(lv);

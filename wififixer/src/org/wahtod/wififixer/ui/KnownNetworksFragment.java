@@ -132,7 +132,7 @@ public class KnownNetworksFragment extends Fragment {
 					getNidFromSSID(getContext(), clicked), false);
 			adapter.notifyDataSetChanged();
 			break;
-			
+
 		case CONTEXT_DISABLE:
 			PrefUtil.setNetworkState(getContext(),
 					getNidFromSSID(getContext(), clicked), false);
@@ -140,7 +140,7 @@ public class KnownNetworksFragment extends Fragment {
 					getNidFromSSID(getContext(), clicked), true);
 			adapter.notifyDataSetChanged();
 			break;
-			
+
 		case CONTEXT_CONNECT:
 			if (PrefUtil.readBoolean(getContext(), Pref.DISABLE_KEY.name())) {
 				Intent intent = new Intent(WFConnection.CONNECTINTENT);

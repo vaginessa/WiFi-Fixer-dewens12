@@ -44,16 +44,17 @@ public class HoneyCombNotifUtil extends NotifUtil {
 			stat = null;
 			return;
 		}
-		if(stat == null) {
-		Notification.Builder builder = new Notification.Builder(ctxt);
-		Intent intent = new Intent(ctxt, WifiFixerActivity.class).setAction(
-				Intent.ACTION_MAIN).setFlags(
-				Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-		builder.setContentIntent(PendingIntent.getActivity(ctxt, 0, intent, 0));
-		builder.setOngoing(true);
-		builder.setSmallIcon(R.drawable.notifsignal, m.getSignal());
-		builder.setContentTitle(ctxt.getString(R.string.network_status));
-		stat = builder.getNotification();
+		if (stat == null) {
+			Notification.Builder builder = new Notification.Builder(ctxt);
+			Intent intent = new Intent(ctxt, WifiFixerActivity.class)
+					.setAction(Intent.ACTION_MAIN).setFlags(
+							Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+			builder.setContentIntent(PendingIntent.getActivity(ctxt, 0, intent,
+					0));
+			builder.setOngoing(true);
+			builder.setSmallIcon(R.drawable.notifsignal, m.getSignal());
+			builder.setContentTitle(ctxt.getString(R.string.network_status));
+			stat = builder.getNotification();
 		}
 		if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
 			m.setStatus(new StringBuilder(ctxt.getString(R.string.unmanaged))
@@ -85,16 +86,17 @@ public class HoneyCombNotifUtil extends NotifUtil {
 			log = null;
 			return;
 		}
-		if(log == null){
-		Notification.Builder builder = new Notification.Builder(ctxt);
-		Intent intent = new Intent(ctxt, WifiFixerActivity.class).setAction(
-				Intent.ACTION_MAIN).setFlags(
-				Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-		builder.setContentIntent(PendingIntent.getActivity(ctxt, 0, intent, 0));
-		builder.setOngoing(true);
-		builder.setSmallIcon(R.drawable.logging_enabled);
-		builder.setContentTitle(ctxt.getString(R.string.logservice));
-		log = builder.getNotification();
+		if (log == null) {
+			Notification.Builder builder = new Notification.Builder(ctxt);
+			Intent intent = new Intent(ctxt, WifiFixerActivity.class)
+					.setAction(Intent.ACTION_MAIN).setFlags(
+							Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+			builder.setContentIntent(PendingIntent.getActivity(ctxt, 0, intent,
+					0));
+			builder.setOngoing(true);
+			builder.setSmallIcon(R.drawable.logging_enabled);
+			builder.setContentTitle(ctxt.getString(R.string.logservice));
+			log = builder.getNotification();
 		}
 		RemoteViews update = new RemoteViews(ctxt.getPackageName(),
 				R.layout.lognotif);

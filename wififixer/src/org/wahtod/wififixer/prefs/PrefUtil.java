@@ -128,7 +128,7 @@ public class PrefUtil extends Object {
 		intTemp[pref.ordinal()] = value;
 
 		if (getFlag(Pref.LOG_KEY)) {
-			StringBuilder logstring =  new StringBuilder(pref.key());
+			StringBuilder logstring = new StringBuilder(pref.key());
 			logstring.append(COLON);
 			logstring.append(network);
 			logstring.append(COLON);
@@ -200,8 +200,7 @@ public class PrefUtil extends Object {
 	}
 
 	public static void notifyNetPrefChange(final Context c,
-			final NetPref netpref, final String netstring,
-			final int value) {
+			final NetPref netpref, final String netstring, final int value) {
 		Intent intent = new Intent(NETVALUE_CHANGED_ACTION);
 		intent.putExtra(VALUE_KEY, netpref.key());
 		intent.putExtra(NET_KEY, netstring.toString());
@@ -229,8 +228,7 @@ public class PrefUtil extends Object {
 	public void postValChanged(final Pref p) {
 	}
 
-	public static String getnetworkSSID(final Context context,
-			final int network) {
+	public static String getnetworkSSID(final Context context, final int network) {
 		WifiManager wm = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);
 		if (!wm.isWifiEnabled())
@@ -265,15 +263,14 @@ public class PrefUtil extends Object {
 		return null;
 	}
 
-	public static String getSafeFileName(final Context ctxt,
-			String filename) {
+	public static String getSafeFileName(final Context ctxt, String filename) {
 		if (filename == null)
 			filename = ctxt.getString(R.string.none);
 		return filename.replaceAll("[^a-zA-Z0-9]", "");
 	}
 
-	public static int readNetworkPref(final Context ctxt,
-			final String network, final NetPref pref) {
+	public static int readNetworkPref(final Context ctxt, final String network,
+			final NetPref pref) {
 		String key = NETPREFIX + network + pref.key();
 		if (getSharedPreferences(ctxt).contains(key))
 			return getSharedPreferences(ctxt).getInt(key, 0);
