@@ -219,10 +219,9 @@
     <string name="StateNotif_summary_off">This is the off state</string>
     <string name="widget_label_1x4">Wifi Fixer 1x4</string>
     <string name="widget_label_1x1">Wifi Fixer 1x1</string>
-    <string name="network_check_blocked">Network Check Blocked</string>
-    <string name="netcheckthread">NetCheckThread</string>
+    <string name="netcheckthread">NetMasterThread</string>
     <string name="logwriterthread">LogWriterThread</string>
-    <string name="httpcheckthread">HttpCheckThread</string>
-    <string name="icmpcheckthread">IcmpCheckThread</string>
+    <string name="httpcheckthread">HttpSensorThread</string>
+    <string name="icmpcheckthread">IcmpSensorThread</string>
 
 </resources>

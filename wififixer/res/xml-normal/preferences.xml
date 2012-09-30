@@ -30,7 +30,7 @@
             android:title="@string/Disable_title" />
 
         <ListPreference
-            android:defaultValue="1"
+            android:defaultValue="2"
             android:entries="@array/entries"
             android:entryValues="@array/entryValues"
             android:key="Perf_Mode"

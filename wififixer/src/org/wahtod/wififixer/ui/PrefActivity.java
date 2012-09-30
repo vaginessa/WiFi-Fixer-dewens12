@@ -126,11 +126,11 @@ public class PrefActivity extends PreferenceActivity implements
 				PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK_KEY.key(),
 						true);
 				PrefUtil.notifyPrefChange(p.getContext(),
-						Pref.WIFILOCK_KEY.key(), true);
+						Pref.WIFILOCK_KEY.key(), false);
 				PrefUtil.writeBoolean(p.getContext(), Pref.SCREEN_KEY.key(),
 						false);
 				PrefUtil.notifyPrefChange(p.getContext(),
-						Pref.SCREEN_KEY.key(), false);
+						Pref.SCREEN_KEY.key(), true);
 				break;
 
 			case 3:

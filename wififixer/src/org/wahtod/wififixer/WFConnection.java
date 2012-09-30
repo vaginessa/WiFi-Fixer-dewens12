@@ -1174,11 +1174,12 @@ public class WFConnection extends Object implements
 		 * If we fail the first check, try again with hostup default to be sure
 		 */
 		HostMessage out = hostup.getHostup(REACHABLE, context,
-				self.get().accesspointIP.toString());
-		/*
-		 * Try #2 with default if #1 fails
-		 */
+				self.get().accesspointIP);
+		
 		if (!out.state)
+			/*
+			 * Try #2
+			 */
 			out = hostup.getHostup(REACHABLE, context, null);
 		log(context, out.status.toString());
 		if (!out.state)
@@ -1627,7 +1628,7 @@ public class WFConnection extends Object implements
 		 */
 		if (PrefUtil.getFlag(Pref.STATENOT_KEY) && statNotifCheck())
 			setStatNotif(true);
-		_statusdispatcher.refreshWidget(new StatusMessage().setStatus(ctxt.get().getString(R.string.ok_button)));
+		_statusdispatcher.refreshWidget(null);
 	}
 
 	public void onScreenStateChanged(boolean state) {

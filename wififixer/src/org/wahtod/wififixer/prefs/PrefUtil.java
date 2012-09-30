@@ -44,6 +44,7 @@ import android.provider.Settings.SettingNotFoundException;
 public class PrefUtil extends Object {
 	private static WeakReference<PrefUtil> self;
 	private static final String COLON = ":";
+	private static SharedPreferences _prefs;
 	/*
 	 * Intent Constants
 	 */
@@ -54,6 +55,7 @@ public class PrefUtil extends Object {
 	public static final String VALUE_KEY = "VALUE_KEY";
 	private static final String INT_KEY = "INTKEY";
 	private static final String NETPREFIX = "n_";
+	
 	/*
 	 * Actions for handler message bundles
 	 */
@@ -104,8 +106,10 @@ public class PrefUtil extends Object {
 	};
 
 	public static SharedPreferences getSharedPreferences(final Context c) {
-		return PreferenceManager.getDefaultSharedPreferences(c
+		if (_prefs == null)
+		_prefs = PreferenceManager.getDefaultSharedPreferences(c
 				.getApplicationContext());
+		return _prefs;
 	}
 
 	public PrefUtil(final Context c) {
