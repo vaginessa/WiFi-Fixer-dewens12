@@ -43,9 +43,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -81,8 +79,7 @@ public class LogService extends Service {
 	private static File file;
 	private static WeakReference<Context> ctxt;
 	private static WeakReference<LogService> self;
-	private static HandlerThread _printthread;
-	private static Handler _printhandler;
+	private static ThreadHandler _printhandler;
 
 	/*
 	 * Handler constants
@@ -114,7 +111,7 @@ public class LogService extends Service {
 
 	private void addStackTrace(final Context context) {
 		if (hasStackTrace(context)) {
-			_printhandler.post(new LogWriterRunnable(getStackTrace(context)) {
+			_printhandler.get().post(new LogWriterRunnable(getStackTrace(context)) {
 			});
 			context.deleteFile(DefaultExceptionHandler.EXCEPTIONS_FILENAME);
 		}
@@ -295,10 +292,7 @@ public class LogService extends Service {
 		/*
 		 * Set up handlerthread
 		 */
-		_printthread = new HandlerThread(getString(R.string.logwriterthread));
-		_printthread.start();
-		Looper loop = _printthread.getLooper();
-		_printhandler = new Handler(loop);
+		_printhandler = new ThreadHandler(getString(R.string.logwriterthread));
 	}
 
 	public boolean processCommands(final Context context, final String rope) {
@@ -373,7 +367,7 @@ public class LogService extends Service {
 			/*
 			 * Write to syslog and our log file on sdcard
 			 */
-			_printhandler.post(new LogWriterRunnable(rope2) {
+			_printhandler.get().post(new LogWriterRunnable(rope2) {
 			});
 		}
 	}
@@ -432,7 +426,7 @@ public class LogService extends Service {
 	 */
 	@Override
 	public void onDestroy() {
-		_printthread.quit();
+		_printhandler.get().getLooper().quit();
 		/*
 		 * Close out the buffered writer and handler
 		 */

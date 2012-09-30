@@ -222,5 +222,7 @@
     <string name="network_check_blocked">Network Check Blocked</string>
     <string name="netcheckthread">NetCheckThread</string>
     <string name="logwriterthread">LogWriterThread</string>
+    <string name="httpcheckthread">HttpCheckThread</string>
+    <string name="icmpcheckthread">IcmpCheckThread</string>
 
 </resources>

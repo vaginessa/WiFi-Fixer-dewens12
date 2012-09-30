@@ -32,7 +32,7 @@ import android.os.Message;
 public class StatusDispatcher {
 	public static StatusMessage m;
 	public static final String REFRESH_INTENT = "org.wahtod.wififixer.STATUS_REFRESH";
-	private static final int WIDGET_REFRESH_DELAY = 30000;
+	private static final int WIDGET_REFRESH_DELAY = 20000;
 	private static final int WIDGET_REFRESH = 115;
 	private static final int REFRESH = 1233;
 	public static final String ACTION_WIDGET_NOTIFICATION = "org.wahtod.wififixer.WNOTIF";

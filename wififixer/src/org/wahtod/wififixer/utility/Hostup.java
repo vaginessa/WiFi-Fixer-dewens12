@@ -22,13 +22,7 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -44,6 +38,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.SyncBasicHttpContext;
 import org.wahtod.wififixer.R;
 
 import android.content.Context;
@@ -72,8 +67,9 @@ public class Hostup {
 	protected volatile boolean finished;
 	protected volatile StopWatch timer;
 	protected volatile DefaultHttpClient httpclient;
-	private ExecutorService _executor = Executors
-			.newCachedThreadPool();
+	private ThreadHandler httpHandler;
+	private ThreadHandler icmpHandler;
+	private BasicHttpContext httpctxt;
 
 	@SuppressWarnings("unused")
 	private Hostup() {
@@ -83,15 +79,16 @@ public class Hostup {
 		timer = new StopWatch();
 		context = new WeakReference<Context>(c);
 		prepareHttpClient();
+		httpHandler = new ThreadHandler(c.getString(R.string.httpcheckthread));
+		icmpHandler = new ThreadHandler(c.getString(R.string.icmpcheckthread));
 	}
 
 	/*
 	 * http header check thread
 	 */
-	@SuppressWarnings("rawtypes")
-	private class GetHeaders implements Callable {
+	private class GetHeaders implements Runnable {
 		@Override
-		public Object call() throws Exception {
+		public void run() {
 			boolean c = false;
 			try {
 				c = getHttpHeaders(context.get());
@@ -111,18 +108,16 @@ public class Hostup {
 				r.append(context.get().getString(R.string.http_ok));
 			else
 				r.append(context.get().getString(R.string.http_fail));
-			finish(c, r);
-			return null;
+			complete(c, r);
 		}
 	};
 
 	/*
 	 * icmp check thread
 	 */
-	@SuppressWarnings("rawtypes")
-	private class GetICMP implements Callable {
+	private class GetICMP implements Runnable {
 		@Override
-		public Object call() throws Exception {
+		public void run() {
 			boolean up = icmpHostup(context.get());
 
 			StringBuilder r = new StringBuilder(target);
@@ -130,13 +125,11 @@ public class Hostup {
 				r.append(context.get().getString(R.string.icmp_ok));
 			else
 				r.append(context.get().getString(R.string.icmp_fail));
-			finish(up, r);
-			return null;
+			complete(up, r);
 		}
 	};
 
-	protected synchronized void finish(final boolean up,
-			final StringBuilder output) {
+	protected void complete(final boolean up, final StringBuilder output) {
 		if (!finished) {
 			timer.stop();
 			response.state = up;
@@ -146,11 +139,13 @@ public class Hostup {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public final HostMessage getHostup(final int timeout, Context ctxt,
-			final String router) {
-		response = new HostMessage();
-		self = new WeakReference<Thread>(Thread.currentThread());
+	public final synchronized HostMessage getHostup(final int timeout,
+			Context ctxt, final String router) {
+		if (response == null)
+			response = new HostMessage();
+		if (self == null)
+			self = new WeakReference<Thread>(Thread.currentThread());
+		;
 		/*
 		 * If null, use H_TARGET else construct URL from router string
 		 */
@@ -165,12 +160,11 @@ public class Hostup {
 		 */
 		timer.start();
 		finished = false;
-		List<Callable<Object>> torun = new ArrayList<Callable<Object>>();
 		if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID))
-			torun.add(new GetICMP());
-		torun.add(new GetHeaders());
+			icmpHandler.get().post(new GetICMP());
+		httpHandler.get().post(new GetHeaders());
 		try {
-			_executor.invokeAll(torun, reachable, TimeUnit.MILLISECONDS);
+			Thread.sleep(reachable);
 		} catch (InterruptedException e) {
 			/*
 			 * We have a response
@@ -210,7 +204,7 @@ public class Hostup {
 		/*
 		 * Create context for this thread
 		 */
-		BasicHttpContext httpctxt = new BasicHttpContext();
+		SyncBasicHttpContext syncHttpCtxt = new SyncBasicHttpContext(httpctxt);
 		/*
 		 * get URI
 		 */
@@ -231,7 +225,8 @@ public class Hostup {
 		/*
 		 * Get response
 		 */
-		HttpResponse hr = httpclient.execute(new HttpHead(headURI), httpctxt);
+		HttpResponse hr = httpclient.execute(new HttpHead(headURI),
+				syncHttpCtxt);
 		status = hr.getStatusLine().getStatusCode();
 		if (status == HttpURLConnection.HTTP_OK)
 			return true;
@@ -243,6 +238,7 @@ public class Hostup {
 		/*
 		 * Prepare httpclient
 		 */
+		httpctxt = new BasicHttpContext();
 		SchemeRegistry scheme = new SchemeRegistry();
 		scheme.register(new Scheme(HTTPSCHEME, PlainSocketFactory
 				.getSocketFactory(), 80));
@@ -258,7 +254,8 @@ public class Hostup {
 	}
 
 	public void finish() {
-		_executor.shutdownNow();
+		icmpHandler.get().getLooper().quit();
+		httpHandler.get().getLooper().quit();
 	}
 
 }

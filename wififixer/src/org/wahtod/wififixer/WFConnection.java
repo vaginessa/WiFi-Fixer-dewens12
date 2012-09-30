@@ -39,6 +39,7 @@ import org.wahtod.wififixer.utility.StatusDispatcher;
 import org.wahtod.wififixer.utility.StatusMessage;
 import org.wahtod.wififixer.utility.StopWatch;
 import org.wahtod.wififixer.utility.StringUtil;
+import org.wahtod.wififixer.utility.ThreadHandler;
 import org.wahtod.wififixer.utility.WFConfig;
 import org.wahtod.wififixer.utility.WakeLock;
 import org.wahtod.wififixer.utility.WifiLock;
@@ -59,8 +60,6 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
 import android.os.Message;
 import android.text.format.Formatter;
 
@@ -174,8 +173,7 @@ public class WFConnection extends Object implements
 	private static final long CWDOG_DELAY = 10000;
 
 	private static Handler handler = new Handler();
-	private volatile static Handler _nethandler;
-	private volatile static HandlerThread _netthread;
+	private volatile static ThreadHandler _nethandler;
 	private static volatile boolean isUp;
 
 	protected static Runnable NetCheckRunnable = new Runnable() {
@@ -629,16 +627,10 @@ public class WFConnection extends Object implements
 		 * Instantiate network checker
 		 */
 		hostup = new Hostup(context);
-		prepareNetCheck(context);
+		_nethandler=new ThreadHandler(context.getString(R.string.netcheckthread));
 	}
 
-	private static void prepareNetCheck(final Context context) {
-		_netthread = new HandlerThread(
-				context.getString(R.string.netcheckthread));
-		_netthread.start();
-		Looper loop = _netthread.getLooper();
-		_nethandler = new Handler(loop);
-	}
+	
 
 	private void clearHandler() {
 		handler.removeCallbacksAndMessages(null);
@@ -1279,7 +1271,7 @@ public class WFConnection extends Object implements
 			/*
 			 * Starts network check AsyncTask
 			 */
-			_nethandler.post(NetCheckRunnable);
+			_nethandler.get().post(NetCheckRunnable);
 		} else {
 			/*
 			 * Make sure scan happens in a reasonable amount of time
@@ -1552,7 +1544,7 @@ public class WFConnection extends Object implements
 		icmpCache(ctxt.get());
 		_connected = true;
 		StatusMessage.send(ctxt.get(), new StatusMessage().setSSID(getSSID()));
-		_statusdispatcher.refreshWidget(null);
+		_statusdispatcher.refreshWidget(new StatusMessage().setSSID(getSSID()));
 		/*
 		 * Make sure connectee is null
 		 */
@@ -1635,7 +1627,7 @@ public class WFConnection extends Object implements
 		 */
 		if (PrefUtil.getFlag(Pref.STATENOT_KEY) && statNotifCheck())
 			setStatNotif(true);
-		_statusdispatcher.refreshWidget(null);
+		_statusdispatcher.refreshWidget(new StatusMessage().setStatus(ctxt.get().getString(R.string.ok_button)));
 	}
 
 	public void onScreenStateChanged(boolean state) {
@@ -1650,7 +1642,7 @@ public class WFConnection extends Object implements
 		wifistate = false;
 		clearHandler();
 		clearConnectedStatus(ctxt.get().getString(R.string.wifi_is_disabled));
-		_statusdispatcher.refreshWidget(null);
+		_statusdispatcher.refreshWidget(new StatusMessage().setStatus(ctxt.get().getString(R.string.wifi_is_disabled)));
 		if (PrefUtil.getFlag(Pref.LOG_KEY))
 			LogService.setLogTS(ctxt.get(), false, 0);
 	}
