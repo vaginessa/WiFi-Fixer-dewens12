@@ -172,8 +172,8 @@ public class WFConnection extends Object implements
 	private static final int CONNECTING_THRESHOLD = 3;
 	private static final long CWDOG_DELAY = 10000;
 
-	private static Handler handler = new Handler();
-	private volatile static ThreadHandler _nethandler;
+	private static volatile Handler handler = new Handler();
+	private static volatile  ThreadHandler _nethandler;
 	private static volatile boolean isUp;
 
 	protected static Runnable NetCheckRunnable = new Runnable() {
