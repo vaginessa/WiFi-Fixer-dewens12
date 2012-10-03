@@ -26,7 +26,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,27 +33,22 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ToggleButton;
 
-public class ServiceFragment extends Fragment {
+public class ServiceFragment extends Fragment implements OnCheckedChangeListener {
 	public static final String REFRESH_ACTION = "org.wahtod.wififixer.ui.ServiceFragment.REFRESH";
 	private ToggleButton servicebutton;
 	private ToggleButton wifibutton;
 	private static WeakReference<ServiceFragment> self;
-
 	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			if (self.get().getActivity() == null)
 				return;
-			int state = -1;
 			if (message.getData().isEmpty())
-				self.get().setIcon();
-			else
-				state = message.getData().getInt(WifiManager.EXTRA_WIFI_STATE);
-			if (state == WifiManager.WIFI_STATE_DISABLED
-					|| state == WifiManager.WIFI_STATE_ENABLED)
-				self.get().setIcon();
+				self.get().setIcons();
 		}
 	};
 	private BroadcastReceiver wifireceiver = new BroadcastReceiver() {
@@ -91,9 +85,7 @@ public class ServiceFragment extends Fragment {
 	}
 
 	private void registerReceiver() {
-		IntentFilter filter = new IntentFilter(
-				WifiManager.WIFI_STATE_CHANGED_ACTION);
-		filter.addAction(REFRESH_ACTION);
+		IntentFilter filter = new IntentFilter(REFRESH_ACTION);
 		getContext().registerReceiver(wifireceiver, filter);
 	}
 
@@ -101,7 +93,7 @@ public class ServiceFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		registerReceiver();
-		setIcon();
+		setIcons();
 	}
 
 	@Override
@@ -109,7 +101,9 @@ public class ServiceFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.service, null);
 		servicebutton = (ToggleButton) v.findViewById(R.id.ToggleButton1);
+		servicebutton.setOnCheckedChangeListener(this);
 		wifibutton = (ToggleButton) v.findViewById(R.id.ToggleButton2);
+		wifibutton.setOnCheckedChangeListener(this);
 		return v;
 	}
 
@@ -117,22 +111,53 @@ public class ServiceFragment extends Fragment {
 		return getActivity();
 	}
 
-	private void setIcon() {
+	private void setIcons() {
 		/*
-		 * Draw icon
+		 * Draw icons
 		 */
+		this.drawServiceToggle();
+		this.drawWifiToggle();
+	}
 
+	public void drawServiceToggle() {
 		if (PrefUtil.readBoolean(getContext(), Pref.DISABLE_KEY.key())) {
 			servicebutton.setChecked(false);
 		} else {
 			servicebutton.setChecked(true);
 		}
+	}
 
+	public void drawWifiToggle() {
 		if (!PrefUtil.getWifiManager(getContext()).isWifiEnabled()) {
 			wifibutton.setChecked(false);
 		} else {
 			wifibutton.setChecked(true);
 		}
+	}
+
+	private class ToggleWatchDog implements Runnable {
+		boolean button;
+
+		@Override
+		public void run() {
+			if (button)
+				self.get().drawWifiToggle();
+			else
+				self.get().drawServiceToggle();
+
+		}
+
+		public ToggleWatchDog(boolean b) {
+			button = b;
+		}
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		if (buttonView.getText().equals(wifibutton.getText()))
+			handler.postDelayed(new ToggleWatchDog(true), 3000);
+		else
+			handler.postDelayed(new ToggleWatchDog(false), 3000);
 
 	}
 

@@ -1776,7 +1776,7 @@ public class WFConnection extends Object implements
 			 * Using alarm here because some devices seem to not fire handlers in deep sleep.
 			 */
 			clearMessage(rMain);
-			ServiceAlarm.addAlarm(ctxt.get(), SHORTWAIT, true, SLEEPWAIT, p);
+			ServiceAlarm.addAlarm(ctxt.get().getApplicationContext(), SHORTWAIT, true, SLEEPWAIT, p);
 		} else {
 			/*
 			 * Screen is on, remove any posts
