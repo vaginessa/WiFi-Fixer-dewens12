@@ -118,7 +118,7 @@ public class WFConnection extends Object implements
 	// ms for main loop sleep
 	private final static int LOOPWAIT = 20000;
 	// ms for sleep loop check
-	private final static long SLEEPWAIT = 240000;
+	private final static long SLEEPWAIT = 120000;
 	private static final int SHORTWAIT = 1500;
 	// just long enough to avoid sleep bug with handler posts
 	private static final int REALLYSHORTWAIT = 500;
@@ -173,7 +173,7 @@ public class WFConnection extends Object implements
 	private static final long CWDOG_DELAY = 10000;
 
 	private static volatile Handler handler = new Handler();
-	private static volatile  ThreadHandler _nethandler;
+	private static volatile ThreadHandler _nethandler;
 	private static volatile boolean isUp;
 
 	protected static Runnable NetCheckRunnable = new Runnable() {
@@ -627,10 +627,9 @@ public class WFConnection extends Object implements
 		 * Instantiate network checker
 		 */
 		hostup = new Hostup(context);
-		_nethandler=new ThreadHandler(context.getString(R.string.netcheckthread));
+		_nethandler = new ThreadHandler(
+				context.getString(R.string.netcheckthread));
 	}
-
-	
 
 	private void clearHandler() {
 		handler.removeCallbacksAndMessages(null);
@@ -1175,13 +1174,14 @@ public class WFConnection extends Object implements
 		 */
 		HostMessage out = hostup.getHostup(REACHABLE, context,
 				self.get().accesspointIP);
-		
-		if (!out.state)
+		log(context, out.status.toString());
+		if (!out.state) {
 			/*
 			 * Try #2
 			 */
 			out = hostup.getHostup(REACHABLE, context, null);
-		log(context, out.status.toString());
+			log(context, out.status.toString());
+		}
 		if (!out.state)
 			return false;
 		else
@@ -1643,7 +1643,8 @@ public class WFConnection extends Object implements
 		wifistate = false;
 		clearHandler();
 		clearConnectedStatus(ctxt.get().getString(R.string.wifi_is_disabled));
-		_statusdispatcher.refreshWidget(new StatusMessage().setStatus(ctxt.get().getString(R.string.wifi_is_disabled)));
+		_statusdispatcher.refreshWidget(new StatusMessage().setStatus(ctxt
+				.get().getString(R.string.wifi_is_disabled)));
 		if (PrefUtil.getFlag(Pref.LOG_KEY))
 			LogService.setLogTS(ctxt.get(), false, 0);
 	}
@@ -1772,11 +1773,12 @@ public class WFConnection extends Object implements
 				PendingIntent.FLAG_CANCEL_CURRENT);
 		if (state && getisWifiEnabled(ctxt.get(), false)) {
 			/*
-			 * Start sleep check
-			 * Using alarm here because some devices seem to not fire handlers in deep sleep.
+			 * Start sleep check Using alarm here because some devices seem to
+			 * not fire handlers in deep sleep.
 			 */
 			clearMessage(rMain);
-			ServiceAlarm.addAlarm(ctxt.get().getApplicationContext(), SHORTWAIT, true, SLEEPWAIT, p);
+			ServiceAlarm.addAlarm(ctxt.get().getApplicationContext(),
+					SHORTWAIT, true, SLEEPWAIT, p);
 		} else {
 			/*
 			 * Screen is on, remove any posts

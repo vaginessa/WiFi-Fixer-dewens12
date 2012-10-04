@@ -223,5 +223,7 @@
     <string name="logwriterthread">LogWriterThread</string>
     <string name="httpcheckthread">HttpSensorThread</string>
     <string name="icmpcheckthread">IcmpSensorThread</string>
+    <string name="malformed_url_exception">Malformed URL Exception</string>
+    <string name="i_o_exception">I/O Exception</string>
 
 </resources>

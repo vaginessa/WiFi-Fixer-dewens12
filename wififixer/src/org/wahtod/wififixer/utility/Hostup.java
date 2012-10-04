@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
@@ -29,7 +30,7 @@ import android.content.Context;
 import android.os.Build;
 
 public class Hostup {
-	private static final int HTTP_TIMEOUT = 8000;
+	private static final int HTTP_TIMEOUT = 4000;
 	/*
 	 * getHostUp method: Executes 2 threads, icmp check and http check first
 	 * thread to return state "wins"
@@ -72,26 +73,8 @@ public class Hostup {
 	private class GetHeaders implements Runnable {
 		@Override
 		public void run() {
-			boolean c = false;
-			try {
-				c = getHttpHeaders(context.get());
-			} catch (IOException e) {
-				/*
-				 * fail, false
-				 */
-			} catch (URISyntaxException e) {
-				/*
-				 * fail, false
-				 */
-			}
-			StringBuilder r = new StringBuilder(context.get().getString(
-					R.string.http));
-			r.append(target);
-			if (c)
-				r.append(context.get().getString(R.string.http_ok));
-			else
-				r.append(context.get().getString(R.string.http_fail));
-			complete(c, r);
+			HostMessage response = getHttpHeaders(context.get());
+			complete(response.state, response.status);
 		}
 	};
 
@@ -182,8 +165,7 @@ public class Hostup {
 	/*
 	 * Performs HTTP HEAD request and returns boolean success or failure
 	 */
-	private boolean getHttpHeaders(final Context context) throws IOException,
-			URISyntaxException {
+	private HostMessage getHttpHeaders(final Context context) {
 		/*
 		 * get URI
 		 */
@@ -199,23 +181,35 @@ public class Hostup {
 				e.printStackTrace();
 			}
 		}
-		int status;
+		int code = -1;
+		boolean state = false;
+		StringBuilder info = new StringBuilder();
 		/*
 		 * Get response
 		 */
-		HttpURLConnection con = (HttpURLConnection) headURI.toURL()
-				.openConnection();
-		con.setReadTimeout(HTTP_TIMEOUT);
+		HttpURLConnection con;
 		try {
-			status = con.getResponseCode();
-		}
-		finally {
+			con = (HttpURLConnection) headURI.toURL().openConnection();
+			con.setReadTimeout(HTTP_TIMEOUT);
+			code = con.getResponseCode();
 			con.disconnect();
+
+		} catch (MalformedURLException e) {
+			info.append(context.getString(R.string.malformed_url_exception));
+		} catch (IOException e) {
+			info.append(context.getString(R.string.i_o_exception));
 		}
-		if (status == HttpURLConnection.HTTP_OK || status == HttpURLConnection.HTTP_UNAUTHORIZED)
-			return true;
+
+		if (code == HttpURLConnection.HTTP_OK
+				|| code == HttpURLConnection.HTTP_UNAUTHORIZED)
+			state = true;
+		info.append(headURI.toASCIIString());
+		if (state)
+			info.append(context.getString(R.string.http_ok));
 		else
-			return false;
+			info.append(context.getString(R.string.http_fail));
+
+		return new HostMessage(info.toString(), state);
 	}
 
 	@SuppressWarnings("deprecation")

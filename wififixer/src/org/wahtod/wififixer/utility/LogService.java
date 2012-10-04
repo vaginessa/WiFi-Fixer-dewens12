@@ -71,7 +71,7 @@ public class LogService extends Service {
 
 	// Log Timestamp
 	private static final long TS_WAIT_SCREENON = 20000;
-	private static final long TS_WAIT_SCREENOFF = 240000;
+	private static final long TS_WAIT_SCREENOFF = 120000;
 
 	// Write buffer constants
 	private static final int WRITE_BUFFER_SIZE = 8192;
