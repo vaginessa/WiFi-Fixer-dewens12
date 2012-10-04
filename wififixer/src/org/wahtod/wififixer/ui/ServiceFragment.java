@@ -128,11 +128,7 @@ public class ServiceFragment extends Fragment implements OnCheckedChangeListener
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		if (buttonView.getText().equals(wifibutton.getText()))
 			handler.postDelayed(DrawIcons, 3000);
-		else
-			handler.postDelayed(DrawIcons, 3000);
-
 	}
 
 }
