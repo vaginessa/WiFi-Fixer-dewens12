@@ -23,25 +23,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.concurrent.RejectedExecutionException;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
-import org.apache.http.client.methods.HttpHead;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.SyncBasicHttpContext;
 import org.wahtod.wififixer.R;
 
 import android.content.Context;
+import android.os.Build;
 
 public class Hostup {
 	private static final int HTTP_TIMEOUT = 8000;
@@ -66,10 +51,8 @@ public class Hostup {
 	protected volatile WeakReference<Thread> self;
 	protected volatile boolean finished;
 	protected volatile StopWatch timer;
-	protected volatile DefaultHttpClient httpclient;
 	private ThreadHandler httpHandler;
 	private ThreadHandler icmpHandler;
-	private BasicHttpContext httpctxt;
 
 	@SuppressWarnings("unused")
 	private Hostup() {
@@ -78,9 +61,9 @@ public class Hostup {
 	public Hostup(final Context c) {
 		timer = new StopWatch();
 		context = new WeakReference<Context>(c);
-		prepareHttpClient();
 		httpHandler = new ThreadHandler(c.getString(R.string.httpcheckthread));
 		icmpHandler = new ThreadHandler(c.getString(R.string.icmpcheckthread));
+		disableConnectionReuse();
 	}
 
 	/*
@@ -202,10 +185,6 @@ public class Hostup {
 	private boolean getHttpHeaders(final Context context) throws IOException,
 			URISyntaxException {
 		/*
-		 * Create context for this thread
-		 */
-		SyncBasicHttpContext syncHttpCtxt = new SyncBasicHttpContext(httpctxt);
-		/*
 		 * get URI
 		 */
 		try {
@@ -221,36 +200,30 @@ public class Hostup {
 			}
 		}
 		int status;
-
 		/*
 		 * Get response
 		 */
-		HttpResponse hr = httpclient.execute(new HttpHead(headURI),
-				syncHttpCtxt);
-		status = hr.getStatusLine().getStatusCode();
-		if (status == HttpURLConnection.HTTP_OK)
+		HttpURLConnection con = (HttpURLConnection) headURI.toURL()
+				.openConnection();
+		con.setReadTimeout(HTTP_TIMEOUT);
+		try {
+			status = con.getResponseCode();
+		}
+		finally {
+			con.disconnect();
+		}
+		if (status == HttpURLConnection.HTTP_OK || status == HttpURLConnection.HTTP_UNAUTHORIZED)
 			return true;
 		else
 			return false;
 	}
 
-	private void prepareHttpClient() {
-		/*
-		 * Prepare httpclient
-		 */
-		httpctxt = new BasicHttpContext();
-		SchemeRegistry scheme = new SchemeRegistry();
-		scheme.register(new Scheme(HTTPSCHEME, PlainSocketFactory
-				.getSocketFactory(), 80));
-		HttpParams httpparams = new BasicHttpParams();
-		HttpProtocolParams.setVersion(httpparams, HttpVersion.HTTP_1_1);
-		HttpConnectionParams.setConnectionTimeout(httpparams, HTTP_TIMEOUT);
-		HttpConnectionParams.setSoTimeout(httpparams, HTTP_TIMEOUT);
-		HttpConnectionParams.setLinger(httpparams, 1);
-		HttpConnectionParams.setStaleCheckingEnabled(httpparams, true);
-		ClientConnectionManager cm = new ThreadSafeClientConnManager(
-				httpparams, scheme);
-		httpclient = new DefaultHttpClient(cm, httpparams);
+	@SuppressWarnings("deprecation")
+	private void disableConnectionReuse() {
+		// Work around pre-Froyo bugs in HTTP connection reuse.
+		if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.FROYO) {
+			System.setProperty("http.keepAlive", "false");
+		}
 	}
 
 	public void finish() {
