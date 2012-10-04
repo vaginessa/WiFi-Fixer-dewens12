@@ -17,7 +17,6 @@
 package org.wahtod.wififixer.ui;
 
 import java.lang.ref.WeakReference;
-
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
@@ -114,50 +113,25 @@ public class ServiceFragment extends Fragment implements OnCheckedChangeListener
 	private void setIcons() {
 		/*
 		 * Draw icons
-		 */
-		this.drawServiceToggle();
-		this.drawWifiToggle();
+		*/
+		handler.post(DrawIcons);
 	}
 
-	public void drawServiceToggle() {
-		if (PrefUtil.readBoolean(getContext(), Pref.DISABLE_KEY.key())) {
-			servicebutton.setChecked(false);
-		} else {
-			servicebutton.setChecked(true);
-		}
-	}
-
-	public void drawWifiToggle() {
-		if (!PrefUtil.getWifiManager(getContext()).isWifiEnabled()) {
-			wifibutton.setChecked(false);
-		} else {
-			wifibutton.setChecked(true);
-		}
-	}
-
-	private class ToggleWatchDog implements Runnable {
-		boolean button;
+	private Runnable DrawIcons = new Runnable() {
 
 		@Override
 		public void run() {
-			if (button)
-				self.get().drawWifiToggle();
-			else
-				self.get().drawServiceToggle();
-
+			wifibutton.setChecked(PrefUtil.getWifiManager(getContext()).isWifiEnabled());
+			servicebutton.setChecked(!PrefUtil.readBoolean(getContext(), Pref.DISABLE_KEY.key()));
 		}
-
-		public ToggleWatchDog(boolean b) {
-			button = b;
-		}
-	}
+	};
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		if (buttonView.getText().equals(wifibutton.getText()))
-			handler.postDelayed(new ToggleWatchDog(true), 3000);
+			handler.postDelayed(DrawIcons, 3000);
 		else
-			handler.postDelayed(new ToggleWatchDog(false), 3000);
+			handler.postDelayed(DrawIcons, 3000);
 
 	}
 
