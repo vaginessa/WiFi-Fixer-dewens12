@@ -27,8 +27,12 @@ import org.wahtod.wififixer.utility.StatusDispatcher;
 import org.wahtod.wififixer.utility.StatusMessage;
 import org.wahtod.wififixer.utility.ScreenStateDetector.OnScreenStateChangedListener;
 import org.wahtod.wififixer.utility.ServiceAlarm;
+import org.wahtod.wififixer.widget.FixerWidget;
+import org.wahtod.wififixer.widget.FixerWidgetSmall;
 
 import android.app.Service;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -164,6 +168,7 @@ public class WifiFixerService extends Service implements
 		if (logging)
 			LogService.log(this, LogService.getLogTag(this),
 					(getString(R.string.oncreate)));
+		findAppWidgets();
 	}
 
 	@Override
@@ -367,6 +372,17 @@ public class WifiFixerService extends Service implements
 			screenstateHandler.unregister(this);
 			wifi.cleanup();
 			registered = false;
+		}
+	}
+
+	private void findAppWidgets() {
+		ComponentName cm = new ComponentName(this, FixerWidget.class);
+		ComponentName cm2 = new ComponentName(this, FixerWidgetSmall.class);
+		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+		if (appWidgetManager.getAppWidgetIds(cm).length > 0
+				|| appWidgetManager.getAppWidgetIds(cm2).length > 0){
+			PrefUtil.writeBoolean(this, Pref.HASWIDGET_KEY.key(), true);
+			PrefUtil.notifyPrefChange(this, Pref.HASWIDGET_KEY.key(), true);
 		}
 	}
 

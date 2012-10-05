@@ -75,9 +75,11 @@ public class TutorialFragmentActivity extends AppFragmentActivity {
 				handler.sendMessageDelayed(m1, 0);
 				m1 = handler.obtainMessage(TOAST, R.string.tutorial_toast_2, 0);
 				handler.sendMessageDelayed(m1, TOAST_DELAY);
-				m1 = handler.obtainMessage(TOAST, R.string.tutorial_toast_3, 0);
+				m1 = handler.obtainMessage(TOAST, R.string.tutorial_toast_9, 0);
 				handler.sendMessageDelayed(m1, TOAST_DELAY * 2);
-				handler.sendEmptyMessageDelayed(PART2, TOAST_DELAY * 3);
+				m1 = handler.obtainMessage(TOAST, R.string.tutorial_toast_3, 0);
+				handler.sendMessageDelayed(m1, TOAST_DELAY * 3);
+				handler.sendEmptyMessageDelayed(PART2, TOAST_DELAY * 4);
 				break;
 
 			case PART2:
@@ -92,9 +94,11 @@ public class TutorialFragmentActivity extends AppFragmentActivity {
 				handler.sendMessageDelayed(m2, 0);
 				m2 = handler.obtainMessage(TOAST, R.string.tutorial_toast_5, 0);
 				handler.sendMessageDelayed(m2, TOAST_DELAY);
-				m2 = handler.obtainMessage(TOAST, R.string.tutorial_toast_3, 0);
+				m2 = handler.obtainMessage(TOAST, R.string.tutorial_toast_9, 0);
 				handler.sendMessageDelayed(m2, TOAST_DELAY * 2);
-				handler.sendEmptyMessageDelayed(PART3, TOAST_DELAY * 3);
+				m2 = handler.obtainMessage(TOAST, R.string.tutorial_toast_3, 0);
+				handler.sendMessageDelayed(m2, TOAST_DELAY * 3);
+				handler.sendEmptyMessageDelayed(PART3, TOAST_DELAY * 4);
 				break;
 
 			case PART3:

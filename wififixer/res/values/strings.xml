@@ -179,6 +179,7 @@
     <string name="tutorial_toast_7">Status shows you what Wifi is doing</string>
     <string name="tutorial_toast_8">That\'s it!\n\nIf you want to run the tutorial
 		again, go to preferences.</string>
+	<string name="tutorial_toast_9">You can long-press the items in this list for more options</string>
     <string name="phone_ui_tutorial">Phone UI Tutorial</string>
     <string name="phone_tutorial_q">Please take a moment for a quick UI tutorial</string>
     <string name="ms">ms</string>
