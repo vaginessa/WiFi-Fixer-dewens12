@@ -389,7 +389,7 @@ public class PrefUtil extends Object {
 		ContentResolver cr = context.getContentResolver();
 		android.provider.Settings.System.putInt(cr,
 				android.provider.Settings.System.WIFI_SLEEP_POLICY, policy);
-
+		writeString(context,PrefConstants.SLPOLICY_KEY,String.valueOf(policy));
 	}
 
 	public static WifiManager getWifiManager(final Context context) {

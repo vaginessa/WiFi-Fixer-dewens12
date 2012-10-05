@@ -38,6 +38,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 
 public class WifiFixerService extends Service implements
 		OnScreenStateChangedListener {
@@ -325,7 +326,7 @@ public class WifiFixerService extends Service implements
 				 */
 				if (!readBoolean(context, PrefConstants.SLPOLICY_DEFAULT)) {
 					writeBoolean(context, PrefConstants.SLPOLICY_DEFAULT, true);
-					setPolicy(context, 2);
+					setPolicy(context, Settings.System.WIFI_SLEEP_POLICY_NEVER);
 				}
 			}
 
