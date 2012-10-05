@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
+import android.preference.CheckBoxPreference;
 
 public class PrefActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
@@ -105,7 +106,8 @@ public class PrefActivity extends PreferenceActivity implements
 		} else if (key.contains(PrefConstants.PERF_KEY)) {
 
 			int pVal = Integer.valueOf(prefs.getString(key, "2"));
-
+			CheckBoxPreference wflock = (CheckBoxPreference) p.findPreference(Pref.WIFILOCK_KEY.key());
+			CheckBoxPreference screen = (CheckBoxPreference) p.findPreference(Pref.SCREEN_KEY.key());
 			switch (pVal) {
 			case 1:
 				PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK_KEY.key(),
@@ -116,6 +118,8 @@ public class PrefActivity extends PreferenceActivity implements
 						true);
 				PrefUtil.notifyPrefChange(p.getContext(),
 						Pref.SCREEN_KEY.key(), true);
+				wflock.setChecked(true);
+				screen.setChecked(true);
 				/*
 				 * Set Wifi Sleep policy to Never
 				 */
@@ -132,6 +136,8 @@ public class PrefActivity extends PreferenceActivity implements
 						true);
 				PrefUtil.notifyPrefChange(p.getContext(),
 						Pref.SCREEN_KEY.key(), true);
+				wflock.setChecked(false);
+				screen.setChecked(true);
 				break;
 
 			case 3:
@@ -145,10 +151,10 @@ public class PrefActivity extends PreferenceActivity implements
 						Pref.SCREEN_KEY.key(), false);
 				PrefUtil.setPolicy(p.getContext(),
 						Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+				wflock.setChecked(false);
+				screen.setChecked(false);
 				break;
 			}
-			p.getContext().startActivity(
-					new Intent(p.getContext(), WifiFixerActivity.class));
 
 		} else if (key.contains(PrefConstants.SLPOLICY_KEY)) {
 			int wfsleep = Integer.valueOf(PrefUtil.readString(p.getContext(),
