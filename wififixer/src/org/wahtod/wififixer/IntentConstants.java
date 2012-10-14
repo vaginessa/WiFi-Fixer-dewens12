@@ -26,6 +26,11 @@ public class IntentConstants {
 	 * Causes Wifi Fixer to turn Wifi off.
 	 */
 	public static final String ACTION_WIFI_OFF = "org.wahtod.wififixer.ACTION_WIFI_OFF";
+	
+	/*
+	 * Causes Wifi Fixer to change wifi state from on to off or off to on.
+	 */
+	public static final String ACTION_WIFI_CHANGE = "org.wahtod.wififixer.ACTION_WIFI_CHANGE";
 
 	/*
 	 * Causes Wifi Fixer to toggle wifi off, then on, i.e. reset wifi.

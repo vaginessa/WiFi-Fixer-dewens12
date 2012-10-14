@@ -151,6 +151,9 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 			ctxt.get().sendBroadcast(new Intent(WidgetReceiver.WIFI_OFF));
 		else if (action.equals(IntentConstants.ACTION_WIFI_TOGGLE))
 			ctxt.get().sendBroadcast(new Intent(WidgetReceiver.TOGGLE_WIFI));
+		else if (action.equals(IntentConstants.ACTION_WIFI_CHANGE))
+			PrefUtil.getWifiManager(ctxt.get()).setWifiEnabled(
+					!PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled());
 	}
 
 	private static void handleAuthAction(final Bundle data) {

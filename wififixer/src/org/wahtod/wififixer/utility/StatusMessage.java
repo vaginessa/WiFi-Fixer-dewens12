@@ -37,6 +37,15 @@ public class StatusMessage {
 		this.setShow(sh);
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder out = new StringBuilder(getSSID());
+		out.append(getStatus());
+		out.append(getSignal());
+		out.append(getShow());
+		return out.toString();
+	}
+
 	public StatusMessage() {
 		status = new Bundle();
 	}

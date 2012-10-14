@@ -39,18 +39,17 @@ public class PrefActivity extends PreferenceActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		setTheme(android.R.style.Theme_Black);
 		super.onCreate(savedInstanceState);
-		PrefUtil.setPolicyfromSystem(this);
 		addPreferencesFromResource(R.xml.preferences);
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onResume() {
 		super.onResume();
+		PrefUtil.setPolicyfromSystem(this);
 		// Set up a listener for when key changes
 		getPreferenceScreen().getSharedPreferences()
 				.registerOnSharedPreferenceChangeListener(this);
-		PrefUtil.setPolicyfromSystem(this);
 	}
 
 	@SuppressWarnings("deprecation")

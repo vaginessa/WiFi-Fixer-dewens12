@@ -44,8 +44,7 @@
                 <CheckBoxPreference
                     android:defaultValue="true"
                     android:key="StateNotif"
-                    android:summaryOn="@string/StateNotif_summary"
-                    android:summaryOff="@string/StateNotif_summary_off"
+                    android:summary="@string/StateNotif_summary"
                     android:title="@string/StateNotif_title" />
             </PreferenceCategory>
             <PreferenceCategory android:title="Repair Notifications" >

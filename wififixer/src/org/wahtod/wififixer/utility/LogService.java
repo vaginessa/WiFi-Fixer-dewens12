@@ -111,8 +111,9 @@ public class LogService extends Service {
 
 	private void addStackTrace(final Context context) {
 		if (hasStackTrace(context)) {
-			_printhandler.get().post(new LogWriterRunnable(getStackTrace(context)) {
-			});
+			_printhandler.get().post(
+					new LogWriterRunnable(getStackTrace(context)) {
+					});
 			context.deleteFile(DefaultExceptionHandler.EXCEPTIONS_FILENAME);
 		}
 	}

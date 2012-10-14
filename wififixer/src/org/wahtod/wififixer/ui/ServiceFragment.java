@@ -36,7 +36,8 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ToggleButton;
 
-public class ServiceFragment extends Fragment implements OnCheckedChangeListener {
+public class ServiceFragment extends Fragment implements
+		OnCheckedChangeListener {
 	private static final int _CHECK_CHANGED_POST_DELAY = 3000;
 	public static final String REFRESH_ACTION = "org.wahtod.wififixer.ui.ServiceFragment.REFRESH";
 	private ToggleButton servicebutton;
@@ -114,7 +115,7 @@ public class ServiceFragment extends Fragment implements OnCheckedChangeListener
 	private void setIcons() {
 		/*
 		 * Draw icons
-		*/
+		 */
 		handler.post(DrawIcons);
 	}
 
@@ -122,14 +123,16 @@ public class ServiceFragment extends Fragment implements OnCheckedChangeListener
 
 		@Override
 		public void run() {
-			wifibutton.setChecked(PrefUtil.getWifiManager(getContext()).isWifiEnabled());
-			servicebutton.setChecked(!PrefUtil.readBoolean(getContext(), Pref.DISABLE_KEY.key()));
+			wifibutton.setChecked(PrefUtil.getWifiManager(getContext())
+					.isWifiEnabled());
+			servicebutton.setChecked(!PrefUtil.readBoolean(getContext(),
+					Pref.DISABLE_KEY.key()));
 		}
 	};
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			handler.postDelayed(DrawIcons, _CHECK_CHANGED_POST_DELAY);
+		handler.postDelayed(DrawIcons, _CHECK_CHANGED_POST_DELAY);
 	}
 
 }

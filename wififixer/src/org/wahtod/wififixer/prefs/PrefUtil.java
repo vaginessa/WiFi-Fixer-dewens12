@@ -39,6 +39,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 
 public class PrefUtil extends Object {
@@ -55,14 +56,14 @@ public class PrefUtil extends Object {
 	public static final String VALUE_KEY = "VALUE_KEY";
 	private static final String INT_KEY = "INTKEY";
 	private static final String NETPREFIX = "n_";
-	
+
 	/*
 	 * Actions for handler message bundles
 	 */
 	public static final String INTENT_ACTION = "INTENT_ACTION";
 
 	/*
-	 * Fields
+	 * D:
 	 */
 	private static boolean[] keyVals;
 	private static WeakReference<Context> context;
@@ -107,8 +108,8 @@ public class PrefUtil extends Object {
 
 	public static SharedPreferences getSharedPreferences(final Context c) {
 		if (_prefs == null)
-		_prefs = PreferenceManager.getDefaultSharedPreferences(c
-				.getApplicationContext());
+			_prefs = PreferenceManager.getDefaultSharedPreferences(c
+					.getApplicationContext());
 		return _prefs;
 	}
 
@@ -248,10 +249,10 @@ public class PrefUtil extends Object {
 				.getSystemService(Context.WIFI_SERVICE))
 				.getConfiguredNetworks();
 		for (WifiConfiguration w : wifiConfigs) {
-			if (w.networkId == network)
+			if (w != null && w.networkId == network)
 				return w.SSID;
 		}
-		return null;
+		return context.getString(R.string.none);
 	}
 
 	public static WifiConfiguration getNetworkByNID(Context context,
@@ -375,10 +376,7 @@ public class PrefUtil extends Object {
 			PrefUtil.writeString(context, PrefConstants.SLPOLICY_KEY,
 					String.valueOf(wfsleep));
 		} catch (SettingNotFoundException e) {
-			/*
-			 * Don't need a catch, all clients are >= 1.5 per manifest market
-			 * restriction
-			 */
+			setPolicy(context,Settings.System.WIFI_SLEEP_POLICY_NEVER);
 		}
 	}
 
@@ -389,7 +387,7 @@ public class PrefUtil extends Object {
 		ContentResolver cr = context.getContentResolver();
 		android.provider.Settings.System.putInt(cr,
 				android.provider.Settings.System.WIFI_SLEEP_POLICY, policy);
-		writeString(context,PrefConstants.SLPOLICY_KEY,String.valueOf(policy));
+		writeString(context, PrefConstants.SLPOLICY_KEY, String.valueOf(policy));
 	}
 
 	public static WifiManager getWifiManager(final Context context) {

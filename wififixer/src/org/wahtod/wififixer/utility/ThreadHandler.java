@@ -26,7 +26,7 @@ public class ThreadHandler extends HandlerThread {
 	}
 
 	private Handler myHandler;
-	
+
 	private void prepareThread() {
 		this.start();
 		Looper loop = this.getLooper();

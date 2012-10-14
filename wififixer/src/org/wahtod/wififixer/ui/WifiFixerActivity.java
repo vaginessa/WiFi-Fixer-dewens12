@@ -255,7 +255,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		issueDialog.show();
 	}
 
-	@SuppressWarnings("deprecation")
 	public void showServiceAlert() {
 		final Context c;
 		c = this;
@@ -263,7 +262,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		alert.setTitle(getString(R.string.note));
 		alert.setIcon(R.drawable.icon);
 		alert.setMessage(getString(R.string.servicealert_message));
-		alert.setButton(getString(R.string.ok_button),
+		alert.setButton(AlertDialog.BUTTON_POSITIVE,
+				getString(R.string.ok_button),
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						PrefUtil.writeBoolean(c, PrefConstants.SERVICEWARNED,

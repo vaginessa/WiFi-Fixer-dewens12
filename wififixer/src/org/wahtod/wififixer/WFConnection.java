@@ -1714,17 +1714,17 @@ public class WFConnection extends Object implements
 	}
 
 	protected void setStatNotif(final boolean state) {
-		StatusMessage n = new StatusMessage()
-				.setStatus(getSupplicantStateString(getSupplicantState()));
 		if (!getWifiManager(ctxt.get()).isWifiEnabled()
 				|| !getIsOnWifi(ctxt.get()))
-			clearConnectedStatus(StatusMessage.EMPTY);
-
+			clearConnectedStatus(ctxt.get().getString(R.string.not_connected));
+		StatusMessage sm = StatusMessage.getNew().setStatus(
+				getSupplicantStateString(getSupplicantState()));
 		if (state)
-			n.setShow(1);
+			sm.setShow(1);
 		else
-			n.setShow(-1);
-		StatusMessage.send(ctxt.get(), n);
+			sm.setShow(-1);
+
+		StatusMessage.send(ctxt.get(), sm);
 	}
 
 	private static boolean shouldManage(final Context ctx) {
@@ -1788,7 +1788,7 @@ public class WFConnection extends Object implements
 			/*
 			 * Check state
 			 */
-			handlerWrapper(rMain);
+			handlerWrapper(rMain, REALLYSHORTWAIT);
 		}
 	}
 

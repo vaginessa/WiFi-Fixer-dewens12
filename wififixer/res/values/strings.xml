@@ -124,7 +124,7 @@
     <string name="service_status">Service</string>
     <string name="enabling_wififixerservice">WifiFixerService Enabled</string>
     <string name="disabling_wififixerservice">WifiFixerService Disabled</string>
-    <string name="wifi">Wifi</string>
+    <string name="wifi">WiFi</string>
     <string name="enabling_wifi">Enabling Wifi</string>
     <string name="disabling_wifi">Disabling Wifi</string>
     <string name="knownnetworks_fragment_header">Known Networks</string>
@@ -226,5 +226,7 @@
     <string name="icmpcheckthread">IcmpSensorThread</string>
     <string name="malformed_url_exception">Malformed URL Exception</string>
     <string name="i_o_exception">I/O Exception</string>
+    <string name="reassoc">Reassociate</string>
+    <string name="reset">Reset</string>
 
 </resources>

@@ -17,10 +17,12 @@
 package org.wahtod.wififixer.utility;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.legacy.HoneyCombNotifUtil;
+import org.wahtod.wififixer.legacy.Api5NotifUtil;
+import org.wahtod.wififixer.legacy.JellyBeanNotifUtil;
 import org.wahtod.wififixer.legacy.LegacyNotifUtil;
 import org.wahtod.wififixer.legacy.VersionedFile;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -34,9 +36,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public abstract class NotifUtil {
-	protected static final int STATNOTIFID = 2392;
-	protected static final int LOGNOTIFID = 2494;
+	public static final int STATNOTIFID = 2392;
+	public static final int LOGNOTIFID = 2494;
 	protected static int ssidStatus = 0;
+	
+	public static final String VSHOW_TAG = "VSHOW";
+	public static final String LOG_TAG = "LOG";
+	public static final String STAT_TAG = "STATNOTIF";
 
 	/*
 	 * for SSID status in status notification
@@ -60,6 +66,9 @@ public abstract class NotifUtil {
 	 * Cache appropriate NotifUtil
 	 */
 	private static NotifUtil selector;
+	protected static Notification lognotif;
+	protected static PendingIntent contentIntent;
+	protected static Notification statnotif;
 
 	/*
 	 * API
@@ -112,9 +121,11 @@ public abstract class NotifUtil {
 		 * Instantiate and cache appropriate NotifUtil implementation
 		 */
 		if (selector == null) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-				selector = new HoneyCombNotifUtil();
-			} else
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+				selector = new JellyBeanNotifUtil();
+			} else if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.ECLAIR)
+				selector = new Api5NotifUtil();
+			else
 				selector = new LegacyNotifUtil();
 		}
 	}

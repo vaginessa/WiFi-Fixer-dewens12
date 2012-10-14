@@ -380,7 +380,7 @@ public class WifiFixerService extends Service implements
 		ComponentName cm2 = new ComponentName(this, FixerWidgetSmall.class);
 		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
 		if (appWidgetManager.getAppWidgetIds(cm).length > 0
-				|| appWidgetManager.getAppWidgetIds(cm2).length > 0){
+				|| appWidgetManager.getAppWidgetIds(cm2).length > 0) {
 			PrefUtil.writeBoolean(this, Pref.HASWIDGET_KEY.key(), true);
 			PrefUtil.notifyPrefChange(this, Pref.HASWIDGET_KEY.key(), true);
 		}

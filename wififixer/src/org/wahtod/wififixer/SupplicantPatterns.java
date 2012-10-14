@@ -27,6 +27,8 @@ public class SupplicantPatterns {
 	public static final List<SupplicantState> SCAN_BOUNCE_1 = Arrays
 			.asList(new SupplicantState[] { SupplicantState.DISCONNECTED,
 					SupplicantState.SCANNING, SupplicantState.DISCONNECTED,
+					SupplicantState.SCANNING, SupplicantState.DISCONNECTED,
+					SupplicantState.SCANNING, SupplicantState.DISCONNECTED,
 					SupplicantState.SCANNING });
 
 	public static final List<SupplicantState> SCAN_BOUNCE_2 = Arrays
