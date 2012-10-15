@@ -826,7 +826,7 @@ public class WFConnection extends Object implements
 			/*
 			 * IP connectivity established
 			 */
-			handleNetworkAction();
+			handleNetworkAction(data);
 		else if (iAction.equals(CONNECTINTENT))
 			handleConnectIntent(context, data);
 		else if (iAction.equals(REASSOCIATE_INTENT))
@@ -1123,16 +1123,20 @@ public class WFConnection extends Object implements
 		connectToAP(ctxt.get(), data.getString(NETWORKNAME));
 	}
 
-	private void handleNetworkAction() {
+	private void handleNetworkAction(final Bundle data) {
+		NetworkInfo info = data.getParcelable(WifiManager.EXTRA_NETWORK_INFO);
 		/*
 		 * This action means network connectivty has changed but, we only want
 		 * to run this code for wifi
 		 */
-		if (!getWifiManager(ctxt.get()).isWifiEnabled()
-				|| !getIsOnWifi(ctxt.get()))
-			return;
-		else if (!_connected)
-			onNetworkConnected();
+		if (info.getType() == ConnectivityManager.TYPE_WIFI) {
+			if (info.getState().equals(NetworkInfo.State.CONNECTED))
+				onNetworkConnected();
+			else if (info.getState().equals(NetworkInfo.State.DISCONNECTED)
+					&& !info.isAvailable())
+				clearConnectedStatus(ctxt.get().getString(
+						R.string.wifi_is_disabled));
+		}
 	}
 
 	private void handleReassociateEvent() {

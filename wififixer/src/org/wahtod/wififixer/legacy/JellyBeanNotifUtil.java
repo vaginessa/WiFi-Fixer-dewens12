@@ -49,16 +49,13 @@ public class JellyBeanNotifUtil extends NotifUtil {
 				Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 		builder.setContentIntent(PendingIntent.getActivity(ctxt, 0, intent, 0));
 		builder.setOngoing(true);
+		builder.setOnlyAlertOnce(true);
 		builder.setWhen(0);
 		builder.setSmallIcon(R.drawable.buttons, m.getSignal());
 		builder.setContentTitle(m.getSSID());
 		builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 		builder.addAction(R.drawable.reassociate, ctxt.getString(R.string.reassoc), PendingIntent
 				.getBroadcast(ctxt, 0, new Intent(WidgetReceiver.REASSOCIATE),
-						PendingIntent.FLAG_UPDATE_CURRENT));
-		builder.addAction(R.drawable.reset, ctxt.getString(R.string.reset), PendingIntent
-				.getBroadcast(ctxt, 0, new Intent(
-						IntentConstants.ACTION_WIFI_TOGGLE),
 						PendingIntent.FLAG_UPDATE_CURRENT));
 		builder.addAction(R.drawable.wifi, ctxt.getString(R.string.wifi), PendingIntent.getBroadcast(
 				ctxt, 0, new Intent(IntentConstants.ACTION_WIFI_CHANGE),

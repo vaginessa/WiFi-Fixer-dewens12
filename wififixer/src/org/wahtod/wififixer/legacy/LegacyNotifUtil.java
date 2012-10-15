@@ -26,7 +26,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 public class LegacyNotifUtil extends NotifUtil {
 	@SuppressWarnings("deprecation")
@@ -99,7 +98,6 @@ public class LegacyNotifUtil extends NotifUtil {
 	public void vaddStatNotif(final Context ctxt, final StatusMessage m) {
 		NotificationManager nm = (NotificationManager) ctxt
 				.getSystemService(Context.NOTIFICATION_SERVICE);
-		Log.i(m.toString(), String.valueOf(m.getShow()));
 		if (m.getShow() != 1) {
 			nm.cancel(NotifUtil.STATNOTIFID);
 			NotifUtil.statnotif = null;
