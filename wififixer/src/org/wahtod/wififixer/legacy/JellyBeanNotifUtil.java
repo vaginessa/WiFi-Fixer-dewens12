@@ -39,7 +39,7 @@ public class JellyBeanNotifUtil extends NotifUtil {
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
 		if (m.getShow() != 1) {
-			cancel(ctxt, NotifUtil.STAT_TAG, NotifUtil.STATNOTIFID);
+			vcancel(ctxt, NotifUtil.STAT_TAG, NotifUtil.STATNOTIFID);
 			return;
 		}
 
@@ -54,12 +54,14 @@ public class JellyBeanNotifUtil extends NotifUtil {
 		builder.setSmallIcon(R.drawable.buttons, m.getSignal());
 		builder.setContentTitle(m.getSSID());
 		builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-		builder.addAction(R.drawable.reassociate, ctxt.getString(R.string.reassoc), PendingIntent
-				.getBroadcast(ctxt, 0, new Intent(WidgetReceiver.REASSOCIATE),
-						PendingIntent.FLAG_UPDATE_CURRENT));
-		builder.addAction(R.drawable.wifi, ctxt.getString(R.string.wifi), PendingIntent.getBroadcast(
-				ctxt, 0, new Intent(IntentConstants.ACTION_WIFI_CHANGE),
+		builder.addAction(R.drawable.reassociate, ctxt
+				.getString(R.string.reassoc), PendingIntent.getBroadcast(ctxt,
+				0, new Intent(WidgetReceiver.REASSOCIATE),
 				PendingIntent.FLAG_UPDATE_CURRENT));
+		builder.addAction(R.drawable.wifi, ctxt.getString(R.string.wifi),
+				PendingIntent.getBroadcast(ctxt, 0, new Intent(
+						IntentConstants.ACTION_WIFI_CHANGE),
+						PendingIntent.FLAG_UPDATE_CURRENT));
 
 		if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
 			m.setStatus(new StringBuilder(ctxt.getString(R.string.unmanaged))
@@ -79,7 +81,7 @@ public class JellyBeanNotifUtil extends NotifUtil {
 	public void vaddLogNotif(final Context ctxt, final boolean flag) {
 
 		if (!flag) {
-			cancel(ctxt, LOG_TAG, NotifUtil.LOGNOTIFID);
+			vcancel(ctxt, LOG_TAG, NotifUtil.LOGNOTIFID);
 			return;
 		}
 
@@ -100,12 +102,6 @@ public class JellyBeanNotifUtil extends NotifUtil {
 		 */
 		notify(ctxt, NotifUtil.LOGNOTIFID, Api5NotifUtil.LOG_TAG,
 				builder.build());
-	}
-
-	protected void cancel(Context ctxt, String tag, int statnotifid) {
-		NotificationManager nm = (NotificationManager) ctxt
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-		nm.cancel(tag, statnotifid);
 	}
 
 	protected void notify(Context context, int id, String tag, Notification n) {
@@ -138,6 +134,13 @@ public class JellyBeanNotifUtil extends NotifUtil {
 		builder.setAutoCancel(true);
 
 		// unique ID
-		nm.notify(id, builder.build());
+		nm.notify(VSHOW_TAG,id, builder.build());
+	}
+
+	@Override
+	public void vcancel(Context context, String tag, int id) {
+		NotificationManager nm = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+		nm.cancel(tag, id);
 	}
 }

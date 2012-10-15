@@ -36,7 +36,7 @@ public class Api5NotifUtil extends NotifUtil {
 		StatusMessage m = validateStrings(in);
 
 		if (m.getShow() != 1) {
-			cancel(ctxt, STAT_TAG, NotifUtil.STATNOTIFID);
+			vcancel(ctxt, STAT_TAG, NotifUtil.STATNOTIFID);
 			return;
 		}
 
@@ -75,18 +75,12 @@ public class Api5NotifUtil extends NotifUtil {
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		nm.notify(tag, id, n);
 	}
-	
-	protected void cancel(Context ctxt, String tag, int statnotifid) {
-		NotificationManager nm = (NotificationManager) ctxt
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-		nm.cancel(tag, statnotifid);
-	}
 
 	@Override
 	public void vaddLogNotif(final Context ctxt, final boolean flag) {
 
 		if (!flag) {
-			cancel(ctxt,LOG_TAG,NotifUtil.LOGNOTIFID);
+			vcancel(ctxt,LOG_TAG,NotifUtil.LOGNOTIFID);
 			return;
 		}
 
@@ -132,5 +126,12 @@ public class Api5NotifUtil extends NotifUtil {
 
 		// unique ID
 		notify(context, id, VSHOW_TAG, builder.build());
+	}
+
+	@Override
+	public void vcancel(Context context, String tag, int id) {
+		NotificationManager nm = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+		nm.cancel(tag, id);
 	}
 }

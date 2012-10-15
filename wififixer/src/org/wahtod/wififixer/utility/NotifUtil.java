@@ -23,7 +23,6 @@ import org.wahtod.wififixer.legacy.LegacyNotifUtil;
 import org.wahtod.wififixer.legacy.VersionedFile;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -39,7 +38,7 @@ public abstract class NotifUtil {
 	public static final int STATNOTIFID = 2392;
 	public static final int LOGNOTIFID = 2494;
 	protected static int ssidStatus = 0;
-	
+
 	public static final String VSHOW_TAG = "VSHOW";
 	public static final String LOG_TAG = "LOG";
 	public static final String STAT_TAG = "STATNOTIF";
@@ -80,6 +79,9 @@ public abstract class NotifUtil {
 
 	public abstract void vshow(final Context context, final String message,
 			final String tickerText, final int id, PendingIntent contentIntent);
+
+	public abstract void vcancel(final Context context, final String tag,
+			final int id);
 
 	public static void setSsidStatus(final int status) {
 		ssidStatus = status;
@@ -123,7 +125,7 @@ public abstract class NotifUtil {
 		if (selector == null) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 				selector = new JellyBeanNotifUtil();
-			} else if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.ECLAIR)
+			} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR)
 				selector = new Api5NotifUtil();
 			else
 				selector = new LegacyNotifUtil();
@@ -176,10 +178,13 @@ public abstract class NotifUtil {
 		return logstring.toString();
 	}
 
-	public static void cancel(final Context context, final int notif) {
-		NotificationManager nm = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-		nm.cancel(notif);
+	public static void cancel(final Context context, final String tag,
+			final int notif) {
+		selector.vcancel(context, tag, notif);
+	}
+	
+	public static void cancel (final Context context, final int notif){
+		selector.vcancel(context,VSHOW_TAG,notif);
 	}
 
 	public static void showToast(final Context context, final int resID) {

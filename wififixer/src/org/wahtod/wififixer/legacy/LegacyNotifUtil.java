@@ -36,7 +36,7 @@ public class LegacyNotifUtil extends NotifUtil {
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
 		if (!flag) {
-			nm.cancel(NotifUtil.LOGNOTIFID);
+			vcancel(context, null, NotifUtil.LOGNOTIFID);
 			return;
 		}
 		if (NotifUtil.lognotif == null) {
@@ -99,7 +99,7 @@ public class LegacyNotifUtil extends NotifUtil {
 		NotificationManager nm = (NotificationManager) ctxt
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		if (m.getShow() != 1) {
-			nm.cancel(NotifUtil.STATNOTIFID);
+			vcancel(ctxt,null,NotifUtil.STATNOTIFID);
 			NotifUtil.statnotif = null;
 			return;
 		}
@@ -133,5 +133,12 @@ public class LegacyNotifUtil extends NotifUtil {
 		 * Fire the notification
 		 */
 		nm.notify(NotifUtil.STATNOTIFID, NotifUtil.statnotif);
+	}
+
+	@Override
+	public void vcancel(Context context, String tag, int id) {
+		NotificationManager nm = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+		nm.cancel(id);
 	}
 }
