@@ -13,8 +13,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.wahtod.wififixer"
     android:installLocation="internalOnly"
-    android:versionCode="978"
-    android:versionName="0.9.5.4" 
+    android:versionCode="979"
+    android:versionName="0.9.5.4a" 
     >
 
     <!-- Documenting permissions here -->
@@ -47,7 +47,8 @@
 
     <uses-sdk
         android:minSdkVersion="4"
-        android:targetSdkVersion="14" />
+        android:maxSdkVersion="16"
+        android:targetSdkVersion="16" />
 
     <uses-feature
         android:name="android.hardware.wifi"

@@ -180,10 +180,12 @@ public abstract class NotifUtil {
 
 	public static void cancel(final Context context, final String tag,
 			final int notif) {
+		cacheSelector();
 		selector.vcancel(context, tag, notif);
 	}
 	
 	public static void cancel (final Context context, final int notif){
+		cacheSelector();
 		selector.vcancel(context,VSHOW_TAG,notif);
 	}
 

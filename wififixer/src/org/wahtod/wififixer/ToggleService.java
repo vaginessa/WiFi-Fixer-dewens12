@@ -50,64 +50,65 @@ public class ToggleService extends Service {
 	private static final int OFF = 1;
 	private static final int WATCHDOG = 2;
 	private static final int TOGGLE = 3;
+	
+	private static Handler hWifiState = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			final Context lc = self.get();
+			/*
+			 * Process MESSAGE
+			 */
+			switch (msg.what) {
+
+			case ON:
+				self.get()
+						.sendBroadcast(new Intent(WidgetReceiver.WIFI_ON));
+				break;
+
+			case OFF:
+				self.get().sendBroadcast(
+						new Intent(WidgetReceiver.WIFI_OFF));
+				break;
+
+			case WATCHDOG:
+				if (!PrefUtil.getWifiManager(lc).isWifiEnabled()) {
+					hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
+					hWifiState.sendEmptyMessageDelayed(WATCHDOG,
+							WATCHDOG_DELAY);
+				} else {
+					PrefUtil.writeBoolean(lc,
+							PrefConstants.WIFI_STATE_LOCK, false);
+					/*
+					 * Stop service: toggle done
+					 */
+					self.get().stopSelf();
+				}
+				/*
+				 * Release Wake Lock
+				 */
+				wlock.lock(false);
+				break;
+
+			case TOGGLE:
+				if (!PrefUtil
+						.readBoolean(lc, PrefConstants.WIFI_STATE_LOCK)) {
+					if (ScreenStateDetector.getScreenState(lc))
+						wlock.lock(true);
+					PrefUtil.writeBoolean(lc,
+							PrefConstants.WIFI_STATE_LOCK, true);
+					hWifiState.sendEmptyMessageDelayed(OFF, SHORT);
+					hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
+					hWifiState.sendEmptyMessageDelayed(WATCHDOG,
+							WATCHDOG_DELAY);
+				}
+				break;
+			}
+			super.handleMessage(msg);
+		}
+
+	};
 
 	public static class RToggleRunnable implements Runnable {
-		private static Handler hWifiState = new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-				final Context lc = self.get();
-				/*
-				 * Process MESSAGE
-				 */
-				switch (msg.what) {
-
-				case ON:
-					self.get()
-							.sendBroadcast(new Intent(WidgetReceiver.WIFI_ON));
-					break;
-
-				case OFF:
-					self.get().sendBroadcast(
-							new Intent(WidgetReceiver.WIFI_OFF));
-					break;
-
-				case WATCHDOG:
-					if (!PrefUtil.getWifiManager(lc).isWifiEnabled()) {
-						hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
-						hWifiState.sendEmptyMessageDelayed(WATCHDOG,
-								WATCHDOG_DELAY);
-					} else {
-						PrefUtil.writeBoolean(lc,
-								PrefConstants.WIFI_STATE_LOCK, false);
-						/*
-						 * Stop service: toggle done
-						 */
-						self.get().stopSelf();
-					}
-					/*
-					 * Release Wake Lock
-					 */
-					wlock.lock(false);
-					break;
-
-				case TOGGLE:
-					if (!PrefUtil
-							.readBoolean(lc, PrefConstants.WIFI_STATE_LOCK)) {
-						if (ScreenStateDetector.getScreenState(lc))
-							wlock.lock(true);
-						PrefUtil.writeBoolean(lc,
-								PrefConstants.WIFI_STATE_LOCK, true);
-						hWifiState.sendEmptyMessageDelayed(OFF, SHORT);
-						hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
-						hWifiState.sendEmptyMessageDelayed(WATCHDOG,
-								WATCHDOG_DELAY);
-					}
-					break;
-				}
-				super.handleMessage(msg);
-			}
-
-		};
 
 		@Override
 		public void run() {

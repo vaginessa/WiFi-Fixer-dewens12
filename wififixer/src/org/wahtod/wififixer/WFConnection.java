@@ -1081,8 +1081,12 @@ public class WFConnection extends Object implements
 	}
 
 	private static SupplicantState getSupplicantState() {
-		return getWifiManager(ctxt.get()).getConnectionInfo()
-				.getSupplicantState();
+		WifiInfo i = getWifiManager(ctxt.get()).getConnectionInfo();
+		if (i != null)
+		return 
+				i.getSupplicantState();
+		else
+			return SupplicantState.INVALID;
 	}
 
 	private static String getSupplicantStateString(final SupplicantState sstate) {
