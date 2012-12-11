@@ -169,7 +169,7 @@ public class WFConnection extends Object implements
 	private static int connecting = 0;
 	private static WifiManager wm_;
 	private static WeakReference<WFConnection> self;
-	private static final int CONNECTING_THRESHOLD = 3;
+	private static final int CONNECTING_THRESHOLD = 5;
 	private static final long CWDOG_DELAY = 10000;
 
 	private static volatile Handler handler = new Handler();
@@ -1083,8 +1083,7 @@ public class WFConnection extends Object implements
 	private static SupplicantState getSupplicantState() {
 		WifiInfo i = getWifiManager(ctxt.get()).getConnectionInfo();
 		if (i != null)
-		return 
-				i.getSupplicantState();
+			return i.getSupplicantState();
 		else
 			return SupplicantState.INVALID;
 	}
@@ -1412,7 +1411,7 @@ public class WFConnection extends Object implements
 		/*
 		 * Supplicant state pattern wedge detection
 		 */
-		if (wedgeCheck())
+		if (supplicantPatternCheck())
 			return;
 
 		/*
@@ -1427,11 +1426,12 @@ public class WFConnection extends Object implements
 		handleSupplicantState(sState);
 	}
 
-	private static boolean wedgeCheck() {
+	private static boolean supplicantPatternCheck() {
 		self.get()._supplicantFifo.add(self.get().lastSupplicantState);
-		if (self.get()._supplicantFifo
-				.containsPatterns(SupplicantPatterns.SCAN_BOUNCE_CLUSTER)) {
-			log(ctxt.get(), R.string.scan_bounce);
+		List<SupplicantState> pattern = self.get()._supplicantFifo
+				.containsPatterns(SupplicantPatterns.SCAN_BOUNCE_CLUSTER);
+		if (pattern != null) {
+			log(ctxt.get(), pattern.getClass().getSimpleName());
 			self.get()._supplicantFifo.clear();
 			toggleWifi();
 			return true;

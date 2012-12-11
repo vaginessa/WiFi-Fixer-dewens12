@@ -34,9 +34,12 @@ public class SupplicantPatterns {
 	public static final List<SupplicantState> SCAN_BOUNCE_2 = Arrays
 			.asList(new SupplicantState[] { SupplicantState.DISCONNECTED,
 					SupplicantState.INACTIVE, SupplicantState.SCANNING,
-					SupplicantState.DISCONNECTED, SupplicantState.INACTIVE });
+					SupplicantState.DISCONNECTED, SupplicantState.INACTIVE,
+					SupplicantState.SCANNING });
 	public static final List<SupplicantState> CONNECT_FAIL_1 = Arrays
 			.asList(new SupplicantState[] { SupplicantState.ASSOCIATED,
+					SupplicantState.FOUR_WAY_HANDSHAKE,
+					SupplicantState.DISCONNECTED, SupplicantState.ASSOCIATED,
 					SupplicantState.FOUR_WAY_HANDSHAKE,
 					SupplicantState.DISCONNECTED });
 

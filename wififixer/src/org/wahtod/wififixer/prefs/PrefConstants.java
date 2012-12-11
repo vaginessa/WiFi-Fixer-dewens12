@@ -47,7 +47,7 @@ public class PrefConstants {
 				"SCREEN"), STATENOT_KEY("StateNotif"), HASWIDGET_KEY(
 				"HASWIDGET");
 
-		private final String key;
+		private String key;
 		private static final Map<String, Pref> lookup = new HashMap<String, Pref>();
 
 		static {
@@ -75,7 +75,7 @@ public class PrefConstants {
 	public static enum NetPref {
 		DISABLED_KEY("ENABLEDSTATE"), NONMANAGED_KEY("NONMANAGED");
 
-		private final String key;
+		private String key;
 		private static final Map<String, NetPref> lookup = new HashMap<String, NetPref>();
 
 		static {

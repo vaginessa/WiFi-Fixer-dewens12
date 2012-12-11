@@ -14,7 +14,7 @@
     package="org.wahtod.wififixer"
     android:installLocation="internalOnly"
     android:versionCode="979"
-    android:versionName="0.9.5.4a" 
+    android:versionName="0.9.5.5b1" 
     >
 
     <!-- Documenting permissions here -->
@@ -47,7 +47,7 @@
 
     <uses-sdk
         android:minSdkVersion="4"
-        android:maxSdkVersion="16"
+        android:maxSdkVersion="17"
         android:targetSdkVersion="16" />
 
     <uses-feature
@@ -59,7 +59,6 @@
     </uses-feature>
 
     <application
-        uiOptions="splitActionBarWhenNarrow"
         android:backupAgent=".prefs.PrefsBackupAgent"
         android:description="@string/app_desc"
         android:hardwareAccelerated="true"

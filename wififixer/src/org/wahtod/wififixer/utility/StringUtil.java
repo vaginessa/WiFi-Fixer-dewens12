@@ -33,7 +33,6 @@ public class StringUtil {
 		if (ssid == null)
 			return EMPTYSTRING;
 		else if (ssid.endsWith("\"") && ssid.startsWith("\"")) {
-
 			try {
 				ssid = ssid.substring(1, ssid.length() - 1);
 			} catch (IndexOutOfBoundsException e) {

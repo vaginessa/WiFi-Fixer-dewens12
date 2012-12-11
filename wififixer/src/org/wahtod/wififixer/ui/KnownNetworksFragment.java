@@ -203,14 +203,6 @@ public class KnownNetworksFragment extends Fragment {
 	}
 
 	/*
-	 * Someday, when I can figure out how to do the UI private void
-	 * undoRemoveNetwork() {
-	 * PrefUtil.getWifiManager(getActivity()).addNetwork(undo);
-	 * PrefUtil.getWifiManager(getActivity()).saveConfiguration(); undo = null;
-	 * adapter.notifyDataSetChanged(); }
-	 */
-
-	/*
 	 * custom adapter for Network List ListView
 	 */
 	private class NetworkListAdapter extends BaseAdapter {

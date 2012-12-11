@@ -424,8 +424,7 @@ public class PrefUtil extends Object {
 
 	public static boolean readManagedState(final Context context,
 			final int network) {
-
-		if (PrefUtil.readNetworkPref(context, getnetworkSSID(context, network),
+		if (readNetworkPref(context, getnetworkSSID(context, network),
 				NetPref.NONMANAGED_KEY) == 1)
 			return true;
 		else
