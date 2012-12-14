@@ -67,7 +67,7 @@ public class WifiFixerService extends Service implements
 	// Version
 	private static int version = 0;
 
-	private WFConnection wifi;
+	private WFMonitor wifi;
 	private ScreenStateDetector screenstateHandler;
 	protected boolean logPrefLoad;
 
@@ -153,7 +153,7 @@ public class WifiFixerService extends Service implements
 		/*
 		 * Initialize Wifi Connection class
 		 */
-		wifi = new WFConnection(this);
+		wifi = new WFMonitor(this);
 		/*
 		 * Start Service watchdog alarm
 		 */

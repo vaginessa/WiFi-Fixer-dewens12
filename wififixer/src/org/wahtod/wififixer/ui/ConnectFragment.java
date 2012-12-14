@@ -19,7 +19,7 @@ package org.wahtod.wififixer.ui;
 import java.lang.reflect.Field;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.WFConnection;
+import org.wahtod.wififixer.WFMonitor;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
@@ -153,8 +153,8 @@ public class ConnectFragment extends FragmentSwitchboard implements
 	}
 
 	private void connectNetwork() {
-		Intent intent = new Intent(WFConnection.CONNECTINTENT);
-		intent.putExtra(WFConnection.NETWORKNAME, network.SSID);
+		Intent intent = new Intent(WFMonitor.CONNECTINTENT);
+		intent.putExtra(WFMonitor.NETWORKNAME, network.SSID);
 		BroadcastHelper.sendBroadcast(getActivity(), intent, true);
 	}
 

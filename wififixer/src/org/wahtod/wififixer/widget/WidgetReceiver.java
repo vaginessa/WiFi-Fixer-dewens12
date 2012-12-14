@@ -21,7 +21,7 @@ import java.lang.ref.WeakReference;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ToggleService;
 import org.wahtod.wififixer.WFBroadcastReceiver;
-import org.wahtod.wififixer.WFConnection;
+import org.wahtod.wififixer.WFMonitor;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
@@ -90,7 +90,7 @@ public class WidgetReceiver extends BroadcastReceiver {
 				NotifUtil.showToast(ctxt.get(),
 						ctxt.get().getString(R.string.reassociating));
 				BroadcastHelper.sendBroadcast(ctxt.get(), new Intent(
-						WFConnection.REASSOCIATE_INTENT), true);
+						WFMonitor.REASSOCIATE_INTENT), true);
 				getWifiManager(ctxt.get()).reassociate();
 			}
 

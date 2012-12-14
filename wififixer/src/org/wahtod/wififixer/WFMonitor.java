@@ -67,7 +67,7 @@ import android.text.format.Formatter;
  * Handles all interaction 
  * with WifiManager
  */
-public class WFConnection extends Object implements
+public class WFMonitor extends Object implements
 		OnScreenStateChangedListener {
 	private static final int DEFAULT_DBM_FLOOR = -90;
 	private String accesspointIP;
@@ -168,7 +168,7 @@ public class WFConnection extends Object implements
 	 */
 	private static int connecting = 0;
 	private static WifiManager wm_;
-	private static WeakReference<WFConnection> self;
+	private static WeakReference<WFMonitor> self;
 	private static final int CONNECTING_THRESHOLD = 5;
 	private static final long CWDOG_DELAY = 10000;
 
@@ -528,9 +528,9 @@ public class WFConnection extends Object implements
 		handler.post(i);
 	}
 
-	public WFConnection(final Context context) {
+	public WFMonitor(final Context context) {
 		_scantimer = new StopWatch();
-		self = new WeakReference<WFConnection>(this);
+		self = new WeakReference<WFMonitor>(this);
 		_supplicantFifo = new FifoList(FIFO_LENGTH);
 		_statusdispatcher = new StatusDispatcher(context, handler);
 		ScreenStateDetector.setOnScreenStateChangedListener(this);

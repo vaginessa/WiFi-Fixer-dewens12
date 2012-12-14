@@ -20,7 +20,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.WFConnection;
+import org.wahtod.wififixer.WFMonitor;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.BroadcastHelper;
@@ -143,8 +143,8 @@ public class KnownNetworksFragment extends Fragment {
 
 		case CONTEXT_CONNECT:
 			if (PrefUtil.readBoolean(getContext(), Pref.DISABLE_KEY.name())) {
-				Intent intent = new Intent(WFConnection.CONNECTINTENT);
-				intent.putExtra(WFConnection.NETWORKNAME, PrefUtil
+				Intent intent = new Intent(WFMonitor.CONNECTINTENT);
+				intent.putExtra(WFMonitor.NETWORKNAME, PrefUtil
 						.getSSIDfromNetwork(getContext(),
 								getNidFromSSID(getContext(), clicked)));
 				BroadcastHelper.sendBroadcast(getContext(), intent, true);
