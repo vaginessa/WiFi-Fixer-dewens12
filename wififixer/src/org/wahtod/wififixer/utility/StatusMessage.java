@@ -31,7 +31,7 @@ public class StatusMessage {
 	public StatusMessage(final String ssid, final String smessage,
 			final int si, final int sh) {
 		status = new Bundle();
-		this.setSSID(ssid);
+		this.setSSID(StringUtil.removeQuotes(ssid));
 		this.setStatus(smessage);
 		this.setSignal(si);
 		this.setShow(sh);
@@ -96,7 +96,7 @@ public class StatusMessage {
 	public StatusMessage setSSID(String s) {
 		if (s == null)
 			s = EMPTY;
-		status.putString(SSID_KEY, s);
+		status.putString(SSID_KEY, StringUtil.removeQuotes(s));
 		return this;
 	}
 

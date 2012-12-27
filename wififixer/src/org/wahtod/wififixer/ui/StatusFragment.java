@@ -22,6 +22,7 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StatusMessage;
+import org.wahtod.wififixer.utility.StringUtil;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -167,7 +168,7 @@ public class StatusFragment extends Fragment {
 			linkspeed.setText(EMPTYSTRING);
 			icon.setImageDrawable(getResources().getDrawable(R.drawable.icon));
 		} else {
-			ssid.setText(info.getSSID());
+			ssid.setText(StringUtil.removeQuotes(info.getSSID()));
 			signal.setText(String.valueOf(info.getRssi()) + DBM);
 			linkspeed.setText(String.valueOf(info.getLinkSpeed()) + MB);
 			status.setText(info.getSupplicantState().name());
