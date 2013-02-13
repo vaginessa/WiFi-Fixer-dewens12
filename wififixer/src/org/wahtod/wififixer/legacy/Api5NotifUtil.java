@@ -1,17 +1,18 @@
-/*Copyright [2010-2012] [David Van de Ven]
+/*	    Wifi Fixer for Android
+    Copyright (C) 2010-2013  David Van de Ven
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-       http://www.apache.org/licenses/LICENSE-2.0
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package org.wahtod.wififixer.legacy;
@@ -21,6 +22,7 @@ import org.wahtod.wififixer.ui.WifiFixerActivity;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StatusMessage;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -70,7 +72,7 @@ public class Api5NotifUtil extends NotifUtil {
 		notify(ctxt, NotifUtil.STATNOTIFID, STAT_TAG, statbuilder.build());
 	}
 
-	protected void notify(Context context, int id, String tag, Notification n) {
+	@SuppressLint("NewApi") protected void notify(Context context, int id, String tag, Notification n) {
 		NotificationManager nm = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		nm.notify(tag, id, n);
@@ -128,7 +130,7 @@ public class Api5NotifUtil extends NotifUtil {
 		notify(context, id, VSHOW_TAG, builder.build());
 	}
 
-	@Override
+	@SuppressLint("NewApi") @Override
 	public void vcancel(Context context, String tag, int id) {
 		NotificationManager nm = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
