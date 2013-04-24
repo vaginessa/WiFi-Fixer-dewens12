@@ -69,8 +69,7 @@ import android.text.format.Formatter;
  * Handles all interaction 
  * with WifiManager
  */
-public class WFMonitor extends Object implements
-		OnScreenStateChangedListener {
+public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	private static final int DEFAULT_DBM_FLOOR = -90;
 	private String accesspointIP;
 	private static String appname;
@@ -1067,9 +1066,11 @@ public class WFMonitor extends Object implements
 			final int network) {
 		List<WifiConfiguration> configs = getWifiManager(context)
 				.getConfiguredNetworks();
-		for (WifiConfiguration w : configs) {
-			if (w.networkId == network)
-				return w;
+		if (configs != null) {
+			for (WifiConfiguration w : configs) {
+				if (w.networkId == network)
+					return w;
+			}
 		}
 		return null;
 	}

@@ -38,8 +38,7 @@ public class FixerWidget extends AppWidgetProvider {
 
 	@Override
 	public void onEnabled(Context context) {
-		if (!PrefUtil.readBoolean(context, PrefConstants.HAS_WIDGET))
-			PrefUtil.writeBoolean(context, PrefConstants.HAS_WIDGET, true);
+		PrefUtil.writeBoolean(context, PrefConstants.HAS_WIDGET, true);
 		PrefUtil.notifyPrefChange(context, PrefConstants.HAS_WIDGET, true);
 		super.onEnabled(context);
 	}
