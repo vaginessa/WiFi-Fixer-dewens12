@@ -40,6 +40,8 @@ Alpha: 1.0 Velociraptor Vanquisher
 
 1.0 will mark a design refresh for "Holo" with additional user-facing features and improvements, bugfixes, and lower memory consumption/fewer wakelocks.
 
+Currently ActionBarSherlock is not integrated so only Android >= API11 is working
+
 
 
 
