@@ -38,7 +38,7 @@
     <string name="donateservice">com.wahtod.wififixer.WFDonateService</string>
     <string name="about">About</string>
     <string name="help">Help</string>
-    <string name="preferences">Prefs</string>
+    <string name="preferences">Settings</string>
     <string name="send_log">Send Log</string>
     <string name="ondestroy">onDestroy handler</string>
     <string name="colon">:</string>
@@ -232,5 +232,9 @@
     <string name="malformed_url_exception">Malformed URL Exception</string>
     <string name="i_o_exception">I/O Exception</string>
     <string name="reassoc">Reassociate</string>
+    <string name="status">Status</string>
+    <string name="managed">Managed</string>
+    <string name="nonmanaged">Ignore</string>
+    <string name="quick_text">Quickbar</string>
 
 </resources>

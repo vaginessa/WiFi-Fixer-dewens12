@@ -17,123 +17,62 @@
 
 package org.wahtod.wififixer.ui;
 
-import java.lang.ref.WeakReference;
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.prefs.PrefConstants.Pref;
-import org.wahtod.wififixer.prefs.PrefUtil;
-
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ToggleButton;
+import android.widget.FrameLayout;
 
-public class ServiceFragment extends Fragment implements
-		OnCheckedChangeListener {
-	private static final int _CHECK_CHANGED_POST_DELAY = 3000;
-	public static final String REFRESH_ACTION = "org.wahtod.wififixer.ui.ServiceFragment.REFRESH";
-	private ToggleButton servicebutton;
-	private ToggleButton wifibutton;
-	private static WeakReference<ServiceFragment> self;
-	private static Handler handler = new Handler() {
-		@Override
-		public void handleMessage(Message message) {
-			if (self.get().getActivity() == null)
-				return;
-			if (message.getData().isEmpty())
-				self.get().setIcons();
-		}
-	};
-	private BroadcastReceiver wifireceiver = new BroadcastReceiver() {
-		public void onReceive(final Context context, final Intent intent) {
-
-			/*
-			 * Dispatch intent commands to handler
-			 */
-			Message message = handler.obtainMessage();
-			Bundle data = new Bundle();
-			if (intent.getExtras() != null) {
-				data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
-				data.putAll(intent.getExtras());
-			}
-			message.setData(data);
-			handler.sendMessage(message);
-		}
-	};
+public class ServiceFragment extends Fragment {
+	public static ServiceFragment newInstance(int p) {
+		ServiceFragment f = new ServiceFragment();
+		Bundle args = new Bundle();
+		args.putInt("num", p);
+		f.setArguments(args);
+		return f;
+	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		self = new WeakReference<ServiceFragment>(this);
+	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 	}
-
-	@Override
-	public void onPause() {
-		unregisterReceiver();
-		super.onPause();
-	}
-
-	private void unregisterReceiver() {
-		getContext().unregisterReceiver(wifireceiver);
-	}
-
-	private void registerReceiver() {
-		IntentFilter filter = new IntentFilter(REFRESH_ACTION);
-		getContext().registerReceiver(wifireceiver, filter);
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		registerReceiver();
-		setIcons();
-	}
-
+	
+	/*
+	 * Phone/Tablet magic happens here
+	 * (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.service, null);
-		servicebutton = (ToggleButton) v.findViewById(R.id.ToggleButton1);
-		servicebutton.setOnCheckedChangeListener(this);
-		wifibutton = (ToggleButton) v.findViewById(R.id.ToggleButton2);
-		wifibutton.setOnCheckedChangeListener(this);
+		
+		if (savedInstanceState == null) {
+			View tablet = v.findViewById(R.id.toggles);
+			FragmentTransaction transaction = getChildFragmentManager()
+					.beginTransaction();
+			StatusFragment aboutFragment = StatusFragment.newInstance(1);
+			transaction.add(R.id.about, aboutFragment);
+			LogFragment logFragment = LogFragment.newInstance(null);
+			transaction.add(R.id.servicelog, logFragment);
+			/*
+			 * tablet view indicates if this is a tablet
+			 */
+			if (tablet != null){
+				QuickSettingsFragment toggleFragment = new QuickSettingsFragment();
+				transaction.add(R.id.toggles, toggleFragment);
+			}
+			transaction.commit();
+		}
 		return v;
 	}
 
 	private Context getContext() {
 		return getActivity();
-	}
-
-	private void setIcons() {
-		/*
-		 * Draw icons
-		 */
-		handler.post(DrawIcons);
-	}
-
-	private Runnable DrawIcons = new Runnable() {
-
-		@Override
-		public void run() {
-			wifibutton.setChecked(PrefUtil.getWifiManager(getContext())
-					.isWifiEnabled());
-			servicebutton.setChecked(!PrefUtil.readBoolean(getContext(),
-					Pref.DISABLE_KEY.key()));
-		}
-	};
-
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		handler.postDelayed(DrawIcons, _CHECK_CHANGED_POST_DELAY);
 	}
 
 }

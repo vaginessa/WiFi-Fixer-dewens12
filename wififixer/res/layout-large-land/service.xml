@@ -17,34 +17,37 @@
     along with this program.  If not, see http://www.gnu.org/licenses
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/RelativeLayout1"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:gravity="left"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/known_list_padding_bottom"
-    android:paddingLeft="@dimen/known_list_padding_left"
-    android:paddingTop="@dimen/known_list_padding_top"
-    >
+    tools:context=".ui.WifiFixerActivity" >
 
-    <ImageView
-        android:id="@+id/NETWORK_ICON"
-        android:layout_width="@dimen/known_list_icon_width"
-        android:layout_height="@dimen/known_list_icon_height"
+    <FrameLayout
+        android:id="@+id/toggles"
+        android:layout_width="150dp"
+        android:layout_height="300dp"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/ssid"
-        android:layout_marginRight="18dp"
-        android:gravity="right"
-        android:src="@drawable/buttons"
-        android:focusable = "false" />
+        android:layout_centerVertical="true" >
+    </FrameLayout>
 
-    <TextView
-        android:id="@+id/ssid"
-        style="@style/Wftext.large"
-        android:layout_width="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="15dp"
-        android:gravity="center_horizontal"
-        android:text="EMPTY"
-        android:focusable = "false" />
+    <FrameLayout
+        android:id="@+id/about"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" >
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/servicelog"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_alignTop="@+id/about"
+        android:layout_marginRight="53dp"
+        android:layout_toLeftOf="@+id/toggles" >
+    </FrameLayout>
 
 </RelativeLayout>

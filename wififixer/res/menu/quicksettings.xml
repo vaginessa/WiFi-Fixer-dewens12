@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:icon="@drawable/quicksettings_icon"
+        android:id="@+id/menu_quicksettings"
+        android:showAsAction="always|withText"
+        android:title="@string/quick_text"/>
+
+</menu>

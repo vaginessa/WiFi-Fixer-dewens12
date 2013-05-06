@@ -18,7 +18,7 @@
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="Wifi Fixer Preferences" >
+    <PreferenceCategory android:title="Service Preferences" >
         <CheckBoxPreference
             android:key="Disable"
             android:summary="Causes the Wifi Fixer service to stop running"
@@ -31,13 +31,7 @@
             android:key="Perf_Mode"
             android:summary="@string/Perf_Mode_summary"
             android:title="@string/Perf_Mode_title" />
-        <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/widget"
-            android:entryValues="@array/widgetValues"
-            android:key="WIDGET"
-            android:summary="@string/WIDGET_summary"
-            android:title="@string/WIDGET_title" />
+        
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/forcephone_title" >
         <CheckBoxPreference

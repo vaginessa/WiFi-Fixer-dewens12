@@ -42,6 +42,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
+import org.wahtod.wififixer.utility.StringUtil;
 
 public class PrefUtil extends Object {
 	private static WeakReference<PrefUtil> self;
@@ -255,6 +256,17 @@ public class PrefUtil extends Object {
 		}
 		return context.getString(R.string.none);
 	}
+	
+	public static int getNIDFromSSID(final Context context, final String ssid) {
+		WifiManager wm = (WifiManager) context
+				.getSystemService(Context.WIFI_SERVICE);
+		List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
+		for (WifiConfiguration network : wifiConfigs) {
+			if (StringUtil.removeQuotes(network.SSID).equals(ssid))
+				return network.networkId;
+		}
+		return -1;
+	}
 
 	public static WifiConfiguration getNetworkByNID(Context context,
 			final int network) {
@@ -445,7 +457,7 @@ public class PrefUtil extends Object {
 
 	public static boolean readNetworkState(final Context context,
 			final int network) {
-		if (PrefUtil.readNetworkPref(context, getnetworkSSID(context, network),
+		if (readNetworkPref(context, getnetworkSSID(context, network),
 				NetPref.DISABLED_KEY) == 1)
 			return true;
 		else

@@ -17,6 +17,7 @@
     along with this program.  If not, see http://www.gnu.org/licenses
 -->
 <resources>
+    <dimen name ="listview_height">72dp</dimen>
     <dimen name ="aboutfragment_layout_padding_bottom">0dp</dimen>
 	<dimen name ="known_list_padding_bottom">5dp</dimen>
 	<dimen name ="known_list_padding_top">5dp</dimen>

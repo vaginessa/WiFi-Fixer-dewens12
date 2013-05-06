@@ -16,55 +16,60 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see http://www.gnu.org/licenses
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="@dimen/listview_height"
+    android:layout_centerVertical="true"
+    android:gravity="center_vertical"
     android:orientation="horizontal"
     android:padding="@dimen/scan_list_padding" >
 
     <TextView
         android:id="@+id/ssid"
-        style="@style/Wftext.header"
+        style="@style/Wftext.large"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
         android:layout_gravity="center_vertical"
         android:layout_marginBottom="@dimen/scan_list_ssid_margin_bottom"
         android:layout_marginLeft="@dimen/scan_list_ssid_margin_left"
-        android:layout_width="0px"
-        android:layout_weight="5"
+        android:layout_toLeftOf="@+id/NETWORK_ICON"
         android:gravity="left"
-        android:maxLength="13"
         android:text="default" >
     </TextView>
 
     <ImageView
         android:id="@+id/NETWORK_ICON"
-        android:layout_height="fill_parent"
-        android:layout_gravity="bottom"
-        android:gravity="left"
-        android:layout_width="0px"
-        android:layout_weight=".5"
+        android:layout_width="@dimen/known_list_icon_height"
+        android:layout_height="@dimen/known_list_icon_height"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/SECURE_ICON"
+        android:gravity="right"
         android:src="@drawable/icon" >
     </ImageView>
 
     <ImageView
         android:id="@+id/SECURE_ICON"
-        android:layout_width="0px"
-        android:layout_weight=".5"
-        android:layout_height="fill_parent"
-        android:layout_gravity="bottom"
-        android:gravity="left"
+        android:layout_width="@dimen/known_list_icon_height"
+        android:layout_height="@dimen/known_list_icon_height"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/encryption"
+        android:gravity="right"
         android:src="@drawable/icon" >
     </ImageView>
 
     <TextView
         android:id="@+id/encryption"
         style="@style/Wftext.small"
-        android:layout_gravity="bottom"
+        android:layout_width="@dimen/known_list_icon_height"
+        android:layout_height="@dimen/known_list_icon_height"
+        android:layout_alignBaseline="@+id/NETWORK_ICON"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_margin="2dp"
-        android:layout_width="0px"
-        android:layout_weight="1"
-        android:gravity="left"
-        android:text="encryption"
-      	 >
+        android:gravity="right"
+        android:text="encryption" >
     </TextView>
 
-</LinearLayout>
+</RelativeLayout>

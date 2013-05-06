@@ -20,7 +20,6 @@ package org.wahtod.wififixer.ui;
 import java.lang.ref.WeakReference;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 
@@ -35,10 +34,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 public class LogFragment extends Fragment {
 	public static final String HAS_LOGFRAGMENT = "HAS_LF";
@@ -47,9 +44,7 @@ public class LogFragment extends Fragment {
 	private static WeakReference<LogFragment> self;
 	private TextView myTV;
 	private ScrollView mySV;
-	private String log;
-	private ToggleButton logToggle;
-	private ImageButton sendLog;
+	private String mlog;
 
 	private class ScrollToBottom implements Runnable {
 
@@ -80,8 +75,8 @@ public class LogFragment extends Fragment {
 		if (getActivity() != null) {
 			String message = b.getString(LOG_MESSAGE);
 			message.replaceAll("\\n", "");
-			log = log + message + "\n";
-			myTV.setText(log);
+			mlog = mlog + message + "\n";
+			myTV.setText(mlog);
 			mySV.post(new ScrollToBottom());
 		}
 	}
@@ -91,57 +86,17 @@ public class LogFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.log_fragment, null);
 		myTV = (TextView) v.findViewById(R.id.logText);
-		myTV.setText(log);
+		myTV.setText(mlog);
 		mySV = (ScrollView) v.findViewById(R.id.SCROLLER);
-		logToggle = (ToggleButton) v.findViewById(R.id.logToggle);
-		sendLog = (ImageButton) v.findViewById(R.id.sendLog);
-		logToggle.setOnClickListener(onClick);
-		logToggle.setChecked(PrefUtil.readBoolean(getActivity(),
-				Pref.LOG_KEY.key()));
-		sendLog.setOnClickListener(onClick);
 		return v;
 	}
 
-	View.OnClickListener onClick = new View.OnClickListener() {
-		public void onClick(View v) {
-			if (v.equals(sendLog))
-				sendLog();
-			else
-				logToggle();
-		}
-	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		self = new WeakReference<LogFragment>(this);
-		log = "";
-		if (!this.getRetainInstance())
-			this.setRetainInstance(true);
+		mlog = "";
 		super.onCreate(savedInstanceState);
-	}
-
-	protected void logToggle() {
-		boolean state = logToggle.isChecked();
-		PrefUtil.writeBoolean(getActivity(), Pref.LOG_KEY.key(), state);
-		PrefUtil.notifyPrefChange(getActivity(), Pref.LOG_KEY.key(), state);
-	}
-
-	protected void sendLog() {
-		Intent i = new Intent(getActivity(), WifiFixerActivity.class);
-		i.putExtra(WifiFixerActivity.SEND_LOG, true);
-		getActivity().startActivity(i);
-	}
-
-	private void setIcon() {
-		/*
-		 * Draw icon
-		 */
-		if (PrefUtil.readBoolean(getActivity(), Pref.LOG_KEY.key())) {
-			logToggle.setChecked(true);
-		} else {
-			logToggle.setChecked(false);
-		}
-		logToggle.refreshDrawableState();
 	}
 
 	@Override
@@ -159,10 +114,7 @@ public class LogFragment extends Fragment {
 	public void onResume() {
 		if (getActivity() != null) {
 			PrefUtil.writeBoolean(this.getActivity(), HAS_LOGFRAGMENT, true);
-			logToggle.setChecked(PrefUtil.readBoolean(this.getActivity(),
-					Pref.LOG_KEY.name()));
 			registerReceiver();
-			setIcon();
 		}
 		mySV.post(new ScrollToBottom());
 		super.onResume();

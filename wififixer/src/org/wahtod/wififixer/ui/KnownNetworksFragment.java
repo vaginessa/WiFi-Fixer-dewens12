@@ -23,14 +23,16 @@ import java.util.List;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitor;
 import org.wahtod.wififixer.prefs.PrefUtil;
-import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StringUtil;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -42,12 +44,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.view.ContextMenu;
+import android.util.Log;
+import android.view.ActionMode;
+import android.view.ActionMode.Callback;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -55,25 +60,24 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-public class KnownNetworksFragment extends Fragment {
+public class KnownNetworksFragment extends Fragment implements Callback {
+	private OnFragmentPageChangeListener mFragmentPageChangeListener;
 	private static WeakReference<KnownNetworksFragment> self;
-	private String clicked;
 	private static NetworkListAdapter adapter;
 	private static List<String> knownnetworks;
 	private static List<String> known_in_range;
 	private static ListView lv;
-	// private WifiConfiguration undo;
+	protected Object mActionMode;
+	protected String mSSID;
 
 	private static final int SCAN_MESSAGE = 31337;
 	private static final int REFRESH_MESSAGE = 2944;
 	private static final int SCAN_DELAY = 15000;
-	private static final int CONTEXT_ENABLE = 115;
-	private static final int CONTEXT_DISABLE = 112;
-	private static final int CONTEXT_CONNECT = 113;
-	private static final int CONTEXT_NONMANAGE = 114;
-	private static final int CONTEXT_REMOVE = 116;
-
 	private static final String NETWORKS_KEY = "NETWORKS_KEY";
+
+	public interface OnFragmentPageChangeListener {
+		public void onFragmentPageChange(boolean state);
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -86,100 +90,29 @@ public class KnownNetworksFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.knownnetworks, null);
 		lv = (ListView) v.findViewById(R.id.knownlist);
-		createAdapter(lv);
-		registerContextMenu();
+		adapter = self.get().new NetworkListAdapter(knownnetworks);
+		lv.setAdapter(adapter);
+		lv.setOnItemLongClickListener(il);
 		return v;
 	}
 
-	@Override
-	public void onDestroyView() {
-		this.unregisterForContextMenu(lv);
-		super.onDestroyView();
-	}
+	private OnItemLongClickListener il = new OnItemLongClickListener() {
 
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-		/*
-		 * Clicked is the ListView selected string, so the SSID
-		 */
-		menu.setHeaderTitle(clicked);
-		menu.add(1, CONTEXT_ENABLE, 0, R.string.enable);
-		menu.add(2, CONTEXT_DISABLE, 1, R.string.disable);
-		menu.add(3, CONTEXT_CONNECT, 2, R.string.connect);
-		menu.add(4, CONTEXT_NONMANAGE, 3, R.string.set_non_managed);
-		menu.add(5, CONTEXT_REMOVE, 5, R.string.remove);
-		menu.setGroupEnabled(3, known_in_range.contains(clicked));
-
-		if (!PrefUtil.getNetworkState(getContext(),
-				getNidFromSSID(getContext(), clicked))) {
-			menu.setGroupEnabled(3, false);
-			menu.setGroupEnabled(2, false);
-		} else
-			menu.setGroupEnabled(1, false);
-
-		if (PrefUtil.readBoolean(getContext(), Pref.DISABLE_KEY.key()))
-			menu.setGroupEnabled(3, false);
-	}
-
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case CONTEXT_ENABLE:
-			PrefUtil.setNetworkState(getContext(),
-					getNidFromSSID(getContext(), clicked), true);
-			PrefUtil.writeNetworkState(getContext(),
-					getNidFromSSID(getContext(), clicked), false);
-			adapter.notifyDataSetChanged();
-			break;
-
-		case CONTEXT_DISABLE:
-			PrefUtil.setNetworkState(getContext(),
-					getNidFromSSID(getContext(), clicked), false);
-			PrefUtil.writeNetworkState(getContext(),
-					getNidFromSSID(getContext(), clicked), true);
-			adapter.notifyDataSetChanged();
-			break;
-
-		case CONTEXT_CONNECT:
-			if (PrefUtil.readBoolean(getContext(), Pref.DISABLE_KEY.name())) {
-				Intent intent = new Intent(WFMonitor.CONNECTINTENT);
-				intent.putExtra(WFMonitor.NETWORKNAME, PrefUtil
-						.getSSIDfromNetwork(getContext(),
-								getNidFromSSID(getContext(), clicked)));
-				BroadcastHelper.sendBroadcast(getContext(), intent, true);
-			} else {
-				PrefUtil.getWifiManager(getContext()).enableNetwork(
-						getNidFromSSID(getContext(), clicked), true);
+		@SuppressLint("NewApi")
+		@Override
+		public boolean onItemLongClick(AdapterView<?> parent, View v, int p,
+				long id) {
+			mSSID = (String) adapter.getItem(p);
+			if (mActionMode != null) {
+				return false;
 			}
-			break;
+			mActionMode = getActivity().startActionMode(
+					KnownNetworksFragment.this);
+			v.setSelected(true);
+			return true;
 
-		case CONTEXT_NONMANAGE:
-			if (!PrefUtil.readManagedState(getContext(),
-					getNidFromSSID(getContext(), clicked))) {
-				PrefUtil.writeManagedState(getContext(),
-						getNidFromSSID(getContext(), clicked), true);
-			} else {
-				PrefUtil.writeManagedState(getContext(),
-						getNidFromSSID(getContext(), clicked), false);
-			}
-			adapter.notifyDataSetChanged();
-			break;
-
-		case CONTEXT_REMOVE:
-			String ssid = clicked;
-			int nid = getNidFromSSID(getContext(), ssid);
-			NotifUtil.showToast(getContext(),
-					getContext().getString(R.string.removing_network) + ssid);
-			// undo = PrefUtil.getNetworkByNID(getContext(), nid);
-			PrefUtil.getWifiManager(getActivity()).removeNetwork(nid);
-			PrefUtil.getWifiManager(getActivity()).saveConfiguration();
-			scanhandler.sendEmptyMessage(SCAN_MESSAGE);
-			break;
 		}
-		return super.onContextItemSelected(item);
-	}
+	};
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -188,9 +121,11 @@ public class KnownNetworksFragment extends Fragment {
 		 */
 		knownnetworks = getNetworks(getContext());
 		known_in_range = new ArrayList<String>();
+		mFragmentPageChangeListener = (OnFragmentPageChangeListener) activity;
 		super.onAttach(activity);
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public void onPause() {
 		unregisterReceiver();
@@ -319,17 +254,8 @@ public class KnownNetworksFragment extends Fragment {
 		}
 	};
 
-	/*
-	 * Create adapter
-	 */
-	private static void createAdapter(ListView v) {
-		adapter = self.get().new NetworkListAdapter(knownnetworks);
-		v.setAdapter(adapter);
-	}
-
 	public static KnownNetworksFragment newInstance(int num) {
 		KnownNetworksFragment f = new KnownNetworksFragment();
-
 		// Supply num input as an argument.
 		Bundle args = new Bundle();
 		args.putInt("num", num);
@@ -393,32 +319,6 @@ public class KnownNetworksFragment extends Fragment {
 		return networks;
 	}
 
-	private static int getNidFromSSID(final Context context, final String ssid) {
-		WifiManager wm = (WifiManager) context
-				.getSystemService(Context.WIFI_SERVICE);
-		List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
-		for (WifiConfiguration network : wifiConfigs) {
-			if (StringUtil.removeQuotes(network.SSID).equals(ssid))
-				return network.networkId;
-		}
-		return -1;
-	}
-
-	private void registerContextMenu() {
-		lv.setOnItemLongClickListener(new OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> adapterview, View v,
-					int position, long id) {
-				clicked = lv.getItemAtPosition(position).toString();
-				if (isWifiOn(getContext()))
-					return false;
-				else
-					return true;
-			}
-		});
-		registerForContextMenu(lv);
-	}
-
 	private static void refreshNetworkAdapter(final ArrayList<String> networks) {
 		/*
 		 * Don't refresh if knownnetworks is empty (wifi is off)
@@ -427,7 +327,8 @@ public class KnownNetworksFragment extends Fragment {
 		if (knownnetworks.size() > 0) {
 			known_in_range = networks;
 			if (adapter == null) {
-				createAdapter(lv);
+				adapter = self.get().new NetworkListAdapter(knownnetworks);
+				lv.setAdapter(adapter);
 			} else {
 				refreshArray();
 				adapter.notifyDataSetChanged();
@@ -479,4 +380,115 @@ public class KnownNetworksFragment extends Fragment {
 		scanhandler.removeMessages(REFRESH_MESSAGE);
 	}
 
+	@SuppressLint("NewApi")
+	@Override
+	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+		if (!isWifiOn(getContext()))
+			return false;
+		
+		mFragmentPageChangeListener.onFragmentPageChange(false);
+
+		MenuInflater inflater = mode.getMenuInflater();
+		mode.setTitle(mSSID);
+		int n = PrefUtil.getNIDFromSSID(getContext(), mSSID);
+		if (!PrefUtil.getNetworkState(getContext(), n))
+			inflater.inflate(R.menu.enable, menu);
+		else
+			inflater.inflate(R.menu.disable, menu);
+
+		if (known_in_range.contains(mSSID))
+			inflater.inflate(R.menu.connect, menu);
+
+		if (PrefUtil.readManagedState(getContext(), n))
+			inflater.inflate(R.menu.managed, menu);
+		else
+			inflater.inflate(R.menu.nonmanaged, menu);
+
+		inflater.inflate(R.menu.remove, menu);
+		return true;
+	}
+
+	@Override
+	public void onDestroyActionMode(ActionMode mode) {
+		mActionMode = null;
+		mFragmentPageChangeListener.onFragmentPageChange(true);
+	}
+
+	@Override
+	public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+		return false;
+	}
+
+	@SuppressLint("NewApi")
+	@Override
+	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+		int n = PrefUtil.getNIDFromSSID(getContext(), mSSID);
+		int i = item.getItemId();
+		switch (i) {
+		case R.id.menu_enable:
+			PrefUtil.setNetworkState(getContext(), n, true);
+			PrefUtil.writeNetworkState(getContext(), n, false);
+			adapter.notifyDataSetChanged();
+			break;
+
+		case R.id.menu_disable:
+			PrefUtil.setNetworkState(getContext(), n, false);
+			PrefUtil.writeNetworkState(getContext(), n, true);
+			adapter.notifyDataSetChanged();
+			break;
+
+		case R.id.menu_managed:
+			PrefUtil.writeManagedState(getContext(), n, false);
+			adapter.notifyDataSetChanged();
+			break;
+
+		case R.id.menu_nonmanaged:
+			PrefUtil.writeManagedState(getContext(), n, true);
+			adapter.notifyDataSetChanged();
+			break;
+
+		case R.id.menu_connect:
+			if (PrefUtil.getNetworkState(getContext(), n)) {
+				Intent intent = new Intent(WFMonitor.CONNECTINTENT);
+				intent.putExtra(WFMonitor.NETWORKNAME,
+						PrefUtil.getSSIDfromNetwork(getContext(), n));
+				BroadcastHelper.sendBroadcast(getContext(), intent, true);
+			} else {
+				PrefUtil.getWifiManager(getContext()).enableNetwork(n, true);
+			}
+			break;
+
+		case R.id.menu_remove:
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setMessage("Remove network:" + mSSID)
+					.setPositiveButton("Yes", dialogClickListener)
+					.setNegativeButton("No", dialogClickListener).show();
+			break;
+		}
+		mode.finish();
+		return true;
+	}
+
+	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			switch (which) {
+			case DialogInterface.BUTTON_POSITIVE:
+				removeNetwork(PrefUtil.getNIDFromSSID(getContext(), mSSID));
+				break;
+
+			case DialogInterface.BUTTON_NEGATIVE:
+				// Ok, do nothing
+				break;
+			}
+		}
+	};
+
+	private void removeNetwork(final int network) {
+		NotifUtil.showToast(getContext(),
+				getContext().getString(R.string.removing_network) + mSSID);
+		PrefUtil.getWifiManager(getActivity()).removeNetwork(network);
+		PrefUtil.getWifiManager(getActivity()).saveConfiguration();
+		scanhandler.sendEmptyMessage(SCAN_MESSAGE);
+	}
 }

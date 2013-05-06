@@ -64,6 +64,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.format.Formatter;
+import android.util.Log;
 
 /*
  * Handles all interaction 
@@ -652,10 +653,13 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	}
 
 	private void checkSignal(final Context context) {
-		int signal = getWifiManager(context).getConnectionInfo().getRssi();
+		WifiInfo ci = getWifiManager(context).getConnectionInfo();
+	    int signal = ci.getRssi();
+	    Log.i("BUTTS",String.valueOf(ci.getLinkSpeed()));
 		if (statNotifCheck()) {
 			StatusMessage m = new StatusMessage().setSSID(getSSID());
 			m.setSignal(WifiManager.calculateSignalLevel(signal, 5));
+			m.setLinkSpeed(String.valueOf(ci.getLinkSpeed()));
 			StatusMessage.send(context, m);
 		}
 

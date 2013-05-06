@@ -18,6 +18,7 @@
 package org.wahtod.wififixer.ui;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitor;
@@ -32,6 +33,7 @@ import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -150,6 +152,11 @@ public class ConnectFragment extends FragmentSwitchboard implements
 		} else if (network.capabilities.contains(WPA)) {
 			wf.preSharedKey = StringUtil.addQuotes(password);
 		}
+		List<WifiConfiguration> configs = PrefUtil.getWifiManager(getActivity()).getConfiguredNetworks();
+		for (WifiConfiguration w:configs){
+			Log.i(w.SSID,w.toString());
+		}
+		Log.i(wf.SSID,wf.toString());
 		return wf;
 	}
 

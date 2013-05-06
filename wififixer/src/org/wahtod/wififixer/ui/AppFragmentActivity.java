@@ -18,13 +18,14 @@
 package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
+
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class AppFragmentActivity extends FragmentActivity {
+public abstract class AppFragmentActivity extends FragmentActivity {
 	private Menu optionsmenu;
 
 	// Create menus

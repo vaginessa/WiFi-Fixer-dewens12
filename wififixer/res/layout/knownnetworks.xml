@@ -17,20 +17,12 @@
     along with this program.  If not, see http://www.gnu.org/licenses
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/TextView01"
-        style="@style/Wftext.large"
-        android:layout_gravity="center_horizontal"
-        android:alpha=".8"
-        android:paddingBottom="@dimen/knownnetworks_header_padding_bottom"
-        android:paddingTop="@dimen/knownnetworks_header_padding_top"
-        android:text="@string/knownnetworks_fragment_header" >
-    </TextView>
+    android:orientation="vertical"
+    android:showDividers="end" >
 
     <ListView
         android:id="@+id/knownlist"
@@ -38,11 +30,12 @@
         android:layout_height="fill_parent"
         android:alpha=".8"
         android:cacheColorHint="#00000000"
-        android:divider="#00000000"
-        android:dividerHeight="0dp"
-        android:headerDividersEnabled="false"
+        android:divider="@drawable/divider"
+        android:dividerHeight="2dp"
         android:paddingLeft="@dimen/knownnetworks_list_padding_left"
-        android:scrollbars="none" >
+        android:scrollbars="none"
+        tools:listitem="@android:layout/simple_list_item_1" >
+
     </ListView>
 
 </LinearLayout>

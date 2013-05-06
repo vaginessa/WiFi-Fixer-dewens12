@@ -22,7 +22,7 @@
         android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
         android:icon="@drawable/ic_menu_manage"
         android:key="prefscreen"
-        android:title="Main" >
+        android:title="Service" >
         <extra
             android:name="resource"
             android:value="general" />
@@ -35,6 +35,15 @@
         <extra
             android:name="resource"
             android:value="notification" />
+    </header>
+    <header
+        android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+        android:icon="@drawable/cog"
+        android:key="prefscreen"
+        android:title="Widget" >
+        <extra
+            android:name="resource"
+            android:value="widget" />
     </header>
     <header
         android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"

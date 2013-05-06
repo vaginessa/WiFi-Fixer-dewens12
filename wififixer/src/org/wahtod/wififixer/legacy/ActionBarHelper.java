@@ -34,7 +34,10 @@ public class ActionBarHelper extends ActionBarDetector {
 			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 			actionBar.setDisplayShowTitleEnabled(false);
 			TabListener tl = new TabListener(a);
-			Tab tab = actionBar.newTab().setText(R.string.known_networks)
+			Tab tab = actionBar.newTab().setText(R.string.status)
+					.setTabListener(tl);
+			actionBar.addTab(tab);
+			tab = actionBar.newTab().setText(R.string.known_networks)
 					.setTabListener(tl);
 			actionBar.addTab(tab);
 			tab = actionBar.newTab().setText(R.string.local_networks)

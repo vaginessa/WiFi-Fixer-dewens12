@@ -17,29 +17,24 @@
 
 package org.wahtod.wififixer.ui;
 
-import java.lang.reflect.Method;
+import android.app.Dialog;
+import android.support.v4.app.DialogFragment;
+import android.view.Window;
+import android.view.WindowManager;
 
-import android.os.Bundle;
-
-public class FragmentSwitchboard extends BaseDialogFragment {
+public class BaseDialogFragment extends DialogFragment {
 	public static final String FRAGMENT_KEY = "FRAGMENT";
 	public static final String METHOD = "newInstance";
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static FragmentSwitchboard newInstance(Bundle bundle) {
-		try {
-			String s = bundle.getString(FRAGMENT_KEY);
-			Class c = Class.forName(s);
-			Class p[] = new Class[1];
-			p[0] = Bundle.class;
-			Method m = c.getMethod(METHOD, p);
-			return (FragmentSwitchboard) m.invoke(c, bundle);
-		} catch (Exception e) {
-			e.printStackTrace();
+	protected static void setDialog(DialogFragment f) {
+		Dialog d = f.getDialog();
+		if (d != null) {
+			d.setCanceledOnTouchOutside(true);
+			d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			f.setStyle(DialogFragment.STYLE_NO_TITLE, f.getTheme());
+			WindowManager.LayoutParams wset = d.getWindow().getAttributes();
+			wset.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
+			d.getWindow().setAttributes(wset);
 		}
-		/*
-		 * Default behavior if no valid objects found
-		 */
-		return new AboutFragment();
 	}
 }

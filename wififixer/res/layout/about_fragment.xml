@@ -16,142 +16,99 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see http://www.gnu.org/licenses
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:alpha=".95"
+    android:background="@drawable/dialog"
+    android:gravity="left"
     android:minHeight="200dp"
     android:minWidth="400dp"
-    android:alpha=".95"
     android:orientation="vertical"
-    android:gravity="center"
-    android:background="@drawable/dialog"
-    >
+    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp" >
 
     <TextView
         android:id="@+id/ssid"
         style="@style/Wftext.large"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="0.04"
-        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="SSID" >
     </TextView>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/BSSID_title"
+        style="@style/Wftext.header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="5dp"
-        android:weightSum="1" >
+        android:layout_alignLeft="@+id/bssid"
+        android:layout_below="@+id/ssid"
+        android:text="MAC:" />
 
-        <LinearLayout
-            android:id="@+id/LinearLayout00"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:baselineAligned="true"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/aboutfragment_layout_padding_bottom"
-            android:weightSum="1" >
+    <TextView
+        android:id="@+id/bssid"
+        style="@style/Wftext"
+        android:layout_alignBottom="@+id/BSSID_title"
+        android:layout_alignLeft="@+id/ssid"
+        android:gravity="center|right"
+        android:text="af:fa:df:df:df" />
 
-            <TextView
-                android:id="@+id/BSSID_title"
-                style="@style/Wftext.header"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="MAC:" >
-            </TextView>
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/Wftext.header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/BSSID_title"
+        android:text="Frequency:" />
 
-            <TextView
-                android:id="@+id/bssid"
-                style="@style/Wftext"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="af:fa:df:df:df" >
-            </TextView>
-        </LinearLayout>
+    <TextView
+        android:id="@+id/frequency"
+        style="@style/Wftext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignParentRight="true"
+        android:text="40" />
 
-        <LinearLayout
-            android:id="@+id/LinearLayout01"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:baselineAligned="true"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/aboutfragment_layout_padding_bottom"
-            android:weightSum="1" >
+    <TextView
+        android:id="@+id/TextView02"
+        style="@style/Wftext.header"
+        android:layout_below="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Capabilities:" />
 
-            <TextView
-                android:id="@+id/TextView02"
-                style="@style/Wftext.header"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="Capabilities:" >
-            </TextView>
+    <TextView
+        android:id="@+id/capabilities"
+        style="@style/Wftext"
+        android:layout_alignBottom="@+id/TextView02"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OPEN" />
 
-            <TextView
-                android:id="@+id/capabilities"
-                style="@style/Wftext"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="OPEN" >
-            </TextView>
-        </LinearLayout>
+    <TextView
+        android:id="@+id/TextView03"
+        style="@style/Wftext.header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextView02"
+        android:layout_below="@+id/TextView02"
+        android:text="Signal:" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical"
-             android:paddingBottom="@dimen/aboutfragment_layout_padding_bottom"
-            android:weightSum="1" >
+    <TextView
+        android:id="@+id/level"
+        style="@style/Wftext"
+        android:layout_alignBottom="@+id/TextView03"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-42" />
 
-            <TextView
-                android:id="@+id/textView1"
-                style="@style/Wftext.header"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="Frequency:" />
-
-            <TextView
-                android:id="@+id/frequency"
-                style="@style/Wftext"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="40" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/LinearLayout02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:weightSum="1" >
-
-            <TextView
-                android:id="@+id/TextView03"
-                style="@style/Wftext.header"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="Signal:" >
-            </TextView>
-
-            <TextView
-                android:id="@+id/level"
-                style="@style/Wftext"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="-42" >
-            </TextView>
-        </LinearLayout>
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

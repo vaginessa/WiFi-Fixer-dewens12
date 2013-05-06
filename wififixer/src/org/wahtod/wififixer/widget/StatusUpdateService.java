@@ -52,6 +52,7 @@ public class StatusUpdateService extends IntentService {
 		if (large) {
 			views.setTextViewText(R.id.ssid, m.getSSID());
 			views.setTextViewText(R.id.status, m.getStatus());
+			views.setTextViewText(R.id.linkspeed, m.getLinkSpeed());
 			cm = new ComponentName(this, FixerWidget.class);
 		} else
 			cm = new ComponentName(this, FixerWidgetSmall.class);

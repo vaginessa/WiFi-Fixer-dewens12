@@ -35,7 +35,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class TutorialFragmentActivity extends AppFragmentActivity {
+public abstract class TutorialFragmentActivity extends AppFragmentActivity {
 	protected static final int TOAST = 0;
 	protected static final int PAGE = 4;
 	protected static final int PART1 = 1;

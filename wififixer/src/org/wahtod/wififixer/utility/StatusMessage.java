@@ -27,7 +27,9 @@ public class StatusMessage {
 	public static final String STATUS_KEY = "STATUS";
 	public static final String SIGNAL_KEY = "SIGNAL";
 	public static final String SHOW_KEY = "SHOW";
-	public static final String EMPTY = "    ";
+	public static final String LINK_KEY = "LINKSPEED";
+	public static final String EMPTY = "Not Connected";
+	public static final String MB = "mb";
 	public Bundle status;
 
 	public StatusMessage(final String ssid, final String smessage,
@@ -45,6 +47,7 @@ public class StatusMessage {
 		out.append(getStatus());
 		out.append(getSignal());
 		out.append(getShow());
+		out.append(getLinkSpeed());
 		return out.toString();
 	}
 
@@ -83,6 +86,11 @@ public class StatusMessage {
 		if (b.containsKey(SHOW_KEY) && b.getInt(SHOW_KEY) != 0)
 			if (b.getInt(SHOW_KEY) != s.getShow())
 				s.setShow(b.getInt(SHOW_KEY));
+		if (b.containsKey(LINK_KEY)) {
+			String ls = b.getString(LINK_KEY);
+			if (ls != null)
+				s.setLinkSpeed(ls.concat(MB));
+		}
 	}
 
 	public static void send(final Context context, final StatusMessage tosend) {
@@ -114,9 +122,18 @@ public class StatusMessage {
 		return this;
 	}
 
+	public StatusMessage setLinkSpeed(String s) {
+		status.putString(LINK_KEY, s);
+		return this;
+	}
+
 	public StatusMessage setShow(final int sh) {
 		status.putInt(SHOW_KEY, sh);
 		return this;
+	}
+
+	public String getLinkSpeed() {
+		return status.getString(LINK_KEY);
 	}
 
 	public String getSSID() {

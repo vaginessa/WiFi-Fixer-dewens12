@@ -20,20 +20,18 @@ package org.wahtod.wififixer.ui;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
-import org.wahtod.wififixer.R;
-
 import org.wahtod.wififixer.DefaultExceptionHandler;
-import org.wahtod.wififixer.IntentConstants;
+import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.boot.BootService;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.prefs.PrefConstants;
-import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
+import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.ui.KnownNetworksFragment.OnFragmentPageChangeListener;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
-import org.wahtod.wififixer.widget.WidgetReceiver;
 
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -41,41 +39,39 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ToggleButton;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.Menu;
+import android.view.MenuItem;
 
-public class WifiFixerActivity extends TutorialFragmentActivity {
+public class WifiFixerActivity extends TutorialFragmentActivity implements
+		OnFragmentPageChangeListener {
 	private static WeakReference<WifiFixerActivity> self;
 
-	public class PhoneAdapter extends FragmentPagerAdapter {
-		public PhoneAdapter(FragmentManager fm) {
+	public class PagerAdapter extends FragmentStatePagerAdapter {
+		public PagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
 
 		@Override
 		public int getCount() {
-			return 2;
+			return 3;
 		}
 
 		@Override
 		public Fragment getItem(int position) {
 			switch (position) {
 			case 0:
+				return ServiceFragment.newInstance(position);
+			case 1:
 				return KnownNetworksFragment.newInstance(position);
 
-			case 1:
+			case 2:
 				return ScanFragment.newInstance(position);
 			}
 			return null;
@@ -111,12 +107,13 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 	public static final String STATUSFRAG_TAG = "STATUS";
 	private static final String RUN_TUTORIAL = "RUN_TUTORIAL";
 	public static final String SHOW_STATUS = "SHOW_STATUS";
-	public static final String SEND_LOG = "SEND_LOG";
 
 	/*
 	 * Delay for Wifi Toggle button check
 	 */
 	private static final long WIFI_TOGGLE_CHECK_DELAY = 3000;
+
+	private BaseViewPager mBasePager;
 
 	void authCheck() {
 		if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
@@ -168,10 +165,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		if (data.containsKey(SHOW_FRAGMENT)) {
 			data.remove(SHOW_FRAGMENT);
 			showFragment(data);
-		} else if (data.containsKey(SEND_LOG)) {
-			data.remove(SEND_LOG);
-			sendLog();
-		} else if (data.containsKey(PrefConstants.SERVICEWARNED)) {
+		}else if (data.containsKey(PrefConstants.SERVICEWARNED)) {
 			data.remove(PrefConstants.SERVICEWARNED);
 			showServiceAlert();
 		}
@@ -197,69 +191,10 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		setIntent(i);
 	}
 
-	void sendLog() {
-		/*
-		 * Gets appropriate dir and filename on sdcard across API versions.
-		 */
-		File file = VersionedFile.getFile(this, LogService.LOGFILE);
-
-		if (Environment.getExternalStorageState() != null
-				&& !(Environment.getExternalStorageState()
-						.contains(Environment.MEDIA_MOUNTED))) {
-			NotifUtil.showToast(WifiFixerActivity.this,
-					R.string.sd_card_unavailable);
-			return;
-		} else if (!file.exists()) {
-			file = this
-					.getFileStreamPath(DefaultExceptionHandler.EXCEPTIONS_FILENAME);
-			if (file.length() < 10) {
-				NotifUtil.showToast(WifiFixerActivity.this,
-						R.string.logfile_delete_err_toast);
-				return;
-			}
-		}
-
-		/*
-		 * Make sure LogService's buffer is flushed
-		 */
-		LogService.log(this, LogService.FLUSH, "");
-		final String fileuri = file.toURI().toString();
-		/*
-		 * Get the issue report, then start send log dialog
-		 */
-		AlertDialog.Builder issueDialog = new AlertDialog.Builder(this);
-
-		issueDialog.setTitle(getString(R.string.issue_report_header));
-		issueDialog.setMessage(getString(R.string.issue_prompt));
-
-		// Set an EditText view to get user input
-		final EditText input = new EditText(this);
-		input.setLines(3);
-		issueDialog.setView(input);
-		issueDialog.setPositiveButton(getString(R.string.ok_button),
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						if (input.getText().length() > 1)
-							showSendLogDialog(input.getText().toString(),
-									fileuri);
-						else
-							NotifUtil.showToast(WifiFixerActivity.this,
-									R.string.issue_report_nag);
-					}
-				});
-
-		issueDialog.setNegativeButton(getString(R.string.cancel_button),
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-					}
-				});
-		issueDialog.show();
-	}
-
 	public void showServiceAlert() {
 		final Context c;
 		c = this;
-		AlertDialog alert = new AlertDialog.Builder(this).create();
+		AlertDialog alert = new AlertDialog.Builder(c).create();
 		alert.setTitle(getString(R.string.note));
 		alert.setIcon(R.drawable.icon);
 		alert.setMessage(getString(R.string.servicealert_message));
@@ -272,61 +207,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 					}
 				});
 		alert.show();
-	}
-
-	public void showSendLogDialog(final String report, final String fileuri) {
-		/*
-		 * Now, prepare and send the log
-		 */
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-		dialog.setTitle(getString(R.string.send_log));
-		dialog.setMessage(getString(R.string.alert_message));
-		dialog.setIcon(R.drawable.icon);
-		dialog.setPositiveButton(getString(R.string.ok_button),
-				new DialogInterface.OnClickListener() {
-
-					public void onClick(DialogInterface dialog, int which) {
-
-						// setLogging(false);
-						Intent sendIntent = new Intent(Intent.ACTION_SEND);
-						sendIntent.setType(getString(R.string.log_mimetype));
-						sendIntent.putExtra(Intent.EXTRA_EMAIL,
-								new String[] { getString(R.string.email) });
-						sendIntent.putExtra(Intent.EXTRA_SUBJECT,
-								getString(R.string.subject));
-						sendIntent.putExtra(Intent.EXTRA_STREAM,
-								Uri.parse(fileuri));
-						sendIntent.putExtra(Intent.EXTRA_TEXT,
-								LogService.getBuildInfo() + "\n\n" + report);
-
-						startActivity(Intent.createChooser(sendIntent,
-								getString(R.string.emailintent)));
-
-					}
-				});
-
-		dialog.setNegativeButton(getString(R.string.cancel_button),
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						return;
-					}
-				});
-		dialog.show();
-	}
-
-	public void serviceToggle(View view) {
-		if (PrefUtil.readBoolean(getApplicationContext(),
-				Pref.DISABLE_KEY.key())) {
-			Intent intent = new Intent(
-					IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
-			sendBroadcast(intent);
-		} else {
-			Intent intent = new Intent(
-					IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
-			sendBroadcast(intent);
-		}
-
-		this.sendBroadcast(new Intent(ServiceFragment.REFRESH_ACTION));
 	}
 
 	private static void startwfService(final Context context) {
@@ -353,16 +233,14 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		 * Set up Fragments, ViewPagers and FragmentPagerAdapters for phone and
 		 * tablet
 		 */
-		ViewPager phonevp = (ViewPager) findViewById(R.id.pager);
-		if (phonevp != null
+		mBasePager = (BaseViewPager) findViewById(R.id.pager);
+		if (mBasePager != null
 				|| PrefUtil.readBoolean(this,
 						getString(R.string.forcephone_key))) {
-			drawFragment(R.id.servicefragment, ServiceFragment.class);
-			removeFragment(R.id.logfragment);
-			if (phonevp.getAdapter() == null) {
-				PhoneAdapter fadapter = new PhoneAdapter(
+			if (mBasePager.getAdapter() == null) {
+				PagerAdapter fadapter = new PagerAdapter(
 						getSupportFragmentManager());
-				phonevp.setAdapter(fadapter);
+				mBasePager.setAdapter(fadapter);
 			}
 			if (!PrefUtil.readBoolean(this, PrefConstants.TUTORIAL))
 				handler.postDelayed(new Runnable() {
@@ -373,12 +251,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 					}
 				}, WIFI_TOGGLE_CHECK_DELAY);
 
-		} else {
-			drawFragment(R.id.servicefragment, ServiceFragment.class);
-			drawFragment(R.id.knownnetworksfragment,
-					KnownNetworksFragment.class);
-			drawFragment(R.id.scanfragment, ScanFragment.class);
-			drawFragment(R.id.logfragment, LogFragment.class);
 		}
 		getSupportFragmentManager().executePendingTransactions();
 	}
@@ -396,10 +268,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		 */
 		super.onCreate(savedInstanceState);
 		setTitle(R.string.app_name);
-		if (PrefUtil.readBoolean(this, getString(R.string.forcephone_key)))
-			setContentView(R.layout.mainalt);
-		else
-			setContentView(R.layout.main);
+		setContentView(R.layout.main);
 		drawUI();
 		ActionBarDetector.setDisplayHomeAsUpEnabled(this, false);
 		// Here's where we fire the nag
@@ -456,33 +325,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		dialog.show();
 	}
 
-	private void drawFragment(int id, Class<? extends Fragment> f) {
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		Fragment found = getSupportFragmentManager().findFragmentByTag(
-				String.valueOf(id));
-		if (found == null) {
-			try {
-				found = (Fragment) f.newInstance();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			ft.add(id, found, String.valueOf(id));
-			ft.commit();
-		}
-	}
-
-	private void removeFragment(int id) {
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		Fragment found = getSupportFragmentManager().findFragmentByTag(
-				String.valueOf(id));
-		if (found != null) {
-			ft.remove(found);
-			ft.commit();
-		}
-	}
-
 	private void showFragment(Bundle bundle) {
 		/*
 		 * Now using DialogFragments
@@ -491,32 +333,34 @@ public class WifiFixerActivity extends TutorialFragmentActivity {
 		d.show(getSupportFragmentManager(), this.getClass().getName());
 	}
 
-	private Runnable WifiToggleCheck = new Runnable() {
-		public void run() {
-			Context c = getApplicationContext();
-			WifiManager wm = (WifiManager) c
-					.getSystemService(Context.WIFI_SERVICE);
-			if (!wm.isWifiEnabled()) {
-				setWifiButtonState(false);
-			}
-		}
-	};
-
-	protected void setWifiButtonState(final boolean state) {
-		ToggleButton tb = (ToggleButton) findViewById(R.id.ToggleButton2);
-		tb.setChecked(state);
+	/*
+	 * Fragments using ContextBar must stop viewpager to preserve focus during
+	 * ContextBar lifecycle
+	 * 
+	 * @see
+	 * org.wahtod.wififixer.ui.KnownNetworksFragment.OnFragmentPageChangeListener
+	 * #onFragmentPageChange(boolean)
+	 */
+	@Override
+	public void onFragmentPageChange(boolean state) {
+		mBasePager.setPagingEnabled(state);
 	}
 
-	public void wifiToggle(View view) {
-		if (!PrefUtil.getWifiManager(this).isWifiEnabled()) {
-			sendBroadcast(new Intent(WidgetReceiver.WIFI_ON));
-			NotifUtil.showToast(this.getApplicationContext(),
-					R.string.enabling_wifi);
-		} else {
-			sendBroadcast(new Intent(WidgetReceiver.WIFI_OFF));
-			handler.postDelayed(WifiToggleCheck, WIFI_TOGGLE_CHECK_DELAY);
-			NotifUtil.showToast(this.getApplicationContext(),
-					R.string.disabling_wifi);
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		if (findViewById(R.id.toggles) == null)
+			getMenuInflater().inflate(R.menu.quicksettings, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.menu_quicksettings) {
+			QuickSettingsFragment d = QuickSettingsFragment.newInstance(item
+					.getTitle().toString());
+			d.show(getSupportFragmentManager(), d.getClass().getSimpleName());
 		}
+
+		return super.onOptionsItemSelected(item);
 	}
 }
