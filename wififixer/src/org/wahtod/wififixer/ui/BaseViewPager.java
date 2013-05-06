@@ -21,34 +21,38 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+/*
+ * Adds method for ViewPager to have touch events enabled/disabled
+ */
 public class BaseViewPager extends ViewPager {
 
-    private boolean enabled;
+	private boolean enabled;
 
-    public BaseViewPager(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        this.enabled = true;
-    }
+	public BaseViewPager(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		this.enabled = true;
+	}
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (this.enabled) {
-            return super.onTouchEvent(event);
-        }
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if (this.enabled) {
+			return super.onTouchEvent(event);
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (this.enabled) {
-            return super.onInterceptTouchEvent(event);
-        }
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent event) {
+		if (this.enabled) {
+			return super.onInterceptTouchEvent(event);
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    public void setPagingEnabled(final boolean state) {
-        this.enabled = state;
-    }
+	public void setPagingEnabled(final boolean state) {
+		this.enabled = state;
+	}
 }

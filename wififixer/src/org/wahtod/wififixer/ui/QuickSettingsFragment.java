@@ -91,7 +91,7 @@ public class QuickSettingsFragment extends BaseDialogFragment {
 					Intent intent = new Intent(IntentConstants.ACTION_WIFI_ON);
 					getActivity().sendBroadcast(intent);
 				} else {
-					Intent intent = new Intent(IntentConstants.ACTION_WIFI_ON);
+					Intent intent = new Intent(IntentConstants.ACTION_WIFI_OFF);
 					getActivity().sendBroadcast(intent);
 				}
 				break;
