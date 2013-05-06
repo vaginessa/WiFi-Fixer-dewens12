@@ -100,7 +100,7 @@ public class LegacyNotifUtil extends NotifUtil {
 		NotificationManager nm = (NotificationManager) ctxt
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		if (m.getShow() != 1) {
-			vcancel(ctxt,null,NotifUtil.STATNOTIFID);
+			vcancel(ctxt, null, NotifUtil.STATNOTIFID);
 			NotifUtil.statnotif = null;
 			return;
 		}

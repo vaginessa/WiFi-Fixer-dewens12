@@ -15,7 +15,6 @@
     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
-
 package org.wahtod.wififixer.legacy;
 
 import android.annotation.SuppressLint;
@@ -23,7 +22,8 @@ import android.content.SharedPreferences.Editor;
 
 public class EditorHelperGB extends EditorDetector {
 
-	@SuppressLint("NewApi") @Override
+	@SuppressLint("NewApi")
+	@Override
 	public void vcommit(final Editor e) {
 		e.apply();
 	}

@@ -34,7 +34,8 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 
 public class JellyBeanNotifUtil extends NotifUtil {
-	@SuppressLint("NewApi") @Override
+	@SuppressLint("NewApi")
+	@Override
 	public void vaddStatNotif(final Context ctxt, final StatusMessage in) {
 		StatusMessage m = validateStrings(in);
 		NotificationManager nm = (NotificationManager) ctxt
@@ -136,7 +137,7 @@ public class JellyBeanNotifUtil extends NotifUtil {
 		builder.setAutoCancel(true);
 
 		// unique ID
-		nm.notify(VSHOW_TAG,id, builder.build());
+		nm.notify(VSHOW_TAG, id, builder.build());
 	}
 
 	@Override

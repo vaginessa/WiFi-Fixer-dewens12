@@ -385,7 +385,7 @@ public class KnownNetworksFragment extends Fragment implements Callback {
 	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 		if (!isWifiOn(getContext()))
 			return false;
-		
+
 		mFragmentPageChangeListener.onFragmentPageChange(false);
 
 		MenuInflater inflater = mode.getMenuInflater();

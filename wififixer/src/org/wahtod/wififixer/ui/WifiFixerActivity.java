@@ -165,7 +165,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		if (data.containsKey(SHOW_FRAGMENT)) {
 			data.remove(SHOW_FRAGMENT);
 			showFragment(data);
-		}else if (data.containsKey(PrefConstants.SERVICEWARNED)) {
+		} else if (data.containsKey(PrefConstants.SERVICEWARNED)) {
 			data.remove(PrefConstants.SERVICEWARNED);
 			showServiceAlert();
 		}
@@ -234,24 +234,21 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		 * tablet
 		 */
 		mBasePager = (BaseViewPager) findViewById(R.id.pager);
-		if (mBasePager != null
-				|| PrefUtil.readBoolean(this,
-						getString(R.string.forcephone_key))) {
+		if (mBasePager != null)
 			if (mBasePager.getAdapter() == null) {
 				PagerAdapter fadapter = new PagerAdapter(
 						getSupportFragmentManager());
 				mBasePager.setAdapter(fadapter);
 			}
-			if (!PrefUtil.readBoolean(this, PrefConstants.TUTORIAL))
-				handler.postDelayed(new Runnable() {
+		if (!PrefUtil.readBoolean(this, PrefConstants.TUTORIAL))
+			handler.postDelayed(new Runnable() {
 
-					@Override
-					public void run() {
-						phoneTutNag();
-					}
-				}, WIFI_TOGGLE_CHECK_DELAY);
+				@Override
+				public void run() {
+					phoneTutNag();
+				}
+			}, WIFI_TOGGLE_CHECK_DELAY);
 
-		}
 		getSupportFragmentManager().executePendingTransactions();
 	}
 
@@ -346,13 +343,27 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		mBasePager.setPagingEnabled(state);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.wahtod.wififixer.ui.AppFragmentActivity#onCreateOptionsMenu(android
+	 * .view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (findViewById(R.id.toggles) == null)
+		if (findViewById(R.id.small_screen) != null)
 			getMenuInflater().inflate(R.menu.quicksettings, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.wahtod.wififixer.ui.AppFragmentActivity#onOptionsItemSelected(android
+	 * .view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.menu_quicksettings) {
@@ -360,7 +371,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 					.getTitle().toString());
 			d.show(getSupportFragmentManager(), d.getClass().getSimpleName());
 		}
-
-		return super.onOptionsItemSelected(item);
+		return true;
 	}
+
 }

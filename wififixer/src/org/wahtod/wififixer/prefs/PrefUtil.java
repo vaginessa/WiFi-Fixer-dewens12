@@ -256,7 +256,7 @@ public class PrefUtil extends Object {
 		}
 		return context.getString(R.string.none);
 	}
-	
+
 	public static int getNIDFromSSID(final Context context, final String ssid) {
 		WifiManager wm = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);
@@ -389,7 +389,7 @@ public class PrefUtil extends Object {
 			PrefUtil.writeString(context, PrefConstants.SLPOLICY_KEY,
 					String.valueOf(wfsleep));
 		} catch (SettingNotFoundException e) {
-			setPolicy(context,Settings.System.WIFI_SLEEP_POLICY_NEVER);
+			setPolicy(context, Settings.System.WIFI_SLEEP_POLICY_NEVER);
 		}
 	}
 

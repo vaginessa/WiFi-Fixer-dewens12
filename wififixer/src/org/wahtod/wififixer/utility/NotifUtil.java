@@ -184,10 +184,10 @@ public abstract class NotifUtil {
 		cacheSelector();
 		selector.vcancel(context, tag, notif);
 	}
-	
-	public static void cancel (final Context context, final int notif){
+
+	public static void cancel(final Context context, final int notif) {
 		cacheSelector();
-		selector.vcancel(context,VSHOW_TAG,notif);
+		selector.vcancel(context, VSHOW_TAG, notif);
 	}
 
 	public static void showToast(final Context context, final int resID) {

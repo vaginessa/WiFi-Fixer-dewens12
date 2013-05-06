@@ -152,11 +152,12 @@ public class ConnectFragment extends FragmentSwitchboard implements
 		} else if (network.capabilities.contains(WPA)) {
 			wf.preSharedKey = StringUtil.addQuotes(password);
 		}
-		List<WifiConfiguration> configs = PrefUtil.getWifiManager(getActivity()).getConfiguredNetworks();
-		for (WifiConfiguration w:configs){
-			Log.i(w.SSID,w.toString());
+		List<WifiConfiguration> configs = PrefUtil
+				.getWifiManager(getActivity()).getConfiguredNetworks();
+		for (WifiConfiguration w : configs) {
+			Log.i(w.SSID, w.toString());
 		}
-		Log.i(wf.SSID,wf.toString());
+		Log.i(wf.SSID, wf.toString());
 		return wf;
 	}
 

@@ -42,7 +42,7 @@ public class PrefActivity extends PreferenceActivity implements
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onResume() {

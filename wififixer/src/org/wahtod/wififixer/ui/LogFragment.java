@@ -91,7 +91,6 @@ public class LogFragment extends Fragment {
 		return v;
 	}
 
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		self = new WeakReference<LogFragment>(this);

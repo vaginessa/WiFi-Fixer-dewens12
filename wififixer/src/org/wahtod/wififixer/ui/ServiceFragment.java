@@ -18,14 +18,13 @@
 package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
-import android.content.Context;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 public class ServiceFragment extends Fragment {
 	public static ServiceFragment newInstance(int p) {
@@ -35,22 +34,20 @@ public class ServiceFragment extends Fragment {
 		f.setArguments(args);
 		return f;
 	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-	}
 	
 	/*
-	 * Phone/Tablet magic happens here
-	 * (non-Javadoc)
-	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 * Phone/Tablet magic happens here (non-Javadoc)
+	 * 
+	 * @see
+	 * android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater,
+	 * android.view.ViewGroup, android.os.Bundle)
 	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.service, null);
-		
+		this.setHasOptionsMenu(true);
+
 		if (savedInstanceState == null) {
 			View tablet = v.findViewById(R.id.toggles);
 			FragmentTransaction transaction = getChildFragmentManager()
@@ -62,17 +59,13 @@ public class ServiceFragment extends Fragment {
 			/*
 			 * tablet view indicates if this is a tablet
 			 */
-			if (tablet != null){
+			if (tablet != null) {
 				QuickSettingsFragment toggleFragment = new QuickSettingsFragment();
 				transaction.add(R.id.toggles, toggleFragment);
 			}
 			transaction.commit();
 		}
 		return v;
-	}
-
-	private Context getContext() {
-		return getActivity();
 	}
 
 }

@@ -654,8 +654,8 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 
 	private void checkSignal(final Context context) {
 		WifiInfo ci = getWifiManager(context).getConnectionInfo();
-	    int signal = ci.getRssi();
-	    Log.i("BUTTS",String.valueOf(ci.getLinkSpeed()));
+		int signal = ci.getRssi();
+		Log.i("BUTTS", String.valueOf(ci.getLinkSpeed()));
 		if (statNotifCheck()) {
 			StatusMessage m = new StatusMessage().setSSID(getSSID());
 			m.setSignal(WifiManager.calculateSignalLevel(signal, 5));

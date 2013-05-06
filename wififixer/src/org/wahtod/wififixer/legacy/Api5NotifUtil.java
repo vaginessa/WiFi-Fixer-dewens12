@@ -72,7 +72,8 @@ public class Api5NotifUtil extends NotifUtil {
 		notify(ctxt, NotifUtil.STATNOTIFID, STAT_TAG, statbuilder.build());
 	}
 
-	@SuppressLint("NewApi") protected void notify(Context context, int id, String tag, Notification n) {
+	@SuppressLint("NewApi")
+	protected void notify(Context context, int id, String tag, Notification n) {
 		NotificationManager nm = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		nm.notify(tag, id, n);
@@ -82,7 +83,7 @@ public class Api5NotifUtil extends NotifUtil {
 	public void vaddLogNotif(final Context ctxt, final boolean flag) {
 
 		if (!flag) {
-			vcancel(ctxt,LOG_TAG,NotifUtil.LOGNOTIFID);
+			vcancel(ctxt, LOG_TAG, NotifUtil.LOGNOTIFID);
 			return;
 		}
 
@@ -130,7 +131,8 @@ public class Api5NotifUtil extends NotifUtil {
 		notify(context, id, VSHOW_TAG, builder.build());
 	}
 
-	@SuppressLint("NewApi") @Override
+	@SuppressLint("NewApi")
+	@Override
 	public void vcancel(Context context, String tag, int id) {
 		NotificationManager nm = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);

@@ -22,7 +22,8 @@ import android.os.StrictMode;
 
 public class StrictModeSetter extends StrictModeDetector {
 
-	@SuppressLint("NewApi") @Override
+	@SuppressLint("NewApi")
+	@Override
 	public boolean vSetPolicy(boolean flag) {
 		if (flag) {
 			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()

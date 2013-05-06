@@ -68,7 +68,8 @@ public class FifoList extends ArrayList<Object> {
 		return sum;
 	}
 
-	public List<SupplicantState> containsPatterns(final List<List<SupplicantState>> patterns) {
+	public List<SupplicantState> containsPatterns(
+			final List<List<SupplicantState>> patterns) {
 		for (List<SupplicantState> n : patterns) {
 			if (this.containsPattern(n))
 				return n;
