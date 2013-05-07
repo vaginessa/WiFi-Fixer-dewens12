@@ -49,10 +49,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 import android.util.SparseArray;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.ViewGroup;
 
 public class WifiFixerActivity extends TutorialFragmentActivity implements
@@ -89,7 +86,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		public Fragment getItem(int position) {
 			switch (position) {
 			case 0:
-				return ServiceFragment.newInstance(position);
+				return FirstPageFragment.newInstance(position);
 			case 1:
 				return KnownNetworksFragment.newInstance(position);
 			case 2:
@@ -147,8 +144,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	public static final String SCANFRAG_TAG = "SCAN";
 	public static final String STATUSFRAG_TAG = "STATUS";
 	private static final String RUN_TUTORIAL = "RUN_TUTORIAL";
-	public static final String SHOW_STATUS = "SHOW_STATUS";
-
 	/*
 	 * Delay for Wifi Toggle button check
 	 */
@@ -179,12 +174,12 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 
 	private void sendLogString() {
 		PagerAdapter adapter = (PagerAdapter) mBasePager.getAdapter();
-		ServiceFragment sf = (ServiceFragment) adapter.getPagerFragment(0);
+		FirstPageFragment sf = (FirstPageFragment) adapter.getPagerFragment(0);
 		if (sf == null)
-			Log.i("Butts", "SERVICEFRAGMENT NULL");
+			LogService.log(this, "Butts", "ServiceFragment Null");
 		else {
 			LogFragment l = (LogFragment) sf.getChildFragmentManager()
-					.findFragmentByTag(ServiceFragment.LOGFRAGMENT_TAG);
+					.findFragmentByTag(FirstPageFragment.LOGFRAGMENT_TAG);
 			l.setText(mLogString.toString());
 		}
 	}
@@ -245,9 +240,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			data.remove(RUN_TUTORIAL);
 			if (findViewById(R.id.pager) != null)
 				phoneTutNag();
-		} else if (data.containsKey(SHOW_STATUS)) {
-			data.remove(SHOW_STATUS);
-			startActivity(new Intent(this, LogFragmentActivity.class));
 		}
 		/*
 		 * Set Activity intent to one without commands we've "consumed"
@@ -296,8 +288,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 
 	public void drawUI() {
 		/*
-		 * Set up Fragments, ViewPagers and FragmentPagerAdapters for phone and
-		 * tablet
+		 * Set up ViewPager and FragmentStatePagerAdapter for phone and tablet
 		 */
 		mBasePager = (BaseViewPager) findViewById(R.id.pager);
 		if (mBasePager != null)
@@ -314,8 +305,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 					phoneTutNag();
 				}
 			}, WIFI_TOGGLE_CHECK_DELAY);
-
-		getSupportFragmentManager().executePendingTransactions();
 	}
 
 	// On Create
@@ -355,9 +344,9 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
 		setIntent(intent);
 		bundleIntent(intent);
+		super.onNewIntent(intent);
 	}
 
 	@Override
@@ -427,37 +416,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.wahtod.wififixer.ui.AppFragmentActivity#onCreateOptionsMenu(android
-	 * .view.Menu)
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		if (findViewById(R.id.small_screen) != null)
-			getMenuInflater().inflate(R.menu.quicksettings, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.wahtod.wififixer.ui.AppFragmentActivity#onOptionsItemSelected(android
-	 * .view.MenuItem)
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.menu_quicksettings) {
-			QuickSettingsFragment d = QuickSettingsFragment.newInstance(item
-					.getTitle().toString());
-			d.show(getSupportFragmentManager(), d.getClass().getSimpleName());
-		}
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * org.wahtod.wififixer.ui.TutorialFragmentActivity#onSaveInstanceState(
 	 * android.os.Bundle)
 	 */
@@ -481,7 +439,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 
 		mLogString = new StringBuilder(
 				savedInstanceState.getString(LogFragment.LOG_MESSAGE));
-		
+
 		handler.postDelayed(new Runnable() {
 
 			@Override

@@ -26,11 +26,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ServiceFragment extends Fragment {
+public class FirstPageFragment extends Fragment {
 	public static final String LOGFRAGMENT_TAG = "LOG_FRAGMENT";
 
-	public static ServiceFragment newInstance(int p) {
-		ServiceFragment f = new ServiceFragment();
+	public static FirstPageFragment newInstance(int p) {
+		FirstPageFragment f = new FirstPageFragment();
 		Bundle args = new Bundle();
 		args.putInt("num", p);
 		f.setArguments(args);

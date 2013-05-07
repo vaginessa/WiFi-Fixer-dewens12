@@ -22,6 +22,7 @@ import org.wahtod.wififixer.R;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -35,6 +36,8 @@ public abstract class AppFragmentActivity extends FragmentActivity {
 		getMenuInflater().inflate(R.menu.help, menu);
 		getMenuInflater().inflate(R.menu.about, menu);
 		getMenuInflater().inflate(R.menu.prefs, menu);
+		if (findViewById(R.id.small_screen) != null)
+			getMenuInflater().inflate(R.menu.quicksettings, menu);
 		optionsmenu = menu;
 		return true;
 	}
@@ -42,8 +45,9 @@ public abstract class AppFragmentActivity extends FragmentActivity {
 	/* Handles item selections */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
 
+		super.onOptionsItemSelected(item);
+		Log.i("BIG_BUTTS", String.valueOf(item.getItemId()));
 		switch (item.getItemId()) {
 		case R.id.menu_prefs:
 			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
@@ -60,6 +64,11 @@ public abstract class AppFragmentActivity extends FragmentActivity {
 		case R.id.menu_about:
 			this.startActivity(new Intent(this, About.class)
 					.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+			return true;
+		case R.id.menu_quicksettings:
+			QuickSettingsFragment d = QuickSettingsFragment.newInstance(item
+					.getTitle().toString());
+			d.show(getSupportFragmentManager(), d.getClass().getSimpleName());
 			return true;
 		}
 		return false;

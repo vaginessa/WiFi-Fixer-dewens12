@@ -42,7 +42,7 @@
             android:layout_gravity="center_horizontal"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text ="Service Disabled"
+            android:text ="..."
              />
 
     </ScrollView>
