@@ -3,7 +3,7 @@
     <item
         android:icon="@drawable/quicksettings_icon"
         android:id="@+id/menu_quicksettings"
-        android:showAsAction="always|withText"
+        android:showAsAction="always"
         android:title="@string/quick_text"/>
 
 </menu>

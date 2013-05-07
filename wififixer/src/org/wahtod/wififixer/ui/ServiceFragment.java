@@ -27,6 +27,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class ServiceFragment extends Fragment {
+	public static final String LOGFRAGMENT_TAG = "LOG_FRAGMENT";
+
 	public static ServiceFragment newInstance(int p) {
 		ServiceFragment f = new ServiceFragment();
 		Bundle args = new Bundle();
@@ -36,7 +38,9 @@ public class ServiceFragment extends Fragment {
 	}
 	
 	/*
-	 * Phone/Tablet magic happens here (non-Javadoc)
+	 * Phone/Tablet magic happens here 
+	 * 
+	 * (non-Javadoc)
 	 * 
 	 * @see
 	 * android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater,
@@ -55,7 +59,7 @@ public class ServiceFragment extends Fragment {
 			StatusFragment aboutFragment = StatusFragment.newInstance(1);
 			transaction.add(R.id.about, aboutFragment);
 			LogFragment logFragment = LogFragment.newInstance(null);
-			transaction.add(R.id.servicelog, logFragment);
+			transaction.add(R.id.servicelog, logFragment,LOGFRAGMENT_TAG);
 			/*
 			 * tablet view indicates if this is a tablet
 			 */

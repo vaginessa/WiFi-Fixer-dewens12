@@ -44,7 +44,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.LayoutInflater;
@@ -61,7 +60,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 public class KnownNetworksFragment extends Fragment implements Callback {
-	private OnFragmentPageChangeListener mFragmentPageChangeListener;
+	private OnFragmentPauseRequestListener mFragmentPauseRequestListener;
 	private static WeakReference<KnownNetworksFragment> self;
 	private static NetworkListAdapter adapter;
 	private static List<String> knownnetworks;
@@ -75,8 +74,8 @@ public class KnownNetworksFragment extends Fragment implements Callback {
 	private static final int SCAN_DELAY = 15000;
 	private static final String NETWORKS_KEY = "NETWORKS_KEY";
 
-	public interface OnFragmentPageChangeListener {
-		public void onFragmentPageChange(boolean state);
+	public interface OnFragmentPauseRequestListener {
+		public void onFragmentPauseRequest(boolean state);
 	}
 
 	@Override
@@ -121,7 +120,7 @@ public class KnownNetworksFragment extends Fragment implements Callback {
 		 */
 		knownnetworks = getNetworks(getContext());
 		known_in_range = new ArrayList<String>();
-		mFragmentPageChangeListener = (OnFragmentPageChangeListener) activity;
+		mFragmentPauseRequestListener = (OnFragmentPauseRequestListener) activity;
 		super.onAttach(activity);
 	}
 
@@ -386,7 +385,7 @@ public class KnownNetworksFragment extends Fragment implements Callback {
 		if (!isWifiOn(getContext()))
 			return false;
 
-		mFragmentPageChangeListener.onFragmentPageChange(false);
+		mFragmentPauseRequestListener.onFragmentPauseRequest(false);
 
 		MenuInflater inflater = mode.getMenuInflater();
 		mode.setTitle(mSSID);
@@ -411,7 +410,7 @@ public class KnownNetworksFragment extends Fragment implements Callback {
 	@Override
 	public void onDestroyActionMode(ActionMode mode) {
 		mActionMode = null;
-		mFragmentPageChangeListener.onFragmentPageChange(true);
+		mFragmentPauseRequestListener.onFragmentPauseRequest(true);
 	}
 
 	@Override

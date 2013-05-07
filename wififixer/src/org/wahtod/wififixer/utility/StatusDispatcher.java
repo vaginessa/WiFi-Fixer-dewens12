@@ -19,11 +19,12 @@ package org.wahtod.wififixer.utility;
 
 import java.lang.ref.WeakReference;
 
-import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
-import org.wahtod.wififixer.ui.StatusFragment;
+import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.ui.WifiFixerActivity;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -32,6 +33,7 @@ import android.os.Message;
 
 public class StatusDispatcher {
 	public static StatusMessage m;
+	public static final String STATUS_ACTION = "org.wahtod.wififixer.ACTION.STATUS_UPDATE";
 	public static final String REFRESH_INTENT = "org.wahtod.wififixer.STATUS_REFRESH";
 	private static final int WIDGET_REFRESH_DELAY = 20000;
 	private static final int WIDGET_REFRESH = 115;
@@ -110,7 +112,8 @@ public class StatusDispatcher {
 		}
 
 		public void run() {
-			Intent i = new Intent(StatusFragment.STATUS_ACTION);
+			Intent i = new Intent(STATUS_ACTION);
+			i.setComponent(new ComponentName(c.get(), WifiFixerActivity.class));
 			i.putExtras(message.status);
 			BroadcastHelper.sendBroadcast(c.get(), i, true);
 		}

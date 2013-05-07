@@ -42,7 +42,8 @@
             android:layout_gravity="center_horizontal"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text="Ipso facto blah blah\n poop fuck tits niart\nfart fart]" />
+            android:text ="Service Disabled"
+             />
 
     </ScrollView>
 

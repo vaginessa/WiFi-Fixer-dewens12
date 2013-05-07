@@ -28,16 +28,19 @@ import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
-import org.wahtod.wififixer.ui.KnownNetworksFragment.OnFragmentPageChangeListener;
+import org.wahtod.wififixer.ui.KnownNetworksFragment.OnFragmentPauseRequestListener;
+import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,14 +49,33 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 
 public class WifiFixerActivity extends TutorialFragmentActivity implements
-		OnFragmentPageChangeListener {
+		OnFragmentPauseRequestListener {
 	private static WeakReference<WifiFixerActivity> self;
+	private StringBuilder mLogString;
 
 	public class PagerAdapter extends FragmentStatePagerAdapter {
+		SparseArray<Fragment> fragmentArray = new SparseArray<Fragment>();
+
+		@Override
+		public void destroyItem(ViewGroup container, int position, Object object) {
+			fragmentArray.remove(position);
+			super.destroyItem(container, position, object);
+		}
+
+		@Override
+		public Object instantiateItem(ViewGroup container, int position) {
+			Fragment f = (Fragment) super.instantiateItem(container, position);
+			fragmentArray.put(position, f);
+			return f;
+		}
+
 		public PagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
@@ -70,11 +92,14 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 				return ServiceFragment.newInstance(position);
 			case 1:
 				return KnownNetworksFragment.newInstance(position);
-
 			case 2:
 				return ScanFragment.newInstance(position);
 			}
 			return null;
+		}
+
+		public Fragment getPagerFragment(int position) {
+			return fragmentArray.get(position);
 		}
 	}
 
@@ -82,6 +107,22 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		@Override
 		public void handleMessage(Message message) {
 			self.get().handleIntentMessage(message);
+		}
+	};
+
+	private BroadcastReceiver logReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Message m = logHandler.obtainMessage();
+			m.setData(intent.getExtras());
+			logHandler.sendMessage(m);
+		}
+	};
+
+	private static Handler logHandler = new Handler() {
+		@Override
+		public void handleMessage(Message message) {
+			self.get().updateLogString(message.getData());
 		}
 	};
 
@@ -120,6 +161,31 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			// Handle Donate Auth
 			startService(new Intent(getString(R.string.donateservice)));
 			nagNotification(this);
+		}
+	}
+
+	private void updateLogString(Bundle b) {
+
+		if (b != null) {
+			String message = b.getString(LogFragment.LOG_MESSAGE);
+			if (message != null) {
+				message.replaceAll("\\n", "");
+				mLogString.append(message);
+				mLogString.append("\n");
+			}
+		}
+		sendLogString();
+	}
+
+	private void sendLogString() {
+		PagerAdapter adapter = (PagerAdapter) mBasePager.getAdapter();
+		ServiceFragment sf = (ServiceFragment) adapter.getPagerFragment(0);
+		if (sf == null)
+			Log.i("Butts", "SERVICEFRAGMENT NULL");
+		else {
+			LogFragment l = (LogFragment) sf.getChildFragmentManager()
+					.findFragmentByTag(ServiceFragment.LOGFRAGMENT_TAG);
+			l.setText(mLogString.toString());
 		}
 	}
 
@@ -256,6 +322,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		self = new WeakReference<WifiFixerActivity>(this);
+		mLogString = new StringBuilder();
 		/*
 		 * Set Default Exception handler
 		 */
@@ -296,7 +363,20 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	@Override
 	public void onPause() {
 		super.onPause();
+		BroadcastHelper.unregisterReceiver(this, logReceiver);
 		removeNag(this);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.wahtod.wififixer.ui.TutorialFragmentActivity#onResume()
+	 */
+	@Override
+	protected void onResume() {
+		BroadcastHelper.registerReceiver(this, logReceiver, new IntentFilter(
+				LogFragment.LOG_MESSAGE_INTENT), true);
+		super.onResume();
 	}
 
 	private void phoneTutNag() {
@@ -339,7 +419,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	 * #onFragmentPageChange(boolean)
 	 */
 	@Override
-	public void onFragmentPageChange(boolean state) {
+	public void onFragmentPauseRequest(boolean state) {
 		mBasePager.setPagingEnabled(state);
 	}
 
@@ -372,6 +452,46 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			d.show(getSupportFragmentManager(), d.getClass().getSimpleName());
 		}
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.wahtod.wififixer.ui.TutorialFragmentActivity#onSaveInstanceState(
+	 * android.os.Bundle)
+	 */
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putString(LogFragment.LOG_MESSAGE, mLogString.toString());
+		super.onSaveInstanceState(outState);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.wahtod.wififixer.ui.TutorialFragmentActivity#onRestoreInstanceState
+	 * (android.os.Bundle)
+	 */
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// Calling superclass first, to restore view hierarchy
+		super.onRestoreInstanceState(savedInstanceState);
+
+		mLogString = new StringBuilder(
+				savedInstanceState.getString(LogFragment.LOG_MESSAGE));
+		
+		handler.postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				sendLogString();
+			}
+		}, 1500);
+
+		this.sendLogString();
+
 	}
 
 }
