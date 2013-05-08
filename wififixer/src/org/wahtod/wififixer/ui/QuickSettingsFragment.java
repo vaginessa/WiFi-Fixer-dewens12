@@ -18,6 +18,7 @@
 package org.wahtod.wififixer.ui;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 
 import org.wahtod.wififixer.DefaultExceptionHandler;
 import org.wahtod.wififixer.IntentConstants;
@@ -29,11 +30,17 @@ import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,10 +51,62 @@ import android.widget.EditText;
 public class QuickSettingsFragment extends BaseDialogFragment {
 
 	private static final String TAG = "TAG";
+	protected static final String INTENT_ACTION = "INTENT_ACTION";
 	private CheckBox serviceCheckBox;
 	private CheckBox wifiCheckBox;
 	private CheckBox logCheckBox;
 	private Button sendLogButton;
+	private static WeakReference<QuickSettingsFragment> self;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		self = new WeakReference<QuickSettingsFragment>(this);
+		super.onCreate(savedInstanceState);
+	}
+
+	private static Handler wifiButtonHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			int state = msg.getData().getInt(WifiManager.EXTRA_WIFI_STATE,
+					WifiManager.WIFI_STATE_UNKNOWN);
+			switch (state) {
+			case WifiManager.WIFI_STATE_ENABLED:
+				self.get().setWifiCheckBox(true);
+				break;
+
+			case WifiManager.WIFI_STATE_DISABLED:
+				self.get().setWifiCheckBox(false);
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	};
+
+	protected class WifiButtonStateRunnable implements Runnable {
+		private boolean state;
+
+		@Override
+		public void run() {
+			wifiCheckBox.setChecked(state);
+		}
+
+		public WifiButtonStateRunnable(boolean b) {
+			state = b;
+		}
+	};
+
+	private BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context c, Intent i) {
+			Bundle b = new Bundle();
+			Message m = wifiButtonHandler.obtainMessage();
+			b.putAll(i.getExtras());
+			b.putString(INTENT_ACTION, i.getAction());
+			m.setData(b);
+			wifiButtonHandler.sendMessage(m);
+		}
+	};
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +128,10 @@ public class QuickSettingsFragment extends BaseDialogFragment {
 		sendLogButton.setOnClickListener(clicker);
 
 		return v;
+	}
+
+	protected void setWifiCheckBox(boolean b) {
+		wifiCheckBox.getHandler().post(new WifiButtonStateRunnable(b));
 	}
 
 	View.OnClickListener clicker = new View.OnClickListener() {
@@ -222,7 +285,20 @@ public class QuickSettingsFragment extends BaseDialogFragment {
 				.isWifiEnabled());
 		logCheckBox.setChecked(PrefUtil.readBoolean(getActivity(),
 				Pref.LOG_KEY.key()));
+		getActivity().registerReceiver(wifiReceiver,
+				new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 		super.onResume();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.support.v4.app.Fragment#onPause()
+	 */
+	@Override
+	public void onPause() {
+		getActivity().unregisterReceiver(wifiReceiver);
+		super.onPause();
 	}
 
 	public static QuickSettingsFragment newInstance(String tag) {
