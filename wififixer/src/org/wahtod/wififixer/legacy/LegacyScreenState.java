@@ -17,7 +17,7 @@
 
 package org.wahtod.wififixer.legacy;
 
-import org.wahtod.wififixer.WifiFixerService;
+import org.wahtod.wififixer.WFMonitorService;
 import org.wahtod.wififixer.prefs.PrefUtil;
 
 import android.content.Context;
@@ -26,7 +26,7 @@ public class LegacyScreenState extends VersionedScreenState {
 
 	@Override
 	public boolean vgetScreenState(Context context) {
-		if (PrefUtil.readBoolean(context, WifiFixerService.SCREENOFF))
+		if (PrefUtil.readBoolean(context, WFMonitorService.SCREENOFF))
 			return false;
 		else
 			return true;

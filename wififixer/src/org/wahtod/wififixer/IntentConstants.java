@@ -39,12 +39,12 @@ public class IntentConstants {
 	public static final String ACTION_WIFI_TOGGLE = "org.wahtod.wififixer.ACTION_WIFI_TOGGLE";
 
 	/*
-	 * Disables WifiFixerService (Broadcastreceiver will still process intents)
+	 * Disables WFMonitorService (Broadcastreceiver will still process intents)
 	 */
 	public static final String ACTION_WIFI_SERVICE_DISABLE = "org.wahtod.wififixer.ACTION_WIFI_SERVICE_DISABLE";
 
 	/*
-	 * Enables WifiFixerService
+	 * Enables WFMonitorService
 	 */
 	public static final String ACTION_WIFI_SERVICE_ENABLE = "org.wahtod.wififixer.ACTION_WIFI_SERVICE_ENABLE";
 

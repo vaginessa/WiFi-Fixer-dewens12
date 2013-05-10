@@ -45,7 +45,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 
-public class WifiFixerService extends Service implements
+public class WFMonitorService extends Service implements
 		OnScreenStateChangedListener {
 
 	/*
@@ -290,7 +290,7 @@ public class WifiFixerService extends Service implements
 
 				case STATENOT_KEY:
 					/*
-					 * Notify WFConnection instance to create/destroy ongoing
+					 * Notify WFMonitor instance to create/destroy ongoing
 					 * status notification
 					 */
 					wifi.setStatNotif(getFlag(Pref.STATENOT_KEY));
@@ -312,6 +312,7 @@ public class WifiFixerService extends Service implements
 				}
 			}
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public void preLoad() {
 				/*

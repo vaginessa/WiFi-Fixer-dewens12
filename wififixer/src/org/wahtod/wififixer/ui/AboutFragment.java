@@ -34,14 +34,21 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.widget.Button;
 import android.widget.TextView;
 
-public class AboutFragment extends FragmentSwitchboard {
+public class AboutFragment extends Fragment implements OnClickListener {
 
-	private WFScanResult network;
+	private boolean mRegistered;
+	private WFScanResult mNetwork;
 	protected static WeakReference<AboutFragment> self;
 
 	private static Handler handler = new Handler() {
@@ -54,12 +61,12 @@ public class AboutFragment extends FragmentSwitchboard {
 			List<ScanResult> results = wm.getScanResults();
 			boolean found = false;
 			for (ScanResult n : results) {
-				if (n.SSID.contains(self.get().network.SSID)) {
+				if (n.SSID != null && n.SSID.contains(self.get().mNetwork.SSID)) {
 					found = true;
 					/*
 					 * Refresh values
 					 */
-					self.get().network = new WFScanResult(n);
+					self.get().mNetwork = new WFScanResult(n);
 					self.get().drawView();
 					break;
 				}
@@ -93,15 +100,15 @@ public class AboutFragment extends FragmentSwitchboard {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.about_fragment, null);
-		setDialog(this);
+		View v = inflater.inflate(R.layout.about_fragment, null, false);
+		Button b = (Button) v.findViewById(R.id.ssid);
+		b.setOnClickListener(this);
 		return v;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		self = new WeakReference<AboutFragment>(this);
-		network = WFScanResult.fromBundle(this.getArguments());
 		super.onCreate(savedInstanceState);
 	}
 
@@ -113,15 +120,36 @@ public class AboutFragment extends FragmentSwitchboard {
 
 	@Override
 	public void onResume() {
-		registerReceiver();
-		if (this.getArguments() != null) {
+		if (mNetwork != null) {
+			registerReceiver();
+			mRegistered = true;
 			drawView();
+			Log.i("DLSAJND", "RAN");
+		} else {
+			FragmentTransaction t = getParentFragment()
+					.getChildFragmentManager().beginTransaction();
+			t.remove(this);
+			t.commit();
 		}
 		super.onResume();
 	}
 
+	@Override
+	public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+		/*
+		 * Animate the view
+		 */
+		if (enter) {
+			ExpandViewAnimation ev = new ExpandViewAnimation(getView()
+					.findViewById(R.id.about_fragment_layout), 300);
+			return ev;
+		} else
+			return null;
+	}
+
 	private void unregisterReceiver() {
-		getContext().unregisterReceiver(scanreceiver);
+		if (mRegistered)
+			getContext().unregisterReceiver(scanreceiver);
 	}
 
 	private void registerReceiver() {
@@ -136,20 +164,30 @@ public class AboutFragment extends FragmentSwitchboard {
 
 	private void drawView() {
 		TextView t = (TextView) getView().findViewById(R.id.ssid);
-		t.setText(network.SSID);
+		t.setText(mNetwork.SSID);
 		t = (TextView) getView().findViewById(R.id.bssid);
-		t.setText(network.BSSID);
+		t.setText(mNetwork.BSSID);
 		t = (TextView) getView().findViewById(R.id.capabilities);
-		t.setText(StringUtil.getLongCapabilitiesString(network.capabilities));
+		t.setText(StringUtil.getLongCapabilitiesString(mNetwork.capabilities));
 		t = (TextView) getView().findViewById(R.id.frequency);
-		t.setText(String.valueOf(network.frequency));
+		t.setText(String.valueOf(mNetwork.frequency));
 		t = (TextView) getView().findViewById(R.id.level);
-		t.setText(String.valueOf(network.level));
+		t.setText(String.valueOf(mNetwork.level));
 	}
 
-	public static AboutFragment newInstance(Bundle bundle) {
+	public static AboutFragment newInstance(WFScanResult r) {
 		AboutFragment f = new AboutFragment();
-		f.setArguments(bundle);
+		f.mNetwork = r;
 		return f;
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		ConnectFragment c = ConnectFragment.newInstance(mNetwork);
+		FragmentTransaction t = this.getParentFragment()
+				.getChildFragmentManager().beginTransaction();
+		t.remove(this);
+		t.add(R.id.fragment_target, c);
+		t.commit();
 	}
 }

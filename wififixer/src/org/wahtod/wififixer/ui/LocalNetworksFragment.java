@@ -26,7 +26,6 @@ import java.util.List;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
-import org.wahtod.wififixer.utility.StatusMessage;
 import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
 
@@ -41,29 +40,24 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.view.ContextMenu;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemLongClickListener;
 
-public class ScanFragment extends Fragment {
-	private static WeakReference<ScanFragment> self;
-	private WFScanResult clicked;
+public class LocalNetworksFragment extends Fragment {
+	private static WeakReference<LocalNetworksFragment> self;
 	private ScanListAdapter adapter;
 	private ListView lv;
-	private static final String WIFIOFF = "WIFIOFF";
-	private static final int CONTEXT_CONNECT = 13;
-	private static final int CONTEXT_INFO = 15;
 	protected static final int REFRESH_LIST_ADAPTER = 0;
 	protected static final int CLEAR_LIST_ADAPTER = 1;
+	private static final String ABOUT_FRAGMENT = "KSABFWKRFBWT";
 	private static Handler drawhandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
@@ -87,7 +81,7 @@ public class ScanFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		self = new WeakReference<ScanFragment>(this);
+		self = new WeakReference<LocalNetworksFragment>(this);
 		super.onCreate(savedInstanceState);
 	}
 
@@ -96,26 +90,24 @@ public class ScanFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.scannetworks, null);
 		lv = (ListView) v.findViewById(R.id.scanlist);
-		registerContextMenu();
+		lv.setOnItemLongClickListener(il);
 		registerReceiver();
 		drawhandler.sendEmptyMessage(REFRESH_LIST_ADAPTER);
 		return v;
 	}
 
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-		/*
-		 * Clicked is the ListView selected WFScanResult
-		 */
-		menu.setHeaderTitle(clicked.SSID);
-		menu.add(4, CONTEXT_CONNECT, 2,
-				getConnectMenuStringFromClicked(getContext(), clicked));
-		menu.add(4, CONTEXT_INFO, 3, R.string.info);
-		int[] location = new int[2];
-		v.getLocationOnScreen(location);
-	}
+	private OnItemLongClickListener il = new OnItemLongClickListener() {
+
+		@Override
+		public boolean onItemLongClick(AdapterView<?> parent, View v, int p,
+				long id) {
+			dispatchItemSelectedEvent(AboutFragment.class.getName(),
+					adapter.getItem(p));
+			v.setSelected(true);
+			return true;
+
+		}
+	};
 
 	@Override
 	public void onDestroyView() {
@@ -123,38 +115,29 @@ public class ScanFragment extends Fragment {
 		super.onDestroyView();
 	}
 
-	public static int getConnectMenuStringFromClicked(final Context context,
+	/*
+	 * Send network info to Aboutfragment, creating if necessary
+	 */
+	private void dispatchItemSelectedEvent(String classname,
 			WFScanResult clicked) {
-		if (KnownNetworksFragment.getNetworks(context).contains(clicked.SSID))
-			return R.string.connect;
-		else if (StringUtil.getCapabilitiesString(clicked.capabilities) == StringUtil.OPEN)
-			return R.string.connect;
-		else
-			return R.string.add;
-	}
-
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case CONTEXT_CONNECT:
-			dispatchContextMenuSelected(ConnectFragment.class.getName());
-			break;
-		case CONTEXT_INFO:
-			dispatchContextMenuSelected(AboutFragment.class.getName());
-			break;
-		}
-		return super.onContextItemSelected(item);
-	}
-
-	private void dispatchContextMenuSelected(String classname) {
 		if (clicked == null)
 			return;
-		Intent i = new Intent(getContext(), WifiFixerActivity.class);
-		i.putExtra(WifiFixerActivity.SHOW_FRAGMENT, true);
-		i.putExtra(WFScanResult.BUNDLE_KEY, clicked.toBundle());
-		i.putExtra(FragmentSwitchboard.FRAGMENT_KEY, classname);
-		i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		getActivity().startActivity(i);
+		AboutFragment a;
+		FragmentTransaction transaction = getChildFragmentManager()
+				.beginTransaction();
+		if (getChildFragmentManager().findFragmentByTag(ABOUT_FRAGMENT) == null) {
+			a = AboutFragment.newInstance(clicked);
+			transaction.add(R.id.fragment_target, a, ABOUT_FRAGMENT);
+		} else {
+			a = (AboutFragment) getChildFragmentManager().findFragmentByTag(
+					ABOUT_FRAGMENT);
+			AboutFragment b = AboutFragment.newInstance(clicked);
+			if (a != null) {
+				transaction.remove(a);
+			}
+			transaction.add(R.id.fragment_target, b, ABOUT_FRAGMENT);
+		}
+		transaction.commit();
 	}
 
 	/*
@@ -207,38 +190,33 @@ public class ScanFragment extends Fragment {
 			 * Set SSID text and color
 			 */
 			holder.text.setText(scanresultArray.get(position).SSID);
-			if (holder.encryption.equals(WIFIOFF)) {
-				holder.icon.setImageDrawable(null);
-				holder.encryption.setText(StatusMessage.EMPTY);
-				holder.security.setImageDrawable(null);
+			/*
+			 * Set signal icon
+			 */
+			int adjusted = WifiManager.calculateSignalLevel(
+					scanresultArray.get(position).level, 5);
+
+			holder.icon.setImageResource(NotifUtil.getIconfromSignal(adjusted,
+					NotifUtil.ICON_SET_SMALL));
+
+			/*
+			 * Set security icon and encryption text
+			 */
+			if (StringUtil.getCapabilitiesString(
+					scanresultArray.get(position).capabilities).equals(
+					StringUtil.OPEN)) {
+				holder.security.setImageResource(R.drawable.buttons);
+				holder.security.setColorFilter(Color.GREEN,
+						PorterDuff.Mode.SRC_ATOP);
+				holder.encryption.setText(R.string.open_network);
 			} else {
-				/*
-				 * Set signal icon
-				 */
-				int adjusted = WifiManager.calculateSignalLevel(
-						scanresultArray.get(position).level, 5);
-
-				holder.icon.setImageResource(NotifUtil.getIconfromSignal(
-						adjusted, NotifUtil.ICON_SET_SMALL));
-
-				/*
-				 * Set security icon and encryption text
-				 */
-				if (StringUtil.getCapabilitiesString(
-						scanresultArray.get(position).capabilities).equals(
-						StringUtil.OPEN)) {
-					holder.security.setImageResource(R.drawable.buttons);
-					holder.security.setColorFilter(Color.GREEN,
-							PorterDuff.Mode.SRC_ATOP);
-					holder.encryption.setText(R.string.open_network);
-				} else {
-					holder.security.setColorFilter(Color.TRANSPARENT,
-							PorterDuff.Mode.SRC_ATOP);
-					holder.security.setImageResource(R.drawable.secure);
-					holder.encryption.setText(StringUtil
-							.getCapabilitiesString(scanresultArray
-									.get(position).capabilities));
-				}
+				holder.security.setColorFilter(Color.TRANSPARENT,
+						PorterDuff.Mode.SRC_ATOP);
+				holder.security.setImageResource(R.drawable.secure);
+				holder.encryption
+						.setText(StringUtil
+								.getCapabilitiesString(scanresultArray
+										.get(position).capabilities));
 			}
 			return convertView;
 		}
@@ -251,8 +229,8 @@ public class ScanFragment extends Fragment {
 		}
 	}
 
-	public static ScanFragment newInstance(int num) {
-		ScanFragment f = new ScanFragment();
+	public static LocalNetworksFragment newInstance(int num) {
+		LocalNetworksFragment f = new LocalNetworksFragment();
 
 		// Supply num input as an argument.
 		Bundle args = new Bundle();
@@ -284,16 +262,11 @@ public class ScanFragment extends Fragment {
 	};
 
 	protected void clearScanListAdapter() {
-		WFScanResult w = new WFScanResult();
-		w.SSID = getString(R.string.wifi_is_disabled);
-		w.level = -99;
-		w.capabilities = WIFIOFF;
 		List<WFScanResult> list = new ArrayList<WFScanResult>();
-		list.add(w);
 		if (adapter.scanresultArray != null) {
 			refreshArray(list);
-			adapter.notifyDataSetChanged();
 		}
+		adapter.notifyDataSetChanged();
 	}
 
 	/*
@@ -379,21 +352,6 @@ public class ScanFragment extends Fragment {
 			}
 		}
 		Collections.sort(adapter.scanresultArray, new SortBySignal());
-	}
-
-	private void registerContextMenu() {
-		lv.setOnItemLongClickListener(new OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> adapterview, View v,
-					int position, long id) {
-				clicked = adapter.scanresultArray.get(position);
-				if (clicked.capabilities.equals(WIFIOFF))
-					return true;
-				else
-					return false;
-			}
-		});
-		registerForContextMenu(lv);
 	}
 
 	private void registerReceiver() {

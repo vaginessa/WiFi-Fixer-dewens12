@@ -19,7 +19,7 @@ package org.wahtod.wififixer.boot;
 
 import java.lang.ref.WeakReference;
 
-import org.wahtod.wififixer.WifiFixerService;
+import org.wahtod.wififixer.WFMonitorService;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 
 import android.app.Service;
@@ -52,7 +52,7 @@ public class BootService extends Service {
 			 * Start Service
 			 */
 			ctxt.get().startService(
-					new Intent(ctxt.get(), WifiFixerService.class));
+					new Intent(ctxt.get(), WFMonitorService.class));
 			bootservice.get().stopSelf();
 		}
 	};

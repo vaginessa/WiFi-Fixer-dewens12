@@ -17,17 +17,18 @@
     along with this program.  If not, see http://www.gnu.org/licenses
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/connect_fragment_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:minHeight="200dp"
     android:minWidth="400dp"
     android:alpha=".95"
-    android:background="@drawable/dialog"
+    android:background="@drawable/boxbg"
     android:gravity="center"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/SSID"
+        android:id="@+id/network_name"
         style="@style/Wftext.large"
         android:layout_gravity="center"
         android:gravity="center"

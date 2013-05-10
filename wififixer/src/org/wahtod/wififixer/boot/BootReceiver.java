@@ -31,7 +31,7 @@ public class BootReceiver extends BroadcastReceiver {
 	 * 
 	 * Because of BroadcastReceiver lifecycle, a thread started from it will be
 	 * GCed. So we're starting a minimal service, BootService, which runs a wait
-	 * thread which launches WifiFixerService after 30 seconds
+	 * thread which launches WFMonitorService after 30 seconds
 	 * 
 	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context,
 	 * android.content.Intent)

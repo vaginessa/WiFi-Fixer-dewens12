@@ -33,6 +33,7 @@ public class ActionBarHelper extends ActionBarDetector {
 		if (a.findViewById(R.id.pager) != null) {
 			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 			actionBar.setDisplayShowTitleEnabled(false);
+			actionBar.setDisplayUseLogoEnabled(true);
 			TabListener tl = new TabListener(a);
 			Tab tab = actionBar.newTab().setText(R.string.status)
 					.setTabListener(tl);

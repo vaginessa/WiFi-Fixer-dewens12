@@ -19,7 +19,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.wahtod.wififixer"
     android:installLocation="internalOnly"
-    android:versionCode="986"
+    android:versionCode="987"
     android:versionName="1.0p1" >
 
     <!-- Documenting permissions here -->
@@ -172,8 +172,8 @@
         <!-- Networking guts: Main Persistent service -->
 
         <service
-            android:name=".WifiFixerService"
-            class="WifiFixerService"
+            android:name=".WFMonitorService"
+            class="WFMonitorService"
             android:exported="false"
             android:persistent="true" >
         </service>

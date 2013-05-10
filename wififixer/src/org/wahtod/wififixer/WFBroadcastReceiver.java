@@ -186,9 +186,9 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 			NotifUtil.showToast(ctxt.get().getApplicationContext(),
 					R.string.disabling_wififixerservice);
 			ctxt.get().stopService(
-					new Intent(ctxt.get(), WifiFixerService.class));
+					new Intent(ctxt.get(), WFMonitorService.class));
 			ServiceAlarm.setComponentEnabled(ctxt.get(),
-					WifiFixerService.class, false);
+					WFMonitorService.class, false);
 			PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLE_KEY.key(), true);
 			ServiceAlarm.unsetAlarm(ctxt.get());
 			ctxt.get().stopService(new Intent(ctxt.get(), LogService.class));
@@ -203,7 +203,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 	private static void handleWifiServiceEnable() {
 		NotifUtil.showToast(ctxt.get().getApplicationContext(),
 				R.string.enabling_wififixerservice);
-		ServiceAlarm.setComponentEnabled(ctxt.get(), WifiFixerService.class,
+		ServiceAlarm.setComponentEnabled(ctxt.get(), WFMonitorService.class,
 				true);
 		PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLE_KEY.key(), false);
 		ctxt.get().startService(

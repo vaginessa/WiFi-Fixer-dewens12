@@ -29,7 +29,7 @@ import java.util.Date;
 
 import org.wahtod.wififixer.DefaultExceptionHandler;
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.WifiFixerService;
+import org.wahtod.wififixer.WFMonitorService;
 import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.legacy.VersionedScreenState;
 import org.wahtod.wififixer.prefs.PrefUtil;
@@ -208,7 +208,7 @@ public class LogService extends Service {
 	}
 
 	public static String getLogTag(final Context context) {
-		return WifiFixerService.class.getSimpleName();
+		return WFMonitorService.class.getSimpleName();
 	}
 
 	private void handleIntent(Intent intent) {

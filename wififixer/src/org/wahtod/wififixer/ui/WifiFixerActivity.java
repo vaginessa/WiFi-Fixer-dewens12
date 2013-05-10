@@ -45,7 +45,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -86,11 +85,13 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		public Fragment getItem(int position) {
 			switch (position) {
 			case 0:
+				if (mLogString != null)
+					handler.postDelayed(rSendLog, 500);
 				return FirstPageFragment.newInstance(position);
 			case 1:
 				return KnownNetworksFragment.newInstance(position);
 			case 2:
-				return ScanFragment.newInstance(position);
+				return LocalNetworksFragment.newInstance(position);
 			}
 			return null;
 		}
@@ -123,10 +124,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		}
 	};
 
-	/*
-	 * Intent extra for fragment commands
-	 */
-	public static final String SHOW_FRAGMENT = "SHOW_FRAGMENT";
 	/*
 	 * Market URI for pendingintent
 	 */
@@ -221,12 +218,9 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			return;
 		Bundle data = message.getData();
 		/*
-		 * Show About Fragment either via fragment or activity
+		 * Check (assuming SERVICEWARNED) for whether one-time alert fired
 		 */
-		if (data.containsKey(SHOW_FRAGMENT)) {
-			data.remove(SHOW_FRAGMENT);
-			showFragment(data);
-		} else if (data.containsKey(PrefConstants.SERVICEWARNED)) {
+		if (data.containsKey(PrefConstants.SERVICEWARNED)) {
 			data.remove(PrefConstants.SERVICEWARNED);
 			showServiceAlert();
 		}
@@ -391,14 +385,6 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		dialog.show();
 	}
 
-	private void showFragment(Bundle bundle) {
-		/*
-		 * Now using DialogFragments
-		 */
-		DialogFragment d = FragmentSwitchboard.newInstance(bundle);
-		d.show(getSupportFragmentManager(), this.getClass().getName());
-	}
-
 	/*
 	 * Fragments using ContextBar must stop viewpager to preserve focus during
 	 * ContextBar lifecycle
@@ -440,16 +426,16 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		mLogString = new StringBuilder(
 				savedInstanceState.getString(LogFragment.LOG_MESSAGE));
 
-		handler.postDelayed(new Runnable() {
-
-			@Override
-			public void run() {
-				sendLogString();
-			}
-		}, 1500);
-
-		this.sendLogString();
+		handler.postDelayed(rSendLog, 500);
 
 	}
 
+	Runnable rSendLog = new Runnable() {
+
+		@Override
+		public void run() {
+			sendLogString();
+		}
+
+	};
 }

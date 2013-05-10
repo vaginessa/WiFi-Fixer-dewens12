@@ -32,10 +32,11 @@ import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.preference.CheckBoxPreference;
 
+@SuppressWarnings("deprecation")
 public class PrefActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
 
-	@SuppressWarnings("deprecation")
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setTheme(android.R.style.Theme_Black);
@@ -43,7 +44,6 @@ public class PrefActivity extends PreferenceActivity implements
 		addPreferencesFromResource(R.xml.preferences);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -53,7 +53,6 @@ public class PrefActivity extends PreferenceActivity implements
 				.registerOnSharedPreferenceChangeListener(this);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -63,7 +62,6 @@ public class PrefActivity extends PreferenceActivity implements
 				.unregisterOnSharedPreferenceChangeListener(this);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 		processPrefChange(getPreferenceScreen(), prefs, key);

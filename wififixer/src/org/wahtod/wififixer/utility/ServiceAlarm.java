@@ -17,7 +17,7 @@
 
 package org.wahtod.wififixer.utility;
 
-import org.wahtod.wififixer.WifiFixerService;
+import org.wahtod.wififixer.WFMonitorService;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 
@@ -48,7 +48,7 @@ public final class ServiceAlarm extends Object {
 
 	private static PendingIntent createPendingIntent(final Context context,
 			final int flag) {
-		Intent intent = new Intent(context, WifiFixerService.class);
+		Intent intent = new Intent(context, WFMonitorService.class);
 		intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 		intent.putExtra(ALARM_START, ALARM_START);
 		PendingIntent pendingintent = PendingIntent.getService(context, 0,
@@ -57,14 +57,14 @@ public final class ServiceAlarm extends Object {
 	}
 
 	/*
-	 * Makes sure that if package is updated LogService and WifiFixerService
+	 * Makes sure that if package is updated LogService and WFMonitorService
 	 * respect disabled state
 	 */
 	public static void enforceServicePrefs(final Context context) {
 		if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
-			setComponentEnabled(context, WifiFixerService.class, false);
+			setComponentEnabled(context, WFMonitorService.class, false);
 		else
-			setComponentEnabled(context, WifiFixerService.class, true);
+			setComponentEnabled(context, WFMonitorService.class, true);
 
 		if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
 			setComponentEnabled(context, LogService.class, true);
