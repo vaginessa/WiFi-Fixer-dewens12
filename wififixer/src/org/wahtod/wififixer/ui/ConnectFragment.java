@@ -65,6 +65,14 @@ public class ConnectFragment extends Fragment implements OnClickListener {
 		View v = inflater.inflate(R.layout.connect_fragment, null);
 		Button b = (Button) v.findViewById(R.id.connect);
 		TextView s = (TextView) v.findViewById(R.id.network_name);
+		/*
+		 * If mNetwork is null we want to remove this fragment immediately
+		 */
+		if (mNetwork == null) {
+			suicide();
+			return v;
+		}
+
 		s.setText(mNetwork.SSID);
 		View e = v.findViewById(R.id.password);
 		TextView summary = (TextView) v.findViewById(R.id.password_summary);
@@ -78,6 +86,13 @@ public class ConnectFragment extends Fragment implements OnClickListener {
 		}
 		b.setOnClickListener(this);
 		return v;
+	}
+
+	private void suicide() {
+		FragmentTransaction f = getParentFragment().getChildFragmentManager()
+				.beginTransaction();
+		f.remove(this);
+		f.commit();
 	}
 
 	private int addNetwork(final String password) {
