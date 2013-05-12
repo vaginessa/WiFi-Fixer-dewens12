@@ -176,6 +176,8 @@ public class AboutFragment extends Fragment implements OnClickListener {
 	}
 
 	private void drawView() {
+		if (getView()==null)
+			return;
 		TextView t = (TextView) getView().findViewById(R.id.ssid);
 		t.setText(mNetwork.SSID);
 		t = (TextView) getView().findViewById(R.id.bssid);
