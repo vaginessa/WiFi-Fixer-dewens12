@@ -36,7 +36,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,7 +45,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class AboutFragment extends Fragment implements OnClickListener {
-
+	
+	public static final String TAG = "KSABFWKRFBWT";
 	private boolean mRegistered;
 	private WFScanResult mNetwork;
 	protected static WeakReference<AboutFragment> self;
@@ -124,7 +124,6 @@ public class AboutFragment extends Fragment implements OnClickListener {
 			registerReceiver();
 			mRegistered = true;
 			drawView();
-			Log.i("DLSAJND", "RAN");
 		} else {
 			FragmentTransaction t = getParentFragment()
 					.getChildFragmentManager().beginTransaction();
@@ -145,6 +144,11 @@ public class AboutFragment extends Fragment implements OnClickListener {
 			return ev;
 		} else
 			return null;
+	}
+
+	public void setNetwork(final WFScanResult network) {
+		mNetwork = network;
+		drawView();
 	}
 
 	private void unregisterReceiver() {
@@ -187,7 +191,7 @@ public class AboutFragment extends Fragment implements OnClickListener {
 		FragmentTransaction t = this.getParentFragment()
 				.getChildFragmentManager().beginTransaction();
 		t.remove(this);
-		t.add(R.id.fragment_target, c);
+		t.add(R.id.fragment_target, c, ConnectFragment.TAG );
 		t.commit();
 	}
 }

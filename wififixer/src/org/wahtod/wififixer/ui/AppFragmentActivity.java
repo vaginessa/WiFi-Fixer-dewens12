@@ -19,14 +19,16 @@ package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.R;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public abstract class AppFragmentActivity extends FragmentActivity {
+	private static final String TAG = "DNMDJDSW";
 	private Menu optionsmenu;
 
 	// Create menus
@@ -43,11 +45,11 @@ public abstract class AppFragmentActivity extends FragmentActivity {
 	}
 
 	/* Handles item selections */
+	@SuppressLint("NewApi")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		super.onOptionsItemSelected(item);
-		Log.i("BIG_BUTTS", String.valueOf(item.getItemId()));
 		switch (item.getItemId()) {
 		case R.id.menu_prefs:
 			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
@@ -66,12 +68,18 @@ public abstract class AppFragmentActivity extends FragmentActivity {
 					.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			return true;
 		case R.id.menu_quicksettings:
-			QuickSettingsFragment d = QuickSettingsFragment.newInstance(item
-					.getTitle().toString());
-			d.show(getSupportFragmentManager(), d.getClass().getSimpleName());
+			/*
+			 * This cannot be called by a tablet
+			 */
+			showQuickSettings();
 			return true;
 		}
 		return false;
+	}
+
+	private void showQuickSettings() {
+		DialogFragment d = QuickSettingsFragment.newInstance(TAG);
+		d.show(getSupportFragmentManager(), TAG);
 	}
 
 	@Override

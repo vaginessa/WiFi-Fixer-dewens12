@@ -111,7 +111,7 @@ public class QuickSettingsFragment extends BaseDialogFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.toggles_fragment, null);
+		View v = inflater.inflate(R.layout.quicksettings_fragment, null);
 		setDialog(this);
 		/*
 		 * add background if instantiated (fragment is being shown as dialog)
@@ -216,8 +216,7 @@ public class QuickSettingsFragment extends BaseDialogFragment {
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						if (input.getText().length() > 1)
-							showSendLogDialog(input.getText().toString(),
-									fileuri);
+							sendIssueReport(input.getText().toString(), fileuri);
 						else
 							NotifUtil.showToast(getActivity(),
 									R.string.issue_report_nag);
@@ -232,44 +231,17 @@ public class QuickSettingsFragment extends BaseDialogFragment {
 		issueDialog.show();
 	}
 
-	public void showSendLogDialog(final String report, final String fileuri) {
-		/*
-		 * Now, prepare and send the log
-		 */
-		AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-		dialog.setTitle(getString(R.string.send_log));
-		dialog.setMessage(getString(R.string.alert_message));
-		dialog.setIcon(R.drawable.icon);
-		dialog.setPositiveButton(getString(R.string.ok_button),
-				new DialogInterface.OnClickListener() {
-
-					public void onClick(DialogInterface dialog, int which) {
-
-						// setLogging(false);
-						Intent sendIntent = new Intent(Intent.ACTION_SEND);
-						sendIntent.setType(getString(R.string.log_mimetype));
-						sendIntent.putExtra(Intent.EXTRA_EMAIL,
-								new String[] { getString(R.string.email) });
-						sendIntent.putExtra(Intent.EXTRA_SUBJECT,
-								getString(R.string.subject));
-						sendIntent.putExtra(Intent.EXTRA_STREAM,
-								Uri.parse(fileuri));
-						sendIntent.putExtra(Intent.EXTRA_TEXT,
-								LogService.getBuildInfo() + "\n\n" + report);
-
-						startActivity(Intent.createChooser(sendIntent,
-								getString(R.string.emailintent)));
-
-					}
-				});
-
-		dialog.setNegativeButton(getString(R.string.cancel_button),
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						return;
-					}
-				});
-		dialog.show();
+	public void sendIssueReport(final String report, final String fileuri) {
+		Intent sendIntent = new Intent(Intent.ACTION_SEND);
+		sendIntent.setType(getString(R.string.log_mimetype));
+		sendIntent.putExtra(Intent.EXTRA_EMAIL,
+				new String[] { getString(R.string.email) });
+		sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject));
+		sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(fileuri));
+		sendIntent.putExtra(Intent.EXTRA_TEXT, LogService.getBuildInfo()
+				+ "\n\n" + report);
+		startActivity(Intent.createChooser(sendIntent,
+				getString(R.string.emailintent)));
 	}
 
 	/*

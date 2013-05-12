@@ -19,6 +19,7 @@ package org.wahtod.wififixer.ui;
 
 import android.app.Dialog;
 import android.support.v4.app.DialogFragment;
+import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -34,6 +35,7 @@ public class BaseDialogFragment extends DialogFragment {
 			f.setStyle(DialogFragment.STYLE_NO_TITLE, f.getTheme());
 			WindowManager.LayoutParams wset = d.getWindow().getAttributes();
 			wset.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
+			wset.gravity=Gravity.CENTER | Gravity.BOTTOM;
 			d.getWindow().setAttributes(wset);
 		}
 	}

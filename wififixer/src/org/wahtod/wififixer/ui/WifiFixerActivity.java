@@ -132,14 +132,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	 * Delete Log intent extra
 	 */
 	private static final String DELETE_LOG = "DELETE_LOG";
-
-	/*
-	 * Fragment Tags
-	 */
-	public static final String SERVICEFRAG_TAG = "SERVICE";
-	public static final String KNOWNNETWORKSFRAG_TAG = "KNOWNNETWORKS";
-	public static final String SCANFRAG_TAG = "SCAN";
-	public static final String STATUSFRAG_TAG = "STATUS";
+	
 	private static final String RUN_TUTORIAL = "RUN_TUTORIAL";
 	/*
 	 * Delay for Wifi Toggle button check

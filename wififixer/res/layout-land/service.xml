@@ -21,7 +21,7 @@
     android:layout_height="match_parent"
     android:gravity="left"
     android:orientation="horizontal" >
-
+  	
     <FrameLayout
         android:id="@+id/about"
         android:layout_width="300dp"
@@ -39,5 +39,5 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         />
-
+    
 </LinearLayout>

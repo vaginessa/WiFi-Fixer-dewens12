@@ -65,7 +65,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.format.Formatter;
 
-
 /*
  * Handles all interaction 
  * with WifiManager
@@ -158,8 +157,8 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	private static final int SUPPLICANT_ASSOC_THRESHOLD = 10;
 
 	/*
-	 * Supplicant State triggers Have to use string because SupplicantState
-	 * enums change over Android versions
+	 * Supplicant State triggers Have to use string because some SupplicantState
+	 * enums aren't available in some Android versions
 	 */
 	private static final String SSTATE_ASSOCIATING = "ASSOCIATING";
 	private static final String SSTATE_ASSOCIATED = "ASSOCIATED";
@@ -655,7 +654,7 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	private void checkSignal(final Context context) {
 		WifiInfo ci = getWifiManager(context).getConnectionInfo();
 		int signal = ci.getRssi();
-		
+
 		if (statNotifCheck()) {
 			StatusMessage m = new StatusMessage().setSSID(getSSID());
 			m.setSignal(WifiManager.calculateSignalLevel(signal, 5));
@@ -1482,7 +1481,15 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 		/*
 		 * Supplicant State triggers
 		 */
-		if (sState.name().equals(SSTATE_ASSOCIATED))
+		if (sState.equals(SupplicantState.INACTIVE)) {
+			/*
+			 * DHCP bug?
+			 */
+			if (PrefUtil.getWatchdogPolicy(ctxt.get())) {
+
+			}
+
+		} else if (sState.name().equals(SSTATE_ASSOCIATED))
 			prepareConnect();
 		else if (sState.name().equals(SSTATE_INVALID))
 			supplicantFix();

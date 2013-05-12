@@ -393,6 +393,14 @@ public class PrefUtil extends Object {
 		}
 	}
 
+	public static boolean getWatchdogPolicy(final Context context) {
+		/*
+		 * Check for Wifi Watchdog, AKA "Avoid poor internet connections"
+		 */
+		return (Settings.Secure.getInt(context.getContentResolver(),
+				"wifi_watchdog_poor_network_test_enabled", 0) == 1);
+	}
+
 	public static void setPolicy(final Context context, final int policy) {
 		/*
 		 * Set Wifi Sleep Policy

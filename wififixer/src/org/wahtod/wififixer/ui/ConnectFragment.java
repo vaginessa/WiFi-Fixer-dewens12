@@ -56,6 +56,7 @@ public class ConnectFragment extends Fragment implements OnClickListener {
 	private static final String PROXY_SETTINGS = "proxySettings";
 	private static final String WPA = "WPA";
 	private static final String WEP = "WEP";
+	public static final String TAG = "SFFJSHFTWFW";
 	protected static final int CANCEL = 1;
 	private WFScanResult mNetwork;
 

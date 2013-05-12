@@ -57,7 +57,6 @@ public class LocalNetworksFragment extends Fragment {
 	private ListView lv;
 	protected static final int REFRESH_LIST_ADAPTER = 0;
 	protected static final int CLEAR_LIST_ADAPTER = 1;
-	private static final String ABOUT_FRAGMENT = "KSABFWKRFBWT";
 	private static Handler drawhandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
@@ -125,18 +124,23 @@ public class LocalNetworksFragment extends Fragment {
 		AboutFragment a;
 		FragmentTransaction transaction = getChildFragmentManager()
 				.beginTransaction();
-		if (getChildFragmentManager().findFragmentByTag(ABOUT_FRAGMENT) == null) {
+		if (getChildFragmentManager().findFragmentByTag(
+				AboutFragment.TAG) == null) {
 			a = AboutFragment.newInstance(clicked);
-			transaction.add(R.id.fragment_target, a, ABOUT_FRAGMENT);
+			transaction.add(R.id.fragment_target, a,
+					AboutFragment.TAG);
 		} else {
 			a = (AboutFragment) getChildFragmentManager().findFragmentByTag(
-					ABOUT_FRAGMENT);
-			AboutFragment b = AboutFragment.newInstance(clicked);
-			if (a != null) {
-				transaction.remove(a);
-			}
-			transaction.add(R.id.fragment_target, b, ABOUT_FRAGMENT);
+					AboutFragment.TAG);
+			a.setNetwork(clicked);
 		}
+		/*
+		 * Make sure we get rid of any ConnectFragments
+		 */
+		Fragment c = getChildFragmentManager().findFragmentByTag(
+				ConnectFragment.TAG);
+		if (c != null)
+			transaction.remove(c);
 		transaction.commit();
 	}
 

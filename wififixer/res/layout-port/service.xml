@@ -34,10 +34,9 @@
         android:layout_height="0px"
         android:layout_weight=".6" />
 
-   <FrameLayout
+    <FrameLayout
         android:id="@+id/small_screen"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        />
-   
+        android:layout_height="0dp" />
+
 </LinearLayout>
