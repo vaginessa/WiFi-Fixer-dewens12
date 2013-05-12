@@ -32,6 +32,7 @@ public class LogFragment extends Fragment {
 	public static final String HAS_LOGFRAGMENT = "HAS_LF";
 	public static final String LOG_MESSAGE_INTENT = "org.wahtod.wififixer.LOG_MESSAGE";
 	public static final String LOG_MESSAGE = "LOG_MESSAGE_KEY";
+	public static final String TAG = "AKAKAKADOUHF";
 	private TextView myTV;
 	private ScrollView mySV;
 

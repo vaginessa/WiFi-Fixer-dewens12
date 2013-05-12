@@ -76,6 +76,7 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	protected static WeakReference<Context> ctxt;
 	private WakeLock wakelock;
 	private WifiLock wifilock;
+	private WifiInfo mLastConnectedNetwork;
 	boolean screenstate;
 
 	/*
@@ -646,9 +647,11 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	}
 
 	private void clearConnectedStatus(final String state) {
-		StatusMessage.send(ctxt.get(),
+		StatusMessage.send(
+				ctxt.get(),
 				StatusMessage.getNew().setSSID(StatusMessage.EMPTY)
-						.setSignal(0).setStatus(state));
+						.setSignal(0).setStatus(state)
+						.setLinkSpeed(StatusMessage.EMPTY));
 	}
 
 	private void checkSignal(final Context context) {
@@ -1140,7 +1143,8 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 		 */
 		if (info.getType() == ConnectivityManager.TYPE_WIFI) {
 			if (info.getState().equals(NetworkInfo.State.CONNECTED))
-				onNetworkConnected();
+				onNetworkConnected(getWifiManager(ctxt.get())
+						.getConnectionInfo());
 			else if (info.getState().equals(NetworkInfo.State.DISCONNECTED)
 					&& !info.isAvailable())
 				clearConnectedStatus(ctxt.get().getString(
@@ -1536,6 +1540,9 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	}
 
 	private void onNetworkDisconnected() {
+		log(ctxt.get(),
+				mLastConnectedNetwork.getSSID()
+						+ ctxt.get().getString(R.string.network_disconnected));
 		_connected = false;
 		clearConnectedStatus((ctxt.get().getString(R.string.disconnected)));
 	}
@@ -1554,7 +1561,8 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 		handlerWrapper(rDemoter, CWDOG_DELAY);
 	}
 
-	private void onNetworkConnected() {
+	private void onNetworkConnected(WifiInfo wifiInfo) {
+		mLastConnectedNetwork = wifiInfo;
 		/*
 		 * Disable watchdog, we've connected
 		 */

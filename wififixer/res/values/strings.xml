@@ -236,5 +236,6 @@
     <string name="managed">Managed</string>
     <string name="nonmanaged">Ignore</string>
     <string name="quick_text">Quickbar</string>
+    <string name="network_disconnected">Network Disconnected</string>
 
 </resources>

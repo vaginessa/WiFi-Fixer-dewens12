@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitor;
+import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
@@ -37,6 +38,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -209,6 +211,12 @@ public class ConnectFragment extends Fragment implements OnClickListener {
 				.getChildFragmentManager().beginTransaction();
 		f.remove(this);
 		f.commit();
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		ActionBarDetector.handleHome(getActivity(), item);
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override

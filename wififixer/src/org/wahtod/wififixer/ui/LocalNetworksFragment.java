@@ -121,18 +121,24 @@ public class LocalNetworksFragment extends Fragment {
 			WFScanResult clicked) {
 		if (clicked == null)
 			return;
-		AboutFragment a;
+
+		/*
+		 * Create New AboutFragment with network field populated
+		 */
+		AboutFragment a = AboutFragment.newInstance(clicked);
+		;
+
+		/*
+		 * Create transaction, making sure to put it on the backstack
+		 */
 		FragmentTransaction transaction = getChildFragmentManager()
 				.beginTransaction();
-		if (getChildFragmentManager().findFragmentByTag(
-				AboutFragment.TAG) == null) {
-			a = AboutFragment.newInstance(clicked);
-			transaction.add(R.id.fragment_target, a,
-					AboutFragment.TAG);
+
+		if (getChildFragmentManager().findFragmentByTag(AboutFragment.TAG) == null) {
+
+			transaction.add(R.id.fragment_target, a, AboutFragment.TAG);
 		} else {
-			a = (AboutFragment) getChildFragmentManager().findFragmentByTag(
-					AboutFragment.TAG);
-			a.setNetwork(clicked);
+			transaction.replace(R.id.fragment_target, a, AboutFragment.TAG);
 		}
 		/*
 		 * Make sure we get rid of any ConnectFragments
@@ -141,6 +147,7 @@ public class LocalNetworksFragment extends Fragment {
 				ConnectFragment.TAG);
 		if (c != null)
 			transaction.remove(c);
+		transaction.addToBackStack(null);
 		transaction.commit();
 	}
 

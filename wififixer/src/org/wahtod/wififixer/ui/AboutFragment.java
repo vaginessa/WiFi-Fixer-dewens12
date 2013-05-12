@@ -29,6 +29,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources.NotFoundException;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -41,11 +42,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class AboutFragment extends Fragment implements OnClickListener {
-	
+
 	public static final String TAG = "KSABFWKRFBWT";
 	private boolean mRegistered;
 	private WFScanResult mNetwork;
@@ -54,7 +56,7 @@ public class AboutFragment extends Fragment implements OnClickListener {
 	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
-			if (self.get().getActivity() == null)
+			if (self.get() == null && self.get().getActivity() == null)
 				return;
 			WifiManager wm = (WifiManager) self.get().getContext()
 					.getSystemService(Context.WIFI_SERVICE);
@@ -138,12 +140,19 @@ public class AboutFragment extends Fragment implements OnClickListener {
 		/*
 		 * Animate the view
 		 */
-		if (enter) {
+		if (enter && !(transit == 17432576)) {
 			ExpandViewAnimation ev = new ExpandViewAnimation(getView()
 					.findViewById(R.id.about_fragment_layout), 300);
 			return ev;
-		} else
-			return null;
+		} else {
+			Animation anim;
+			try {
+				anim = AnimationUtils.loadAnimation(getContext(), transit);
+			} catch (NotFoundException e) {
+				return null;
+			}
+			return anim;
+		}
 	}
 
 	public void setNetwork(final WFScanResult network) {
@@ -191,7 +200,8 @@ public class AboutFragment extends Fragment implements OnClickListener {
 		FragmentTransaction t = this.getParentFragment()
 				.getChildFragmentManager().beginTransaction();
 		t.remove(this);
-		t.add(R.id.fragment_target, c, ConnectFragment.TAG );
+		t.add(R.id.fragment_target, c, ConnectFragment.TAG);
+		t.addToBackStack(null);
 		t.commit();
 	}
 }

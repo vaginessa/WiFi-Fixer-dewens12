@@ -50,7 +50,7 @@ import android.widget.EditText;
 
 public class QuickSettingsFragment extends BaseDialogFragment {
 
-	private static final String TAG = "TAG";
+	public static final String TAG = "TAG";
 	protected static final String INTENT_ACTION = "INTENT_ACTION";
 	private CheckBox serviceCheckBox;
 	private CheckBox wifiCheckBox;

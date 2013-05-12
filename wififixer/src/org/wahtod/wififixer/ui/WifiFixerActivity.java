@@ -100,7 +100,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			return fragmentArray.get(position);
 		}
 	}
-
+	
 	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
@@ -169,7 +169,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			LogService.log(this, "Butts", "ServiceFragment Null");
 		else {
 			LogFragment l = (LogFragment) sf.getChildFragmentManager()
-					.findFragmentByTag(FirstPageFragment.LOGFRAGMENT_TAG);
+					.findFragmentByTag(LogFragment.TAG);
 			l.setText(mLogString.toString());
 		}
 	}
@@ -422,6 +422,21 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		handler.postDelayed(rSendLog, 500);
 
 	}
+	
+	/* 
+	 * Overriding default behavior to handle our fragment backstack
+	 * 
+	 * (non-Javadoc)
+	 * @see android.support.v4.app.FragmentActivity#onBackPressed()
+	 */
+	@Override
+	public void onBackPressed() {
+		PagerAdapter adapter = (PagerAdapter) mBasePager.getAdapter();
+		LocalNetworksFragment f = (LocalNetworksFragment) adapter.getPagerFragment(2);
+		if(f == null || !f.getChildFragmentManager().popBackStackImmediate())
+			super.onBackPressed();
+	}
+
 
 	Runnable rSendLog = new Runnable() {
 

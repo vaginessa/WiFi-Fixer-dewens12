@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 
 public class FirstPageFragment extends Fragment {
 	public static final String LOGFRAGMENT_TAG = "LOG_FRAGMENT";
+	public static final String TAG = "BSJDFWFFFW";
 
 	public static FirstPageFragment newInstance(int p) {
 		FirstPageFragment f = new FirstPageFragment();
@@ -36,9 +37,9 @@ public class FirstPageFragment extends Fragment {
 		f.setArguments(args);
 		return f;
 	}
-	
+
 	/*
-	 * Phone/Tablet magic happens here 
+	 * Phone/Tablet magic happens here
 	 * 
 	 * (non-Javadoc)
 	 * 
@@ -57,9 +58,9 @@ public class FirstPageFragment extends Fragment {
 			FragmentTransaction transaction = getChildFragmentManager()
 					.beginTransaction();
 			StatusFragment aboutFragment = StatusFragment.newInstance(1);
-			transaction.add(R.id.about, aboutFragment);
+			transaction.add(R.id.about, aboutFragment, AboutFragment.TAG);
 			LogFragment logFragment = LogFragment.newInstance(null);
-			transaction.add(R.id.servicelog, logFragment,LOGFRAGMENT_TAG);
+			transaction.add(R.id.servicelog, logFragment, LogFragment.TAG);
 			/*
 			 * tablet view indicates if this is a tablet
 			 */

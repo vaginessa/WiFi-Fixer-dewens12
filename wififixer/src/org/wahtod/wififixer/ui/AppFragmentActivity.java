@@ -79,7 +79,7 @@ public abstract class AppFragmentActivity extends FragmentActivity {
 
 	private void showQuickSettings() {
 		DialogFragment d = QuickSettingsFragment.newInstance(TAG);
-		d.show(getSupportFragmentManager(), TAG);
+		d.show(getSupportFragmentManager(), QuickSettingsFragment.TAG);
 	}
 
 	@Override
