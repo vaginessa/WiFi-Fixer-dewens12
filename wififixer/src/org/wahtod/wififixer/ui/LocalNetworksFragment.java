@@ -135,7 +135,6 @@ public class LocalNetworksFragment extends Fragment {
 				.beginTransaction();
 
 		if (getChildFragmentManager().findFragmentByTag(AboutFragment.TAG) == null) {
-
 			transaction.add(R.id.fragment_target, a, AboutFragment.TAG);
 		} else {
 			transaction.replace(R.id.fragment_target, a, AboutFragment.TAG);
@@ -146,7 +145,7 @@ public class LocalNetworksFragment extends Fragment {
 		Fragment c = getChildFragmentManager().findFragmentByTag(
 				ConnectFragment.TAG);
 		if (c != null)
-			transaction.remove(c);
+			transaction.replace(R.id.fragment_target, a);
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}

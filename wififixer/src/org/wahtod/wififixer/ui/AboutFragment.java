@@ -56,7 +56,7 @@ public class AboutFragment extends Fragment implements OnClickListener {
 	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
-			if (self.get() == null && self.get().getActivity() == null)
+			if (self.get() == null || self.get().getActivity() == null)
 				return;
 			WifiManager wm = (WifiManager) self.get().getContext()
 					.getSystemService(Context.WIFI_SERVICE);

@@ -212,12 +212,6 @@ public class ConnectFragment extends Fragment implements OnClickListener {
 		f.remove(this);
 		f.commit();
 	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		ActionBarDetector.handleHome(getActivity(), item);
-		return super.onOptionsItemSelected(item);
-	}
 
 	@Override
 	public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
