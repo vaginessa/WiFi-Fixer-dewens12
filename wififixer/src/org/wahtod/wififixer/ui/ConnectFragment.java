@@ -107,6 +107,9 @@ public class ConnectFragment extends Fragment implements OnClickListener {
 		return n;
 	}
 
+	/*
+	 * Reflection magic ahead
+	 */
 	private static WifiConfiguration addHiddenFields(WifiConfiguration w) {
 		try {
 			Field f = w.getClass().getField(IP_ASSIGNMENT);
@@ -132,7 +135,7 @@ public class ConnectFragment extends Fragment implements OnClickListener {
 		WifiConfiguration wf = new WifiConfiguration();
 		if (wf.toString().contains(BUGGED)) {
 			/*
-			 * Add hidden fields on bugged Android 3.2+ configs
+			 * Add hidden fields on bugged Android 3.1+ configs
 			 */
 			wf = addHiddenFields(wf);
 		}

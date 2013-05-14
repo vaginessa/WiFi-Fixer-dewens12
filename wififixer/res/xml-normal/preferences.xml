@@ -21,7 +21,7 @@
     <PreferenceCategory android:title="Wifi Fixer Preferences" >
         <PreferenceScreen android:title="@string/phone_ui_tutorial" >
             <intent
-                android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity"
+                android:targetClass="org.wahtod.wififixer.ui.MainActivity"
                 android:targetPackage="org.wahtod.wififixer" >
                 <extra
                     android:name="RUN_TUTORIAL"
@@ -73,7 +73,7 @@
                     android:summary="@string/service_status_summary"
                     android:title="@string/service_status_title" >
                     <intent
-                        android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity"
+                        android:targetClass="org.wahtod.wififixer.ui.MainActivity"
                         android:targetPackage="org.wahtod.wififixer" >
                         <extra
                             android:name="SHOW_STATUS"
@@ -85,7 +85,7 @@
                     android:summary="@string/sendlog_summary"
                     android:title="@string/sendlog_title" >
                     <intent
-                        android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity"
+                        android:targetClass="org.wahtod.wififixer.ui.MainActivity"
                         android:targetPackage="org.wahtod.wififixer" >
                         <extra
                             android:name="SEND_LOG"
@@ -97,7 +97,7 @@
                     android:summary="@string/deletelog_summary"
                     android:title="@string/deletelog_title" >
                     <intent
-                        android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity"
+                        android:targetClass="org.wahtod.wififixer.ui.MainActivity"
                         android:targetPackage="org.wahtod.wififixer" >
                         <extra
                             android:name="DELETE_LOG"

@@ -24,7 +24,7 @@
 	         summary="Begins a small tutorial on the app's user interface"
 					>
 					<intent android:targetPackage="org.wahtod.wififixer"
-						android:targetClass="org.wahtod.wififixer.ui.WifiFixerActivity">
+						android:targetClass="org.wahtod.wififixer.ui.MainActivity">
 						<extra android:name="RUN_TUTORIAL" android:value="pi">
 						</extra>
 					</intent>
