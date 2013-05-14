@@ -27,7 +27,7 @@ import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.LogFragment;
-import org.wahtod.wififixer.ui.WifiFixerActivity;
+import org.wahtod.wififixer.ui.MainActivity;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.FifoList;
 import org.wahtod.wififixer.utility.HostMessage;
@@ -72,7 +72,6 @@ import android.text.format.Formatter;
 public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	private static final int DEFAULT_DBM_FLOOR = -90;
 	private String accesspointIP;
-	private static String appname;
 	protected static WeakReference<Context> ctxt;
 	private WakeLock wakelock;
 	private WifiLock wifilock;
@@ -536,7 +535,7 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 		_supplicantFifo = new FifoList(FIFO_LENGTH);
 		_statusdispatcher = new StatusDispatcher(context, handler);
 		ScreenStateDetector.setOnScreenStateChangedListener(this);
-		appname = LogService.getLogTag(context);
+		LogService.getLogTag(context);
 		screenstate = ScreenStateDetector.getScreenState(context);
 		knownbysignal = new ArrayList<WFConfig>();
 		/*
@@ -1225,7 +1224,7 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 		}
 
 		if (PrefUtil.getFlag(Pref.LOG_KEY))
-			LogService.log(c, appname, message);
+			LogService.log(c, message);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -1265,7 +1264,7 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 					context.getString(R.string.wifi_connection_problem)
 							+ string, string, ERR_NOTIF, PendingIntent
 							.getActivity(context, 0, new Intent(context,
-									WifiFixerActivity.class), 0));
+									MainActivity.class), 0));
 		}
 	}
 
@@ -1455,10 +1454,12 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 		/*
 		 * Disconnect check
 		 */
-		if (_connected && !sState.equals(SupplicantState.COMPLETED)
-				&& !sState.equals(SupplicantState.FOUR_WAY_HANDSHAKE)
-				&& !sState.equals(SupplicantState.GROUP_HANDSHAKE)
-				&& !sState.equals(SupplicantState.SCANNING))
+		if (_connected
+				&& (sState.equals(SupplicantState.DISCONNECTED) || !sState
+						.equals(SupplicantState.COMPLETED)
+						&& !sState.equals(SupplicantState.FOUR_WAY_HANDSHAKE)
+						&& !sState.equals(SupplicantState.GROUP_HANDSHAKE)
+						&& !sState.equals(SupplicantState.SCANNING)))
 			onNetworkDisconnected();
 		/*
 		 * Check for ASSOCIATING bug but first clear check if not ASSOCIATING

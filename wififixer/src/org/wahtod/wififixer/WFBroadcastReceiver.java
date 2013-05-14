@@ -22,7 +22,7 @@ import org.wahtod.wififixer.boot.BootService;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
-import org.wahtod.wififixer.ui.WifiFixerActivity;
+import org.wahtod.wififixer.ui.MainActivity;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
@@ -86,7 +86,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 			break;
 
 		case 2:
-			Intent widgetintent = new Intent(context, WifiFixerActivity.class);
+			Intent widgetintent = new Intent(context, MainActivity.class);
 			widgetintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			context.startActivity(widgetintent);
 			break;
@@ -159,9 +159,8 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 	private static void handleAuthAction(final Bundle data) {
 		if (data.containsKey(AUTHEXTRA)
 				&& data.getString(AUTHEXTRA).contains(AUTHSTRING)) {
-			LogService.log(ctxt.get(), LogService.getLogTag(ctxt.get())
-					.toString(), ctxt.get().getString(R.string.authed));
-			Intent intent = new Intent(ctxt.get(), WifiFixerActivity.class)
+			LogService.log(ctxt.get(), ctxt.get().getString(R.string.authed));
+			Intent intent = new Intent(ctxt.get(), MainActivity.class)
 					.setAction(Intent.ACTION_MAIN).setFlags(
 							Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 
@@ -194,7 +193,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 			ctxt.get().stopService(new Intent(ctxt.get(), LogService.class));
 		} else {
 			ctxt.get().startActivity(
-					new Intent(ctxt.get(), WifiFixerActivity.class).putExtra(
+					new Intent(ctxt.get(), MainActivity.class).putExtra(
 							PrefConstants.SERVICEWARNED, true).setFlags(
 							Intent.FLAG_ACTIVITY_NEW_TASK));
 		}

@@ -126,15 +126,13 @@ public class ToggleService extends Service {
 				@Override
 				public void onAcquire() {
 					LogService.log(self.get(),
-							getString(R.string.wififixerservice), self.get()
-									.getString(R.string.acquiring_wake_lock));
+							self.get().getString(R.string.acquiring_wake_lock));
 					super.onAcquire();
 				}
 
 				@Override
 				public void onRelease() {
 					LogService.log(self.get(),
-							self.get().getString(R.string.wififixerservice),
 							self.get().getString(R.string.releasing_wake_lock));
 					super.onRelease();
 				}

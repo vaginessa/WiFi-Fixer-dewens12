@@ -140,7 +140,7 @@ public class PrefUtil extends Object {
 			logstring.append(network);
 			logstring.append(COLON);
 			logstring.append(String.valueOf(intTemp[pref.ordinal()]));
-			LogService.log(context.get(), LogService.getLogTag(context.get()),
+			LogService.log(context.get(),
 					logstring.toString());
 		}
 

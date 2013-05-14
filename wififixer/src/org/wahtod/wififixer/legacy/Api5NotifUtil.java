@@ -18,7 +18,7 @@
 package org.wahtod.wififixer.legacy;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.ui.WifiFixerActivity;
+import org.wahtod.wififixer.ui.MainActivity;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StatusMessage;
 
@@ -49,7 +49,7 @@ public class Api5NotifUtil extends NotifUtil {
 
 		NotificationCompat.Builder statbuilder = new NotificationCompat.Builder(
 				ctxt);
-		Intent intent = new Intent(ctxt, WifiFixerActivity.class).setAction(
+		Intent intent = new Intent(ctxt, MainActivity.class).setAction(
 				Intent.ACTION_MAIN).setFlags(
 				Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 		statbuilder.setContentIntent(PendingIntent.getActivity(ctxt, 0, intent,
@@ -89,7 +89,7 @@ public class Api5NotifUtil extends NotifUtil {
 
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(
 				ctxt);
-		Intent intent = new Intent(ctxt, WifiFixerActivity.class).setAction(
+		Intent intent = new Intent(ctxt, MainActivity.class).setAction(
 				Intent.ACTION_MAIN).setFlags(
 				Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 		builder.setContentIntent(PendingIntent.getActivity(ctxt, 0, intent, 0));

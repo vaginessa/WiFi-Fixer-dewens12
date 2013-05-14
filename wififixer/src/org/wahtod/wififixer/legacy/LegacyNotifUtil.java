@@ -18,7 +18,7 @@
 package org.wahtod.wififixer.legacy;
 
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.ui.WifiFixerActivity;
+import org.wahtod.wififixer.ui.MainActivity;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StatusMessage;
 
@@ -46,7 +46,7 @@ public class LegacyNotifUtil extends NotifUtil {
 					System.currentTimeMillis());
 			NotifUtil.lognotif.flags = Notification.FLAG_ONGOING_EVENT;
 
-			Intent intent = new Intent(context, WifiFixerActivity.class)
+			Intent intent = new Intent(context, MainActivity.class)
 					.setAction(Intent.ACTION_MAIN).setFlags(
 							Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 
@@ -109,7 +109,7 @@ public class LegacyNotifUtil extends NotifUtil {
 			NotifUtil.statnotif = new Notification(R.drawable.statsignal0,
 					ctxt.getString(R.string.network_status), 0);
 
-			Intent intent = new Intent(ctxt, WifiFixerActivity.class)
+			Intent intent = new Intent(ctxt, MainActivity.class)
 					.setAction(Intent.ACTION_MAIN).setFlags(
 							Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 

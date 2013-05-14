@@ -21,7 +21,7 @@ import java.lang.ref.WeakReference;
 
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
-import org.wahtod.wififixer.ui.WifiFixerActivity;
+import org.wahtod.wififixer.ui.MainActivity;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -113,7 +113,7 @@ public class StatusDispatcher {
 
 		public void run() {
 			Intent i = new Intent(STATUS_ACTION);
-			i.setComponent(new ComponentName(c.get(), WifiFixerActivity.class));
+			i.setComponent(new ComponentName(c.get(), MainActivity.class));
 			i.putExtras(message.status);
 			BroadcastHelper.sendBroadcast(c.get(), i, true);
 		}

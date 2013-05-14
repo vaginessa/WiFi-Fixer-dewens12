@@ -45,18 +45,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FixedFragmentStatePagerAdapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-public class WifiFixerActivity extends TutorialFragmentActivity implements
+public class MainActivity extends TutorialFragmentActivity implements
 		OnFragmentPauseRequestListener {
-	private static WeakReference<WifiFixerActivity> self;
+	private static WeakReference<MainActivity> self;
 	private StringBuilder mLogString;
 
-	public class PagerAdapter extends FragmentStatePagerAdapter {
+	public class PagerAdapter extends FixedFragmentStatePagerAdapter {
 		SparseArray<Fragment> fragmentArray = new SparseArray<Fragment>();
 
 		@Override
@@ -86,7 +86,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			switch (position) {
 			case 0:
 				if (mLogString != null)
-					handler.postDelayed(rSendLog, 500);
+					handler.postDelayed(rSendLogString, 500);
 				return FirstPageFragment.newInstance(position);
 			case 1:
 				return KnownNetworksFragment.newInstance(position);
@@ -100,7 +100,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			return fragmentArray.get(position);
 		}
 	}
-	
+
 	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
@@ -132,12 +132,12 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	 * Delete Log intent extra
 	 */
 	private static final String DELETE_LOG = "DELETE_LOG";
-	
+
 	private static final String RUN_TUTORIAL = "RUN_TUTORIAL";
 	/*
 	 * Delay for Wifi Toggle button check
 	 */
-	private static final long WIFI_TOGGLE_CHECK_DELAY = 3000;
+	private static final long NAG_DELAY = 3000;
 
 	private BaseViewPager mBasePager;
 
@@ -165,8 +165,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 	private void sendLogString() {
 		PagerAdapter adapter = (PagerAdapter) mBasePager.getAdapter();
 		FirstPageFragment sf = (FirstPageFragment) adapter.getPagerFragment(0);
-		if (sf == null)
-			LogService.log(this, "Butts", "ServiceFragment Null");
+		if (sf == null || adapter == null)
+			LogService.log(this, "Null during Activity.SendLogString");
 		else {
 			LogFragment l = (LogFragment) sf.getChildFragmentManager()
 					.findFragmentByTag(LogFragment.TAG);
@@ -183,10 +183,10 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		if (PrefUtil.readBoolean(this, Pref.LOG_KEY.key()))
 			PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), false);
 		if (file.delete())
-			NotifUtil.showToast(WifiFixerActivity.this,
+			NotifUtil.showToast(MainActivity.this,
 					R.string.logfile_delete_toast);
 		else
-			NotifUtil.showToast(WifiFixerActivity.this,
+			NotifUtil.showToast(MainActivity.this,
 					R.string.logfile_delete_err_toast);
 		if (PrefUtil.readBoolean(this, Pref.LOG_KEY.key()))
 			PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), true);
@@ -225,8 +225,7 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 			deleteLog();
 		} else if (data.containsKey(RUN_TUTORIAL)) {
 			data.remove(RUN_TUTORIAL);
-			if (findViewById(R.id.pager) != null)
-				phoneTutNag();
+			phoneTutNag();
 		}
 		/*
 		 * Set Activity intent to one without commands we've "consumed"
@@ -291,13 +290,13 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 				public void run() {
 					phoneTutNag();
 				}
-			}, WIFI_TOGGLE_CHECK_DELAY);
+			}, NAG_DELAY);
 	}
 
 	// On Create
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		self = new WeakReference<WifiFixerActivity>(this);
+		self = new WeakReference<MainActivity>(this);
 		mLogString = new StringBuilder();
 		/*
 		 * Set Default Exception handler
@@ -309,7 +308,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		super.onCreate(savedInstanceState);
 		setTitle(R.string.app_name);
 		setContentView(R.layout.main);
-		drawUI();
+		if (mBasePager == null)
+			drawUI();
 		ActionBarDetector.setDisplayHomeAsUpEnabled(this, false);
 		// Here's where we fire the nag
 		authCheck();
@@ -372,7 +372,8 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 				getString(R.string.later_button),
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						return;
+						PrefUtil.writeBoolean(self.get(),
+								PrefConstants.TUTORIAL, true);
 					}
 				});
 		dialog.show();
@@ -419,26 +420,27 @@ public class WifiFixerActivity extends TutorialFragmentActivity implements
 		mLogString = new StringBuilder(
 				savedInstanceState.getString(LogFragment.LOG_MESSAGE));
 
-		handler.postDelayed(rSendLog, 500);
+		handler.postDelayed(rSendLogString, 500);
 
 	}
-	
-	/* 
-	 * Overriding default behavior to handle our fragment backstack
+
+	/*
+	 * handle our fragment backstack
 	 * 
 	 * (non-Javadoc)
+	 * 
 	 * @see android.support.v4.app.FragmentActivity#onBackPressed()
 	 */
 	@Override
 	public void onBackPressed() {
 		PagerAdapter adapter = (PagerAdapter) mBasePager.getAdapter();
-		LocalNetworksFragment f = (LocalNetworksFragment) adapter.getPagerFragment(2);
-		if(f == null || !f.getChildFragmentManager().popBackStackImmediate())
+		LocalNetworksFragment f = (LocalNetworksFragment) adapter
+				.getPagerFragment(2);
+		if (f == null || !f.getChildFragmentManager().popBackStackImmediate())
 			super.onBackPressed();
 	}
 
-
-	Runnable rSendLog = new Runnable() {
+	Runnable rSendLogString = new Runnable() {
 
 		@Override
 		public void run() {

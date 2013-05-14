@@ -277,6 +277,10 @@ public class LogService extends Service {
 		context.startService(sendIntent);
 	}
 
+	public static void log(final Context context, final String m) {
+		log(context, getLogTag(context), m);
+	}
+
 	@Override
 	public void onCreate() {
 		self = new WeakReference<LogService>(this);

@@ -103,11 +103,9 @@ public class WFMonitorService extends Service implements
 
 		if (intent != null && logging) {
 			if (intent.hasExtra(ServiceAlarm.ALARM_START))
-				LogService.log(this, LogService.getLogTag(this),
-						getString(R.string.alarm_intent));
+				LogService.log(this, getString(R.string.alarm_intent));
 			else
-				LogService.log(this, LogService.getLogTag(this),
-						getString(R.string.start_intent));
+				LogService.log(this, getString(R.string.start_intent));
 		}
 	}
 
@@ -127,11 +125,9 @@ public class WFMonitorService extends Service implements
 		 */
 
 		if (StrictModeDetector.setPolicy(false))
-			LogService.log(this, LogService.getLogTag(this),
-					(getString(R.string.strict_mode_extant)));
+			LogService.log(this, (getString(R.string.strict_mode_extant)));
 		else
-			LogService.log(this, LogService.getLogTag(this),
-					(getString(R.string.strict_mode_unavailable)));
+			LogService.log(this, (getString(R.string.strict_mode_unavailable)));
 		/*
 		 * Make sure service settings are enforced.
 		 */
@@ -179,8 +175,7 @@ public class WFMonitorService extends Service implements
 		unregisterReceivers();
 		wifi.setStatNotif(false);
 		if (logging)
-			LogService.log(this, LogService.getLogTag(this),
-					(getString(R.string.ondestroy)));
+			LogService.log(this, getString(R.string.ondestroy));
 		cleanup();
 		super.onDestroy();
 	}
@@ -188,8 +183,7 @@ public class WFMonitorService extends Service implements
 	@Override
 	public void onLowMemory() {
 		if (logging)
-			LogService.log(this, LogService.getLogTag(this),
-					(getString(R.string.low_memory)));
+			LogService.log(this, (getString(R.string.low_memory)));
 		super.onLowMemory();
 	}
 
@@ -237,9 +231,8 @@ public class WFMonitorService extends Service implements
 			@Override
 			public void log() {
 				if (logging) {
-					LogService.log(getBaseContext(), LogService
-							.getLogTag(context), (getBaseContext()
-							.getString(R.string.loading_settings)));
+					LogService.log(context,
+							(context.getString(R.string.loading_settings)));
 					for (Pref prefkey : Pref.values()) {
 						if (getFlag(prefkey))
 							LogService.log(getBaseContext(),

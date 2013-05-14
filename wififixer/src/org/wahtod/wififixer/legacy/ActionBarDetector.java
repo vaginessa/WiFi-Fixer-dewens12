@@ -17,7 +17,7 @@
 
 package org.wahtod.wififixer.legacy;
 
-import org.wahtod.wififixer.ui.WifiFixerActivity;
+import org.wahtod.wififixer.ui.MainActivity;
 import org.wahtod.wififixer.legacy.ActionBarHelper;
 
 import android.app.Activity;
@@ -56,7 +56,7 @@ public abstract class ActionBarDetector {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// app icon in Action Bar clicked; go home
-			Intent intent = new Intent(a, WifiFixerActivity.class);
+			Intent intent = new Intent(a, MainActivity.class);
 			NavUtils.navigateUpTo(a, intent);
 		}
 	}

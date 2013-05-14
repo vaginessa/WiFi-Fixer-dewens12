@@ -44,7 +44,12 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 		Thread.setDefaultUncaughtExceptionHandler(this);
 	}
 
-	// Default exception handler
+	/*
+	 * The file needs to be world-readable so the gmail app can attach it directly
+	 * Not in sdcard because that can be unmounted
+	 * (non-Javadoc)
+	 * @see java.lang.Thread.UncaughtExceptionHandler#uncaughtException(java.lang.Thread, java.lang.Throwable)
+	 */
 	@SuppressLint("WorldReadableFiles")
 	public void uncaughtException(Thread t, Throwable e) {
 
