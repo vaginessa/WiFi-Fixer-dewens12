@@ -18,6 +18,7 @@
 package org.wahtod.wififixer.utility;
 
 import org.wahtod.wififixer.WFMonitorService;
+import org.wahtod.wififixer.boot.BootService;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 
@@ -48,7 +49,7 @@ public final class ServiceAlarm extends Object {
 
 	private static PendingIntent createPendingIntent(final Context context,
 			final int flag) {
-		Intent intent = new Intent(context, WFMonitorService.class);
+		Intent intent = new Intent(context, BootService.class);
 		intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
 		intent.putExtra(ALARM_START, ALARM_START);
 		PendingIntent pendingintent = PendingIntent.getService(context, 0,

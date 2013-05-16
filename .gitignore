@@ -12,3 +12,4 @@ wififixer/project.properties
 wififixer/build.xml
 wififixer/lint.xml
 wififixer/proguard-project.txt
+wififixer/wififixer.iml

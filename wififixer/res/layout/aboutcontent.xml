@@ -89,36 +89,36 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="5dip"
                 android:text="Wifi Fixer for Android" />
-            
+
              <TextView
                 style="@style/Wftext"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dip"
                 android:text="Copyright (C) 2010-2013  David Van de Ven"/>
-            
+
             <TextView
                 style="@style/Wftext"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dip"
                 android:text="This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version." />
-            
+
              <TextView
                 style="@style/Wftext"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dip"
                 android:text="This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."/>
-            
+
              <TextView
                 style="@style/Wftext"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:autoLink="web"
                 android:paddingTop="10dip"
-                android:text="You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses"/>           
-            
+                android:text="You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses"/>
+
             <TextView
                 style="@style/Wftext.large"
                 android:layout_width="fill_parent"

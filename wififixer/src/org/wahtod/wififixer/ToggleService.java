@@ -17,15 +17,6 @@
 
 package org.wahtod.wififixer;
 
-import java.lang.ref.WeakReference;
-
-import org.wahtod.wififixer.prefs.PrefConstants;
-import org.wahtod.wififixer.prefs.PrefUtil;
-import org.wahtod.wififixer.utility.LogService;
-import org.wahtod.wififixer.utility.ScreenStateDetector;
-import org.wahtod.wififixer.utility.WakeLock;
-import org.wahtod.wififixer.widget.WidgetReceiver;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -33,125 +24,126 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 
+import org.wahtod.wififixer.prefs.PrefConstants;
+import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.LogService;
+import org.wahtod.wififixer.utility.WakeLock;
+import org.wahtod.wififixer.widget.WidgetReceiver;
+
+import java.lang.ref.WeakReference;
+
 public class ToggleService extends Service {
-	private static WakeLock wlock;
-	private static WeakReference<ToggleService> self;
+    private static WeakReference<ToggleService> self;
+    private static WakeLock _wakelock;
 
-	/*
-	 * Delay Constants
-	 */
-	private static final int TOGGLE_DELAY = 8000;
-	private static final int WATCHDOG_DELAY = 11000;
-	private static final int SHORT = 300;
+    /*
+     * Delay Constants
+     */
+    private static final int TOGGLE_DELAY = 5000;
+    private static final int WATCHDOG_DELAY = 10000;
+    private static final int SHORT = 300;
 
-	/*
-	 * Handler Constants
-	 */
-	private static final int ON = 0;
-	private static final int OFF = 1;
-	private static final int WATCHDOG = 2;
-	private static final int TOGGLE = 3;
+    /*
+     * Handler Constants
+     */
+    private static final int ON = 0;
+    private static final int OFF = 1;
+    private static final int WATCHDOG = 2;
+    private static final int TOGGLE = 3;
 
-	private static Handler hWifiState = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			final Context lc = self.get();
-			/*
+    private static Handler hWifiState = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            final Context lc = self.get();
+            /*
 			 * Process MESSAGE
 			 */
-			switch (msg.what) {
+            switch (msg.what) {
 
-			case ON:
-				self.get().sendBroadcast(new Intent(WidgetReceiver.WIFI_ON));
-				break;
+                case ON:
+                    self.get().sendBroadcast(new Intent(WidgetReceiver.WIFI_ON));
+                    break;
 
-			case OFF:
-				self.get().sendBroadcast(new Intent(WidgetReceiver.WIFI_OFF));
-				break;
+                case OFF:
+                    self.get().sendBroadcast(new Intent(WidgetReceiver.WIFI_OFF));
+                    break;
 
-			case WATCHDOG:
-				if (!PrefUtil.getWifiManager(lc).isWifiEnabled()) {
-					hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
-					hWifiState
-							.sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
-				} else {
-					PrefUtil.writeBoolean(lc, PrefConstants.WIFI_STATE_LOCK,
-							false);
+                case WATCHDOG:
+                    if (!PrefUtil.getWifiManager(lc).isWifiEnabled()) {
+                        _wakelock.lock(true);
+                        hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
+                        hWifiState
+                                .sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
+                    } else {
+                        PrefUtil.writeBoolean(lc, PrefConstants.WIFI_STATE_LOCK,
+                                false);
+                        _wakelock.lock(false);
 					/*
 					 * Stop service: toggle done
 					 */
-					self.get().stopSelf();
-				}
-				/*
-				 * Release Wake Lock
-				 */
-				wlock.lock(false);
-				break;
+                        self.get().stopSelf();
+                    }
+                    break;
 
-			case TOGGLE:
-				if (!PrefUtil.readBoolean(lc, PrefConstants.WIFI_STATE_LOCK)) {
-					if (ScreenStateDetector.getScreenState(lc))
-						wlock.lock(true);
-					PrefUtil.writeBoolean(lc, PrefConstants.WIFI_STATE_LOCK,
-							true);
-					hWifiState.sendEmptyMessageDelayed(OFF, SHORT);
-					hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
-					hWifiState
-							.sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
-				}
-				break;
-			}
-			super.handleMessage(msg);
-		}
+                case TOGGLE:
+                    if (!PrefUtil.readBoolean(lc, PrefConstants.WIFI_STATE_LOCK)) {
+                        PrefUtil.writeBoolean(lc, PrefConstants.WIFI_STATE_LOCK,
+                                true);
+                        hWifiState.sendEmptyMessageDelayed(OFF, SHORT);
+                        hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
+                        hWifiState
+                                .sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
+                    }
+                    break;
+            }
+            super.handleMessage(msg);
+        }
 
-	};
+    };
 
-	public static class RToggleRunnable implements Runnable {
+    public static class RToggleRunnable implements Runnable {
 
-		@Override
-		public void run() {
-			hWifiState.sendEmptyMessage(TOGGLE);
-		}
-	};
+        @Override
+        public void run() {
+            hWifiState.sendEmptyMessage(TOGGLE);
+        }
+    };
 
-	@Override
-	public void onCreate() {
-		self = new WeakReference<ToggleService>(this);
-		/*
-		 * initialize wake lock
+    @Override
+    public void onCreate() {
+        self = new WeakReference<ToggleService>(this);
+        /*
+		 * Initialize WakeLock and WifiLock
 		 */
-		if (wlock == null)
-			wlock = new WakeLock(this) {
+        _wakelock = new WakeLock(self.get()) {
 
-				@Override
-				public void onAcquire() {
-					LogService.log(self.get(),
-							self.get().getString(R.string.acquiring_wake_lock));
-					super.onAcquire();
-				}
+            @Override
+            public void onAcquire() {
+                LogService.log(self.get(), R.string.acquiring_wake_lock);
+                super.onAcquire();
+            }
 
-				@Override
-				public void onRelease() {
-					LogService.log(self.get(),
-							self.get().getString(R.string.releasing_wake_lock));
-					super.onRelease();
-				}
-			};
+            @Override
+            public void onRelease() {
+                LogService.log(self.get(), R.string.releasing_wake_lock);
+                super.onRelease();
+            }
 
+        };
 		/*
 		 * Start toggle thread
 		 */
-		Thread toggleThread = new Thread(new RToggleRunnable());
-		toggleThread.start();
-		super.onCreate();
-	}
+        Thread toggleThread = new Thread(new RToggleRunnable());
+        toggleThread.start();
+        super.onCreate();
+    }
 
-	@Override
-	public IBinder onBind(Intent intent) {
+    @Override
+    public IBinder onBind(Intent intent) {
 		/*
 		 * Mandatory override
 		 */
-		return null;
-	}
+        return null;
+    }
 
 }

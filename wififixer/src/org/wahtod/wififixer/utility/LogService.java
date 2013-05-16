@@ -280,6 +280,10 @@ public class LogService extends Service {
 	public static void log(final Context context, final String m) {
 		log(context, getLogTag(context), m);
 	}
+	
+	public static void log(Context c, int resId) {
+		log(c, c.getString(resId));
+	}
 
 	@Override
 	public void onCreate() {

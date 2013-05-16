@@ -140,13 +140,13 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	private boolean wifistate;
 
 	/*
-	 * Constants for wifirepair values
+	 * Constants for mRepairLevel values
 	 */
 	private static final int W_REASSOCIATE = 0;
 	private static final int W_RECONNECT = 1;
 	private static final int W_REPAIR = 2;
 
-	private static int wifirepair = W_REASSOCIATE;
+	private static int mRepairLevel = W_REASSOCIATE;
 
 	private static long _signalCheckTime;
 
@@ -168,7 +168,7 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	 * For connectToAP sticking
 	 */
 	private static int connecting = 0;
-	private static WifiManager wm_;
+	private static WifiManager _wm;
 	private static WeakReference<WFMonitor> self;
 	private static final int CONNECTING_THRESHOLD = 5;
 	private static final long CWDOG_DELAY = 10000;
@@ -193,8 +193,8 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 
 				isUp = networkUp(ctxt.get());
 
-				if (isUp && wifirepair != W_REASSOCIATE)
-					wifirepair = W_REASSOCIATE;
+				if (isUp)
+					mRepairLevel = W_REASSOCIATE;
 			}
 			handler.post(PostExecuteRunnable);
 		}
@@ -279,7 +279,7 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 					&& self.get().connectToBest(ctxt.get()) != NULLVAL) {
 				pendingreconnect = false;
 			} else {
-				wifirepair = W_REASSOCIATE;
+				mRepairLevel = W_REASSOCIATE;
 				self.get().handlerWrapper(rScanWatchDog, SHORTWAIT);
 				log(ctxt.get(),
 						R.string.exiting_supplicant_fix_thread_starting_scan);
@@ -355,13 +355,13 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	 */
 	protected static Runnable rWifiTask = new Runnable() {
 		public void run() {
-			switch (wifirepair) {
+			switch (mRepairLevel) {
 
 			case W_REASSOCIATE:
 				// Let's try to reassociate first..
 				getWifiManager(ctxt.get()).reassociate();
 				log(ctxt.get(), R.string.reassociating);
-				wifirepair++;
+				mRepairLevel++;
 				notifyWrap(ctxt.get(),
 						ctxt.get().getString(R.string.reassociating));
 				break;
@@ -370,7 +370,7 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 				// Ok, now force reconnect..
 				getWifiManager(ctxt.get()).reconnect();
 				log(ctxt.get(), R.string.reconnecting);
-				wifirepair++;
+				mRepairLevel++;
 				notifyWrap(ctxt.get(),
 						ctxt.get().getString(R.string.reconnecting));
 				break;
@@ -382,19 +382,15 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 				/*
 				 * Reset state
 				 */
-				wifirepair = W_REASSOCIATE;
+				mRepairLevel = W_REASSOCIATE;
 				log(ctxt.get(), R.string.repairing);
 				notifyWrap(ctxt.get(), ctxt.get().getString(R.string.repairing));
 				break;
 			}
-			/*
-			 * Remove wake lock if there is one
-			 */
 			self.get().wakelock.lock(false);
-
 			log(ctxt.get(),
 					new StringBuilder(ctxt.get().getString(
-							R.string.fix_algorithm)).append(wifirepair)
+							R.string.fix_algorithm)).append(mRepairLevel)
 							.toString());
 		}
 	};
@@ -441,18 +437,12 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	 */
 	protected static Runnable rSignalhop = new Runnable() {
 		public void run() {
-			/*
-			 * Remove all posts first
-			 */
-			if (!self.get().screenstate)
-				self.get().wakelock.lock(true);
+
 			self.get().clearQueue();
 			/*
 			 * run the signal hop check
 			 */
 			self.get().signalHop();
-			self.get().wakelock.lock(false);
-
 		}
 
 	};
@@ -581,18 +571,20 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 		// User Event
 		filter.addAction(REASSOCIATE_INTENT);
 		BroadcastHelper.registerReceiver(context, localreceiver, filter, true);
-		// Initialize WakeLock
+		/*
+		 * Initialize WakeLock and WifiLock
+		 */
 		wakelock = new WakeLock(context) {
 
 			@Override
 			public void onAcquire() {
-				log(context, R.string.acquiring_wake_lock);
+				LogService.log(ctxt.get(), R.string.acquiring_wake_lock);
 				super.onAcquire();
 			}
 
 			@Override
 			public void onRelease() {
-				log(context, R.string.releasing_wake_lock);
+				LogService.log(ctxt.get(), R.string.releasing_wake_lock);
 				super.onRelease();
 			}
 
@@ -1107,10 +1099,10 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 		/*
 		 * Cache WifiManager
 		 */
-		if (wm_ == null) {
-			wm_ = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		if (_wm == null) {
+			_wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		}
-		return wm_;
+		return _wm;
 	}
 
 	private void handleConnect() {
@@ -1146,6 +1138,7 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 						.getConnectionInfo());
 			else if (info.getState().equals(NetworkInfo.State.DISCONNECTED)
 					&& !info.isAvailable())
+                onNetworkDisconnected();
 				clearConnectedStatus(ctxt.get().getString(
 						R.string.wifi_is_disabled));
 		}
@@ -1283,8 +1276,6 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 
 	private void checkWifi() {
 		if (getIsSupplicantConnected(ctxt.get())) {
-			if (!screenstate)
-				wakelock.lock(true);
 			/*
 			 * Starts network check AsyncTask
 			 */
@@ -1299,11 +1290,11 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 
 	protected void handleNetworkResult(final boolean state) {
 		if (!state) {
+			wakelock.lock(true);
 			_connected = false;
 			shouldrepair = true;
 			wifiRepair();
 		}
-		wakelock.lock(false);
 	}
 
 	public void cleanup() {
@@ -1451,16 +1442,7 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	private void handleSupplicantState(final SupplicantState sState) {
 		if (!getWifiManager(ctxt.get()).isWifiEnabled())
 			return;
-		/*
-		 * Disconnect check
-		 */
-		if (_connected
-				&& (sState.equals(SupplicantState.DISCONNECTED) || !sState
-						.equals(SupplicantState.COMPLETED)
-						&& !sState.equals(SupplicantState.FOUR_WAY_HANDSHAKE)
-						&& !sState.equals(SupplicantState.GROUP_HANDSHAKE)
-						&& !sState.equals(SupplicantState.SCANNING)))
-			onNetworkDisconnected();
+		
 		/*
 		 * Check for ASSOCIATING bug but first clear check if not ASSOCIATING
 		 */
@@ -1541,11 +1523,13 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	}
 
 	private void onNetworkDisconnected() {
+        if(_connected){
 		log(ctxt.get(),
 				mLastConnectedNetwork.getSSID()
 						+ ctxt.get().getString(R.string.network_disconnected));
 		_connected = false;
 		clearConnectedStatus((ctxt.get().getString(R.string.disconnected)));
+        }
 	}
 
 	private void onNetworkConnecting() {
@@ -1565,7 +1549,7 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	private void onNetworkConnected(WifiInfo wifiInfo) {
 		mLastConnectedNetwork = wifiInfo;
 		/*
-		 * Disable watchdog, we've connected
+		 * Disable Demoter, we've connected
 		 */
 		clearMessage(rDemoter);
 		/*
@@ -1794,6 +1778,7 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 					.toString());
 		} else {
 			log(ctxt.get(), R.string.signalhop_no_result);
+			shouldrepair=true;
 			wifiRepair();
 		}
 	}
@@ -1825,12 +1810,8 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 
 	public void startScan(final boolean pending) {
 		pendingscan = pending;
-		// We want a wakelock during scan
-		if (!screenstate)
-			wakelock.lock(true);
 		if (getWifiManager(ctxt.get()).startScan()) {
 			log(ctxt.get(), R.string.initiating_scan);
-			getWifiManager(ctxt.get()).startScan();
 		} else {
 			/*
 			 * Reset supplicant, log
@@ -1838,7 +1819,6 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 			toggleWifi();
 			log(ctxt.get(), R.string.scan_failed);
 		}
-		wakelock.lock(false);
 	}
 
 	private void supplicantFix() {
@@ -1877,21 +1857,8 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	private void wifiRepair() {
 		if (!shouldrepair)
 			return;
-
-		if (screenstate) {
-			/*
-			 * Start Wifi Task
-			 */
-			handlerWrapper(rWifiTask);
-			log(ctxt.get(), R.string.running_wifi_repair);
-		} else {
-			/*
-			 * if screen off, try wake lock then resubmit to handler
-			 */
-			wakelock.lock(true);
-			handlerWrapper(rWifiTask);
-			log(ctxt.get(), R.string.wifi_repair_post_failed);
-		}
+		handlerWrapper(rWifiTask);
+		log(ctxt.get(), R.string.running_wifi_repair);
 		shouldrepair = false;
 	}
 
