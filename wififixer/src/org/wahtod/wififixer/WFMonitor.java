@@ -153,8 +153,8 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	/*
 	 * For Supplicant ASSOCIATING bug
 	 */
-	private static int supplicant_associating = 0;
-	private static final int SUPPLICANT_ASSOC_THRESHOLD = 10;
+	private static StopWatch _assoc_watchdog = new StopWatch();
+	private static final long SUPPLICANT_ASSOC_THRESHOLD = 15000;
 
 	/*
 	 * Supplicant State triggers Have to use string because some SupplicantState
@@ -1138,9 +1138,9 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 						.getConnectionInfo());
 			else if (info.getState().equals(NetworkInfo.State.DISCONNECTED)
 					&& !info.isAvailable())
-                onNetworkDisconnected();
-				clearConnectedStatus(ctxt.get().getString(
-						R.string.wifi_is_disabled));
+				onNetworkDisconnected();
+			clearConnectedStatus(ctxt.get()
+					.getString(R.string.wifi_is_disabled));
 		}
 	}
 
@@ -1262,13 +1262,12 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	}
 
 	private static void checkAssociateState() {
-		supplicant_associating++;
-		if (supplicant_associating > SUPPLICANT_ASSOC_THRESHOLD) {
+
+		if (_assoc_watchdog.getElapsed() > SUPPLICANT_ASSOC_THRESHOLD) {
 			/*
 			 * Reset supplicant, it's stuck
 			 */
 			toggleWifi();
-			supplicant_associating = 0;
 			log(ctxt.get(), R.string.supplicant_associate_threshold_exceeded);
 		} else
 			self.get().handlerWrapper(rAssocWatchDog, SHORTWAIT);
@@ -1442,13 +1441,15 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	private void handleSupplicantState(final SupplicantState sState) {
 		if (!getWifiManager(ctxt.get()).isWifiEnabled())
 			return;
-		
+
 		/*
 		 * Check for ASSOCIATING bug but first clear check if not ASSOCIATING
 		 */
 		if (!(sState.name().equals(SSTATE_ASSOCIATING))) {
-			supplicant_associating = 0;
 			clearMessage(rAssocWatchDog);
+		} else {
+			_assoc_watchdog.start();
+			handlerWrapper(rAssocWatchDog, SHORTWAIT);
 		}
 		/*
 		 * Status notification updating supplicant state
@@ -1523,13 +1524,12 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 	}
 
 	private void onNetworkDisconnected() {
-        if(_connected){
-		log(ctxt.get(),
-				mLastConnectedNetwork.getSSID()
-						+ ctxt.get().getString(R.string.network_disconnected));
-		_connected = false;
-		clearConnectedStatus((ctxt.get().getString(R.string.disconnected)));
-        }
+		if (_connected) {
+			log(ctxt.get(), mLastConnectedNetwork.getSSID()
+					+ ctxt.get().getString(R.string.network_disconnected));
+			_connected = false;
+			clearConnectedStatus((ctxt.get().getString(R.string.disconnected)));
+		}
 	}
 
 	private void onNetworkConnecting() {
@@ -1565,11 +1565,6 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 		 * Make sure connectee is null
 		 */
 		connectee = null;
-		/*
-		 * Reset supplicant associate check
-		 */
-		supplicant_associating = 0;
-
 		/*
 		 * Reset repair_reset flag to false
 		 */
@@ -1778,7 +1773,7 @@ public class WFMonitor extends Object implements OnScreenStateChangedListener {
 					.toString());
 		} else {
 			log(ctxt.get(), R.string.signalhop_no_result);
-			shouldrepair=true;
+			shouldrepair = true;
 			wifiRepair();
 		}
 	}

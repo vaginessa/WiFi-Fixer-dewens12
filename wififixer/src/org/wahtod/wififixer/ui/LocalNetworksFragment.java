@@ -41,6 +41,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class LocalNetworksFragment extends Fragment {
+public class LocalNetworksFragment extends Fragment implements
+		android.support.v4.app.FragmentManager.OnBackStackChangedListener {
 	private static WeakReference<LocalNetworksFragment> self;
 	private ScanListAdapter adapter;
 	private ListView lv;
@@ -92,6 +94,7 @@ public class LocalNetworksFragment extends Fragment {
 		lv.setOnItemLongClickListener(il);
 		registerReceiver();
 		drawhandler.sendEmptyMessage(REFRESH_LIST_ADAPTER);
+		getChildFragmentManager().addOnBackStackChangedListener(this);
 		return v;
 	}
 
@@ -373,5 +376,24 @@ public class LocalNetworksFragment extends Fragment {
 
 	private void unregisterReceiver() {
 		BroadcastHelper.unregisterReceiver(getContext(), receiver);
+	}
+
+	@Override
+	public void onBackStackChanged() {
+		Log.d(this.getClass().getName(), String
+				.valueOf(getChildFragmentManager().getBackStackEntryCount()));
+
+	}
+
+	/*
+	 * Clear backstack
+	 * 
+	 * @see android.support.v4.app.Fragment#onResume()
+	 */
+	@Override
+	public void onResume() {
+		while (getChildFragmentManager().popBackStackImmediate())
+			getChildFragmentManager().popBackStackImmediate();
+		super.onResume();
 	}
 }

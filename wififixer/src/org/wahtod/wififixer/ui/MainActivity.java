@@ -52,7 +52,8 @@ import android.util.SparseArray;
 import android.view.ViewGroup;
 
 public class MainActivity extends TutorialFragmentActivity implements
-		OnFragmentPauseRequestListener {
+		OnFragmentPauseRequestListener{
+
 	private static WeakReference<MainActivity> self;
 	private StringBuilder mLogString;
 
