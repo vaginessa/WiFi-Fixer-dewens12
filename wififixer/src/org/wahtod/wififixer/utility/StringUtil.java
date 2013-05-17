@@ -24,6 +24,7 @@ public class StringUtil {
 	public static final String WPA2 = "WPA2";
 	public static final String WEP = "WEP";
 	public static final String OPEN = "OPEN";
+    public static final String WPS = "WPS";
 	public static final CharSequence ESS = "ESS";
 
 	public static String addQuotes(String s) {
@@ -68,10 +69,10 @@ public class StringUtil {
 			return WPA2;
 		else if (capabilities.contains(WPA))
 			return WPA;
-		else if (capabilities.contains(ESS))
-			return OPEN;
+		else if (capabilities.contains(WPS))
+			return WPS;
 		else
-			return capabilities;
+			return OPEN;
 	}
 
 }

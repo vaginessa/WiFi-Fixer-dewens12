@@ -68,8 +68,10 @@ import android.text.format.Formatter;
 /*
  * Handles all interaction 
  * with WifiManager
+ *
+ * "fix" part of Wifi Fixer.
  */
-public class WFMonitor extends Object implements OnScreenStateChangedListener {
+public class WFMonitor implements OnScreenStateChangedListener {
 	private static final int DEFAULT_DBM_FLOOR = -90;
 	private String accesspointIP;
 	protected static WeakReference<Context> ctxt;
