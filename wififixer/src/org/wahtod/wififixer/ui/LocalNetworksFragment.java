@@ -128,6 +128,7 @@ public class LocalNetworksFragment extends Fragment implements
         return new LocalNetworksLoader(this.getActivity());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onLoadFinished(Loader loader, Object o) {
         adapter.scanresultArray = (List<WFScanResult>) o;
@@ -136,7 +137,7 @@ public class LocalNetworksFragment extends Fragment implements
 
     @Override
     public void onLoaderReset(Loader loader) {
-
+        adapter.scanresultArray = null;
     }
 
     private Context getContext() {
@@ -208,11 +209,11 @@ public class LocalNetworksFragment extends Fragment implements
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-			/*
-			 * Set SSID text and color
+            /*
+             * Set SSID text and color
 			 */
             holder.text.setText(scanresultArray.get(position).SSID);
-			/*
+            /*
 			 * Set signal icon
 			 */
             int adjusted = WifiManager.calculateSignalLevel(

@@ -18,81 +18,71 @@
 package org.wahtod.wififixer;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.WakeLock;
-import org.wahtod.wififixer.widget.WidgetReceiver;
 
 import java.lang.ref.WeakReference;
 
 public class ToggleService extends Service {
-    private static WeakReference<ToggleService> self;
-    private static WakeLock _wakelock;
-
     /*
      * Delay Constants
      */
     private static final int TOGGLE_DELAY = 5000;
-    private static final int WATCHDOG_DELAY = 10000;
-    private static final int SHORT = 300;
-
+    private static final int WATCHDOG_DELAY = 3000;
+    private static final int SHORT = 500;
     /*
      * Handler Constants
      */
-    private static final int ON = 0;
-    private static final int OFF = 1;
-    private static final int WATCHDOG = 2;
-    private static final int TOGGLE = 3;
+    private static final int WIFI_STATE_MESSAGE = 1266;
+    private static final int WATCHDOG = 21255;
+    protected static Handler _handler = new Handler() {
 
-    private static Handler hWifiState = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            final Context lc = self.get();
             /*
-			 * Process MESSAGE
+             * Process MESSAGE
 			 */
             switch (msg.what) {
 
-                case ON:
-                    self.get().sendBroadcast(new Intent(WidgetReceiver.WIFI_ON));
-                    break;
-
-                case OFF:
-                    self.get().sendBroadcast(new Intent(WidgetReceiver.WIFI_OFF));
-                    break;
-
-                case WATCHDOG:
-                    if (!PrefUtil.getWifiManager(lc).isWifiEnabled()) {
-                        _wakelock.lock(true);
-                        hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
-                        hWifiState
-                                .sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
-                    } else {
-                        PrefUtil.writeBoolean(lc, PrefConstants.WIFI_STATE_LOCK,
+                case WifiManager.WIFI_STATE_ENABLED:
+                    if (PrefUtil.readBoolean(self.get(), PrefConstants.WIFI_STATE_LOCK)) {
+                        PrefUtil.writeBoolean(self.get(), PrefConstants.WIFI_STATE_LOCK,
                                 false);
-                        _wakelock.lock(false);
-					/*
-					 * Stop service: toggle done
-					 */
-                        self.get().stopSelf();
                     }
                     break;
 
-                case TOGGLE:
-                    if (!PrefUtil.readBoolean(lc, PrefConstants.WIFI_STATE_LOCK)) {
-                        PrefUtil.writeBoolean(lc, PrefConstants.WIFI_STATE_LOCK,
-                                true);
-                        hWifiState.sendEmptyMessageDelayed(OFF, SHORT);
-                        hWifiState.sendEmptyMessageDelayed(ON, TOGGLE_DELAY);
-                        hWifiState
+                case WifiManager.WIFI_STATE_DISABLED:
+                    _handler
+                            .sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
+                    PrefUtil.getWifiManager(self.get()).setWifiEnabled(true);
+                    break;
+
+
+                case WATCHDOG:
+                    if (!PrefUtil.getWifiManager(self.get()).isWifiEnabled()) {
+                        _wakelock.lock(true);
+                        PrefUtil.getWifiManager(self.get()).setWifiEnabled(true);
+                        _handler
                                 .sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
+                    } else {
+                        LogService.log(self.get(), "Watchdog Exited");
+                        _wakelock.lock(false);
+                    /*
+                     * Stop service: toggle done
+					 */
+                        self.get().shutdown();
+                        return;
                     }
                     break;
             }
@@ -100,20 +90,25 @@ public class ToggleService extends Service {
         }
 
     };
-
-    public static class RToggleRunnable implements Runnable {
-
-        @Override
-        public void run() {
-            hWifiState.sendEmptyMessage(TOGGLE);
+    private static WeakReference<ToggleService> self;
+    private static WakeLock _wakelock;
+    private static BroadcastReceiver wifiStateReceiver = new BroadcastReceiver() {
+        public void onReceive(final Context context, final Intent intent) {
+            Bundle extras = intent.getExtras();
+            if (extras != null && extras.containsKey(WifiManager.EXTRA_WIFI_STATE)) {
+                int state = extras.getInt(WifiManager.EXTRA_WIFI_STATE,
+                        WifiManager.WIFI_STATE_UNKNOWN);
+                _handler.sendEmptyMessage(state);
+            }
         }
     };
 
     @Override
     public void onCreate() {
+        super.onCreate();
         self = new WeakReference<ToggleService>(this);
         /*
-		 * Initialize WakeLock and WifiLock
+         * Initialize WakeLock and WifiLock
 		 */
         _wakelock = new WakeLock(self.get()) {
 
@@ -130,20 +125,32 @@ public class ToggleService extends Service {
             }
 
         };
-		/*
-		 * Start toggle thread
-		 */
-        Thread toggleThread = new Thread(new RToggleRunnable());
-        toggleThread.start();
-        super.onCreate();
+        IntentFilter filter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        registerReceiver(wifiStateReceiver, filter);
+        _handler.postDelayed(new RToggleRunnable(), SHORT);
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-		/*
-		 * Mandatory override
+        /*
+         * Mandatory override
 		 */
         return null;
+    }
+
+    protected void shutdown() {
+        this.unregisterReceiver(wifiStateReceiver);
+        this.stopSelf();
+    }
+
+    public static class RToggleRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            PrefUtil.writeBoolean(self.get(), PrefConstants.WIFI_STATE_LOCK,
+                    true);
+            PrefUtil.getWifiManager(self.get()).setWifiEnabled(false);
+        }
     }
 
 }

@@ -65,12 +65,11 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
         WifiManager wm = (WifiManager) context
                 .getSystemService(Context.WIFI_SERVICE);
 
-        if (wm.isWifiEnabled()){
-            List<WFScanResult> scanned =  WFScanResult.fromScanResultArray(wm.getScanResults());
-            Collections.sort(scanned,new SortBySignal());
+        if (wm.isWifiEnabled()) {
+            List<WFScanResult> scanned = WFScanResult.fromScanResultArray(wm.getScanResults());
+            Collections.sort(scanned, new SortBySignal());
             return scanned;
-        }
-        else
+        } else
             return new ArrayList<WFScanResult>();
     }
 
@@ -101,7 +100,7 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
 		 */
     class SortBySignal implements Comparator<WFScanResult> {
         public int compare(WFScanResult o2, WFScanResult o1) {
-				/*
+                /*
 				 * Sort by signal
 				 */
             return (o1.level < o2.level ? -1 : (o1.level == o2.level ? 0
