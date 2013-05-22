@@ -26,7 +26,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +38,7 @@ import org.wahtod.wififixer.utility.WFScanResult;
 
 import java.util.List;
 
-public class LocalNetworksFragment extends Fragment implements
-        android.support.v4.app.FragmentManager.OnBackStackChangedListener, LoaderManager.LoaderCallbacks {
+public class LocalNetworksFragment extends Fragment implements LoaderManager.LoaderCallbacks {
     private ScanListAdapter adapter;
     private ListView lv;
     private Loader mLoader;
@@ -73,7 +71,6 @@ public class LocalNetworksFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         mLoader = getLoaderManager().initLoader(0, null, this);
         mLoader.forceLoad();
-
     }
 
     @Override
@@ -84,13 +81,12 @@ public class LocalNetworksFragment extends Fragment implements
         lv.setOnItemLongClickListener(il);
         adapter = new ScanListAdapter(getContext(), 0, null);
         lv.setAdapter(adapter);
-        getChildFragmentManager().addOnBackStackChangedListener(this);
         return v;
     }
 
     /*
-     * Send network info to Aboutfragment, creating if necessary
-     */
+         * Send network info to Aboutfragment, creating if necessary
+         */
     private void dispatchItemSelectedEvent(String classname,
                                            WFScanResult clicked) {
         if (clicked == null)
@@ -142,13 +138,6 @@ public class LocalNetworksFragment extends Fragment implements
 
     private Context getContext() {
         return getActivity();
-    }
-
-    @Override
-    public void onBackStackChanged() {
-        Log.d(this.getClass().getName(), String
-                .valueOf(getChildFragmentManager().getBackStackEntryCount()));
-
     }
 
     /*
@@ -214,7 +203,7 @@ public class LocalNetworksFragment extends Fragment implements
 			 */
             holder.text.setText(scanresultArray.get(position).SSID);
             /*
-			 * Set signal icon
+             * Set signal icon
 			 */
             int adjusted = WifiManager.calculateSignalLevel(
                     scanresultArray.get(position).level, 5);
@@ -223,7 +212,7 @@ public class LocalNetworksFragment extends Fragment implements
                     NotifUtil.ICON_SET_SMALL));
 
 			/*
-			 * Set security icon and encryption text
+             * Set security icon and encryption text
 			 */
             if (StringUtil.getCapabilitiesString(
                     scanresultArray.get(position).capabilities).equals(

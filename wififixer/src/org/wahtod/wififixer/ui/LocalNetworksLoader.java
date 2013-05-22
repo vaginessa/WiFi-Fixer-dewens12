@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.support.v4.content.AsyncTaskLoader;
+import android.util.Log;
+import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.WFScanResult;
 
@@ -51,10 +53,14 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
         }
     };
 
+    @Override
+    protected void onStartLoading() {
+        registerReceiver();
+        super.onStartLoading();
+    }
+
     public LocalNetworksLoader(Context context) {
         super(context);
-        registerReceiver();
-        mScanResults = getNetworks(context);
         deliverResult(mScanResults);
     }
 
@@ -62,8 +68,7 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
      * Note that this WILL return a null String[] if called while wifi is off.
 	 */
     private List<WFScanResult> getNetworks(final Context context) {
-        WifiManager wm = (WifiManager) context
-                .getSystemService(Context.WIFI_SERVICE);
+        WifiManager wm = PrefUtil.getWifiManager(context);
 
         if (wm.isWifiEnabled()) {
             List<WFScanResult> scanned = WFScanResult.fromScanResultArray(wm.getScanResults());
@@ -74,13 +79,8 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
     }
 
     @Override
-    protected void finalize() throws Throwable {
-        unregisterReceiver();
-        super.finalize();
-    }
-
-    @Override
     public List<WFScanResult> loadInBackground() {
+        mScanResults = getNetworks(getContext());
         return mScanResults;
     }
 
@@ -89,6 +89,12 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
                 WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         BroadcastHelper.registerReceiver(getContext(), receiver, filter, false);
+    }
+
+    @Override
+    protected void onStopLoading() {
+        unregisterReceiver();
+        super.onStopLoading();
     }
 
     private void unregisterReceiver() {

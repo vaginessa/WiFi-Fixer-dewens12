@@ -17,8 +17,12 @@
 
 package org.wahtod.wififixer.widget;
 
-import java.lang.ref.WeakReference;
-
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ToggleService;
 import org.wahtod.wififixer.WFBroadcastReceiver;
@@ -27,97 +31,82 @@ import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.net.wifi.WifiManager;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import java.lang.ref.WeakReference;
 
 public class WidgetReceiver extends BroadcastReceiver {
-	private static WeakReference<Context> ctxt;
-	/*
-	 * Intent Constants
-	 */
-	public static final String WIFI_ON = "org.wahtod.wififixer.WidgetReceiver.WIFI_ON";
-	public static final String WIFI_OFF = "org.wahtod.wififixer.WidgetReceiver.WIFI_OFF";
-	public static final String TOGGLE_WIFI = "org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE";
-	public static final String REASSOCIATE = "org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE";
-
-	private static WifiManager wm;
-
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		ctxt = new WeakReference<Context>(context);
-		handleIntent(context, intent);
-	}
-
-	private static Handler handler = new Handler() {
-		@Override
-		public void handleMessage(Message message) {
-			String action = message.getData().getString(PrefUtil.INTENT_ACTION);
-			/*
+    /*
+     * Intent Constants
+     */
+    public static final String WIFI_ON = "org.wahtod.wififixer.WidgetReceiver.WIFI_ON";
+    public static final String WIFI_OFF = "org.wahtod.wififixer.WidgetReceiver.WIFI_OFF";
+    public static final String TOGGLE_WIFI = "org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE";
+    public static final String REASSOCIATE = "org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE";
+    private static WeakReference<Context> ctxt;
+    private static Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message message) {
+            String action = message.getData().getString(PrefUtil.INTENT_ACTION);
+            /*
 			 * Turn on WIFI
 			 */
-			if (action.equals(WIFI_ON))
-				setWifiState(ctxt.get(), true);
-			else
+            if (action.equals(WIFI_ON))
+                setWifiState(ctxt.get(), true);
+            else
 			/*
 			 * If Wifi is disabled, return
 			 */
-			if (!getWifiManager(ctxt.get()).isWifiEnabled()) {
-				return;
-			}
+                if (!PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled()) {
+                    return;
+                }
 			/*
 			 * Turn off Wifi
 			 */
-			else if (action.equals(WIFI_OFF))
-				setWifiState(ctxt.get(), false);
+                else if (action.equals(WIFI_OFF))
+                    setWifiState(ctxt.get(), false);
 			/*
 			 * Toggle Wifi
 			 */
-			else if (action.equals(TOGGLE_WIFI)) {
-				if (message.getData().containsKey(
-						WFBroadcastReceiver.FROMWIDGET))
-					NotifUtil.showToast(ctxt.get(), R.string.toggling_wifi);
-				ctxt.get().startService(
-						new Intent(ctxt.get(), ToggleService.class));
-			}
+                else if (action.equals(TOGGLE_WIFI)) {
+                    if (message.getData().containsKey(
+                            WFBroadcastReceiver.FROMWIDGET))
+                        NotifUtil.showToast(ctxt.get(), R.string.toggling_wifi);
+                    ctxt.get().startService(
+                            new Intent(ctxt.get(), ToggleService.class));
+                }
 			/*
 			 * Reassociate
 			 */
-			else if (action.equals(REASSOCIATE)) {
-				NotifUtil.showToast(ctxt.get(),
-						ctxt.get().getString(R.string.reassociating));
-				BroadcastHelper.sendBroadcast(ctxt.get(), new Intent(
-						WFMonitor.REASSOCIATE_INTENT), true);
-				getWifiManager(ctxt.get()).reassociate();
-			}
+                else if (action.equals(REASSOCIATE)) {
+                    NotifUtil.showToast(ctxt.get(),
+                            ctxt.get().getString(R.string.reassociating));
+                    BroadcastHelper.sendBroadcast(ctxt.get(), new Intent(
+                            WFMonitor.REASSOCIATE_INTENT), true);
+                    PrefUtil.getWifiManager(ctxt.get()).reassociate();
+                }
 
-		}
-	};
+        }
+    };
 
-	public static WifiManager getWifiManager(final Context context) {
-		if (wm == null)
-			wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-		return wm;
-	}
+    public static void setWifiState(final Context context, final boolean state) {
+        PrefUtil.getWifiManager(context).setWifiEnabled(state);
+    }
 
-	public static void setWifiState(final Context context, final boolean state) {
-		getWifiManager(context).setWifiEnabled(state);
-	}
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        ctxt = new WeakReference<Context>(context);
+        handleIntent(context, intent);
+    }
 
-	public void handleIntent(final Context context, final Intent intent) {
+    public void handleIntent(final Context context, final Intent intent) {
 		/*
 		 * Dispatch intent commands to handler
 		 */
-		Message message = handler.obtainMessage();
-		Bundle data = new Bundle();
-		data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
-		if (intent.getExtras() != null)
-			data.putAll(intent.getExtras());
-		message.setData(data);
-		handler.sendMessage(message);
-	}
+        Message message = handler.obtainMessage();
+        Bundle data = new Bundle();
+        data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
+        if (intent.getExtras() != null)
+            data.putAll(intent.getExtras());
+        message.setData(data);
+        handler.sendMessage(message);
+    }
 }

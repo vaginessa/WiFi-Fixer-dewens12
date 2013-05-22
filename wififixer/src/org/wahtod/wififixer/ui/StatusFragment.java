@@ -20,6 +20,7 @@ package org.wahtod.wififixer.ui;
 import java.lang.ref.WeakReference;
 
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StatusDispatcher;
@@ -60,7 +61,7 @@ public class StatusFragment extends Fragment {
 		@Override
 		public void handleMessage(Message message) {
 			/*
-			 * handle SCAN_RESULTS_AVAILABLE intents to refresh ListView
+			 * handle new scanresult
 			 * asynchronously (to avoid ANR)
 			 */
 			switch (message.what) {
@@ -146,9 +147,8 @@ public class StatusFragment extends Fragment {
 	 * Note that this WILL return a null String[] if called while wifi is off.
 	 */
 	private static WifiInfo getNetwork(final Context context) {
-		WifiManager wm = (WifiManager) context
-				.getSystemService(Context.WIFI_SERVICE);
-		if (wm.isWifiEnabled()) {
+		WifiManager wm = PrefUtil.getWifiManager(context);
+        if (wm.isWifiEnabled()) {
 			return wm.getConnectionInfo();
 		} else
 			return null;

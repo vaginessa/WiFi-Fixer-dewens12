@@ -19,14 +19,14 @@ package org.wahtod.wififixer.utility;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
+import org.wahtod.wififixer.prefs.PrefUtil;
 
 public class WifiLock {
 	static WifiManager.WifiLock wifilock;
 
 	public WifiLock(final Context context) {
-		WifiManager wm = (WifiManager) context
-				.getSystemService(Context.WIFI_SERVICE);
-		/*
+		WifiManager wm = PrefUtil.getWifiManager(context);
+        /*
 		 * We want WifiManager.WIFI_MODE_FULL as we're not just scanning
 		 */
 		wifilock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL,

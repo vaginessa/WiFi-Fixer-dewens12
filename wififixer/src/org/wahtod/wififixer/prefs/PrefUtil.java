@@ -69,7 +69,7 @@ public class PrefUtil extends Object {
 	 */
 	private static boolean[] keyVals;
 	private static WeakReference<Context> context;
-	private static WifiManager wm_;
+	private static volatile WifiManager wm_;
 	private static HashMap<String, int[]> netprefs;
 
 	private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
@@ -236,8 +236,7 @@ public class PrefUtil extends Object {
 	}
 
 	public static String getnetworkSSID(final Context context, final int network) {
-		WifiManager wm = (WifiManager) context
-				.getSystemService(Context.WIFI_SERVICE);
+		WifiManager wm = getWifiManager(context);
 		if (!wm.isWifiEnabled())
 			return context.getString(R.string.none);
 		else
@@ -247,9 +246,7 @@ public class PrefUtil extends Object {
 
 	public static String getSSIDfromNetwork(final Context context,
 			final int network) {
-		final List<WifiConfiguration> wifiConfigs = ((WifiManager) context
-				.getSystemService(Context.WIFI_SERVICE))
-				.getConfiguredNetworks();
+		final List<WifiConfiguration> wifiConfigs = getWifiManager(context).getConfiguredNetworks();
 		for (WifiConfiguration w : wifiConfigs) {
 			if (w != null && w.networkId == network)
 				return w.SSID;
@@ -411,7 +408,7 @@ public class PrefUtil extends Object {
 		writeString(context, PrefConstants.SLPOLICY_KEY, String.valueOf(policy));
 	}
 
-	public static WifiManager getWifiManager(final Context context) {
+	public synchronized static WifiManager getWifiManager(final Context context) {
 		/*
 		 * Cache WifiManager
 		 */
