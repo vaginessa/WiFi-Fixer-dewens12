@@ -67,8 +67,8 @@ public class LocalNetworksFragment extends Fragment implements LoaderManager.Loa
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         mLoader = getLoaderManager().initLoader(0, null, this);
         mLoader.forceLoad();
     }

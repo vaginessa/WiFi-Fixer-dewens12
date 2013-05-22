@@ -143,7 +143,6 @@ public class KnownNetworksFragment extends Fragment implements Callback {
         Bundle args = new Bundle();
         args.putInt("num", num);
         f.setArguments(args);
-
         return f;
     }
 
