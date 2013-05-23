@@ -65,7 +65,7 @@ public class KnownNetworksFragment extends Fragment implements Callback {
 
                 case SCAN_MESSAGE:
                 /*
-				 * If wifi is on, scan. If not, make sure no networks in range
+                 * If wifi is on, scan. If not, make sure no networks in range
 				 */
                     if (PrefUtil.getWifiManager(self.get().getActivity())
                             .isWifiEnabled())

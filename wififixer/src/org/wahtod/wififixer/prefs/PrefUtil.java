@@ -255,8 +255,7 @@ public class PrefUtil extends Object {
 	}
 
 	public static int getNIDFromSSID(final Context context, final String ssid) {
-		WifiManager wm = (WifiManager) context
-				.getSystemService(Context.WIFI_SERVICE);
+		WifiManager wm = getWifiManager(context);
 		List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
 		for (WifiConfiguration network : wifiConfigs) {
 			if (StringUtil.removeQuotes(network.SSID).equals(ssid))

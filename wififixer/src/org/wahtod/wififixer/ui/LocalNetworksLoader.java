@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.support.v4.content.AsyncTaskLoader;
-import android.util.Log;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.WFScanResult;
@@ -107,7 +106,7 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
     class SortBySignal implements Comparator<WFScanResult> {
         public int compare(WFScanResult o2, WFScanResult o1) {
                 /*
-				 * Sort by signal
+                 * Sort by signal
 				 */
             return (o1.level < o2.level ? -1 : (o1.level == o2.level ? 0
                     : 1));
