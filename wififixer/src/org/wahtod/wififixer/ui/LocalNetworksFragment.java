@@ -232,12 +232,12 @@ public class LocalNetworksFragment extends Fragment implements LoaderManager.Loa
             }
             return convertView;
         }
+    }
 
-        private class ViewHolder {
-            TextView text;
-            TextView encryption;
-            ImageView icon;
-            ImageView security;
-        }
+    public static class ViewHolder {
+        TextView text;
+        TextView encryption;
+        ImageView icon;
+        ImageView security;
     }
 }
