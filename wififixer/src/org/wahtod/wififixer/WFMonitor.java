@@ -124,7 +124,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
         @Override
         public void run() {
-			/*
+            /*
 			 * Notify state
 			 */
             if (self.get().screenstate) {
@@ -1112,7 +1112,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 ctxt.get(),
                 StatusMessage.getNew().setSSID(StatusMessage.EMPTY)
                         .setSignal(0).setStatus(state)
-                        .setLinkSpeed(StatusMessage.EMPTY));
+                        .setLinkSpeed("0"));
     }
 
     private void checkSignal(final Context context) {
