@@ -292,10 +292,15 @@ public class LogService extends Service {
             return;
         else {
             /*
-			 * Write to syslog and our log file on sdcard
+             * Write to syslog and our log file on sdcard
 			 */
             _printhandler.get().post(new LogWriterRunnable(rope2) {
             });
+
+         /*
+         * update ongoing notification
+		 */
+            NotifUtil.addLogNotif(this, true);
         }
     }
 
@@ -327,10 +332,10 @@ public class LogService extends Service {
         @Override
         public void run() {
             /*
-		 * Add captured Stack Traces
+         * Add captured Stack Traces
 		 */
             addStackTrace(LogService.this);
-			/*
+            /*
 			 * Write to sdcard and Android logs
 			 */
             if (Environment.getExternalStorageState() != null
