@@ -1,18 +1,19 @@
-/*	    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
+/*
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2013  David Van de Ven
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package org.wahtod.wififixer;
@@ -125,7 +126,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
         @Override
         public void run() {
             /*
-			 * Notify state
+             * Notify state
 			 */
             if (self.get().screenstate) {
                 StatusMessage m = new StatusMessage();
@@ -190,7 +191,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 log(ctxt.get(), R.string.toggling_wifi);
 
             }
-			/*
+            /*
 			 * If repair_reset is true we should be in normal scan mode until
 			 * connected
 			 */
@@ -428,7 +429,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
         _supplicantFifo = new FifoList(FIFO_LENGTH);
         _statusdispatcher = new StatusDispatcher(context, handler);
         ScreenStateDetector.setOnScreenStateChangedListener(this);
-        LogService.getLogTag(context);
         screenstate = ScreenStateDetector.getScreenState(context);
         knownbysignal = new ArrayList<WFConfig>();
 		/*
