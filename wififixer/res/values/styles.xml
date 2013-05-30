@@ -1,36 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-		    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
--->
+  ~ Wifi Fixer for Android
+  ~     Copyright (C) 2010-2013  David Van de Ven
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see http://www.gnu.org/licenses
+  -->
 <resources>
-	<!-- Defined in anim folder -->
-	<style name="Animation"></style>
-	<style name="WifiFixerAnimation" parent="android:style/Animation.Activity">">
-		<item name="android:activityOpenEnterAnimation">@anim/wf_enter</item>
-		<item name="android:activityOpenExitAnimation">@anim/wf_exit</item>
-		<item name="android:activityCloseEnterAnimation">@anim/wf_enter</item>
-		<item name="android:activityCloseExitAnimation">@anim/wf_exit</item>
-		<item name="android:taskOpenEnterAnimation">@anim/wf_enter</item>
-		<item name="android:taskOpenExitAnimation">@anim/wf_exit</item>
-		<item name="android:taskCloseEnterAnimation">@anim/wf_enter</item>
-		<item name="android:taskCloseExitAnimation">@anim/wf_exit</item>
-		<item name="android:taskToFrontEnterAnimation">@anim/wf_enter</item>
-		<item name="android:taskToFrontExitAnimation">@anim/wf_exit</item>
-		<item name="android:taskToBackEnterAnimation">@anim/wf_enter</item>
-		<item name="android:taskToBackExitAnimation">@anim/wf_exit</item>
-	</style>
+    <!-- Defined in anim folder -->
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
+
+    <style name="WifiFixerAnimation" parent="android:style/Animation.Activity">">
+        <item name="android:activityOpenEnterAnimation">@anim/wf_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/wf_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/wf_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/wf_exit</item>
+        <item name="android:taskOpenEnterAnimation">@anim/wf_enter</item>
+        <item name="android:taskOpenExitAnimation">@anim/wf_exit</item>
+        <item name="android:taskCloseEnterAnimation">@anim/wf_enter</item>
+        <item name="android:taskCloseExitAnimation">@anim/wf_exit</item>
+        <item name="android:taskToFrontEnterAnimation">@anim/wf_enter</item>
+        <item name="android:taskToFrontExitAnimation">@anim/wf_exit</item>
+        <item name="android:taskToBackEnterAnimation">@anim/wf_enter</item>
+        <item name="android:taskToBackExitAnimation">@anim/wf_exit</item>
+    </style>
+
 </resources>

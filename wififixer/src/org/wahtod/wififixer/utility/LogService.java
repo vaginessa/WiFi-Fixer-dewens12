@@ -40,17 +40,15 @@ public class LogService extends Service {
     public static final String LOGFILE = "wififixer_log.txt";
     public static final String APPNAME = "APPNAME";
     public static final String MESSAGE = "MESSAGE";
-    public static final String TS_DISABLE = "DISABLE";
     public static final String DUMPBUILD = "DUMPBUILD";
     public static final String LOG = "LOG";
-    public static final String TIMESTAMP = "TS";
-    public static final String FLUSH = "*FLUSH*";
-    public static final String TS_DELAY = "TSDELAY";
     private static final String BUILD = "Build:";
     private static final String COLON = ":";
     private static final String NEWLINE = "\n";
-    //max logfile size
-    private static final int MAX_FILE_SIZE = 1024 * 1024 * 3;
+    /*
+    * Max Logfile Size is 300K
+     */
+    private static final int MAX_FILE_SIZE = 1024 * 300;
     private static final int INTENT = 3;
     private static int version = 0;
     private static String vstring;
@@ -136,19 +134,6 @@ public class LogService extends Service {
 
     public static void log(Context c, int resId) {
         log(c, c.getString(resId));
-    }
-
-    public static void setLogTS(final Context context, final boolean state,
-                                final long delay) {
-        Intent intent = new Intent(context, LogService.class);
-        intent.putExtra(APPNAME, TIMESTAMP);
-        if (state) {
-            intent.putExtra(MESSAGE, String.valueOf(delay));
-        } else {
-            intent.putExtra(MESSAGE, TS_DISABLE);
-        }
-
-        context.startService(intent);
     }
 
     private void addStackTrace(final Context context) {
@@ -336,7 +321,7 @@ public class LogService extends Service {
 		 */
             addStackTrace(LogService.this);
             /*
-			 * Write to sdcard and Android logs
+             * Write to sdcard and Android logs
 			 */
             if (Environment.getExternalStorageState() != null
                     && !(Environment.getExternalStorageState()

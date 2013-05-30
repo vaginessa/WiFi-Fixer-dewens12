@@ -192,7 +192,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
             }
             /*
-			 * If repair_reset is true we should be in normal scan mode until
+             * If repair_reset is true we should be in normal scan mode until
 			 * connected
 			 */
             log(ctxt.get(), R.string.scan_mode);
@@ -203,7 +203,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
      */
     protected static Runnable rMain = new Runnable() {
         public void run() {
-			/*
+            /*
 			 * Check for disabled state
 			 */
             if (PrefUtil.getFlag(Pref.DISABLE_KEY))
@@ -643,22 +643,11 @@ public class WFMonitor implements OnScreenStateChangedListener {
         SupplicantState sstate = getSupplicantState();
         if (sstate == null)
             return false;
-        else if (sstate == SupplicantState.ASSOCIATED
-                || sstate == SupplicantState.COMPLETED)
-            return true;
-        else
-            return false;
+        else return sstate == SupplicantState.ASSOCIATED
+                || sstate == SupplicantState.COMPLETED;
     }
 
     private static boolean getisWifiEnabled(final Context context, boolean log) {
-
-        if (self.get().wifistate) {
-            if (log)
-                log(context, R.string.wifi_is_enabled);
-        } else {
-            if (log)
-                log(context, R.string.wifi_is_disabled);
-        }
         return self.get().wifistate;
     }
 
@@ -880,10 +869,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
             out = hostup.getHostup(REACHABLE, context, null);
             log(context, out.status.toString());
         }
-        if (!out.state)
-            return false;
-        else
-            return true;
+        return out.state;
     }
 
     private static void log(final Context c, final int message) {
@@ -1031,18 +1017,12 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private static boolean shouldManage(final Context ctx) {
-        if (PrefUtil.readManagedState(ctx, getNetworkID()))
-            return false;
-        else
-            return true;
+        return !PrefUtil.readManagedState(ctx, getNetworkID());
     }
 
     private static boolean statNotifCheck() {
-        if (self.get().screenstate
-                && PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled())
-            return true;
-        else
-            return false;
+        return self.get().screenstate
+                && PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled();
     }
 
     private static boolean supplicantInterruptCheck(final Context context) {
@@ -1051,14 +1031,11 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		/*
 		 * First, make sure this won't interrupt anything
 		 */
-        if (sstate.name().equals(SSTATE_ASSOCIATING)
+        return !(sstate.name().equals(SSTATE_ASSOCIATING)
                 || sstate.name().equals(SSTATE_ASSOCIATED)
                 || sstate.equals(SupplicantState.COMPLETED)
                 || sstate.equals(SupplicantState.GROUP_HANDSHAKE)
-                || sstate.equals(SupplicantState.FOUR_WAY_HANDSHAKE))
-            return false;
-        else
-            return true;
+                || sstate.equals(SupplicantState.FOUR_WAY_HANDSHAKE));
     }
 
     private static void toggleWifi() {
@@ -1657,8 +1634,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
         clearConnectedStatus(ctxt.get().getString(R.string.wifi_is_disabled));
         _statusdispatcher.refreshWidget(new StatusMessage().setStatus(ctxt
                 .get().getString(R.string.wifi_is_disabled)));
-        if (PrefUtil.getFlag(Pref.LOG_KEY))
-            LogService.setLogTS(ctxt.get(), false, 0);
     }
 
     private void onWifiEnabled() {
@@ -1668,9 +1643,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
         if (PrefUtil.getFlag(Pref.STATENOT_KEY) && screenstate)
             setStatNotif(true);
-
-        if (PrefUtil.getFlag(Pref.LOG_KEY))
-            LogService.setLogTS(ctxt.get(), true, SHORTWAIT);
 
 		/*
 		 * Remove wifi state lock

@@ -89,7 +89,7 @@ public class WFMonitorService extends Service implements
             version = pi.versionCode;
         } catch (NameNotFoundException e) {
             /*
-			 * If own package isn't found, something is horribly wrong.
+             * If own package isn't found, something is horribly wrong.
 			 */
         }
     }
@@ -111,7 +111,7 @@ public class WFMonitorService extends Service implements
 
     @Override
     public void onCreate() {
-		/*
+        /*
 		 * Set Default Exception handler
 		 */
         DefaultExceptionHandler.register(this);
@@ -257,7 +257,6 @@ public class WFMonitorService extends Service implements
                         if (logging) {
                             ServiceAlarm.setComponentEnabled(getBaseContext(),
                                     LogService.class, true);
-                            LogService.setLogTS(getBaseContext(), logging, 0);
                             LogService.log(getBaseContext(),
                                     (LogService.DUMPBUILD), (EMPTYSTRING));
                             if (logPrefLoad)

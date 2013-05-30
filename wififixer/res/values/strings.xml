@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-		    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
--->
+  ~ Wifi Fixer for Android
+  ~     Copyright (C) 2010-2013  David Van de Ven
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see http://www.gnu.org/licenses
+  -->
 <resources>
 
     <string name="network_status">Network Status</string>
@@ -31,7 +31,7 @@
     <string name="donatenag">If you use this software, please donate!</string>
     <string name="thank_you">Thank You for using Wifi Fixer</string>
     <string name="emailintent">Select Gmail: other apps may not attach log</string>
-    <string name="issue_prompt">Please describe the issue.  Be as specific as you can.</string>
+    <string name="issue_prompt">Please describe the issue. Be as specific as you can.</string>
     <string name="subject">WifiFixer Log</string>
     <string name="email">zanshin.g1@gmail.com</string>
     <string name="sd_card_unavailable">SD Card Unavailable</string>
@@ -49,7 +49,7 @@
     <string name="number_of_known">known networks:</string>
     <string name="signal_poor">Signal poor: SignalHop scan</string>
     <string name="current_dbm">Current dBm:</string>
-    <string name="hopping">Hopping to better network  </string>
+    <string name="hopping">Hopping to better network</string>
     <string name="wifi_repair_post_failed">Wifi Repair:Screen Off</string>
     <string name="wifi_not_current_network">Wifi Not Current Network</string>
     <string name="running_wifi_repair">Running Wifi Repair</string>
@@ -61,7 +61,7 @@
     <string name="wifi_connection_problem">Wifi Status:</string>
     <string name="supplicant_state">Supplicant State:</string>
     <string name="loading_settings">Loading Settings</string>
-    <string name="best_signal_ssid">Best Signal: SSID: </string>
+    <string name="best_signal_ssid">Best Signal: SSID:</string>
     <string name="signal_level">Signal Level:</string>
     <string name="capabilities">Capabilities:</string>
     <string name="found_ssid">Found SSID:</string>
@@ -89,8 +89,8 @@
     <string name="connecting_to_network">Connecting to:</string>
     <string name="releasing_wifi_lock">Releasing Wifi Lock</string>
     <string name="acquiring_wifi_lock">Acquiring Wifi Lock</string>
-    <string name="nid"> NID:</string>
-    <string name="fix_algorithm">Fix Algorithm </string>
+    <string name="nid">NID:</string>
+    <string name="fix_algorithm">Fix Algorithm</string>
     <string name="repairing">Repairing</string>
     <string name="reconnecting">Reconnecting</string>
     <string name="reassociating">Reassociating</string>
@@ -111,20 +111,21 @@
     <string name="scan_interrupt">Scan would interrupt supplicant</string>
     <string name="not_managing_network">Not managing network:</string>
     <string name="supplicant_associate_threshold_exceeded">Associate Threshold Exceeded: resetting
-		wifi</string>
+        wifi
+    </string>
     <string name="none">none</string>
     <string name="low_memory">Low Memory</string>
     <string name="error_allocating_buffered_writer">Error allocating buffered writer:</string>
     <string name="log_mimetype">message/rfc882</string>
-    <string name="unmanaged">-U- </string>
+    <string name="unmanaged">-U-</string>
     <string name="scan_mode">Should be in normal system scan mode</string>
-    <string name="alert_message">Preparing  email"</string>
+    <string name="alert_message">Preparing email"</string>
     <string name="ok_button">OK</string>
     <string name="cancel_button">Cancel</string>
     <string name="null_ssid">None</string>
     <string name="http">http://</string>
     <string name="writing_to_log">Capturing to Log</string>
-    <string name="k"> KB</string>
+    <string name="k">KB</string>
     <string name="strict_mode_extant">Strict Mode Extant</string>
     <string name="strict_mode_unavailable">Strict Mode Unavailable</string>
     <string name="service_status">Service</string>
@@ -140,7 +141,8 @@
     <string name="resource">resource</string>
     <string name="xml">xml</string>
     <string name="SCREEN_summary">Service checks network when screen is off: will use
-		slightly more battery</string>
+        slightly more battery
+    </string>
     <string name="SCREEN_title">Manage During Sleep</string>
     <string name="Disable_title">Disable Service</string>
     <string name="Disable_summary">Disables wifi management service</string>
@@ -148,10 +150,12 @@
     <string name="Perf_Mode_summary">Adjusts settings automatically using preset profiles</string>
     <string name="StateNotif_title">Status Notification</string>
     <string name="StateNotif_summary">Displays an ongoing notification showing connection
-		state when service is enabled</string>
+        state when service is enabled
+    </string>
     <string name="Notifications_title">Repair Notifications</string>
     <string name="Notifications_summary">Displays a notification when Wifi Fixer repairs a
-		problem</string>
+        problem
+    </string>
     <string name="SLOG_title">Enable Logging</string>
     <string name="SLOG_summary">Starts capture of Wifi Fixer\'s sensors to the sdcard</string>
     <string name="WIDGET_title">Widget Behavior</string>
@@ -160,10 +164,12 @@
     <string name="WifiLock_summary">Enables Wifi Lock: will increase battery use slightly</string>
     <string name="SLEEP_POLICY_title">Wifi Sleep Policy</string>
     <string name="SLEEP_POLICY_summary">Sets system Wifi sleep policy: See Known Issues in
-		Help</string>
+        Help
+    </string>
     <string name="N1FIX2_title">Nexus One Sleep Fix</string>
     <string name="N1FIX2_summary">Experimental: please read Wifi Sleep Policy section of Known Issues in
-		Help.</string>
+        Help.
+    </string>
     <string name="remove">Remove</string>
     <string name="removing_network">Removing:</string>
     <string name="passwd_entry_text">Enter wifi key</string>
@@ -184,8 +190,9 @@
     <string name="tutorial_toast_6">At the top is the Status view</string>
     <string name="tutorial_toast_7">Status shows you what Wifi is doing</string>
     <string name="tutorial_toast_8">That\'s it!\n\nIf you want to run the tutorial
-		again, go to preferences.</string>
-	<string name="tutorial_toast_9">You can long-press the items in this list for more options</string>
+        again, go to preferences.
+    </string>
+    <string name="tutorial_toast_9">You can long-press the items in this list for more options</string>
     <string name="phone_ui_tutorial">Phone UI Tutorial</string>
     <string name="phone_tutorial_q">Please take a moment for a quick UI tutorial</string>
     <string name="ms">ms</string>
@@ -211,7 +218,9 @@
     <string name="deletelog_summary">Deletes Log from sdcard</string>
     <string name="deletelog_title">Delete Log</string>
     <string name="dbmfloor_title">Signalhop Level</string>
-    <string name="dbmfloor_summary">Level at which Wifi Fixer scans for a better known network \nDefault is recommended</string>
+    <string name="dbmfloor_summary">Level at which Wifi Fixer scans for a better known network \nDefault is
+        recommended
+    </string>
     <string name="dbmfloor_key">DBMFLOOR</string>
     <string name="wififixerservice">WifiFixerService</string>
     <string name="no_stack_trace_found">No Stack Trace Found</string>
@@ -222,10 +231,11 @@
     <string name="info">Info</string>
     <string name="disconnected">Disconnected</string>
     <string name="note">Important!</string>
-    <string name="servicealert_message">When the service is disabled, your wifi is no longer being monitored or repaired</string>
+    <string name="servicealert_message">When the service is disabled, your wifi is no longer monitored or repaired
+    </string>
     <string name="widget_label_1x4">Wifi Fixer 1x4</string>
     <string name="widget_label_1x1">Wifi Fixer 1x1</string>
-    <string name="netcheckthread">NetMasterThread</string>
+    <string name="netcheckthread">MasterSensorThread</string>
     <string name="logwriterthread">LogWriterThread</string>
     <string name="httpcheckthread">HttpSensorThread</string>
     <string name="icmpcheckthread">IcmpSensorThread</string>
