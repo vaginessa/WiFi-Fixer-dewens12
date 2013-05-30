@@ -17,6 +17,7 @@
   ~     You should have received a copy of the GNU General Public License
   ~     along with this program.  If not, see http://www.gnu.org/licenses
   -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.wahtod.wififixer"
           android:installLocation="internalOnly"
@@ -72,8 +73,8 @@
             android:icon="@drawable/icon"
             android:label="@string/app_name"
             android:restoreAnyVersion="true"
-            android:theme="@style/ThemeWifiFixer"
-            >
+            android:theme="@style/ThemeWifiFixer">
+
         <meta-data
                 android:name="com.google.android.backup.api_key"
                 android:value="AEdPqrEAAAAIAGomq--y98O0VHARd55VOdh8CoEphVxKfVXAHw"/>
@@ -86,6 +87,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -124,8 +126,8 @@
         </receiver>
 
         <!--
-			Widget intent dispatch
-			and support
+            Widget intent dispatch
+            and support
         -->
 
         <receiver
@@ -191,6 +193,27 @@
                 android:name=".ToggleService"
                 >
         </service>
+
+        <uses-library
+                android:required="false"
+                android:name="com.sec.android.app.multiwindow"/>
+
+        <meta-data
+                android:name="com.sec.android.support.multiwindow"
+                android:value="true"/>
+
+        <meta-data
+                android:name="com.sec.android.multiwindow.DEFAULT_SIZE_W"
+                android:value="500dp"/>
+        <meta-data
+                android:name="com.sec.android.multiwindow.DEFAULT_SIZE_H"
+                android:value="500dp"/>
+        <meta-data
+                android:name="com.sec.android.multiwindow.MINIMUM_SIZE_W"
+                android:value="500dp"/>
+        <meta-data
+                android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H"
+                android:value="500dp"/>
     </application>
 
 </manifest>
