@@ -29,7 +29,7 @@ public class LogFormatter extends Formatter {
         out.append(date);
         out.append(":");
         out.append(record.getLoggerName());
-        out.append("\n");
+        out.append(": ");
         out.append(formatMessage(record));
         out.append("\n");
         return out.toString();
