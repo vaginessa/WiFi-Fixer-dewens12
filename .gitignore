@@ -3,15 +3,13 @@ out/
 .settings
 bin/
 gen/
-proguard/
 .classpath
 .project
-proguard.cfg
 wififixer/build.properties
 wififixer/local.properties
 wififixer/default.properties
 wififixer/project.properties
 wififixer/build.xml
 wififixer/lint.xml
-wififixer/proguard-project.txt
+wififixer/proguard_logs
 wififixer/wififixer.iml
