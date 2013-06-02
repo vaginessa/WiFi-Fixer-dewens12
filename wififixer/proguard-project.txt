@@ -45,6 +45,8 @@
 
 -keep public class org.wahtod.wififixer.ui.GenericPreferenceFragment
 
+-keepnames class org.wahtod.wififixer.utility.BroadcastHelper
+
 -keepclassmembers class org.wahtod.wififixer.ui.GenericPreferenceFragment{
  public *;
 }

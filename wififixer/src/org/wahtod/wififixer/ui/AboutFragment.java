@@ -60,22 +60,26 @@ public class AboutFragment extends Fragment implements OnClickListener {
                 return;
 
             List<ScanResult> results = PrefUtil.getWifiManager(self.get().getActivity()).getScanResults();
-            WFScanResult network = self.get().mNetwork;
-            if (network == null) {
+            if (self.get().mNetwork == null) {
               /*
                * Shouldn't happen, log it
                */
                 LogService.log(self.get().getActivity(), "WFScanResult Null in AboutFragment.HandleMessage");
             } else {
+                Boolean found = false;
                 for (ScanResult n : results) {
-                    if (n.SSID != null && n.SSID.contains(network.SSID)) {
+                    if (n.SSID != null && n.SSID.contains(self.get().mNetwork.SSID)) {
+                        found = true;
                     /*
                      * Refresh values
 					 */
-                        network = new WFScanResult(n);
+                        self.get().mNetwork = new WFScanResult(n);
                         self.get().refreshViews();
                         break;
                     }
+                }
+                if (!found) {
+                    self.get().mNetwork.level = -255;
                 }
             }
         }
@@ -220,7 +224,7 @@ public class AboutFragment extends Fragment implements OnClickListener {
         private TextView frequency;
         private TextView level;
 
-        public ViewHolder(View parent) {
+        public ViewHolder(final View parent) {
             ssid = (TextView) parent.findViewById(R.id.ssid);
             bssid = (TextView) parent.findViewById(R.id.bssid);
             capabilities = (TextView) parent.findViewById(R.id.capabilities);
