@@ -51,7 +51,6 @@ public class FirstPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.service, null);
-        this.setHasOptionsMenu(true);
 
         if (savedInstanceState == null) {
 
@@ -62,7 +61,7 @@ public class FirstPageFragment extends Fragment {
             LogFragment logFragment = LogFragment.newInstance(null);
             transaction.add(R.id.servicelog, logFragment, LogFragment.TAG);
             /*
-			 * toggles view indicates if this is a tablet
+             * toggles view indicates if this is a tablet
 			 */
             if (v.findViewById(R.id.toggles) != null) {
                 QuickSettingsFragment toggleFragment = new QuickSettingsFragment();

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Wifi Fixer for Android
   ~     Copyright (C) 2010-2013  David Van de Ven
@@ -16,22 +17,17 @@
   ~     You should have received a copy of the GNU General Public License
   ~     along with this program.  If not, see http://www.gnu.org/licenses
   -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="left"
+              android:id="@+id/widget46"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
               android:orientation="horizontal">
 
-    <FrameLayout
-            android:id="@+id/about"
-            android:layout_width="300dp"
+    <org.wahtod.wififixer.ui.BaseViewPager
+            android:id="@+id/pager"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            />
-
-    <FrameLayout
-            android:id="@+id/servicelog"
-            android:layout_width="300dp"
-            android:layout_height="fill_parent"
-            />
+            android:cacheColorHint="#00000000"/>
 
 </LinearLayout>

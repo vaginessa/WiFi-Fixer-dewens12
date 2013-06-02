@@ -140,18 +140,6 @@ public class LocalNetworksFragment extends Fragment implements LoaderManager.Loa
     }
 
     /*
-     * Clear backstack
-     *
-     * @see android.support.v4.app.Fragment#onResume()
-     *//*
-    @Override
-    public void onResume() {
-        while (getChildFragmentManager().popBackStackImmediate())
-            getChildFragmentManager().popBackStackImmediate();
-        super.onResume();
-    }*/
-
-    /*
      * custom adapter for Network List ListView
      */
     private class ScanListAdapter extends ArrayAdapter<WFScanResult> {
