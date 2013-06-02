@@ -50,6 +50,7 @@ public class KnownNetworksFragment extends Fragment implements ActionMode.Callba
     private static final int REFRESH_MESSAGE = 2944;
     private static final int SCAN_DELAY = 15000;
     private static final String NETWORKS_KEY = "NETWORKS_KEY";
+    private static final String SSID_KEY = "SSID";
     private static WeakReference<KnownNetworksFragment> self;
     private static NetworkListAdapter adapter;
     private static List<String> knownnetworks;
@@ -126,7 +127,7 @@ public class KnownNetworksFragment extends Fragment implements ActionMode.Callba
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(final Context context, final Intent intent) {
             /*
-			 * we know this is going to be a scan result notification
+             * we know this is going to be a scan result notification
 			 */
             Message msg = Message.obtain();
             msg.what = REFRESH_MESSAGE;
@@ -154,7 +155,7 @@ public class KnownNetworksFragment extends Fragment implements ActionMode.Callba
 
         List<String> networks = new ArrayList<String>();
         for (WifiConfiguration wfResult : wifiConfigs) {
-			/*
+            /*
 			 * Make sure there's a 1:1 correlation between
 			 * getConfiguredNetworks() and the array
 			 */
@@ -205,6 +206,32 @@ public class KnownNetworksFragment extends Fragment implements ActionMode.Callba
 
         for (String ssid : remove) {
             adapter.ssidArray.remove(ssid);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        /*
+         * Preserve ActionMode state
+         */
+        if (mActionMode != null) {
+            outState.putString(SSID_KEY, mSSID);
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.containsKey(SSID_KEY)) {
+            mSSID = savedInstanceState.getString(SSID_KEY);
+            mActionMode = getActivity().startActionMode(
+                    KnownNetworksFragment.this);
+            for (int c = 1; c < adapter.getCount(); c++) {
+                if (adapter.getItem(c).equals(mSSID)) {
+                    lv.setSelection(c);
+                }
+            }
         }
     }
 
