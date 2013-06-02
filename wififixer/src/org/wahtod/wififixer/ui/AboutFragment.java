@@ -41,6 +41,7 @@ import android.widget.TextView;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.BroadcastHelper;
+import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
 
@@ -50,6 +51,7 @@ import java.util.List;
 public class AboutFragment extends Fragment implements OnClickListener {
 
     public static final String TAG = "KSABFWKRFBWT";
+    private static final String NETWORK_KEY = "WFNETWORK";
     protected static WeakReference<AboutFragment> self;
     private static Handler handler = new Handler() {
         @Override
@@ -58,31 +60,30 @@ public class AboutFragment extends Fragment implements OnClickListener {
                 return;
 
             List<ScanResult> results = PrefUtil.getWifiManager(self.get().getActivity()).getScanResults();
-            boolean found = false;
-            for (ScanResult n : results) {
-                if (n.SSID != null && n.SSID.contains(self.get().mNetwork.SSID)) {
-                    found = true;
+            WFScanResult network = self.get().mNetwork;
+            if (network == null) {
+              /*
+               * Shouldn't happen, log it
+               */
+                LogService.log(self.get().getActivity(), "WFScanResult Null in AboutFragment.HandleMessage");
+            } else {
+                for (ScanResult n : results) {
+                    if (n.SSID != null && n.SSID.contains(network.SSID)) {
                     /*
                      * Refresh values
 					 */
-                    self.get().mNetwork = new WFScanResult(n);
-                    self.get().refreshViews();
-                    break;
+                        network = new WFScanResult(n);
+                        self.get().refreshViews();
+                        break;
+                    }
                 }
-            }
-            if (!found) {
-                /*
-                 * Here's where we're going to tell the activity to remove this
-				 * fragment.
-				 */
             }
         }
     };
-
-    private static BroadcastReceiver scanreceiver = new BroadcastReceiver() {
+    protected WFScanResult mNetwork;
+    private BroadcastReceiver scanreceiver = new BroadcastReceiver() {
         public void onReceive(final Context context, final Intent intent) {
-
-			/*
+            /*
              * Dispatch intent commands to handler
 			 */
             Message message = handler.obtainMessage();
@@ -95,8 +96,7 @@ public class AboutFragment extends Fragment implements OnClickListener {
             handler.sendMessage(message);
         }
     };
-    private boolean mRegistered;
-    private WFScanResult mNetwork;
+    private ViewHolder _views;
 
     public static AboutFragment newInstance(WFScanResult r) {
         AboutFragment f = new AboutFragment();
@@ -104,9 +104,19 @@ public class AboutFragment extends Fragment implements OnClickListener {
         return f;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    ;
+
+    private void refreshViews() {
+        try {
+            _views.setSsid(mNetwork.SSID);
+            _views.setBssid(mNetwork.BSSID);
+            _views.setCapabilities(StringUtil.getLongCapabilitiesString(mNetwork.capabilities));
+            _views.setFrequency(mNetwork.frequency);
+            _views.setLevel(mNetwork.level);
+        } catch (NullPointerException e) {
+            LogService.log(getActivity(), "Null in RefreshViews");
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -119,29 +129,63 @@ public class AboutFragment extends Fragment implements OnClickListener {
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        _views = new ViewHolder(view);
+    }
+
+    @Override
+    public void onDestroyView() {
+        _views = null;
+        super.onDestroyView();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         self = new WeakReference<AboutFragment>(this);
         super.onCreate(savedInstanceState);
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState == null) {
+            /*
+             * Do nothing
+             */
+        } else {
+            /*
+             * Restore Network
+             */
+            mNetwork = WFScanResult.fromBundle(savedInstanceState.getBundle(NETWORK_KEY));
+        }
+        IntentFilter scan = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+        BroadcastHelper.registerReceiver(getActivity(), scanreceiver, scan, false);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mNetwork != null)
+            outState.putBundle(NETWORK_KEY, mNetwork.toBundle());
+    }
+
+    @Override
     public void onPause() {
-        super.onPause();
         BroadcastHelper.unregisterReceiver(getActivity(), scanreceiver);
+        super.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        IntentFilter scan = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-        getActivity().registerReceiver(scanreceiver, scan);
         refreshViews();
     }
 
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-		/*
-		 * Animate the view
+        /*
+         * Animate the view
 		 */
         if (enter && !(transit == 17432576)) {
             ExpandViewAnimation ev = new ExpandViewAnimation(getView()
@@ -158,21 +202,6 @@ public class AboutFragment extends Fragment implements OnClickListener {
         }
     }
 
-    private void refreshViews() {
-        if (getView() == null)
-            return;
-        TextView t = (TextView) getView().findViewById(R.id.ssid);
-        t.setText(mNetwork.SSID);
-        t = (TextView) getView().findViewById(R.id.bssid);
-        t.setText(mNetwork.BSSID);
-        t = (TextView) getView().findViewById(R.id.capabilities);
-        t.setText(StringUtil.getLongCapabilitiesString(mNetwork.capabilities));
-        t = (TextView) getView().findViewById(R.id.frequency);
-        t.setText(String.valueOf(mNetwork.frequency));
-        t = (TextView) getView().findViewById(R.id.level);
-        t.setText(String.valueOf(mNetwork.level));
-    }
-
     @Override
     public void onClick(View arg0) {
         ConnectFragment c = ConnectFragment.newInstance(mNetwork);
@@ -182,5 +211,41 @@ public class AboutFragment extends Fragment implements OnClickListener {
         t.add(R.id.fragment_target, c, ConnectFragment.TAG);
         t.addToBackStack(null);
         t.commit();
+    }
+
+    static class ViewHolder {
+        private TextView ssid;
+        private TextView bssid;
+        private TextView capabilities;
+        private TextView frequency;
+        private TextView level;
+
+        public ViewHolder(View parent) {
+            ssid = (TextView) parent.findViewById(R.id.ssid);
+            bssid = (TextView) parent.findViewById(R.id.bssid);
+            capabilities = (TextView) parent.findViewById(R.id.capabilities);
+            frequency = (TextView) parent.findViewById(R.id.frequency);
+            level = (TextView) parent.findViewById(R.id.level);
+        }
+
+        public void setSsid(final String s) {
+            ssid.setText(s);
+        }
+
+        public void setBssid(final String s) {
+            bssid.setText(s);
+        }
+
+        public void setCapabilities(final String s) {
+            capabilities.setText(s);
+        }
+
+        public void setFrequency(final int i) {
+            frequency.setText(String.valueOf(i));
+        }
+
+        public void setLevel(final int i) {
+            level.setText(String.valueOf(i));
+        }
     }
 }

@@ -1,18 +1,19 @@
-/*	    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
+/*
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2013  David Van de Ven
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package org.wahtod.wififixer.ui;
@@ -46,6 +47,8 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 public class ConnectFragment extends Fragment implements OnClickListener {
+    public static final String TAG = "SFFJSHFTWFW";
+    protected static final int CANCEL = 1;
     private static final String PROXY_CLASS = "android.net.wifi.WifiConfiguration$ProxySettings";
     private static final String BUGGED = "Proxy";
     private static final String DHCP_CONSTANT = "DHCP";
@@ -55,56 +58,8 @@ public class ConnectFragment extends Fragment implements OnClickListener {
     private static final String PROXY_SETTINGS = "proxySettings";
     private static final String WPA = "WPA";
     private static final String WEP = "WEP";
-    public static final String TAG = "SFFJSHFTWFW";
-    protected static final int CANCEL = 1;
+    private static final String NETWORK_KEY = "WFSCANRESULT";
     private WFScanResult mNetwork;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.connect_fragment, null);
-        Button b = (Button) v.findViewById(R.id.connect);
-        TextView s = (TextView) v.findViewById(R.id.network_name);
-        /*
-		 * If mNetwork is null we want to remove this fragment immediately
-		 */
-        if (mNetwork == null) {
-            suicide();
-            return v;
-        }
-
-        s.setText(mNetwork.SSID);
-        View e = v.findViewById(R.id.password);
-        TextView summary = (TextView) v.findViewById(R.id.password_summary);
-        if (StringUtil.getCapabilitiesString(mNetwork.capabilities).equals(
-                StringUtil.OPEN)
-                || KnownNetworksFragment.getNetworks(getActivity()).contains(
-                mNetwork.SSID)) {
-            e.setVisibility(View.INVISIBLE);
-            b.setText(getString(R.string.connect));
-            summary.setText(R.string.button_connect);
-        }
-        b.setOnClickListener(this);
-        return v;
-    }
-
-    private void suicide() {
-        FragmentTransaction f = getParentFragment().getChildFragmentManager()
-                .beginTransaction();
-        f.remove(this);
-        f.commit();
-    }
-
-    private int addNetwork(final String password) {
-        WifiConfiguration wf = getKeyAppropriateConfig(password);
-        WifiManager wm = PrefUtil.getWifiManager(getActivity());
-        int n = wm.addNetwork(wf);
-        if (n != -1) {
-            wm.enableNetwork(n, false);
-            wm.saveConfiguration();
-        }
-        return n;
-    }
 
     /*
      * Reflection magic ahead
@@ -122,18 +77,42 @@ public class ConnectFragment extends Fragment implements OnClickListener {
             f.set(w, v);
             f2.set(w, v2);
         } catch (Exception e) {
-			/*
-			 * Log
+            /*
+             * Log
 			 */
             e.printStackTrace();
         }
         return w;
     }
 
+    public static ConnectFragment newInstance(WFScanResult n) {
+        ConnectFragment f = new ConnectFragment();
+        f.mNetwork = n;
+        return f;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.connect_fragment, null);
+        return v;
+    }
+
+    private int addNetwork(final String password) {
+        WifiConfiguration wf = getKeyAppropriateConfig(password);
+        WifiManager wm = PrefUtil.getWifiManager(getActivity());
+        int n = wm.addNetwork(wf);
+        if (n != -1) {
+            wm.enableNetwork(n, false);
+            wm.saveConfiguration();
+        }
+        return n;
+    }
+
     private WifiConfiguration getKeyAppropriateConfig(final String password) {
         WifiConfiguration wf = new WifiConfiguration();
         if (wf.toString().contains(BUGGED)) {
-			/*
+            /*
 			 * Add hidden fields on bugged Android 3.1+ configs
 			 */
             wf = addHiddenFields(wf);
@@ -173,12 +152,6 @@ public class ConnectFragment extends Fragment implements OnClickListener {
         BroadcastHelper.sendBroadcast(getActivity(), intent, true);
     }
 
-    public static ConnectFragment newInstance(WFScanResult n) {
-        ConnectFragment f = new ConnectFragment();
-        f.mNetwork = n;
-        return f;
-    }
-
     private void notifyConnecting() {
         NotifUtil.showToast(getActivity(),
                 getActivity().getString(R.string.connecting_to_network)
@@ -211,6 +184,42 @@ public class ConnectFragment extends Fragment implements OnClickListener {
                 .getChildFragmentManager().beginTransaction();
         f.remove(this);
         f.commit();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState == null) {
+            /*
+             * Do nothing
+             */
+        } else {
+            /*
+             * Restore Network
+             */
+            mNetwork = WFScanResult.fromBundle(savedInstanceState.getBundle(NETWORK_KEY));
+        }
+        Button b = (Button) getActivity().findViewById(R.id.connect);
+        View e = getActivity().findViewById(R.id.password);
+        TextView summary = (TextView) getActivity().findViewById(R.id.password_summary);
+        if (StringUtil.getCapabilitiesString(mNetwork.capabilities).equals(
+                StringUtil.OPEN)
+                || KnownNetworksFragment.getNetworks(getActivity()).contains(
+                mNetwork.SSID)) {
+            e.setVisibility(View.INVISIBLE);
+            b.setText(getString(R.string.connect));
+            summary.setText(R.string.button_connect);
+        }
+        b.setOnClickListener(this);
+        TextView s = (TextView) getActivity().findViewById(R.id.network_name);
+        s.setText(mNetwork.SSID);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mNetwork != null)
+            outState.putBundle(NETWORK_KEY, mNetwork.toBundle());
     }
 
     @Override

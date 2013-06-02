@@ -1,18 +1,19 @@
-/*	    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
+/*
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2013  David Van de Ven
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package org.wahtod.wififixer.ui;
@@ -40,23 +41,17 @@ import java.lang.ref.WeakReference;
 
 public class StatusFragment extends Fragment {
     protected static final int REFRESH = 0;
-    private static final int STATUS_MESSAGE = 337;
     protected static final int REFRESH_DELAY = 5000;
+    private static final int STATUS_MESSAGE = 337;
     private static final String EMPTYSTRING = "";
     private static final String DBM = "dBm";
     private static final String MB = "mb";
     private static WeakReference<StatusFragment> self;
-    private TextView linkspeed;
-    private TextView ssid;
-    private TextView signal;
-    private TextView status;
-    private ImageView icon;
-
     private static Handler drawhandler = new Handler() {
         @Override
         public void handleMessage(Message message) {
             /*
-			 * handle new scanresult
+             * handle new scanresult
 			 * asynchronously (to avoid ANR)
 			 */
             switch (message.what) {
@@ -66,22 +61,21 @@ public class StatusFragment extends Fragment {
                     break;
 
                 case STATUS_MESSAGE:
-				/*
-				 * Change status text
+                /*
+                 * Change status text
 				 */
                     if (!message.getData().isEmpty() && self.get() != null)
-                        self.get().status.setText(StatusMessage
+                        self.get()._views.setStatus(StatusMessage
                                 .fromMessage(message).getStatus());
                     break;
             }
         }
     };
-
     private BroadcastReceiver statusreceiver = new BroadcastReceiver() {
         public void onReceive(final Context context, final Intent intent) {
 
 			/*
-			 * Dispatch intent commands to handler
+             * Dispatch intent commands to handler
 			 */
             Message message = drawhandler.obtainMessage(STATUS_MESSAGE);
             Bundle data = new Bundle();
@@ -92,6 +86,27 @@ public class StatusFragment extends Fragment {
             drawhandler.sendMessage(message);
         }
     };
+    private ViewHolder _views;
+
+    public static StatusFragment newInstance(int num) {
+        StatusFragment f = new StatusFragment();
+        // Supply num input as an argument.
+        Bundle args = new Bundle();
+        args.putInt("num", num);
+        f.setArguments(args);
+        return f;
+    }
+
+    /*
+     * Note that this WILL return a null String[] if called while wifi is off.
+     */
+    private static WifiInfo getNetwork(final Context context) {
+        WifiManager wm = PrefUtil.getWifiManager(context);
+        if (wm.isWifiEnabled()) {
+            return wm.getConnectionInfo();
+        } else
+            return null;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,12 +118,14 @@ public class StatusFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.status, null);
-        ssid = (TextView) v.findViewById(R.id.SSID);
-        signal = (TextView) v.findViewById(R.id.signal);
-        linkspeed = (TextView) v.findViewById(R.id.linkspeed);
-        status = (TextView) v.findViewById(R.id.status);
-        icon = (ImageView) v.findViewById(R.id.signal_icon);
+        _views = new ViewHolder(v);
         return v;
+    }
+
+    @Override
+    public void onDestroyView() {
+        _views = null;
+        super.onDestroyView();
     }
 
     @Override
@@ -125,55 +142,33 @@ public class StatusFragment extends Fragment {
         drawhandler.sendEmptyMessage(REFRESH);
     }
 
-    public static StatusFragment newInstance(int num) {
-        StatusFragment f = new StatusFragment();
-        // Supply num input as an argument.
-        Bundle args = new Bundle();
-        args.putInt("num", num);
-        f.setArguments(args);
-        return f;
-    }
-
     private Context getContext() {
         return getActivity();
-    }
-
-    /*
-     * Note that this WILL return a null String[] if called while wifi is off.
-     */
-    private static WifiInfo getNetwork(final Context context) {
-        WifiManager wm = PrefUtil.getWifiManager(context);
-        if (wm.isWifiEnabled()) {
-            return wm.getConnectionInfo();
-        } else
-            return null;
     }
 
     private void refresh() {
         WifiInfo info = getNetwork(getContext());
 
         if (info == null) {
-            ssid.setText(getContext().getString(R.string.wifi_is_disabled));
-            signal.setText(EMPTYSTRING);
-            linkspeed.setText(EMPTYSTRING);
-            status.setText(EMPTYSTRING);
-            icon.setImageDrawable(getResources().getDrawable(R.drawable.icon));
+            _views.setSsid(getContext().getString(R.string.wifi_is_disabled));
+            _views.setSignal(EMPTYSTRING);
+            _views.setLinkspeed(EMPTYSTRING);
+            _views.setStatus(EMPTYSTRING);
+            _views.setIcon(R.drawable.icon);
         } else if (info.getRssi() == -200) {
-            ssid.setText(EMPTYSTRING);
-            signal.setText(EMPTYSTRING);
-            linkspeed.setText(EMPTYSTRING);
-            icon.setImageDrawable(getResources().getDrawable(R.drawable.icon));
+            _views.setSsid(EMPTYSTRING);
+            _views.setSignal(EMPTYSTRING);
+            _views.setLinkspeed(EMPTYSTRING);
+            _views.setIcon(R.drawable.icon);
         } else {
-            ssid.setText(StringUtil.removeQuotes(info.getSSID()));
-            signal.setText(String.valueOf(info.getRssi()) + DBM);
-            linkspeed.setText(String.valueOf(info.getLinkSpeed()) + MB);
-            status.setText(info.getSupplicantState().name());
-            icon.setImageDrawable(getResources()
-                    .getDrawable(
-                            (NotifUtil.getIconfromSignal(
-                                    WifiManager.calculateSignalLevel(
-                                            info.getRssi(), 5),
-                                    NotifUtil.ICON_SET_LARGE))));
+            _views.setSsid(StringUtil.removeQuotes(info.getSSID()));
+            _views.setSignal(String.valueOf(info.getRssi()) + DBM);
+            _views.setLinkspeed(String.valueOf(info.getLinkSpeed()) + MB);
+            _views.setStatus(info.getSupplicantState().name());
+            _views.setIcon(NotifUtil.getIconfromSignal(
+                    WifiManager.calculateSignalLevel(
+                            info.getRssi(), 5),
+                    NotifUtil.ICON_SET_LARGE));
         }
 
         drawhandler.sendEmptyMessageDelayed(REFRESH, REFRESH_DELAY);
@@ -187,5 +182,41 @@ public class StatusFragment extends Fragment {
         IntentFilter filter = new IntentFilter(StatusDispatcher.STATUS_ACTION);
         BroadcastHelper.registerReceiver(getContext(), statusreceiver, filter,
                 true);
+    }
+
+    private static class ViewHolder {
+        private TextView linkspeed;
+        private TextView ssid;
+        private TextView signal;
+        private TextView status;
+        private ImageView icon;
+
+        public ViewHolder(View container) {
+            linkspeed = (TextView) container.findViewById(R.id.linkspeed);
+            ssid = (TextView) container.findViewById(R.id.SSID);
+            signal = (TextView) container.findViewById(R.id.signal);
+            status = (TextView) container.findViewById(R.id.status);
+            icon = (ImageView) container.findViewById(R.id.signal_icon);
+        }
+
+        public void setLinkspeed(final String l) {
+            linkspeed.setText(l);
+        }
+
+        public void setSsid(final String l) {
+            ssid.setText(l);
+        }
+
+        public void setSignal(final String l) {
+            signal.setText(l);
+        }
+
+        public void setStatus(final String l) {
+            status.setText(l);
+        }
+
+        public void setIcon(final int i) {
+            icon.setImageResource(i);
+        }
     }
 }

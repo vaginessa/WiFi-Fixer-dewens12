@@ -82,7 +82,6 @@ public class LocalNetworksFragment extends Fragment implements LoaderManager.Loa
         lv.setOnItemLongClickListener(il);
         adapter = new ScanListAdapter(getContext(), 0, null);
         lv.setAdapter(adapter);
-        setRetainInstance(true);
         return v;
     }
 

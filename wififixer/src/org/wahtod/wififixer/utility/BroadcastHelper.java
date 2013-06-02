@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import java.util.HashMap;
 
@@ -32,43 +33,60 @@ import java.util.HashMap;
  * as well as making sure an unregistered receiver can't be unregistered and vice versa
  */
 public class BroadcastHelper {
-    private static volatile HashMap<BroadcastReceiver, Boolean> _clients;
+    private static HashMap<String, Boolean> _clients;
 
     private BroadcastHelper() {
         /*
-		 * Singleton
+         * Singleton
 		 */
     }
 
-    public synchronized static boolean isRegistered(final BroadcastReceiver r) {
-        return getMap().containsKey(r);
+    public synchronized static boolean isRegistered(final BroadcastReceiver receiver) {
+        return getMap().containsKey(receiver.toString());
     }
 
-    private synchronized static HashMap<BroadcastReceiver, Boolean> getMap() {
+    private synchronized static HashMap<String, Boolean> getMap() {
         if (_clients == null)
-            _clients = new HashMap<BroadcastReceiver, Boolean>();
+            _clients = new HashMap<String, Boolean>();
         return _clients;
     }
 
     public synchronized static void registerReceiver(final Context c,
-                                                     final BroadcastReceiver r, final IntentFilter f, final boolean local) {
-        if (!isRegistered(r)) {
-            if (local)
-                LocalBroadcastManager.getInstance(c).registerReceiver(r, f);
-            else
-                c.registerReceiver(r, f);
-            getMap().put(r, local);
+                                                     final BroadcastReceiver receiver,
+                                                     final IntentFilter f, final boolean local) {
+        String hashString = receiver.toString();
+        if (!isRegistered(receiver)) {
+            try {
+                if (local)
+                    LocalBroadcastManager.getInstance(c).registerReceiver(receiver, f);
+                else
+                    c.registerReceiver(receiver, f);
+                Log.i(BroadcastHelper.class.getSimpleName(), "Registered:" + receiver.toString() +
+                        " Local:" + String.valueOf(local));
+            } catch (Exception e) {
+                Log.i(BroadcastHelper.class.getSimpleName(), "Exception Registering:" + receiver.toString());
+                e.printStackTrace();
+            }
+            getMap().put(hashString, local);
         }
     }
 
     public synchronized static void unregisterReceiver(final Context c,
-                                                       final BroadcastReceiver r) {
-        if (isRegistered(r)) {
-            if (getMap().get(r))
-                LocalBroadcastManager.getInstance(c).unregisterReceiver(r);
-            else
-                c.unregisterReceiver(r);
-            getMap().remove(r);
+                                                       final BroadcastReceiver receiver) {
+        String hashString = receiver.toString();
+        if (isRegistered(receiver)) {
+            try {
+                if (getMap().get(hashString))
+                    LocalBroadcastManager.getInstance(c).unregisterReceiver(receiver);
+                else
+                    c.unregisterReceiver(receiver);
+                Log.i(BroadcastHelper.class.getSimpleName(), "Unregistered:" + receiver.toString()
+                        + " Local:" + String.valueOf(getMap().get(hashString)));
+            } catch (Exception e) {
+                Log.i(BroadcastHelper.class.getSimpleName(), "Exception Unregistering:" + receiver.toString());
+                e.printStackTrace();
+            }
+            getMap().remove(hashString);
         }
     }
 
