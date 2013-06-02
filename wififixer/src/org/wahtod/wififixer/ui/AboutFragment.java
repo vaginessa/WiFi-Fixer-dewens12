@@ -1,18 +1,19 @@
-/*	    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
+/*
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2013  David Van de Ven
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package org.wahtod.wififixer.ui;
@@ -39,6 +40,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
 
@@ -61,28 +63,27 @@ public class AboutFragment extends Fragment implements OnClickListener {
                 if (n.SSID != null && n.SSID.contains(self.get().mNetwork.SSID)) {
                     found = true;
                     /*
-					 * Refresh values
+                     * Refresh values
 					 */
                     self.get().mNetwork = new WFScanResult(n);
-                    self.get().drawView();
+                    self.get().refreshViews();
                     break;
                 }
             }
             if (!found) {
-				/*
-				 * Here's where we're going to tell the activity to remove this
+                /*
+                 * Here's where we're going to tell the activity to remove this
 				 * fragment.
 				 */
             }
         }
     };
-    private boolean mRegistered;
-    private WFScanResult mNetwork;
-    private BroadcastReceiver scanreceiver = new BroadcastReceiver() {
+
+    private static BroadcastReceiver scanreceiver = new BroadcastReceiver() {
         public void onReceive(final Context context, final Intent intent) {
 
 			/*
-			 * Dispatch intent commands to handler
+             * Dispatch intent commands to handler
 			 */
             Message message = handler.obtainMessage();
             Bundle data = new Bundle();
@@ -94,11 +95,18 @@ public class AboutFragment extends Fragment implements OnClickListener {
             handler.sendMessage(message);
         }
     };
+    private boolean mRegistered;
+    private WFScanResult mNetwork;
 
     public static AboutFragment newInstance(WFScanResult r) {
         AboutFragment f = new AboutFragment();
         f.mNetwork = r;
         return f;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -118,23 +126,16 @@ public class AboutFragment extends Fragment implements OnClickListener {
 
     @Override
     public void onPause() {
-        unregisterReceiver();
         super.onPause();
+        BroadcastHelper.unregisterReceiver(getActivity(), scanreceiver);
     }
 
     @Override
     public void onResume() {
-        if (mNetwork != null) {
-            registerReceiver();
-            mRegistered = true;
-            drawView();
-        } else {
-            FragmentTransaction t = getParentFragment()
-                    .getChildFragmentManager().beginTransaction();
-            t.remove(this);
-            t.commit();
-        }
         super.onResume();
+        IntentFilter scan = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+        getActivity().registerReceiver(scanreceiver, scan);
+        refreshViews();
     }
 
     @Override
@@ -149,7 +150,7 @@ public class AboutFragment extends Fragment implements OnClickListener {
         } else {
             Animation anim;
             try {
-                anim = AnimationUtils.loadAnimation(getContext(), transit);
+                anim = AnimationUtils.loadAnimation(getActivity(), transit);
             } catch (NotFoundException e) {
                 return null;
             }
@@ -157,27 +158,7 @@ public class AboutFragment extends Fragment implements OnClickListener {
         }
     }
 
-    public void setNetwork(final WFScanResult network) {
-        mNetwork = network;
-        drawView();
-    }
-
-    private void unregisterReceiver() {
-        if (mRegistered)
-            getContext().unregisterReceiver(scanreceiver);
-    }
-
-    private void registerReceiver() {
-        IntentFilter filter = new IntentFilter(
-                WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-        getContext().registerReceiver(scanreceiver, filter);
-    }
-
-    private Context getContext() {
-        return getActivity();
-    }
-
-    private void drawView() {
+    private void refreshViews() {
         if (getView() == null)
             return;
         TextView t = (TextView) getView().findViewById(R.id.ssid);
