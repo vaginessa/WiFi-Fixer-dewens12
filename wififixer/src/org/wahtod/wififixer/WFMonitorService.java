@@ -112,7 +112,7 @@ public class WFMonitorService extends Service implements
     @Override
     public void onCreate() {
         /*
-		 * Set Default Exception handler
+         * Set Default Exception handler
 		 */
         DefaultExceptionHandler.register(this);
 		/*
@@ -342,7 +342,7 @@ public class WFMonitorService extends Service implements
 		 * Shut down handler set widget to default make sure notification is
 		 * cancelled
 		 */
-        StatusDispatcher.m = null;
+        StatusDispatcher.statusMessage = null;
         h.post(new StatusDispatcher.Widget(StatusMessage.getNew().setSSID(
                 this.getString(R.string.service_inactive))));
         h.post(new StatusDispatcher.StatNotif(StatusMessage.getNew()

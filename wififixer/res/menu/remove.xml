@@ -23,6 +23,7 @@
             android:id="@+id/menu_remove"
             android:icon="@drawable/remove"
             android:showAsAction="ifRoom"
+            android:title="@string/remove"
             />
 
 </menu>
