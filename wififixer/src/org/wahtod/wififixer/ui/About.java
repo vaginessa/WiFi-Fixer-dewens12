@@ -17,15 +17,13 @@
 
 package org.wahtod.wififixer.ui;
 
-import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.legacy.ActionBarDetector;
-
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.TextView;
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.legacy.ActionBarDetector;
 
 public class About extends AppFragmentActivity {
 	private TextView version;
@@ -41,7 +39,7 @@ public class About extends AppFragmentActivity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
 		ActionBarDetector.handleHome(this, item);
 		return super.onOptionsItemSelected(item);
 	}

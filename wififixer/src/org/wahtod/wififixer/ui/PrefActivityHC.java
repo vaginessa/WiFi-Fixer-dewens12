@@ -17,24 +17,25 @@
 
 package org.wahtod.wififixer.ui;
 
-import java.util.List;
-
+import android.annotation.TargetApi;
+import android.os.Build;
+import android.os.Bundle;
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
 
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.view.MenuItem;
+import java.util.List;
 
-public class PrefActivityHC extends PreferenceActivity {
+public class PrefActivityHC extends SherlockPreferenceActivity {
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		ActionBarDetector.handleHome(this, item);
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+		ActionBarDetector.handleHome( this,item);
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Override
 	public void onBuildHeaders(List<Header> target) {
 		loadHeadersFromResource(R.xml.preference_headers, target);
 		super.onBuildHeaders(target);
@@ -42,7 +43,7 @@ public class PrefActivityHC extends PreferenceActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		ActionBarDetector.setDisplayHomeAsUpEnabled(this, true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		super.onCreate(savedInstanceState);
 	}
 }

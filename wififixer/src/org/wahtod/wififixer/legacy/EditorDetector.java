@@ -39,7 +39,6 @@ public abstract class EditorDetector {
 		 * set
 		 */
 		selector.vcommit(e);
-		return;
 	}
 
 	private static boolean hasEditorApply() {

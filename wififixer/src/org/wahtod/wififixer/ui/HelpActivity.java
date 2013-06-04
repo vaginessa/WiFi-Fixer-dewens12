@@ -17,17 +17,15 @@
 
 package org.wahtod.wififixer.ui;
 
-import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.legacy.ActionBarDetector;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.legacy.ActionBarDetector;
 
 public class HelpActivity extends AppFragmentActivity {
 
@@ -63,7 +61,7 @@ public class HelpActivity extends AppFragmentActivity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
 		ActionBarDetector.handleHome(this, item);
 		return super.onOptionsItemSelected(item);
 	}

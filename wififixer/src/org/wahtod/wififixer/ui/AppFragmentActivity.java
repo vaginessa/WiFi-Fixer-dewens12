@@ -22,25 +22,23 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
-import android.view.MenuItem;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import org.wahtod.wififixer.R;
 
-public abstract class AppFragmentActivity extends FragmentActivity {
+public abstract class AppFragmentActivity extends SherlockFragmentActivity {
     private static final String TAG = "DNMDJDSW";
-    private Menu optionsmenu;
+    private com.actionbarsherlock.view.Menu optionsmenu;
 
     // Create menus
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.help, menu);
-        getMenuInflater().inflate(R.menu.about, menu);
-        getMenuInflater().inflate(R.menu.prefs, menu);
+        getSupportMenuInflater().inflate(R.menu.help, menu);
+        getSupportMenuInflater().inflate(R.menu.about, menu);
+        getSupportMenuInflater().inflate(R.menu.prefs, menu);
         if (findViewById(R.id.small_screen) != null)
-            getMenuInflater().inflate(R.menu.quicksettings, menu);
+            getSupportMenuInflater().inflate(R.menu.quicksettings, menu);
         optionsmenu = menu;
         return true;
     }
@@ -48,7 +46,7 @@ public abstract class AppFragmentActivity extends FragmentActivity {
     /* Handles item selections */
     @SuppressLint("NewApi")
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
 
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {

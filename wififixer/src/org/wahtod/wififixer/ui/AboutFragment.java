@@ -28,7 +28,6 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +37,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+import com.actionbarsherlock.app.SherlockFragment;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.BroadcastHelper;
@@ -48,7 +48,7 @@ import org.wahtod.wififixer.utility.WFScanResult;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-public class AboutFragment extends Fragment implements OnClickListener {
+public class AboutFragment extends SherlockFragment implements OnClickListener {
 
     public static final String TAG = "KSABFWKRFBWT";
     private static final String NETWORK_KEY = "WFNETWORK";

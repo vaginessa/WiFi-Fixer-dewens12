@@ -17,42 +17,38 @@
 
 package org.wahtod.wififixer.legacy;
 
-import org.wahtod.wififixer.ui.MainActivity;
-import org.wahtod.wififixer.legacy.ActionBarHelper;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.support.v4.app.NavUtils;
-import android.view.MenuItem;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.ui.MainActivity;
+import org.wahtod.wififixer.ui.TabListener;
 
-public abstract class ActionBarDetector {
-	private static ActionBarDetector selector;
+public class ActionBarDetector {
 
-	public abstract void vsetDisplayHomeAsUpEnabled(Activity a, boolean state);
-
-	public static void setDisplayHomeAsUpEnabled(Activity a, boolean state) {
-		/*
-		 * Add Action Bar home up
-		 */
-		if (selector == null) {
-			if (checkHasActionBar()) {
-				selector = new ActionBarHelper();
-			} else
-				return;
-		}
-		/*
-		 * If API exists, set
-		 */
-		selector.vsetDisplayHomeAsUpEnabled(a, state);
-		return;
+	public static void setDisplayHomeAsUpEnabled(SherlockFragmentActivity a, boolean state) {
+            ActionBar actionBar = a.getSupportActionBar();
+            if (a.findViewById(R.id.pager) != null) {
+                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+                actionBar.setDisplayShowTitleEnabled(false);
+                actionBar.setDisplayUseLogoEnabled(true);
+                TabListener tl = new TabListener(a);
+                ActionBar.Tab tab = actionBar.newTab().setText(R.string.status)
+                        .setTabListener(tl);
+                actionBar.addTab(tab);
+                tab = actionBar.newTab().setText(R.string.known_networks)
+                        .setTabListener(tl);
+                actionBar.addTab(tab);
+                tab = actionBar.newTab().setText(R.string.local_networks)
+                        .setTabListener(tl);
+                actionBar.addTab(tab);
+            }
+        a.getSupportActionBar().setDisplayHomeAsUpEnabled(state);
 	}
 
-	public static boolean checkHasActionBar() {
-		return Build.VERSION.SDK_INT >= 11;
-	}
-
-	public static void handleHome(Activity a, MenuItem item) {
+	public static void handleHome(Activity a, com.actionbarsherlock.view.MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// app icon in Action Bar clicked; go home

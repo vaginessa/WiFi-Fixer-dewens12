@@ -17,62 +17,62 @@
 
 package org.wahtod.wififixer.ui;
 
-import java.lang.ref.WeakReference;
-
+import android.support.v4.view.ViewPager;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import org.wahtod.wififixer.R;
 
-import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
+import java.lang.ref.WeakReference;
 
-@SuppressLint("NewApi")
 public class TabListener implements ActionBar.TabListener {
-	private final WeakReference<Activity> mActivity;
-	private final WeakReference<BaseViewPager> mPager;
+    private final WeakReference<SherlockFragmentActivity> mActivity;
+    private final WeakReference<BaseViewPager> mPager;
 
-	public TabListener(Activity activity) {
-		mActivity = new WeakReference<Activity>(activity);
-		mPager = new WeakReference<BaseViewPager>((BaseViewPager) mActivity
-				.get().findViewById(R.id.pager));
-		/*
+    public TabListener(SherlockFragmentActivity activity) {
+        mActivity = new WeakReference<SherlockFragmentActivity>(activity);
+        mPager = new WeakReference<BaseViewPager>((BaseViewPager) mActivity
+                .get().findViewById(R.id.pager));
+        /*
 		 * Throwing in a page change listener so the viewpager can keep the
 		 * currently selected tab synched with its current page
 		 */
-		if (mPager.get() != null) {
-			mPager.get().setOnPageChangeListener(
-					new ViewPager.OnPageChangeListener() {
-						@Override
-						public void onPageScrollStateChanged(int arg0) {
-						}
+        if (mPager.get() != null) {
+            mPager.get().setOnPageChangeListener(
+                    new ViewPager.OnPageChangeListener() {
+                        @Override
+                        public void onPageScrollStateChanged(int arg0) {
+                        }
 
-						@Override
-						public void onPageScrolled(int arg0, float arg1,
-								int arg2) {
-						}
-						
-						@Override
-						public void onPageSelected(int arg0) {
-							mActivity.get().getActionBar()
-									.setSelectedNavigationItem(arg0);
-						}
-					});
-		}
-	}
+                        @Override
+                        public void onPageScrolled(int arg0, float arg1,
+                                                   int arg2) {
+                        }
 
-	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		/*
+                        @Override
+                        public void onPageSelected(int arg0) {
+                            mActivity.get().getSupportActionBar()
+                                    .setSelectedNavigationItem(arg0);
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
+        /*
 		 * Only change viewpager page if enabled
 		 */
-		if (mPager.get().isEnabled())
-			mPager.get().setCurrentItem(tab.getPosition());
-	}
-	
-	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-	}
+        if (mPager.get().isEnabled())
+            mPager.get().setCurrentItem(tab.getPosition());
+    }
 
-	public void onTabReselected(Tab tab, FragmentTransaction ft) {
-	}
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
+
+    }
 }

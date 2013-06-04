@@ -30,10 +30,16 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.AdapterView.OnItemLongClickListener;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitor;
 import org.wahtod.wififixer.prefs.PrefUtil;
@@ -45,7 +51,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KnownNetworksFragment extends Fragment implements ActionMode.Callback {
+public class KnownNetworksFragment extends SherlockFragment {
     private static final int SCAN_MESSAGE = 31337;
     private static final int REFRESH_MESSAGE = 2944;
     private static final int SCAN_DELAY = 15000;
@@ -90,6 +96,94 @@ public class KnownNetworksFragment extends Fragment implements ActionMode.Callba
             }
         }
     };
+    public ActionMode.Callback mActionModeCallback= new ActionMode.Callback(){
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            if (!isWifiOn(getContext()))
+                return false;
+
+            mFragmentPauseRequestListener.onFragmentPauseRequest(false);
+
+            MenuInflater inflater = mode.getMenuInflater();
+            mode.setTitle(mSSID);
+            int n = PrefUtil.getNIDFromSSID(getContext(), mSSID);
+            if (!PrefUtil.getNetworkState(getContext(), n))
+                inflater.inflate(R.menu.enable, menu);
+            else
+                inflater.inflate(R.menu.disable, menu);
+
+            if (known_in_range.contains(mSSID))
+                inflater.inflate(R.menu.connect, menu);
+
+            if (PrefUtil.readManagedState(getContext(), n))
+                inflater.inflate(R.menu.managed, menu);
+            else
+                inflater.inflate(R.menu.nonmanaged, menu);
+
+            inflater.inflate(R.menu.remove, menu);
+            return true;
+        }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        mActionMode = null;
+        mFragmentPauseRequestListener.onFragmentPauseRequest(true);
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        int n = PrefUtil.getNIDFromSSID(getContext(), mSSID);
+        int i = item.getItemId();
+        switch (i) {
+            case R.id.menu_enable:
+                PrefUtil.setNetworkState(getContext(), n, true);
+                PrefUtil.writeNetworkState(getContext(), n, false);
+                adapter.notifyDataSetChanged();
+                break;
+
+            case R.id.menu_disable:
+                PrefUtil.setNetworkState(getContext(), n, false);
+                PrefUtil.writeNetworkState(getContext(), n, true);
+                adapter.notifyDataSetChanged();
+                break;
+
+            case R.id.menu_managed:
+                PrefUtil.writeManagedState(getContext(), n, false);
+                adapter.notifyDataSetChanged();
+                break;
+
+            case R.id.menu_nonmanaged:
+                PrefUtil.writeManagedState(getContext(), n, true);
+                adapter.notifyDataSetChanged();
+                break;
+
+            case R.id.menu_connect:
+                if (PrefUtil.getNetworkState(getContext(), n)) {
+                    Intent intent = new Intent(WFMonitor.CONNECTINTENT);
+                    intent.putExtra(WFMonitor.NETWORKNAME,
+                            PrefUtil.getSSIDfromNetwork(getContext(), n));
+                    BroadcastHelper.sendBroadcast(getContext(), intent, true);
+                } else {
+                    PrefUtil.getWifiManager(getContext()).enableNetwork(n, true);
+                }
+                break;
+
+            case R.id.menu_remove:
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Remove network:" + mSSID)
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+                break;
+        }
+        mode.finish();
+        return true;
+    }
+};
     protected Object mActionMode;
     protected String mSSID;
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -117,8 +211,7 @@ public class KnownNetworksFragment extends Fragment implements ActionMode.Callba
             if (mActionMode != null) {
                 return false;
             }
-            mActionMode = getActivity().startActionMode(
-                    KnownNetworksFragment.this);
+            mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
             v.setSelected(true);
             return true;
 
@@ -225,8 +318,7 @@ public class KnownNetworksFragment extends Fragment implements ActionMode.Callba
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.containsKey(SSID_KEY)) {
             mSSID = savedInstanceState.getString(SSID_KEY);
-            mActionMode = getActivity().startActionMode(
-                    KnownNetworksFragment.this);
+            mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
             for (int c = 1; c < adapter.getCount(); c++) {
                 if (adapter.getItem(c).equals(mSSID)) {
                     lv.setSelection(c);
@@ -324,95 +416,6 @@ public class KnownNetworksFragment extends Fragment implements ActionMode.Callba
         BroadcastHelper.unregisterReceiver(getContext(), receiver);
         scanhandler.removeMessages(SCAN_MESSAGE);
         scanhandler.removeMessages(REFRESH_MESSAGE);
-    }
-
-    @SuppressLint("NewApi")
-    @Override
-    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        if (!isWifiOn(getContext()))
-            return false;
-
-        mFragmentPauseRequestListener.onFragmentPauseRequest(false);
-
-        MenuInflater inflater = mode.getMenuInflater();
-        mode.setTitle(mSSID);
-        int n = PrefUtil.getNIDFromSSID(getContext(), mSSID);
-        if (!PrefUtil.getNetworkState(getContext(), n))
-            inflater.inflate(R.menu.enable, menu);
-        else
-            inflater.inflate(R.menu.disable, menu);
-
-        if (known_in_range.contains(mSSID))
-            inflater.inflate(R.menu.connect, menu);
-
-        if (PrefUtil.readManagedState(getContext(), n))
-            inflater.inflate(R.menu.managed, menu);
-        else
-            inflater.inflate(R.menu.nonmanaged, menu);
-
-        inflater.inflate(R.menu.remove, menu);
-        return true;
-    }
-
-    @Override
-    public void onDestroyActionMode(ActionMode mode) {
-        mActionMode = null;
-        mFragmentPauseRequestListener.onFragmentPauseRequest(true);
-    }
-
-    @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        return false;
-    }
-
-    @SuppressLint("NewApi")
-    @Override
-    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        int n = PrefUtil.getNIDFromSSID(getContext(), mSSID);
-        int i = item.getItemId();
-        switch (i) {
-            case R.id.menu_enable:
-                PrefUtil.setNetworkState(getContext(), n, true);
-                PrefUtil.writeNetworkState(getContext(), n, false);
-                adapter.notifyDataSetChanged();
-                break;
-
-            case R.id.menu_disable:
-                PrefUtil.setNetworkState(getContext(), n, false);
-                PrefUtil.writeNetworkState(getContext(), n, true);
-                adapter.notifyDataSetChanged();
-                break;
-
-            case R.id.menu_managed:
-                PrefUtil.writeManagedState(getContext(), n, false);
-                adapter.notifyDataSetChanged();
-                break;
-
-            case R.id.menu_nonmanaged:
-                PrefUtil.writeManagedState(getContext(), n, true);
-                adapter.notifyDataSetChanged();
-                break;
-
-            case R.id.menu_connect:
-                if (PrefUtil.getNetworkState(getContext(), n)) {
-                    Intent intent = new Intent(WFMonitor.CONNECTINTENT);
-                    intent.putExtra(WFMonitor.NETWORKNAME,
-                            PrefUtil.getSSIDfromNetwork(getContext(), n));
-                    BroadcastHelper.sendBroadcast(getContext(), intent, true);
-                } else {
-                    PrefUtil.getWifiManager(getContext()).enableNetwork(n, true);
-                }
-                break;
-
-            case R.id.menu_remove:
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("Remove network:" + mSSID)
-                        .setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).show();
-                break;
-        }
-        mode.finish();
-        return true;
     }
 
     private void removeNetwork(final int network) {

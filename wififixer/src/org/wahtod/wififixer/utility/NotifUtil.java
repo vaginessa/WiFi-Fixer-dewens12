@@ -99,11 +99,7 @@ public class NotifUtil {
                             IntentConstants.ACTION_WIFI_CHANGE),
                             PendingIntent.FLAG_UPDATE_CURRENT));
         }
-        mStatusBuilder.setSmallIcon(R.drawable.buttons, m.getSignal());
-        if (NotifUtil.ssidStatus == NotifUtil.SSID_STATUS_UNMANAGED) {
-            m.setStatus(new StringBuilder(ctxt.getString(R.string.unmanaged))
-                    .append(m.getStatus()).toString());
-        }
+        mStatusBuilder.setSmallIcon(R.drawable.notifsignal, m.getSignal());
         mStatusBuilder.setContentTitle(m.getSSID());
         mStatusBuilder.setSmallIcon(R.drawable.notifsignal, m.getSignal());
         mStatusBuilder.setLargeIcon(BitmapFactory.decodeResource(ctxt.getResources(),
@@ -182,10 +178,6 @@ public class NotifUtil {
 
     public static void cancel(Context context, int id) {
         cancel(context, VSHOW_TAG, id);
-    }
-
-    public static void setSsidStatus(final int status) {
-        ssidStatus = status;
     }
 
     public static StatusMessage validateStrings(final StatusMessage in) {

@@ -18,7 +18,7 @@
 -->
 <resources>
 <style name="Theme"></style>
-    <style name="ThemeWifiFixer" parent="android:Theme">
+    <style name="ThemeWifiFixer" parent="Theme.Sherlock">
     <item name="android:windowAnimationStyle">@style/WifiFixerAnimation</item>
     <item name="android:windowNoTitle">true</item>
      <item name="android:windowBackground">@drawable/bg</item>

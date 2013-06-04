@@ -50,7 +50,6 @@ import java.lang.ref.WeakReference;
 public class MainActivity extends TutorialFragmentActivity implements
         OnFragmentPauseRequestListener {
 
-    private static final String FRAGMENTS_KEY = "FRGMENTS";
     private static WeakReference<MainActivity> self;
     private StringBuilder mLogString;
 
@@ -308,7 +307,7 @@ public class MainActivity extends TutorialFragmentActivity implements
         setContentView(R.layout.main);
         if (mBasePager == null)
             drawUI();
-        ActionBarDetector.setDisplayHomeAsUpEnabled(this, false);
+       ActionBarDetector.setDisplayHomeAsUpEnabled(this, false);
         // Here's where we fire the nag
         authCheck();
 		/*

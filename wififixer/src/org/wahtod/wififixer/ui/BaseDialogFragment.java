@@ -22,8 +22,9 @@ import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
+import com.actionbarsherlock.app.SherlockDialogFragment;
 
-public class BaseDialogFragment extends DialogFragment {
+public class BaseDialogFragment extends SherlockDialogFragment {
 	public static final String FRAGMENT_KEY = "FRAGMENT";
 	public static final String METHOD = "newInstance";
 

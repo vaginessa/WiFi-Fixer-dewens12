@@ -19,14 +19,14 @@
 package org.wahtod.wififixer.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.actionbarsherlock.app.SherlockFragment;
 import org.wahtod.wififixer.R;
 
-public class FirstPageFragment extends Fragment {
+public class FirstPageFragment extends SherlockFragment {
     public static final String LOGFRAGMENT_TAG = "LOG_FRAGMENT";
     public static final String TAG = "BSJDFWFFFW";
 
