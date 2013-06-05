@@ -1,6 +1,9 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.4.2'
@@ -14,8 +17,44 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 17
-    buildToolsVersion "17.0.0"
+
+    signingConfigs {
+        release
+    }
+
+    buildTypes {
+        release {
+            runProguard true
+            proguardFile file = "proguard-project.txt"
+            compileSdkVersion 17
+            buildToolsVersion "17.0.0"
+            signingConfig signingConfigs.release
+            def proc = "./copyapk.sh".execute()
+        }
+
+        debug {
+            debuggable true
+            runProguard false
+            compileSdkVersion 17
+            buildToolsVersion "17.0.0"
+        }
+    }
+
+    if (project.hasProperty("storeFile")) {
+        android.signingConfigs.release.storeFile = file(storeFile)
+    }
+
+    if (project.hasProperty("storePassword")) {
+        android.signingConfigs.release.storePassword = storePassword
+    }
+
+    if (project.hasProperty("keyAlias")) {
+        android.signingConfigs.release.keyAlias = keyAlias
+    }
+
+    if (project.hasProperty("keyPassword")) {
+        android.signingConfigs.release.keyPassword = keyPassword
+    }
 
     sourceSets {
         main {
