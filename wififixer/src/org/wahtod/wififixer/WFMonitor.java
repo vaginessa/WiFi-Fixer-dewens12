@@ -262,7 +262,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                     PrefUtil.getWifiManager(ctxt.get()).disconnect();
                     self.get().handlerWrapper(rScanWatchDog, SHORTWAIT);
                 /*
-				 * Reset state
+                 * Reset state
 				 */
                     mRepairLevel = W_REASSOCIATE;
                     log(ctxt.get(), R.string.repairing);
@@ -282,7 +282,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     protected static Runnable rSleepcheck = new Runnable() {
         public void run() {
             if (shouldManage(ctxt.get())) {
-				/*
+                /*
 				 * This is all we want to do.
 				 */
 
@@ -1618,7 +1618,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		/*
 		 * Notify current state on resume
 		 */
-        if (PrefUtil.getFlag(Pref.STATENOT_KEY) && statNotifCheck())
+        if (PrefUtil.getFlag(Pref.STATENOT_KEY))
             setStatNotif(true);
         _statusdispatcher.refreshWidget(null);
     }
@@ -1660,13 +1660,13 @@ public class WFMonitor implements OnScreenStateChangedListener {
         if (!PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled())
             clearConnectedStatus(ctxt.get().getString(R.string.wifi_is_disabled));
         else {
-            StatusMessage sm = StatusMessage.getNew().setStatus(
-                    getSupplicantStateString(getSupplicantState()));
-            if (state)
-                sm.setShow(1);
-            else
-                sm.setShow(-1);
-            StatusMessage.send(ctxt.get(), sm);
+            if (state) {
+                if (!_connected)
+                    clearConnectedStatus(getSupplicantStateString(getSupplicantState()));
+            } else {
+                StatusMessage sm = StatusMessage.getNew().setShow(-1);
+                StatusMessage.send(ctxt.get(), sm);
+            }
         }
         _statusdispatcher.refreshWidget(null);
     }
