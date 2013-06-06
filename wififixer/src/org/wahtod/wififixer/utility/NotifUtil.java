@@ -25,6 +25,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,8 +33,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.ui.MainActivity;
 import org.wahtod.wififixer.widget.WidgetReceiver;
@@ -41,19 +42,15 @@ import org.wahtod.wififixer.widget.WidgetReceiver;
 public class NotifUtil {
     public static final int STATNOTIFID = 2392;
     public static final int LOGNOTIFID = 2494;
-    protected static int ssidStatus = 0;
-
     public static final String VSHOW_TAG = "VSHOW";
     public static final String LOG_TAG = "LOG";
     public static final String STAT_TAG = "STATNOTIF";
-
     /*
      * for SSID status in status notification
      */
     public static final int SSID_STATUS_UNMANAGED = 3;
     public static final int SSID_STATUS_MANAGED = 7;
     public static final String SEPARATOR = " : ";
-
     /*
      * Intent Keys for Toast
      */
@@ -64,12 +61,29 @@ public class NotifUtil {
      */
     public static final int ICON_SET_SMALL = 0;
     public static final int ICON_SET_LARGE = 1;
-
-
+    protected static int ssidStatus = 0;
     protected static PendingIntent contentIntent;
-
     private static NotificationCompat.Builder mLogBuilder;
     private static NotificationCompat.Builder mStatusBuilder;
+
+    private static Notification build(final Context ctxt, NotificationCompat.Builder builder, StatusMessage in) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            return builder.build();
+
+        Intent intent = new Intent(ctxt, MainActivity.class).setAction(
+                Intent.ACTION_MAIN).setFlags(
+                Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        Notification out = builder.build();
+        out.icon = getIconfromSignal(in.getSignal(),
+                NotifUtil.ICON_SET_SMALL);
+        out.iconLevel = in.getSignal();
+        out.setLatestEventInfo(ctxt,
+                ctxt.getString(R.string.app_name), in.getSSID()
+                + NotifUtil.SEPARATOR + in.getStatus(),
+                PendingIntent.getActivity(ctxt, 0, intent, 0));
+
+        return out;
+    }
 
     public static void addStatNotif(final Context ctxt, final StatusMessage in) {
         StatusMessage m = validateStrings(in);
@@ -99,7 +113,6 @@ public class NotifUtil {
                             IntentConstants.ACTION_WIFI_CHANGE),
                             PendingIntent.FLAG_UPDATE_CURRENT));
         }
-        mStatusBuilder.setSmallIcon(R.drawable.notifsignal, m.getSignal());
         mStatusBuilder.setContentTitle(m.getSSID());
         mStatusBuilder.setSmallIcon(R.drawable.notifsignal, m.getSignal());
         mStatusBuilder.setLargeIcon(BitmapFactory.decodeResource(ctxt.getResources(),
@@ -108,7 +121,7 @@ public class NotifUtil {
         /*
          * Fire the notification
 		 */
-        nm.notify(NotifUtil.STAT_TAG, NotifUtil.STATNOTIFID, mStatusBuilder.build());
+        nm.notify(NotifUtil.STAT_TAG, NotifUtil.STATNOTIFID, build(ctxt, mStatusBuilder, in));
     }
 
     public static void addLogNotif(final Context ctxt, final boolean flag) {
@@ -187,7 +200,6 @@ public class NotifUtil {
             in.setStatus(StatusMessage.EMPTY);
         return in;
     }
-
 
     public static int getIconfromSignal(int signal, int iconset) {
         switch (signal) {
