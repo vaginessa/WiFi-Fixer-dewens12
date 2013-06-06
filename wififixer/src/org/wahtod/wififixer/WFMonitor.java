@@ -283,7 +283,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
         public void run() {
             if (shouldManage(ctxt.get())) {
                 /*
-				 * This is all we want to do.
+                 * This is all we want to do.
 				 */
 
                 if (getisWifiEnabled(ctxt.get(), true)) {
@@ -1618,8 +1618,14 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		/*
 		 * Notify current state on resume
 		 */
-        if (PrefUtil.getFlag(Pref.STATENOT_KEY))
-            setStatNotif(true);
+        if (PrefUtil.getFlag(Pref.STATENOT_KEY)) {
+            if (getIsOnWifi(ctxt.get()))
+                clearConnectedStatus(getSupplicantStateString(getSupplicantState()));
+            else
+                StatusMessage.send(ctxt.get(),
+                        StatusMessage.getNew().setStatus(getSupplicantStateString(getSupplicantState())).setShow(1));
+
+        }
         _statusdispatcher.refreshWidget(null);
     }
 
