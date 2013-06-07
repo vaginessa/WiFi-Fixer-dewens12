@@ -26,34 +26,55 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ui.MainActivity;
 import org.wahtod.wififixer.ui.TabListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ActionBarDetector {
 
-	public static void setDisplayHomeAsUpEnabled(SherlockFragmentActivity a, boolean state) {
-            ActionBar actionBar = a.getSupportActionBar();
-            if (a.findViewById(R.id.pager) != null) {
-                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-                actionBar.setDisplayShowTitleEnabled(false);
-                actionBar.setDisplayUseLogoEnabled(true);
-                TabListener tl = new TabListener(a);
-                ActionBar.Tab tab = actionBar.newTab().setText(R.string.status)
-                        .setTabListener(tl);
-                actionBar.addTab(tab);
-                tab = actionBar.newTab().setText(R.string.known_networks)
-                        .setTabListener(tl);
-                actionBar.addTab(tab);
-                tab = actionBar.newTab().setText(R.string.local_networks)
-                        .setTabListener(tl);
-                actionBar.addTab(tab);
-            }
+    public static void setDisplayHomeAsUpEnabled(SherlockFragmentActivity a, boolean state) {
+        ActionBar actionBar = a.getSupportActionBar();
+        if (a.findViewById(R.id.pager) != null) {
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayUseLogoEnabled(true);
+            showTabs(a, actionBar);
+        }
         a.getSupportActionBar().setDisplayHomeAsUpEnabled(state);
-	}
+    }
 
-	public static void handleHome(Activity a, com.actionbarsherlock.view.MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			// app icon in Action Bar clicked; go home
-			Intent intent = new Intent(a, MainActivity.class);
-			NavUtils.navigateUpTo(a, intent);
-		}
-	}
+    public static void showTabs(SherlockFragmentActivity a, ActionBar actionBar) {
+        List<ActionBar.Tab> tabArrayList = getTabs(actionBar);
+        setTabListeners(new TabListener(a),tabArrayList);
+        for (ActionBar.Tab t: tabArrayList){
+            actionBar.addTab(t);
+        }
+    }
+
+    private static void setTabListeners(TabListener tabListener, List<ActionBar.Tab> tabArrayList) {
+        for (ActionBar.Tab tab : tabArrayList) {
+            tab.setTabListener(tabListener);
+        }
+    }
+
+    private static ActionBar.Tab getTabWithText(ActionBar actionBar, int res) {
+        ActionBar.Tab tab = actionBar.newTab().setText(res);
+        return tab;
+    }
+
+    private static List<ActionBar.Tab> getTabs(ActionBar actionBar) {
+        List<ActionBar.Tab> tabArrayList = new ArrayList<ActionBar.Tab>();
+        tabArrayList.add(getTabWithText(actionBar, R.string.status));
+        tabArrayList.add(getTabWithText(actionBar, R.string.known_networks));
+        tabArrayList.add(getTabWithText(actionBar, R.string.local_networks));
+        return tabArrayList;
+    }
+
+    public static void handleHome(Activity a, com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in Action Bar clicked; go home
+                Intent intent = new Intent(a, MainActivity.class);
+                NavUtils.navigateUpTo(a, intent);
+        }
+    }
 }

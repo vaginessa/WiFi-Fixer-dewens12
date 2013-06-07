@@ -30,6 +30,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.SparseArray;
 import android.view.ViewGroup;
+import com.actionbarsherlock.app.ActionBar;
 import org.wahtod.wififixer.DefaultExceptionHandler;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.boot.BootService;
@@ -50,77 +51,6 @@ import java.lang.ref.WeakReference;
 public class MainActivity extends TutorialFragmentActivity implements
         OnFragmentPauseRequestListener {
 
-    private static WeakReference<MainActivity> self;
-    private StringBuilder mLogString;
-
-    public class PagerAdapter extends FixedFragmentStatePagerAdapter {
-        SparseArray<Fragment> fragmentArray = new SparseArray<Fragment>();
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            fragmentArray.remove(position);
-            super.destroyItem(container, position, object);
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            Fragment f = (Fragment) super.instantiateItem(container, position);
-            fragmentArray.put(position, f);
-            return f;
-        }
-
-        public PagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    if (mLogString != null)
-                        handler.postDelayed(rSendLogString, 500);
-                    return FirstPageFragment.newInstance(position);
-                case 1:
-                    return KnownNetworksFragment.newInstance(position);
-                case 2:
-                    return LocalNetworksFragment.newInstance(position);
-            }
-            return null;
-        }
-
-        public Fragment getPagerFragment(int position) {
-            return fragmentArray.get(position);
-        }
-    }
-
-    private static Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message message) {
-            self.get().handleIntentMessage(message);
-        }
-    };
-
-    private BroadcastReceiver logReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Message m = logHandler.obtainMessage();
-            m.setData(intent.getExtras());
-            logHandler.sendMessage(m);
-        }
-    };
-
-    private static Handler logHandler = new Handler() {
-        @Override
-        public void handleMessage(Message message) {
-            self.get().updateLogString(message.getData());
-        }
-    };
-
     /*
      * Market URI for pendingintent
      */
@@ -129,14 +59,61 @@ public class MainActivity extends TutorialFragmentActivity implements
      * Delete Log intent extra
      */
     private static final String DELETE_LOG = "DELETE_LOG";
-
     private static final String RUN_TUTORIAL = "RUN_TUTORIAL";
     /*
      * Delay for Wifi Toggle button check
      */
     private static final long NAG_DELAY = 3000;
+    private static WeakReference<MainActivity> self;
+    private static Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message message) {
+            self.get().handleIntentMessage(message);
+        }
+    };
+    private static Handler logHandler = new Handler() {
+        @Override
+        public void handleMessage(Message message) {
+            self.get().updateLogString(message.getData());
+        }
+    };
+    Runnable rSendLogString = new Runnable() {
 
+        @Override
+        public void run() {
+            sendLogString();
+        }
+
+    };
+    private StringBuilder mLogString;
+    private BroadcastReceiver logReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Message m = logHandler.obtainMessage();
+            m.setData(intent.getExtras());
+            logHandler.sendMessage(m);
+        }
+    };
     private BaseViewPager mBasePager;
+
+    private static void startwfService(final Context context) {
+        context.startService(new Intent(context, BootService.class).putExtra(
+                BootService.FLAG_NO_DELAY, true));
+    }
+
+    private static void nagNotification(final Context context) {
+        /*
+         * Nag for donation
+		 */
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+                new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI)), 0);
+        NotifUtil.show(context, context.getString(R.string.donatenag),
+                context.getString(R.string.thank_you), 3337, contentIntent);
+    }
+
+    private static void removeNag(final Context context) {
+        NotifUtil.cancel(context, 3337);
+    }
 
     void authCheck() {
         if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
@@ -250,25 +227,6 @@ public class MainActivity extends TutorialFragmentActivity implements
         alert.show();
     }
 
-    private static void startwfService(final Context context) {
-        context.startService(new Intent(context, BootService.class).putExtra(
-                BootService.FLAG_NO_DELAY, true));
-    }
-
-    private static void nagNotification(final Context context) {
-		/*
-		 * Nag for donation
-		 */
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-                new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI)), 0);
-        NotifUtil.show(context, context.getString(R.string.donatenag),
-                context.getString(R.string.thank_you), 3337, contentIntent);
-    }
-
-    private static void removeNag(final Context context) {
-        NotifUtil.cancel(context, 3337);
-    }
-
     public void drawUI() {
 		/*
 		 * Set up ViewPager and FragmentStatePagerAdapter for phone and tablet
@@ -307,7 +265,7 @@ public class MainActivity extends TutorialFragmentActivity implements
         setContentView(R.layout.main);
         if (mBasePager == null)
             drawUI();
-       ActionBarDetector.setDisplayHomeAsUpEnabled(this, false);
+        ActionBarDetector.setDisplayHomeAsUpEnabled(this, false);
         // Here's where we fire the nag
         authCheck();
 		/*
@@ -387,6 +345,11 @@ public class MainActivity extends TutorialFragmentActivity implements
     @Override
     public void onFragmentPauseRequest(boolean state) {
         mBasePager.setPagingEnabled(state);
+        if (state)
+            getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        else
+            getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+
     }
 
     /*
@@ -437,12 +400,48 @@ public class MainActivity extends TutorialFragmentActivity implements
             super.onBackPressed();
     }
 
-    Runnable rSendLogString = new Runnable() {
+    public class PagerAdapter extends FixedFragmentStatePagerAdapter {
+        SparseArray<Fragment> fragmentArray = new SparseArray<Fragment>();
 
-        @Override
-        public void run() {
-            sendLogString();
+        public PagerAdapter(FragmentManager fm) {
+            super(fm);
         }
 
-    };
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            fragmentArray.remove(position);
+            super.destroyItem(container, position, object);
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Fragment f = (Fragment) super.instantiateItem(container, position);
+            fragmentArray.put(position, f);
+            return f;
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    if (mLogString != null)
+                        handler.postDelayed(rSendLogString, 500);
+                    return FirstPageFragment.newInstance(position);
+                case 1:
+                    return KnownNetworksFragment.newInstance(position);
+                case 2:
+                    return LocalNetworksFragment.newInstance(position);
+            }
+            return null;
+        }
+
+        public Fragment getPagerFragment(int position) {
+            return fragmentArray.get(position);
+        }
+    }
 }

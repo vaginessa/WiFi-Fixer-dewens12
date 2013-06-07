@@ -27,13 +27,14 @@ import java.lang.ref.WeakReference;
 public class TabListener implements ActionBar.TabListener {
     private final WeakReference<SherlockFragmentActivity> mActivity;
     private final WeakReference<BaseViewPager> mPager;
+    private ActionBar.Tab mLastSelectedTab;
 
     public TabListener(SherlockFragmentActivity activity) {
         mActivity = new WeakReference<SherlockFragmentActivity>(activity);
         mPager = new WeakReference<BaseViewPager>((BaseViewPager) mActivity
                 .get().findViewById(R.id.pager));
         /*
-		 * Throwing in a page change listener so the viewpager can keep the
+         * Throwing in a page change listener so the viewpager can keep the
 		 * currently selected tab synched with its current page
 		 */
         if (mPager.get() != null) {
@@ -50,8 +51,9 @@ public class TabListener implements ActionBar.TabListener {
 
                         @Override
                         public void onPageSelected(int arg0) {
-                            mActivity.get().getSupportActionBar()
-                                    .setSelectedNavigationItem(arg0);
+                            ActionBar ab = mActivity.get().getSupportActionBar();
+                            if (ab.getNavigationMode() == ActionBar.NAVIGATION_MODE_TABS)
+                                ab.setSelectedNavigationItem(arg0);
                         }
                     });
         }
@@ -60,7 +62,7 @@ public class TabListener implements ActionBar.TabListener {
     @Override
     public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
         /*
-		 * Only change viewpager page if enabled
+         * Only change viewpager page if enabled
 		 */
         if (mPager.get().isEnabled())
             mPager.get().setCurrentItem(tab.getPosition());
