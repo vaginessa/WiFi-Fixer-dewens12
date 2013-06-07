@@ -17,7 +17,6 @@ dependencies {
 }
 
 android {
-
     signingConfigs {
         release
     }
@@ -29,7 +28,6 @@ android {
             compileSdkVersion 17
             buildToolsVersion "17.0.0"
             signingConfig signingConfigs.release
-            def proc = "./copyapk.sh".execute()
         }
 
         debug {
