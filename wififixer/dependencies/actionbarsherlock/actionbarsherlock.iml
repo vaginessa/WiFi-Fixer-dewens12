@@ -7,11 +7,12 @@
         <option name="ASSEMBLE_TASK_NAME" value="bundleDebug" />
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
+        <option name="LIBRARY_PROJECT" value="true" />
       </configuration>
     </facet>
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
-        <option name="GRADLE_PROJECT_PATH" />
+        <option name="GRADLE_PROJECT_PATH" value=":dependencies:actionbarsherlock" />
         <option name="PROJECT_ABSOLUTE_PATH" value="$MODULE_DIR$/../.." />
         <option name="GRADLE_HOME_DIR_PATH" />
       </configuration>
