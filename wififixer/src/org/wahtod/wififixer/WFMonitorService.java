@@ -77,6 +77,11 @@ public class WFMonitorService extends Service implements
     private void cleanup() {
         wifi.wifiLock(false);
         screenstateHandler.unsetOnScreenStateChangedListener(this);
+        if (PrefUtil.readBoolean(this, Pref.HASWIDGET_KEY.key()))
+            resetWidget();
+        unregisterReceivers();
+        ServiceAlarm.unsetAlarm(this);
+        wifi.setStatNotif(false);
     }
 
     private void getPackageInfo() {
@@ -165,10 +170,6 @@ public class WFMonitorService extends Service implements
 
     @Override
     public void onDestroy() {
-        if (PrefUtil.readBoolean(this, Pref.HASWIDGET_KEY.key()))
-            resetWidget();
-        unregisterReceivers();
-        wifi.setStatNotif(false);
         if (logging)
             LogService.log(this, getString(R.string.ondestroy));
         cleanup();
@@ -179,6 +180,7 @@ public class WFMonitorService extends Service implements
     public void onLowMemory() {
         if (logging)
             LogService.log(this, (getString(R.string.low_memory)));
+        stopSelf();
         super.onLowMemory();
     }
 
