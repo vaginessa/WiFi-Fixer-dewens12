@@ -298,8 +298,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
      */
     protected static Runnable rScan = new Runnable() {
         public void run() {
-			/*
-			 * Start scan
+            /*
+             * Start scan
 			 */
             if (supplicantInterruptCheck(ctxt.get())) {
                 self.get().startScan(true);
@@ -318,7 +318,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
         public void run() {
 
             self.get().clearQueue();
-			/*
+            /*
 			 * run the signal hop check
 			 */
             self.get().signalHop();
@@ -1541,7 +1541,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
         restoreNetworkPriority(ctxt.get(), n);
         icmpCache(ctxt.get());
         _connected = true;
-        StatusMessage.send(ctxt.get(), new StatusMessage().setSSID(getSSID()));
+
+        StatusMessage.send(ctxt.get(), _statusdispatcher.getStatusMessage());
         _statusdispatcher.refreshWidget(null);
 		/*
 		 * Make sure connectee is null
@@ -1619,14 +1620,13 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 * Notify current state on resume
 		 */
         if (PrefUtil.getFlag(Pref.STATENOT_KEY)) {
-            if (getIsOnWifi(ctxt.get()))
+            if (!getIsOnWifi(ctxt.get()))
                 clearConnectedStatus(getSupplicantStateString(getSupplicantState()));
             else
-                StatusMessage.send(ctxt.get(),
-                        StatusMessage.getNew().setStatus(getSupplicantStateString(getSupplicantState())).setShow(1));
+                StatusMessage.send(ctxt.get(), _statusdispatcher.getStatusMessage());
 
+            _statusdispatcher.refreshWidget(null);
         }
-        _statusdispatcher.refreshWidget(null);
     }
 
     public void onScreenStateChanged(boolean state) {
@@ -1663,17 +1663,18 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     protected void setStatNotif(final boolean state) {
-        if (!PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled())
-            clearConnectedStatus(ctxt.get().getString(R.string.wifi_is_disabled));
-        else {
-            if (state) {
-                if (!_connected)
-                    clearConnectedStatus(getSupplicantStateString(getSupplicantState()));
-            } else {
-                StatusMessage sm = StatusMessage.getNew().setShow(-1);
-                StatusMessage.send(ctxt.get(), sm);
-            }
-        }
+        if (!getisWifiEnabled(ctxt.get(), false)
+                || !getIsOnWifi(ctxt.get()))
+            clearConnectedStatus(ctxt.get().getString(R.string.not_connected));
+        StatusMessage sm = StatusMessage.getNew().setStatus(
+                getSupplicantStateString(getSupplicantState())).setSSID(getSSID());
+        if (state) {
+            sm.setShow(1);
+            onNetworkConnected(PrefUtil.getWifiManager(ctxt.get()).getConnectionInfo());
+        } else
+            sm.setShow(-1);
+
+        StatusMessage.send(ctxt.get(), sm);
         _statusdispatcher.refreshWidget(null);
     }
 

@@ -344,7 +344,7 @@ public class WFMonitorService extends Service implements
 		 * Shut down handler set widget to default make sure notification is
 		 * cancelled
 		 */
-        StatusDispatcher.statusMessage = null;
+        StatusDispatcher._statusMessage = null;
         h.post(new StatusDispatcher.Widget(StatusMessage.getNew().setSSID(
                 this.getString(R.string.service_inactive))));
         h.post(new StatusDispatcher.StatNotif(StatusMessage.getNew()

@@ -28,10 +28,10 @@ import org.wahtod.wififixer.ui.MainActivity;
 import java.lang.ref.WeakReference;
 
 public class StatusDispatcher {
-    public static StatusMessage statusMessage;
+    public static StatusMessage _statusMessage;
     public static final String STATUS_ACTION = "org.wahtod.wififixer.ACTION.STATUS_UPDATE";
     public static final String REFRESH_INTENT = "org.wahtod.wififixer.STATUS_REFRESH";
-    private static final int WIDGET_REFRESH_DELAY = 20000;
+    private static final int WIDGET_REFRESH_DELAY = 5000;
     private static final int WIDGET_REFRESH = 115;
     private static final int REFRESH = 1233;
     public static final String ACTION_WIDGET_NOTIFICATION = "org.wahtod.wififixer.WNOTIF";
@@ -40,11 +40,15 @@ public class StatusDispatcher {
     private static WeakReference<Handler> host;
 
     public StatusDispatcher(final Context context, final Handler myhost) {
-        statusMessage = new StatusMessage();
+        _statusMessage = new StatusMessage();
         c = new WeakReference<Context>(context);
         host = new WeakReference<Handler>(myhost);
         BroadcastHelper.registerReceiver(context, messagereceiver,
                 new IntentFilter(REFRESH_INTENT), true);
+    }
+
+    public StatusMessage getStatusMessage(){
+        return _statusMessage;
     }
 
     private BroadcastReceiver messagereceiver = new BroadcastReceiver() {
@@ -62,12 +66,12 @@ public class StatusDispatcher {
     private static Handler messagehandler = new Handler() {
         @Override
         public void handleMessage(Message message) {
-            if (statusMessage != null && ScreenStateDetector.getScreenState(c.get()))
+            if (_statusMessage != null && ScreenStateDetector.getScreenState(c.get()))
                 switch (message.what) {
                     case WIDGET_REFRESH:
                         if (PrefUtil.getFlag(Pref.HASWIDGET_KEY))
                             if (message.peekData() == null)
-                                host.get().post(new Widget(statusMessage));
+                                host.get().post(new Widget(_statusMessage));
                             else
                                 host.get().post(
                                         new Widget(StatusMessage
@@ -75,9 +79,9 @@ public class StatusDispatcher {
                         break;
 
                     case REFRESH:
-                        StatusMessage.updateFromMessage(statusMessage, message);
-                        host.get().post(new FastStatus(statusMessage));
-                        host.get().post(new StatNotif(statusMessage));
+                        StatusMessage.updateFromMessage(_statusMessage, message);
+                        host.get().post(new FastStatus(_statusMessage));
+                        host.get().post(new StatNotif(_statusMessage));
                         if (!this.hasMessages(WIDGET_REFRESH))
                             this.sendEmptyMessageDelayed(WIDGET_REFRESH,
                                     WIDGET_REFRESH_DELAY);
