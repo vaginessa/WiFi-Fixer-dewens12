@@ -84,10 +84,12 @@ public class StatusMessage {
         }
     }
 
-    public static void send(final Context context, final StatusMessage tosend) {
-        Intent i = new Intent(StatusDispatcher.REFRESH_INTENT);
-        i.putExtras(tosend.status);
-        BroadcastHelper.sendBroadcast(context, i, true);
+    public static void send(Context context, StatusMessage tosend) {
+        if (ScreenStateDetector.getScreenState(context)) {
+            Intent i = new Intent(StatusDispatcher.REFRESH_INTENT);
+            i.putExtras(tosend.status);
+            BroadcastHelper.sendBroadcast(context, i, true);
+        }
     }
 
     @Override

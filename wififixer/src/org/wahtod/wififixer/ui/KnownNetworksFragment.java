@@ -106,7 +106,7 @@ public class KnownNetworksFragment extends SherlockFragment {
 
             MenuInflater inflater = mode.getMenuInflater();
             mode.setTitle(mSSID);
-            int n = PrefUtil.getNIDFromSSID(getContext(), mSSID);
+            int n = PrefUtil.getNidFromSsid(getContext(), mSSID);
             if (!PrefUtil.getNetworkState(getContext(), n))
                 inflater.inflate(R.menu.enable, menu);
             else
@@ -137,7 +137,7 @@ public class KnownNetworksFragment extends SherlockFragment {
 
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        int n = PrefUtil.getNIDFromSSID(getContext(), mSSID);
+        int n = PrefUtil.getNidFromSsid(getContext(), mSSID);
         int i = item.getItemId();
         switch (i) {
             case R.id.menu_enable:
@@ -191,7 +191,7 @@ public class KnownNetworksFragment extends SherlockFragment {
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    removeNetwork(PrefUtil.getNIDFromSSID(getContext(), mSSID));
+                    removeNetwork(PrefUtil.getNidFromSsid(getContext(), mSSID));
                     break;
 
                 case DialogInterface.BUTTON_NEGATIVE:

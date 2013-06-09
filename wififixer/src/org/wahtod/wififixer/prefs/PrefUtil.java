@@ -155,7 +155,7 @@ public class PrefUtil {
         return context.getString(R.string.none);
     }
 
-    public static int getNIDFromSSID(final Context context, final String ssid) {
+    public static int getNidFromSsid(final Context context, final String ssid) {
         WifiManager wm = getWifiManager(context);
         List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
         if (wifiConfigs != null && ssid != null) {

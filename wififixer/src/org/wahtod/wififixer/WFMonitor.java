@@ -602,24 +602,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
         }
     }
 
-    private static int getNetworkfromSSID(final Context context,
-                                          final String ssid) {
-        if (ssid == null)
-            return -1;
-        final List<WifiConfiguration> wifiConfigs = PrefUtil.getWifiManager(context)
-                .getConfiguredNetworks();
-        for (WifiConfiguration w : wifiConfigs) {
-            if (w.SSID != null
-                    && StringUtil.removeQuotes(w.SSID).equals(
-                    StringUtil.removeQuotes(ssid)))
-                return w.networkId;
-        }
-		/*
-		 * Not found
-		 */
-        return -1;
-    }
-
     private static boolean getIsOnWifi(final Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -1122,7 +1104,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		/*
 		 * Back to explicit connection
 		 */
-        int n = getNetworkfromSSID(context, ssid);
+        int n = PrefUtil.getNidFromSsid(context, ssid);
 
         if (n == -1)
             return;
@@ -1541,7 +1523,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
         _connected = true;
 
         StatusMessage.send(ctxt.get(), _statusdispatcher.getStatusMessage().setSSID(getSSID())
-                .setStatus(ctxt.get(), R.string.connected_to_network));
+                .setStatus(ctxt.get(), R.string.connected_to_network).setSignal(0));
         _statusdispatcher.refreshWidget(null);
 		/*
 		 * Make sure connectee is null
