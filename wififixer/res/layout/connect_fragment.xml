@@ -18,7 +18,7 @@
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/connect_fragment_layout"
-              android:layout_width="fill_parent"
+              android:layout_width="@dimen/inserted_fragment_width"
               android:layout_height="fill_parent"
               android:minHeight="200dp"
               android:minWidth="400dp"

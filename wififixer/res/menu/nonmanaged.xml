@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/menu_nonmanaged"
-        android:showAsAction="always|withText"
+        android:showAsAction="ifRoom|withText"
         android:title="@string/nonmanaged"/>
 
 </menu>

@@ -45,5 +45,6 @@
 	<dimen name ="service_imagebutton_margin_bottom">1dp</dimen>
 	<dimen name ="service_imagebutton_margin_top">1dp</dimen>
 	<dimen name ="status_padding">5dp</dimen>
+    <dimen name = "inserted_fragment_width">250dp</dimen>
 	
 </resources>
