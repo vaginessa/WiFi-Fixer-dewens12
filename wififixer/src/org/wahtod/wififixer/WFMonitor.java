@@ -319,7 +319,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
             self.get().clearQueue();
             /*
-			 * run the signal hop check
+             * run the signal hop check
 			 */
             self.get().signalHop();
         }
@@ -365,6 +365,10 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 demoteNetwork(ctxt.get(), n);
         }
     };
+    /*
+     * For ongoing status notification, widget, and Status fragment
+     */
+    protected static StatusDispatcher _statusdispatcher;
     // flags
     private static boolean shouldrepair = false;
     private static boolean pendingscan = false;
@@ -388,13 +392,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static volatile Handler handler = new Handler();
     private static volatile ThreadHandler _nethandler;
     private static volatile boolean isUp;
-    /*
-     * For ongoing status notification, widget, and Status fragment
-     */
-    protected StatusDispatcher _statusdispatcher;
-    ;
     boolean screenstate;
-    ;
     private String accesspointIP;
     private WakeLock wakelock;
     private WifiLock wifilock;
@@ -1523,7 +1521,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
         fixDisabledNetworks(ctxt.get(), PrefUtil.getWifiManager(ctxt.get())
                 .getConfiguredNetworks());
         handlerWrapper(rDemoter, CWDOG_DELAY);
-        StatusMessage message = new StatusMessage().setSSID(getSSID()).setStatus(ctxt.get().getString(R.string.connecting));
+        StatusMessage message = _statusdispatcher.getStatusMessage()
+                .setSSID(getSSID()).setStatus(ctxt.get(), R.string.connecting);
         StatusMessage.send(ctxt.get(), message);
         _statusdispatcher.refreshWidget(null);
     }
@@ -1542,7 +1541,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
         icmpCache(ctxt.get());
         _connected = true;
 
-        StatusMessage.send(ctxt.get(), _statusdispatcher.getStatusMessage());
+        StatusMessage.send(ctxt.get(), _statusdispatcher.getStatusMessage().setSSID(getSSID())
+                .setStatus(ctxt.get(), R.string.connected_to_network));
         _statusdispatcher.refreshWidget(null);
 		/*
 		 * Make sure connectee is null
@@ -1623,7 +1623,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
             if (!getIsOnWifi(ctxt.get()))
                 clearConnectedStatus(getSupplicantStateString(getSupplicantState()));
             else
-                StatusMessage.send(ctxt.get(), _statusdispatcher.getStatusMessage());
+                StatusMessage.send(ctxt.get(), _statusdispatcher.getStatusMessage().setShow(1));
 
             _statusdispatcher.refreshWidget(null);
         }
