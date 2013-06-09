@@ -40,9 +40,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PrefUtil {
-    private static WeakReference<PrefUtil> self;
+    public static final String VALUE_KEY = "VALUE_KEY";
+    /*
+     * Actions for handler message bundles
+     */
+    public static final String INTENT_ACTION = "INTENT_ACTION";
     private static final String COLON = ":";
-    private static SharedPreferences _prefs;
     /*
      * Intent Constants
      */
@@ -50,15 +53,10 @@ public class PrefUtil {
     private static final String NETVALUE_CHANGED_ACTION = "ACTION.NETPREFS.VALUECHANGED";
     private static final String NET_KEY = "NETKEY";
     private static final String DATA_KEY = "DATA_KEY";
-    public static final String VALUE_KEY = "VALUE_KEY";
     private static final String INT_KEY = "INTKEY";
     private static final String NETPREFIX = "n_";
-
-    /*
-     * Actions for handler message bundles
-     */
-    public static final String INTENT_ACTION = "INTENT_ACTION";
-
+    private static WeakReference<PrefUtil> self;
+    private static SharedPreferences _prefs;
     /*
      * D:
      */
@@ -66,7 +64,22 @@ public class PrefUtil {
     private static WeakReference<Context> context;
     private static volatile WifiManager wm_;
     private static HashMap<String, int[]> netprefs;
-
+    private static Handler receiverExecutor = new Handler() {
+        @Override
+        public void handleMessage(Message message) {
+            Bundle data = message.getData();
+            String action = data.getString(INTENT_ACTION);
+            if (action.equals(VALUE_CHANGED_ACTION))
+                self.get().handlePrefChange(
+                        Pref.get(data.getString(VALUE_KEY)),
+                        data.getBoolean(DATA_KEY));
+            else if (action.equals(NETVALUE_CHANGED_ACTION)) {
+                self.get().handleNetPrefChange(
+                        NetPref.get(data.getString(VALUE_KEY)),
+                        data.getString(NET_KEY), data.getInt(INT_KEY));
+            }
+        }
+    };
     private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
         public void onReceive(final Context context, final Intent intent) {
             String valuekey = intent.getStringExtra(VALUE_KEY);
@@ -86,30 +99,6 @@ public class PrefUtil {
         }
     };
 
-    private static Handler receiverExecutor = new Handler() {
-        @Override
-        public void handleMessage(Message message) {
-            Bundle data = message.getData();
-            String action = data.getString(INTENT_ACTION);
-            if (action.equals(VALUE_CHANGED_ACTION))
-                self.get().handlePrefChange(
-                        Pref.get(data.getString(VALUE_KEY)),
-                        data.getBoolean(DATA_KEY));
-            else if (action.equals(NETVALUE_CHANGED_ACTION)) {
-                self.get().handleNetPrefChange(
-                        NetPref.get(data.getString(VALUE_KEY)),
-                        data.getString(NET_KEY), data.getInt(INT_KEY));
-            }
-        }
-    };
-
-    public static SharedPreferences getSharedPreferences(final Context c) {
-        if (_prefs == null)
-            _prefs = PreferenceManager.getDefaultSharedPreferences(c
-                    .getApplicationContext());
-        return _prefs;
-    }
-
     public PrefUtil(final Context c) {
         self = new WeakReference<PrefUtil>(this);
         context = new WeakReference<Context>(c);
@@ -121,76 +110,11 @@ public class PrefUtil {
         netprefs = new HashMap<String, int[]>();
     }
 
-    public void putnetPref(final NetPref pref, final String network,
-                           final int value) {
-        int[] intTemp = netprefs.get(network);
-        if (intTemp == null) {
-            intTemp = new int[PrefConstants.NUMNETPREFS];
-        }
-        intTemp[pref.ordinal()] = value;
-
-        if (getFlag(Pref.LOG_KEY)) {
-            StringBuilder logstring = new StringBuilder(pref.key());
-            logstring.append(COLON);
-            logstring.append(network);
-            logstring.append(COLON);
-            logstring.append(String.valueOf(intTemp[pref.ordinal()]));
-            LogService.log(context.get(),
-                    logstring.toString());
-        }
-
-        netprefs.put(network, intTemp);
-    }
-
-    public int getnetPref(final Context context, final NetPref pref,
-                          final String network) {
-        int ordinal = pref.ordinal();
-        if (!netprefs.containsKey(network)) {
-            int[] intarray = new int[PrefConstants.NUMNETPREFS];
-            intarray[ordinal] = readNetworkPref(context, network, pref);
-            netprefs.put(network.toString(), intarray);
-            return intarray[ordinal];
-        } else
-            return netprefs.get(network)[ordinal];
-    }
-
-    public void loadPrefs() {
-
-		/*
-         * Pre-prefs load
-		 */
-        preLoad();
-        /*
-		 * Load
-		 */
-        for (Pref prefkey : Pref.values()) {
-            handleLoadPref(prefkey);
-        }
-        specialCase();
-    }
-
-    void handleLoadPref(final Pref p) {
-        setFlag(p, readBoolean(context.get(), p.key()));
-    }
-
-    void handlePrefChange(final Pref p, final boolean flagval) {
-		/*
-		 * Before value changes from loading
-		 */
-        preValChanged(p);
-		/*
-		 * Setting the value from prefs
-		 */
-        setFlag(p, flagval);
-		/*
-		 * After value changes from loading
-		 */
-        postValChanged(p);
-    }
-
-    void handleNetPrefChange(final NetPref np, final String network,
-                             final int newvalue) {
-        putnetPref(np, network, newvalue);
+    public static SharedPreferences getSharedPreferences(final Context c) {
+        if (_prefs == null)
+            _prefs = PreferenceManager.getDefaultSharedPreferences(c
+                    .getApplicationContext());
+        return _prefs;
     }
 
     public static void notifyPrefChange(final Context c, final String pref,
@@ -210,26 +134,6 @@ public class PrefUtil {
         BroadcastHelper.sendBroadcast(c, intent, true);
     }
 
-    public void preLoad() {
-
-		/*
-		 * Pre-Pref load
-		 */
-
-    }
-
-    public void preValChanged(final Pref p) {
-        switch (p) {
-		/*
-		 * Pre Value Changed here
-		 */
-        }
-
-    }
-
-    public void postValChanged(final Pref p) {
-    }
-
     public static String getnetworkSSID(final Context context, final int network) {
         WifiManager wm = getWifiManager(context);
         if (!wm.isWifiEnabled())
@@ -242,9 +146,11 @@ public class PrefUtil {
     public static String getSSIDfromNetwork(final Context context,
                                             final int network) {
         final List<WifiConfiguration> wifiConfigs = getWifiManager(context).getConfiguredNetworks();
-        for (WifiConfiguration w : wifiConfigs) {
-            if (w != null && w.networkId == network)
-                return w.SSID;
+        if (wifiConfigs != null) {
+            for (WifiConfiguration w : wifiConfigs) {
+                if (w != null && w.networkId == network)
+                    return w.SSID;
+            }
         }
         return context.getString(R.string.none);
     }
@@ -252,9 +158,11 @@ public class PrefUtil {
     public static int getNIDFromSSID(final Context context, final String ssid) {
         WifiManager wm = getWifiManager(context);
         List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
-        for (WifiConfiguration network : wifiConfigs) {
-            if (StringUtil.removeQuotes(network.SSID).equals(ssid))
-                return network.networkId;
+        if (wifiConfigs != null && ssid != null) {
+            for (WifiConfiguration network : wifiConfigs) {
+                if (StringUtil.removeQuotes(network.SSID).equals(ssid))
+                    return network.networkId;
+            }
         }
         return -1;
     }
@@ -289,7 +197,7 @@ public class PrefUtil {
 
     public static void writeNetworkPref(final Context ctxt,
                                         final String netstring, final NetPref pref, final int value) {
-		/*
+        /*
 		 * Check for actual changed value if changed, notify
 		 */
         if (value != readNetworkPref(ctxt, netstring, pref)) {
@@ -345,27 +253,12 @@ public class PrefUtil {
         EditorDetector.commit(editor);
     }
 
-    public void specialCase() {
-		/*
-		 * Any special case code here
-		 */
-
-    }
-
-    public void log() {
-
-    }
-
     public static boolean getFlag(final Pref pref) {
         return keyVals[pref.ordinal()];
     }
 
     public static void setFlag(final Pref pref, final boolean flag) {
         keyVals[pref.ordinal()] = flag;
-    }
-
-    public void unRegisterReciever() {
-        BroadcastHelper.unregisterReceiver(context.get(), changeReceiver);
     }
 
     public static void setPolicyfromSystem(final Context context) {
@@ -461,6 +354,113 @@ public class PrefUtil {
         else
             w.disableNetwork(network);
         return w.saveConfiguration();
+    }
+
+    public void putnetPref(final NetPref pref, final String network,
+                           final int value) {
+        int[] intTemp = netprefs.get(network);
+        if (intTemp == null) {
+            intTemp = new int[PrefConstants.NUMNETPREFS];
+        }
+        intTemp[pref.ordinal()] = value;
+
+        if (getFlag(Pref.LOG_KEY)) {
+            StringBuilder logstring = new StringBuilder(pref.key());
+            logstring.append(COLON);
+            logstring.append(network);
+            logstring.append(COLON);
+            logstring.append(String.valueOf(intTemp[pref.ordinal()]));
+            LogService.log(context.get(),
+                    logstring.toString());
+        }
+
+        netprefs.put(network, intTemp);
+    }
+
+    public int getnetPref(final Context context, final NetPref pref,
+                          final String network) {
+        int ordinal = pref.ordinal();
+        if (!netprefs.containsKey(network)) {
+            int[] intarray = new int[PrefConstants.NUMNETPREFS];
+            intarray[ordinal] = readNetworkPref(context, network, pref);
+            netprefs.put(network.toString(), intarray);
+            return intarray[ordinal];
+        } else
+            return netprefs.get(network)[ordinal];
+    }
+
+    public void loadPrefs() {
+
+		/*
+         * Pre-prefs load
+		 */
+        preLoad();
+        /*
+		 * Load
+		 */
+        for (Pref prefkey : Pref.values()) {
+            handleLoadPref(prefkey);
+        }
+        specialCase();
+    }
+
+    void handleLoadPref(final Pref p) {
+        setFlag(p, readBoolean(context.get(), p.key()));
+    }
+
+    void handlePrefChange(final Pref p, final boolean flagval) {
+		/*
+		 * Before value changes from loading
+		 */
+        preValChanged(p);
+		/*
+		 * Setting the value from prefs
+		 */
+        setFlag(p, flagval);
+		/*
+		 * After value changes from loading
+		 */
+        postValChanged(p);
+    }
+
+    void handleNetPrefChange(final NetPref np, final String network,
+                             final int newvalue) {
+        putnetPref(np, network, newvalue);
+    }
+
+    public void preLoad() {
+
+		/*
+		 * Pre-Pref load
+		 */
+
+    }
+
+    public void preValChanged(final Pref p) {
+        switch (p) {
+		/*
+		 * Pre Value Changed here
+		 */
+        }
+
+    }
+
+    public void postValChanged(final Pref p) {
+    }
+
+    public void specialCase() {
+		/*
+		 * Any special case code here
+		 */
+
+    }
+
+    public void log() {
+
+    }
+
+    public void unRegisterReciever() {
+        BroadcastHelper.unregisterReceiver(context.get(), changeReceiver);
     }
 
 }
