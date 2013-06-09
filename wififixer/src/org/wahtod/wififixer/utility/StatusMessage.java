@@ -42,16 +42,6 @@ public class StatusMessage {
         this.setShow(sh);
     }
 
-    @Override
-    public String toString() {
-        StringBuilder out = new StringBuilder(getSSID());
-        out.append(getStatus());
-        out.append(getSignal());
-        out.append(getShow());
-        out.append(getLinkSpeed());
-        return out.toString();
-    }
-
     public StatusMessage() {
         status = new Bundle();
     }
@@ -89,7 +79,7 @@ public class StatusMessage {
                 s.setShow(b.getInt(SHOW_KEY));
         if (b.containsKey(LINK_KEY)) {
             String ls = b.getString(LINK_KEY);
-            if (ls != null)
+            if (ls != null && !ls.contains(MB))
                 s.setLinkSpeed(ls.concat(MB));
         }
     }
@@ -100,11 +90,38 @@ public class StatusMessage {
         BroadcastHelper.sendBroadcast(context, i, true);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder out = new StringBuilder(getSSID());
+        out.append(getStatus());
+        out.append(getSignal());
+        out.append(getShow());
+        out.append(getLinkSpeed());
+        return out.toString();
+    }
+
+    public String getLinkSpeed() {
+        return status.getString(LINK_KEY);
+    }
+
+    public StatusMessage setLinkSpeed(String s) {
+        status.putString(LINK_KEY, s);
+        return this;
+    }
+
+    public String getSSID() {
+        return status.getString(SSID_KEY);
+    }
+
     public StatusMessage setSSID(String s) {
         if (s == null)
             s = EMPTY;
         status.putString(SSID_KEY, StringUtil.removeQuotes(s));
         return this;
+    }
+
+    public String getStatus() {
+        return status.getString(STATUS_KEY);
     }
 
     public StatusMessage setStatus(String s) {
@@ -114,38 +131,26 @@ public class StatusMessage {
         return this;
     }
 
-    public StatusMessage setSignal(final int i) {
-        status.putInt(SIGNAL_KEY, i);
+    public StatusMessage setStatus(Context c, int s) {
+        status.putString(STATUS_KEY, c.getString(s));
         return this;
-    }
-
-    public StatusMessage setLinkSpeed(String s) {
-        status.putString(LINK_KEY, s);
-        return this;
-    }
-
-    public StatusMessage setShow(final int sh) {
-        status.putInt(SHOW_KEY, sh);
-        return this;
-    }
-
-    public String getLinkSpeed() {
-        return status.getString(LINK_KEY);
-    }
-
-    public String getSSID() {
-        return status.getString(SSID_KEY);
-    }
-
-    public String getStatus() {
-        return status.getString(STATUS_KEY);
     }
 
     public int getSignal() {
         return status.getInt(SIGNAL_KEY);
     }
 
+    public StatusMessage setSignal(final int i) {
+        status.putInt(SIGNAL_KEY, i);
+        return this;
+    }
+
     public int getShow() {
         return status.getInt(SHOW_KEY);
+    }
+
+    public StatusMessage setShow(final int sh) {
+        status.putInt(SHOW_KEY, sh);
+        return this;
     }
 }
