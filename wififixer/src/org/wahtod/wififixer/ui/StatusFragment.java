@@ -64,9 +64,9 @@ public class StatusFragment extends Fragment {
                 /*
                  * Change status text
 				 */
-                    if(message == null)
+                    if (message == null)
                         return;
-                    if (!message.getData().isEmpty() && self.get() != null)
+                    if (!message.getData().isEmpty() && self.get()._views != null)
                         self.get()._views.setStatus(StatusMessage
                                 .fromMessage(message).getStatus());
                     break;
