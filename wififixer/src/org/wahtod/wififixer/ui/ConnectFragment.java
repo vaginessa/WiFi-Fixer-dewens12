@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +34,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.actionbarsherlock.app.SherlockFragment;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitor;
 import org.wahtod.wififixer.prefs.PrefUtil;
@@ -46,7 +46,7 @@ import org.wahtod.wififixer.utility.WFScanResult;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class ConnectFragment extends Fragment implements OnClickListener {
+public class ConnectFragment extends SherlockFragment implements OnClickListener {
     public static final String TAG = "SFFJSHFTWFW";
     protected static final int CANCEL = 1;
     private static final String PROXY_CLASS = "android.net.wifi.WifiConfiguration$ProxySettings";
@@ -60,6 +60,7 @@ public class ConnectFragment extends Fragment implements OnClickListener {
     private static final String WEP = "WEP";
     private static final String NETWORK_KEY = "WFSCANRESULT";
     private WFScanResult mNetwork;
+    private PasswordHolder mPasswordHolder;
 
     /*
      * Reflection magic ahead
@@ -147,10 +148,14 @@ public class ConnectFragment extends Fragment implements OnClickListener {
     }
 
     @Override
-    public void onPause() {
+    public void onDestroyView() {
         View e = ((View) getView().findViewById(R.id.password));
         closeInputMethod(e);
-        super.onPause();
+        super.onDestroyView();
+    }
+
+    private static class PasswordHolder{
+        View password;
     }
 
     private void connectNetwork() {
@@ -166,10 +171,9 @@ public class ConnectFragment extends Fragment implements OnClickListener {
     }
 
     public void onClick(View v) {
-        View e = ((View) v.getParent()).findViewById(R.id.password);
         String password = null;
         try {
-            password = String.valueOf(((EditText) e).getText());
+            password = String.valueOf(((EditText) mPasswordHolder.password).getText());
         } catch (NullPointerException e1) {
         }
         if (password == null || password.length() == 0) {
@@ -184,7 +188,7 @@ public class ConnectFragment extends Fragment implements OnClickListener {
         } else
             addNetwork(password);
 
-        closeInputMethod(e);
+        closeInputMethod(mPasswordHolder.password);
         FragmentTransaction f = this.getParentFragment()
                 .getChildFragmentManager().beginTransaction();
         f.remove(this);
@@ -211,13 +215,15 @@ public class ConnectFragment extends Fragment implements OnClickListener {
             mNetwork = WFScanResult.fromBundle(savedInstanceState.getBundle(NETWORK_KEY));
         }
         Button b = (Button) getActivity().findViewById(R.id.connect);
-        View e = getActivity().findViewById(R.id.password);
+        mPasswordHolder = new PasswordHolder();
+
+        mPasswordHolder.password = getActivity().findViewById(R.id.password);
         TextView summary = (TextView) getActivity().findViewById(R.id.password_summary);
         if (StringUtil.getCapabilitiesString(mNetwork.capabilities).equals(
                 StringUtil.OPEN)
                 || KnownNetworksFragment.getNetworks(getActivity()).contains(
                 mNetwork.SSID)) {
-            e.setVisibility(View.INVISIBLE);
+            mPasswordHolder.password.setVisibility(View.INVISIBLE);
             b.setText(getString(R.string.connect));
             summary.setText(R.string.button_connect);
         }
