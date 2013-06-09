@@ -113,6 +113,7 @@
   public static final android.os.Parcelable$Creator *;
 }
 
+-keep public class * extends android.app.backup.BackupAgent
 -keep public class org.wahtod.wififixer.ui.GenericPreferenceFragment
 
 -keepnames class org.wahtod.wififixer.utility.BroadcastHelper
