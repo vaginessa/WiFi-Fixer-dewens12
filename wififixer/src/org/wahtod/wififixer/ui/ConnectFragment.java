@@ -113,7 +113,7 @@ public class ConnectFragment extends Fragment implements OnClickListener {
         WifiConfiguration wf = new WifiConfiguration();
         if (wf.toString().contains(BUGGED)) {
             /*
-			 * Add hidden fields on bugged Android 3.1+ configs
+             * Add hidden fields on bugged Android 3.1+ configs
 			 */
             wf = addHiddenFields(wf);
         }
@@ -144,6 +144,13 @@ public class ConnectFragment extends Fragment implements OnClickListener {
         }
         Log.i(wf.SSID, wf.toString());
         return wf;
+    }
+
+    @Override
+    public void onPause() {
+        View e = ((View) getView().findViewById(R.id.password));
+        closeInputMethod(e);
+        super.onPause();
     }
 
     private void connectNetwork() {
@@ -177,13 +184,17 @@ public class ConnectFragment extends Fragment implements OnClickListener {
         } else
             addNetwork(password);
 
-        InputMethodManager imm = (InputMethodManager) getActivity()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(e.getWindowToken(), 0);
+        closeInputMethod(e);
         FragmentTransaction f = this.getParentFragment()
                 .getChildFragmentManager().beginTransaction();
         f.remove(this);
         f.commit();
+    }
+
+    private void closeInputMethod(View e) {
+        InputMethodManager imm = (InputMethodManager) getActivity()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(e.getWindowToken(), 0);
     }
 
     @Override
