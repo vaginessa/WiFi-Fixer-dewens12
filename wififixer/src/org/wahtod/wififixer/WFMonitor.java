@@ -368,7 +368,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     /*
      * For ongoing status notification, widget, and Status fragment
      */
-    protected static StatusDispatcher _statusdispatcher;
+    protected StatusDispatcher _statusdispatcher;
     // flags
     private static boolean shouldrepair = false;
     private static boolean pendingscan = false;
@@ -1258,8 +1258,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
             if (info.getState().equals(NetworkInfo.State.CONNECTED))
                 onNetworkConnected(PrefUtil.getWifiManager(ctxt.get())
                         .getConnectionInfo());
-            else if (info.getState().equals(NetworkInfo.State.DISCONNECTED)
-                    && !info.isAvailable())
+            else if (info.getState().equals(NetworkInfo.State.DISCONNECTED))
                 onNetworkDisconnected();
         }
     }
