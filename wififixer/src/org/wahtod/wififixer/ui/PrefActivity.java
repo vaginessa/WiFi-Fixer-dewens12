@@ -41,7 +41,11 @@ public class PrefActivity extends PreferenceActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		setTheme(android.R.style.Theme_Black);
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.preferences);
+		addPreferencesFromResource(R.xml.general);
+        addPreferencesFromResource(R.xml.notification);
+        addPreferencesFromResource(R.xml.widget);
+        addPreferencesFromResource(R.xml.logging);
+        addPreferencesFromResource(R.xml.advanced);
 	}
 
 	@Override

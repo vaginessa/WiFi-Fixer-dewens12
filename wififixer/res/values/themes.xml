@@ -25,6 +25,9 @@
         <item name="android:windowAnimationStyle">@style/WifiFixerAnimation</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/bg</item>
-        <item name="actionBarStyle">@style/Widget.Sherlock.ActionBar</item>
+        <item name="actionBarStyle">@style/ActionBar</item>
+    </style>
+    <style name="ActionBar" parent="Widget.Sherlock.Light.ActionBar">
+        <item name="android:background">@color/titlebg</item>
     </style>
 </resources>

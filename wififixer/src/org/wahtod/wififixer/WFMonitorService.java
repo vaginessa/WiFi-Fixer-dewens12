@@ -308,8 +308,7 @@ public class WFMonitorService extends Service implements
 				 * Set defaults. Doing here instead of activity because service
 				 * may be started first due to boot intent.
 				 */
-                PreferenceManager.setDefaultValues(context, R.xml.preferences,
-                        false);
+                setDefaultPreferences(context);
 				/*
 				 * Set default: Status Notification on
 				 */
@@ -336,6 +335,19 @@ public class WFMonitorService extends Service implements
         prefs.loadPrefs();
         logging = PrefUtil.getFlag(Pref.LOG_KEY);
         NotifUtil.cancel(this, NOTIFID);
+    }
+
+    private void setDefaultPreferences(Context context) {
+        PreferenceManager.setDefaultValues(context, R.xml.general,
+                false);
+        PreferenceManager.setDefaultValues(context, R.xml.logging,
+                false);
+        PreferenceManager.setDefaultValues(context, R.xml.notification,
+                false);
+        PreferenceManager.setDefaultValues(context, R.xml.advanced,
+                false);
+        PreferenceManager.setDefaultValues(context, R.xml.widget,
+                false);
     }
 
     private void resetWidget() {
