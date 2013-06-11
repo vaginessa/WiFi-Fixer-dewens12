@@ -61,11 +61,11 @@ public class ScreenStateDetector {
 	private static ArrayList<WeakReference<OnScreenStateChangedListener>> _clients = new ArrayList<WeakReference<OnScreenStateChangedListener>>();
 	private static boolean registered;
 
-	public static boolean getScreenState(final Context context) {
+	public static boolean getScreenState(Context context) {
 		return VersionedScreenState.getScreenState(context);
 	}
 
-	private static void onScreenEvent(final boolean state) {
+	private static void onScreenEvent(boolean state) {
 		for (WeakReference<OnScreenStateChangedListener> listener : _clients) {
 			if (listener.get() != null)
 				listener.get().onScreenStateChanged(state);
@@ -91,7 +91,7 @@ public class ScreenStateDetector {
 		}
 	};
 
-	public ScreenStateDetector(final Context context) {
+	public ScreenStateDetector(Context context) {
 		if (!registered) {
 			/*
 			 * Register for screen state events
@@ -107,7 +107,7 @@ public class ScreenStateDetector {
 		}
 	}
 
-	public void unregister(final Context context) {
+	public void unregister(Context context) {
 		if (registered)
 			context.unregisterReceiver(receiver);
 		registered = false;

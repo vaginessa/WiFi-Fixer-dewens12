@@ -44,7 +44,7 @@ public class FifoList extends ArrayList<Object> {
 		return true;
 	}
 
-	public boolean containsPattern(final List<SupplicantState> collection) {
+	public boolean containsPattern(List<SupplicantState> collection) {
 		if (this.size() < collection.size())
 			return false;
 		int chash = hashSum(collection);
@@ -60,7 +60,7 @@ public class FifoList extends ArrayList<Object> {
 		return false;
 	}
 
-	private static int hashSum(final List<SupplicantState> collection) {
+	private static int hashSum(List<SupplicantState> collection) {
 		int sum = 0;
 		for (int n = 0; n < collection.size(); n++) {
 			sum += collection.get(n).hashCode();
@@ -69,7 +69,7 @@ public class FifoList extends ArrayList<Object> {
 	}
 
 	public List<SupplicantState> containsPatterns(
-			final List<List<SupplicantState>> patterns) {
+			List<List<SupplicantState>> patterns) {
 		for (List<SupplicantState> n : patterns) {
 			if (this.containsPattern(n))
 				return n;

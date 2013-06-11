@@ -42,12 +42,12 @@ public final class ServiceAlarm extends Object {
     public static final long STARTDELAY = 30000;
     private static final long NODELAY = 0;
 
-    public static boolean alarmExists(final Context c) {
+    public static boolean alarmExists(Context c) {
         return (createPendingIntent(c, 0) != null);
     }
 
-    private static PendingIntent createPendingIntent(final Context context,
-                                                     final int flag) {
+    private static PendingIntent createPendingIntent(Context context,
+                                                     int flag) {
         Intent intent = new Intent(context, WFMonitorService.class);
         intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
         intent.putExtra(ALARM_START, ALARM_START);
@@ -60,7 +60,7 @@ public final class ServiceAlarm extends Object {
      * Makes sure that if package is updated LogService and WFMonitorService
      * respect disabled state
      */
-    public static void enforceServicePrefs(final Context context) {
+    public static void enforceServicePrefs(Context context) {
         if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
             setComponentEnabled(context, WFMonitorService.class, false);
         else
@@ -73,8 +73,8 @@ public final class ServiceAlarm extends Object {
 
     }
 
-    public static void setComponentEnabled(final Context context,
-                                           final Class<?> cls, final Boolean state) {
+    public static void setComponentEnabled(Context context,
+                                           Class<?> cls, Boolean state) {
         PackageManager pm = context.getPackageManager();
         ComponentName service = new ComponentName(context, cls);
         if (state)
@@ -89,27 +89,27 @@ public final class ServiceAlarm extends Object {
         }
     }
 
-    public static void setServiceAlarm(final Context c,
-                                       final boolean initialdelay) {
+    public static void setServiceAlarm(Context c,
+                                       boolean initialdelay) {
         addAlarm(c, initialdelay, true, PERIOD,
                 createPendingIntent(c, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
-    public static void addAlarm(final Context c, final long delay,
-                                final boolean repeating, final long period, PendingIntent p) {
+    public static void addAlarm(Context c, long delay,
+                                boolean repeating, long period, PendingIntent p) {
         registerAlarm(c, delay, repeating, period, p);
     }
 
-    public static void addAlarm(final Context c, final boolean initialdelay,
-                                final boolean repeating, final long period, PendingIntent p) {
+    public static void addAlarm(Context c, boolean initialdelay,
+                                boolean repeating, long period, PendingIntent p) {
         if (initialdelay)
             registerAlarm(c, PERIOD, repeating, period, p);
         else
             registerAlarm(c, NODELAY, repeating, period, p);
     }
 
-    private static void registerAlarm(final Context c, final long delay,
-                                      final boolean repeating, final long period, PendingIntent p) {
+    private static void registerAlarm(Context c, long delay,
+                                      boolean repeating, long period, PendingIntent p) {
         AlarmManager mgr = (AlarmManager) c
                 .getSystemService(Context.ALARM_SERVICE);
         if (repeating)
@@ -120,13 +120,13 @@ public final class ServiceAlarm extends Object {
                     SystemClock.elapsedRealtime() + delay, p);
     }
 
-    public static void unsetAlarm(final Context c) {
+    public static void unsetAlarm(Context c) {
         AlarmManager mgr = (AlarmManager) c
                 .getSystemService(Context.ALARM_SERVICE);
         mgr.cancel(createPendingIntent(c, 0));
     }
 
-    public static void unsetAlarm(final Context c, PendingIntent p) {
+    public static void unsetAlarm(Context c, PendingIntent p) {
         AlarmManager mgr = (AlarmManager) c
                 .getSystemService(Context.ALARM_SERVICE);
         mgr.cancel(p);

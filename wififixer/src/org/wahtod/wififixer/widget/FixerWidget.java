@@ -51,7 +51,7 @@ public class FixerWidget extends AppWidgetProvider {
 		super.onReceive(context, intent);
 	}
 
-	private void doStatusUpdate(final Context context, Intent intent) {
+	private void doStatusUpdate(Context context, Intent intent) {
 		Intent start = UpdateService.updateIntent(context,
 				StatusUpdateService.class, FixerWidget.class.getName());
 		start.fillIn(intent, Intent.FILL_IN_DATA);

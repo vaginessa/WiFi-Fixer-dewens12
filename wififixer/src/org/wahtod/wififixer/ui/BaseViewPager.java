@@ -56,7 +56,7 @@ public class BaseViewPager extends ViewPager {
 		return enabled;
 	}
 
-	public void setPagingEnabled(final boolean state) {
+	public void setPagingEnabled(boolean state) {
 		this.enabled = state;
 	}
 }

@@ -23,7 +23,7 @@ import android.os.PowerManager;
 public class WakeLock {
 	private PowerManager.WakeLock wakelock;
 
-	public WakeLock(final Context context) {
+	public WakeLock(Context context) {
 		PowerManager pm = (PowerManager) context
 				.getSystemService(Context.POWER_SERVICE);
 		/*
@@ -36,7 +36,7 @@ public class WakeLock {
 		wakelock.setReferenceCounted(false);
 	}
 
-	public void lock(final boolean state) {
+	public void lock(boolean state) {
 		if (state) {
 			if (!wakelock.isHeld()) {
 				wakelock.acquire();

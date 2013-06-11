@@ -93,7 +93,7 @@ public class ToggleService extends Service {
     private static WeakReference<ToggleService> self;
     private static WakeLock _wakelock;
     private static BroadcastReceiver wifiStateReceiver = new BroadcastReceiver() {
-        public void onReceive(final Context context, final Intent intent) {
+        public void onReceive(Context context, Intent intent) {
             Bundle extras = intent.getExtras();
             if (extras != null && extras.containsKey(WifiManager.EXTRA_WIFI_STATE)) {
                 int state = extras.getInt(WifiManager.EXTRA_WIFI_STATE,

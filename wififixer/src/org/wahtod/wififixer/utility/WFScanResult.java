@@ -68,7 +68,7 @@ public class WFScanResult {
         BSSID = "";
     }
 
-    public static WFScanResult fromBundle(final Bundle bundle) {
+    public static WFScanResult fromBundle(Bundle bundle) {
         WFScanResult out = new WFScanResult();
         if (bundle != null && bundle.containsKey(BUNDLE_KEY)) {
             Bundle fields = bundle.getBundle(BUNDLE_KEY);
@@ -93,7 +93,7 @@ public class WFScanResult {
         return wrapper;
     }
 
-    public WFScanResult(final ScanResult result) {
+    public WFScanResult(ScanResult result) {
         if (result.SSID == null)
             SSID = "";
         else
@@ -113,7 +113,7 @@ public class WFScanResult {
     }
 
     public static List<WFScanResult> fromScanResultArray(
-            final List<ScanResult> results) {
+            List<ScanResult> results) {
         if (results == null)
             return null;
 

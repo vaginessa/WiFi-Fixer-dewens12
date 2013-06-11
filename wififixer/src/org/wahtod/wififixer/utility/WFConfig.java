@@ -32,7 +32,7 @@ public class WFConfig extends Object {
 	public int level;
 	public int failcount;
 
-	public WFConfig(final ScanResult sResult, final WifiConfiguration wConfig) {
+	public WFConfig(ScanResult sResult, WifiConfiguration wConfig) {
 		/*
 		 * Constructor for only use of object so far
 		 */

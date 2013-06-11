@@ -33,8 +33,8 @@ public class StatusMessage {
     public static final String MB = "mb";
     public Bundle status;
 
-    public StatusMessage(final String ssid, final String smessage,
-                         final int si, final int sh) {
+    public StatusMessage(String ssid, String smessage,
+                         int si, int sh) {
         status = new Bundle();
         this.setSSID(StringUtil.removeQuotes(ssid));
         this.setStatus(smessage);
@@ -50,19 +50,19 @@ public class StatusMessage {
         return new StatusMessage();
     }
 
-    public static StatusMessage fromMessage(final Message m) {
+    public static StatusMessage fromMessage(Message m) {
         StatusMessage s = new StatusMessage();
         s.status.putAll(m.getData());
         return s;
     }
 
-    public static StatusMessage fromIntent(final Intent i) {
+    public static StatusMessage fromIntent(Intent i) {
         StatusMessage s = new StatusMessage();
         s.status = i.getBundleExtra(StatusDispatcher.STATUS_DATA_KEY);
         return s;
     }
 
-    public static void updateFromMessage(StatusMessage s, final Message m) {
+    public static void updateFromMessage(StatusMessage s, Message m) {
         Bundle b = m.getData();
         if (b.containsKey(SSID_KEY) && b.getString(SSID_KEY) != null
                 && b.getString(SSID_KEY).length() > 1)
@@ -142,7 +142,7 @@ public class StatusMessage {
         return status.getInt(SIGNAL_KEY);
     }
 
-    public StatusMessage setSignal(final int i) {
+    public StatusMessage setSignal(int i) {
         status.putInt(SIGNAL_KEY, i);
         return this;
     }
@@ -151,7 +151,7 @@ public class StatusMessage {
         return status.getInt(SHOW_KEY);
     }
 
-    public StatusMessage setShow(final int sh) {
+    public StatusMessage setShow(int sh) {
         status.putInt(SHOW_KEY, sh);
         return this;
     }

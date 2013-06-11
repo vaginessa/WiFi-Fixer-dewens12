@@ -81,7 +81,7 @@ public class PrefUtil {
         }
     };
     private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
-        public void onReceive(final Context context, final Intent intent) {
+        public void onReceive(Context context, Intent intent) {
             String valuekey = intent.getStringExtra(VALUE_KEY);
             Message message = receiverExecutor.obtainMessage();
             Bundle data = new Bundle();
@@ -99,7 +99,7 @@ public class PrefUtil {
         }
     };
 
-    public PrefUtil(final Context c) {
+    public PrefUtil(Context c) {
         self = new WeakReference<PrefUtil>(this);
         context = new WeakReference<Context>(c);
         keyVals = new boolean[Pref.values().length];
@@ -110,14 +110,14 @@ public class PrefUtil {
         netprefs = new HashMap<String, int[]>();
     }
 
-    public static SharedPreferences getSharedPreferences(final Context c) {
+    public static SharedPreferences getSharedPreferences(Context c) {
         if (_prefs == null)
             _prefs = PreferenceManager.getDefaultSharedPreferences(c
                     .getApplicationContext());
         return _prefs;
     }
 
-    public static void notifyPrefChange(final Context c, final String pref,
+    public static void notifyPrefChange(Context c, String pref,
                                         boolean b) {
         Intent intent = new Intent(VALUE_CHANGED_ACTION);
         intent.putExtra(VALUE_KEY, pref);
@@ -125,8 +125,8 @@ public class PrefUtil {
         BroadcastHelper.sendBroadcast(c, intent, true);
     }
 
-    public static void notifyNetPrefChange(final Context c,
-                                           final NetPref netpref, final String netstring, final int value) {
+    public static void notifyNetPrefChange(Context c,
+                                           NetPref netpref, String netstring, int value) {
         Intent intent = new Intent(NETVALUE_CHANGED_ACTION);
         intent.putExtra(VALUE_KEY, netpref.key());
         intent.putExtra(NET_KEY, netstring.toString());
@@ -134,7 +134,7 @@ public class PrefUtil {
         BroadcastHelper.sendBroadcast(c, intent, true);
     }
 
-    public static String getnetworkSSID(final Context context, final int network) {
+    public static String getnetworkSSID(Context context, int network) {
         WifiManager wm = getWifiManager(context);
         if (!wm.isWifiEnabled())
             return context.getString(R.string.none);
@@ -143,9 +143,9 @@ public class PrefUtil {
                     getSSIDfromNetwork(context, network));
     }
 
-    public static String getSSIDfromNetwork(final Context context,
-                                            final int network) {
-        final List<WifiConfiguration> wifiConfigs = getWifiManager(context).getConfiguredNetworks();
+    public static String getSSIDfromNetwork(Context context,
+                                            int network) {
+        List<WifiConfiguration> wifiConfigs = getWifiManager(context).getConfiguredNetworks();
         if (wifiConfigs != null) {
             for (WifiConfiguration w : wifiConfigs) {
                 if (w != null && w.networkId == network)
@@ -155,7 +155,7 @@ public class PrefUtil {
         return context.getString(R.string.none);
     }
 
-    public static int getNidFromSsid(final Context context, final String ssid) {
+    public static int getNidFromSsid(Context context, String ssid) {
         WifiManager wm = getWifiManager(context);
         List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
         if (wifiConfigs != null && ssid != null) {
@@ -168,7 +168,7 @@ public class PrefUtil {
     }
 
     public static WifiConfiguration getNetworkByNID(Context context,
-                                                    final int network) {
+                                                    int network) {
         List<WifiConfiguration> configs = getWifiManager(context)
                 .getConfiguredNetworks();
         if (configs == null)
@@ -180,14 +180,14 @@ public class PrefUtil {
         return null;
     }
 
-    public static String getSafeFileName(final Context ctxt, String filename) {
+    public static String getSafeFileName(Context ctxt, String filename) {
         if (filename == null)
             filename = ctxt.getString(R.string.none);
         return filename.replaceAll("[^a-zA-Z0-9]", "");
     }
 
-    public static int readNetworkPref(final Context ctxt, final String network,
-                                      final NetPref pref) {
+    public static int readNetworkPref(Context ctxt, String network,
+                                      NetPref pref) {
         String key = NETPREFIX + network + pref.key();
         if (getSharedPreferences(ctxt).contains(key))
             return getSharedPreferences(ctxt).getInt(key, 0);
@@ -195,8 +195,8 @@ public class PrefUtil {
             return 0;
     }
 
-    public static void writeNetworkPref(final Context ctxt,
-                                        final String netstring, final NetPref pref, final int value) {
+    public static void writeNetworkPref(Context ctxt,
+                                        String netstring, NetPref pref, int value) {
         /*
 		 * Check for actual changed value if changed, notify
 		 */
@@ -214,54 +214,54 @@ public class PrefUtil {
         }
     }
 
-    public static boolean readBoolean(final Context ctxt, final String key) {
+    public static boolean readBoolean(Context ctxt, String key) {
         return getSharedPreferences(ctxt).getBoolean(key, false);
     }
 
-    public static void writeBoolean(final Context ctxt, final String key,
-                                    final boolean value) {
+    public static void writeBoolean(Context ctxt, String key,
+                                    boolean value) {
         SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
         editor.putBoolean(key, value);
         EditorDetector.commit(editor);
     }
 
-    public static String readString(final Context ctxt, final String key) {
+    public static String readString(Context ctxt, String key) {
         return getSharedPreferences(ctxt).getString(key, null);
     }
 
-    public static void writeString(final Context ctxt, final String key,
-                                   final String value) {
+    public static void writeString(Context ctxt, String key,
+                                   String value) {
         SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
         editor.putString(key, value);
         EditorDetector.commit(editor);
     }
 
-    public static int readInt(final Context ctxt, final String key) {
+    public static int readInt(Context ctxt, String key) {
         return getSharedPreferences(ctxt).getInt(key, -1);
     }
 
-    public static void writeInt(final Context ctxt, final String key,
-                                final int value) {
+    public static void writeInt(Context ctxt, String key,
+                                int value) {
         SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
         editor.putInt(key, value);
         EditorDetector.commit(editor);
     }
 
-    public static void removeKey(final Context ctxt, final String key) {
+    public static void removeKey(Context ctxt, String key) {
         SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
         editor.remove(key);
         EditorDetector.commit(editor);
     }
 
-    public static boolean getFlag(final Pref pref) {
+    public static boolean getFlag(Pref pref) {
         return keyVals[pref.ordinal()];
     }
 
-    public static void setFlag(final Pref pref, final boolean flag) {
+    public static void setFlag(Pref pref, boolean flag) {
         keyVals[pref.ordinal()] = flag;
     }
 
-    public static void setPolicyfromSystem(final Context context) {
+    public static void setPolicyfromSystem(Context context) {
 		/*
 		 * Handle Wifi Sleep Policy
 		 */
@@ -276,7 +276,7 @@ public class PrefUtil {
         }
     }
 
-    public static boolean getWatchdogPolicy(final Context context) {
+    public static boolean getWatchdogPolicy(Context context) {
 		/*
 		 * Check for Wifi Watchdog, AKA "Avoid poor internet connections"
 		 */
@@ -284,7 +284,7 @@ public class PrefUtil {
                 "wifi_watchdog_poor_network_test_enabled", 0) == 1);
     }
 
-    public static void setPolicy(final Context context, final int policy) {
+    public static void setPolicy(Context context, int policy) {
 		/*
 		 * Set Wifi Sleep Policy
 		 */
@@ -294,7 +294,7 @@ public class PrefUtil {
         writeString(context, PrefConstants.SLPOLICY_KEY, String.valueOf(policy));
     }
 
-    public synchronized static WifiManager getWifiManager(final Context context) {
+    public synchronized static WifiManager getWifiManager(Context context) {
 		/*
 		 * Cache WifiManager
 		 */
@@ -304,16 +304,16 @@ public class PrefUtil {
         return wm_;
     }
 
-    public static boolean getNetworkState(final Context context,
-                                          final int network) {
+    public static boolean getNetworkState(Context context,
+                                          int network) {
         WifiConfiguration w = getNetworkByNID(context, network);
         if (!getWifiManager(context).isWifiEnabled())
             return !readNetworkState(context, network);
         else return !(w != null && w.status == WifiConfiguration.Status.DISABLED);
     }
 
-    public static void writeNetworkState(final Context context,
-                                         final int network, final boolean state) {
+    public static void writeNetworkState(Context context,
+                                         int network, boolean state) {
         String netstring = getnetworkSSID(context, network);
         if (state)
             PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY,
@@ -323,14 +323,14 @@ public class PrefUtil {
                     0);
     }
 
-    public static boolean readManagedState(final Context context,
-                                           final int network) {
+    public static boolean readManagedState(Context context,
+                                           int network) {
         return readNetworkPref(context, getnetworkSSID(context, network),
                 NetPref.NONMANAGED_KEY) == 1;
     }
 
-    public static void writeManagedState(final Context context,
-                                         final int network, final boolean state) {
+    public static void writeManagedState(Context context,
+                                         int network, boolean state) {
         String netstring = getnetworkSSID(context, network);
         if (state)
             PrefUtil.writeNetworkPref(context, netstring,
@@ -340,14 +340,14 @@ public class PrefUtil {
                     NetPref.NONMANAGED_KEY, 0);
     }
 
-    public static boolean readNetworkState(final Context context,
-                                           final int network) {
+    public static boolean readNetworkState(Context context,
+                                           int network) {
         return readNetworkPref(context, getnetworkSSID(context, network),
                 NetPref.DISABLED_KEY) == 1;
     }
 
-    public static boolean setNetworkState(final Context context,
-                                          final int network, final boolean state) {
+    public static boolean setNetworkState(Context context,
+                                          int network, boolean state) {
         WifiManager w = getWifiManager(context);
         if (state)
             w.enableNetwork(network, false);
@@ -356,8 +356,8 @@ public class PrefUtil {
         return w.saveConfiguration();
     }
 
-    public void putnetPref(final NetPref pref, final String network,
-                           final int value) {
+    public void putnetPref(NetPref pref, String network,
+                           int value) {
         int[] intTemp = netprefs.get(network);
         if (intTemp == null) {
             intTemp = new int[PrefConstants.NUMNETPREFS];
@@ -377,8 +377,8 @@ public class PrefUtil {
         netprefs.put(network, intTemp);
     }
 
-    public int getnetPref(final Context context, final NetPref pref,
-                          final String network) {
+    public int getnetPref(Context context, NetPref pref,
+                          String network) {
         int ordinal = pref.ordinal();
         if (!netprefs.containsKey(network)) {
             int[] intarray = new int[PrefConstants.NUMNETPREFS];
@@ -404,11 +404,11 @@ public class PrefUtil {
         specialCase();
     }
 
-    void handleLoadPref(final Pref p) {
+    void handleLoadPref(Pref p) {
         setFlag(p, readBoolean(context.get(), p.key()));
     }
 
-    void handlePrefChange(final Pref p, final boolean flagval) {
+    void handlePrefChange(Pref p, boolean flagval) {
 		/*
 		 * Before value changes from loading
 		 */
@@ -423,8 +423,8 @@ public class PrefUtil {
         postValChanged(p);
     }
 
-    void handleNetPrefChange(final NetPref np, final String network,
-                             final int newvalue) {
+    void handleNetPrefChange(NetPref np, String network,
+                             int newvalue) {
         putnetPref(np, network, newvalue);
     }
 
@@ -436,7 +436,7 @@ public class PrefUtil {
 
     }
 
-    public void preValChanged(final Pref p) {
+    public void preValChanged(Pref p) {
         switch (p) {
 		/*
 		 * Pre Value Changed here
@@ -445,7 +445,7 @@ public class PrefUtil {
 
     }
 
-    public void postValChanged(final Pref p) {
+    public void postValChanged(Pref p) {
     }
 
     public void specialCase() {

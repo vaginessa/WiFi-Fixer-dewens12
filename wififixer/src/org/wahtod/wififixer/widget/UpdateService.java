@@ -50,7 +50,7 @@ public class UpdateService extends IntentService {
 		manager.updateAppWidget(thisWidget, updateViews);
 	}
 
-	public static RemoteViews doUpdate(Context context, final Intent intent) {
+	public static RemoteViews doUpdate(Context context, Intent intent) {
 
 		// Create an Intent to send widget command to WidgetReceiver
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
@@ -70,8 +70,8 @@ public class UpdateService extends IntentService {
 		return views;
 	}
 
-	public static Intent updateIntent(final Context ctxt,
-			@SuppressWarnings("rawtypes") Class service, final String provider) {
+	public static Intent updateIntent(Context ctxt,
+			@SuppressWarnings("rawtypes") Class service, String provider) {
 		Intent i = new Intent(ctxt, service);
 		i.putExtra(WIDGET_PROVIDER_NAME, provider);
 		return i;

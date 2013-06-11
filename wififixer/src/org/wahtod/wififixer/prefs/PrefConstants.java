@@ -64,7 +64,7 @@ public class PrefConstants {
 			return key;
 		}
 
-		public static Pref get(final String pstring) {
+		public static Pref get(String pstring) {
 
 			return lookup.get(pstring);
 		}
@@ -92,7 +92,7 @@ public class PrefConstants {
 			return key;
 		}
 
-		public static NetPref get(final String pstring) {
+		public static NetPref get(String pstring) {
 
 			return lookup.get(pstring);
 		}

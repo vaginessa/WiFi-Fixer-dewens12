@@ -61,7 +61,7 @@ public class Hostup {
 	private Hostup() {
 	}
 
-	public Hostup(final Context c) {
+	public Hostup(Context c) {
 		timer = new StopWatch();
 		context = new WeakReference<Context>(c);
 		httpHandler = new ThreadHandler(c.getString(R.string.httpcheckthread));
@@ -97,7 +97,7 @@ public class Hostup {
 		}
 	};
 
-	protected void complete(final boolean up, final StringBuilder output) {
+	protected void complete(boolean up, StringBuilder output) {
 		if (!finished) {
 			timer.stop();
 			response.state = up;
@@ -107,8 +107,8 @@ public class Hostup {
 		}
 	}
 
-	public final synchronized HostMessage getHostup(final int timeout,
-			Context ctxt, final String router) {
+	public final synchronized HostMessage getHostup(int timeout,
+			Context ctxt, String router) {
 		if (response == null)
 			response = new HostMessage();
 		if (self == null)
@@ -149,7 +149,7 @@ public class Hostup {
 	/*
 	 * Performs ICMP ping/echo and returns boolean success or failure
 	 */
-	private boolean icmpHostup(final Context context) {
+	private boolean icmpHostup(Context context) {
 		boolean isUp = false;
 
 		try {
@@ -167,7 +167,7 @@ public class Hostup {
 	/*
 	 * Performs HTTP HEAD request and returns boolean success or failure
 	 */
-	private HostMessage getHttpHeaders(final Context context) {
+	private HostMessage getHttpHeaders(Context context) {
 		/*
 		 * get URI
 		 */

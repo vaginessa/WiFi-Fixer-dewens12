@@ -170,7 +170,7 @@ public abstract class TutorialFragmentActivity extends AppFragmentActivity {
 		PrefUtil.writeBoolean(this, PrefConstants.TUTORIAL, true);
 	}
 
-	private void showTutorialToast(final int id) {
+	private void showTutorialToast(int id) {
 		LayoutInflater inflater = getLayoutInflater();
 		View layout = inflater.inflate(R.layout.tutorial,
 				(ViewGroup) findViewById(R.id.toast_root));

@@ -53,14 +53,14 @@ public class StringUtil {
 		return s;
 	}
 
-	public static String getLongCapabilitiesString(final String capabilities) {
+	public static String getLongCapabilitiesString(String capabilities) {
 		if (capabilities.length() == 0)
 			return OPEN;
 		else
 			return capabilities;
 	}
 
-	public static String getCapabilitiesString(final String capabilities) {
+	public static String getCapabilitiesString(String capabilities) {
 		if (capabilities.length() == 0)
 			return OPEN;
 		else if (capabilities.contains(WEP))

@@ -36,7 +36,7 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
 
     private List<WFScanResult> mScanResults;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
-        public void onReceive(final Context context, final Intent intent) {
+        public void onReceive(Context context, Intent intent) {
             /*
              * Receive Scan Results
 			 */
@@ -66,7 +66,7 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
     /*
      * Note that this WILL return a null String[] if called while wifi is off.
 	 */
-    private List<WFScanResult> getNetworks(final Context context) {
+    private List<WFScanResult> getNetworks(Context context) {
         WifiManager wm = PrefUtil.getWifiManager(context);
 
         if (wm.isWifiEnabled()) {

@@ -66,7 +66,7 @@ public class NotifUtil {
     private static NotificationCompat.Builder mLogBuilder;
     private static NotificationCompat.Builder mStatusBuilder;
 
-    private static Notification build(final Context ctxt, NotificationCompat.Builder builder, StatusMessage in) {
+    private static Notification build(Context ctxt, NotificationCompat.Builder builder, StatusMessage in) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
             return builder.build();
 
@@ -85,7 +85,7 @@ public class NotifUtil {
         return out;
     }
 
-    public static void addStatNotif(final Context ctxt, final StatusMessage in) {
+    public static void addStatNotif(Context ctxt, StatusMessage in) {
         StatusMessage m = validateStrings(in);
         NotificationManager nm = (NotificationManager) ctxt
                 .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -124,7 +124,7 @@ public class NotifUtil {
         nm.notify(NotifUtil.STAT_TAG, NotifUtil.STATNOTIFID, build(ctxt, mStatusBuilder, in));
     }
 
-    public static void addLogNotif(final Context ctxt, final boolean flag) {
+    public static void addLogNotif(Context ctxt, boolean flag) {
 
         if (!flag) {
             cancel(ctxt, LOG_TAG, NotifUtil.LOGNOTIFID);
@@ -157,8 +157,8 @@ public class NotifUtil {
         nm.notify(tag, id, n);
     }
 
-    public static void show(final Context context, final String message,
-                            final String tickerText, final int id, PendingIntent contentIntent) {
+    public static void show(Context context, String message,
+                            String tickerText, int id, PendingIntent contentIntent) {
 
 		/*
          * If contentIntent is NULL, create valid contentIntent
@@ -193,7 +193,7 @@ public class NotifUtil {
         cancel(context, VSHOW_TAG, id);
     }
 
-    public static StatusMessage validateStrings(final StatusMessage in) {
+    public static StatusMessage validateStrings(StatusMessage in) {
         if (in.getSSID() == null)
             in.setSSID(StatusMessage.EMPTY);
         if (in.getStatus() == null)
@@ -237,7 +237,7 @@ public class NotifUtil {
         return signal;
     }
 
-    public static String getLogString(final Context context) {
+    public static String getLogString(Context context) {
         StringBuilder logstring = new StringBuilder(
                 context.getString(R.string.writing_to_log));
         logstring.append(NotifUtil.SEPARATOR);
@@ -247,11 +247,11 @@ public class NotifUtil {
         return logstring.toString();
     }
 
-    public static void showToast(final Context context, final int resID) {
+    public static void showToast(Context context, int resID) {
         showToast(context, context.getString(resID));
     }
 
-    public static void showToast(final Context context, final String message) {
+    public static void showToast(Context context, String message) {
 
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Service.LAYOUT_INFLATER_SERVICE);

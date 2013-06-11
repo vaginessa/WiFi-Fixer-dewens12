@@ -87,7 +87,7 @@ public class WidgetReceiver extends BroadcastReceiver {
         }
     };
 
-    public static void setWifiState(final Context context, final boolean state) {
+    public static void setWifiState(Context context, boolean state) {
         PrefUtil.getWifiManager(context).setWifiEnabled(state);
     }
 
@@ -97,7 +97,7 @@ public class WidgetReceiver extends BroadcastReceiver {
         handleIntent(context, intent);
     }
 
-    public void handleIntent(final Context context, final Intent intent) {
+    public void handleIntent(Context context, Intent intent) {
 		/*
 		 * Dispatch intent commands to handler
 		 */

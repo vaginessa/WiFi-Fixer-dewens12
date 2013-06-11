@@ -111,7 +111,7 @@ public class HelpActivity extends AppFragmentActivity {
 			return false;
 		}
 
-		private void displayExternalURI(final String uri) {
+		private void displayExternalURI(String uri) {
 			Intent i = new Intent(Intent.ACTION_VIEW);
 			Uri u = Uri.parse(uri);
 			i.setData(u);

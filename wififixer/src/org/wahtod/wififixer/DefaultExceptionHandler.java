@@ -16,17 +16,12 @@
  */
 package org.wahtod.wififixer;
 
-import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.Date;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
+
+import java.io.*;
+import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.Date;
 
 public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 	public static final String EXCEPTIONS_FILENAME = "exceptions.txt";
@@ -35,7 +30,7 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 	private final Context appcontext;
 
 	@SuppressLint("WorldReadableFiles")
-	public DefaultExceptionHandler(final Context context) {
+	public DefaultExceptionHandler(Context context) {
 		isRegistered = true;
 		appcontext = context.getApplicationContext();
 		UncaughtExceptionHandler currentHandler = Thread
@@ -53,8 +48,8 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 	@SuppressLint("WorldReadableFiles")
 	public void uncaughtException(Thread t, Throwable e) {
 
-		final Writer result = new StringWriter();
-		final PrintWriter printWriter = new PrintWriter(result);
+		Writer result = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(result);
 		e.printStackTrace(printWriter);
 		String stacktrace = result.toString();
 		DataOutputStream data;
@@ -92,7 +87,7 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 		_default.uncaughtException(t, e);
 	}
 
-	public static void register(final Context ctxt) {
+	public static void register(Context ctxt) {
 		if (!isRegistered)
 			new DefaultExceptionHandler(ctxt);
 	}

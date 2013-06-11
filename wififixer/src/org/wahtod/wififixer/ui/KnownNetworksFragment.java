@@ -218,7 +218,7 @@ public class KnownNetworksFragment extends SherlockFragment {
         }
     };
     private BroadcastReceiver receiver = new BroadcastReceiver() {
-        public void onReceive(final Context context, final Intent intent) {
+        public void onReceive(Context context, Intent intent) {
             /*
              * we know this is going to be a scan result notification
 			 */
@@ -240,7 +240,7 @@ public class KnownNetworksFragment extends SherlockFragment {
         return f;
     }
 
-    public static List<String> getNetworks(final Context context) {
+    public static List<String> getNetworks(Context context) {
         WifiManager wm = PrefUtil.getWifiManager(context);
         List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
         if (wifiConfigs == null || wifiConfigs.isEmpty())
@@ -260,7 +260,7 @@ public class KnownNetworksFragment extends SherlockFragment {
         return networks;
     }
 
-    private static void refreshNetworkAdapter(final ArrayList<String> networks) {
+    private static void refreshNetworkAdapter(ArrayList<String> networks) {
 		/*
 		 * Don't refresh if knownnetworks is empty (wifi is off)
 		 */
@@ -277,7 +277,7 @@ public class KnownNetworksFragment extends SherlockFragment {
         }
     }
 
-    private static boolean isWifiOn(final Context ctxt) {
+    private static boolean isWifiOn(Context ctxt) {
         return PrefUtil.getWifiManager(ctxt).isWifiEnabled();
     }
 
@@ -368,7 +368,7 @@ public class KnownNetworksFragment extends SherlockFragment {
         registerReceiver();
     }
 
-    private ArrayList<String> getKnownAPArray(final Context context) {
+    private ArrayList<String> getKnownAPArray(Context context) {
 
         WifiManager wm = PrefUtil.getWifiManager(context);
 
@@ -418,7 +418,7 @@ public class KnownNetworksFragment extends SherlockFragment {
         scanhandler.removeMessages(REFRESH_MESSAGE);
     }
 
-    private void removeNetwork(final int network) {
+    private void removeNetwork(int network) {
         NotifUtil.showToast(getContext(),
                 getContext().getString(R.string.removing_network) + mSSID);
         PrefUtil.getWifiManager(getActivity()).removeNetwork(network);

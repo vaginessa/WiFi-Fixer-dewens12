@@ -23,9 +23,9 @@ public abstract class EditorDetector {
 	private static final String APPLY_METHOD = "apply";
 	private static EditorDetector selector;
 
-	public abstract void vcommit(final Editor e);
+	public abstract void vcommit(Editor e);
 
-	public static void commit(final Editor e) {
+	public static void commit(Editor e) {
 		/*
 		 * Select appropriate Class and pass method
 		 */

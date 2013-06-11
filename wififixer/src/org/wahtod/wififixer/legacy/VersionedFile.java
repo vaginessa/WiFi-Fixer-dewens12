@@ -24,10 +24,10 @@ import android.os.Build;
 public abstract class VersionedFile {
 	private static VersionedFile selector;
 
-	public abstract File vgetLogFile(final Context context,
-			final String filename);
+	public abstract File vgetLogFile(Context context,
+			String filename);
 
-	public static File getFile(final Context context, final String filename) {
+	public static File getFile(Context context, String filename) {
 		/*
 		 * Instantiate appropriate VersionedLogFile
 		 */

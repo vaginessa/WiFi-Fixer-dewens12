@@ -41,7 +41,7 @@ public class BroadcastHelper {
 		 */
     }
 
-    public synchronized static boolean isRegistered(final BroadcastReceiver receiver) {
+    public synchronized static boolean isRegistered(BroadcastReceiver receiver) {
         return getMap().containsKey(receiver.toString());
     }
 
@@ -51,9 +51,9 @@ public class BroadcastHelper {
         return _clients;
     }
 
-    public synchronized static void registerReceiver(final Context c,
-                                                     final BroadcastReceiver receiver,
-                                                     final IntentFilter f, final boolean local) {
+    public synchronized static void registerReceiver(Context c,
+                                                     BroadcastReceiver receiver,
+                                                     IntentFilter f, boolean local) {
         String hashString = receiver.toString();
         if (!isRegistered(receiver)) {
             try {
@@ -71,8 +71,8 @@ public class BroadcastHelper {
         }
     }
 
-    public synchronized static void unregisterReceiver(final Context c,
-                                                       final BroadcastReceiver receiver) {
+    public synchronized static void unregisterReceiver(Context c,
+                                                       BroadcastReceiver receiver) {
         String hashString = receiver.toString();
         if (isRegistered(receiver)) {
             try {
@@ -90,8 +90,8 @@ public class BroadcastHelper {
         }
     }
 
-    public static void sendBroadcast(final Context c, final Intent i,
-                                     final boolean local) {
+    public static void sendBroadcast(Context c, Intent i,
+                                     boolean local) {
         if (local)
             LocalBroadcastManager.getInstance(c).sendBroadcast(i);
         else

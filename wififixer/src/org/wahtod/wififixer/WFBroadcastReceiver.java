@@ -61,7 +61,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 		handleIntent(context, intent);
 	}
 
-	private static void handleWidgetAction(final Context context) {
+	private static void handleWidgetAction(Context context) {
 		int command;
 		/*
 		 * Handle null value possible if prefs not initialized yet
@@ -93,7 +93,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 		}
 	}
 
-	private void handleIntent(final Context context, final Intent intent) {
+	private void handleIntent(Context context, Intent intent) {
 		/*
 		 * Dispatches the broadcast intent to the handler for processing
 		 */
@@ -106,7 +106,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 		handler.sendMessage(message);
 	}
 
-	private static void dispatchIntent(final Bundle data) {
+	private static void dispatchIntent(Bundle data) {
 		/*
 		 * Respond to manifest intents
 		 */
@@ -156,7 +156,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 					!PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled());
 	}
 
-	private static void handleAuthAction(final Bundle data) {
+	private static void handleAuthAction(Bundle data) {
 		if (data.containsKey(AUTHEXTRA)
 				&& data.getString(AUTHEXTRA).contains(AUTHSTRING)) {
 			LogService.log(ctxt.get(), ctxt.get().getString(R.string.authed));

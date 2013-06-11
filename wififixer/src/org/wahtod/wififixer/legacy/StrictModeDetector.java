@@ -21,9 +21,9 @@ public abstract class StrictModeDetector {
 	private static final String ANDROID_OS_STRICT_MODE = "android.os.StrictMode";
 	private static StrictModeDetector selector;
 
-	public abstract boolean vSetPolicy(final boolean flag);
+	public abstract boolean vSetPolicy(boolean flag);
 
-	public static boolean setPolicy(final boolean flag) {
+	public static boolean setPolicy(boolean flag) {
 		/*
 		 * Handle logic to check if StrictMode exists Set StrictMode based on
 		 * flag if it does otherwise return false

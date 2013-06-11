@@ -24,7 +24,7 @@ public class EditorHelperGB extends EditorDetector {
 
 	@SuppressLint("NewApi")
 	@Override
-	public void vcommit(final Editor e) {
+	public void vcommit(Editor e) {
 		e.apply();
 	}
 

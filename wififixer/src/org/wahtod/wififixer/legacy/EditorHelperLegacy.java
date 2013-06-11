@@ -22,7 +22,7 @@ import android.content.SharedPreferences.Editor;
 public class EditorHelperLegacy extends EditorDetector {
 
 	@Override
-	public void vcommit(final Editor e) {
+	public void vcommit(Editor e) {
 		e.commit();
 	}
 

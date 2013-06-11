@@ -99,7 +99,7 @@ public class ConnectFragment extends SherlockFragment implements OnClickListener
         return v;
     }
 
-    private int addNetwork(final String password) {
+    private int addNetwork(String password) {
         WifiConfiguration wf = getKeyAppropriateConfig(password);
         WifiManager wm = PrefUtil.getWifiManager(getActivity());
         int n = wm.addNetwork(wf);
@@ -110,7 +110,7 @@ public class ConnectFragment extends SherlockFragment implements OnClickListener
         return n;
     }
 
-    private WifiConfiguration getKeyAppropriateConfig(final String password) {
+    private WifiConfiguration getKeyAppropriateConfig(String password) {
         WifiConfiguration wf = new WifiConfiguration();
         if (wf.toString().contains(BUGGED)) {
             /*

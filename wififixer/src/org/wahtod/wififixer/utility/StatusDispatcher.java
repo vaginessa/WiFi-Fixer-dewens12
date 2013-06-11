@@ -39,7 +39,7 @@ public class StatusDispatcher {
     private static WeakReference<Context> c;
     private static WeakReference<Handler> host;
 
-    public StatusDispatcher(final Context context, final Handler myhost) {
+    public StatusDispatcher(Context context, Handler myhost) {
         _statusMessage = new StatusMessage();
         c = new WeakReference<Context>(context);
         host = new WeakReference<Handler>(myhost);
@@ -52,7 +52,7 @@ public class StatusDispatcher {
     }
 
     private BroadcastReceiver messagereceiver = new BroadcastReceiver() {
-        public void onReceive(final Context context, final Intent intent) {
+        public void onReceive(Context context, Intent intent) {
             Message in = messagehandler.obtainMessage(REFRESH);
             in.setData(intent.getExtras());
             messagehandler.sendMessage(in);
@@ -93,7 +93,7 @@ public class StatusDispatcher {
     public static class StatNotif implements Runnable {
         private final StatusMessage message;
 
-        public StatNotif(final StatusMessage message) {
+        public StatNotif(StatusMessage message) {
             this.message = message;
         }
 
@@ -107,7 +107,7 @@ public class StatusDispatcher {
     private static class FastStatus implements Runnable {
         private final StatusMessage message;
 
-        FastStatus(final StatusMessage message) {
+        FastStatus(StatusMessage message) {
             this.message = message;
         }
 
@@ -124,7 +124,7 @@ public class StatusDispatcher {
     public static class Widget implements Runnable {
         private final StatusMessage message;
 
-        public Widget(final StatusMessage message) {
+        public Widget(StatusMessage message) {
             this.message = message;
         }
 
@@ -149,7 +149,7 @@ public class StatusDispatcher {
         clearQueue();
     }
 
-    public void refreshWidget(final StatusMessage n) {
+    public void refreshWidget(StatusMessage n) {
         clearQueue();
         if (n == null)
             messagehandler.sendEmptyMessage(WIDGET_REFRESH);

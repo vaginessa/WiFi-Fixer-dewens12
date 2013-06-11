@@ -99,7 +99,7 @@ public class WFMonitorService extends Service implements
         }
     }
 
-    private void handleStart(final Intent intent) {
+    private void handleStart(Intent intent) {
 
         if (intent != null && logging) {
             if (intent.hasExtra(ServiceAlarm.ALARM_START))
@@ -241,7 +241,7 @@ public class WFMonitorService extends Service implements
             }
 
             @Override
-            public void postValChanged(final Pref p) {
+            public void postValChanged(Pref p) {
                 switch (p) {
 
                     case WIFILOCK_KEY:
@@ -351,7 +351,7 @@ public class WFMonitorService extends Service implements
     }
 
     private void resetWidget() {
-        final Handler h = new Handler();
+        Handler h = new Handler();
 		/*
 		 * Shut down handler set widget to default make sure notification is
 		 * cancelled

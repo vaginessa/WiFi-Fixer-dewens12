@@ -74,7 +74,7 @@ public class StatusFragment extends Fragment {
         }
     };
     private BroadcastReceiver statusreceiver = new BroadcastReceiver() {
-        public void onReceive(final Context context, final Intent intent) {
+        public void onReceive(Context context, Intent intent) {
 
 			/*
              * Dispatch intent commands to handler
@@ -102,7 +102,7 @@ public class StatusFragment extends Fragment {
     /*
      * Note that this WILL return a null String[] if called while wifi is off.
      */
-    private static WifiInfo getNetwork(final Context context) {
+    private static WifiInfo getNetwork(Context context) {
         WifiManager wm = PrefUtil.getWifiManager(context);
         if (wm.isWifiEnabled()) {
             return wm.getConnectionInfo();
@@ -201,23 +201,23 @@ public class StatusFragment extends Fragment {
             icon = (ImageView) container.findViewById(R.id.signal_icon);
         }
 
-        public void setLinkspeed(final String l) {
+        public void setLinkspeed(String l) {
             linkspeed.setText(l);
         }
 
-        public void setSsid(final String l) {
+        public void setSsid(String l) {
             ssid.setText(l);
         }
 
-        public void setSignal(final String l) {
+        public void setSignal(String l) {
             signal.setText(l);
         }
 
-        public void setStatus(final String l) {
+        public void setStatus(String l) {
             status.setText(l);
         }
 
-        public void setIcon(final int i) {
+        public void setIcon(int i) {
             icon.setImageResource(i);
         }
     }

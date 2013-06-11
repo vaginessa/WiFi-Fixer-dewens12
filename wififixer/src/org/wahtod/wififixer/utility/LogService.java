@@ -72,12 +72,12 @@ public class LogService extends Service {
         }
     };
 
-    private static boolean hasStackTrace(final Context context) {
+    private static boolean hasStackTrace(Context context) {
         return context.getFileStreamPath(
                 DefaultExceptionHandler.EXCEPTIONS_FILENAME).exists();
     }
 
-    private static String getStackTrace(final Context context) {
+    private static String getStackTrace(Context context) {
         StringBuilder trace = new StringBuilder();
         DataInputStream d;
         try {
@@ -119,8 +119,8 @@ public class LogService extends Service {
         return WFMonitorService.class.getSimpleName();
     }
 
-    public static void log(final Context context, final String an,
-                           final String m) {
+    public static void log(Context context, String an,
+                           String m) {
         Intent sendIntent = new Intent(context, LogService.class);
         sendIntent.setFlags(Intent.FLAG_FROM_BACKGROUND);
         sendIntent.putExtra(APPNAME, an);
@@ -128,7 +128,7 @@ public class LogService extends Service {
         context.startService(sendIntent);
     }
 
-    public static void log(final Context context, final String m) {
+    public static void log(Context context, String m) {
         log(context, getLogTag(), m);
     }
 
@@ -145,7 +145,7 @@ public class LogService extends Service {
         }
     }
 
-    private void dispatchIntent(final Bundle data) {
+    private void dispatchIntent(Bundle data) {
 
         if (data.containsKey(APPNAME) && data.containsKey(MESSAGE)) {
             String app_name = data.getString(APPNAME);
@@ -192,7 +192,7 @@ public class LogService extends Service {
         }
     }
 
-    private void handleStart(final Intent intent) {
+    private void handleStart(Intent intent) {
         /*
          * Dispatches the broadcast intent to the handler for processing
 		 */
@@ -248,7 +248,7 @@ public class LogService extends Service {
         _printhandler = new ThreadHandler(getString(R.string.logwriterthread));
     }
 
-    public boolean processCommands(final Context context, final String rope) {
+    public boolean processCommands(Context context, String rope) {
         /*
          * Incoming intents might have a command to process
 		 */
@@ -271,7 +271,7 @@ public class LogService extends Service {
         return message.toString();
     }
 
-    private void processLogIntent(final Context context, final String rope,
+    private void processLogIntent(Context context, String rope,
                                   final String rope2) {
         if (processCommands(context, rope))
             return;
@@ -310,7 +310,7 @@ public class LogService extends Service {
     public class LogWriterRunnable implements Runnable {
         private String msg;
 
-        public LogWriterRunnable(final String message) {
+        public LogWriterRunnable(String message) {
             msg = message;
         }
 

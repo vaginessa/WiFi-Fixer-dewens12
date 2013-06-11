@@ -96,12 +96,12 @@ public class MainActivity extends TutorialFragmentActivity implements
     };
     private BaseViewPager mBasePager;
 
-    private static void startwfService(final Context context) {
+    private static void startwfService(Context context) {
         context.startService(new Intent(context, BootService.class).putExtra(
                 BootService.FLAG_NO_DELAY, true));
     }
 
-    private static void nagNotification(final Context context) {
+    private static void nagNotification(Context context) {
         /*
          * Nag for donation
 		 */
@@ -111,7 +111,7 @@ public class MainActivity extends TutorialFragmentActivity implements
                 context.getString(R.string.thank_you), 3337, contentIntent);
     }
 
-    private static void removeNag(final Context context) {
+    private static void removeNag(Context context) {
         NotifUtil.cancel(context, 3337);
     }
 
@@ -166,7 +166,7 @@ public class MainActivity extends TutorialFragmentActivity implements
             PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), true);
     }
 
-    private void bundleIntent(final Intent intent) {
+    private void bundleIntent(Intent intent) {
 		/*
 		 * Dispatch intent commands to handler
 		 */

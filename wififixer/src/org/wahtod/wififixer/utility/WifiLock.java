@@ -24,7 +24,7 @@ import org.wahtod.wififixer.prefs.PrefUtil;
 public class WifiLock {
 	static WifiManager.WifiLock wifilock;
 
-	public WifiLock(final Context context) {
+	public WifiLock(Context context) {
 		WifiManager wm = PrefUtil.getWifiManager(context);
         /*
 		 * We want WifiManager.WIFI_MODE_FULL as we're not just scanning
@@ -33,7 +33,7 @@ public class WifiLock {
 				context.toString());
 	}
 
-	public void lock(final boolean state) {
+	public void lock(boolean state) {
 		if (state) {
 			if (!wifilock.isHeld()) {
 				wifilock.acquire();

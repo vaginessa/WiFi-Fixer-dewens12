@@ -86,7 +86,7 @@ public class AboutFragment extends SherlockFragment implements OnClickListener {
     };
     protected WFScanResult mNetwork;
     private BroadcastReceiver scanreceiver = new BroadcastReceiver() {
-        public void onReceive(final Context context, final Intent intent) {
+        public void onReceive(Context context, Intent intent) {
             /*
              * Dispatch intent commands to handler
 			 */
@@ -224,7 +224,7 @@ public class AboutFragment extends SherlockFragment implements OnClickListener {
         private TextView frequency;
         private TextView level;
 
-        public ViewHolder(final View parent) {
+        public ViewHolder(View parent) {
             ssid = (TextView) parent.findViewById(R.id.ssid);
             bssid = (TextView) parent.findViewById(R.id.bssid);
             capabilities = (TextView) parent.findViewById(R.id.capabilities);
@@ -232,23 +232,23 @@ public class AboutFragment extends SherlockFragment implements OnClickListener {
             level = (TextView) parent.findViewById(R.id.level);
         }
 
-        public void setSsid(final String s) {
+        public void setSsid(String s) {
             ssid.setText(s);
         }
 
-        public void setBssid(final String s) {
+        public void setBssid(String s) {
             bssid.setText(s);
         }
 
-        public void setCapabilities(final String s) {
+        public void setCapabilities(String s) {
             capabilities.setText(s);
         }
 
-        public void setFrequency(final int i) {
+        public void setFrequency(int i) {
             frequency.setText(String.valueOf(i));
         }
 
-        public void setLevel(final int i) {
+        public void setLevel(int i) {
             level.setText(String.valueOf(i));
         }
     }

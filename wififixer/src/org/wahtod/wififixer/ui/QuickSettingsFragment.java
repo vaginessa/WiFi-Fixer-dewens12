@@ -123,7 +123,7 @@ public class QuickSettingsFragment extends BaseDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final Dialog dialog = super.onCreateDialog(savedInstanceState);
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
         return dialog;
     }
@@ -229,7 +229,7 @@ public class QuickSettingsFragment extends BaseDialogFragment {
         issueDialog.show();
     }
 
-    public void sendIssueReport(final String report, final String fileuri) {
+    public void sendIssueReport(String report, String fileuri) {
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.setType(getString(R.string.log_mimetype));
         sendIntent.putExtra(Intent.EXTRA_EMAIL,
