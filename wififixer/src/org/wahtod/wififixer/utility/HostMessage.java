@@ -18,15 +18,15 @@
 package org.wahtod.wififixer.utility;
 
 public class HostMessage {
-	public StringBuilder status;
+	public String status;
 	public boolean state;
 
 	public HostMessage(String sl, boolean s) {
-		status = new StringBuilder(sl);
+		status = sl;
 		state = s;
 	}
 
 	public HostMessage() {
-		status = new StringBuilder(32);
+		status = null;
 	}
 }

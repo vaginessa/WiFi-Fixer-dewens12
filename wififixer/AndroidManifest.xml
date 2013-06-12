@@ -21,7 +21,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.wahtod.wififixer"
           android:installLocation="internalOnly"
-          android:versionCode="1003"
+          android:versionCode="1004"
           android:versionName="1.0b2">
 
     <!-- Documenting permissions here -->
@@ -59,10 +59,10 @@
 
     <uses-feature
             android:name="android.hardware.wifi"
-            android:required="true"/>
+            android:required="false"/>
     <uses-feature
             android:name="android.hardware.touchscreen"
-            android:required="true">
+            android:required="false">
     </uses-feature>
 
     <application

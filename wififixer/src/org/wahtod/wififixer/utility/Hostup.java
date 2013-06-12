@@ -17,19 +17,14 @@
 
 package org.wahtod.wififixer.utility;
 
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.net.HttpURLConnection;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.UnknownHostException;
-import java.util.concurrent.RejectedExecutionException;
-import org.wahtod.wififixer.R;
-
 import android.content.Context;
 import android.os.Build;
+import org.wahtod.wififixer.R;
+
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.net.*;
+import java.util.concurrent.RejectedExecutionException;
 
 public class Hostup {
 	private static final int HTTP_TIMEOUT = 4000;
@@ -51,7 +46,7 @@ public class Hostup {
 	protected volatile URI headURI;
 	protected volatile int reachable;
 	protected volatile WeakReference<Context> context;
-	protected volatile WeakReference<Thread> self;
+	protected volatile WeakReference<Thread> masterThread;
 	protected volatile boolean finished;
 	protected volatile StopWatch timer;
 	private ThreadHandler httpHandler;
@@ -76,7 +71,7 @@ public class Hostup {
 		@Override
 		public void run() {
 			HostMessage response = getHttpHeaders(context.get());
-			complete(response.state, response.status);
+			complete();
 		}
 	};
 
@@ -87,32 +82,31 @@ public class Hostup {
 		@Override
 		public void run() {
 			boolean up = icmpHostup(context.get());
-
-			StringBuilder r = new StringBuilder(target);
+            complete();
+			String r = new String(target);
 			if (up)
-				r.append(context.get().getString(R.string.icmp_ok));
+				r += context.get().getString(R.string.icmp_ok);
 			else
-				r.append(context.get().getString(R.string.icmp_fail));
-			complete(up, r);
+				r += context.get().getString(R.string.icmp_fail);
+            response.state = up;
+            response.status = r;
 		}
 	};
 
-	protected void complete(boolean up, StringBuilder output) {
+	protected void complete() {
 		if (!finished) {
+            finished = true;
+            masterThread.get().interrupt();
 			timer.stop();
-			response.state = up;
-			response.status = output;
-			finished = true;
-			self.get().interrupt();
 		}
 	}
 
-	public final synchronized HostMessage getHostup(int timeout,
+	public synchronized HostMessage getHostup(int timeout,
 			Context ctxt, String router) {
 		if (response == null)
 			response = new HostMessage();
-		if (self == null)
-			self = new WeakReference<Thread>(Thread.currentThread());
+		if (masterThread == null)
+			masterThread = new WeakReference<Thread>(Thread.currentThread());
 		;
 		/*
 		 * If null, use H_TARGET else construct URL from router string
@@ -137,12 +131,13 @@ public class Hostup {
 			/*
 			 * We have a response
 			 */
-			response.status.append(String.valueOf(timer.getElapsed()));
-			response.status.append(ctxt.getString(R.string.ms));
+			response.status += (String.valueOf(timer.getElapsed()));
+			response.status +=(ctxt.getString(R.string.ms));
 			return response;
 		} catch (RejectedExecutionException e) {
-			response.status.append(REJECTED_EXECUTION);
+			response.status+=(REJECTED_EXECUTION);
 		}
+        finished = true;
 		return new HostMessage(ctxt.getString(R.string.critical_timeout), false);
 	}
 
