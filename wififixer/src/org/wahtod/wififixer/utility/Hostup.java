@@ -27,199 +27,211 @@ import java.net.*;
 import java.util.concurrent.RejectedExecutionException;
 
 public class Hostup {
-	private static final int HTTP_TIMEOUT = 4000;
-	/*
-	 * getHostUp method: Executes 2 threads, icmp check and http check first
-	 * thread to return state "wins"
-	 */
+    protected static final String NEWLINE = "\n";
+    /*
+     * getHostUp method: Executes 2 threads, icmp check and http check first
+     * thread to return state "wins"
+     */
+    // Target for header check
+    protected static final String FAILOVER_TARGET = "www.google.com";
+    protected static final String HTTPSCHEME = "http";
+    protected static final String INET_LOOPBACK = "127.0.0.1";
+    protected static final String INET_INVALID = "0.0.0.0";
+    protected static final int TIMEOUT_EXTRA = 2000;
+    private static final int HTTP_TIMEOUT = 4000;
+    private static final String REJECTED_EXECUTION = "Rejected Execution";
+    protected volatile String target;
+    protected volatile HostMessage response;
+    protected volatile URI headURI;
+    protected volatile int reachable;
+    protected volatile int mCurrentSession;
+    protected volatile WeakReference<Context> context;
+    protected volatile WeakReference<Thread> masterThread;
+    protected volatile boolean finished;
+    protected volatile StopWatch timer;
+    private ThreadHandler httpHandler;
+    private ThreadHandler icmpHandler;
 
-	private static final String REJECTED_EXECUTION = "Rejected Execution";
-	protected static final String NEWLINE = "\n";
-	// Target for header check
-	protected static final String FAILOVER_TARGET = "www.google.com";
-	protected static final String HTTPSCHEME = "http";
-	protected static final String INET_LOOPBACK = "127.0.0.1";
-	protected static final String INET_INVALID = "0.0.0.0";
-	protected static final int TIMEOUT_EXTRA = 2000;
-	protected volatile String target;
-	protected volatile HostMessage response;
-	protected volatile URI headURI;
-	protected volatile int reachable;
-	protected volatile WeakReference<Context> context;
-	protected volatile WeakReference<Thread> masterThread;
-	protected volatile boolean finished;
-	protected volatile StopWatch timer;
-	private ThreadHandler httpHandler;
-	private ThreadHandler icmpHandler;
+    @SuppressWarnings("unused")
+    private Hostup() {
+    }
 
-	@SuppressWarnings("unused")
-	private Hostup() {
-	}
+    public Hostup(Context c) {
+        mCurrentSession = 0;
+        timer = new StopWatch();
+        context = new WeakReference<Context>(c);
+        httpHandler = new ThreadHandler(c.getString(R.string.httpcheckthread));
+        icmpHandler = new ThreadHandler(c.getString(R.string.icmpcheckthread));
+        disableConnectionReuse();
+    }
 
-	public Hostup(Context c) {
-		timer = new StopWatch();
-		context = new WeakReference<Context>(c);
-		httpHandler = new ThreadHandler(c.getString(R.string.httpcheckthread));
-		icmpHandler = new ThreadHandler(c.getString(R.string.icmpcheckthread));
-		disableConnectionReuse();
-	}
-
-	/*
-	 * http header check thread
-	 */
-	private class GetHeaders implements Runnable {
-		@Override
-		public void run() {
-			HostMessage response = getHttpHeaders(context.get());
-			complete();
-		}
-	};
-
-	/*
-	 * icmp check thread
-	 */
-	private class GetICMP implements Runnable {
-		@Override
-		public void run() {
-			boolean up = icmpHostup(context.get());
-            complete();
-			String r = new String(target);
-			if (up)
-				r += context.get().getString(R.string.icmp_ok);
-			else
-				r += context.get().getString(R.string.icmp_fail);
-            response.state = up;
-            response.status = r;
-		}
-	};
-
-	protected void complete() {
-		if (!finished) {
+    protected void complete(HostMessage h, int session) {
+        if (!finished && (session == mCurrentSession)) {
             finished = true;
+            response = h;
             masterThread.get().interrupt();
-			timer.stop();
-		}
-	}
+            timer.stop();
+        }
+    }
 
-	public synchronized HostMessage getHostup(int timeout,
-			Context ctxt, String router) {
-		if (response == null)
-			response = new HostMessage();
-		if (masterThread == null)
-			masterThread = new WeakReference<Thread>(Thread.currentThread());
-		;
-		/*
-		 * If null, use H_TARGET else construct URL from router string
+    public synchronized HostMessage getHostup(int timeout,
+                                              Context ctxt, String router) {
+        mCurrentSession++;
+        if (response == null) response = new HostMessage();
+        if (masterThread == null)
+            masterThread = new WeakReference<Thread>(Thread.currentThread());
+        /*
+         * If null, use H_TARGET else construct URL from router string
 		 */
-		if (router == null)
-			target = FAILOVER_TARGET;
-		else
-			target = router;
+        if (router == null)
+            target = FAILOVER_TARGET;
+        else
+            target = router;
 
-		reachable = timeout + TIMEOUT_EXTRA;
-		/*
+        reachable = timeout + TIMEOUT_EXTRA;
+        /*
 		 * Start Check Threads
 		 */
-		timer.start();
-		finished = false;
-		if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID))
-			icmpHandler.get().post(new GetICMP());
-		httpHandler.get().post(new GetHeaders());
-		try {
-			Thread.sleep(reachable);
-		} catch (InterruptedException e) {
-			/*
+
+        timer.start();
+        finished = false;
+        if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID))
+            icmpHandler.get().post(new GetICMP(mCurrentSession));
+        httpHandler.get().post(new GetHeaders(mCurrentSession));
+        try {
+            Thread.sleep(reachable);
+        } catch (InterruptedException e) {
+            /*
 			 * We have a response
 			 */
-			response.status += (String.valueOf(timer.getElapsed()));
-			response.status +=(ctxt.getString(R.string.ms));
-			return response;
-		} catch (RejectedExecutionException e) {
-			response.status+=(REJECTED_EXECUTION);
-		}
+            response.status += (String.valueOf(timer.getElapsed()));
+            response.status += (ctxt.getString(R.string.ms));
+            return response;
+        } catch (RejectedExecutionException e) {
+            response.status += (REJECTED_EXECUTION);
+        }
         finished = true;
-		return new HostMessage(ctxt.getString(R.string.critical_timeout), false);
-	}
+        return new HostMessage(ctxt.getString(R.string.critical_timeout), false);
+    }
 
-	/*
-	 * Performs ICMP ping/echo and returns boolean success or failure
-	 */
-	private boolean icmpHostup(Context context) {
-		boolean isUp = false;
+    /*
+     * Performs ICMP ping/echo and returns boolean success or failure
+     */
+    private HostMessage icmpHostup(Context context) {
+        HostMessage out = new HostMessage();
 
-		try {
-			if (InetAddress.getByName(target).isReachable(reachable))
-				isUp = true;
+        try {
+            if (InetAddress.getByName(target).isReachable(reachable))
+                out.state = true;
 
-		} catch (UnknownHostException e) {
+        } catch (UnknownHostException e) {
 
-		} catch (IOException e) {
+        } catch (IOException e) {
 
-		}
-		return isUp;
-	}
+        }
 
-	/*
-	 * Performs HTTP HEAD request and returns boolean success or failure
-	 */
-	private HostMessage getHttpHeaders(Context context) {
-		/*
+        if (out.state)
+            out.status = target + context.getString(R.string.icmp_ok);
+        else
+            out.status = target + context.getString(R.string.icmp_fail);
+
+        return out;
+    }
+
+    /*
+     * Performs HTTP HEAD request and returns boolean success or failure
+     */
+    private HostMessage getHttpHeaders(Context context) {
+        /*
 		 * get URI
 		 */
-		try {
-			headURI = new URI(context.getString(R.string.http) + target);
-		} catch (URISyntaxException e1) {
-			try {
-				headURI = new URI(context.getString(R.string.http)
-						+ FAILOVER_TARGET);
-			} catch (URISyntaxException e) {
-				// Should not ever happen since H_TARGET is guaranteed to be a
-				// valid URL at this point
-				e.printStackTrace();
-			}
-		}
-		int code = -1;
-		boolean state = false;
-		StringBuilder info = new StringBuilder();
-		/*
+        try {
+            headURI = new URI(context.getString(R.string.http) + target);
+        } catch (URISyntaxException e1) {
+            try {
+                headURI = new URI(context.getString(R.string.http)
+                        + FAILOVER_TARGET);
+            } catch (URISyntaxException e) {
+                // Should not ever happen since H_TARGET is guaranteed to be a
+                // valid URL at this point
+                e.printStackTrace();
+            }
+        }
+        int code = -1;
+        boolean state = false;
+        StringBuilder info = new StringBuilder();
+        /*
 		 * Get response
 		 */
-		HttpURLConnection con;
-		try {
-			con = (HttpURLConnection) headURI.toURL().openConnection();
-			con.setReadTimeout(HTTP_TIMEOUT);
-			code = con.getResponseCode();
-			con.disconnect();
+        HttpURLConnection con;
+        try {
+            con = (HttpURLConnection) headURI.toURL().openConnection();
+            con.setReadTimeout(HTTP_TIMEOUT);
+            code = con.getResponseCode();
+            con.disconnect();
 
-		} catch (MalformedURLException e) {
-			info.append(context.getString(R.string.malformed_url_exception));
-		} catch (IOException e) {
-			info.append(context.getString(R.string.i_o_exception));
-		}
+        } catch (MalformedURLException e) {
+            info.append(context.getString(R.string.malformed_url_exception));
+        } catch (IOException e) {
+            info.append(context.getString(R.string.i_o_exception));
+        }
 
-		if (code == HttpURLConnection.HTTP_OK
-				|| code == HttpURLConnection.HTTP_UNAUTHORIZED)
-			state = true;
-		info.append(headURI.toASCIIString());
-		if (state)
-			info.append(context.getString(R.string.http_ok));
-		else
-			info.append(context.getString(R.string.http_fail));
+        if (code == HttpURLConnection.HTTP_OK
+                || code == HttpURLConnection.HTTP_UNAUTHORIZED)
+            state = true;
+        info.append(headURI.toASCIIString());
+        if (state)
+            info.append(context.getString(R.string.http_ok));
+        else
+            info.append(context.getString(R.string.http_fail));
 
-		return new HostMessage(info.toString(), state);
-	}
+        return new HostMessage(info.toString(), state);
+    }
 
-	@SuppressWarnings("deprecation")
-	private void disableConnectionReuse() {
-		// Work around pre-Froyo bugs in HTTP connection reuse.
-		if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.FROYO) {
-			System.setProperty("http.keepAlive", "false");
-		}
-	}
+    @SuppressWarnings("deprecation")
+    private void disableConnectionReuse() {
+        // Work around pre-Froyo bugs in HTTP connection reuse.
+        if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.FROYO) {
+            System.setProperty("http.keepAlive", "false");
+        }
+    }
 
-	public void finish() {
-		icmpHandler.get().getLooper().quit();
-		httpHandler.get().getLooper().quit();
-	}
+    public void finish() {
+        icmpHandler.get().getLooper().quit();
+        httpHandler.get().getLooper().quit();
+    }
 
+    /*
+         * http header check thread
+         */
+    private class GetHeaders implements Runnable {
+        int session;
+
+        public GetHeaders(int id) {
+            session = id;
+        }
+
+        @Override
+        public void run() {
+            HostMessage h = getHttpHeaders(context.get());
+            complete(h, session);
+        }
+    }
+
+    /*
+         * icmp check thread
+         */
+    private class GetICMP implements Runnable {
+        int session;
+
+        public GetICMP(int id) {
+            session = id;
+        }
+
+        @Override
+        public void run() {
+            HostMessage h = icmpHostup(context.get());
+            complete(h, session);
+        }
+    }
 }
