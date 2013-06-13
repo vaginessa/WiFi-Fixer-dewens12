@@ -841,13 +841,13 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 */
         HostMessage out = hostup.getHostup(REACHABLE, context,
                 self.get().accesspointIP);
-        log(context, out.status.toString());
+        log(context, out.status);
         if (!out.state) {
 			/*
 			 * Try #2
 			 */
             out = hostup.getHostup(REACHABLE, context, null);
-            log(context, out.status.toString());
+            log(context, out.status);
         }
         return out.state;
     }
