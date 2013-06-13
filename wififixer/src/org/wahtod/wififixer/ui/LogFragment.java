@@ -17,9 +17,6 @@
 
 package org.wahtod.wififixer.ui;
 
-import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.prefs.PrefUtil;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,55 +24,64 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.prefs.PrefUtil;
 
 public class LogFragment extends Fragment {
-	public static final String HAS_LOGFRAGMENT = "HAS_LF";
-	public static final String LOG_MESSAGE_INTENT = "org.wahtod.wififixer.LOG_MESSAGE";
-	public static final String LOG_MESSAGE = "LOG_MESSAGE_KEY";
-	public static final String TAG = "AKAKAKADOUHF";
-	private TextView myTV;
-	private ScrollView mySV;
+    public static final String HAS_LOGFRAGMENT = "HAS_LF";
+    public static final String LOG_MESSAGE_INTENT = "org.wahtod.wififixer.LOG_MESSAGE";
+    public static final String LOG_MESSAGE = "LOG_MESSAGE_KEY";
+    public static final String TAG = "AKAKAKADOUHF";
+    public ViewHolder _views;
 
-	public class ScrollToBottom implements Runnable {
-		@Override
-		public void run() {
-			mySV.fullScroll(ScrollView.FOCUS_DOWN);
-		}
-	};
+    public static LogFragment newInstance(Bundle bundle) {
+        LogFragment f = new LogFragment();
+        f.setArguments(bundle);
+        return f;
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.log_fragment, null);
-		myTV = (TextView) v.findViewById(R.id.logText);
-		mySV = (ScrollView) v.findViewById(R.id.SCROLLER);
-		return v;
-	}
+    ;
 
-	@Override
-	public void onPause() {
-		/*
-		 * Set pref so LogService can send log lines to the broadcastreceiver
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.log_fragment, null);
+        _views = new ViewHolder();
+        _views.myTV = (TextView) v.findViewById(R.id.logText);
+        _views.mySV = (ScrollView) v.findViewById(R.id.SCROLLER);
+        return v;
+    }
+
+    @Override
+    public void onPause() {
+        /*
+         * Set pref so LogService can send log lines to the broadcastreceiver
 		 */
-		PrefUtil.writeBoolean(getActivity(), HAS_LOGFRAGMENT, false);
-		super.onPause();
-	}
+        PrefUtil.writeBoolean(getActivity(), HAS_LOGFRAGMENT, false);
+        super.onPause();
+    }
 
-	@Override
-	public void onResume() {
-		PrefUtil.writeBoolean(getActivity(), HAS_LOGFRAGMENT, true);
-		mySV.post(new ScrollToBottom());
-		super.onResume();
-	}
+    @Override
+    public void onResume() {
+        PrefUtil.writeBoolean(getActivity(), HAS_LOGFRAGMENT, true);
+        _views.mySV.post(new ScrollToBottom());
+        super.onResume();
+    }
 
-	public void setText(String text) {
-		myTV.setText(text);
-		mySV.post(new ScrollToBottom());
-	}
+    public void setText(String text) {
+        _views.myTV.setText(text);
+        _views.mySV.post(new ScrollToBottom());
+    }
 
-	public static LogFragment newInstance(Bundle bundle) {
-		LogFragment f = new LogFragment();
-		f.setArguments(bundle);
-		return f;
-	}
+    private static class ViewHolder {
+        public TextView myTV;
+        public ScrollView mySV;
+    }
+
+    public class ScrollToBottom implements Runnable {
+        @Override
+        public void run() {
+            _views.mySV.fullScroll(ScrollView.FOCUS_DOWN);
+        }
+    }
 }

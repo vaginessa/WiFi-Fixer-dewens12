@@ -144,13 +144,14 @@ public class MainActivity extends TutorialFragmentActivity implements
         else {
             LogFragment l = (LogFragment) sf.getChildFragmentManager()
                     .findFragmentByTag(LogFragment.TAG);
-            l.setText(mLogString.toString());
+            if (l != null)
+                l.setText(mLogString.toString());
         }
     }
 
     private void deleteLog() {
         /*
-		 * Delete old log if logging currently enabled, disable it briefly for
+         * Delete old log if logging currently enabled, disable it briefly for
 		 * deletion
 		 */
         File file = VersionedFile.getFile(this, LogService.LOGFILE);
