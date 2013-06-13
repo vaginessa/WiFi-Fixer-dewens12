@@ -160,7 +160,7 @@ public class PrefUtil {
         List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
         if (wifiConfigs != null && ssid != null) {
             for (WifiConfiguration network : wifiConfigs) {
-                if (StringUtil.removeQuotes(network.SSID).equals(ssid))
+                if (StringUtil.removeQuotes(network.SSID).equals(StringUtil.removeQuotes(ssid)))
                     return network.networkId;
             }
         }
@@ -198,7 +198,7 @@ public class PrefUtil {
     public static void writeNetworkPref(Context ctxt,
                                         String netstring, NetPref pref, int value) {
         /*
-		 * Check for actual changed value if changed, notify
+         * Check for actual changed value if changed, notify
 		 */
         if (value != readNetworkPref(ctxt, netstring, pref)) {
 			/*
