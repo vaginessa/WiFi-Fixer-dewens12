@@ -97,6 +97,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static final String SSTATE_INVALID = "INVALID";
     private static final int CONNECTING_THRESHOLD = 5;
     private static final long CWDOG_DELAY = 10000;
+    private static final int SLEEP_CHECK_CHOKE = 60000;
     protected static WeakReference<Context> ctxt;
     protected static Runnable NetCheckRunnable = new Runnable() {
         @Override
@@ -365,10 +366,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 demoteNetwork(ctxt.get(), n);
         }
     };
-    /*
-     * For ongoing status notification, widget, and Status fragment
-     */
-    protected StatusDispatcher _statusdispatcher;
     // flags
     private static boolean shouldrepair = false;
     private static boolean pendingscan = false;
@@ -392,6 +389,10 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static volatile Handler handler = new Handler();
     private static volatile ThreadHandler _nethandler;
     private static volatile boolean isUp;
+    /*
+     * For ongoing status notification, widget, and Status fragment
+     */
+    protected StatusDispatcher _statusdispatcher;
     boolean screenstate;
     private String accesspointIP;
     private WakeLock wakelock;
@@ -420,6 +421,13 @@ public class WFMonitor implements OnScreenStateChangedListener {
             handleBroadcast(context, intent);
         }
     };
+    private boolean mSleepCheckChoke = false;
+    private Runnable SleepCheckChoke = new Runnable() {
+        @Override
+        public void run() {
+            mSleepCheckChoke = false;
+        }
+    };
 
     public WFMonitor(final Context context) {
         _scantimer = new StopWatch();
@@ -429,8 +437,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
         ScreenStateDetector.setOnScreenStateChangedListener(this);
         screenstate = ScreenStateDetector.getScreenState(context);
         knownbysignal = new ArrayList<WFConfig>();
-		/*
-		 * Cache Context from service
+        /*
+         * Cache Context from service
 		 */
         ctxt = new WeakReference<Context>(context);
 		/*
@@ -1202,8 +1210,13 @@ public class WFMonitor implements OnScreenStateChangedListener {
             handleConnectIntent(context, data);
         else if (iAction.equals(REASSOCIATE_INTENT))
             handleReassociateEvent();
-        else if (iAction.equals(SLEEPCHECKINTENT)) {
+        else if (iAction.equals(SLEEPCHECKINTENT) && !mSleepCheckChoke) {
+            /*
+             * alarms get delayed due to deep sleep, causing a "storm" of
+             * alarms: only respond to one every SLEEP_CHECK_CHOKE ms
+             */
             handlerWrapper(rSleepcheck, REALLYSHORTWAIT);
+            handlerWrapper(SleepCheckChoke, SLEEP_CHECK_CHOKE);
         } else
             log(context, (iAction.toString()));
 
@@ -1774,5 +1787,4 @@ public class WFMonitor implements OnScreenStateChangedListener {
             self.get().handleNetworkResult(state);
         }
     }
-
 }
