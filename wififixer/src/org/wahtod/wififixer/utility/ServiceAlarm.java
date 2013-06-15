@@ -42,8 +42,8 @@ public final class ServiceAlarm extends Object {
     public static final long STARTDELAY = 30000;
     private static final long NODELAY = 0;
 
-    public static boolean alarmExists(Context c) {
-        return (createPendingIntent(c, 0) != null);
+    public static boolean alarmExists(Context context, Intent intent) {
+        return (PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_NO_CREATE) != null);
     }
 
     private static PendingIntent createPendingIntent(Context context,

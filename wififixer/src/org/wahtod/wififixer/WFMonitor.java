@@ -1708,7 +1708,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 			 * not fire handlers in deep sleep.
 			 */
             clearMessage(rMain);
-            if (!ServiceAlarm.alarmExists(ctxt.get()))
+            if (!ServiceAlarm.alarmExists(ctxt.get(), i))
                 ServiceAlarm.addAlarm(ctxt.get(),
                         SHORTWAIT, true, SLEEPWAIT, p);
         } else {
