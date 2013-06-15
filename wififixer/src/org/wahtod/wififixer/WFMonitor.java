@@ -122,8 +122,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
         }
     };
     protected static Runnable PostExecuteRunnable = new Runnable() {
-        private static final int STATUS_UPDATE_DELAY = 3000;
-
         @Override
         public void run() {
             /*
@@ -138,20 +136,9 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 StatusMessage.send(ctxt.get(), m);
             }
             self.get().handlerWrapper(new PostNetCheckRunnable(isUp));
-            self.get().handlerWrapper(rStatusUpdate, STATUS_UPDATE_DELAY);
         }
     };
-    /*
-     * Sends status update
-     */
-    protected static Runnable rStatusUpdate = new Runnable() {
-        public void run() {
-            StatusMessage.send(
-                    ctxt.get(),
-                    StatusMessage.getNew().setStatus(
-                            getSupplicantState().name()));
-        }
-    };
+
     /*
      * Runs first time supplicant nonresponsive
      */
