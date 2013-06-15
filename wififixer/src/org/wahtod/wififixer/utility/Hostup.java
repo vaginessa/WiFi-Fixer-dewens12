@@ -20,6 +20,8 @@ package org.wahtod.wififixer.utility;
 import android.content.Context;
 import android.os.Build;
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.prefs.PrefConstants;
+import org.wahtod.wififixer.prefs.PrefUtil;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -48,7 +50,6 @@ public class Hostup {
     protected volatile WeakReference<Context> context;
     protected volatile WeakReference<Thread> masterThread;
     protected volatile boolean finished;
-    protected volatile StopWatch timer;
     private ThreadHandler httpHandler;
     private ThreadHandler icmpHandler;
 
@@ -58,7 +59,6 @@ public class Hostup {
 
     public Hostup(Context c) {
         mCurrentSession = 0;
-        timer = new StopWatch();
         context = new WeakReference<Context>(c);
         httpHandler = new ThreadHandler(c.getString(R.string.httpcheckthread));
         icmpHandler = new ThreadHandler(c.getString(R.string.icmpcheckthread));
@@ -70,12 +70,14 @@ public class Hostup {
             finished = true;
             response = h;
             masterThread.get().interrupt();
-            timer.stop();
         }
     }
 
     public synchronized HostMessage getHostup(int timeout,
                                               Context ctxt, String router) {
+       /*
+        * Track Sessions to find ordering problem in deep sleep
+        */
         mCurrentSession++;
         if (response == null) response = new HostMessage();
         if (masterThread == null)
@@ -93,7 +95,6 @@ public class Hostup {
 		 * Start Check Threads
 		 */
 
-        timer.start();
         finished = false;
         if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID))
             icmpHandler.get().post(new GetICMP(mCurrentSession));
@@ -104,12 +105,15 @@ public class Hostup {
             /*
 			 * We have a response
 			 */
-            response.status += (String.valueOf(timer.getElapsed()));
+            response.status += (String.valueOf(response.timer.getElapsed()));
             response.status += (ctxt.getString(R.string.ms));
             return response;
         } catch (RejectedExecutionException e) {
             response.status += (REJECTED_EXECUTION);
         }
+        /*
+         * End session here
+         */
         finished = true;
         return new HostMessage(ctxt.getString(R.string.critical_timeout), false);
     }
@@ -119,6 +123,7 @@ public class Hostup {
      */
     private HostMessage icmpHostup(Context context) {
         HostMessage out = new HostMessage();
+        out.timer.start();
 
         try {
             if (InetAddress.getByName(target).isReachable(reachable))
@@ -134,7 +139,7 @@ public class Hostup {
             out.status = target + context.getString(R.string.icmp_ok);
         else
             out.status = target + context.getString(R.string.icmp_fail);
-
+        out.timer.stop();
         return out;
     }
 
@@ -145,6 +150,8 @@ public class Hostup {
         /*
 		 * get URI
 		 */
+        HostMessage out = new HostMessage();
+        out.timer.start();
         try {
             headURI = new URI(context.getString(R.string.http) + target);
         } catch (URISyntaxException e1) {
@@ -184,8 +191,10 @@ public class Hostup {
             info.append(context.getString(R.string.http_ok));
         else
             info.append(context.getString(R.string.http_fail));
-
-        return new HostMessage(info.toString(), state);
+        out.timer.stop();
+        out.status = info.toString();
+        out.state = state;
+        return out;
     }
 
     @SuppressWarnings("deprecation")
@@ -209,12 +218,16 @@ public class Hostup {
 
         public GetHeaders(int id) {
             session = id;
+            if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
+                LogService.log(context.get(), "Started GetHeaders Session:" + String.valueOf(id));
         }
 
         @Override
         public void run() {
             HostMessage h = getHttpHeaders(context.get());
             complete(h, session);
+            if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
+                LogService.log(context.get(), "Ended GetHeaders Session:" + String.valueOf(session));
         }
     }
 
@@ -226,12 +239,16 @@ public class Hostup {
 
         public GetICMP(int id) {
             session = id;
+            if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
+                LogService.log(context.get(), "Started GetICMP Session:" + String.valueOf(id));
         }
 
         @Override
         public void run() {
             HostMessage h = icmpHostup(context.get());
             complete(h, session);
+            if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
+                LogService.log(context.get(), "Ended GetICMP Session:" + String.valueOf(session));
         }
     }
 }

@@ -20,13 +20,15 @@ package org.wahtod.wififixer.utility;
 public class HostMessage {
 	public String status;
 	public boolean state;
+    public StopWatch timer;
 
-	public HostMessage(String sl, boolean s) {
+    public HostMessage(String sl, boolean s) {
 		status = sl;
 		state = s;
 	}
 
 	public HostMessage() {
 		status = null;
-	}
+        timer = new StopWatch();
+    }
 }
