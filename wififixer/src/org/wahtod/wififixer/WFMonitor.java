@@ -428,7 +428,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
          * Cache Context from service
 		 */
         ctxt = new WeakReference<Context>(context);
-		/*
+        /*
 		 * Set IP
 		 */
         if (getIsOnWifi(context))
@@ -1651,7 +1651,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 getSupplicantStateString(getSupplicantState())).setSSID(getSSID());
         if (state) {
             sm.setShow(1);
-            onNetworkConnected(PrefUtil.getWifiManager(ctxt.get()).getConnectionInfo());
         } else
             sm.setShow(-1);
 
