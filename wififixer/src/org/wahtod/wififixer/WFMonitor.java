@@ -138,7 +138,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
             self.get().handlerWrapper(new PostNetCheckRunnable(isUp));
         }
     };
-
     /*
      * Runs first time supplicant nonresponsive
      */
@@ -429,12 +428,12 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 */
         ctxt = new WeakReference<Context>(context);
         /*
-		 * Set IP
+         * Set IP
 		 */
         if (getIsOnWifi(context))
             icmpCache(context);
-		/*
-		 * Set current AP int
+        /*
+         * Set current AP int
 		 */
         lastAP = getNetworkID();
 		/*
@@ -1396,7 +1395,9 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		/*
 		 * Check for auth error
 		 */
-        if (data.containsKey(WifiManager.EXTRA_SUPPLICANT_ERROR))
+        if (data.containsKey(WifiManager.EXTRA_SUPPLICANT_ERROR)
+                && data.getInt(WifiManager.EXTRA_SUPPLICANT_ERROR)
+                == WifiManager.ERROR_AUTHENTICATING)
             NotifUtil.showToast(ctxt.get(), R.string.authentication_error);
 
 		/*
