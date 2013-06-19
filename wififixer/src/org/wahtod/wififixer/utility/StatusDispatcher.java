@@ -60,8 +60,8 @@ public class StatusDispatcher {
     };
 
     /*
-     * Essentially, a Leaky Bucket that throttles Widget messages to once every
-     * 10 seconds
+     * Essentially, a Leaky Bucket that throttles Widget messages to one every
+     * WIDGET_REFRESH_DELAY seconds
      */
     private static Handler messagehandler = new Handler() {
         @Override

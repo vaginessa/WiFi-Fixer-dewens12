@@ -256,7 +256,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                     notifyWrap(ctxt.get(), ctxt.get().getString(R.string.repairing));
                     break;
             }
-            self.get().wakelock.lock(false);
+            self.get().wakelock.lock(false, -1);
             log(ctxt.get(),
                     new StringBuilder(ctxt.get().getString(
                             R.string.fix_algorithm)).append(mRepairLevel)
@@ -436,8 +436,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
          * Set current AP int
 		 */
         lastAP = getNetworkID();
-		/*
-		 * Set current supplicant state
+        /*
+         * Set current supplicant state
 		 */
         lastSupplicantState = getSupplicantState();
 		/*
@@ -1268,7 +1268,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     protected void handleNetworkResult(boolean state) {
         if (!state) {
-            wakelock.lock(true);
+            wakelock.lock(true, -1);
             _connected = false;
             shouldrepair = true;
             wifiRepair();

@@ -18,48 +18,65 @@
 package org.wahtod.wififixer.utility;
 
 import android.content.Context;
+import android.os.Handler;
 import android.os.PowerManager;
 
 public class WakeLock {
-	private PowerManager.WakeLock wakelock;
+    private PowerManager.WakeLock wakelock;
+    private Handler mReleaseHandler = new Handler();
+    private Runnable ReleasePoster = new Runnable() {
 
-	public WakeLock(Context context) {
-		PowerManager pm = (PowerManager) context
-				.getSystemService(Context.POWER_SERVICE);
-		/*
-		 * We want PowerManager.PARTIAL_WAKE_LOCK because we don't want to
+        @Override
+        public void run() {
+            onRelease();
+        }
+    };
+
+    public WakeLock(Context context) {
+        PowerManager pm = (PowerManager) context
+                .getSystemService(Context.POWER_SERVICE);
+        /*
+         * We want PowerManager.PARTIAL_WAKE_LOCK because we don't want to
 		 * change screen state, we just want to rev up the CPU so the wifi
 		 * commands work right
 		 */
-		wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-				context.toString());
-		wakelock.setReferenceCounted(false);
-	}
+        wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                context.toString());
+        wakelock.setReferenceCounted(false);
+    }
 
-	public void lock(boolean state) {
-		if (state) {
-			if (!wakelock.isHeld()) {
-				wakelock.acquire();
-				onAcquire();
-			}
-		} else if (wakelock.isHeld()) {
-			wakelock.release();
-			onRelease();
-		}
-	}
+    public void lock(boolean state) {
+        lock(state, -1);
+    }
 
-	public void onRelease() {
-		/*
+    public void lock(boolean state, int timeout) {
+        if (state) {
+            if (!wakelock.isHeld()) {
+                if (timeout == -1)
+                    wakelock.acquire();
+                else {
+                    wakelock.acquire(timeout);
+                    mReleaseHandler.postDelayed(ReleasePoster, timeout);
+                }
+                onAcquire();
+            }
+        } else if (wakelock.isHeld()) {
+            wakelock.release();
+            onRelease();
+        }
+    }
+
+    public void onRelease() {
+        /*
+         * Override
+		 */
+
+    }
+
+    public void onAcquire() {
+        /*
 		 * Override
 		 */
 
-	}
-
-	public void onAcquire() {
-		/*
-		 * Override
-		 */
-
-	}
-
+    }
 }

@@ -22,8 +22,8 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:padding="10dp"
-              android:background="@drawable/dialog"
-              >
+              android:background="#262b76"
+        >
     <ImageView android:id="@+id/icon"
                android:layout_width="wrap_content"
                android:layout_height="fill_parent"
