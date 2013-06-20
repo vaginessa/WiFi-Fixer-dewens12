@@ -49,7 +49,7 @@ public class Hostup {
     protected volatile int mCurrentSession;
     protected volatile WeakReference<Context> context;
     protected volatile WeakReference<Thread> masterThread;
-    protected volatile boolean finished;
+    protected volatile boolean mFinished;
     private ThreadHandler httpHandler;
     private ThreadHandler icmpHandler;
 
@@ -67,8 +67,8 @@ public class Hostup {
     }
 
     protected void complete(HostMessage h, int session) {
-        if (!finished && (session == mCurrentSession)) {
-            finished = true;
+        if (session == mCurrentSession) {
+            mFinished = true;
             response = h;
             masterThread.get().interrupt();
         }
@@ -93,10 +93,10 @@ public class Hostup {
 
         reachable = timeout + TIMEOUT_EXTRA;
         /*
-		 * Start Check Threads
+         * Start Check Threads
 		 */
 
-        finished = false;
+        mFinished = false;
         if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID))
             icmpHandler.get().post(new GetICMP(mCurrentSession));
         httpHandler.get().post(new GetHeaders(mCurrentSession));
@@ -115,7 +115,7 @@ public class Hostup {
         /*
          * End session here
          */
-        finished = true;
+        mFinished = true;
         return new HostMessage(ctxt.getString(R.string.critical_timeout), false);
     }
 
@@ -175,6 +175,7 @@ public class Hostup {
         try {
             con = (HttpURLConnection) headURI.toURL().openConnection();
             con.setReadTimeout(HTTP_TIMEOUT);
+            con.setConnectTimeout(HTTP_TIMEOUT);
             code = con.getResponseCode();
             con.disconnect();
 
@@ -226,7 +227,8 @@ public class Hostup {
         @Override
         public void run() {
             HostMessage h = getHttpHeaders(context.get());
-            complete(h, session);
+            if (!mFinished)
+                complete(h, session);
             if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
                 LogService.log(context.get(), "Ended GetHeaders Session:" + String.valueOf(session));
         }
@@ -247,7 +249,8 @@ public class Hostup {
         @Override
         public void run() {
             HostMessage h = icmpHostup(context.get());
-            complete(h, session);
+            if (!mFinished)
+                complete(h, session);
             if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
                 LogService.log(context.get(), "Ended GetICMP Session:" + String.valueOf(session));
         }
