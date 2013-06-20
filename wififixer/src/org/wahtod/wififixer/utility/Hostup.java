@@ -186,7 +186,11 @@ public class Hostup {
         }
 
         if (code == HttpURLConnection.HTTP_OK
-                || code == HttpURLConnection.HTTP_UNAUTHORIZED)
+                || code == HttpURLConnection.HTTP_UNAUTHORIZED
+                || code == HttpURLConnection.HTTP_FORBIDDEN
+                || code == HttpURLConnection.HTTP_NOT_FOUND
+                || code == HttpURLConnection.HTTP_PROXY_AUTH)
+
             state = true;
         info.append(headURI.toASCIIString());
         if (state)
