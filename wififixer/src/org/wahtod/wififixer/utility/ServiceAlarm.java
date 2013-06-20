@@ -113,7 +113,7 @@ public final class ServiceAlarm extends Object {
         AlarmManager mgr = (AlarmManager) c
                 .getSystemService(Context.ALARM_SERVICE);
         if (repeating)
-            mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            mgr.setRepeating(AlarmManager.ELAPSED_REALTIME,
                     SystemClock.elapsedRealtime() + delay, period, p);
         else
             mgr.set(AlarmManager.ELAPSED_REALTIME,
