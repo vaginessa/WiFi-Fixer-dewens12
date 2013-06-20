@@ -440,8 +440,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
          * Set current supplicant state
 		 */
         lastSupplicantState = getSupplicantState();
-		/*
-		 * Set current wifi radio state
+        /*
+         * Set current wifi radio state
 		 */
         wifistate = PrefUtil.getWifiManager(context).isWifiEnabled();
 		/*
@@ -1209,7 +1209,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private void handleConnect() {
-        if (connectee.wificonfig.SSID.contains(getSSID().toString())) {
+        if (StringUtil.removeQuotes(connectee.wificonfig.SSID)
+                .equals(StringUtil.removeQuotes(getSSID()))) {
             log(ctxt.get(),
                     new StringBuilder(ctxt.get().getString(
                             R.string.connected_to_network)).append(
