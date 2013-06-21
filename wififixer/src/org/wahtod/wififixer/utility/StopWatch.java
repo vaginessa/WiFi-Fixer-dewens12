@@ -17,6 +17,8 @@
 
 package org.wahtod.wififixer.utility;
 
+import static android.os.SystemClock.elapsedRealtime;
+
 public class StopWatch {
 	/*
 	 * Provides timing services
@@ -31,20 +33,20 @@ public class StopWatch {
 	}
 
 	public void start() {
-		this.start = System.currentTimeMillis();
-		this.running = true;
+        this.start = elapsedRealtime();
+        this.running = true;
 	}
 
 	public void stop() {
-		this.stop = System.currentTimeMillis();
-		this.running = false;
+        this.stop = elapsedRealtime();
+        this.running = false;
 	}
 
 	public long getElapsed() {
 		long elapsed;
 		if (running) {
-			elapsed = (System.currentTimeMillis() - start);
-		} else {
+            elapsed = (elapsedRealtime() - start);
+        } else {
 			elapsed = (stop - start);
 		}
 		return elapsed;

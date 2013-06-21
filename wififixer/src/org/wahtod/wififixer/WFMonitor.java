@@ -73,7 +73,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     // ms for main loop sleep
     private final static int LOOPWAIT = 20000;
     // ms for sleep loop check
-    private final static long SLEEPWAIT = 120000;
+    private final static long SLEEPWAIT = 300000;
     private static final int SHORTWAIT = 1500;
     // just long enough to avoid sleep bug with handler posts
     private static final int REALLYSHORTWAIT = 500;
@@ -97,7 +97,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static final String SSTATE_INVALID = "INVALID";
     private static final int CONNECTING_THRESHOLD = 5;
     private static final long CWDOG_DELAY = 10000;
-    private static final int SLEEP_CHECK_CHOKE = 60000;
+    private static final int SLEEP_CHECK_WAKELOCK_DURATION = 3000;
     protected static WeakReference<Context> ctxt;
     protected static Runnable NetCheckRunnable = new Runnable() {
         @Override
@@ -268,16 +268,14 @@ public class WFMonitor implements OnScreenStateChangedListener {
      */
     protected static Runnable rSleepcheck = new Runnable() {
         public void run() {
-            if (shouldManage(ctxt.get())) {
                 /*
                  * This is all we want to do.
 				 */
 
                 if (getisWifiEnabled(ctxt.get(), true)) {
                     self.get().checkWifi();
-                }
-            }
-
+            } else
+                    self.get().wakelock.lock(false);
         }
     };
     /*
@@ -405,13 +403,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private BroadcastReceiver localreceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             handleBroadcast(context, intent);
-        }
-    };
-    private boolean mSleepCheckChoke = false;
-    private Runnable SleepCheckChoke = new Runnable() {
-        @Override
-        public void run() {
-            mSleepCheckChoke = false;
         }
     };
 
@@ -782,11 +773,18 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private static String getSSID() {
-        String s = (PrefUtil.getWifiManager(ctxt.get()).getConnectionInfo().getSSID());
+        String s = null;
+        try {
+            s = (PrefUtil.getWifiManager(ctxt.get()).getConnectionInfo().getSSID());
+        } catch (NullPointerException e) {
+            /*
+             * whoops, no connectioninfo, or WifiManager is null
+             */
+        }
         if (s != null)
             return s;
         else
-            return ("    ");
+            return ("null");
     }
 
     private static SupplicantState getSupplicantState() {
@@ -1196,25 +1194,27 @@ public class WFMonitor implements OnScreenStateChangedListener {
             handleConnectIntent(context, data);
         else if (iAction.equals(REASSOCIATE_INTENT))
             handleReassociateEvent();
-        else if (iAction.equals(SLEEPCHECKINTENT) && !mSleepCheckChoke) {
+        else if (iAction.equals(SLEEPCHECKINTENT)) {
             /*
-             * alarms get delayed due to deep sleep, causing a "storm" of
-             * alarms: only respond to one every SLEEP_CHECK_CHOKE ms
+             * Run Sleep Check immediately
+             * with wake lock,
              */
-            handlerWrapper(rSleepcheck, REALLYSHORTWAIT);
-            handlerWrapper(SleepCheckChoke, SLEEP_CHECK_CHOKE);
+            if (shouldManage(ctxt.get())) {
+                wakelock.lock(true);
+                handlerWrapper(rSleepcheck);
+            }
         } else
             log(context, (iAction.toString()));
 
     }
 
     private void handleConnect() {
+        String ssid = getSSID();
         if (StringUtil.removeQuotes(connectee.wificonfig.SSID)
-                .equals(StringUtil.removeQuotes(getSSID()))) {
+                .equals(StringUtil.removeQuotes(ssid))) {
             log(ctxt.get(),
-                    new StringBuilder(ctxt.get().getString(
-                            R.string.connected_to_network)).append(
-                            connectee.wificonfig.SSID).toString());
+                    ctxt.get().getString(R.string.connected_to_network)
+                            + connectee.wificonfig.SSID);
         } else {
             log(ctxt.get(), R.string.connect_failed);
 
@@ -1774,6 +1774,10 @@ public class WFMonitor implements OnScreenStateChangedListener {
         public void run() {
             self.get().checkSignal(ctxt.get());
             self.get().handleNetworkResult(state);
+            /*
+             * In case we had one held from sleep check
+             */
+            self.get().wakelock.lock(false);
         }
     }
 }
