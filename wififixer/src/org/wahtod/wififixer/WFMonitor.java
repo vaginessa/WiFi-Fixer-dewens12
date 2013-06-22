@@ -97,7 +97,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static final String SSTATE_INVALID = "INVALID";
     private static final int CONNECTING_THRESHOLD = 5;
     private static final long CWDOG_DELAY = 10000;
-    private static final int SLEEP_CHECK_WAKELOCK_DURATION = 3000;
     protected static WeakReference<Context> ctxt;
     protected static Runnable NetCheckRunnable = new Runnable() {
         @Override
@@ -1264,6 +1263,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 			 * Make sure scan happens in a reasonable amount of time
 			 */
             handlerWrapper(rScanWatchDog, SHORTWAIT);
+            wakelock.lock(false);
         }
     }
 
