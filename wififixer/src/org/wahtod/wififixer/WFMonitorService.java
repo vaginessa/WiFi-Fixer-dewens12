@@ -80,7 +80,6 @@ public class WFMonitorService extends Service implements
         if (PrefUtil.readBoolean(this, Pref.HASWIDGET_KEY.key()))
             resetWidget();
         unregisterReceivers();
-        ServiceAlarm.unsetAlarm(this);
         wifi.setStatNotif(false);
     }
 
@@ -178,9 +177,12 @@ public class WFMonitorService extends Service implements
 
     @Override
     public void onLowMemory() {
+        /*
+         *  All we want to do is log this for diagnosis:
+         *  Service lifecycle should occur naturally
+         */
         if (logging)
             LogService.log(this, (getString(R.string.low_memory)));
-        stopSelf();
         super.onLowMemory();
     }
 
