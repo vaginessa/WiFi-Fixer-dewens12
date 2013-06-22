@@ -20,8 +20,6 @@ package org.wahtod.wififixer.utility;
 import android.content.Context;
 import android.os.Build;
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.prefs.PrefConstants;
-import org.wahtod.wififixer.prefs.PrefUtil;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -224,8 +222,8 @@ public class Hostup {
 
         public GetHeaders(int id) {
             session = id;
-            if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
-                LogService.log(context.get(), "Started GetHeaders Session:" + String.valueOf(id));
+            //if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
+            //    LogService.log(context.get(), "Started GetHeaders Session:" + String.valueOf(id));
         }
 
         @Override
@@ -233,8 +231,8 @@ public class Hostup {
             HostMessage h = getHttpHeaders(context.get());
             if (!mFinished)
                 complete(h, session);
-            if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
-                LogService.log(context.get(), "Ended GetHeaders Session:" + String.valueOf(session));
+            //if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
+            //    LogService.log(context.get(), "Ended GetHeaders Session:" + String.valueOf(session));
         }
     }
 
@@ -246,8 +244,8 @@ public class Hostup {
 
         public GetICMP(int id) {
             session = id;
-            if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
-                LogService.log(context.get(), "Started GetICMP Session:" + String.valueOf(id));
+            //if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
+            //    LogService.log(context.get(), "Started GetICMP Session:" + String.valueOf(id));
         }
 
         @Override
@@ -255,8 +253,8 @@ public class Hostup {
             HostMessage h = icmpHostup(context.get());
             if (!mFinished)
                 complete(h, session);
-            if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
-                LogService.log(context.get(), "Ended GetICMP Session:" + String.valueOf(session));
+            //if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
+            //    LogService.log(context.get(), "Ended GetICMP Session:" + String.valueOf(session));
         }
     }
 }
