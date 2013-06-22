@@ -17,17 +17,16 @@
 
 package org.wahtod.wififixer.utility;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-
-import org.wahtod.wififixer.legacy.VersionedScreenState;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
+import org.wahtod.wififixer.legacy.VersionedScreenState;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 public class ScreenStateDetector {
 	/*
@@ -59,7 +58,6 @@ public class ScreenStateDetector {
 	};
 
 	private static ArrayList<WeakReference<OnScreenStateChangedListener>> _clients = new ArrayList<WeakReference<OnScreenStateChangedListener>>();
-	private static boolean registered;
 
 	public static boolean getScreenState(Context context) {
 		return VersionedScreenState.getScreenState(context);
@@ -92,7 +90,6 @@ public class ScreenStateDetector {
 	};
 
 	public ScreenStateDetector(Context context) {
-		if (!registered) {
 			/*
 			 * Register for screen state events
 			 * 
@@ -102,15 +99,11 @@ public class ScreenStateDetector {
 			 */
 			IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
 			filter.addAction(Intent.ACTION_SCREEN_ON);
-			context.registerReceiver(receiver, filter);
-			registered = true;
-		}
+			BroadcastHelper.registerReceiver(context, receiver, filter, false);
 	}
 
 	public void unregister(Context context) {
-		if (registered)
-			context.unregisterReceiver(receiver);
-		registered = false;
+			BroadcastHelper.unregisterReceiver(context, receiver);
 	}
 
 	public void unsetOnScreenStateChangedListener(
