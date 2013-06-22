@@ -271,10 +271,10 @@ public class WFMonitor implements OnScreenStateChangedListener {
                  * This is all we want to do.
 				 */
 
-                if (getisWifiEnabled(ctxt.get(), true)) {
-                    self.get().checkWifi();
+            if (getisWifiEnabled(ctxt.get(), true)) {
+                self.get().checkWifi();
             } else
-                    self.get().wakelock.lock(false);
+                self.get().wakelock.lock(false);
         }
     };
     /*
@@ -434,8 +434,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
          * Set current wifi radio state
 		 */
         wifistate = PrefUtil.getWifiManager(context).isWifiEnabled();
-		/*
-		 * Set up system Intent filters
+        /*
+         * Set up system Intent filters
 		 */
         IntentFilter filter = new IntentFilter(
                 WifiManager.WIFI_STATE_CHANGED_ACTION);
@@ -1199,7 +1199,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
              * with wake lock,
              */
             if (shouldManage(ctxt.get())) {
-                wakelock.lock(true);
+                if (!PrefUtil.getFlag(Pref.WAKELOCK_KEY))
+                    wakelock.lock(true);
                 handlerWrapper(rSleepcheck);
             }
         } else

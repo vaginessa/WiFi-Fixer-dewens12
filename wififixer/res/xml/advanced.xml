@@ -38,6 +38,11 @@
             android:key="SCREEN"
             android:summary="@string/SCREEN_summary"
             android:title="@string/SCREEN_title" />
+        <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="WAKELOCK_DISABLE"
+                android:summary="@string/WAKELOCK_summary"
+                android:title="@string/WAKELOCK_title"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="Specialized Fixes" >
         <ListPreference

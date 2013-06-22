@@ -46,9 +46,9 @@ public class PrefConstants {
 		WIFILOCK_KEY("WiFiLock"), NOTIF_KEY("Notifications"), DISABLE_KEY(
 				"Disable"), LOG_KEY("SLOG"), N1FIX2_KEY("N1FIX2"), SCREEN_KEY(
 				"SCREEN"), STATENOT_KEY("StateNotif"), HASWIDGET_KEY(
-				"HASWIDGET");
+                "HASWIDGET"), WAKELOCK_KEY("WAKELOCK_DISABLE");
 
-		private String key;
+        private String key;
 		private static final Map<String, Pref> lookup = new HashMap<String, Pref>();
 
 		static {
