@@ -1231,16 +1231,17 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private void handleNetworkAction(Bundle data) {
-        NetworkInfo info = data.getParcelable(WifiManager.EXTRA_NETWORK_INFO);
-		/*
+        NetworkInfo networkInfo = data.getParcelable(WifiManager.EXTRA_NETWORK_INFO);
+        /*
 		 * This action means network connectivty has changed but, we only want
 		 * to run this code for wifi
 		 */
-        if (info.getType() == ConnectivityManager.TYPE_WIFI) {
-            if (info.getState().equals(NetworkInfo.State.CONNECTED))
-                onNetworkConnected(PrefUtil.getWifiManager(ctxt.get())
-                        .getConnectionInfo());
-            else if (info.getState().equals(NetworkInfo.State.DISCONNECTED))
+        if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+            if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED) && !_connected) {
+                WifiInfo connectionInfo = PrefUtil.getWifiManager(ctxt.get())
+                        .getConnectionInfo();
+                onNetworkConnected(connectionInfo);
+            } else if (networkInfo.getState().equals(NetworkInfo.State.DISCONNECTED))
                 onNetworkDisconnected();
         }
     }
@@ -1447,9 +1448,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
             }
 
-        } else if (sState.name().equals(SSTATE_ASSOCIATED))
-            prepareConnect();
-        else if (sState.name().equals(SSTATE_INVALID))
+        } else if (sState.name().equals(SSTATE_INVALID))
             supplicantFix();
         else if (sState.name().equals(SSTATE_ASSOCIATING)) {
             handlerWrapper(rAssocWatchDog, SHORTWAIT);
@@ -1513,7 +1512,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     private void onNetworkConnected(WifiInfo wifiInfo) {
         mLastConnectedNetwork = wifiInfo;
-		/*
+        prepareConnect();
+        /*
 		 * Disable Demoter, we've connected
 		 */
         clearMessage(rDemoter);
