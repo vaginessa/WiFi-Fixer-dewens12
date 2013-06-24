@@ -1213,7 +1213,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
         if (StringUtil.removeQuotes(connectee.wificonfig.SSID)
                 .equals(StringUtil.removeQuotes(ssid))) {
             log(ctxt.get(),
-                    ctxt.get().getString(R.string.connected_to_network)
+                    ctxt.get().getString(R.string.connnection_completed)
                             + connectee.wificonfig.SSID);
         } else {
             log(ctxt.get(), R.string.connect_failed);

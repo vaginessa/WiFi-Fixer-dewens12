@@ -252,5 +252,6 @@
     <string name="WAKELOCK_summary">Most devices operate correctly with this enabled. Reduces battery use slightly.
     </string>
     <string name="WAKELOCK_title">Disable Sleep Wake Lock</string>
+    <string name="connnection_completed">Requested connection completed:</string>
 
 </resources>
