@@ -228,6 +228,10 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 case W_REASSOCIATE:
                     // Let's try to reassociate first..
                     PrefUtil.getWifiManager(ctxt.get()).reassociate();
+                    /*
+                     * Schedule network check to verify reassociate
+                     */
+                    self.get().handlerWrapper(rSleepcheck, SHORTWAIT);
                     log(ctxt.get(), R.string.reassociating);
                     mRepairLevel++;
                     notifyWrap(ctxt.get(),
@@ -255,7 +259,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                     notifyWrap(ctxt.get(), ctxt.get().getString(R.string.repairing));
                     break;
             }
-            self.get().wakelock.lock(false, -1);
+            self.get().wakelock.lock(false);
             log(ctxt.get(),
                     new StringBuilder(ctxt.get().getString(
                             R.string.fix_algorithm)).append(mRepairLevel)
@@ -448,16 +452,16 @@ public class WFMonitor implements OnScreenStateChangedListener {
         // Sleep Check
         filter.addAction(SLEEPCHECKINTENT);
         BroadcastHelper.registerReceiver(context, receiver, filter, false);
-		/*
-		 * Local Intent filters
+        /*
+         * Local Intent filters
 		 */
         // Connect intent
         filter = new IntentFilter(CONNECTINTENT);
         // User Event
         filter.addAction(REASSOCIATE_INTENT);
         BroadcastHelper.registerReceiver(context, localreceiver, filter, true);
-		/*
-		 * Initialize WakeLock and WifiLock
+        /*
+         * Initialize WakeLock and WifiLock
 		 */
         wakelock = new WakeLock(context) {
 
@@ -607,8 +611,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
         SupplicantState sstate = getSupplicantState();
         if (sstate == null)
             return false;
-        else return sstate == SupplicantState.ASSOCIATED
-                || sstate == SupplicantState.COMPLETED;
+        else return sstate.equals(SupplicantState.ASSOCIATED)
+                || sstate.equals(SupplicantState.COMPLETED);
     }
 
     private static boolean getisWifiEnabled(Context context, boolean log) {
@@ -1199,7 +1203,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
              * with wake lock,
              */
             if (shouldManage(ctxt.get())) {
-                if (!PrefUtil.getFlag(Pref.WAKELOCK_KEY))
+                if (!PrefUtil.readBoolean(ctxt.get(), Pref.WAKELOCK_KEY.key()))
                     wakelock.lock(true);
                 handlerWrapper(rSleepcheck);
             }
@@ -1271,11 +1275,12 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     protected void handleNetworkResult(boolean state) {
         if (!state) {
-            wakelock.lock(true, -1);
+            wakelock.lock(true);
             _connected = false;
             shouldrepair = true;
             wifiRepair();
-        }
+        } else
+            wakelock.lock(false);
     }
 
     public void cleanup() {
@@ -1604,12 +1609,16 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 * Notify current state on resume
 		 */
         if (PrefUtil.getFlag(Pref.STATENOT_KEY)) {
-            if (!getIsOnWifi(ctxt.get()))
-                clearConnectedStatus(getSupplicantStateString(getSupplicantState()));
-            else
-                StatusMessage.send(ctxt.get(), _statusdispatcher.getStatusMessage().setShow(1));
-
-            _statusdispatcher.refreshWidget(null);
+            if (!getisWifiEnabled(ctxt.get(), false))
+                clearConnectedStatus(ctxt.get().getString(R.string.wifi_is_disabled));
+            else {
+                if (_connected)
+                    handlerWrapper(rMain);
+                else {
+                    clearConnectedStatus(getSupplicantStateString(getSupplicantState()));
+                }
+                _statusdispatcher.refreshWidget(null);
+            }
         }
     }
 
@@ -1734,15 +1743,17 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private void wifiRepair() {
-        if (!shouldrepair)
+        if (!shouldrepair) {
+            wifilock.lock(false);
             return;
+        }
         handlerWrapper(rWifiTask);
         log(ctxt.get(), R.string.running_wifi_repair);
         shouldrepair = false;
     }
 
-    public void wifiLock(boolean state) {
-        wifilock.lock(state);
+    public void wifiLock(boolean b) {
+        wifilock.lock(b);
     }
 
     /*
@@ -1775,10 +1786,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
         public void run() {
             self.get().checkSignal(ctxt.get());
             self.get().handleNetworkResult(state);
-            /*
-             * In case we had one held from sleep check
-             */
-            self.get().wakelock.lock(false);
         }
     }
 }

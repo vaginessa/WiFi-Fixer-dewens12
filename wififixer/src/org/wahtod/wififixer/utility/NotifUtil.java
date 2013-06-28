@@ -33,8 +33,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.IntentConstants;
+import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.ui.MainActivity;
 import org.wahtod.wififixer.widget.WidgetReceiver;
@@ -261,7 +261,7 @@ public class NotifUtil {
         TextView text = (TextView) layout.findViewById(R.id.text);
         text.setText(message);
         Toast toast = new Toast(context.getApplicationContext());
-        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
         toast.show();

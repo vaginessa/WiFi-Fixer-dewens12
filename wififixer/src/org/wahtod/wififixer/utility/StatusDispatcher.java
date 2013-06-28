@@ -66,7 +66,7 @@ public class StatusDispatcher {
     private static Handler messagehandler = new Handler() {
         @Override
         public void handleMessage(Message message) {
-            if (_statusMessage != null && ScreenStateDetector.getScreenState(c.get()))
+            if (_statusMessage != null)
                 switch (message.what) {
                     case WIDGET_REFRESH:
                         if (PrefUtil.getFlag(Pref.HASWIDGET_KEY))
