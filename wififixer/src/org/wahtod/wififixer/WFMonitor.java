@@ -924,12 +924,13 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private static boolean supplicantPatternCheck() {
-        self.get()._supplicantFifo.add(self.get().lastSupplicantState);
-        List<SupplicantState> pattern = self.get()._supplicantFifo
+        WFMonitor me = self.get();
+        me._supplicantFifo.add(me.lastSupplicantState);
+        List<SupplicantState> pattern = me._supplicantFifo
                 .containsPatterns(SupplicantPatterns.SCAN_BOUNCE_CLUSTER);
         if (pattern != null) {
             log(ctxt.get(), pattern.getClass().getSimpleName());
-            self.get()._supplicantFifo.clear();
+            me._supplicantFifo.clear();
             toggleWifi();
             return true;
         } else
@@ -1321,7 +1322,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
      */
     private boolean handlerWrapper(Runnable r) {
         if (handler.hasMessages(r.hashCode()))
-            return false;
+            handler.removeCallbacks(r);
         Message out = Message.obtain(handler, r);
         out.what = r.hashCode();
         if (screenstate)
@@ -1332,7 +1333,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     private boolean handlerWrapper(Runnable r, long delay) {
         if (handler.hasMessages(r.hashCode()))
-            return false;
+         handler.removeCallbacks(r);
         Message out = Message.obtain(handler, r);
         out.what = r.hashCode();
         return handler.sendMessageDelayed(out, delay);
@@ -1391,8 +1392,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 */
         SupplicantState sState = data
                 .getParcelable(WifiManager.EXTRA_NEW_STATE);
-        if (sState.equals(lastSupplicantState))
-            return;
+
         lastSupplicantState = sState;
 		/*
 		 * Supplicant state pattern wedge detection
