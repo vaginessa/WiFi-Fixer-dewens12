@@ -494,7 +494,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
         };
 
 		/*
-		 * acquire wifi lock if should
+         * acquire wifi lock if should
 		 */
         if (PrefUtil.getFlag(Pref.WIFILOCK_KEY))
             wifilock.lock(true);
@@ -1333,7 +1333,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     private boolean handlerWrapper(Runnable r, long delay) {
         if (handler.hasMessages(r.hashCode()))
-         handler.removeCallbacks(r);
+            handler.removeCallbacks(r);
         Message out = Message.obtain(handler, r);
         out.what = r.hashCode();
         return handler.sendMessageDelayed(out, delay);
@@ -1696,12 +1696,12 @@ public class WFMonitor implements OnScreenStateChangedListener {
         }
     }
 
-    private void sleepCheck(boolean state) {
+    private void sleepCheck(boolean screenoff) {
         Intent i = new Intent(SLEEPCHECKINTENT);
         PendingIntent p = PendingIntent.getBroadcast(ctxt.get(), 0, i,
                 PendingIntent.FLAG_CANCEL_CURRENT);
-        if (state && getisWifiEnabled(ctxt.get(), false)) {
-			/*
+        if (screenoff && getisWifiEnabled(ctxt.get(), false)) {
+            /*
 			 * Start sleep check Using alarm here because some devices seem to
 			 * not fire handlers in deep sleep.
 			 */

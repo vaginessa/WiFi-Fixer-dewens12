@@ -61,8 +61,6 @@ public class NotifUtil {
      */
     public static final int ICON_SET_SMALL = 0;
     public static final int ICON_SET_LARGE = 1;
-    protected static int ssidStatus = 0;
-    protected static PendingIntent contentIntent;
     private static NotificationCompat.Builder mLogBuilder;
     private static NotificationCompat.Builder mStatusBuilder;
 
@@ -92,6 +90,7 @@ public class NotifUtil {
 
         if (m.getShow() != 1) {
             cancel(ctxt, NotifUtil.STAT_TAG, NotifUtil.STATNOTIFID);
+            mStatusBuilder = null;
             return;
         }
         if (mStatusBuilder == null) {
