@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.v4.app.FixedFragmentStatePagerAdapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -129,6 +130,8 @@ public class MainActivity extends TutorialFragmentActivity implements
             String message = b.getString(LogFragment.LOG_MESSAGE);
             if (message != null) {
                 message.replaceAll("\\n", "");
+                mLogString.append(SystemClock.elapsedRealtime());
+                mLogString.append(": ");
                 mLogString.append(message);
                 mLogString.append("\n");
             }
