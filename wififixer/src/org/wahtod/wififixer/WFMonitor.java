@@ -151,7 +151,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 pendingreconnect = false;
             } else {
                 mRepairLevel = W_REASSOCIATE;
-                self.get().handlerWrapper(rScanWatchDog, SHORTWAIT);
+                PrefUtil.getWifiManager(ctxt.get()).startScan();
                 log(ctxt.get(),
                         R.string.exiting_supplicant_fix_thread_starting_scan);
             }
@@ -250,7 +250,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 case W_REPAIR:
                     // Start Scan
                     PrefUtil.getWifiManager(ctxt.get()).disconnect();
-                    self.get().handlerWrapper(rScanWatchDog, SHORTWAIT);
                 /*
                  * Reset state
 				 */
@@ -292,7 +291,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
             if (supplicantInterruptCheck(ctxt.get())) {
                 self.get().startScan(true);
                 log(ctxt.get(), R.string.wifimanager_scan);
-                self.get().handlerWrapper(rScanWatchDog, SCAN_WATCHDOG_DELAY);
             } else {
                 log(ctxt.get(), R.string.scan_interrupt);
             }
@@ -312,16 +310,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
             self.get().signalHop();
         }
 
-    };
-    /*
-     * Makes sure scan happens every X seconds
-     */
-    protected static Runnable rScanWatchDog = new Runnable() {
-        @Override
-        public void run() {
-            scanwatchdog();
-
-        }
     };
     /*
      * Watches association with AP and resets wifi if it takes too long
@@ -971,27 +959,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
         return false;
     }
 
-    public static void scanwatchdog() {
-        if (PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled()
-                && !getIsOnWifi(ctxt.get())
-                && self.get()._scantimer.getElapsed() > SCAN_WATCHDOG_DELAY) {
-			/*
-			 * Reset and log
-			 */
-            toggleWifi();
-            StringBuilder scanfail = new StringBuilder(ctxt.get().getString(
-                    R.string.scan_failed));
-            scanfail.append(":");
-            scanfail.append(String.valueOf(self.get()._scantimer.getElapsed()));
-            scanfail.append(ctxt.get().getString(R.string.ms));
-            log(ctxt.get(), scanfail.toString());
-        }
-        if (self.get().screenstate)
-            self.get().handlerWrapper(rScan, NORMAL_SCAN_DELAY);
-        else
-            self.get().handlerWrapper(rScan, SLEEPWAIT);
-    }
-
     private static boolean shouldManage(Context ctx) {
         return !PrefUtil.readManagedState(ctx, getNetworkID());
     }
@@ -1266,10 +1233,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
 			 */
             _nethandler.get().post(NetCheckRunnable);
         } else {
-			/*
-			 * Make sure scan happens in a reasonable amount of time
-			 */
-            handlerWrapper(rScanWatchDog, SHORTWAIT);
             wakelock.lock(false);
         }
     }
@@ -1344,10 +1307,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 * Reset timer: we've successfully scanned
 		 */
         _scantimer.start();
-		/*
-		 * Scan results received. Remove Scan Watchdog.
-		 */
-        clearMessage(rScanWatchDog);
 		/*
 		 * Sanity check
 		 */
