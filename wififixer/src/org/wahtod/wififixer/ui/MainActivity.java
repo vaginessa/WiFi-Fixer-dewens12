@@ -129,7 +129,6 @@ public class MainActivity extends TutorialFragmentActivity implements
         if (b != null) {
             String message = b.getString(LogFragment.LOG_MESSAGE);
             if (message != null) {
-                message.replaceAll("\\n", "");
                 mLogString.append(SystemClock.elapsedRealtime());
                 mLogString.append(": ");
                 mLogString.append(message);
