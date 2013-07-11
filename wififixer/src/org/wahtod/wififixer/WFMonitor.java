@@ -322,17 +322,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
         }
     };
-    /*
-     * Watches association with AP and resets wifi if it takes too long
-     */
-    protected static Runnable rAssocWatchDog = new Runnable() {
-
-        @Override
-        public void run() {
-            checkAssociateState();
-
-        }
-    };
     protected static Runnable rDemoter = new Runnable() {
         @Override
         public void run() {
@@ -352,10 +341,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static volatile Hostup hostup;
     private static int mRepairLevel = W_REASSOCIATE;
     private static long _signalCheckTime;
-    /*
-     * For Supplicant ASSOCIATING bug
-     */
-    private static StopWatch _assoc_watchdog = new StopWatch();
     /*
      * For connectToAP sticking
      */
@@ -488,7 +473,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
             wifilock.lock(true);
 
 		/*
-		 * Start status notification if should
+         * Start status notification if should
 		 */
         if (PrefUtil.readBoolean(context, Pref.STATENOT_KEY.key()))
             setStatNotif(true);
@@ -899,18 +884,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
         }
     }
 
-    private static void checkAssociateState() {
-
-        if (_assoc_watchdog.getElapsed() > SUPPLICANT_ASSOC_THRESHOLD) {
-			/*
-			 * Reset supplicant, it's stuck
-			 */
-            toggleWifi();
-            log(ctxt.get(), R.string.supplicant_associate_threshold_exceeded);
-        } else
-            self.get().handlerWrapper(rAssocWatchDog, SHORTWAIT);
-    }
-
     private static boolean supplicantPatternCheck() {
         WFMonitor me = self.get();
         me._supplicantFifo.add(me.lastSupplicantState);
@@ -1213,7 +1186,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 WifiInfo connectionInfo = PrefUtil.getWifiManager(ctxt.get())
                         .getConnectionInfo();
                 onNetworkConnected(connectionInfo);
-            } else if (networkInfo.getState().equals(NetworkInfo.State.DISCONNECTED))
+            } else if (networkInfo.getState().equals(NetworkInfo.State.DISCONNECTED) && _connected)
                 onNetworkDisconnected();
         }
     }
@@ -1376,16 +1349,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private void handleSupplicantState(SupplicantState sState) {
         if (!PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled())
             return;
-
-		/*
-		 * Check for ASSOCIATING bug but first clear check if not ASSOCIATING
-		 */
-        if (!(sState.name().equals(SSTATE_ASSOCIATING))) {
-            clearMessage(rAssocWatchDog);
-        } else {
-            _assoc_watchdog.start();
-            handlerWrapper(rAssocWatchDog, SHORTWAIT);
-        }
 		/*
 		 * Status notification updating supplicant state
 		 */
@@ -1409,16 +1372,17 @@ public class WFMonitor implements OnScreenStateChangedListener {
 			 * DHCP bug?
 			 */
             if (PrefUtil.getWatchdogPolicy(ctxt.get())) {
-
+                /*
+                 * Notify user of watchdog policy issue
+                 */
             }
 
         } else if (sState.name().equals(SSTATE_INVALID))
             supplicantFix();
         else if (sState.name().equals(SSTATE_ASSOCIATING)) {
-            handlerWrapper(rAssocWatchDog, SHORTWAIT);
-            if (!_connected)
-                onNetworkConnecting();
-        }
+            onNetworkConnecting();
+        } else if (sState.name().equals(SupplicantState.DISCONNECTED) && _connected)
+            onNetworkDisconnected();
     }
 
     private void handleWifiState(Bundle data) {
