@@ -29,7 +29,6 @@ public class PrefConstants {
 
 	public static final String SLPOLICY_DEFAULT = "SLPDEF";
 	public static final String STATNOTIF_DEFAULT = "STATNOTIFD";
-	public static final String SLPOLICY_KEY = "SLEEP_POLICY";
 	public static final String PERF_KEY = "Perf_Mode";
 	public static final String WIDGET_KEY = "WIDGET";
 	public static final String WIFI_STATE_LOCK = "WFSTATELOCK";

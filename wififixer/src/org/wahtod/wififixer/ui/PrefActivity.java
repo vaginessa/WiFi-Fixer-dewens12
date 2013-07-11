@@ -19,6 +19,7 @@ package org.wahtod.wififixer.ui;
 
 import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.legacy.SleepPolicyHelper;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
@@ -51,7 +52,6 @@ public class PrefActivity extends PreferenceActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-		PrefUtil.setPolicyfromSystem(this);
 		// Set up a listener for when key changes
 		getPreferenceScreen().getSharedPreferences()
 				.registerOnSharedPreferenceChangeListener(this);
@@ -60,7 +60,6 @@ public class PrefActivity extends PreferenceActivity implements
 	@Override
 	protected void onPause() {
 		super.onPause();
-
 		// Unregister the listener when paused
 		getPreferenceScreen().getSharedPreferences()
 				.unregisterOnSharedPreferenceChangeListener(this);
@@ -129,8 +128,8 @@ public class PrefActivity extends PreferenceActivity implements
 				/*
 				 * Set Wifi Sleep policy to Never
 				 */
-				PrefUtil.setPolicy(p.getContext(),
-						Settings.System.WIFI_SLEEP_POLICY_NEVER);
+				SleepPolicyHelper.setSleepPolicy(p.getContext(),
+                        Settings.System.WIFI_SLEEP_POLICY_NEVER);
 				break;
 
 			case 2:
@@ -157,8 +156,8 @@ public class PrefActivity extends PreferenceActivity implements
 						false);
 				PrefUtil.notifyPrefChange(p.getContext(),
 						Pref.SCREEN_KEY.key(), false);
-				PrefUtil.setPolicy(p.getContext(),
-						Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+				SleepPolicyHelper.setSleepPolicy(p.getContext(),
+                        Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
 				if (wflock != null)
 					wflock.setChecked(false);
 				if (screen != null)
@@ -166,14 +165,6 @@ public class PrefActivity extends PreferenceActivity implements
 				break;
 			}
 
-		} else if (key.contains(PrefConstants.SLPOLICY_KEY)) {
-			int wfsleep = Integer.valueOf(PrefUtil.readString(p.getContext(),
-					PrefConstants.SLPOLICY_KEY));
-			if (wfsleep != 3) {
-				PrefUtil.setPolicy(p.getContext(), wfsleep);
-			} else {
-				PrefUtil.setPolicyfromSystem(p.getContext());
-			}
 		}
 	}
 }

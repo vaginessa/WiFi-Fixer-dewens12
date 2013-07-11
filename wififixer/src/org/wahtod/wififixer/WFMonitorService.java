@@ -31,6 +31,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import org.wahtod.wififixer.legacy.SleepPolicyHelper;
 import org.wahtod.wififixer.legacy.StrictModeDetector;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
@@ -319,11 +320,11 @@ public class WFMonitorService extends Service implements
                     writeBoolean(context, Pref.STATENOT_KEY.key(), true);
                 }
 				/*
-				 * Set default: Wifi Sleep Policy
+				 * Set default: Wifi Sleep Policy to never
 				 */
                 if (!readBoolean(context, PrefConstants.SLPOLICY_DEFAULT)) {
                     writeBoolean(context, PrefConstants.SLPOLICY_DEFAULT, true);
-                    setPolicy(context, Settings.System.WIFI_SLEEP_POLICY_NEVER);
+                    SleepPolicyHelper.setSleepPolicy(context, Settings.System.WIFI_SLEEP_POLICY_NEVER);
                 }
             }
 

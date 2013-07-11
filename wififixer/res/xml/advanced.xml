@@ -16,47 +16,45 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see http://www.gnu.org/licenses
 -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/dbmfloor_title" >
+    <PreferenceCategory android:title="@string/dbmfloor_title">
         <ListPreference
-            android:defaultValue="-90"
-            android:entries="@array/dbmfloor"
-            android:entryValues="@array/dbmfloorValues"
-            android:key="@string/dbmfloor_key"
-            android:summary="@string/dbmfloor_summary"
-            android:title="@string/dbmfloor_title" />
+                android:defaultValue="-90"
+                android:entries="@array/dbmfloor"
+                android:entryValues="@array/dbmfloorValues"
+                android:key="@string/dbmfloor_key"
+                android:summary="@string/dbmfloor_summary"
+                android:title="@string/dbmfloor_title"/>
     </PreferenceCategory>
-    <PreferenceCategory android:title="Wifi Usability" >
+    <PreferenceCategory android:title="Wifi Usability">
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="WiFiLock"
-            android:summary="@string/WifiLock_summary"
-            android:title="@string/WifiLock_title" />
+                android:defaultValue="true"
+                android:key="WiFiLock"
+                android:summary="@string/WifiLock_summary"
+                android:title="@string/WifiLock_title"/>
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="SCREEN"
-            android:summary="@string/SCREEN_summary"
-            android:title="@string/SCREEN_title" />
+                android:defaultValue="true"
+                android:key="SCREEN"
+                android:summary="@string/SCREEN_summary"
+                android:title="@string/SCREEN_title"/>
         <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="WAKELOCK_DISABLE"
                 android:summary="@string/WAKELOCK_summary"
                 android:title="@string/WAKELOCK_title"/>
     </PreferenceCategory>
-    <PreferenceCategory android:title="Specialized Fixes" >
-        <ListPreference
-            android:defaultValue="3"
-            android:entries="@array/wfsleep"
-            android:entryValues="@array/wfsleepValues"
-            android:key="SLEEP_POLICY"
-            android:summary="@string/SLEEP_POLICY_summary"
-            android:title="@string/SLEEP_POLICY_title" />
+    <PreferenceCategory android:title="Specialized Fixes">
+        <PreferenceScreen  android:summary="@string/SLEEP_POLICY_summary"
+                           android:title="@string/SLEEP_POLICY_title">
+                >
+            <intent android:action="android.settings.WIFI_SETTINGS"/>
 
+        </PreferenceScreen>
         <CheckBoxPreference
-            android:key="N1FIX2"
-            android:summary="@string/N1FIX2_summary"
-            android:title="@string/N1FIX2_title" />
+                android:key="N1FIX2"
+                android:summary="@string/N1FIX2_summary"
+                android:title="@string/N1FIX2_title"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

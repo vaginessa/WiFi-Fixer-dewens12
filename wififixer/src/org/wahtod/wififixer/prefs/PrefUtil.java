@@ -26,7 +26,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.provider.Settings.SettingNotFoundException;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.EditorDetector;
 import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
@@ -261,37 +260,12 @@ public class PrefUtil {
         keyVals[pref.ordinal()] = flag;
     }
 
-    public static void setPolicyfromSystem(Context context) {
-		/*
-		 * Handle Wifi Sleep Policy
-		 */
-        ContentResolver cr = context.getContentResolver();
-        try {
-            int wfsleep = android.provider.Settings.System.getInt(cr,
-                    android.provider.Settings.System.WIFI_SLEEP_POLICY);
-            PrefUtil.writeString(context, PrefConstants.SLPOLICY_KEY,
-                    String.valueOf(wfsleep));
-        } catch (SettingNotFoundException e) {
-            setPolicy(context, Settings.System.WIFI_SLEEP_POLICY_NEVER);
-        }
-    }
-
     public static boolean getWatchdogPolicy(Context context) {
 		/*
 		 * Check for Wifi Watchdog, AKA "Avoid poor internet connections"
 		 */
         return (Settings.Secure.getInt(context.getContentResolver(),
                 "wifi_watchdog_poor_network_test_enabled", 0) == 1);
-    }
-
-    public static void setPolicy(Context context, int policy) {
-		/*
-		 * Set Wifi Sleep Policy
-		 */
-        ContentResolver cr = context.getContentResolver();
-        android.provider.Settings.System.putInt(cr,
-                android.provider.Settings.System.WIFI_SLEEP_POLICY, policy);
-        writeString(context, PrefConstants.SLPOLICY_KEY, String.valueOf(policy));
     }
 
     public synchronized static WifiManager getWifiManager(Context context) {

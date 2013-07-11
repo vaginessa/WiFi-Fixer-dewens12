@@ -164,8 +164,7 @@
     <string name="WifiLock_title">Enable Wifi Lock</string>
     <string name="WifiLock_summary">Enables Wifi Lock: will increase battery use slightly</string>
     <string name="SLEEP_POLICY_title">Wifi Sleep Policy</string>
-    <string name="SLEEP_POLICY_summary">Sets system Wifi sleep policy: See Known Issues in
-        Help
+    <string name="SLEEP_POLICY_summary">Opens Wifi Settings tap for advanced: See Known Issues
     </string>
     <string name="N1FIX2_title">Nexus One Sleep Fix</string>
     <string name="N1FIX2_summary">Experimental: please read Wifi Sleep Policy section of Known Issues in
