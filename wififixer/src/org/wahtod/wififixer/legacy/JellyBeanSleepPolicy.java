@@ -40,7 +40,7 @@ public class JellyBeanSleepPolicy extends SleepPolicyHelper {
 
         switch (policy) {
             case Settings.Global.WIFI_SLEEP_POLICY_DEFAULT:
-                out += "When screen is off";
+                out += "Never";
                 break;
 
             case Settings.Global.WIFI_SLEEP_POLICY_NEVER_WHILE_PLUGGED:
@@ -48,7 +48,7 @@ public class JellyBeanSleepPolicy extends SleepPolicyHelper {
                 break;
 
             case Settings.Global.WIFI_SLEEP_POLICY_NEVER:
-                out += "Never";
+                out += "Always";
                 break;
         }
         return out;
