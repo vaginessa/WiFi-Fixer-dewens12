@@ -98,7 +98,8 @@ public class StatusDispatcher {
         }
 
         public void run() {
-            NotifUtil.addStatNotif(c.get(), message);
+            if (PrefUtil.getFlag(Pref.STATENOT_KEY))
+                NotifUtil.addStatNotif(c.get(), message);
         }
     }
 

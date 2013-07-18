@@ -48,32 +48,25 @@ public class WFMonitorService extends Service implements
      * Loads WFConnection class, Prefs
 	 */
 
-    // IDs For notifications
-    private static final int NOTIFID = 31337;
     // Screen State SharedPref key
     public static final String SCREENOFF = "SCREENOFF";
-
+    // IDs For notifications
+    private static final int NOTIFID = 31337;
     // *****************************
     private final static String EMPTYSTRING = "";
-
+    static boolean screenstate;
     // Flags
     private static boolean registered = false;
-
     private static boolean logging = false;
-
     // Version
     private static int version = 0;
-
-    private WFMonitor wifi;
-    private ScreenStateDetector screenstateHandler;
-    protected boolean logPrefLoad;
-
-    static boolean screenstate;
-
     /*
      * Preferences
      */
     private static PrefUtil prefs;
+    protected boolean logPrefLoad;
+    private WFMonitor wifi;
+    private ScreenStateDetector screenstateHandler;
 
     private void cleanup() {
         wifi.wifiLock(false);
@@ -120,8 +113,8 @@ public class WFMonitorService extends Service implements
          * Set Default Exception handler
 		 */
         DefaultExceptionHandler.register(this);
-		/*
-		 * Strict Mode check
+        /*
+         * Strict Mode check
 		 */
 
         if (StrictModeDetector.setPolicy(false))
@@ -285,7 +278,10 @@ public class WFMonitorService extends Service implements
 					 * Notify WFMonitor instance to create/destroy ongoing
 					 * status notification
 					 */
-                        wifi.setStatNotif(getFlag(Pref.STATENOT_KEY));
+                        if (getFlag(Pref.STATENOT_KEY))
+                            wifi.setStatNotif(true);
+                        else
+                            NotifUtil.addStatNotif(WFMonitorService.this, StatusMessage.getNew().setShow(-1));
                         break;
                 }
 
