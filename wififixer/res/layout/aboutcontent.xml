@@ -171,7 +171,15 @@
                 android:text="Privacy Disclosure:" />
 
             <TextView
-                style="@style/Wftext.header"
+                    style="@style/Wftext.header"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dip"
+                    android:text="Your Wifi password is never stored or transmitted. It is only used to create the Wifi Configuration\n"/>
+
+
+            <TextView
+                    style="@style/Wftext.header"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dip"

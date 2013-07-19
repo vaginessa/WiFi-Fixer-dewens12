@@ -14,7 +14,7 @@ import org.wahtod.wififixer.utility.NotifUtil;
 public class JellyBeanSleepPolicy extends SleepPolicyHelper {
     @Override
     public void vSetSleepPolicy(Context context, int policy) {
-        NotifUtil.show(context,getSleepPolicyString(policy), "Tap to set",8124,getPendingIntent(context));
+        NotifUtil.show(context, getSleepPolicyString(policy), "Tap to set", 8124, getPendingIntent(context));
     }
 
     @Override

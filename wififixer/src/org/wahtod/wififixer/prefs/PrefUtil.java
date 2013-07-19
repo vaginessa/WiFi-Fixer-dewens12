@@ -32,6 +32,7 @@ import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.LogService;
+import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StringUtil;
 
 import java.lang.ref.WeakReference;
@@ -200,14 +201,14 @@ public class PrefUtil {
          * Check for actual changed value if changed, notify
 		 */
         if (value != readNetworkPref(ctxt, netstring, pref)) {
-			/*
-			 * commit changes
+            /*
+             * commit changes
 			 */
             SharedPreferences.Editor editor = getSharedPreferences(ctxt).edit();
             editor.putInt(NETPREFIX + netstring + pref.key(), value);
             EditorDetector.commit(editor);
-			/*
-			 * notify
+            /*
+             * notify
 			 */
             notifyNetPrefChange(ctxt, pref, netstring, value);
         }
@@ -283,7 +284,7 @@ public class PrefUtil {
         WifiConfiguration w = getNetworkByNID(context, network);
         if (!getWifiManager(context).isWifiEnabled())
             return !readNetworkState(context, network);
-        else return !(w != null && w.status == WifiConfiguration.Status.DISABLED);
+        else return !(w != null && w.status != WifiConfiguration.Status.ENABLED);
     }
 
     public static void writeNetworkState(Context context,
@@ -323,11 +324,27 @@ public class PrefUtil {
     public static boolean setNetworkState(Context context,
                                           int network, boolean state) {
         WifiManager w = getWifiManager(context);
-        if (state)
+        if (!state)
             w.enableNetwork(network, false);
         else
             w.disableNetwork(network);
         return w.saveConfiguration();
+    }
+
+    public static void setBlackList(Context context, boolean state) {
+        int network = getNidFromSsid(context, "attwifi");
+        if (network == -1) {
+            NotifUtil.showToast(context, R.string.hotspot_fail);
+            PrefUtil.writeBoolean(context, Pref.ATT_BLACKLIST.key(), false);
+        } else if (state) {
+            setNetworkState(context, network, true);
+            writeNetworkState(context, network, true);
+            NotifUtil.showToast(context, R.string.blacklist_enable);
+        } else {
+            setNetworkState(context, network, false);
+            writeNetworkState(context, network, false);
+            NotifUtil.showToast(context, R.string.blacklist_disable);
+        }
     }
 
     public void putnetPref(NetPref pref, String network,

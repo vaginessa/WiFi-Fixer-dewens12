@@ -55,6 +55,10 @@
                 android:key="N1FIX2"
                 android:summary="@string/N1FIX2_summary"
                 android:title="@string/N1FIX2_title"/>
+        <CheckBoxPreference
+                android:key="ATTBLIST"
+                android:summary="@string/BLIST_summary"
+                android:title="@string/BLIST_title"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

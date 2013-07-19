@@ -42,6 +42,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitor;
+import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
@@ -96,7 +97,7 @@ public class KnownNetworksFragment extends SherlockFragment {
             }
         }
     };
-    public ActionMode.Callback mActionModeCallback= new ActionMode.Callback(){
+    public ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             if (!isWifiOn(getContext()))
@@ -107,7 +108,7 @@ public class KnownNetworksFragment extends SherlockFragment {
             MenuInflater inflater = mode.getMenuInflater();
             mode.setTitle(mSSID);
             int n = PrefUtil.getNidFromSsid(getContext(), mSSID);
-            if (!PrefUtil.getNetworkState(getContext(), n))
+            if (getStatusFromSSID(getContext(), mSSID))
                 inflater.inflate(R.menu.enable, menu);
             else
                 inflater.inflate(R.menu.disable, menu);
@@ -124,66 +125,66 @@ public class KnownNetworksFragment extends SherlockFragment {
             return true;
         }
 
-    @Override
-    public void onDestroyActionMode(ActionMode mode) {
-        mActionMode = null;
-        mFragmentPauseRequestListener.onFragmentPauseRequest(true);
-    }
-
-    @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        return false;
-    }
-
-    @Override
-    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        int n = PrefUtil.getNidFromSsid(getContext(), mSSID);
-        int i = item.getItemId();
-        switch (i) {
-            case R.id.menu_enable:
-                PrefUtil.setNetworkState(getContext(), n, true);
-                PrefUtil.writeNetworkState(getContext(), n, false);
-                adapter.notifyDataSetChanged();
-                break;
-
-            case R.id.menu_disable:
-                PrefUtil.setNetworkState(getContext(), n, false);
-                PrefUtil.writeNetworkState(getContext(), n, true);
-                adapter.notifyDataSetChanged();
-                break;
-
-            case R.id.menu_managed:
-                PrefUtil.writeManagedState(getContext(), n, false);
-                adapter.notifyDataSetChanged();
-                break;
-
-            case R.id.menu_nonmanaged:
-                PrefUtil.writeManagedState(getContext(), n, true);
-                adapter.notifyDataSetChanged();
-                break;
-
-            case R.id.menu_connect:
-                if (PrefUtil.getNetworkState(getContext(), n)) {
-                    Intent intent = new Intent(WFMonitor.CONNECTINTENT);
-                    intent.putExtra(WFMonitor.NETWORKNAME,
-                            PrefUtil.getSSIDfromNetwork(getContext(), n));
-                    BroadcastHelper.sendBroadcast(getContext(), intent, true);
-                } else {
-                    PrefUtil.getWifiManager(getContext()).enableNetwork(n, true);
-                }
-                break;
-
-            case R.id.menu_remove:
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("Remove network:" + mSSID)
-                        .setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).show();
-                break;
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mActionMode = null;
+            mFragmentPauseRequestListener.onFragmentPauseRequest(true);
         }
-        mode.finish();
-        return true;
-    }
-};
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            int n = PrefUtil.getNidFromSsid(getContext(), mSSID);
+            int i = item.getItemId();
+            switch (i) {
+                case R.id.menu_enable:
+                    PrefUtil.setNetworkState(getContext(), n, false);
+                    PrefUtil.writeNetworkState(getContext(), n, false);
+                    adapter.notifyDataSetChanged();
+                    break;
+
+                case R.id.menu_disable:
+                    PrefUtil.setNetworkState(getContext(), n, true);
+                    PrefUtil.writeNetworkState(getContext(), n, true);
+                    adapter.notifyDataSetChanged();
+                    break;
+
+                case R.id.menu_managed:
+                    PrefUtil.writeManagedState(getContext(), n, false);
+                    adapter.notifyDataSetChanged();
+                    break;
+
+                case R.id.menu_nonmanaged:
+                    PrefUtil.writeManagedState(getContext(), n, true);
+                    adapter.notifyDataSetChanged();
+                    break;
+
+                case R.id.menu_connect:
+                    if (!getStatusFromSSID(getContext(), mSSID)) {
+                        Intent intent = new Intent(WFMonitor.CONNECTINTENT);
+                        intent.putExtra(WFMonitor.NETWORKNAME,
+                                PrefUtil.getSSIDfromNetwork(getContext(), n));
+                        BroadcastHelper.sendBroadcast(getContext(), intent, true);
+                    } else {
+                        PrefUtil.getWifiManager(getContext()).enableNetwork(n, true);
+                    }
+                    break;
+
+                case R.id.menu_remove:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Remove network:" + mSSID)
+                            .setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+                    break;
+            }
+            mode.finish();
+            return true;
+        }
+    };
     protected Object mActionMode;
     protected String mSSID;
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -207,8 +208,11 @@ public class KnownNetworksFragment extends SherlockFragment {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View v, int p,
                                        long id) {
-            mSSID = (String) adapter.getItem(p);
-            if (mActionMode != null) {
+
+            TextView ssid = (TextView) v.findViewById(R.id.ssid);
+            mSSID = ssid.getText().toString();
+            if (mActionMode != null || (PrefUtil.getFlag(PrefConstants.Pref.ATT_BLACKLIST))
+                    && mSSID.equals("attwifi")) {
                 return false;
             }
             mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
@@ -249,7 +253,7 @@ public class KnownNetworksFragment extends SherlockFragment {
         List<String> networks = new ArrayList<String>();
         for (WifiConfiguration wfResult : wifiConfigs) {
             /*
-			 * Make sure there's a 1:1 correlation between
+             * Make sure there's a 1:1 correlation between
 			 * getConfiguredNetworks() and the array
 			 */
             if (wfResult.SSID != null && wfResult.SSID.length() > 0)
@@ -261,8 +265,8 @@ public class KnownNetworksFragment extends SherlockFragment {
     }
 
     private static void refreshNetworkAdapter(ArrayList<String> networks) {
-		/*
-		 * Don't refresh if knownnetworks is empty (wifi is off)
+        /*
+         * Don't refresh if knownnetworks is empty (wifi is off)
 		 */
         knownnetworks = getNetworks(self.get().getActivity());
         if (knownnetworks.size() > 0) {
@@ -333,6 +337,12 @@ public class KnownNetworksFragment extends SherlockFragment {
         super.onCreate(savedInstanceState);
     }
 
+    public boolean getStatusFromSSID(Context context, String ssid) {
+        WifiConfiguration net = PrefUtil.getNetworkByNID(context, PrefUtil.getNidFromSsid(context, ssid));
+        boolean enabled = net.status == WifiConfiguration.Status.DISABLED;
+        return enabled;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -346,8 +356,8 @@ public class KnownNetworksFragment extends SherlockFragment {
 
     @Override
     public void onAttach(Activity activity) {
-		/*
-		 * Grab and set up ListView
+        /*
+         * Grab and set up ListView
 		 */
         knownnetworks = getNetworks(getContext());
         known_in_range = new ArrayList<String>();
@@ -373,26 +383,26 @@ public class KnownNetworksFragment extends SherlockFragment {
         WifiManager wm = PrefUtil.getWifiManager(context);
 
         List<ScanResult> scanResults = wm.getScanResults();
-		/*
-		 * Catch null if scan results fires after wifi disabled or while wifi is
+        /*
+         * Catch null if scan results fires after wifi disabled or while wifi is
 		 * in intermediate state
 		 */
         if (scanResults == null) {
             return null;
         }
-		/*
-		 * Iterate the known networks over the scan results, adding found known
+        /*
+         * Iterate the known networks over the scan results, adding found known
 		 * networks.
 		 */
         ArrayList<String> known_in_range = new ArrayList<String>();
         for (ScanResult sResult : scanResults) {
-			/*
-			 * Add known networks in range
+            /*
+             * Add known networks in range
 			 */
 
             if (knownnetworks.contains(sResult.SSID)) {
-				/*
-				 * Add result to known_in_range
+                /*
+                 * Add result to known_in_range
 				 */
                 known_in_range.add(sResult.SSID);
             }
@@ -480,12 +490,14 @@ public class KnownNetworksFragment extends SherlockFragment {
                 if (PrefUtil.readManagedState(getContext(), position))
                     holder.text.setTextColor(Color.BLACK);
                 else {
-                    if (PrefUtil.getNetworkState(getContext(), position))
+                    if (!getStatusFromSSID(getContext(), ssidArray.get(position)))
                         holder.icon.setColorFilter(Color.WHITE,
                                 PorterDuff.Mode.SRC_ATOP);
                     else
                         holder.icon.setColorFilter(Color.BLACK,
                                 PorterDuff.Mode.SRC_ATOP);
+                    if (PrefUtil.readBoolean(getActivity(), PrefConstants.Pref.ATT_BLACKLIST.key()) && holder.text.getText().toString().equals("attwifi"))
+                        holder.text.setTextColor(Color.RED);
                 }
             }
             return convertView;

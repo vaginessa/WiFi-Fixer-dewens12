@@ -121,8 +121,8 @@ public class WFMonitorService extends Service implements
             LogService.log(this, (getString(R.string.strict_mode_extant)));
         else
             LogService.log(this, (getString(R.string.strict_mode_unavailable)));
-		/*
-		 * Make sure service settings are enforced.
+        /*
+         * Make sure service settings are enforced.
 		 */
         ServiceAlarm.enforceServicePrefs(this);
         super.onCreate();
@@ -271,6 +271,13 @@ public class WFMonitorService extends Service implements
                         if (!logPrefLoad) {
                             logPrefLoad = true;
                         }
+                        break;
+
+                    case ATT_BLACKLIST:
+                        /*
+                         * Disable AT&T hotspot
+                         */
+                        PrefUtil.setBlackList(WFMonitorService.this, getFlag(Pref.ATT_BLACKLIST));
                         break;
 
                     case STATENOT_KEY:

@@ -252,5 +252,10 @@
     </string>
     <string name="WAKELOCK_title">Disable Sleep Wake Lock</string>
     <string name="connnection_completed">Requested connection completed:</string>
+    <string name="hotspot_fail"><![CDATA[AT&T Hotspot Doesn\'t Exist]]></string>
+    <string name="blacklist_enable"><![CDATA[AT&T Hotspot Blacklisted]]></string>
+    <string name="blacklist_disable"><![CDATA[AT&T Hotspot Enabled]]></string>
+    <string name="BLIST_summary"><![CDATA[Disables attwifi hotspot so it will not be connected to]]></string>
+    <string name="BLIST_title"><![CDATA[AT&T Hotspot Blacklist]]></string>
 
 </resources>
