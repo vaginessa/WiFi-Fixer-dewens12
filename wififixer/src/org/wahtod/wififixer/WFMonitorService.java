@@ -277,7 +277,7 @@ public class WFMonitorService extends Service implements
                         /*
                          * Disable AT&T hotspot
                          */
-                        PrefUtil.setBlackList(WFMonitorService.this, getFlag(Pref.ATT_BLACKLIST));
+                        PrefUtil.setBlackList(WFMonitorService.this, getFlag(Pref.ATT_BLACKLIST), true);
                         break;
 
                     case STATENOT_KEY:

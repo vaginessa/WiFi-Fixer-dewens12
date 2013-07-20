@@ -567,19 +567,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private static void enforceDisabledState(Context context) {
-        List<WifiConfiguration> networks = PrefUtil.getWifiManager(context).getConfiguredNetworks();
-        boolean status;
-        WifiManager wifiManager = PrefUtil.getWifiManager(context);
-        for (WifiConfiguration config : networks) {
-            status = config.status == WifiConfiguration.Status.DISABLED;
-            if (status != PrefUtil.readNetworkState(context, config.networkId)) {
-                if (status)
-                    wifiManager.enableNetwork(config.networkId, false);
-                else
-                    wifiManager.disableNetwork(config.networkId);
-            }
-        }
-        PrefUtil.getWifiManager(context).saveConfiguration();
+        if (PrefUtil.getFlag(Pref.ATT_BLACKLIST))
+            PrefUtil.setBlackList(context, true, false);
     }
 
     private static boolean getIsOnWifi(Context context) {
@@ -592,8 +581,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
                         && !(ni.getState() == NetworkInfo.State.CONNECTING))
                     return true;
         } catch (NullPointerException e) {
-			/*
-			 * NetworkInfo can return null
+            /*
+             * NetworkInfo can return null
 			 */
         }
         return false;
@@ -1294,6 +1283,12 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private void handleScanResults() {
+        /*
+         * Disabled network check/enforcement
+         */
+        fixDisabledNetworks(ctxt.get());
+        enforceDisabledState(ctxt.get());
+
 		/*
 		 * Reset timer: we've successfully scanned
 		 */
@@ -1447,7 +1442,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 * Checking onConnecting because auth may complete but IP allocation may
 		 * not, want to bounce to another network if that's the case
 		 */
-        fixDisabledNetworks(ctxt.get());
         handlerWrapper(rDemoter, CWDOG_DELAY);
         StatusMessage message = _statusdispatcher.getStatusMessage()
                 .setSSID(getSSID()).setStatus(ctxt.get(), R.string.connecting);
@@ -1593,6 +1587,10 @@ public class WFMonitor implements OnScreenStateChangedListener {
         if (PrefUtil.readBoolean(ctxt.get(), PrefConstants.WIFI_STATE_LOCK))
             PrefUtil.writeBoolean(ctxt.get(), PrefConstants.WIFI_STATE_LOCK,
                     false);
+        /*
+         *  Enforce disabled/enabled networks
+         */
+        fixDisabledNetworks(ctxt.get());
         enforceDisabledState(ctxt.get());
     }
 
