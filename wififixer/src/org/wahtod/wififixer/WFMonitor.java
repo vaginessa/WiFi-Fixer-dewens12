@@ -275,6 +275,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
 				 */
 
             if (getisWifiEnabled(ctxt.get(), true)) {
+                if (!PrefUtil.readBoolean(ctxt.get(), Pref.WAKELOCK_KEY.key()))
+                    self.get().wakelock.lock(true);
                 self.get().checkWifi();
             } else
                 self.get().wakelock.lock(false);
@@ -603,7 +605,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static int getKnownAPsBySignal(Context context) {
 
 		/*
-		 * Comparator class for sorting results
+         * Comparator class for sorting results
 		 */
         class SortBySignal implements Comparator<WFConfig> {
             @Override
@@ -1151,8 +1153,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
              * with wake lock,
              */
             if (shouldManage(ctxt.get())) {
-                if (!PrefUtil.readBoolean(ctxt.get(), Pref.WAKELOCK_KEY.key()))
-                    wakelock.lock(true);
                 handlerWrapper(rSleepcheck);
             }
         } else
