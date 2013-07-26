@@ -26,9 +26,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import android.support.v4.app.FixedFragmentStatePagerAdapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 import com.actionbarsherlock.app.ActionBar;
@@ -403,7 +403,7 @@ public class MainActivity extends TutorialFragmentActivity implements
             super.onBackPressed();
     }
 
-    public class PagerAdapter extends FixedFragmentStatePagerAdapter {
+    public class PagerAdapter extends FragmentStatePagerAdapter {
         SparseArray<Fragment> fragmentArray = new SparseArray<Fragment>();
 
         public PagerAdapter(FragmentManager fm) {

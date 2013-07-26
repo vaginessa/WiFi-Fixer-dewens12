@@ -610,8 +610,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
         class SortBySignal implements Comparator<WFConfig> {
             @Override
             public int compare(WFConfig o2, WFConfig o1) {
-				/*
-				 * Sort by signal and priority
+                /*
+                 * Sort by signal and priority
 				 */
                 if (o1.level < o2.level
                         || o1.wificonfig.priority < o2.wificonfig.priority)
@@ -1546,13 +1546,16 @@ public class WFMonitor implements OnScreenStateChangedListener {
             if (!getisWifiEnabled(ctxt.get(), false))
                 clearConnectedStatus(ctxt.get().getString(R.string.wifi_is_disabled));
             else {
-                if (_connected)
-                    handlerWrapper(rMain);
-                else {
+                if (_connected) {
+                    StatusMessage.send(ctxt.get(), _statusdispatcher.getStatusMessage().setShow(1));
+                } else {
                     clearConnectedStatus(getSupplicantStateString(getSupplicantState()));
                 }
-                _statusdispatcher.refreshWidget(null);
             }
+        }
+        if (_connected && getisWifiEnabled(ctxt.get(), false)) {
+            handlerWrapper(rMain);
+            _statusdispatcher.refreshWidget(null);
         }
     }
 

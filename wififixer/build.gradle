@@ -6,14 +6,14 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.0'
+        classpath 'com.android.tools.build:gradle:0.5.+'
     }
 }
 apply plugin: 'android'
 
 dependencies {
     compile project(":dependencies:actionbarsherlock")
-    compile 'com.android.support:support-v4:13.0.0'
+    compile 'com.android.support:support-v4:18.0.+'
 }
 
 android {
@@ -25,16 +25,16 @@ android {
         release {
             runProguard true
             proguardFile file = "proguard-project.txt"
-            compileSdkVersion 17
-            buildToolsVersion "17.0.0"
+            compileSdkVersion 18
+            buildToolsVersion "18.0.0"
             signingConfig signingConfigs.release
         }
 
         debug {
             debuggable true
             runProguard false
-            compileSdkVersion 17
-            buildToolsVersion "17.0.0"
+            compileSdkVersion 18
+            buildToolsVersion "18.0.0"
         }
     }
 
