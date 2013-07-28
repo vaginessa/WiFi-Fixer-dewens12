@@ -414,7 +414,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 */
         wifistate = PrefUtil.getWifiManager(context).isWifiEnabled();
         if (wifistate)
-            enforceDisabledState(context);
+            enforceAttBlacklistState(context);
         /*
          * Set up system Intent filters
 		 */
@@ -568,7 +568,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
         }
     }
 
-    private static void enforceDisabledState(Context context) {
+    private static void enforceAttBlacklistState(Context context) {
         if (PrefUtil.getFlag(Pref.ATT_BLACKLIST))
             PrefUtil.setBlackList(context, true, false);
     }
@@ -625,7 +625,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
         }
 
 		/*
-		 * Acquire scan results
+         * Acquire scan results
 		 */
         List<ScanResult> scanResults = PrefUtil.getWifiManager(ctxt.get())
                 .getScanResults();
@@ -1287,7 +1287,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
          * Disabled network check/enforcement
          */
         fixDisabledNetworks(ctxt.get());
-        enforceDisabledState(ctxt.get());
+        enforceAttBlacklistState(ctxt.get());
 
 		/*
 		 * Reset timer: we've successfully scanned
@@ -1594,7 +1594,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
          *  Enforce disabled/enabled networks
          */
         fixDisabledNetworks(ctxt.get());
-        enforceDisabledState(ctxt.get());
+        enforceAttBlacklistState(ctxt.get());
     }
 
     protected void setStatNotif(boolean state) {

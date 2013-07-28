@@ -339,8 +339,12 @@ public class KnownNetworksFragment extends SherlockFragment {
 
     public boolean getStatusFromSSID(Context context, String ssid) {
         WifiConfiguration net = PrefUtil.getNetworkByNID(context, PrefUtil.getNidFromSsid(context, ssid));
-        boolean enabled = net.status == WifiConfiguration.Status.DISABLED;
-        return enabled;
+        if (net == null)
+            return false;
+        else {
+            boolean enabled = net.status == WifiConfiguration.Status.DISABLED;
+            return enabled;
+        }
     }
 
     @Override
@@ -483,8 +487,8 @@ public class KnownNetworksFragment extends SherlockFragment {
                     holder.text.setTextColor(Color.GREEN);
                 else
                     holder.text.setTextColor(Color.WHITE);
-				/*
-				 * Set SSID text and color
+                /*
+                 * Set SSID text and color
 				 */
                 holder.text.setText(ssidArray.get(position));
                 if (PrefUtil.readManagedState(getContext(), position))
