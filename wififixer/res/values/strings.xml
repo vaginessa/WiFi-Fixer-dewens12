@@ -182,15 +182,16 @@
     <string name="add">Add</string>
     <string name="button_connect">Tap to connect</string>
     <string name="connection_threshold_exceeded">Connection Threshold Exceeded</string>
-    <string name="tutorial_toast_1">This is Known Networks</string>
-    <string name="tutorial_toast_2">Known Networks shows networks you\'ve added</string>
-    <string name="tutorial_toast_4">This is Local Networks</string>
-    <string name="tutorial_toast_3">You can tap, hold and swipe left or right in the network pane to navigate</string>
-    <string name="tutorial_toast_5">Local Networks shows scanned networks around you</string>
-    <string name="tutorial_toast_6">At the top is the Status view</string>
-    <string name="tutorial_toast_7">Status shows you what Wifi is doing</string>
-    <string name="tutorial_toast_8">That\'s it!\n\nIf you want to run the tutorial
-        again, go to preferences.
+    <string name="tutorial_toast_1">This is the Status fragment</string>
+    <string name="tutorial_toast_2">The Status fragment shows you what your WiFi and Wifi Fixer are doing</string>
+    <string name="tutorial_toast_4">This is the Known Networks fragment</string>
+    <string name="tutorial_toast_3">You can tap, hold and swipe left or right in the window to navigate, or use the tab
+        buttons
+    </string>
+    <string name="tutorial_toast_5">The Known Networks fragment shows networks you have added</string>
+    <string name="tutorial_toast_6">This is the Local Networks fragment</string>
+    <string name="tutorial_toast_7">The Local Networks fragment shows networks around you</string>
+    <string name="tutorial_toast_8">That\'s it!\n\nIf you want to run the tutorial again, go to Settings.
     </string>
     <string name="tutorial_toast_9">You can long-press the items in this list for more options</string>
     <string name="phone_ui_tutorial">Phone UI Tutorial</string>

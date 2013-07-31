@@ -500,7 +500,7 @@ public class KnownNetworksFragment extends SherlockFragment {
                     else
                         holder.icon.setColorFilter(Color.BLACK,
                                 PorterDuff.Mode.SRC_ATOP);
-                    if (PrefUtil.readBoolean(getActivity(), PrefConstants.Pref.ATT_BLACKLIST.key()) && holder.text.getText().toString().equals("attwifi"))
+                    if (PrefUtil.readBoolean(getContext(), PrefConstants.Pref.ATT_BLACKLIST.key()) && holder.text.getText().toString().equals("attwifi"))
                         holder.text.setTextColor(Color.RED);
                 }
             }

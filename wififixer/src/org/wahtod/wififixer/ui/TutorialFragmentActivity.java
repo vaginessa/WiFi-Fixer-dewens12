@@ -17,12 +17,6 @@
 
 package org.wahtod.wififixer.ui;
 
-import java.lang.ref.WeakReference;
-
-import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.prefs.PrefConstants;
-import org.wahtod.wififixer.prefs.PrefUtil;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,6 +28,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.prefs.PrefConstants;
+import org.wahtod.wififixer.prefs.PrefUtil;
+
+import java.lang.ref.WeakReference;
 
 public abstract class TutorialFragmentActivity extends AppFragmentActivity {
 	protected static final int TOAST = 0;
@@ -76,12 +75,10 @@ public abstract class TutorialFragmentActivity extends AppFragmentActivity {
 				handler.sendMessageDelayed(m1, 0);
 				m1 = handler.obtainMessage(TOAST, R.string.tutorial_toast_2, 0);
 				handler.sendMessageDelayed(m1, TOAST_DELAY);
-				m1 = handler.obtainMessage(TOAST, R.string.tutorial_toast_9, 0);
-				handler.sendMessageDelayed(m1, TOAST_DELAY * 2);
 				m1 = handler.obtainMessage(TOAST, R.string.tutorial_toast_3, 0);
-				handler.sendMessageDelayed(m1, TOAST_DELAY * 3);
-				handler.sendEmptyMessageDelayed(PART2, TOAST_DELAY * 4);
-				break;
+                handler.sendMessageDelayed(m1, TOAST_DELAY * 2);
+                handler.sendEmptyMessageDelayed(PART2, TOAST_DELAY * 3);
+                break;
 
 			case PART2:
 				Message m2 = handler.obtainMessage(SET_PART, 2, 0);
@@ -106,22 +103,26 @@ public abstract class TutorialFragmentActivity extends AppFragmentActivity {
 				Message m3 = handler.obtainMessage(SET_PART, 3, 0);
 				handler.sendMessage(m3);
 				/*
-				 * Change page to Status fragment
+                 * Change page to Known Networks fragment
 				 */
-				m3 = handler.obtainMessage(TOAST, R.string.tutorial_toast_6, 0);
+                m3 = handler.obtainMessage(PAGE, 2, 0);
+                handler.sendMessageDelayed(m3, 0);
+                m3 = handler.obtainMessage(TOAST, R.string.tutorial_toast_6, 0);
 				handler.sendMessageDelayed(m3, 0);
 				m3 = handler.obtainMessage(TOAST, R.string.tutorial_toast_7, 0);
 				handler.sendMessageDelayed(m3, TOAST_DELAY);
-				m3 = handler.obtainMessage(TOAST, R.string.tutorial_toast_8, 0);
-				handler.sendMessageDelayed(m3, TOAST_DELAY * 2);
-				/*
+                m2 = handler.obtainMessage(TOAST, R.string.tutorial_toast_9, 0);
+                handler.sendMessageDelayed(m2, TOAST_DELAY * 2);
+                m3 = handler.obtainMessage(TOAST, R.string.tutorial_toast_8, 0);
+                handler.sendMessageDelayed(m3, TOAST_DELAY * 3);
+                /*
 				 * Change page to Status fragment
 				 */
 				m3 = handler.obtainMessage(PAGE, 0, 0);
-				handler.sendMessageDelayed(m3, TOAST_DELAY * 2);
-				m3 = handler.obtainMessage(SET_PART, -1, 0);
-				handler.sendMessageDelayed(m3, TOAST_DELAY * 2);
-				break;
+                handler.sendMessageDelayed(m3, TOAST_DELAY * 3);
+                m3 = handler.obtainMessage(SET_PART, -1, 0);
+                handler.sendMessageDelayed(m3, TOAST_DELAY * 3);
+                break;
 			}
 		}
 	};
