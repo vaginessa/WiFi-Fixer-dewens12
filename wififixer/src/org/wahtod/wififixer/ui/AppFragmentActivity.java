@@ -20,7 +20,6 @@ package org.wahtod.wififixer.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -51,12 +50,8 @@ public abstract class AppFragmentActivity extends SherlockFragmentActivity {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case R.id.menu_prefs:
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-                    this.startActivity(new Intent(this, PrefActivity.class)
-                            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                else
-                    this.startActivity(new Intent(this, PrefActivityHC.class)
-                            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                this.startActivity(new Intent(this, PrefActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 return true;
             case R.id.menu_help:
                 this.startActivity(new Intent(this, HelpActivity.class)

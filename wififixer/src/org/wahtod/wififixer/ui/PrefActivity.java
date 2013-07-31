@@ -17,154 +17,168 @@
 
 package org.wahtod.wififixer.ui;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Build;
+import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.PreferenceScreen;
+import android.provider.Settings;
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.legacy.SleepPolicyHelper;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
-import android.provider.Settings;
-import android.preference.CheckBoxPreference;
+import java.util.List;
 
-@SuppressWarnings("deprecation")
-public class PrefActivity extends PreferenceActivity implements
-		OnSharedPreferenceChangeListener {
+public class PrefActivity extends SherlockPreferenceActivity implements
+        OnSharedPreferenceChangeListener {
+    @SuppressWarnings("deprecation")
 
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		setTheme(android.R.style.Theme_Black);
-		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.general);
-        addPreferencesFromResource(R.xml.notification);
-        addPreferencesFromResource(R.xml.widget);
-        addPreferencesFromResource(R.xml.logging);
-        addPreferencesFromResource(R.xml.advanced);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		// Set up a listener for when key changes
-		getPreferenceScreen().getSharedPreferences()
-				.registerOnSharedPreferenceChangeListener(this);
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		// Unregister the listener when paused
-		getPreferenceScreen().getSharedPreferences()
-				.unregisterOnSharedPreferenceChangeListener(this);
-	}
-
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-		processPrefChange(getPreferenceScreen(), prefs, key);
-	}
-
-	public static void processPrefChange(PreferenceScreen p,
-			SharedPreferences prefs, String key) {
-		if (key.length() == 0)
-			return;
-		/*
-		 * Dispatch intent if this is a pref service is interested in
+    public static void processPrefChange(PreferenceScreen p,
+                                         SharedPreferences prefs, String key) {
+        if (key.length() == 0)
+            return;
+        /*
+         * Dispatch intent if this is a pref service is interested in
 		 */
-		if (Pref.get(key) != null) {
-			/*
-			 * First handle Service enable case
+        if (Pref.get(key) != null) {
+            /*
+             * First handle Service enable case
 			 */
-			if (key.equals(Pref.DISABLE_KEY.key())) {
-				if (!PrefUtil.readBoolean(p.getContext(),
-						Pref.DISABLE_KEY.key())) {
-					Intent intent = new Intent(
-							IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
-					p.getContext().sendBroadcast(intent);
-				}
-
-				else {
-					Intent intent = new Intent(
-							IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
-					p.getContext().sendBroadcast(intent);
-				}
-				return;
-			}
-			/*
+            if (key.equals(Pref.DISABLE_KEY.key())) {
+                if (!PrefUtil.readBoolean(p.getContext(),
+                        Pref.DISABLE_KEY.key())) {
+                    Intent intent = new Intent(
+                            IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
+                    p.getContext().sendBroadcast(intent);
+                } else {
+                    Intent intent = new Intent(
+                            IntentConstants.ACTION_WIFI_SERVICE_DISABLE);
+                    p.getContext().sendBroadcast(intent);
+                }
+                return;
+            }
+            /*
 			 * We want to notify for these, since they're prefs the service is
 			 * interested in.
 			 */
 
-			PrefUtil.notifyPrefChange(p.getContext(), key,
-					prefs.getBoolean(key, false));
+            PrefUtil.notifyPrefChange(p.getContext(), key,
+                    prefs.getBoolean(key, false));
 
-		} else if (key.contains(PrefConstants.PERF_KEY)) {
+        } else if (key.contains(PrefConstants.PERF_KEY)) {
 
-			int pVal = Integer.valueOf(prefs.getString(key, "2"));
-			CheckBoxPreference wflock = (CheckBoxPreference) p
-					.findPreference(Pref.WIFILOCK_KEY.key());
-			CheckBoxPreference screen = (CheckBoxPreference) p
-					.findPreference(Pref.SCREEN_KEY.key());
-			switch (pVal) {
-			case 1:
-				PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK_KEY.key(),
-						true);
-				PrefUtil.notifyPrefChange(p.getContext(),
-						Pref.WIFILOCK_KEY.key(), true);
-				PrefUtil.writeBoolean(p.getContext(), Pref.SCREEN_KEY.key(),
-						true);
-				PrefUtil.notifyPrefChange(p.getContext(),
-						Pref.SCREEN_KEY.key(), true);
-				if (wflock != null)
-					wflock.setChecked(true);
-				if (screen != null)
-					screen.setChecked(true);
-				/*
+            int pVal = Integer.valueOf(prefs.getString(key, "2"));
+            CheckBoxPreference wflock = (CheckBoxPreference) p
+                    .findPreference(Pref.WIFILOCK_KEY.key());
+            CheckBoxPreference screen = (CheckBoxPreference) p
+                    .findPreference(Pref.SCREEN_KEY.key());
+            switch (pVal) {
+                case 1:
+                    PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK_KEY.key(),
+                            true);
+                    PrefUtil.notifyPrefChange(p.getContext(),
+                            Pref.WIFILOCK_KEY.key(), true);
+                    PrefUtil.writeBoolean(p.getContext(), Pref.SCREEN_KEY.key(),
+                            true);
+                    PrefUtil.notifyPrefChange(p.getContext(),
+                            Pref.SCREEN_KEY.key(), true);
+                    if (wflock != null)
+                        wflock.setChecked(true);
+                    if (screen != null)
+                        screen.setChecked(true);
+                /*
 				 * Set Wifi Sleep policy to Never
 				 */
-				SleepPolicyHelper.setSleepPolicy(p.getContext(),
-                        Settings.System.WIFI_SLEEP_POLICY_NEVER);
-				break;
+                    SleepPolicyHelper.setSleepPolicy(p.getContext(),
+                            Settings.System.WIFI_SLEEP_POLICY_NEVER);
+                    break;
 
-			case 2:
-				PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK_KEY.key(),
-						false);
-				PrefUtil.notifyPrefChange(p.getContext(),
-						Pref.WIFILOCK_KEY.key(), false);
-				PrefUtil.writeBoolean(p.getContext(), Pref.SCREEN_KEY.key(),
-						true);
-				PrefUtil.notifyPrefChange(p.getContext(),
-						Pref.SCREEN_KEY.key(), true);
-				if (wflock != null)
-					wflock.setChecked(false);
-				if (screen != null)
-					screen.setChecked(true);
-				break;
+                case 2:
+                    PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK_KEY.key(),
+                            false);
+                    PrefUtil.notifyPrefChange(p.getContext(),
+                            Pref.WIFILOCK_KEY.key(), false);
+                    PrefUtil.writeBoolean(p.getContext(), Pref.SCREEN_KEY.key(),
+                            true);
+                    PrefUtil.notifyPrefChange(p.getContext(),
+                            Pref.SCREEN_KEY.key(), true);
+                    if (wflock != null)
+                        wflock.setChecked(false);
+                    if (screen != null)
+                        screen.setChecked(true);
+                    break;
 
-			case 3:
-				PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK_KEY.key(),
-						false);
-				PrefUtil.notifyPrefChange(p.getContext(),
-						Pref.WIFILOCK_KEY.key(), false);
-				PrefUtil.writeBoolean(p.getContext(), Pref.SCREEN_KEY.key(),
-						false);
-				PrefUtil.notifyPrefChange(p.getContext(),
-						Pref.SCREEN_KEY.key(), false);
-				SleepPolicyHelper.setSleepPolicy(p.getContext(),
-                        Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-				if (wflock != null)
-					wflock.setChecked(false);
-				if (screen != null)
-					screen.setChecked(false);
-				break;
-			}
+                case 3:
+                    PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK_KEY.key(),
+                            false);
+                    PrefUtil.notifyPrefChange(p.getContext(),
+                            Pref.WIFILOCK_KEY.key(), false);
+                    PrefUtil.writeBoolean(p.getContext(), Pref.SCREEN_KEY.key(),
+                            false);
+                    PrefUtil.notifyPrefChange(p.getContext(),
+                            Pref.SCREEN_KEY.key(), false);
+                    SleepPolicyHelper.setSleepPolicy(p.getContext(),
+                            Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+                    if (wflock != null)
+                        wflock.setChecked(false);
+                    if (screen != null)
+                        screen.setChecked(false);
+                    break;
+            }
 
-		}
-	}
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+            setTheme(android.R.style.Theme_Black);
+        super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            addPreferencesFromResource(R.xml.general);
+            addPreferencesFromResource(R.xml.notification);
+            addPreferencesFromResource(R.xml.widget);
+            addPreferencesFromResource(R.xml.logging);
+            addPreferencesFromResource(R.xml.advanced);
+            // Set up a listener for when key changes
+            getPreferenceScreen().getSharedPreferences()
+                    .registerOnSharedPreferenceChangeListener(this);
+        } else
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+            getPreferenceScreen().getSharedPreferences()
+                    .unregisterOnSharedPreferenceChangeListener(this);
+        super.onDestroy();
+    }
+
+    @SuppressLint("NewApi")
+    @Override
+    public void onBuildHeaders(List<Header> target) {
+        loadHeadersFromResource(R.xml.preference_headers, target);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        ActionBarDetector.handleHome(this, item);
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        processPrefChange(getPreferenceScreen(), prefs, key);
+    }
 }
