@@ -121,13 +121,6 @@ public class QuickSettingsFragment extends BaseDialogFragment {
         }
     };
 
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
-        return dialog;
-    }
-
     public static QuickSettingsFragment newInstance(String tag) {
         QuickSettingsFragment f = new QuickSettingsFragment();
         // Supply input as an argument.
@@ -136,6 +129,13 @@ public class QuickSettingsFragment extends BaseDialogFragment {
         f.setArguments(args);
 
         return f;
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
+        return dialog;
     }
 
     @Override
@@ -173,12 +173,13 @@ public class QuickSettingsFragment extends BaseDialogFragment {
     }
 
     protected void setWifiCheckBox(boolean b) {
-        wifiCheckBox.getHandler().post(new WifiButtonStateRunnable(b));
+        if (wifiCheckBox != null)
+            wifiCheckBox.getHandler().post(new WifiButtonStateRunnable(b));
     }
 
     void sendLog() {
         /*
-		 * Gets appropriate dir and filename on sdcard across API versions.
+         * Gets appropriate dir and filename on sdcard across API versions.
 		 */
         File file = VersionedFile.getFile(getActivity(), LogService.LOGFILE);
 
