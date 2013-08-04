@@ -52,6 +52,7 @@ import java.lang.ref.WeakReference;
 public class MainActivity extends TutorialFragmentActivity implements
         OnFragmentPauseRequestListener {
 
+    public static final String SHOW_HELP = "SHOW_HELP";
     /*
      * Market URI for pendingintent
      */
@@ -170,8 +171,8 @@ public class MainActivity extends TutorialFragmentActivity implements
     }
 
     private void bundleIntent(Intent intent) {
-		/*
-		 * Dispatch intent commands to handler
+        /*
+         * Dispatch intent commands to handler
 		 */
         Message message = handler.obtainMessage();
         Bundle data = new Bundle();
@@ -203,6 +204,8 @@ public class MainActivity extends TutorialFragmentActivity implements
         } else if (data.containsKey(RUN_TUTORIAL)) {
             data.remove(RUN_TUTORIAL);
             phoneTutNag();
+        } else if (data.containsKey(SHOW_HELP)) {
+            this.startActivity(new Intent(this, HelpActivity.class));
         }
 		/*
 		 * Set Activity intent to one without commands we've "consumed"

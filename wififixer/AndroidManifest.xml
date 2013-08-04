@@ -21,10 +21,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.wahtod.wififixer"
           android:installLocation="internalOnly"
-          android:versionCode="1033"
-          android:versionName="1.0b9">
+          android:versionCode="1036"
+          android:versionName="1.0b10">
 
-<!-- Documenting permissions here -->
+    <!-- Documenting permissions here -->
     <!-- For service start (30 seconds from boot_completed) -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <!-- For wifi state -->
@@ -192,6 +192,7 @@
                 android:name=".ToggleService"
                 >
         </service>
+        <service android:name=".utility.WifiWatchdogService"/>
 
         <uses-library
                 android:required="false"

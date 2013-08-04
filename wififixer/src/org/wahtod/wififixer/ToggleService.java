@@ -29,22 +29,13 @@ import android.os.IBinder;
 import android.os.Message;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
-import org.wahtod.wififixer.utility.LogService;
-import org.wahtod.wififixer.utility.WakeLock;
+import org.wahtod.wififixer.utility.WifiWatchdogService;
 
 import java.lang.ref.WeakReference;
 
 public class ToggleService extends Service {
-    /*
-     * Delay Constants
-     */
-    private static final int TOGGLE_DELAY = 5000;
-    private static final int WATCHDOG_DELAY = 3000;
+    private static final int BUGGED_NOTIF_ID = 42487;
     private static final int SHORT = 500;
-    /*
-     * Handler Constants
-     */
-    private static final int WIFI_STATE_MESSAGE = 1266;
     private static final int WATCHDOG = 21255;
     protected static Handler _handler = new Handler() {
 
@@ -63,27 +54,8 @@ public class ToggleService extends Service {
                     break;
 
                 case WifiManager.WIFI_STATE_DISABLED:
-                    _handler
-                            .sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
+                    self.get().startService(new Intent(self.get().getApplicationContext(), WifiWatchdogService.class));
                     PrefUtil.getWifiManager(self.get()).setWifiEnabled(true);
-                    break;
-
-
-                case WATCHDOG:
-                    if (!PrefUtil.getWifiManager(self.get()).isWifiEnabled()) {
-                        _wakelock.lock(true);
-                        PrefUtil.getWifiManager(self.get()).setWifiEnabled(true);
-                        _handler
-                                .sendEmptyMessageDelayed(WATCHDOG, WATCHDOG_DELAY);
-                    } else {
-                        LogService.log(self.get(), "Watchdog Exited");
-                        _wakelock.lock(false);
-                    /*
-                     * Stop service: toggle done
-					 */
-                        self.get().shutdown();
-                        return;
-                    }
                     break;
             }
             super.handleMessage(msg);
@@ -91,7 +63,6 @@ public class ToggleService extends Service {
 
     };
     private static WeakReference<ToggleService> self;
-    private static WakeLock _wakelock;
     private static BroadcastReceiver wifiStateReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             Bundle extras = intent.getExtras();
@@ -107,24 +78,6 @@ public class ToggleService extends Service {
     public void onCreate() {
         super.onCreate();
         self = new WeakReference<ToggleService>(this);
-        /*
-         * Initialize WakeLock and WifiLock
-		 */
-        _wakelock = new WakeLock(self.get()) {
-
-            @Override
-            public void onAcquire() {
-                LogService.log(self.get(), R.string.acquiring_wake_lock);
-                super.onAcquire();
-            }
-
-            @Override
-            public void onRelease() {
-                LogService.log(self.get(), R.string.releasing_wake_lock);
-                super.onRelease();
-            }
-
-        };
         IntentFilter filter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
         registerReceiver(wifiStateReceiver, filter);
         _handler.postDelayed(new RToggleRunnable(), SHORT);

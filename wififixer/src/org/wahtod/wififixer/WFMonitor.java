@@ -547,6 +547,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     private static void fixDisabledNetworks(Context context) {
         List<WifiConfiguration> wflist = PrefUtil.getWifiManager(context).getConfiguredNetworks();
+        if (wflist == null)
+            return;
         for (WifiConfiguration wfresult : wflist) {
             /*
              * Check for Android 2.x disabled network bug WifiConfiguration
@@ -629,8 +631,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 */
         List<ScanResult> scanResults = PrefUtil.getWifiManager(ctxt.get())
                 .getScanResults();
-		/*
-		 * Catch null if scan results fires after wifi disabled or while wifi is
+        /*
+         * Catch null if scan results fires after wifi disabled or while wifi is
 		 * in intermediate state
 		 */
         if (scanResults == null) {

@@ -30,6 +30,7 @@ import org.wahtod.wififixer.WFMonitor;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
+import org.wahtod.wififixer.utility.WifiWatchdogService;
 
 import java.lang.ref.WeakReference;
 
@@ -47,7 +48,7 @@ public class WidgetReceiver extends BroadcastReceiver {
         public void handleMessage(Message message) {
             String action = message.getData().getString(PrefUtil.INTENT_ACTION);
             /*
-			 * Turn on WIFI
+             * Turn on WIFI
 			 */
             if (action.equals(WIFI_ON))
                 setWifiState(ctxt.get(), true);
@@ -89,6 +90,8 @@ public class WidgetReceiver extends BroadcastReceiver {
 
     public static void setWifiState(Context context, boolean state) {
         PrefUtil.getWifiManager(context).setWifiEnabled(state);
+        if (state)
+            ctxt.get().startService(new Intent(ctxt.get().getApplicationContext(), WifiWatchdogService.class));
     }
 
     @Override
