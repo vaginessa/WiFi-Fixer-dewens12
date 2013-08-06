@@ -17,6 +17,7 @@
   ~     You should have received a copy of the GNU General Public License
   ~     along with this program.  If not, see http://www.gnu.org/licenses
   -->
+
 <resources>
 
     <string name="network_status">Network Status</string>
@@ -258,5 +259,7 @@
     <string name="blacklist_disable"><![CDATA[AT&T Hotspot Enabled]]></string>
     <string name="BLIST_summary"><![CDATA[Disables attwifi hotspot so it will not be connected to]]></string>
     <string name="BLIST_title"><![CDATA[AT&T Hotspot Blacklist]]></string>
+    <string name="stuck_notif">Your Wifi is stuck. Please refer to Known Issues in Help</string>
+    <string name="stuck_ticker">Stuck Wifi</string>
 
 </resources>

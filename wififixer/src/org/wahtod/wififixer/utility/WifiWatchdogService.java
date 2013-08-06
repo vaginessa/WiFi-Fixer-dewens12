@@ -64,7 +64,7 @@ public class WifiWatchdogService extends Service {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(MainActivity.SHOW_HELP, true);
         PendingIntent pending = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotifUtil.show(this, "Your Wifi is stuck. Please refer to Known Issues in Help", "Stuck Wifi", NOTIFICATION_ID, pending);
+        NotifUtil.show(this, getString(R.string.stuck_notif), getString(R.string.stuck_ticker), NOTIFICATION_ID, pending);
     }
 
     private void watchdog() {
