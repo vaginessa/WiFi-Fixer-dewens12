@@ -38,7 +38,9 @@ import java.lang.ref.WeakReference;
 public class ToggleService extends Service {
     private static final int BUGGED_NOTIF_ID = 42487;
     private static final int SHORT = 500;
+    private static final int STOP = 202;
     private static final int WATCHDOG = 21255;
+    private static final int STOP_DELAY = 6000;
     protected static Handler _handler = new Handler() {
 
         @Override
@@ -57,6 +59,10 @@ public class ToggleService extends Service {
                 case WifiManager.WIFI_STATE_DISABLED:
 
                     PrefUtil.getWifiManager(self.get()).setWifiEnabled(true);
+                    break;
+
+                case STOP:
+                    self.get().shutdown();
                     break;
             }
             super.handleMessage(msg);
@@ -85,6 +91,7 @@ public class ToggleService extends Service {
         IntentFilter filter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
         registerReceiver(wifiStateReceiver, filter);
         _handler.postDelayed(new RToggleRunnable(), SHORT);
+        _handler.sendEmptyMessageDelayed(STOP, STOP_DELAY);
     }
 
     @Override
@@ -97,8 +104,9 @@ public class ToggleService extends Service {
 
     protected void shutdown() {
         this.unregisterReceiver(wifiStateReceiver);
-        this.stopSelf();
+        _handler.removeMessages(STOP);
         mWakeLock.lock(false);
+        this.stopSelf();
     }
 
     public static class RToggleRunnable implements Runnable {
