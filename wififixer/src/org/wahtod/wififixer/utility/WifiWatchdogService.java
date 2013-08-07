@@ -97,21 +97,7 @@ public class WifiWatchdogService extends Service {
         /*
          * Initialize WakeLock
 		 */
-        _wakelock = new WakeLock(this) {
-
-            @Override
-            public void onAcquire() {
-                LogService.log(WifiWatchdogService.this, R.string.acquiring_wake_lock);
-                super.onAcquire();
-            }
-
-            @Override
-            public void onRelease() {
-                LogService.log(WifiWatchdogService.this, R.string.releasing_wake_lock);
-                super.onRelease();
-            }
-
-        };
+        _wakelock = new LoggingWakeLock(this);
         super.onCreate();
     }
 

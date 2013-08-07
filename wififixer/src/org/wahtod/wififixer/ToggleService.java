@@ -30,6 +30,7 @@ import android.os.IBinder;
 import android.os.Message;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.LoggingWakeLock;
 import org.wahtod.wififixer.utility.WifiWatchdogService;
 
 import java.lang.ref.WeakReference;
@@ -48,10 +49,9 @@ public class ToggleService extends Service {
             switch (msg.what) {
 
                 case WifiManager.WIFI_STATE_ENABLED:
-                    if (PrefUtil.readBoolean(self.get(), PrefConstants.WIFI_STATE_LOCK)) {
-                        PrefUtil.writeBoolean(self.get(), PrefConstants.WIFI_STATE_LOCK,
-                                false);
-                    }
+                    PrefUtil.writeBoolean(self.get(), PrefConstants.WIFI_STATE_LOCK,
+                            false);
+                    self.get().shutdown();
                     break;
 
                 case WifiManager.WIFI_STATE_DISABLED:
@@ -74,10 +74,13 @@ public class ToggleService extends Service {
             }
         }
     };
+    private LoggingWakeLock mWakeLock;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mWakeLock = new LoggingWakeLock(this);
+        mWakeLock.lock(true);
         self = new WeakReference<ToggleService>(this);
         IntentFilter filter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
         registerReceiver(wifiStateReceiver, filter);
@@ -95,6 +98,7 @@ public class ToggleService extends Service {
     protected void shutdown() {
         this.unregisterReceiver(wifiStateReceiver);
         this.stopSelf();
+        mWakeLock.lock(false);
     }
 
     public static class RToggleRunnable implements Runnable {
