@@ -77,8 +77,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static final int SHORTWAIT = 1500;
     // just long enough to avoid sleep bug with handler posts
     private static final int REALLYSHORTWAIT = 500;
-    private static final int SCAN_WATCHDOG_DELAY = 25000;
-    private static final int NORMAL_SCAN_DELAY = 20000;
+
     // various
     private static final int NULLVAL = -1;
     /*
@@ -440,21 +439,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
         /*
          * Initialize WakeLock and WifiLock
 		 */
-        wakelock = new WakeLock(context) {
-
-            @Override
-            public void onAcquire() {
-                LogService.log(ctxt.get(), R.string.acquiring_wake_lock);
-                super.onAcquire();
-            }
-
-            @Override
-            public void onRelease() {
-                LogService.log(ctxt.get(), R.string.releasing_wake_lock);
-                super.onRelease();
-            }
-
-        };
+        wakelock = new LoggingWakeLock(context);
 
         wifilock = new WifiLock(context) {
             @Override
