@@ -233,8 +233,8 @@ public class MainActivity extends TutorialFragmentActivity implements
         alert.show();
     }
 
-    public void drawUI() {
-		/*
+    private void drawUI() {
+        /*
 		 * Set up ViewPager and FragmentStatePagerAdapter for phone and tablet
 		 */
         mBasePager = (BaseViewPager) findViewById(R.id.pager);

@@ -1338,12 +1338,16 @@ public class WFMonitor implements OnScreenStateChangedListener {
         if (data.containsKey(WifiManager.EXTRA_SUPPLICANT_ERROR)
                 && data.getInt(WifiManager.EXTRA_SUPPLICANT_ERROR)
                 == WifiManager.ERROR_AUTHENTICATING)
-            NotifUtil.showToast(ctxt.get(), R.string.authentication_error);
-
-		/*
+            authError();
+        /*
 		 * Supplicant state-specific logic
 		 */
         handleSupplicantState(sState);
+    }
+
+    private void authError() {
+        NotifUtil.show(ctxt.get(), ctxt.get().getString(R.string.authentication_error),
+                ctxt.get().getString(R.string.authentication_error), 9224, null);
     }
 
     private void handleSupplicantState(SupplicantState sState) {
