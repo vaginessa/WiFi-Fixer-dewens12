@@ -1,18 +1,19 @@
-/*	    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
+/*
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2013  David Van de Ven
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package org.wahtod.wififixer.ui;
@@ -44,23 +45,48 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
             if (intent.getAction().equals(
                     WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
                 mScanResults = getNetworks(getContext());
-                deliverResult(mScanResults);
             } else if (intent.getExtras().getInt(WifiManager.EXTRA_WIFI_STATE) == WifiManager.WIFI_STATE_DISABLED) {
                 mScanResults = new ArrayList<WFScanResult>();
 
             }
+            onContentChanged();
         }
     };
+
+    public LocalNetworksLoader(Context context) {
+        super(context);
+    }
 
     @Override
     protected void onStartLoading() {
         registerReceiver();
-        super.onStartLoading();
+        if (mScanResults != null) {
+            deliverResult(mScanResults);
+        }
+
+        if (takeContentChanged() || mScanResults == null) {
+            forceLoad();
+        }
     }
 
-    public LocalNetworksLoader(Context context) {
-        super(context);
-        deliverResult(mScanResults);
+    @Override
+    public void deliverResult(List<WFScanResult> data) {
+        if (isReset()) {
+            mScanResults = null;
+            unregisterReceiver();
+            return;
+        }
+
+        List<WFScanResult> oldData = mScanResults;
+        mScanResults = data;
+
+        if (isStarted()) {
+            super.deliverResult(data);
+        }
+
+        if (oldData != null && oldData != data) {
+            oldData = null;
+        }
     }
 
     /*
@@ -91,9 +117,22 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
     }
 
     @Override
+    protected void onReset() {
+        onStopLoading();
+        mScanResults = null;
+        unregisterReceiver();
+    }
+
+    @Override
+    public void onCanceled(List<WFScanResult> data) {
+        super.onCanceled(data);
+        mScanResults = null;
+    }
+
+    @Override
     protected void onStopLoading() {
         unregisterReceiver();
-        super.onStopLoading();
+        cancelLoad();
     }
 
     private void unregisterReceiver() {
