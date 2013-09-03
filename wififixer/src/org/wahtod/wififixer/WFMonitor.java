@@ -96,6 +96,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static final String SSTATE_INVALID = "INVALID";
     private static final int CONNECTING_THRESHOLD = 5;
     private static final long CWDOG_DELAY = 10000;
+    private static final int AUTH_ERROR_NOTIFICATION = 242425;
     protected static WeakReference<Context> ctxt;
     protected static Runnable NetCheckRunnable = new Runnable() {
         @Override
@@ -624,8 +625,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
             log(context, R.string.null_scan_results);
             return NULLVAL;
         }
-		/*
-		 * Known networks from supplicant.
+        /*
+         * Known networks from supplicant.
 		 */
         List<WifiConfiguration> wifiConfigs = PrefUtil.getWifiManager(ctxt.get())
                 .getConfiguredNetworks();
@@ -1347,7 +1348,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     private void authError() {
         NotifUtil.show(ctxt.get(), ctxt.get().getString(R.string.authentication_error),
-                ctxt.get().getString(R.string.authentication_error), 9224, null);
+                ctxt.get().getString(R.string.authentication_error), AUTH_ERROR_NOTIFICATION, null);
     }
 
     private void handleSupplicantState(SupplicantState sState) {
@@ -1475,7 +1476,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 * Clear any error/new network notifications
 		 */
         NotifUtil.cancel(ctxt.get(), ERR_NOTIF);
-		/*
+        NotifUtil.cancel(ctxt.get(), AUTH_ERROR_NOTIFICATION);
+        /*
 		 * Log Non-Managed network
 		 */
         if (!shouldManage(ctxt.get()))
