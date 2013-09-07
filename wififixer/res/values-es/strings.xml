@@ -142,7 +142,6 @@
     <string name="scanfragment_header">Redes Cercanas</string>
     <string name="open_network">Abierta</string>
     <string name="logservice">LogService</string>
-    <string name="resource">recurso</string>
     <string name="xml">xml</string>
     <string name="SCREEN_summary">El servicio chequea la red cuando la pantalla esta apagada: usara
         un poco mas de bateria
