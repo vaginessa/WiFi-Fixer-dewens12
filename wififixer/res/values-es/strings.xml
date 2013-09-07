@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Wifi Fixer for Android
+  ~     Copyright (C) 2010-2013  David Van de Ven
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see http://www.gnu.org/licenses
+  -->
+
+<resources>
+
+    <string name="network_status">Estado de la Red</string>
+    <string name="scheduling_n1_fix">Scheduling N1 Fix</string>
+    <string name="widget_update_called">Widget Update Called</string>
+    <string name="logfile_delete_err_toast">Habilitar Registro para Recaudar Datos</string>
+    <string name="logfile_delete_toast">Archivo de Registro Borrado</string>
+    <string name="connect">Conectar</string>
+    <string name="disable">Deshabilitar</string>
+    <string name="enable">Habilitar</string>
+    <string name="enabling_logging">Registro Habilitado</string>
+    <string name="disabling_logging">Registro Deshabilitado</string>
+    <string name="donatenag">Si consideras util este software, por favor considera donar.</string>
+    <string name="thank_you">Gracias por usar Wifi Fixer</string>
+    <string name="emailintent">Selecciona Gmail, otras aplicaciones podrian no adjuntar el registro</string>
+    <string name="issue_prompt">Por favor describe el problema. Se tan especifico como puedas.</string>
+    <string name="subject">Registro de WifiFixer</string>
+    <string name="email">zanshin.g1@gmail.com</string>
+    <string name="sd_card_unavailable">Tarjeta SD No disponible</string>
+    <string name="donateservice">com.wahtod.wififixer.WFDonateService</string>
+    <string name="about">Acerca de</string>
+    <string name="help">Ayuda</string>
+    <string name="preferences">Configuracion</string>
+    <string name="send_log">Enviar registro</string>
+    <string name="ondestroy">onDestroy controlador</string>
+    <string name="colon">:</string>
+    <string name="prefs_change">Prefs Change:</string>
+    <string name="connect_failed">Conexion Fallida</string>
+    <string name="initiating_scan">Iniciando Busqueda</string>
+    <string name="signalhop_no_result">Signalhop: No hay red mejor</string>
+    <string name="number_of_known">redes conocidas:</string>
+    <string name="signal_poor">Señal debil: Busqueda SignalHop</string>
+    <string name="current_dbm">Intensidad actual dBm:</string>
+    <string name="hopping">Esperando una red mejor</string>
+    <string name="wifi_repair_post_failed">Wifi Repair:Screen Off</string>
+    <string name="wifi_not_current_network">Wifi Not Current Network</string>
+    <string name="running_wifi_repair">Ejecutando Reparacion de Wifi</string>
+    <string name="releasing_wake_lock">Liberando &quot;Wake Lock&quot;</string>
+    <string name="acquiring_wake_lock">Aquiriendo &quot;Wake Lock&quot;</string>
+    <string name="running_supplicant_fix">Ejecutando &quot;Supplicant Fix&quot;</string>
+    <string name="oncreate">OnCreate</string>
+    <string name="wififixerservice_build">WifiFixerService Compilacion:</string>
+    <string name="wifi_connection_problem">Status de Wifi:</string>
+    <string name="supplicant_state">Estado &quot;Supplicant&quot;:</string>
+    <string name="loading_settings">Cargando Opciones</string>
+    <string name="best_signal_ssid">Mejor Señal: SSID:</string>
+    <string name="signal_level">Nivel de Señal:</string>
+    <string name="capabilities">Capacidades:</string>
+    <string name="found_ssid">SSID Encontrado:</string>
+    <string name="parsing_scan_results">Procesando Resultados de Busqueda</string>
+    <string name="null_scan_results">Resultado de Busqueda Vacio</string>
+    <string name="cached_ip">IP en Cache:</string>
+    <string name="wifi_state_unknown">ESTADO_WIFI_DESCONOCIDO</string>
+    <string name="wifi_state_disabled">ESTADO_WIFI_DESHABILITADO</string>
+    <string name="wifi_state_enabled">ESTADO_WIFI_HABILITADO</string>
+    <string name="wifi_state_disabling">ESTADO_WIFI_DESHABILITANDO</string>
+    <string name="wifi_state_enabling">ESTADO_WIFI_HABILITANDO</string>
+    <string name="reconnecthandler">Resultados de Busqueda adquiridos:Ejecutando &quot;Reconnect_Handler&quot;</string>
+    <string name="repairhandler">Resultados de Busqueda adquiridos:Ejecutando &quot;Repair_Handler&quot;</string>
+    <string name="start_intent">Inicio normal o Inicio por actividad</string>
+    <string name="alarm_intent">Alarma Atenta</string>
+    <string name="screen_on_handler">controlador SCREEN_ON</string>
+    <string name="screen_off_handler">controlador SCREEN_OFF</string>
+    <string name="authorized">Autorizado</string>
+    <string name="donatethanks">Gracias por tu donativo.</string>
+    <string name="isauthed">ISAUTHED</string>
+    <string name="authed">Si, estamos autorizados!</string>
+    <string name="packagename">org.wahtod.wififixer</string>
+    <string name="wifi_is_disabled">Wifi Off</string>
+    <string name="wifi_is_enabled">Wifi On</string>
+    <string name="connecting_to_network">Conectando a:</string>
+    <string name="releasing_wifi_lock">Liberando &quot;Wifi Lock&quot;</string>
+    <string name="acquiring_wifi_lock">Adquiriendo &quot;Wifi Lock&quot;</string>
+    <string name="nid">NID:</string>
+    <string name="fix_algorithm">Algoritmo de Reparacion</string>
+    <string name="repairing">Reparando</string>
+    <string name="reconnecting">Reconectando</string>
+    <string name="reassociating">Reasociando</string>
+    <string name="shouldrun_false_dying">SHOULDRUN falso, saliendo.</string>
+    <string name="supplicant_nonresponsive_toggling_wifi">Supplicant no responde, reseteando wifi</string>
+    <string name="exiting_supplicant_fix_thread_starting_scan">Cerrando hilo &quot;Supplicant Fix&quot;:Iniciando
+        Busqueda
+    </string>
+    <string name="wifi_off_aborting_reconnect">Wifi Apagado:Abortando Reconexion</string>
+    <string name="toggling_wifi">Reseteando Wifi</string>
+    <string name="connected_to_network">Conectado a Red:</string>
+    <string name="wifi_off_aborting_repair">Wifi Apagado:Abortando Reparacion</string>
+    <string name="app_name">Wifi Fixer</string>
+    <string name="app_desc">Servicio monitor de condicion Wifi</string>
+    <string name="passed">APROBADO</string>
+    <string name="failed">RECHAZADO</string>
+    <string name="reenablenetwork">Rehabilitacion de red deshabilitada:</string>
+    <string name="authentication_error">Error de Autentificacion</string>
+    <string name="set_non_managed">Fijar No Gestionado</string>
+    <string name="scan_interrupt">La busqueda interrumpira supplicant</string>
+    <string name="not_managing_network">Red no gestionada:</string>
+    <string name="supplicant_associate_threshold_exceeded">Umbral de asociacion excedido: reseteando
+        wifi
+    </string>
+    <string name="none">ninguno</string>
+    <string name="low_memory">Memoria Baja</string>
+    <string name="error_allocating_buffered_writer">Error ubicando escritor en buffer:</string>
+    <string name="log_mimetype">message/rfc882</string>
+    <string name="unmanaged">-U-</string>
+    <string name="scan_mode">Debe estar en modo busqueda de sistema normal</string>
+    <string name="alert_message">Preparando email"</string>
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="null_ssid">Ninguno</string>
+    <string name="http">http://</string>
+    <string name="writing_to_log">Capturando a Registro</string>
+    <string name="k">KB</string>
+    <string name="strict_mode_extant">Modo Estricto Existente</string>
+    <string name="strict_mode_unavailable">Modo Estricto Strict Mode No Disponible</string>
+    <string name="service_status">Servicio</string>
+    <string name="enabling_wififixerservice">WifiFixerService Habilitado</string>
+    <string name="disabling_wififixerservice">WifiFixerService Deshabilitado</string>
+    <string name="wifi">WiFi</string>
+    <string name="enabling_wifi">Habilitando Wifi</string>
+    <string name="disabling_wifi">Deshabilitando Wifi</string>
+    <string name="knownnetworks_fragment_header">Redes Conocidas</string>
+    <string name="scanfragment_header">Redes Cercanas</string>
+    <string name="open_network">Abierta</string>
+    <string name="logservice">LogService</string>
+    <string name="resource">recurso</string>
+    <string name="xml">xml</string>
+    <string name="SCREEN_summary">El servicio chequea la red cuando la pantalla esta apagada: usara
+        un poco mas de bateria
+    </string>
+    <string name="SCREEN_title">Administrar Durante la Suspension</string>
+    <string name="Disable_title">Deshabilitar Servicio</string>
+    <string name="Disable_summary">Deshabilita el servicio de administracion wifi</string>
+    <string name="Perf_Mode_title">Establecer Perfil Wifi</string>
+    <string name="Perf_Mode_summary">Ajusta automaticamente las opciones usando perfiles predeterminados</string>
+    <string name="StateNotif_title">Notificacion de Status</string>
+    <string name="StateNotif_summary">Muestra una notificacion emergente mostrando el
+        estado de la conexion cuando el servicio es habilitado
+    </string>
+    <string name="Notifications_title">Notificacion de Reparacion</string>
+    <string name="Notifications_summary">Muestra una notificacion cuando Wifi Fixer repara un
+        problema
+    </string>
+    <string name="SLOG_title">Habilitar Registro</string>
+    <string name="SLOG_summary">Comienza a capturar datos de los sensores de Wifi Fixer a la tarjeta sd</string>
+    <string name="WIDGET_title">Comportamiento del Widget</string>
+    <string name="WIDGET_summary">Cambia el comportamiento del Widget al tocarlo</string>
+    <string name="WifiLock_title">Habilitar Wifi Lock</string>
+    <string name="WifiLock_summary">Habilita Wifi Lock: incrementara el uso de bateria levemente</string>
+    <string name="SLEEP_POLICY_title">Politica Wifi durante suspension</string>
+    <string name="SLEEP_POLICY_summary">Abre la configuracion avanzada de Wifi: Revisar los problemas conocidos
+    </string>
+    <string name="N1FIX2_title">Solucion de suspension en Nexus One</string>
+    <string name="N1FIX2_summary">Experimental: Por favor lee la seccion politica Wifi durante suspension en los
+        Problemas Conocidos de la
+        Ayuda.
+    </string>
+    <string name="remove">Quitar</string>
+    <string name="removing_network">Quitando:</string>
+    <string name="passwd_entry_text">Clave de wifi</string>
+    <string name="network_check">Comprobando Red:</string>
+    <string name="http_ok">:HTTP_OK:</string>
+    <string name="http_fail">:HTTP_FAIL:</string>
+    <string name="icmp_ok">:ICMP_OK:</string>
+    <string name="icmp_fail">:ICMP_FAIL:</string>
+    <string name="critical_timeout">Comprobacion de Red fallida: tiempo de espera agotado</string>
+    <string name="add">Añadir</string>
+    <string name="button_connect">Pulse para conectar</string>
+    <string name="connection_threshold_exceeded">Umbral de Conexion Excedido</string>
+    <string name="tutorial_toast_1">Esta es el area de Status</string>
+    <string name="tutorial_toast_2">El area de Status muestra lo que Wifi Fixer y tu Wifi estan haciendo</string>
+    <string name="tutorial_toast_4">Este es el area de Redes Conocidas</string>
+    <string name="tutorial_toast_3">Puedes pulsar, mantener presionado o deslizar hacia izquierda o derecha en la
+        ventana para navegar, o usar las pestañas
+        como botones
+    </string>
+    <string name="tutorial_toast_5">El area de redes conocidas muestra las redes que has añadido</string>
+    <string name="tutorial_toast_6">Este es el area de Redes Cercanas</string>
+    <string name="tutorial_toast_7">El area de Redes Cercanas muestras las redes a tu alrededor</string>
+    <string name="tutorial_toast_8">Eso es todo!\n\nSi deseas repasar el tutorial nuevamente, dirigete a Opciones.
+    </string>
+    <string name="tutorial_toast_9">Manten presionado cualquier item en esta lista para mas opciones</string>
+    <string name="phone_ui_tutorial">Tutorial de la Interfaz de Usuario</string>
+    <string name="phone_tutorial_q">Por favor toma un momento para un tutorial rapido de la interfaz</string>
+    <string name="ms">ms</string>
+    <string name="later_button">Luego</string>
+    <string name="scan_failed">Busqueda Fallida: Reseteando Wifi</string>
+    <string name="forcephone_title">Forzar Interfaz para telefono</string>
+    <string name="forcephone_key">ForzarMovil</string>
+    <string name="forcephone_summary">Habilita si ves la interfaz para tablet en tu telefono.</string>
+    <string name="scan_bounce">Patron de falla Supplicant detectado:Reseteando</string>
+    <string name="wifimanager_scan">Solicitando busqueda al WifiManager</string>
+    <string name="issue_report_header">Reporte de Incidencia</string>
+    <string name="issue_report_nag">El Reporte ed Incidencia debe ser llenado para enviar el registro</string>
+    <string name="demoting_network">Degradando red</string>
+    <string name="_to_">" para "</string>
+    <string name="network_at_priority_floor">Red en el fondo de la prioridad:</string>
+    <string name="priority">Prioridad:</string>
+    <string name="error">error</string>
+    <string name="log">Registro</string>
+    <string name="service_status_summary">Muestra informacion detallada de WifiFixerService</string>
+    <string name="service_status_title">Status del Servicio</string>
+    <string name="sendlog_summary">Enviar registro al Desarrollador</string>
+    <string name="sendlog_title">Enviar Registro</string>
+    <string name="deletelog_summary">Borrar registro de la tarjeta SD</string>
+    <string name="deletelog_title">Borrar Registro</string>
+    <string name="dbmfloor_title">Nivel de Signalhop</string>
+    <string name="dbmfloor_summary">Nivel al cual Wifi Fixer busca una red conocida mejor \nDefault es
+        recomendado
+    </string>
+    <string name="dbmfloor_key">DBMFLOOR</string>
+    <string name="wififixerservice">WifiFixerService</string>
+    <string name="no_stack_trace_found">No se encontro seguimiento de pila</string>
+    <string name="known_networks">Conocidas</string>
+    <string name="local_networks">Cercanas</string>
+    <string name="not_connected">No Conectado</string>
+    <string name="service_inactive">Servicio Inactivo</string>
+    <string name="info">Info</string>
+    <string name="disconnected">Disconectado</string>
+    <string name="note">Importante!</string>
+    <string name="servicealert_message">Cuando el servicio es deshabilitado tu Wifi no sera monitoreada o reparada
+    </string>
+    <string name="widget_label_1x4">Wifi Fixer 1x4</string>
+    <string name="widget_label_1x1">Wifi Fixer 1x1</string>
+    <string name="netcheckthread">MasterSensorThread</string>
+    <string name="logwriterthread">LogWriterThread</string>
+    <string name="httpcheckthread">HttpSensorThread</string>
+    <string name="icmpcheckthread">IcmpSensorThread</string>
+    <string name="malformed_url_exception">Excepcion de URL Malformada</string>
+    <string name="i_o_exception">Excepcion de I/O</string>
+    <string name="reassoc">Reasociar</string>
+    <string name="status">Status</string>
+    <string name="managed">Administrada</string>
+    <string name="nonmanaged">Ignorar</string>
+    <string name="quick_text">Quickbar</string>
+    <string name="network_disconnected">Red Desconectada</string>
+    <string name="connecting">Conectando</string>
+    <string name="WAKELOCK_summary">La mayoria de los dispositivos funciona correctamente con esto habilitado. Reduce un
+        poco el uso de bateria.
+    </string>
+    <string name="WAKELOCK_title">Deshabilitar Wake Lock en suspension</string>
+    <string name="connnection_completed">Solicitud de conexion completada:</string>
+    <string name="hotspot_fail"><![CDATA[Hotspot AT&T No Existe]]></string>
+    <string name="blacklist_enable"><![CDATA[Hotspot AT&T En Lista Negra]]></string>
+    <string name="blacklist_disable"><![CDATA[Hotspot AT&T Habilitado]]></string>
+    <string name="BLIST_summary"><![CDATA[Deshabilita el hotspot wifi AT&T para evitar conectarse a el]]></string>
+    <string name="BLIST_title"><![CDATA[Lista Negra de Hotspot AT&T]]></string>
+    <string name="stuck_notif">Tu Wifi esta atascado. Por favor lee los Problemas Conocidos en la Ayuda</string>
+    <string name="stuck_ticker">Wifi Atascado</string>
+
+</resources>

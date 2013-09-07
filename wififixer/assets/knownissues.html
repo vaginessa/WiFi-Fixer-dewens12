@@ -1,3 +1,21 @@
+<!--
+  ~ Wifi Fixer for Android
+  ~     Copyright (C) 2010-2013  David Van de Ven
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see http://www.gnu.org/licenses
+  -->
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
 
@@ -18,8 +36,8 @@
 </font><br>
 <font color="white">
 It is strongly recommended that you do not use Wifi Fixer with this
-kind of software, but if you must, add WifiFixerService and LogService
-to the allowed list.</font><br>
+    kind of software, but if you must, add WFMonitorService and LogService
+    to the allowed list.</font><br>
 </div>
 <font color="white">
 <br>
@@ -49,22 +67,21 @@ displaying.</font><br>
 <font color="white">
 </font><br>
 <font color="white">
-At this time wifi may become unusable.</font><br>
-<font color="white">
+    The issue is in the vendor implementation of the Android Framework interacting with the Wifi driver</font><br>
+    <font color="white">
 </font><br>
 <font color="white">
-It can be fixed either by removing all your wifi network entries then
-rebooting the device or going into Settings:Privacy and doing a factory
-reset</font><br>
-<font color="white">
+    It can be worked around either by rebooting the device or going into Settings:Privacy and doing a factory
+    reset.</font><br>
+    <font color="white">
 </font><br>
 <font color="white">
 Note: You will lose all your settings if you perform a factory reset.</font><br>
 <font color="white">
 </font><br>
 <font color="white">
-I wish that I could fix this problem, but it's in the phone's software. </font><br>
-<font color="white">
+    I wish that I could fix this problem, but it requires a vendor fix. </font><br>
+    <font color="white">
 </font><br>
 <font color="white">Rebooting or factory resetting is a temporary fix. In order to
 solve the problem permanently, you must update your device's software
@@ -84,8 +101,8 @@ screen is off.</font><br>
 </font><br>
 <font color="white">
 This is caused by wifi power save mode, which is not compatible with
-some wifi access points/routers.</font><br>
-<font color="white">
+    some wifi access points.</font><br>
+    <font color="white">
 </font><br>
 <font color="white">
 There is a workaround, "Nexus One Sleep Fix", in Advanced Options
@@ -118,8 +135,7 @@ when wifi is disabled.</font><br>
 <font color="white">
 </font><br>
 <font color="white">
-The network list cannot be loaded when wifi is off on pre-Honeycomb
-devices.</font><br>
+    The network list cannot be loaded when wifi is off.</font><br>
 </div>
 <font color="white">
 <br>
@@ -128,8 +144,9 @@ devices.</font><br>
 <h4><font color="white">Other Wifi Apps</font></h4>
 
 <div style="margin-left: 40px;"><font color="white">Wifi Fixer may conflict with other apps which use the Android wifi manager. &nbsp; Try disabling the service
-when using conflicting apps if you have an issue.&nbsp; </font><br>
-</div>
+    when using conflicting apps if you have an issue.<br>
+    There is no way to prevent other apps from accessing WifiManager.
+</font></div>
 <font color="white">
 <br>
 </font>
@@ -149,10 +166,8 @@ it to broadcast.</font><br>
 <h4><font color="white">Why does the widget update so slowly?</font></h4>
 
 
-<div style="margin-left: 40px;"><font color="white">The widget updates
-less frequently than the status notification to save system resources.
-&nbsp;&nbsp; Android best practices don't allow for widget updates
-faster than 1 minute.&nbsp;</font><font color="white"> </font></div>
+<div style="margin-left: 40px;"><font color="white">The widget updates less frequently than the status notification to
+    save system resources.</font></div>
 <br>
 
 <h4><font color="white">Why can't I change time between scans/checks?</font></h4>
@@ -160,8 +175,6 @@ faster than 1 minute.&nbsp;</font><font color="white"> </font></div>
 <div style="margin-left: 40px;"><font color="white">These values can have a profound effect on
 battery life.&nbsp; The timing has been balanced for maximum responsiveness
 with minimal battery use.</font><br>
-<font color="white">
-There is no benefit to changing them. </font><br>
 </div>
 <font color="white">
 <br>
@@ -172,9 +185,8 @@ made changes to WifiConfiguration in Android 3.2 which causes networks
 created with a new WifiConfiguration object not to work properly due to
 missing fields.&nbsp; I worked around the issue partially with Java
 reflection, but open networks fail on some builds of
-Android.&nbsp;&nbsp; I will&nbsp; fix this when Google responds to my
-bug report.<br>
-The bug report is here:&nbsp;<a href="http://code.google.com/p/android/issues/detail?id=21469" target="_blank">Bug Report #21469</a></font></font><a href="http://code.google.com/p/android/issues/detail?id=21469"></a></div>
+    Android.&nbsp;&nbsp;This will be fixed in an upcoming release of Wifi Fixer.<br>
+    The bug report is here:&nbsp;<a href="http://code.google.com/p/android/issues/detail?id=21469" target="_blank">Bug Report #21469</a></font></font><a href="http://code.google.com/p/android/issues/detail?id=21469"></a></div>
 &nbsp;
 <br>
 <font color="white">
@@ -183,9 +195,9 @@ The bug report is here:&nbsp;<a href="http://code.google.com/p/android/issues/de
 <div style="margin-left: 40px;"><font color="white"><font color="white">At
 this time Open/WPA/WPA2 is supported in
 Local Networks. You can use the Android settings app to connect.&nbsp;
-The network will appear in Wifi Fixer under Known Networks. </font></font><br>
-</div>
-<font color="white"><font color="white">
+    The network will appear in Wifi Fixer under Known Networks.<br>
+    There will be support for extended authentication networks in an upcoming release of Wifi Fixer.</font>
+    <font color="white"><font color="white">
 <br>
 <br>
 <br>
