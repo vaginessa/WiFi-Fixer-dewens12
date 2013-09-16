@@ -90,7 +90,7 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
     }
 
     /*
-     * Note that this WILL return a null String[] if called while wifi is off.
+     * Returns empty ArrayList<WFScanResult> if wifi off or scan results null
 	 */
     private List<WFScanResult> getNetworks(Context context) {
         WifiManager wm = PrefUtil.getWifiManager(context);
