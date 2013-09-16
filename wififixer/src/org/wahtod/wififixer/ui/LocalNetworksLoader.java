@@ -97,10 +97,12 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
 
         if (wm.isWifiEnabled()) {
             List<WFScanResult> scanned = WFScanResult.fromScanResultArray(wm.getScanResults());
-            Collections.sort(scanned, new SortBySignal());
-            return scanned;
-        } else
-            return new ArrayList<WFScanResult>();
+            if (scanned != null) {
+                Collections.sort(scanned, new SortBySignal());
+                return scanned;
+            }
+        }
+        return new ArrayList<WFScanResult>();
     }
 
     @Override
