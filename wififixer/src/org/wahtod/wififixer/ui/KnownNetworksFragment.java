@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KnownNetworksFragment extends SherlockFragment {
+    public static final String ATTWIFI = "attwifi";
     private static final int SCAN_MESSAGE = 31337;
     private static final int REFRESH_MESSAGE = 2944;
     private static final int SCAN_DELAY = 15000;
@@ -62,7 +63,7 @@ public class KnownNetworksFragment extends SherlockFragment {
     private static NetworkListAdapter adapter;
     private static List<String> knownnetworks;
     private static List<String> known_in_range;
-    private static ListView lv;
+    private static ListView mListView;
     private static Handler scanhandler = new Handler() {
         @Override
         public void handleMessage(Message message) {
@@ -212,7 +213,7 @@ public class KnownNetworksFragment extends SherlockFragment {
             TextView ssid = (TextView) v.findViewById(R.id.ssid);
             mSSID = ssid.getText().toString();
             if (mActionMode != null || (PrefUtil.getFlag(PrefConstants.Pref.ATT_BLACKLIST))
-                    && mSSID.equals("attwifi")) {
+                    && mSSID.equals(ATTWIFI)) {
                 return false;
             }
             mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
@@ -273,7 +274,7 @@ public class KnownNetworksFragment extends SherlockFragment {
             known_in_range = networks;
             if (adapter == null) {
                 adapter = self.get().new NetworkListAdapter(knownnetworks);
-                lv.setAdapter(adapter);
+                mListView.setAdapter(adapter);
             } else {
                 refreshArray();
                 adapter.notifyDataSetChanged();
@@ -325,7 +326,7 @@ public class KnownNetworksFragment extends SherlockFragment {
             mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
             for (int c = 1; c < adapter.getCount(); c++) {
                 if (adapter.getItem(c).equals(mSSID)) {
-                    lv.setSelection(c);
+                    mListView.setSelection(c);
                 }
             }
         }
@@ -351,10 +352,10 @@ public class KnownNetworksFragment extends SherlockFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.knownnetworks, null);
-        lv = (ListView) v.findViewById(R.id.knownlist);
+        mListView = (ListView) v.findViewById(R.id.knownlist);
         adapter = self.get().new NetworkListAdapter(knownnetworks);
-        lv.setAdapter(adapter);
-        lv.setOnItemLongClickListener(il);
+        mListView.setAdapter(adapter);
+        mListView.setOnItemLongClickListener(il);
         return v;
     }
 
@@ -457,6 +458,18 @@ public class KnownNetworksFragment extends SherlockFragment {
             ssidArray = knownnetworks;
         }
 
+        /*
+         * Disable ATTWIFI when it's disabled.
+         */
+        @Override
+        public boolean isEnabled(int position) {
+            String item = ssidArray.get(position);
+            if (item != null) {
+                return !blackListCheck(item);
+            }
+            return super.isEnabled(position);
+        }
+
         public int getCount() {
             return ssidArray.size();
         }
@@ -500,11 +513,19 @@ public class KnownNetworksFragment extends SherlockFragment {
                     else
                         holder.icon.setColorFilter(Color.BLACK,
                                 PorterDuff.Mode.SRC_ATOP);
-                    if (PrefUtil.readBoolean(getContext(), PrefConstants.Pref.ATT_BLACKLIST.key()) && holder.text.getText().toString().equals("attwifi"))
+                    if (blackListCheck(holder.text.getText().toString())) {
                         holder.text.setTextColor(Color.RED);
+                    }
                 }
             }
             return convertView;
+        }
+
+        private boolean blackListCheck(String item) {
+            if (!PrefUtil.readBoolean(getContext(), PrefConstants.Pref.ATT_BLACKLIST.key()))
+                return false;
+            else
+                return (item.equals(ATTWIFI));
         }
 
         private class ViewHolder {
