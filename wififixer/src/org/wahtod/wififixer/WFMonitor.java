@@ -34,7 +34,6 @@ import android.text.format.Formatter;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
-import org.wahtod.wififixer.ui.LogFragment;
 import org.wahtod.wififixer.ui.MainActivity;
 import org.wahtod.wififixer.utility.*;
 import org.wahtod.wififixer.utility.ScreenStateDetector.OnScreenStateChangedListener;
@@ -350,6 +349,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static volatile Handler handler = new Handler();
     private static volatile ThreadHandler _nethandler;
     private static volatile boolean isUp;
+    private static LogDBHelper logDBHelper;
     /*
      * For ongoing status notification, widget, and Status fragment
      */
@@ -638,7 +638,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
         int index;
         for (ScanResult sResult : scanResults) {
-			/*
+            /*
 			 * Look for scan result in our known list
 			 */
             index = containsSSID(sResult.SSID, wifiConfigs);
@@ -819,22 +819,20 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     private static void log(Context c, int message) {
 		/*
-		 * handle live logging fragment
+		 * Logging strings by id
 		 */
-        if (PrefUtil.getFlag(Pref.LOG_KEY)
-                || PrefUtil.readBoolean(c, LogFragment.HAS_LOGFRAGMENT))
-            log(c, c.getString(message));
+        log(c, c.getString(message));
     }
 
     private static void log(Context c, String message) {
 		/*
-		 * handle live logging fragment
+		 * Log to SQLite DB for LogFragment
 		 */
-        if (PrefUtil.readBoolean(c, LogFragment.HAS_LOGFRAGMENT)) {
-            Intent i = new Intent(LogFragment.LOG_MESSAGE_INTENT);
-            i.putExtra(LogFragment.LOG_MESSAGE, message);
-            BroadcastHelper.sendBroadcast(c, i, true);
-        }
+        if (logDBHelper == null)
+            logDBHelper = new LogDBHelper(c);
+        logDBHelper.expireEntries();
+        logDBHelper.addLogEntry(message);
+
 
         if (PrefUtil.getFlag(Pref.LOG_KEY))
             LogService.log(c, message);

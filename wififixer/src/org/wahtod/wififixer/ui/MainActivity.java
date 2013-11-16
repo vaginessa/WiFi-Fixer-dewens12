@@ -20,12 +20,13 @@ package org.wahtod.wififixer.ui;
 
 import android.app.AlertDialog;
 import android.app.PendingIntent;
-import android.content.*;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -41,7 +42,6 @@ import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.KnownNetworksFragment.OnFragmentPauseRequestListener;
-import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.LogService;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
@@ -73,29 +73,7 @@ public class MainActivity extends TutorialFragmentActivity implements
             self.get().handleIntentMessage(message);
         }
     };
-    private static Handler logHandler = new Handler() {
-        @Override
-        public void handleMessage(Message message) {
-            self.get().updateLogString(message.getData());
-        }
-    };
-    Runnable rSendLogString = new Runnable() {
 
-        @Override
-        public void run() {
-            sendLogString();
-        }
-
-    };
-    private StringBuilder mLogString;
-    private BroadcastReceiver logReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Message m = logHandler.obtainMessage();
-            m.setData(intent.getExtras());
-            logHandler.sendMessage(m);
-        }
-    };
     private BaseViewPager mBasePager;
 
     private static void startwfService(Context context) {
@@ -122,33 +100,6 @@ public class MainActivity extends TutorialFragmentActivity implements
             // Handle Donate Auth
             startService(new Intent(getString(R.string.donateservice)));
             nagNotification(this);
-        }
-    }
-
-    private void updateLogString(Bundle b) {
-
-        if (b != null) {
-            String message = b.getString(LogFragment.LOG_MESSAGE);
-            if (message != null) {
-                mLogString.append(SystemClock.elapsedRealtime());
-                mLogString.append(": ");
-                mLogString.append(message);
-                mLogString.append("\n");
-            }
-        }
-        sendLogString();
-    }
-
-    private void sendLogString() {
-        PagerAdapter adapter = (PagerAdapter) mBasePager.getAdapter();
-        FirstPageFragment sf = (FirstPageFragment) adapter.getPagerFragment(0);
-        if (sf == null || adapter == null)
-            LogService.log(this, "Null during Activity.SendLogString");
-        else {
-            LogFragment l = (LogFragment) sf.getChildFragmentManager()
-                    .findFragmentByTag(LogFragment.TAG);
-            if (l != null)
-                l.setText(mLogString.toString());
         }
     }
 
@@ -258,7 +209,6 @@ public class MainActivity extends TutorialFragmentActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         self = new WeakReference<MainActivity>(this);
-        mLogString = new StringBuilder();
 		/*
 		 * Set Default Exception handler
 		 */
@@ -300,7 +250,6 @@ public class MainActivity extends TutorialFragmentActivity implements
     @Override
     public void onPause() {
         super.onPause();
-        BroadcastHelper.unregisterReceiver(this, logReceiver);
         removeNag(this);
     }
 
@@ -311,8 +260,6 @@ public class MainActivity extends TutorialFragmentActivity implements
      */
     @Override
     protected void onResume() {
-        BroadcastHelper.registerReceiver(this, logReceiver, new IntentFilter(
-                LogFragment.LOG_MESSAGE_INTENT), true);
         super.onResume();
     }
 
@@ -355,38 +302,6 @@ public class MainActivity extends TutorialFragmentActivity implements
             getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         else
             getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.wahtod.wififixer.ui.TutorialFragmentActivity#onSaveInstanceState(
-     * android.os.Bundle)
-     */
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(LogFragment.LOG_MESSAGE, mLogString.toString());
-        super.onSaveInstanceState(outState);
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.wahtod.wififixer.ui.TutorialFragmentActivity#onRestoreInstanceState
-     * (android.os.Bundle)
-     */
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        // Calling superclass first, to restore view hierarchy
-        super.onRestoreInstanceState(savedInstanceState);
-
-        mLogString = new StringBuilder(
-                savedInstanceState.getString(LogFragment.LOG_MESSAGE));
-
-        handler.postDelayed(rSendLogString, 500);
 
     }
 
@@ -435,8 +350,6 @@ public class MainActivity extends TutorialFragmentActivity implements
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    if (mLogString != null)
-                        handler.postDelayed(rSendLogString, 500);
                     return FirstPageFragment.newInstance(position);
                 case 1:
                     return KnownNetworksFragment.newInstance(position);
