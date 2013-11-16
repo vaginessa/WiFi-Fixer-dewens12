@@ -77,7 +77,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static final int SHORTWAIT = 1500;
     // just long enough to avoid sleep bug with handler posts
     private static final int REALLYSHORTWAIT = 500;
-
     // various
     private static final int NULLVAL = -1;
     /*
@@ -630,8 +629,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 */
         List<WifiConfiguration> wifiConfigs = PrefUtil.getWifiManager(ctxt.get())
                 .getConfiguredNetworks();
-		/*
-		 * Iterate the known networks over the scan results, adding found known
+        /*
+         * Iterate the known networks over the scan results, adding found known
 		 * networks.
 		 */
 
@@ -1417,7 +1416,10 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     private void onNetworkDisconnected() {
         if (_connected) {
-            log(ctxt.get(), mLastConnectedNetwork.getSSID()
+            String ssid = mLastConnectedNetwork.getSSID();
+            if (ssid == null)
+                ssid = "none";
+            log(ctxt.get(), ssid
                     + ctxt.get().getString(R.string.network_disconnected));
             _connected = false;
             if (getisWifiEnabled(ctxt.get(), false))
