@@ -55,7 +55,7 @@ public class LogDBHelper extends SQLiteOpenHelper {
 
     public void expireEntries() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "DELETE FROM " + TABLE_NAME + " WHERE " + TIMESTAMP_KEY + " >= datetime('now','-10 minutes')";
+        String query = "DELETE FROM " + TABLE_NAME + " WHERE " + TIMESTAMP_KEY + " <= datetime('now','localtime','-10 minutes')";
         db.execSQL(query);
         db.close();
     }
