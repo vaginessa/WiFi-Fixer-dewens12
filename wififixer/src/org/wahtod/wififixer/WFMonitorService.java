@@ -57,7 +57,6 @@ public class WFMonitorService extends Service implements
     static boolean screenstate;
     // Flags
     private static boolean registered = false;
-    private static boolean logging = false;
     // Version
     private static int version = 0;
     /*
@@ -94,7 +93,7 @@ public class WFMonitorService extends Service implements
 
     private void handleStart(Intent intent) {
 
-        if (intent != null && logging) {
+        if (intent != null) {
             if (intent.hasExtra(ServiceAlarm.ALARM_START))
                 LogUtil.log(this, getString(R.string.alarm_intent));
             else
@@ -127,14 +126,12 @@ public class WFMonitorService extends Service implements
         ServiceAlarm.enforceServicePrefs(this);
         super.onCreate();
         getPackageInfo();
-		/*
-		 * Load Preferences
+        /*
+         * Load Preferences
 		 */
         preferenceInitialize(this);
-        if (logging) {
-            LogUtil.log(this, LogUtil.getLogTag(),
-                    (getString(R.string.wififixerservice_build) + version));
-        }
+        LogUtil.log(this, LogUtil.getLogTag(),
+                (getString(R.string.wififixerservice_build) + version));
 
 		/*
 		 * Set initial screen state
@@ -155,16 +152,14 @@ public class WFMonitorService extends Service implements
             stopSelf();
         else
             registered = true;
-        if (logging)
-            LogUtil.log(this, LogUtil.getLogTag(),
-                    (getString(R.string.oncreate)));
+        LogUtil.log(this, LogUtil.getLogTag(),
+                (getString(R.string.oncreate)));
         findAppWidgets();
     }
 
     @Override
     public void onDestroy() {
-        if (logging)
-            LogUtil.log(this, getString(R.string.ondestroy));
+        LogUtil.log(this, getString(R.string.ondestroy));
         cleanup();
         super.onDestroy();
     }
@@ -175,8 +170,7 @@ public class WFMonitorService extends Service implements
          *  All we want to do is log this for diagnosis:
          *  Service lifecycle should occur naturally
          */
-        if (logging)
-            LogUtil.log(this, (getString(R.string.low_memory)));
+        LogUtil.log(this, (getString(R.string.low_memory)));
         super.onLowMemory();
     }
 
@@ -223,17 +217,15 @@ public class WFMonitorService extends Service implements
         prefs = new PrefUtil(this) {
             @Override
             public void log() {
-                if (logging) {
-                    LogUtil.log(context,
-                            (context.getString(R.string.loading_settings)));
-                    for (Pref prefkey : Pref.values()) {
-                        if (getFlag(prefkey))
-                            LogUtil.log(getBaseContext(),
-                                    LogUtil.getLogTag(),
-                                    (prefkey.key()));
-                    }
-
+                LogUtil.log(context,
+                        (context.getString(R.string.loading_settings)));
+                for (Pref prefkey : Pref.values()) {
+                    if (getFlag(prefkey))
+                        LogUtil.log(getBaseContext(),
+                                LogUtil.getLogTag(),
+                                (prefkey.key()));
                 }
+
             }
 
             @Override
@@ -251,14 +243,13 @@ public class WFMonitorService extends Service implements
                         break;
 
                     case LOG_KEY:
-                        logging = getFlag(Pref.LOG_KEY);
-                        if (logging) {
-                                NotifUtil.showToast(getBaseContext(),
-                                        R.string.enabling_logging);
-                            log();
+
+                        if (getFlag(Pref.LOG_KEY)) {
+                            LogUtil.log(context,
+                                    R.string.enabling_logging);
                         } else {
-                                NotifUtil.showToast(getBaseContext(),
-                                        R.string.disabling_logging);
+                            LogUtil.log(context,
+                                    R.string.disabling_logging);
                         }
                         break;
 
@@ -284,16 +275,15 @@ public class WFMonitorService extends Service implements
 				/*
 				 * Log change of preference state
 				 */
-                if (logging) {
-                    StringBuilder l = new StringBuilder(
-                            getString(R.string.prefs_change));
-                    l.append(p.key());
-                    l.append(getString(R.string.colon));
-                    l.append(String.valueOf(getFlag(p)));
-                    LogUtil.log(getBaseContext(),
-                            LogUtil.getLogTag(),
-                            l.toString());
-                }
+
+                StringBuilder l = new StringBuilder(
+                        getString(R.string.prefs_change));
+                l.append(p.key());
+                l.append(getString(R.string.colon));
+                l.append(String.valueOf(getFlag(p)));
+                LogUtil.log(getBaseContext(),
+                        LogUtil.getLogTag(),
+                        l.toString());
             }
 
             @SuppressWarnings("deprecation")
@@ -328,7 +318,6 @@ public class WFMonitorService extends Service implements
         };
 
         prefs.loadPrefs();
-        logging = PrefUtil.getFlag(Pref.LOG_KEY);
         NotifUtil.cancel(this, NOTIFID);
     }
 

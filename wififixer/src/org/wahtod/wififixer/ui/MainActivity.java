@@ -50,6 +50,7 @@ public class MainActivity extends TutorialFragmentActivity implements
         OnFragmentPauseRequestListener {
 
     public static final String SHOW_HELP = "SHOW_HELP";
+    private static final String SEND_LOG = "SEND_LOG";
     /*
      * Market URI for pendingintent
      */
@@ -136,8 +137,9 @@ public class MainActivity extends TutorialFragmentActivity implements
             phoneTutNag();
         } else if (data.containsKey(SHOW_HELP)) {
             this.startActivity(new Intent(this, HelpActivity.class));
-        }
-		/*
+        } else if (data.containsKey(SEND_LOG))
+            LogUtil.sendLog(this);
+        /*
 		 * Set Activity intent to one without commands we've "consumed"
 		 */
         Intent i = new Intent(data.getString(PrefUtil.INTENT_ACTION));

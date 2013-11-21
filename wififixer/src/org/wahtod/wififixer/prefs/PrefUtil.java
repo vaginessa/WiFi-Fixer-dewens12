@@ -332,6 +332,8 @@ public class PrefUtil {
     }
 
     public static void setBlackList(Context context, boolean state, boolean toast) {
+        if (!getWifiManager(context).isWifiEnabled())
+            return;
         int network = getNidFromSsid(context, "attwifi");
         if (network == -1) {
             if (toast)

@@ -552,7 +552,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private static void enforceAttBlacklistState(Context context) {
-        if (PrefUtil.getFlag(Pref.ATT_BLACKLIST))
+        if (PrefUtil.readBoolean(context, Pref.ATT_BLACKLIST.key()))
             PrefUtil.setBlackList(context, true, false);
     }
 
@@ -645,7 +645,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 				 */
                 if (PrefUtil.getNetworkState(context, wfResult.networkId)) {
                     /*
-					 * Log network
+                     * Log network
 					 */
                     logScanResult(context, sResult, wfResult);
 					/*

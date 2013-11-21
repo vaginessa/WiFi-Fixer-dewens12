@@ -42,7 +42,7 @@
     <string name="help">Help</string>
     <string name="preferences">Settings</string>
     <string name="send_log">Send Log</string>
-    <string name="ondestroy">onDestroy handler</string>
+    <string name="ondestroy">Service Destroyed</string>
     <string name="colon">:</string>
     <string name="prefs_change">Prefs Change:</string>
     <string name="connect_failed">Connect Failed</string>
@@ -58,7 +58,7 @@
     <string name="releasing_wake_lock">Releasing Wake Lock</string>
     <string name="acquiring_wake_lock">Acquiring Wake Lock</string>
     <string name="running_supplicant_fix">Running Supplicant Fix</string>
-    <string name="oncreate">OnCreate</string>
+    <string name="oncreate">Service Started</string>
     <string name="wififixerservice_build">WifiFixerService Build:</string>
     <string name="wifi_connection_problem">Wifi Status:</string>
     <string name="supplicant_state">Supplicant State:</string>
