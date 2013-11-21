@@ -28,8 +28,8 @@
     <string name="connect">Connect</string>
     <string name="disable">Disable</string>
     <string name="enable">Enable</string>
-    <string name="enabling_logging">Logging Enabled</string>
-    <string name="disabling_logging">Logging Disabled</string>
+    <string name="enabling_logging">Debug Enabled</string>
+    <string name="disabling_logging">Debug Disabled</string>
     <string name="donatenag">If you use this software, please donate!</string>
     <string name="thank_you">Thank You for using Wifi Fixer</string>
     <string name="emailintent">Select Gmail: other apps may not attach log</string>
@@ -158,8 +158,8 @@
     <string name="Notifications_summary">Displays a notification when Wifi Fixer repairs a
         problem
     </string>
-    <string name="SLOG_title">Enable Logging</string>
-    <string name="SLOG_summary">Starts capture of Wifi Fixer\'s sensors to the sdcard</string>
+    <string name="SLOG_title">Debug</string>
+    <string name="SLOG_summary">Outputs Wifi Fixer\'s diagnostic info to the Android debug log</string>
     <string name="WIDGET_title">Widget Behavior</string>
     <string name="WIDGET_summary">Changes Launcher Widget tap behavior</string>
     <string name="WifiLock_title">Enable Wifi Lock</string>

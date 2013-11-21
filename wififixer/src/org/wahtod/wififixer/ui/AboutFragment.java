@@ -41,7 +41,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.BroadcastHelper;
-import org.wahtod.wififixer.utility.LogService;
+import org.wahtod.wififixer.utility.LogUtil;
 import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
 
@@ -64,7 +64,7 @@ public class AboutFragment extends SherlockFragment implements OnClickListener {
               /*
                * Shouldn't happen, log it
                */
-                LogService.log(self.get().getActivity(), "WFScanResult Null in AboutFragment.HandleMessage");
+                LogUtil.log(self.get().getActivity(), "WFScanResult Null in AboutFragment.HandleMessage");
             } else {
                 Boolean found = false;
                 for (ScanResult n : results) {
@@ -118,7 +118,7 @@ public class AboutFragment extends SherlockFragment implements OnClickListener {
             _views.setFrequency(mNetwork.frequency);
             _views.setLevel(mNetwork.level);
         } catch (NullPointerException e) {
-            LogService.log(getActivity(), "Null in RefreshViews");
+            LogUtil.log(getActivity(), "Null in RefreshViews");
             e.printStackTrace();
         }
     }

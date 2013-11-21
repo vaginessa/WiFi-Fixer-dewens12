@@ -18,29 +18,24 @@
 
 package org.wahtod.wififixer.ui;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.*;
-import android.net.Uri;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.*;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
-import org.wahtod.wififixer.DefaultExceptionHandler;
 import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
-import org.wahtod.wififixer.utility.LogService;
-import org.wahtod.wififixer.utility.NotifUtil;
+import org.wahtod.wififixer.utility.LogUtil;
 
-import java.io.File;
 import java.lang.ref.WeakReference;
 
 public class QuickSettingsFragment extends BaseDialogFragment {
@@ -98,7 +93,7 @@ public class QuickSettingsFragment extends BaseDialogFragment {
                     break;
 
                 case R.id.send_log_button:
-                    sendLog();
+                    LogUtil.sendLog(getActivity());
                     break;
 
             }
@@ -175,72 +170,6 @@ public class QuickSettingsFragment extends BaseDialogFragment {
     protected void setWifiCheckBox(boolean b) {
         if (wifiCheckBox != null)
             wifiCheckBox.getHandler().post(new WifiButtonStateRunnable(b));
-    }
-
-    void sendLog() {
-        /*
-         * Gets appropriate dir and filename on sdcard across API versions.
-		 */
-        File file = VersionedFile.getFile(getActivity(), LogService.LOGFILE);
-
-        if (Environment.getExternalStorageState() != null
-                && !(Environment.getExternalStorageState()
-                .contains(Environment.MEDIA_MOUNTED))) {
-            NotifUtil.showToast(getActivity(), R.string.sd_card_unavailable);
-            return;
-        } else if (!file.exists()) {
-            file = getActivity().getFileStreamPath(
-                    DefaultExceptionHandler.EXCEPTIONS_FILENAME);
-            if (file.length() < 10) {
-                NotifUtil.showToast(getActivity(),
-                        R.string.logfile_delete_err_toast);
-                return;
-            }
-        }
-
-        final String fileuri = file.toURI().toString();
-		/*
-		 * Get the issue report, then start send log dialog
-		 */
-        AlertDialog.Builder issueDialog = new AlertDialog.Builder(getActivity());
-
-        issueDialog.setTitle(getString(R.string.issue_report_header));
-        issueDialog.setMessage(getString(R.string.issue_prompt));
-
-        // Set an EditText view to get user input
-        final EditText input = new EditText(getActivity());
-        input.setLines(3);
-        issueDialog.setView(input);
-        issueDialog.setPositiveButton(getString(R.string.ok_button),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        if (input.getText().length() > 1)
-                            sendIssueReport(input.getText().toString(), fileuri);
-                        else
-                            NotifUtil.showToast(getActivity(),
-                                    R.string.issue_report_nag);
-                    }
-                });
-
-        issueDialog.setNegativeButton(getString(R.string.cancel_button),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                    }
-                });
-        issueDialog.show();
-    }
-
-    public void sendIssueReport(String report, String fileuri) {
-        Intent sendIntent = new Intent(Intent.ACTION_SEND);
-        sendIntent.setType(getString(R.string.log_mimetype));
-        sendIntent.putExtra(Intent.EXTRA_EMAIL,
-                new String[]{getString(R.string.email)});
-        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject));
-        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(fileuri));
-        sendIntent.putExtra(Intent.EXTRA_TEXT, LogService.getBuildInfo()
-                + "\n\n" + report);
-        startActivity(Intent.createChooser(sendIntent,
-                getString(R.string.emailintent)));
     }
 
     /*

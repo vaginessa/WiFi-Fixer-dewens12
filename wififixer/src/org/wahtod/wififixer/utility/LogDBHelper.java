@@ -65,7 +65,7 @@ public class LogDBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_NAME, new String[]{ID_KEY, TEXT_KEY, TIMESTAMP_KEY}, ID_KEY + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
-        return cursor.getString(2) + ":" + cursor.getString(1);
+        return cursor.getString(2) + ": " + cursor.getString(1);
     }
 
     public String getAllEntries() {
@@ -80,6 +80,7 @@ public class LogDBHelper extends SQLiteOpenHelper {
 
             } while (cursor.moveToNext());
         }
+        cursor.close();
         db.close();
         return out.toString();
     }
@@ -96,6 +97,7 @@ public class LogDBHelper extends SQLiteOpenHelper {
 
             } while (cursor.moveToNext());
         }
+        cursor.close();
         db.close();
         return out.toString();
     }
@@ -107,6 +109,7 @@ public class LogDBHelper extends SQLiteOpenHelper {
         int out = -1;
         if (cursor.moveToFirst())
             out = cursor.getInt(0);
+        cursor.close();
         db.close();
         return out;
     }

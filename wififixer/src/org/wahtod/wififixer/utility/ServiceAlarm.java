@@ -57,20 +57,14 @@ public final class ServiceAlarm extends Object {
     }
 
     /*
-     * Makes sure that if package is updated LogService and WFMonitorService
-     * respect disabled state
+     * Makes sure that if package is updated WFMonitorService
+     * respects disabled state
      */
     public static void enforceServicePrefs(Context context) {
         if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
             setComponentEnabled(context, WFMonitorService.class, false);
         else
             setComponentEnabled(context, WFMonitorService.class, true);
-
-        if (PrefUtil.readBoolean(context, Pref.LOG_KEY.key()))
-            setComponentEnabled(context, LogService.class, true);
-        else
-            setComponentEnabled(context, LogService.class, false);
-
     }
 
     public static void setComponentEnabled(Context context,

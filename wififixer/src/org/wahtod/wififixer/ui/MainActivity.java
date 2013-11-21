@@ -37,16 +37,13 @@ import org.wahtod.wififixer.DefaultExceptionHandler;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.boot.BootService;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
-import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.prefs.PrefConstants;
-import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.KnownNetworksFragment.OnFragmentPauseRequestListener;
-import org.wahtod.wififixer.utility.LogService;
+import org.wahtod.wififixer.utility.LogUtil;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 
-import java.io.File;
 import java.lang.ref.WeakReference;
 
 public class MainActivity extends TutorialFragmentActivity implements
@@ -103,24 +100,6 @@ public class MainActivity extends TutorialFragmentActivity implements
         }
     }
 
-    private void deleteLog() {
-        /*
-         * Delete old log if logging currently enabled, disable it briefly for
-		 * deletion
-		 */
-        File file = VersionedFile.getFile(this, LogService.LOGFILE);
-        if (PrefUtil.readBoolean(this, Pref.LOG_KEY.key()))
-            PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), false);
-        if (file.delete())
-            NotifUtil.showToast(MainActivity.this,
-                    R.string.logfile_delete_toast);
-        else
-            NotifUtil.showToast(MainActivity.this,
-                    R.string.logfile_delete_err_toast);
-        if (PrefUtil.readBoolean(this, Pref.LOG_KEY.key()))
-            PrefUtil.notifyPrefChange(this, Pref.LOG_KEY.key(), true);
-    }
-
     private void bundleIntent(Intent intent) {
         /*
          * Dispatch intent commands to handler
@@ -151,7 +130,7 @@ public class MainActivity extends TutorialFragmentActivity implements
 		 */
         else if (data.containsKey(DELETE_LOG)) {
             data.remove(DELETE_LOG);
-            deleteLog();
+            LogUtil.deleteLog(this);
         } else if (data.containsKey(RUN_TUTORIAL)) {
             data.remove(RUN_TUTORIAL);
             phoneTutNag();

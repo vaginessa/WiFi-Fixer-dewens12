@@ -1,18 +1,19 @@
-/*	    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
+/*
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2013  David Van de Ven
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package org.wahtod.wififixer.utility;
@@ -102,7 +103,7 @@ public class Hostup {
             Thread.sleep(reachable);
         } catch (InterruptedException e) {
             /*
-			 * We have a response
+             * We have a response
 			 */
             response.status += (String.valueOf(response.timer.getElapsed()));
             response.status += (ctxt.getString(R.string.ms));
@@ -223,7 +224,7 @@ public class Hostup {
         public GetHeaders(int id) {
             session = id;
             //if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
-            //    LogService.log(context.get(), "Started GetHeaders Session:" + String.valueOf(id));
+            //    LogUtil.log(context.get(), "Started GetHeaders Session:" + String.valueOf(id));
         }
 
         @Override
@@ -232,7 +233,7 @@ public class Hostup {
             if (!mFinished)
                 complete(h, session);
             //if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
-            //    LogService.log(context.get(), "Ended GetHeaders Session:" + String.valueOf(session));
+            //    LogUtil.log(context.get(), "Ended GetHeaders Session:" + String.valueOf(session));
         }
     }
 
@@ -245,7 +246,7 @@ public class Hostup {
         public GetICMP(int id) {
             session = id;
             //if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
-            //    LogService.log(context.get(), "Started GetICMP Session:" + String.valueOf(id));
+            //    LogUtil.log(context.get(), "Started GetICMP Session:" + String.valueOf(id));
         }
 
         @Override
@@ -254,7 +255,7 @@ public class Hostup {
             if (!mFinished)
                 complete(h, session);
             //if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
-            //    LogService.log(context.get(), "Ended GetICMP Session:" + String.valueOf(session));
+            //    LogUtil.log(context.get(), "Ended GetICMP Session:" + String.valueOf(session));
         }
     }
 }

@@ -36,13 +36,13 @@ public class LoggingWakeLock extends WakeLock {
 
     @Override
     public void onAcquire() {
-        LogService.log(ctxt.get(), R.string.acquiring_wake_lock);
+        LogUtil.log(ctxt.get(), R.string.acquiring_wake_lock);
         super.onAcquire();
     }
 
     @Override
     public void onRelease() {
-        LogService.log(ctxt.get(), R.string.releasing_wake_lock);
+        LogUtil.log(ctxt.get(), R.string.releasing_wake_lock);
         super.onRelease();
     }
 

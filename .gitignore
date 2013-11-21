@@ -37,3 +37,4 @@ gradle.properties
 *gradle*
 *proguard*
 *lint*
+out

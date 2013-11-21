@@ -21,8 +21,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.wahtod.wififixer"
           android:installLocation="internalOnly"
-          android:versionCode="1052"
-          android:versionName="1.0.2b2">
+          android:versionCode="1054"
+          android:versionName="1.0.2b3">
 
     <!-- Documenting permissions here -->
     <!-- For service start (30 seconds from boot_completed) -->
@@ -177,13 +177,6 @@
                 android:name=".WFMonitorService"
                 android:exported="false"
                 android:persistent="true">
-        </service>
-
-        <!-- Provides LogService.log services -->
-
-        <service
-                android:name=".utility.LogService"
-                >
         </service>
 
         <!-- Handles asynchronous toggling of wifi state -->

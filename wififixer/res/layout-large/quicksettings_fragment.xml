@@ -17,6 +17,7 @@
   ~     You should have received a copy of the GNU General Public License
   ~     along with this program.  If not, see http://www.gnu.org/licenses
   -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/quicksettings_layout"
                 android:layout_width="300dp"
@@ -64,7 +65,7 @@
             android:layout_marginBottom="15dp"
             android:layout_marginLeft="60dp"
             android:layout_marginTop="10dp"
-            android:text="Logging"/>
+            android:text="@string/SLOG_title"/>
 
     <Button
             android:id="@+id/send_log_button"

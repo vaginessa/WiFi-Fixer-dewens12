@@ -31,7 +31,7 @@ import org.wahtod.wififixer.legacy.EditorDetector;
 import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.utility.BroadcastHelper;
-import org.wahtod.wififixer.utility.LogService;
+import org.wahtod.wififixer.utility.LogUtil;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StringUtil;
 
@@ -270,8 +270,8 @@ public class PrefUtil {
     }
 
     public synchronized static WifiManager getWifiManager(Context context) {
-		/*
-		 * Cache WifiManager
+        /*
+         * Cache WifiManager
 		 */
         if (wm_ == null) {
             wm_ = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -358,15 +358,15 @@ public class PrefUtil {
         }
         intTemp[pref.ordinal()] = value;
 
-        if (getFlag(Pref.LOG_KEY)) {
-            StringBuilder logstring = new StringBuilder(pref.key());
-            logstring.append(COLON);
-            logstring.append(network);
-            logstring.append(COLON);
-            logstring.append(String.valueOf(intTemp[pref.ordinal()]));
-            LogService.log(context.get(),
-                    logstring.toString());
-        }
+
+        StringBuilder logstring = new StringBuilder(pref.key());
+        logstring.append(COLON);
+        logstring.append(network);
+        logstring.append(COLON);
+        logstring.append(String.valueOf(intTemp[pref.ordinal()]));
+        LogUtil.log(context.get(),
+                logstring.toString());
+
 
         netprefs.put(network, intTemp);
     }

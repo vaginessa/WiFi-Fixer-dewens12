@@ -25,7 +25,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.MainActivity;
 
@@ -81,7 +80,7 @@ public class WifiWatchdogService extends Service {
             _watchdogCount++;
         } else if (_watchdogCount < WATCHDOG_MAX_COUNT) {
             _watchdogCount = 0;
-            LogService.log(WifiWatchdogService.this, "Watchdog Exited");
+            LogUtil.log(WifiWatchdogService.this, "Watchdog Exited");
             _wakelock.lock(false);
                     /*
                      * Stop service: toggle done
@@ -103,9 +102,8 @@ public class WifiWatchdogService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (PrefUtil.readBoolean(this, PrefConstants.Pref.LOG_KEY.key()))
-            LogService.log(this, this.getString(R.string.app_name), "WifiWatchdogService Request:" + String.valueOf(startId)
-                    + String.valueOf(_waitFlag));
+        LogUtil.log(this, this.getString(R.string.app_name), "WifiWatchdogService Request:" + String.valueOf(startId)
+                + String.valueOf(_waitFlag));
         if (!_waitFlag) {
             _waitFlag = true;
             mMessageHandler.sendEmptyMessageDelayed(WATCHDOG_MESSAGE, WATCHDOG_DELAY);

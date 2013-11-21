@@ -96,9 +96,9 @@ public class WFMonitorService extends Service implements
 
         if (intent != null && logging) {
             if (intent.hasExtra(ServiceAlarm.ALARM_START))
-                LogService.log(this, getString(R.string.alarm_intent));
+                LogUtil.log(this, getString(R.string.alarm_intent));
             else
-                LogService.log(this, getString(R.string.start_intent));
+                LogUtil.log(this, getString(R.string.start_intent));
         }
     }
 
@@ -118,9 +118,9 @@ public class WFMonitorService extends Service implements
 		 */
 
         if (StrictModeDetector.setPolicy(false))
-            LogService.log(this, (getString(R.string.strict_mode_extant)));
+            LogUtil.log(this, (getString(R.string.strict_mode_extant)));
         else
-            LogService.log(this, (getString(R.string.strict_mode_unavailable)));
+            LogUtil.log(this, (getString(R.string.strict_mode_unavailable)));
         /*
          * Make sure service settings are enforced.
 		 */
@@ -132,7 +132,7 @@ public class WFMonitorService extends Service implements
 		 */
         preferenceInitialize(this);
         if (logging) {
-            LogService.log(this, LogService.getLogTag(),
+            LogUtil.log(this, LogUtil.getLogTag(),
                     (getString(R.string.wififixerservice_build) + version));
         }
 
@@ -156,7 +156,7 @@ public class WFMonitorService extends Service implements
         else
             registered = true;
         if (logging)
-            LogService.log(this, LogService.getLogTag(),
+            LogUtil.log(this, LogUtil.getLogTag(),
                     (getString(R.string.oncreate)));
         findAppWidgets();
     }
@@ -164,7 +164,7 @@ public class WFMonitorService extends Service implements
     @Override
     public void onDestroy() {
         if (logging)
-            LogService.log(this, getString(R.string.ondestroy));
+            LogUtil.log(this, getString(R.string.ondestroy));
         cleanup();
         super.onDestroy();
     }
@@ -176,7 +176,7 @@ public class WFMonitorService extends Service implements
          *  Service lifecycle should occur naturally
          */
         if (logging)
-            LogService.log(this, (getString(R.string.low_memory)));
+            LogUtil.log(this, (getString(R.string.low_memory)));
         super.onLowMemory();
     }
 
@@ -224,12 +224,12 @@ public class WFMonitorService extends Service implements
             @Override
             public void log() {
                 if (logging) {
-                    LogService.log(context,
+                    LogUtil.log(context,
                             (context.getString(R.string.loading_settings)));
                     for (Pref prefkey : Pref.values()) {
                         if (getFlag(prefkey))
-                            LogService.log(getBaseContext(),
-                                    LogService.getLogTag(),
+                            LogUtil.log(getBaseContext(),
+                                    LogUtil.getLogTag(),
                                     (prefkey.key()));
                     }
 
@@ -253,23 +253,12 @@ public class WFMonitorService extends Service implements
                     case LOG_KEY:
                         logging = getFlag(Pref.LOG_KEY);
                         if (logging) {
-                            ServiceAlarm.setComponentEnabled(getBaseContext(),
-                                    LogService.class, true);
-                            LogService.log(getBaseContext(),
-                                    (LogService.DUMPBUILD), (EMPTYSTRING));
-                            if (logPrefLoad)
                                 NotifUtil.showToast(getBaseContext(),
                                         R.string.enabling_logging);
                             log();
                         } else {
-                            if (logPrefLoad)
                                 NotifUtil.showToast(getBaseContext(),
                                         R.string.disabling_logging);
-                            ServiceAlarm.setComponentEnabled(getBaseContext(),
-                                    LogService.class, false);
-                        }
-                        if (!logPrefLoad) {
-                            logPrefLoad = true;
                         }
                         break;
 
@@ -301,8 +290,8 @@ public class WFMonitorService extends Service implements
                     l.append(p.key());
                     l.append(getString(R.string.colon));
                     l.append(String.valueOf(getFlag(p)));
-                    LogService.log(getBaseContext(),
-                            LogService.getLogTag(),
+                    LogUtil.log(getBaseContext(),
+                            LogUtil.getLogTag(),
                             l.toString());
                 }
             }

@@ -241,7 +241,7 @@ public class NotifUtil {
                 context.getString(R.string.writing_to_log));
         logstring.append(NotifUtil.SEPARATOR);
         logstring.append(String.valueOf(VersionedFile.getFile(context,
-                LogService.LOGFILE).length() / 1024));
+                LogUtil.LOGFILE).length() / 1024));
         logstring.append(context.getString(R.string.k));
         return logstring.toString();
     }

@@ -1,18 +1,19 @@
-/*	    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
+/*
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2013  David Van de Ven
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.wahtod.wififixer;
 
@@ -28,7 +29,7 @@ import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.MainActivity;
-import org.wahtod.wififixer.utility.LogService;
+import org.wahtod.wififixer.utility.LogUtil;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 import org.wahtod.wififixer.widget.FixerWidget;
@@ -59,7 +60,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
         String action = PrefUtil.readString(context, PrefConstants.WIDGET_KEY);
         if (action == null) {
             /*
-			 * Default: REASSOCIATE
+             * Default: REASSOCIATE
 			 */
             command = 0;
         } else
@@ -140,7 +141,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
     private static void handleAuthAction(Bundle data) {
         if (data.containsKey(AUTHEXTRA)
                 && data.getString(AUTHEXTRA).contains(AUTHSTRING)) {
-            LogService.log(ctxt.get(), ctxt.get().getString(R.string.authed));
+            LogUtil.log(ctxt.get(), ctxt.get().getString(R.string.authed));
             Intent intent = new Intent(ctxt.get(), MainActivity.class)
                     .setAction(Intent.ACTION_MAIN).setFlags(
                             Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
@@ -171,7 +172,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
                     WFMonitorService.class, false);
             PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLE_KEY.key(), true);
             ServiceAlarm.unsetAlarm(ctxt.get());
-            ctxt.get().stopService(new Intent(ctxt.get(), LogService.class));
+            ctxt.get().stopService(new Intent(ctxt.get(), LogUtil.class));
         } else {
             ctxt.get().startActivity(
                     new Intent(ctxt.get(), MainActivity.class).putExtra(
