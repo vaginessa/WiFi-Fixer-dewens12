@@ -35,8 +35,18 @@ public class LogDBHelper extends SQLiteOpenHelper {
     public static final String TEXT_KEY = "logtext";
     public static final String TIMESTAMP_KEY = "timeStamp";
 
-    public LogDBHelper(Context context) {
+    private static LogDBHelper _instance;
+
+    private LogDBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+    }
+
+    public static LogDBHelper newinstance(Context context) {
+        if (_instance == null) {
+            _instance = new LogDBHelper(context.getApplicationContext());
+        }
+
+        return _instance;
     }
 
     @Override
@@ -57,7 +67,6 @@ public class LogDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "DELETE FROM " + TABLE_NAME + " WHERE " + TIMESTAMP_KEY + " <= datetime('now','localtime','-10 minutes')";
         db.execSQL(query);
-        db.close();
     }
 
     public String getCurrentEntry(int id) {
@@ -81,7 +90,6 @@ public class LogDBHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        db.close();
         return out.toString();
     }
 
@@ -98,7 +106,6 @@ public class LogDBHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        db.close();
         return out.toString();
     }
 
@@ -110,7 +117,6 @@ public class LogDBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst())
             out = cursor.getInt(0);
         cursor.close();
-        db.close();
         return out;
     }
 
@@ -119,6 +125,5 @@ public class LogDBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(TEXT_KEY, logEntry);
         db.insert(TABLE_NAME, null, values);
-        db.close();
     }
 }

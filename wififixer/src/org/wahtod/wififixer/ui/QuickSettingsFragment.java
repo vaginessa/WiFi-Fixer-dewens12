@@ -87,8 +87,8 @@ public class QuickSettingsFragment extends BaseDialogFragment {
 
                 case R.id.logging_checkbox:
                     boolean state = logCheckBox.isChecked();
-                    PrefUtil.writeBoolean(getActivity(), Pref.LOG_KEY.key(), state);
-                    PrefUtil.notifyPrefChange(getActivity(), Pref.LOG_KEY.key(),
+                    PrefUtil.writeBoolean(getActivity(), Pref.DEBUG_KEY.key(), state);
+                    PrefUtil.notifyPrefChange(getActivity(), Pref.DEBUG_KEY.key(),
                             state);
                     break;
 
@@ -184,7 +184,7 @@ public class QuickSettingsFragment extends BaseDialogFragment {
         wifiCheckBox.setChecked(PrefUtil.getWifiManager(getActivity())
                 .isWifiEnabled());
         logCheckBox.setChecked(PrefUtil.readBoolean(getActivity(),
-                Pref.LOG_KEY.key()));
+                Pref.DEBUG_KEY.key()));
         getActivity().registerReceiver(wifiReceiver,
                 new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
         super.onResume();

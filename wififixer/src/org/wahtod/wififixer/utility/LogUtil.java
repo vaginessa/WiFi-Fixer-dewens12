@@ -98,13 +98,13 @@ public class LogUtil {
 
     public static void log(Context context, String an,
                            String m) {
-        if (PrefUtil.readBoolean(context, PrefConstants.Pref.LOG_KEY.key()))
+        if (PrefUtil.readBoolean(context, PrefConstants.Pref.DEBUG_KEY.key()))
             Log.i(an, m);
         /*
          * Log to SQLite DB for LogFragment
 		 */
         if (logHelper == null)
-            logHelper = new LogDBHelper(context);
+            logHelper = LogDBHelper.newinstance(context);
         logHelper.expireEntries();
         logHelper.addLogEntry(m);
     }
@@ -134,7 +134,7 @@ public class LogUtil {
             out.append(NEWLINE);
             if (hasStackTrace(context))
                 out.append(getStackTrace(context));
-            LogDBHelper logHelper = new LogDBHelper(context);
+            LogDBHelper logHelper = LogDBHelper.newinstance(context);
             out.append(logHelper.getAllEntries());
             writer.write(out.toString());
             writer.close();

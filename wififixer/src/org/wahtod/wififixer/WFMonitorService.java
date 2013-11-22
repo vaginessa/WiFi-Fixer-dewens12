@@ -130,8 +130,7 @@ public class WFMonitorService extends Service implements
          * Load Preferences
 		 */
         preferenceInitialize(this);
-        LogUtil.log(this, LogUtil.getLogTag(),
-                (getString(R.string.wififixerservice_build) + version));
+        logStart();
 
 		/*
 		 * Set initial screen state
@@ -155,6 +154,17 @@ public class WFMonitorService extends Service implements
         LogUtil.log(this, LogUtil.getLogTag(),
                 (getString(R.string.oncreate)));
         findAppWidgets();
+    }
+
+    private void logStart() {
+        StringBuilder out = new StringBuilder();
+        out.append("\n\n********************\n");
+        out.append(getString(R.string.wififixerservice_build) + version);
+        out.append("\n");
+        out.append("********************\n");
+
+        LogUtil.log(this, LogUtil.getLogTag(),
+                out.toString());
     }
 
     @Override
@@ -242,9 +252,9 @@ public class WFMonitorService extends Service implements
                         }
                         break;
 
-                    case LOG_KEY:
+                    case DEBUG_KEY:
 
-                        if (getFlag(Pref.LOG_KEY)) {
+                        if (getFlag(Pref.DEBUG_KEY)) {
                             LogUtil.log(context,
                                     R.string.enabling_logging);
                         } else {
@@ -312,7 +322,7 @@ public class WFMonitorService extends Service implements
 
             @Override
             public void specialCase() {
-                postValChanged(Pref.LOG_KEY);
+                postValChanged(Pref.DEBUG_KEY);
                 postValChanged(Pref.WIFILOCK_KEY);
             }
         };

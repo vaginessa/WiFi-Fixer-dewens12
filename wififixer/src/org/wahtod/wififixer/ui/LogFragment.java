@@ -77,7 +77,7 @@ public class LogFragment extends Fragment {
 
     @Override
     public void onResume() {
-        mLogHelper = new LogDBHelper(getActivity());
+        mLogHelper = LogDBHelper.newinstance(getActivity());
         mLogIndex = mLogHelper.getlastEntry();
         setText(mLogHelper.getAllEntries());
         _views.mySV.post(new ScrollToBottom());

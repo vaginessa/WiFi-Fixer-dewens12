@@ -59,7 +59,7 @@
     <string name="acquiring_wake_lock">Aquiriendo &quot;Wake Lock&quot;</string>
     <string name="running_supplicant_fix">Ejecutando &quot;Supplicant Fix&quot;</string>
     <string name="oncreate">OnCreate</string>
-    <string name="wififixerservice_build">WifiFixerService Compilacion:</string>
+    <string name="wififixerservice_build">Service Compilacion:</string>
     <string name="wifi_connection_problem">Status de Wifi:</string>
     <string name="supplicant_state">Estado &quot;Supplicant&quot;:</string>
     <string name="loading_settings">Cargando Opciones</string>

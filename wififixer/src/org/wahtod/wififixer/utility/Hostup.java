@@ -148,7 +148,7 @@ public class Hostup {
      */
     private HostMessage getHttpHeaders(Context context) {
         /*
-		 * get URI
+         * get URI
 		 */
         HostMessage out = new HostMessage();
         out.timer.start();
@@ -223,7 +223,7 @@ public class Hostup {
 
         public GetHeaders(int id) {
             session = id;
-            //if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
+            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG_KEY))
             //    LogUtil.log(context.get(), "Started GetHeaders Session:" + String.valueOf(id));
         }
 
@@ -232,7 +232,7 @@ public class Hostup {
             HostMessage h = getHttpHeaders(context.get());
             if (!mFinished)
                 complete(h, session);
-            //if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
+            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG_KEY))
             //    LogUtil.log(context.get(), "Ended GetHeaders Session:" + String.valueOf(session));
         }
     }
@@ -245,7 +245,7 @@ public class Hostup {
 
         public GetICMP(int id) {
             session = id;
-            //if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
+            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG_KEY))
             //    LogUtil.log(context.get(), "Started GetICMP Session:" + String.valueOf(id));
         }
 
@@ -254,7 +254,7 @@ public class Hostup {
             HostMessage h = icmpHostup(context.get());
             if (!mFinished)
                 complete(h, session);
-            //if (PrefUtil.getFlag(PrefConstants.Pref.LOG_KEY))
+            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG_KEY))
             //    LogUtil.log(context.get(), "Ended GetICMP Session:" + String.valueOf(session));
         }
     }
