@@ -108,7 +108,8 @@ public class WFMonitorService extends Service implements
 
     @Override
     public void onCreate() {
-        PrefUtil.writeBoolean(this, PrefConstants.SERVICELOCK, true);
+        getPackageInfo();
+        logStart();
         /*
          * Set Default Exception handler
 		 */
@@ -126,13 +127,10 @@ public class WFMonitorService extends Service implements
 		 */
         ServiceAlarm.enforceServicePrefs(this);
         super.onCreate();
-        getPackageInfo();
         /*
          * Load Preferences
 		 */
         preferenceInitialize(this);
-        logStart();
-
 		/*
 		 * Set initial screen state
 		 */
@@ -171,7 +169,6 @@ public class WFMonitorService extends Service implements
     @Override
     public void onDestroy() {
         LogUtil.log(this, getString(R.string.ondestroy));
-        PrefUtil.writeBoolean(this, PrefConstants.SERVICELOCK, false);
         cleanup();
         super.onDestroy();
     }

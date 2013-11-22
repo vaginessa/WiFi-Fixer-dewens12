@@ -18,6 +18,7 @@
 
 package org.wahtod.wififixer.ui;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -35,6 +36,7 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.app.ActionBar;
 import org.wahtod.wififixer.DefaultExceptionHandler;
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.WFMonitorService;
 import org.wahtod.wififixer.boot.BootService;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.prefs.PrefConstants;
@@ -74,7 +76,14 @@ public class MainActivity extends TutorialFragmentActivity implements
     private BaseViewPager mBasePager;
 
     private static void startwfService(Context context) {
-        if (!PrefUtil.readBoolean(context, PrefConstants.SERVICELOCK))
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        boolean hasService = false;
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (WFMonitorService.class.getName().equals(service.service.getClassName())) {
+                hasService = true;
+            }
+        }
+        if (!hasService)
             context.startService(new Intent(context, BootService.class).putExtra(
                     BootService.FLAG_NO_DELAY, true));
     }

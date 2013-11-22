@@ -25,79 +25,78 @@ import java.util.Map;
 public class PrefConstants {
 
 	/*
-	 * Constants for non-UI-tracked preferences
+     * Constants for non-UI-tracked preferences
 	 */
 
-	public static final String SLPOLICY_DEFAULT = "SLPDEF";
-	public static final String STATNOTIF_DEFAULT = "STATNOTIFD";
-	public static final String PERF_KEY = "Perf_Mode";
-	public static final String WIDGET_KEY = "WIDGET";
-	public static final String WIFI_STATE_LOCK = "WFSTATELOCK";
-	public static final String LOGGING_MENU = "Logging";
-	public static final String HAS_WIDGET = "HASWIDGET";
-	public static final String TUTORIAL = "TUTORIAL";
-	public static final String SERVICEWARNED = "SWARNED";
-    public static final String SERVICELOCK = "SERVICE_LOCKED";
+    public static final String SLPOLICY_DEFAULT = "SLPDEF";
+    public static final String STATNOTIF_DEFAULT = "STATNOTIFD";
+    public static final String PERF_KEY = "Perf_Mode";
+    public static final String WIDGET_KEY = "WIDGET";
+    public static final String WIFI_STATE_LOCK = "WFSTATELOCK";
+    public static final String LOGGING_MENU = "Logging";
+    public static final String HAS_WIDGET = "HASWIDGET";
+    public static final String TUTORIAL = "TUTORIAL";
+    public static final String SERVICEWARNED = "SWARNED";
 
 	/*
 	 * PrefsList enum
 	 */
 
-	public static enum Pref {
-		WIFILOCK_KEY("WiFiLock"), NOTIF_KEY("Notifications"), DISABLE_KEY(
+    public static enum Pref {
+        WIFILOCK_KEY("WiFiLock"), NOTIF_KEY("Notifications"), DISABLE_KEY(
                 "Disable"), DEBUG_KEY("DEBUG"), N1FIX2_KEY("N1FIX2"), SCREEN_KEY(
                 "SCREEN"), STATENOT_KEY("StateNotif"), HASWIDGET_KEY(
                 "HASWIDGET"), WAKELOCK_KEY("WAKELOCK_DISABLE"), ATT_BLACKLIST("ATTBLIST");
 
         private String key;
-		private static final Map<String, Pref> lookup = new HashMap<String, Pref>();
+        private static final Map<String, Pref> lookup = new HashMap<String, Pref>();
 
-		static {
-			for (Pref p : EnumSet.allOf(Pref.class))
-				lookup.put(p.key(), p);
-		}
+        static {
+            for (Pref p : EnumSet.allOf(Pref.class))
+                lookup.put(p.key(), p);
+        }
 
-		Pref(String key) {
-			this.key = key;
-		}
+        Pref(String key) {
+            this.key = key;
+        }
 
-		public String key() {
-			return key;
-		}
+        public String key() {
+            return key;
+        }
 
-		public static Pref get(String pstring) {
+        public static Pref get(String pstring) {
 
-			return lookup.get(pstring);
-		}
+            return lookup.get(pstring);
+        }
 
-	}
+    }
 
-	public static final int NUMNETPREFS = 2;
+    public static final int NUMNETPREFS = 2;
 
-	public static enum NetPref {
-		DISABLED_KEY("ENABLEDSTATE"), NONMANAGED_KEY("NONMANAGED");
+    public static enum NetPref {
+        DISABLED_KEY("ENABLEDSTATE"), NONMANAGED_KEY("NONMANAGED");
 
-		private String key;
-		private static final Map<String, NetPref> lookup = new HashMap<String, NetPref>();
+        private String key;
+        private static final Map<String, NetPref> lookup = new HashMap<String, NetPref>();
 
-		static {
-			for (NetPref p : EnumSet.allOf(NetPref.class))
-				lookup.put(p.key(), p);
-		}
+        static {
+            for (NetPref p : EnumSet.allOf(NetPref.class))
+                lookup.put(p.key(), p);
+        }
 
-		NetPref(String key) {
-			this.key = key;
-		}
+        NetPref(String key) {
+            this.key = key;
+        }
 
-		public String key() {
-			return key;
-		}
+        public String key() {
+            return key;
+        }
 
-		public static NetPref get(String pstring) {
+        public static NetPref get(String pstring) {
 
-			return lookup.get(pstring);
-		}
+            return lookup.get(pstring);
+        }
 
-	}
+    }
 
 }

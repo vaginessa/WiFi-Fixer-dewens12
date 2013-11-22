@@ -79,6 +79,7 @@ public class LogUtil {
                     trace.append(e);
                 }
             }
+            context.deleteFile(DefaultExceptionHandler.EXCEPTIONS_FILENAME);
             return trace.toString();
         }
     }
