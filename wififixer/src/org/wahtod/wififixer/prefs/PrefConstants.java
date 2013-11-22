@@ -37,6 +37,7 @@ public class PrefConstants {
 	public static final String HAS_WIDGET = "HASWIDGET";
 	public static final String TUTORIAL = "TUTORIAL";
 	public static final String SERVICEWARNED = "SWARNED";
+    public static final String SERVICELOCK = "SERVICE_LOCKED";
 
 	/*
 	 * PrefsList enum

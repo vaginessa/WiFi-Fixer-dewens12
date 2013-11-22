@@ -71,12 +71,12 @@ public class MainActivity extends TutorialFragmentActivity implements
             self.get().handleIntentMessage(message);
         }
     };
-
     private BaseViewPager mBasePager;
 
     private static void startwfService(Context context) {
-        context.startService(new Intent(context, BootService.class).putExtra(
-                BootService.FLAG_NO_DELAY, true));
+        if (!PrefUtil.readBoolean(context, PrefConstants.SERVICELOCK))
+            context.startService(new Intent(context, BootService.class).putExtra(
+                    BootService.FLAG_NO_DELAY, true));
     }
 
     private static void nagNotification(Context context) {
@@ -119,8 +119,8 @@ public class MainActivity extends TutorialFragmentActivity implements
         if (message.getData().isEmpty())
             return;
         Bundle data = message.getData();
-		/*
-		 * Check (assuming SERVICEWARNED) for whether one-time alert fired
+        /*
+         * Check (assuming SERVICEWARNED) for whether one-time alert fired
 		 */
         if (data.containsKey(PrefConstants.SERVICEWARNED)) {
             data.remove(PrefConstants.SERVICEWARNED);
