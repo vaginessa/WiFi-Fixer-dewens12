@@ -68,7 +68,7 @@ public class AboutFragment extends SherlockFragment implements OnClickListener {
             } else {
                 Boolean found = false;
                 for (ScanResult n : results) {
-                    if (n.SSID != null && n.SSID.contains(self.get().mNetwork.SSID)) {
+                    if (n.BSSID != null && n.BSSID.contains(self.get().mNetwork.BSSID)) {
                         found = true;
                     /*
                      * Refresh values
@@ -112,7 +112,10 @@ public class AboutFragment extends SherlockFragment implements OnClickListener {
 
     private void refreshViews() {
         try {
-            _views.setSsid(mNetwork.SSID);
+            if (mNetwork.SSID.length() > 0)
+                _views.setSsid(mNetwork.SSID);
+            else
+                _views.setSsid(mNetwork.BSSID);
             _views.setBssid(mNetwork.BSSID);
             _views.setCapabilities(StringUtil.getLongCapabilitiesString(mNetwork.capabilities));
             _views.setFrequency(mNetwork.frequency);

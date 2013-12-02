@@ -139,6 +139,13 @@ public class LocalNetworksFragment extends Fragment implements LoaderManager.Loa
         return getActivity();
     }
 
+    public static class ViewHolder {
+        TextView text;
+        TextView encryption;
+        ImageView icon;
+        ImageView security;
+    }
+
     /*
      * custom adapter for Network List ListView
      */
@@ -188,7 +195,13 @@ public class LocalNetworksFragment extends Fragment implements LoaderManager.Loa
             /*
              * Set SSID text and color
 			 */
-            holder.text.setText(scanresultArray.get(position).SSID);
+            String ssid = scanresultArray.get(position).SSID;
+            if (ssid.length() < 1) {
+                ssid = scanresultArray.get(position).BSSID;
+                holder.text.setTextColor(Color.GRAY);
+            } else
+                holder.text.setTextColor(Color.WHITE);
+            holder.text.setText(ssid);
             /*
              * Set signal icon
 			 */
@@ -219,12 +232,5 @@ public class LocalNetworksFragment extends Fragment implements LoaderManager.Loa
             }
             return convertView;
         }
-    }
-
-    public static class ViewHolder {
-        TextView text;
-        TextView encryption;
-        ImageView icon;
-        ImageView security;
     }
 }

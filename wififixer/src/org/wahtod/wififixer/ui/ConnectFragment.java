@@ -154,10 +154,6 @@ public class ConnectFragment extends SherlockFragment implements OnClickListener
         super.onDestroyView();
     }
 
-    private static class PasswordHolder{
-        View password;
-    }
-
     private void connectNetwork() {
         Intent intent = new Intent(WFMonitor.CONNECTINTENT);
         intent.putExtra(WFMonitor.NETWORKNAME, mNetwork.SSID);
@@ -229,7 +225,10 @@ public class ConnectFragment extends SherlockFragment implements OnClickListener
         }
         b.setOnClickListener(this);
         TextView s = (TextView) getActivity().findViewById(R.id.network_name);
-        s.setText(mNetwork.SSID);
+        if (mNetwork.SSID.length() > 0)
+            s.setText(mNetwork.SSID);
+        else
+            s.setText(mNetwork.BSSID);
     }
 
     @Override
@@ -241,8 +240,8 @@ public class ConnectFragment extends SherlockFragment implements OnClickListener
 
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-		/*
-		 * Animate the view
+        /*
+         * Animate the view
 		 */
         if (enter) {
             ExpandViewAnimation ev = new ExpandViewAnimation(getView()
@@ -250,5 +249,9 @@ public class ConnectFragment extends SherlockFragment implements OnClickListener
             return ev;
         } else
             return null;
+    }
+
+    private static class PasswordHolder {
+        View password;
     }
 }
