@@ -29,11 +29,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
-import org.wahtod.wififixer.legacy.SleepPolicyHelper;
 import org.wahtod.wififixer.legacy.StrictModeDetector;
-import org.wahtod.wififixer.prefs.PrefConstants;
+import org.wahtod.wififixer.prefs.MyPrefs;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.*;
@@ -54,16 +51,13 @@ public class WFMonitorService extends Service implements
     private static final int NOTIFID = 31337;
     // *****************************
     private final static String EMPTYSTRING = "";
-    static boolean screenstate;
-    // Flags
-    private static boolean registered = false;
+    protected static boolean screenstate;
     // Version
     private static int version = 0;
     /*
      * Preferences
      */
-    private static PrefUtil prefs;
-    protected boolean logPrefLoad;
+    private MyPrefs prefs;
     private WFMonitor wifi;
     private ScreenStateDetector screenstateHandler;
 
@@ -138,18 +132,12 @@ public class WFMonitorService extends Service implements
 		/*
 		 * Initialize Wifi Connection class
 		 */
-        wifi = new WFMonitor(this);
+        wifi = WFMonitor.newInstance(this);
 		/*
 		 * Start Service watchdog alarm
 		 */
         ServiceAlarm.setServiceAlarm(this.getApplicationContext(), false);
-		/*
-		 * Set registered flag true so unregister code runs later
-		 */
-        if (registered)
-            stopSelf();
-        else
-            registered = true;
+
         LogUtil.log(this, LogUtil.getLogTag(),
                 (getString(R.string.oncreate)));
         findAppWidgets();
@@ -223,124 +211,9 @@ public class WFMonitorService extends Service implements
     }
 
     private void preferenceInitialize(final Context context) {
-        prefs = new PrefUtil(this) {
-            @Override
-            public void log() {
-                LogUtil.log(context,
-                        (context.getString(R.string.loading_settings)));
-                for (Pref prefkey : Pref.values()) {
-                    if (getFlag(prefkey))
-                        LogUtil.log(getBaseContext(),
-                                LogUtil.getLogTag(),
-                                (prefkey.key()));
-                }
-
-            }
-
-            @Override
-            public void postValChanged(Pref p) {
-                switch (p) {
-
-                    case WIFILOCK_KEY:
-                        if (wifi != null && PrefUtil.getFlag(Pref.WIFILOCK_KEY)) {
-                            // generate new lock
-                            wifi.wifiLock(true);
-                        } else if (wifi != null
-                                && !PrefUtil.getFlag(Pref.WIFILOCK_KEY)) {
-                            wifi.wifiLock(false);
-                        }
-                        break;
-
-                    case DEBUG_KEY:
-
-                        if (getFlag(Pref.DEBUG_KEY)) {
-                            LogUtil.log(context,
-                                    R.string.enabling_logging);
-                        } else {
-                            LogUtil.log(context,
-                                    R.string.disabling_logging);
-                        }
-                        break;
-
-                    case ATT_BLACKLIST:
-                        /*
-                         * Disable AT&T hotspot
-                         */
-                        PrefUtil.setBlackList(WFMonitorService.this, getFlag(Pref.ATT_BLACKLIST), true);
-                        break;
-
-                    case STATENOT_KEY:
-					/*
-					 * Notify WFMonitor instance to create/destroy ongoing
-					 * status notification
-					 */
-                        if (getFlag(Pref.STATENOT_KEY))
-                            wifi.setStatNotif(true);
-                        else
-                            NotifUtil.addStatNotif(WFMonitorService.this, StatusMessage.getNew().setShow(-1));
-                        break;
-                }
-
-				/*
-				 * Log change of preference state
-				 */
-
-                StringBuilder l = new StringBuilder(
-                        getString(R.string.prefs_change));
-                l.append(p.key());
-                l.append(getString(R.string.colon));
-                l.append(String.valueOf(getFlag(p)));
-                LogUtil.log(getBaseContext(),
-                        LogUtil.getLogTag(),
-                        l.toString());
-            }
-
-            @SuppressWarnings("deprecation")
-            @Override
-            public void preLoad() {
-				/*
-				 * Set defaults. Doing here instead of activity because service
-				 * may be started first due to boot intent.
-				 */
-                setDefaultPreferences(context);
-				/*
-				 * Set default: Status Notification on
-				 */
-                if (!readBoolean(context, PrefConstants.STATNOTIF_DEFAULT)) {
-                    writeBoolean(context, PrefConstants.STATNOTIF_DEFAULT, true);
-                    writeBoolean(context, Pref.STATENOT_KEY.key(), true);
-                }
-				/*
-				 * Set default: Wifi Sleep Policy to never
-				 */
-                if (!readBoolean(context, PrefConstants.SLPOLICY_DEFAULT)) {
-                    writeBoolean(context, PrefConstants.SLPOLICY_DEFAULT, true);
-                    SleepPolicyHelper.setSleepPolicy(context, Settings.System.WIFI_SLEEP_POLICY_NEVER);
-                }
-            }
-
-            @Override
-            public void specialCase() {
-                postValChanged(Pref.DEBUG_KEY);
-                postValChanged(Pref.WIFILOCK_KEY);
-            }
-        };
-
+        prefs = MyPrefs.newInstance(this);
         prefs.loadPrefs();
         NotifUtil.cancel(this, NOTIFID);
-    }
-
-    private void setDefaultPreferences(Context context) {
-        PreferenceManager.setDefaultValues(context, R.xml.general,
-                false);
-        PreferenceManager.setDefaultValues(context, R.xml.logging,
-                false);
-        PreferenceManager.setDefaultValues(context, R.xml.notification,
-                false);
-        PreferenceManager.setDefaultValues(context, R.xml.advanced,
-                false);
-        PreferenceManager.setDefaultValues(context, R.xml.widget,
-                false);
     }
 
     private void resetWidget() {
@@ -357,18 +230,15 @@ public class WFMonitorService extends Service implements
     }
 
     private void setInitialScreenState() {
-        screenstateHandler = new ScreenStateDetector(this);
+        screenstateHandler = ScreenStateDetector.newInstance(this);
         screenstate = ScreenStateDetector.getScreenState(this);
         ScreenStateDetector.setOnScreenStateChangedListener(this);
     }
 
     private void unregisterReceivers() {
-        if (registered) {
-            prefs.unRegisterReciever();
-            screenstateHandler.unregister(this);
+            //prefs.unRegisterReceiver();
+            screenstateHandler.unsetOnScreenStateChangedListener(this);
             wifi.cleanup();
-            registered = false;
-        }
     }
 
     private void findAppWidgets() {

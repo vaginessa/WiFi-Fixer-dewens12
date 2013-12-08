@@ -265,5 +265,6 @@
     <string name="BLIST_title"><![CDATA[Lista Negra de Hotspot AT&T]]></string>
     <string name="stuck_notif">Tu Wifi esta atascado. Por favor lee los Problemas Conocidos en la Ayuda</string>
     <string name="stuck_ticker">Wifi Atascado</string>
+    <string name="failover">Failover set to:</string>
 
 </resources>

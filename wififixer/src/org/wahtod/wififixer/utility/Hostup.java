@@ -21,6 +21,7 @@ package org.wahtod.wififixer.utility;
 import android.content.Context;
 import android.os.Build;
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.WFMonitor;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -28,19 +29,21 @@ import java.net.*;
 import java.util.concurrent.RejectedExecutionException;
 
 public class Hostup {
-    protected static final String NEWLINE = "\n";
     /*
      * getHostUp method: Executes 2 threads, icmp check and http check first
      * thread to return state "wins"
      */
     // Target for header check
-    protected static final String FAILOVER_TARGET = "www.google.com";
+    public static final String FAILOVER = "www.google.com";
+    public static final String FAILOVER2 = "www.baidu.com";
+    protected static final String NEWLINE = "\n";
     protected static final String HTTPSCHEME = "http";
     protected static final String INET_LOOPBACK = "127.0.0.1";
     protected static final String INET_INVALID = "0.0.0.0";
     protected static final int TIMEOUT_EXTRA = 2000;
     private static final int HTTP_TIMEOUT = 4000;
     private static final String REJECTED_EXECUTION = "Rejected Execution";
+    private static Hostup _hostup;
     protected volatile String target;
     protected volatile HostMessage response;
     protected volatile URI headURI;
@@ -52,17 +55,28 @@ public class Hostup {
     private ThreadHandler httpHandler;
     private ThreadHandler icmpHandler;
 
-
-    @SuppressWarnings("unused")
-    private Hostup() {
+    public String getmFailover() {
+        return mFailover;
     }
 
-    public Hostup(Context c) {
+    public void setmFailover(String mFailover) {
+        this.mFailover = mFailover;
+    }
+
+    private String mFailover;
+
+    private Hostup(Context c) {
         mCurrentSession = 0;
         context = new WeakReference<Context>(c);
+        disableConnectionReuse();
         httpHandler = new ThreadHandler(c.getString(R.string.httpcheckthread));
         icmpHandler = new ThreadHandler(c.getString(R.string.icmpcheckthread));
-        disableConnectionReuse();
+    }
+
+    public static Hostup newInstance(Context context) {
+        if (_hostup == null)
+            _hostup = new Hostup(context.getApplicationContext());
+        return _hostup;
     }
 
     protected void complete(HostMessage h, int session) {
@@ -80,13 +94,12 @@ public class Hostup {
         */
         mCurrentSession++;
         if (response == null) response = new HostMessage();
-        if (masterThread == null)
-            masterThread = new WeakReference<Thread>(Thread.currentThread());
+        masterThread = new WeakReference<Thread>(Thread.currentThread());
         /*
-         * If null, use H_TARGET else construct URL from router string
+         * If null, use failover else construct URL from router string
 		 */
         if (router == null)
-            target = FAILOVER_TARGET;
+            target = mFailover;
         else
             target = router;
 
@@ -112,10 +125,20 @@ public class Hostup {
             response.status += (REJECTED_EXECUTION);
         }
         /*
-         * End session here
+         * End session here for critical timeouts
          */
         mFinished = true;
-        return new HostMessage(ctxt.getString(R.string.critical_timeout), false);
+        return new HostMessage(target + ":" + ctxt.getString(R.string.critical_timeout), false);
+    }
+
+    public void setFailover(Context context) {
+        HostMessage out = getHostup(WFMonitor.REACHABLE, context,
+                Hostup.FAILOVER);
+        if (out.state)
+            mFailover = Hostup.FAILOVER;
+        else
+            mFailover = Hostup.FAILOVER2;
+        LogUtil.log(context, context.getString(R.string.failover) + mFailover);
     }
 
     /*
@@ -155,20 +178,13 @@ public class Hostup {
         try {
             headURI = new URI(context.getString(R.string.http) + target);
         } catch (URISyntaxException e1) {
-            try {
-                headURI = new URI(context.getString(R.string.http)
-                        + FAILOVER_TARGET);
-            } catch (URISyntaxException e) {
-                // Should not ever happen since H_TARGET is guaranteed to be a
-                // valid URL at this point
-                e.printStackTrace();
-            }
+            e1.printStackTrace();
         }
         int code = -1;
         boolean state = false;
         StringBuilder info = new StringBuilder();
         /*
-		 * Get response
+         * Get response
 		 */
         HttpURLConnection con;
         try {
@@ -191,7 +207,7 @@ public class Hostup {
                 || code == HttpURLConnection.HTTP_PROXY_AUTH)
 
             state = true;
-        info.append(headURI.toASCIIString());
+        info.append(target);
         if (state)
             info.append(context.getString(R.string.http_ok));
         else

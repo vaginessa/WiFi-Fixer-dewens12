@@ -261,5 +261,6 @@
     <string name="BLIST_title"><![CDATA[AT&T Hotspot Blacklist]]></string>
     <string name="stuck_notif">Your Wifi is stuck. Please refer to Known Issues in Help</string>
     <string name="stuck_ticker">Stuck Wifi</string>
+    <string name="failover">Failover set to:</string>
 
 </resources>

@@ -155,14 +155,24 @@ public class PrefUtil {
         return context.getString(R.string.none);
     }
 
-    public static int getNidFromSsid(Context context, String ssid) {
+    public static int getNid(Context context, String target) {
         WifiManager wm = getWifiManager(context);
+        String network = StringUtil.removeQuotes(target);
         List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
-        if (wifiConfigs != null && ssid != null) {
-            for (WifiConfiguration network : wifiConfigs) {
-                if (StringUtil.removeQuotes(network.SSID).equals(StringUtil.removeQuotes(ssid)))
-                    return network.networkId;
+        if (wifiConfigs == null)
+            return -1;
+        /*
+         *  Is this a bssid or network string?
+         */
+        if (network.matches("^([a-fA-F0-9][:-]){5}[a-fA-F0-9][:-]$")) {
+            for (WifiConfiguration n : wifiConfigs) {
+                if (StringUtil.removeQuotes(n.BSSID).equals(network))
+                    return n.networkId;
             }
+        }
+        for (WifiConfiguration n : wifiConfigs) {
+            if (StringUtil.removeQuotes(n.SSID).equals(network))
+                return n.networkId;
         }
         return -1;
     }
@@ -334,7 +344,7 @@ public class PrefUtil {
     public static void setBlackList(Context context, boolean state, boolean toast) {
         if (!getWifiManager(context).isWifiEnabled())
             return;
-        int network = getNidFromSsid(context, "attwifi");
+        int network = getNid(context, "attwifi");
         if (network == -1) {
             if (toast)
                 NotifUtil.showToast(context, R.string.hotspot_fail);
@@ -392,7 +402,7 @@ public class PrefUtil {
 		 */
         preLoad();
         /*
-		 * Load
+         * Load
 		 */
         for (Pref prefkey : Pref.values()) {
             handleLoadPref(prefkey);
@@ -405,7 +415,7 @@ public class PrefUtil {
     }
 
     void handlePrefChange(Pref p, boolean flagval) {
-		/*
+        /*
 		 * Before value changes from loading
 		 */
         preValChanged(p);
@@ -455,7 +465,7 @@ public class PrefUtil {
 
     }
 
-    public void unRegisterReciever() {
+    public void unRegisterReceiver() {
         BroadcastHelper.unregisterReceiver(context.get(), changeReceiver);
     }
 

@@ -72,7 +72,15 @@ public class ScreenStateDetector {
 
 	public static void setOnScreenStateChangedListener(
 			OnScreenStateChangedListener listener) {
-		if (!_clients.contains(listener))
+		boolean found = false;
+        for (WeakReference<OnScreenStateChangedListener> n : _clients){
+            if(n.get() != null && n.get().equals(listener)){
+                found = true;
+                break;
+            }
+        }
+
+        if(!found)
 			_clients.add(new WeakReference<OnScreenStateChangedListener>(
 					listener));
 	}
@@ -89,7 +97,15 @@ public class ScreenStateDetector {
 		}
 	};
 
-	public ScreenStateDetector(Context context) {
+    private static ScreenStateDetector _screenStateDetector;
+
+    public static ScreenStateDetector newInstance(Context context){
+        if (_screenStateDetector == null)
+            _screenStateDetector = new ScreenStateDetector(context.getApplicationContext());
+        return _screenStateDetector;
+    }
+
+	private ScreenStateDetector(Context context) {
 			/*
 			 * Register for screen state events
 			 * 
