@@ -44,6 +44,7 @@ public class Hostup {
     private static final int HTTP_TIMEOUT = 4000;
     private static final String REJECTED_EXECUTION = "Rejected Execution";
     private static Hostup _hostup;
+    private static volatile ThreadHandler _nethandler;
     protected volatile String target;
     protected volatile HostMessage response;
     protected volatile URI headURI;
@@ -54,6 +55,30 @@ public class Hostup {
     protected volatile boolean mFinished;
     private ThreadHandler httpHandler;
     private ThreadHandler icmpHandler;
+    private String mFailover;
+
+    private Hostup(Context c) {
+        mCurrentSession = 0;
+        context = new WeakReference<Context>(c);
+        disableConnectionReuse();
+    }
+
+    public static void submitRunnable(Runnable r) {
+       if (_nethandler != null)
+           _nethandler.get().post(r);
+    }
+
+    public static Hostup newInstance(Context context) {
+        if (_hostup == null)
+            _hostup = new Hostup(context.getApplicationContext());
+        else{
+        _hostup.httpHandler = new ThreadHandler(context.getString(R.string.httpcheckthread));
+        _hostup.icmpHandler = new ThreadHandler(context.getString(R.string.icmpcheckthread));
+            _nethandler = new ThreadHandler(
+                    context.getString(R.string.netcheckthread));
+        }
+        return _hostup;
+    }
 
     public String getmFailover() {
         return mFailover;
@@ -61,22 +86,6 @@ public class Hostup {
 
     public void setmFailover(String mFailover) {
         this.mFailover = mFailover;
-    }
-
-    private String mFailover;
-
-    private Hostup(Context c) {
-        mCurrentSession = 0;
-        context = new WeakReference<Context>(c);
-        disableConnectionReuse();
-        httpHandler = new ThreadHandler(c.getString(R.string.httpcheckthread));
-        icmpHandler = new ThreadHandler(c.getString(R.string.icmpcheckthread));
-    }
-
-    public static Hostup newInstance(Context context) {
-        if (_hostup == null)
-            _hostup = new Hostup(context.getApplicationContext());
-        return _hostup;
     }
 
     protected void complete(HostMessage h, int session) {
@@ -229,6 +238,11 @@ public class Hostup {
     public void finish() {
         icmpHandler.get().getLooper().quit();
         httpHandler.get().getLooper().quit();
+        masterThread.clear();
+        _nethandler.get().getLooper().quit();
+        icmpHandler = null;
+        httpHandler = null;
+        _nethandler = null;
     }
 
     /*

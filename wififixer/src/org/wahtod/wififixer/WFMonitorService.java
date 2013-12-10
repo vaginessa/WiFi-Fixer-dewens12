@@ -68,6 +68,7 @@ public class WFMonitorService extends Service implements
             resetWidget();
         unregisterReceivers();
         wifi.setStatNotif(false);
+        wifi.cleanup();
     }
 
     private void getPackageInfo() {
@@ -238,7 +239,6 @@ public class WFMonitorService extends Service implements
     private void unregisterReceivers() {
             //prefs.unRegisterReceiver();
             screenstateHandler.unsetOnScreenStateChangedListener(this);
-            wifi.cleanup();
     }
 
     private void findAppWidgets() {

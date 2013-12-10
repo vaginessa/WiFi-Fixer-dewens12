@@ -346,7 +346,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
      */
     private static int connecting = 0;
     private static volatile Handler handler = new Handler();
-    private static volatile ThreadHandler _nethandler;
     private static volatile boolean isUp;
     private static WFMonitor _wfmonitor;
     private static String accesspointIP;
@@ -882,8 +881,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
         // User Event
         filter.addAction(REASSOCIATE_INTENT);
         BroadcastHelper.registerReceiver(context.getApplicationContext(), _wfmonitor.localreceiver, filter, true);
-        _nethandler = new ThreadHandler(
-                context.getString(R.string.netcheckthread));
+
 
         _wfmonitor._statusdispatcher = new StatusDispatcher(context, handler);
         ScreenStateDetector.setOnScreenStateChangedListener(_wfmonitor);
@@ -1174,7 +1172,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 			/*
 			 * Starts network check AsyncTask
 			 */
-            _nethandler.get().post(NetCheckRunnable);
+            Hostup.submitRunnable(NetCheckRunnable);
         } else {
             wakelock.lock(false);
         }
@@ -1191,7 +1189,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     public void cleanup() {
-        _nethandler.getLooper().quit();
         BroadcastHelper.unregisterReceiver(ctxt.get(), receiver);
         clearQueue();
         clearHandler();
