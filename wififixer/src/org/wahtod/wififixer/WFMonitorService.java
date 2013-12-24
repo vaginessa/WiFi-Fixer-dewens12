@@ -245,10 +245,15 @@ public class WFMonitorService extends Service implements
         ComponentName cm = new ComponentName(this, FixerWidget.class);
         ComponentName cm2 = new ComponentName(this, FixerWidgetSmall.class);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        if (appWidgetManager.getAppWidgetIds(cm).length > 0
-                || appWidgetManager.getAppWidgetIds(cm2).length > 0) {
+        int widget = appWidgetManager.getAppWidgetIds(cm).length;
+        int widgetSmall = appWidgetManager.getAppWidgetIds(cm2).length;
+        if (widget > 0
+                || widgetSmall > 0) {
             PrefUtil.writeBoolean(this, Pref.HASWIDGET_KEY.key(), true);
             PrefUtil.notifyPrefChange(this, Pref.HASWIDGET_KEY.key(), true);
+        } else {
+            PrefUtil.writeBoolean(this, Pref.HASWIDGET_KEY.key(), false);
+            PrefUtil.notifyPrefChange(this, Pref.HASWIDGET_KEY.key(), false);
         }
     }
 

@@ -50,7 +50,7 @@ public class Hostup {
     protected volatile URI headURI;
     protected volatile int reachable;
     protected volatile int mCurrentSession;
-    protected volatile WeakReference<Context> context;
+    protected volatile WeakReference<Context> mContext;
     protected volatile WeakReference<Thread> masterThread;
     protected volatile boolean mFinished;
     private ThreadHandler httpHandler;
@@ -59,21 +59,21 @@ public class Hostup {
 
     private Hostup(Context c) {
         mCurrentSession = 0;
-        context = new WeakReference<Context>(c);
+        mContext = new WeakReference<Context>(c);
         disableConnectionReuse();
     }
 
     public static void submitRunnable(Runnable r) {
-       if (_nethandler != null)
-           _nethandler.get().post(r);
+        if (_nethandler != null)
+            _nethandler.get().post(r);
     }
 
     public static Hostup newInstance(Context context) {
         if (_hostup == null)
             _hostup = new Hostup(context.getApplicationContext());
-        else{
-        _hostup.httpHandler = new ThreadHandler(context.getString(R.string.httpcheckthread));
-        _hostup.icmpHandler = new ThreadHandler(context.getString(R.string.icmpcheckthread));
+        else {
+            _hostup.httpHandler = new ThreadHandler(context.getString(R.string.httpcheckthread));
+            _hostup.icmpHandler = new ThreadHandler(context.getString(R.string.icmpcheckthread));
             _nethandler = new ThreadHandler(
                     context.getString(R.string.netcheckthread));
         }
@@ -259,7 +259,7 @@ public class Hostup {
 
         @Override
         public void run() {
-            HostMessage h = getHttpHeaders(context.get());
+            HostMessage h = getHttpHeaders(mContext.get());
             if (!mFinished)
                 complete(h, session);
             //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG_KEY))
@@ -281,7 +281,7 @@ public class Hostup {
 
         @Override
         public void run() {
-            HostMessage h = icmpHostup(context.get());
+            HostMessage h = icmpHostup(mContext.get());
             if (!mFinished)
                 complete(h, session);
             //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG_KEY))
