@@ -32,6 +32,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
+import android.view.View;
 import android.view.ViewGroup;
 import com.actionbarsherlock.app.ActionBar;
 import org.wahtod.wififixer.DefaultExceptionHandler;
@@ -47,6 +48,7 @@ import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
 
 public class MainActivity extends TutorialFragmentActivity implements
         OnFragmentPauseRequestListener {
@@ -135,7 +137,7 @@ public class MainActivity extends TutorialFragmentActivity implements
             data.remove(PrefConstants.SERVICEWARNED);
             showServiceAlert();
         }
-		/*
+        /*
 		 * Delete Log if called by preference
 		 */
         else if (data.containsKey(DELETE_LOG)) {
@@ -329,6 +331,21 @@ public class MainActivity extends TutorialFragmentActivity implements
             Fragment f = (Fragment) super.instantiateItem(container, position);
             fragmentArray.put(position, f);
             return f;
+        }
+
+        @Override
+        public Object instantiateItem(View container, int position) {
+            final Object fragment = super.instantiateItem(container, position);
+            try {
+                final Field fragmentStateField = Fragment.class.getDeclaredField("mSavedFragmentState");
+                fragmentStateField.setAccessible(true);
+                final Bundle savedFragmentState = (Bundle) fragmentStateField.get(fragment);
+                if (savedFragmentState != null)
+                    savedFragmentState.setClassLoader(Fragment.class.getClassLoader());
+            } catch (Exception e) {
+                LogUtil.log(MainActivity.this, e.getMessage());
+            }
+            return fragment;
         }
 
         @Override
