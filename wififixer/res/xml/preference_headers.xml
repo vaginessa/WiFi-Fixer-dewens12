@@ -1,67 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-		    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
--->
-<preference-headers xmlns:android="http://schemas.android.com/apk/res/android" >
+  ~ Wifi Fixer for Android
+  ~     Copyright (C) 2010-2014  David Van de Ven
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see http://www.gnu.org/licenses
+  -->
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
     <header
-        android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
-        android:icon="@drawable/ic_menu_manage"
-        android:key="prefscreen"
-        android:title="Service" >
+            android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+            android:icon="@drawable/ic_menu_manage"
+            android:key="prefscreen"
+            android:title="Service">
         <extra
-            android:name="resource"
-            android:value="general" />
+                android:name="resource"
+                android:value="general"/>
     </header>
     <header
-        android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
-        android:icon="@drawable/ic_menu_notifications"
-        android:key="prefscreen"
-        android:title="Notification" >
+            android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+            android:icon="@drawable/ic_menu_notifications"
+            android:key="prefscreen"
+            android:title="Notification">
         <extra
-            android:name="resource"
-            android:value="notification" />
+                android:name="resource"
+                android:value="notification"/>
     </header>
     <header
-        android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
-        android:icon="@drawable/cog"
-        android:key="prefscreen"
-        android:title="Widget" >
+            android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+            android:icon="@drawable/cog"
+            android:key="prefscreen"
+            android:title="Widget">
         <extra
-            android:name="resource"
-            android:value="widget" />
+                android:name="resource"
+                android:value="widget"/>
     </header>
     <header
-        android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
-        android:icon="@drawable/ic_menu_save"
-        android:key="prefscreen"
-        android:title="Logging" >
+            android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+            android:icon="@drawable/ic_menu_save"
+            android:key="prefscreen"
+            android:title="Logging">
         <extra
-            android:name="resource"
-            android:value="logging" />
+                android:name="resource"
+                android:value="logging"/>
     </header>
     <header
-        android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
-        android:icon="@drawable/ic_menu_add"
-        android:key="prefscreen"
-        android:title="Advanced" >
+            android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+            android:icon="@drawable/ic_menu_add"
+            android:key="prefscreen"
+            android:title="Advanced">
         <extra
-            android:name="resource"
-            android:value="advanced" />
+                android:name="resource"
+                android:value="advanced"/>
     </header>
 
 </preference-headers>

@@ -1,3 +1,21 @@
+/*
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
+ */
+
 package com.actionbarsherlock.app;
 
 import android.content.res.Configuration;
@@ -18,7 +36,9 @@ import com.actionbarsherlock.view.MenuItem;
 import static com.actionbarsherlock.ActionBarSherlock.OnActionModeFinishedListener;
 import static com.actionbarsherlock.ActionBarSherlock.OnActionModeStartedListener;
 
-/** @see {@link android.support.v4.app.Watson} */
+/**
+ * @see {@link android.support.v4.app.Watson}
+ */
 public class SherlockFragmentActivity extends Watson implements OnActionModeStartedListener, OnActionModeFinishedListener {
     private static final String TAG = "SherlockFragmentActivity";
 
@@ -48,10 +68,12 @@ public class SherlockFragmentActivity extends Watson implements OnActionModeStar
     }
 
     @Override
-    public void onActionModeStarted(ActionMode mode) {}
+    public void onActionModeStarted(ActionMode mode) {
+    }
 
     @Override
-    public void onActionModeFinished(ActionMode mode) {}
+    public void onActionModeFinished(ActionMode mode) {
+    }
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -178,7 +200,8 @@ public class SherlockFragmentActivity extends Watson implements OnActionModeStar
 
     @Override
     public final boolean onPreparePanel(int featureId, View view, android.view.Menu menu) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "[onPreparePanel] featureId: " + featureId + ", view: " + view + ", menu: " + menu);
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "[onPreparePanel] featureId: " + featureId + ", view: " + view + ", menu: " + menu);
 
         if (featureId == Window.FEATURE_OPTIONS_PANEL && !mIgnoreNativePrepare) {
             mIgnoreNativePrepare = true;
@@ -198,7 +221,8 @@ public class SherlockFragmentActivity extends Watson implements OnActionModeStar
 
     @Override
     public final boolean onMenuItemSelected(int featureId, android.view.MenuItem item) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "[onMenuItemSelected] featureId: " + featureId + ", item: " + item.getTitle());
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "[onMenuItemSelected] featureId: " + featureId + ", item: " + item.getTitle());
 
         if (featureId == Window.FEATURE_OPTIONS_PANEL && !mIgnoreNativeSelected) {
             mIgnoreNativeSelected = true;
@@ -273,7 +297,7 @@ public class SherlockFragmentActivity extends Watson implements OnActionModeStar
     }
 
     public void requestWindowFeature(long featureId) {
-        getSherlock().requestFeature((int)featureId);
+        getSherlock().requestFeature((int) featureId);
     }
 
     @Override

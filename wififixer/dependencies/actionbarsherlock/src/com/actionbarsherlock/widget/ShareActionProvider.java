@@ -1,17 +1,19 @@
 /*
- * Copyright (C) 2011 The Android Open Source Project
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package com.actionbarsherlock.widget;
@@ -23,7 +25,6 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.View;
-
 import com.actionbarsherlock.R;
 import com.actionbarsherlock.view.ActionProvider;
 import com.actionbarsherlock.view.Menu;
@@ -84,7 +85,7 @@ public class ShareActionProvider extends ActionProvider {
          * behavior which is launching it.
          * <p>
          * <strong>Note:</strong> Modifying the intent is not permitted and
-         *     any changes to the latter will be ignored.
+         * any changes to the latter will be ignored.
          * </p>
          *
          * @param source The source of the notification.
@@ -108,7 +109,7 @@ public class ShareActionProvider extends ActionProvider {
      * Listener for handling menu item clicks.
      */
     private final ShareMenuItemOnMenuItemClickListener mOnMenuItemClickListener =
-        new ShareMenuItemOnMenuItemClickListener();
+            new ShareMenuItemOnMenuItemClickListener();
 
     /**
      * The default name for storing share history.
@@ -145,8 +146,9 @@ public class ShareActionProvider extends ActionProvider {
      * not rely on the default behavior which is to launch the activity.
      * <p>
      * <strong>Note:</strong> If you choose the backing share history file
-     *     you will still be notified in this callback.
+     * you will still be notified in this callback.
      * </p>
+     *
      * @param listener The listener.
      */
     public void setOnShareTargetSelectedListener(OnShareTargetSelectedListener listener) {
@@ -206,8 +208,8 @@ public class ShareActionProvider extends ActionProvider {
         for (int i = 0; i < collapsedActivityCount; i++) {
             ResolveInfo activity = dataModel.getActivity(i);
             subMenu.add(0, i, i, activity.loadLabel(packageManager))
-                .setIcon(activity.loadIcon(packageManager))
-                .setOnMenuItemClickListener(mOnMenuItemClickListener);
+                    .setIcon(activity.loadIcon(packageManager))
+                    .setOnMenuItemClickListener(mOnMenuItemClickListener);
         }
 
         if (collapsedActivityCount < expandedActivityCount) {
@@ -218,8 +220,8 @@ public class ShareActionProvider extends ActionProvider {
             for (int i = 0; i < expandedActivityCount; i++) {
                 ResolveInfo activity = dataModel.getActivity(i);
                 expandedSubMenu.add(0, i, i, activity.loadLabel(packageManager))
-                    .setIcon(activity.loadIcon(packageManager))
-                    .setOnMenuItemClickListener(mOnMenuItemClickListener);
+                        .setIcon(activity.loadIcon(packageManager))
+                        .setOnMenuItemClickListener(mOnMenuItemClickListener);
             }
         }
     }
@@ -230,11 +232,11 @@ public class ShareActionProvider extends ActionProvider {
      * for all view created by {@link #onCreateActionView()}. Defaults to
      * {@link #DEFAULT_SHARE_HISTORY_FILE_NAME}. Set to <code>null</code>
      * if share history should not be persisted between sessions.
-     * <p>
+     * <p/>
      * <strong>Note:</strong> The history file name can be set any time, however
      * only the action views created by {@link #onCreateActionView()} after setting
      * the file name will be backed by the provided file.
-     * <p>
+     * <p/>
      *
      * @param shareHistoryFile The share history file name.
      */
@@ -258,13 +260,12 @@ public class ShareActionProvider extends ActionProvider {
      * </p>
      *
      * @param shareIntent The share intent.
-     *
      * @see Intent#ACTION_SEND
      * @see Intent#ACTION_SEND_MULTIPLE
      */
     public void setShareIntent(Intent shareIntent) {
         ActivityChooserModel dataModel = ActivityChooserModel.get(mContext,
-            mShareHistoryFileName);
+                mShareHistoryFileName);
         dataModel.setIntent(shareIntent);
     }
 

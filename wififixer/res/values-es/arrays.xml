@@ -16,21 +16,12 @@
   ~     You should have received a copy of the GNU General Public License
   ~     along with this program.  If not, see http://www.gnu.org/licenses
   -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Status Notification">
-        <CheckBoxPreference
-                android:key="StateNotif"
-                android:defaultValue="true"
-                android:summary="@string/StateNotif_summary"
-                android:title="@string/StateNotif_title"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="Repair Notification">
-        <CheckBoxPreference
-                android:key="Notifications"
-                android:summary="@string/Notifications_summary"
-                android:title="@string/Notifications_title"/>
-    </PreferenceCategory>
-
-</PreferenceScreen>
+<resources>
+    <string name="maxwifi">Max Wifi</string>
+    <string name="balanced">Balanced</string>
+    <string name="maxbattery">Maximum Battery</string>
+    <string name="reassociate">Reassociate</string>
+    <string name="resetwifi">Reset Wifi</string>
+    <string name="showapp">Bring App to Foreground</string>
+</resources>

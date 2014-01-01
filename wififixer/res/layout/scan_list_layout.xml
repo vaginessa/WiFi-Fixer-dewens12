@@ -1,75 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-		    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
--->
+  ~ Wifi Fixer for Android
+  ~     Copyright (C) 2010-2014  David Van de Ven
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see http://www.gnu.org/licenses
+  -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/RelativeLayout1"
-    android:layout_width="fill_parent"
-    android:layout_height="@dimen/listview_height"
-    android:layout_centerVertical="true"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="@dimen/scan_list_padding" >
+                android:id="@+id/RelativeLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/listview_height"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/scan_list_padding">
 
     <TextView
-        android:id="@+id/ssid"
-        style="@style/Wftext.large"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_gravity="center_vertical"
-        android:layout_marginBottom="@dimen/scan_list_ssid_margin_bottom"
-        android:layout_marginLeft="@dimen/scan_list_ssid_margin_left"
-        android:layout_toLeftOf="@+id/NETWORK_ICON"
-        android:gravity="left"
-        android:text="default" >
+            android:id="@+id/ssid"
+            style="@style/Wftext.large"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="@dimen/scan_list_ssid_margin_bottom"
+            android:layout_marginLeft="@dimen/scan_list_ssid_margin_left"
+            android:layout_toLeftOf="@+id/NETWORK_ICON"
+            android:gravity="left"
+            android:text="default">
     </TextView>
 
     <ImageView
-        android:id="@+id/NETWORK_ICON"
-        android:layout_width="@dimen/known_list_icon_height"
-        android:layout_height="@dimen/known_list_icon_height"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/SECURE_ICON"
-        android:gravity="right"
-        android:src="@drawable/icon" >
+            android:id="@+id/NETWORK_ICON"
+            android:layout_width="@dimen/known_list_icon_height"
+            android:layout_height="@dimen/known_list_icon_height"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/SECURE_ICON"
+            android:gravity="right"
+            android:src="@drawable/icon">
     </ImageView>
 
     <ImageView
-        android:id="@+id/SECURE_ICON"
-        android:layout_width="@dimen/known_list_icon_height"
-        android:layout_height="@dimen/known_list_icon_height"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/encryption"
-        android:gravity="right"
-        android:src="@drawable/icon" >
+            android:id="@+id/SECURE_ICON"
+            android:layout_width="@dimen/known_list_icon_height"
+            android:layout_height="@dimen/known_list_icon_height"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/encryption"
+            android:gravity="right"
+            android:src="@drawable/icon">
     </ImageView>
 
     <TextView
-        android:id="@+id/encryption"
-        style="@style/Wftext.small"
-        android:layout_width="@dimen/known_list_icon_height"
-        android:layout_height="@dimen/known_list_icon_height"
-        android:layout_alignBaseline="@+id/NETWORK_ICON"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="2dp"
-        android:gravity="right"
-        android:text="encryption" >
+            android:id="@+id/encryption"
+            style="@style/Wftext.small"
+            android:layout_width="@dimen/known_list_icon_height"
+            android:layout_height="@dimen/known_list_icon_height"
+            android:layout_alignBaseline="@+id/NETWORK_ICON"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="2dp"
+            android:gravity="right"
+            android:text="encryption">
     </TextView>
 
 </RelativeLayout>

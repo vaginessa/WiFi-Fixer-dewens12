@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-		    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
--->
+  ~ Wifi Fixer for Android
+  ~     Copyright (C) 2010-2014  David Van de Ven
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see http://www.gnu.org/licenses
+  -->
 <level-list xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:maxLevel="0" android:drawable="@drawable/statsignal0" />
-  <item android:maxLevel="1" android:drawable="@drawable/statsignal1" />
-  <item android:maxLevel="2" android:drawable="@drawable/statsignal2" />
-  <item android:maxLevel="3" android:drawable="@drawable/statsignal3" />
-   <item android:maxLevel="4" android:drawable="@drawable/statsignal4" />
- </level-list>
+    <item
+            android:maxLevel="0"
+            android:drawable="@drawable/statsignal0"/>
+    <item
+            android:maxLevel="1"
+            android:drawable="@drawable/statsignal1"/>
+    <item
+            android:maxLevel="2"
+            android:drawable="@drawable/statsignal2"/>
+    <item
+            android:maxLevel="3"
+            android:drawable="@drawable/statsignal3"/>
+    <item
+            android:maxLevel="4"
+            android:drawable="@drawable/statsignal4"/>
+</level-list>

@@ -1,7 +1,23 @@
+/*
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
+ */
+
 package com.actionbarsherlock.internal.nineoldandroids.view.animation;
 
-import java.lang.ref.WeakReference;
-import java.util.WeakHashMap;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.os.Build;
@@ -9,6 +25,9 @@ import android.util.FloatMath;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+
+import java.lang.ref.WeakReference;
+import java.util.WeakHashMap;
 
 public final class AnimatorProxy extends Animation {
     public static final boolean NEEDS_PROXY = Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB;
@@ -47,6 +66,7 @@ public final class AnimatorProxy extends Animation {
     public float getAlpha() {
         return mAlpha;
     }
+
     public void setAlpha(float alpha) {
         if (mAlpha != alpha) {
             mAlpha = alpha;
@@ -56,9 +76,11 @@ public final class AnimatorProxy extends Animation {
             }
         }
     }
+
     public float getScaleX() {
         return mScaleX;
     }
+
     public void setScaleX(float scaleX) {
         if (mScaleX != scaleX) {
             prepareForUpdate();
@@ -66,9 +88,11 @@ public final class AnimatorProxy extends Animation {
             invalidateAfterUpdate();
         }
     }
+
     public float getScaleY() {
         return mScaleY;
     }
+
     public void setScaleY(float scaleY) {
         if (mScaleY != scaleY) {
             prepareForUpdate();
@@ -76,6 +100,7 @@ public final class AnimatorProxy extends Animation {
             invalidateAfterUpdate();
         }
     }
+
     public int getScrollX() {
         View view = mView.get();
         if (view == null) {
@@ -83,12 +108,14 @@ public final class AnimatorProxy extends Animation {
         }
         return view.getScrollX();
     }
+
     public void setScrollX(int value) {
         View view = mView.get();
         if (view != null) {
             view.scrollTo(value, view.getScrollY());
         }
     }
+
     public int getScrollY() {
         View view = mView.get();
         if (view == null) {
@@ -96,6 +123,7 @@ public final class AnimatorProxy extends Animation {
         }
         return view.getScrollY();
     }
+
     public void setScrollY(int value) {
         View view = mView.get();
         if (view != null) {
@@ -106,6 +134,7 @@ public final class AnimatorProxy extends Animation {
     public float getTranslationX() {
         return mTranslationX;
     }
+
     public void setTranslationX(float translationX) {
         if (mTranslationX != translationX) {
             prepareForUpdate();
@@ -113,9 +142,11 @@ public final class AnimatorProxy extends Animation {
             invalidateAfterUpdate();
         }
     }
+
     public float getTranslationY() {
         return mTranslationY;
     }
+
     public void setTranslationY(float translationY) {
         if (mTranslationY != translationY) {
             prepareForUpdate();
@@ -130,12 +161,13 @@ public final class AnimatorProxy extends Animation {
             computeRect(mBefore, view);
         }
     }
+
     private void invalidateAfterUpdate() {
         View view = mView.get();
         if (view == null) {
             return;
         }
-        View parent = (View)view.getParent();
+        View parent = (View) view.getParent();
         if (parent == null) {
             return;
         }

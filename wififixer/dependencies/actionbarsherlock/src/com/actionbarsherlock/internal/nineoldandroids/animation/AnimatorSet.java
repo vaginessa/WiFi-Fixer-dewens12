@@ -1,32 +1,34 @@
 /*
- * Copyright (C) 2010 The Android Open Source Project
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package com.actionbarsherlock.internal.nineoldandroids.animation;
+
+import android.view.animation.Interpolator;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import android.view.animation.Interpolator;
-
 /**
  * This class plays a set of {@link Animator} objects in the specified order. Animations
  * can be set up to play together, in sequence, or after a specified delay.
- *
+ * <p/>
  * <p>There are two different approaches to adding animations to a <code>AnimatorSet</code>:
  * either the {@link AnimatorSet#playTogether(Animator[]) playTogether()} or
  * {@link AnimatorSet#playSequentially(Animator[]) playSequentially()} methods can be called to add
@@ -34,7 +36,7 @@ import android.view.animation.Interpolator;
  * used in conjunction with methods in the {@link AnimatorSet.Builder Builder}
  * class to add animations
  * one by one.</p>
- *
+ * <p/>
  * <p>It is possible to set up a <code>AnimatorSet</code> with circular dependencies between
  * its animations. For example, an animation a1 could be set up to start before animation a2, a2
  * before a3, and a3 before a1. The results of this configuration are undefined, but will typically
@@ -164,7 +166,7 @@ public final class AnimatorSet extends Animator {
                 play(items[0]);
             } else {
                 for (int i = 0; i < items.length - 1; ++i) {
-                    play(items[i]).before(items[i+1]);
+                    play(items[i]).before(items[i + 1]);
                 }
             }
         }
@@ -183,7 +185,7 @@ public final class AnimatorSet extends Animator {
                 play(items.get(0));
             } else {
                 for (int i = 0; i < items.size() - 1; ++i) {
-                    play(items.get(i)).before(items.get(i+1));
+                    play(items.get(i)).before(items.get(i + 1));
                 }
             }
         }
@@ -217,9 +219,9 @@ public final class AnimatorSet extends Animator {
         for (Node node : mNodes) {
             Animator animation = node.animation;
             if (animation instanceof AnimatorSet) {
-                ((AnimatorSet)animation).setTarget(target);
+                ((AnimatorSet) animation).setTarget(target);
             } else if (animation instanceof ObjectAnimator) {
-                ((ObjectAnimator)animation).setTarget(target);
+                ((ObjectAnimator) animation).setTarget(target);
             }
         }
     }
@@ -248,7 +250,7 @@ public final class AnimatorSet extends Animator {
      * <code>a1</code> first, followed by <code>a2</code>, and
      * <code>play(a1).after(a2)</code> sets up the AnimatorSet to play
      * <code>a2</code> first, followed by <code>a1</code>.
-     *
+     * <p/>
      * <p>Note that <code>play()</code> is the only way to tell the
      * <code>Builder</code> the animation upon which the dependency is created,
      * so successive calls to the various functions in <code>Builder</code>
@@ -259,8 +261,8 @@ public final class AnimatorSet extends Animator {
      * <code>a2</code> and <code>a3</code>.</p>
      *
      * @param anim The animation that is the dependency used in later calls to the
-     * methods in the returned <code>Builder</code> object. A null parameter will result
-     * in a null <code>Builder</code> return value.
+     *             methods in the returned <code>Builder</code> object. A null parameter will result
+     *             in a null <code>Builder</code> return value.
      * @return Builder The object that constructs the AnimatorSet based on the dependencies
      * outlined in the calls to <code>play</code> and the other methods in the
      * <code>Builder</code object.
@@ -275,7 +277,7 @@ public final class AnimatorSet extends Animator {
 
     /**
      * {@inheritDoc}
-     *
+     * <p/>
      * <p>Note that canceling a <code>AnimatorSet</code> also cancels all of the animations that it
      * is responsible for.</p>
      */
@@ -294,7 +296,7 @@ public final class AnimatorSet extends Animator {
                 // If we're currently in the startDelay period, just cancel that animator and
                 // send out the end event to all listeners
                 mDelayAnim.cancel();
-            } else  if (mSortedNodes.size() > 0) {
+            } else if (mSortedNodes.size() > 0) {
                 for (Node node : mSortedNodes) {
                     node.animation.cancel();
                 }
@@ -310,7 +312,7 @@ public final class AnimatorSet extends Animator {
 
     /**
      * {@inheritDoc}
-     *
+     * <p/>
      * <p>Note that ending a <code>AnimatorSet</code> also ends all of the animations that it is
      * responsible for.</p>
      */
@@ -350,6 +352,7 @@ public final class AnimatorSet extends Animator {
     /**
      * Returns true if any of the child animations of this AnimatorSet have been started and have
      * not yet ended.
+     *
      * @return Whether this AnimatorSet has been started and has not yet ended.
      */
     @Override
@@ -381,7 +384,7 @@ public final class AnimatorSet extends Animator {
     /**
      * The amount of time, in milliseconds, to delay starting the animation after
      * {@link #start()} is called.
-
+     *
      * @param startDelay The amount of the delay, in milliseconds
      */
     @Override
@@ -408,7 +411,7 @@ public final class AnimatorSet extends Animator {
      * then each child animation inherits this duration.
      *
      * @param duration The length of the animation, in milliseconds, of each of the child
-     * animations of this AnimatorSet.
+     *                 animations of this AnimatorSet.
      */
     @Override
     public AnimatorSet setDuration(long duration) {
@@ -440,7 +443,7 @@ public final class AnimatorSet extends Animator {
 
     /**
      * {@inheritDoc}
-     *
+     * <p/>
      * <p>Starting this <code>AnimatorSet</code> will, in turn, start the animations for which
      * it is responsible. The details of when exactly those animations are started depends on
      * the dependency relationships that have been set up between the animations.
@@ -506,9 +509,11 @@ public final class AnimatorSet extends Animator {
             mDelayAnim.setDuration(mStartDelay);
             mDelayAnim.addListener(new AnimatorListenerAdapter() {
                 boolean canceled = false;
+
                 public void onAnimationCancel(Animator anim) {
                     canceled = true;
                 }
+
                 public void onAnimationEnd(Animator anim) {
                     if (!canceled) {
                         int numNodes = nodesToStart.size();
@@ -673,6 +678,7 @@ public final class AnimatorSet extends Animator {
          * Check whether the event received is one that the node was waiting for.
          * If so, mark it as complete and see whether it's time to start
          * the animation.
+         *
          * @param dependencyAnimation the animation that sent the event.
          */
         private void startIfReady(Animator dependencyAnimation) {
@@ -845,7 +851,6 @@ public final class AnimatorSet extends Animator {
     /**
      * Dependency holds information about the node that some other node is
      * dependent upon and the nature of that dependency.
-     *
      */
     private static class Dependency {
         static final int WITH = 0; // dependent node must start with this dependency node
@@ -873,10 +878,10 @@ public final class AnimatorSet extends Animator {
         public Animator animation;
 
         /**
-         *  These are the dependencies that this node's animation has on other
-         *  nodes. For example, if this node's animation should begin with some
-         *  other animation ends, then there will be an item in this node's
-         *  dependencies list for that other animation's node.
+         * These are the dependencies that this node's animation has on other
+         * nodes. For example, if this node's animation should begin with some
+         * other animation ends, then there will be an item in this node's
+         * dependencies list for that other animation's node.
          */
         public ArrayList<Dependency> dependencies = null;
 
@@ -925,6 +930,7 @@ public final class AnimatorSet extends Animator {
         /**
          * Add a dependency to this Node. The dependency includes information about the
          * node that this node is dependency upon and the nature of the dependency.
+         *
          * @param dependency
          */
         public void addDependency(Dependency dependency) {
@@ -950,7 +956,7 @@ public final class AnimatorSet extends Animator {
                 node.animation = animation.clone();
                 return node;
             } catch (CloneNotSupportedException e) {
-               throw new AssertionError();
+                throw new AssertionError();
             }
         }
     }
@@ -1020,7 +1026,7 @@ public final class AnimatorSet extends Animator {
          * play() method is called.
          *
          * @param anim The animation that is the dependency for the other animations passed into
-         * the other methods of this Builder object.
+         *             the other methods of this Builder object.
          */
         Builder(Animator anim) {
             mCurrentNode = mNodeMap.get(anim);
@@ -1036,7 +1042,7 @@ public final class AnimatorSet extends Animator {
          * {@link AnimatorSet#play(Animator)} call that created this <code>Builder</code> object.
          *
          * @param anim The animation that will play when the animation supplied to the
-         * {@link AnimatorSet#play(Animator)} method starts.
+         *             {@link AnimatorSet#play(Animator)} method starts.
          */
         public Builder with(Animator anim) {
             Node node = mNodeMap.get(anim);
@@ -1056,7 +1062,7 @@ public final class AnimatorSet extends Animator {
          * ends.
          *
          * @param anim The animation that will play when the animation supplied to the
-         * {@link AnimatorSet#play(Animator)} method ends.
+         *             {@link AnimatorSet#play(Animator)} method ends.
          */
         public Builder before(Animator anim) {
             Node node = mNodeMap.get(anim);
@@ -1076,7 +1082,7 @@ public final class AnimatorSet extends Animator {
          * to start when the animation supplied in this method call ends.
          *
          * @param anim The animation whose end will cause the animation supplied to the
-         * {@link AnimatorSet#play(Animator)} method to play.
+         *             {@link AnimatorSet#play(Animator)} method to play.
          */
         public Builder after(Animator anim) {
             Node node = mNodeMap.get(anim);
@@ -1096,7 +1102,7 @@ public final class AnimatorSet extends Animator {
          * to play when the given amount of time elapses.
          *
          * @param delay The number of milliseconds that should elapse before the
-         * animation starts.
+         *              animation starts.
          */
         public Builder after(long delay) {
             // setup dummy ValueAnimator just to run the clock

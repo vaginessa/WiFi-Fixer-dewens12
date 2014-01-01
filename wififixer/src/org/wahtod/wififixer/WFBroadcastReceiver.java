@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2013  David Van de Ven
+ *     Copyright (C) 2010-2014  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see http://www.gnu.org/licenses
  */
+
 package org.wahtod.wififixer;
 
 import android.app.PendingIntent;
@@ -86,7 +87,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 
     private static void dispatchIntent(Bundle data) {
         /*
-		 * Respond to manifest intents
+         * Respond to manifest intents
 		 */
         String action = data.getString(PrefUtil.INTENT_ACTION);
         /*

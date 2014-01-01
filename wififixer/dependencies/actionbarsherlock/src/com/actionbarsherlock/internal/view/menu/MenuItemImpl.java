@@ -1,17 +1,19 @@
 /*
- * Copyright (C) 2006 The Android Open Source Project
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package com.actionbarsherlock.internal.view.menu;
@@ -26,7 +28,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewDebug;
 import android.widget.LinearLayout;
-
 import com.actionbarsherlock.view.ActionProvider;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
@@ -51,7 +52,9 @@ public final class MenuItemImpl implements MenuItem {
     private char mShortcutNumericChar;
     private char mShortcutAlphabeticChar;
 
-    /** The icon's drawable which is only created as needed */
+    /**
+     * The icon's drawable which is only created as needed
+     */
     private Drawable mIconDrawable;
     /**
      * The icon's resource ID which is used to get the Drawable when it is
@@ -60,21 +63,25 @@ public final class MenuItemImpl implements MenuItem {
      */
     private int mIconResId = NO_ICON;
 
-    /** The menu to which this item belongs */
+    /**
+     * The menu to which this item belongs
+     */
     private MenuBuilder mMenu;
-    /** If this item should launch a sub menu, this is the sub menu to launch */
+    /**
+     * If this item should launch a sub menu, this is the sub menu to launch
+     */
     private SubMenuBuilder mSubMenu;
 
     private Runnable mItemCallback;
     private MenuItem.OnMenuItemClickListener mClickListener;
 
     private int mFlags = ENABLED;
-    private static final int CHECKABLE      = 0x00000001;
-    private static final int CHECKED        = 0x00000002;
-    private static final int EXCLUSIVE      = 0x00000004;
-    private static final int HIDDEN         = 0x00000008;
-    private static final int ENABLED        = 0x00000010;
-    private static final int IS_ACTION      = 0x00000020;
+    private static final int CHECKABLE = 0x00000001;
+    private static final int CHECKED = 0x00000002;
+    private static final int EXCLUSIVE = 0x00000004;
+    private static final int HIDDEN = 0x00000008;
+    private static final int ENABLED = 0x00000010;
+    private static final int IS_ACTION = 0x00000020;
 
     private int mShowAsAction = SHOW_AS_ACTION_NEVER;
 
@@ -83,7 +90,9 @@ public final class MenuItemImpl implements MenuItem {
     private OnActionExpandListener mOnActionExpandListener;
     private boolean mIsActionViewExpanded = false;
 
-    /** Used for the icon resource ID if this item does not have an icon */
+    /**
+     * Used for the icon resource ID if this item does not have an icon
+     */
     static final int NO_ICON = 0;
 
     /**
@@ -102,16 +111,16 @@ public final class MenuItemImpl implements MenuItem {
      * Instantiates this menu item.
      *
      * @param menu
-     * @param group Item ordering grouping control. The item will be added after
-     *            all other items whose order is <= this number, and before any
-     *            that are larger than it. This can also be used to define
-     *            groups of items for batch state changes. Normally use 0.
-     * @param id Unique item ID. Use 0 if you do not need a unique ID.
+     * @param group         Item ordering grouping control. The item will be added after
+     *                      all other items whose order is <= this number, and before any
+     *                      that are larger than it. This can also be used to define
+     *                      groups of items for batch state changes. Normally use 0.
+     * @param id            Unique item ID. Use 0 if you do not need a unique ID.
      * @param categoryOrder The ordering for this item.
-     * @param title The text to display for the item.
+     * @param title         The text to display for the item.
      */
     MenuItemImpl(MenuBuilder menu, int group, int id, int categoryOrder, int ordering,
-            CharSequence title, int showAsAction) {
+                 CharSequence title, int showAsAction) {
 
         /* TODO if (sPrependShortcutLabel == null) {
             // This is instantiated from the UI thread, so no chance of sync issues
@@ -141,7 +150,7 @@ public final class MenuItemImpl implements MenuItem {
      */
     public boolean invoke() {
         if (mClickListener != null &&
-            mClickListener.onMenuItemClick(this)) {
+                mClickListener.onMenuItemClick(this)) {
             return true;
         }
 
@@ -267,8 +276,8 @@ public final class MenuItemImpl implements MenuItem {
 
     /**
      * @return The label to show for the shortcut. This includes the chording
-     *         key (for example 'Menu+a'). Also, any non-human readable
-     *         characters should be human readable (for example 'Menu+enter').
+     * key (for example 'Menu+a'). Also, any non-human readable
+     * characters should be human readable (for example 'Menu+enter').
      */
     String getShortcutLabel() {
 
@@ -302,8 +311,8 @@ public final class MenuItemImpl implements MenuItem {
 
     /**
      * @return Whether this menu item should be showing shortcuts (depends on
-     *         whether the menu should show shortcuts and whether this item has
-     *         a shortcut defined)
+     * whether the menu should show shortcuts and whether this item has
+     * a shortcut defined)
      */
     boolean shouldShowShortcut() {
         // Show shortcuts if the menu is supposed to show shortcuts AND this item has a shortcut
@@ -334,7 +343,7 @@ public final class MenuItemImpl implements MenuItem {
      *
      * @param itemView The ItemView that is receiving the title
      * @return Either the title or condensed title based on what the ItemView
-     *         prefers
+     * prefers
      */
     CharSequence getTitleForItemView(MenuView.ItemView itemView) {
         return ((itemView != null) && itemView.prefersCondensedTitle())
@@ -479,7 +488,7 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
-   public MenuItem setOnMenuItemClickListener(MenuItem.OnMenuItemClickListener clickListener) {
+    public MenuItem setOnMenuItemClickListener(MenuItem.OnMenuItemClickListener clickListener) {
         mClickListener = clickListener;
         return this;
     }

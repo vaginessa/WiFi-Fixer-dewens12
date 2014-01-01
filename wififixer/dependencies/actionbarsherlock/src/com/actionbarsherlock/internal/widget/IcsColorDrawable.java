@@ -1,3 +1,21 @@
+/*
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
+ */
+
 package com.actionbarsherlock.internal.widget;
 
 import android.graphics.Bitmap;
@@ -26,7 +44,8 @@ public class IcsColorDrawable extends Drawable {
         this.color = color;
     }
 
-    @Override public void draw(Canvas canvas) {
+    @Override
+    public void draw(Canvas canvas) {
         if ((color >>> 24) != 0) {
             paint.setColor(color);
             canvas.drawRect(getBounds(), paint);
@@ -41,11 +60,13 @@ public class IcsColorDrawable extends Drawable {
         }
     }
 
-    @Override public void setColorFilter(ColorFilter colorFilter) {
+    @Override
+    public void setColorFilter(ColorFilter colorFilter) {
         //Ignored
     }
 
-    @Override public int getOpacity() {
+    @Override
+    public int getOpacity() {
         return color >>> 24;
     }
 }

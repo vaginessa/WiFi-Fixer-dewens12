@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-		    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
--->
+  ~ Wifi Fixer for Android
+  ~     Copyright (C) 2010-2014  David Van de Ven
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see http://www.gnu.org/licenses
+  -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:showDividers="end" >
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/content"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+              android:showDividers="end">
 
     <ListView
-        android:id="@+id/knownlist"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:alpha=".8"
-        android:cacheColorHint="#00000000"
-        android:divider="@drawable/divider"
-        android:dividerHeight="2dp"
-        android:paddingLeft="@dimen/knownnetworks_list_padding_left"
-        android:scrollbars="none"
-        tools:listitem="@android:layout/simple_list_item_1" >
+            android:id="@+id/knownlist"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:alpha=".8"
+            android:cacheColorHint="#00000000"
+            android:divider="@drawable/divider"
+            android:dividerHeight="2dp"
+            android:paddingLeft="@dimen/knownnetworks_list_padding_left"
+            android:scrollbars="none"
+            tools:listitem="@android:layout/simple_list_item_1">
 
     </ListView>
 

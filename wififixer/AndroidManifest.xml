@@ -2,7 +2,7 @@
 
 <!--
   ~ Wifi Fixer for Android
-  ~     Copyright (C) 2010-2013  David Van de Ven
+  ~     Copyright (C) 2010-2014  David Van de Ven
   ~
   ~     This program is free software: you can redistribute it and/or modify
   ~     it under the terms of the GNU General Public License as published by
@@ -21,8 +21,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.wahtod.wififixer"
           android:installLocation="internalOnly"
-          android:versionCode="1062"
-          android:versionName="1.0.2rc2">
+          android:versionCode="1064"
+          android:versionName="1.0.2">
 
 <!-- Documenting permissions here -->
     <!-- For service start (30 seconds from boot_completed) -->

@@ -1,45 +1,41 @@
 /*
- * Copyright (C) 2010 The Android Open Source Project
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package com.actionbarsherlock.internal.view.menu;
 
-import java.util.ArrayList;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.DataSetObserver;
 import android.os.Parcelable;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.view.*;
 import android.view.View.MeasureSpec;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
-import android.widget.ListAdapter;
-import android.widget.PopupWindow;
+import android.widget.*;
 import com.actionbarsherlock.R;
 import com.actionbarsherlock.internal.view.View_HasStateListenerSupport;
 import com.actionbarsherlock.internal.view.View_OnAttachStateChangeListener;
 import com.actionbarsherlock.internal.widget.IcsListPopupWindow;
 import com.actionbarsherlock.view.MenuItem;
 
+import java.util.ArrayList;
+
 /**
  * Presents a menu as a small, simple popup anchored to another view.
+ *
  * @hide
  */
 public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.OnKeyListener,
@@ -75,7 +71,7 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
     }
 
     public MenuPopupHelper(Context context, MenuBuilder menu,
-            View anchorView, boolean overflowOnly) {
+                           View anchorView, boolean overflowOnly) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
         mMenu = menu;
@@ -118,7 +114,7 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
             final boolean addGlobalListener = mTreeObserver == null;
             mTreeObserver = anchor.getViewTreeObserver(); // Refresh to latest
             if (addGlobalListener) mTreeObserver.addOnGlobalLayoutListener(this);
-            ((View_HasStateListenerSupport)anchor).addOnAttachStateChangeListener(this);
+            ((View_HasStateListenerSupport) anchor).addOnAttachStateChangeListener(this);
             mPopup.setAnchorView(anchor);
         } else {
             return false;
@@ -145,7 +141,7 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
             mTreeObserver.removeGlobalOnLayoutListener(this);
             mTreeObserver = null;
         }
-        ((View_HasStateListenerSupport)mAnchorView).removeOnAttachStateChangeListener(this);
+        ((View_HasStateListenerSupport) mAnchorView).removeOnAttachStateChangeListener(this);
     }
 
     public boolean isShowing() {
@@ -172,9 +168,9 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
         View itemView = null;
         int itemType = 0;
         final int widthMeasureSpec =
-            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         final int heightMeasureSpec =
-            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         final int count = adapter.getCount();
         for (int i = 0; i < count; i++) {
             final int positionType = adapter.getItemViewType(i);
@@ -215,7 +211,7 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
             if (!mTreeObserver.isAlive()) mTreeObserver = v.getViewTreeObserver();
             mTreeObserver.removeGlobalOnLayoutListener(this);
         }
-        ((View_HasStateListenerSupport)v).removeOnAttachStateChangeListener(this);
+        ((View_HasStateListenerSupport) v).removeOnAttachStateChangeListener(this);
     }
 
     @Override

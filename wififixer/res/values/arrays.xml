@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-		    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
--->
+  ~ Wifi Fixer for Android
+  ~     Copyright (C) 2010-2014  David Van de Ven
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see http://www.gnu.org/licenses
+  -->
 
 <resources>
     <string-array name="dbmfloor">
@@ -32,9 +32,9 @@
     </string-array>
 
     <string-array name="entries">
-        <item>Max Wifi</item>
-        <item>Balanced</item>
-        <item>Max Battery</item>
+        <item>@string/maxwifi</item>
+        <item>@string/balanced</item>
+        <item>@string/maxbattery</item>
     </string-array>
     <string-array name="entryValues">
         <item>1</item>
@@ -47,9 +47,9 @@
         <item>2</item>
     </string-array>
     <string-array name="widget">
-        <item>Reassociate</item>
-        <item>Reset Wifi</item>
-        <item>Show App</item>
+        <item>@string/reassociate</item>
+        <item>@string/resetwifi</item>
+        <item>@string/showapp</item>
     </string-array>
     <string-array name="widgetValues">
         <item>0</item>
@@ -63,4 +63,10 @@
         <item>-60</item>
     </string-array>
 
+    <string name="maxwifi">Max Wifi</string>
+    <string name="balanced">Balanced</string>
+    <string name="maxbattery">Maximum Battery</string>
+    <string name="reassociate">Reassociate</string>
+    <string name="resetwifi">Reset Wifi</string>
+    <string name="showapp">Bring App to Foreground</string>
 </resources>

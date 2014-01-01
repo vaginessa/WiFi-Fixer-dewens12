@@ -1,23 +1,23 @@
 /*
- * Copyright (C) 2010 The Android Open Source Project
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package com.actionbarsherlock.internal.app;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -38,10 +38,10 @@ import android.widget.SpinnerAdapter;
 import com.actionbarsherlock.R;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.internal.nineoldandroids.animation.Animator;
+import com.actionbarsherlock.internal.nineoldandroids.animation.Animator.AnimatorListener;
 import com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet;
 import com.actionbarsherlock.internal.nineoldandroids.animation.ObjectAnimator;
-import com.actionbarsherlock.internal.nineoldandroids.animation.Animator.AnimatorListener;
 import com.actionbarsherlock.internal.nineoldandroids.widget.NineFrameLayout;
 import com.actionbarsherlock.internal.view.menu.MenuBuilder;
 import com.actionbarsherlock.internal.view.menu.MenuPopupHelper;
@@ -54,6 +54,10 @@ import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+
 import static com.actionbarsherlock.internal.ResourcesCompat.getResources_getBoolean;
 
 /**
@@ -140,7 +144,7 @@ public class ActionBarImpl extends ActionBar {
 
         //window.hasFeature() workaround for pre-3.0
         if ((features & (1 << Window.FEATURE_ACTION_BAR_OVERLAY)) == 0) {
-            mContentView = (NineFrameLayout)decor.findViewById(android.R.id.content);
+            mContentView = (NineFrameLayout) decor.findViewById(android.R.id.content);
         }
     }
 
@@ -318,15 +322,15 @@ public class ActionBarImpl extends ActionBar {
 
     public void setSelectedNavigationItem(int position) {
         switch (mActionView.getNavigationMode()) {
-        case NAVIGATION_MODE_TABS:
-            selectTab(mTabs.get(position));
-            break;
-        case NAVIGATION_MODE_LIST:
-            mActionView.setDropdownSelectedPosition(position);
-            break;
-        default:
-            throw new IllegalStateException(
-                    "setSelectedNavigationIndex not valid for current navigation mode");
+            case NAVIGATION_MODE_TABS:
+                selectTab(mTabs.get(position));
+                break;
+            case NAVIGATION_MODE_LIST:
+                mActionView.setDropdownSelectedPosition(position);
+                break;
+            default:
+                throw new IllegalStateException(
+                        "setSelectedNavigationIndex not valid for current navigation mode");
         }
     }
 
@@ -512,7 +516,7 @@ public class ActionBarImpl extends ActionBar {
 
         FragmentTransaction trans = null;
         if (mActivity instanceof FragmentActivity) {
-            trans = ((FragmentActivity)mActivity).getSupportFragmentManager().beginTransaction()
+            trans = ((FragmentActivity) mActivity).getSupportFragmentManager().beginTransaction()
                     .disallowAddToBackStack();
         }
 

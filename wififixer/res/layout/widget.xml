@@ -1,71 +1,71 @@
 <!--
-		    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
--->
+  ~ Wifi Fixer for Android
+  ~     Copyright (C) 2010-2014  David Van de Ven
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see http://www.gnu.org/licenses
+  -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget_target"
-    android:layout_width="fill_parent"
-    android:layout_height="72dp"
-    android:background="@drawable/boxbg"
-    android:gravity="end"
-    android:orientation="horizontal" >
+                android:id="@+id/widget_target"
+                android:layout_width="fill_parent"
+                android:layout_height="72dp"
+                android:background="@drawable/boxbg"
+                android:gravity="end"
+                android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/signal"
-        android:layout_width="72dp"
-        android:layout_height="fill_parent"
-        android:layout_gravity="left"
-        android:alpha=".90"
-        android:background="@drawable/boxbg"
-        android:fadingEdge="vertical"
-        android:src="@drawable/largesignal" />
+            android:id="@+id/signal"
+            android:layout_width="72dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="left"
+            android:alpha=".90"
+            android:background="@drawable/boxbg"
+            android:fadingEdge="vertical"
+            android:src="@drawable/largesignal"/>
 
     <TextView
-        android:id="@+id/ssid"
-        style="@style/Wftext.header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_toRightOf="@id/signal"
-        android:paddingLeft="10dp"
-        android:text="@string/service_inactive" />
+            android:id="@+id/ssid"
+            style="@style/Wftext.header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_toRightOf="@id/signal"
+            android:paddingLeft="10dp"
+            android:text="@string/service_inactive"/>
 
     <TextView
-        android:id="@+id/status"
-        style="@style/Wftext.small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/signal"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="left"
-        android:gravity="bottom"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        />
+            android:id="@+id/status"
+            style="@style/Wftext.small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/signal"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="left"
+            android:gravity="bottom"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            />
 
     <TextView
-        android:id="@+id/linkspeed"
-        style="@style/Wftext.small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:paddingBottom="10dp"
-        android:paddingRight="10dp"
-        />
+            android:id="@+id/linkspeed"
+            style="@style/Wftext.small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="10dp"
+            android:paddingRight="10dp"
+            />
 
 </RelativeLayout>

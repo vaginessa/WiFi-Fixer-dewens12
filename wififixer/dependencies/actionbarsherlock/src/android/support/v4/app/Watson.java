@@ -1,3 +1,21 @@
+/*
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
+ */
+
 package android.support.v4.app;
 
 import android.util.Log;
@@ -10,21 +28,32 @@ import com.actionbarsherlock.BuildConfig;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
 import java.util.ArrayList;
 
-/** I'm in ur package. Stealing ur variables. */
+/**
+ * I'm in ur package. Stealing ur variables.
+ */
 public abstract class Watson extends FragmentActivity implements OnCreatePanelMenuListener, OnPreparePanelListener, OnMenuItemSelectedListener {
     private static final String TAG = "Watson";
 
-    /** Fragment interface for menu creation callback. */
+    /**
+     * Fragment interface for menu creation callback.
+     */
     public interface OnCreateOptionsMenuListener {
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater);
     }
-    /** Fragment interface for menu preparation callback. */
+
+    /**
+     * Fragment interface for menu preparation callback.
+     */
     public interface OnPrepareOptionsMenuListener {
         public void onPrepareOptionsMenu(Menu menu);
     }
-    /** Fragment interface for menu item selection callback. */
+
+    /**
+     * Fragment interface for menu item selection callback.
+     */
     public interface OnOptionsItemSelectedListener {
         public boolean onOptionsItemSelected(MenuItem item);
     }
@@ -52,7 +81,7 @@ public abstract class Watson extends FragmentActivity implements OnCreatePanelMe
                     Fragment f = mFragments.mAdded.get(i);
                     if (f != null && !f.mHidden && f.mHasMenu && f.mMenuVisible && f instanceof OnCreateOptionsMenuListener) {
                         show = true;
-                        ((OnCreateOptionsMenuListener)f).onCreateOptionsMenu(menu, inflater);
+                        ((OnCreateOptionsMenuListener) f).onCreateOptionsMenu(menu, inflater);
                         if (newMenus == null) {
                             newMenus = new ArrayList<Fragment>();
                         }
@@ -83,7 +112,8 @@ public abstract class Watson extends FragmentActivity implements OnCreatePanelMe
 
     @Override
     public boolean onPreparePanel(int featureId, View view, Menu menu) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "[onPreparePanel] featureId: " + featureId + ", view: " + view + " menu: " + menu);
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "[onPreparePanel] featureId: " + featureId + ", view: " + view + " menu: " + menu);
 
         if (featureId == Window.FEATURE_OPTIONS_PANEL) {
             boolean result = onPrepareOptionsMenu(menu);
@@ -95,7 +125,7 @@ public abstract class Watson extends FragmentActivity implements OnCreatePanelMe
                     Fragment f = mFragments.mAdded.get(i);
                     if (f != null && !f.mHidden && f.mHasMenu && f.mMenuVisible && f instanceof OnPrepareOptionsMenuListener) {
                         show = true;
-                        ((OnPrepareOptionsMenuListener)f).onPrepareOptionsMenu(menu);
+                        ((OnPrepareOptionsMenuListener) f).onPrepareOptionsMenu(menu);
                     }
                 }
             }
@@ -123,7 +153,7 @@ public abstract class Watson extends FragmentActivity implements OnCreatePanelMe
                 for (int i = 0; i < mFragments.mAdded.size(); i++) {
                     Fragment f = mFragments.mAdded.get(i);
                     if (f != null && !f.mHidden && f.mHasMenu && f.mMenuVisible && f instanceof OnOptionsItemSelectedListener) {
-                        if (((OnOptionsItemSelectedListener)f).onOptionsItemSelected(item)) {
+                        if (((OnOptionsItemSelectedListener) f).onOptionsItemSelected(item)) {
                             return true;
                         }
                     }

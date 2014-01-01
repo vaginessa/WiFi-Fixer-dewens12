@@ -2,7 +2,7 @@
 
 <!--
   ~ Wifi Fixer for Android
-  ~     Copyright (C) 2010-2013  David Van de Ven
+  ~     Copyright (C) 2010-2014  David Van de Ven
   ~
   ~     This program is free software: you can redistribute it and/or modify
   ~     it under the terms of the GNU General Public License as published by
@@ -126,20 +126,18 @@
     <string name="cancel_button">Cancel</string>
     <string name="null_ssid">None</string>
     <string name="http">http://</string>
-    <string name="writing_to_log">Capturing to Log</string>
     <string name="k">KB</string>
     <string name="strict_mode_extant">Strict Mode Extant</string>
     <string name="strict_mode_unavailable">Strict Mode Unavailable</string>
     <string name="service_status">Service</string>
-    <string name="enabling_wififixerservice">WifiFixerService Enabled</string>
-    <string name="disabling_wififixerservice">WifiFixerService Disabled</string>
+    <string name="enabling_wififixerservice">Service Enabled</string>
+    <string name="disabling_wififixerservice">Service Disabled</string>
     <string name="wifi">WiFi</string>
     <string name="enabling_wifi">Enabling Wifi</string>
     <string name="disabling_wifi">Disabling Wifi</string>
     <string name="knownnetworks_fragment_header">Known Networks</string>
     <string name="scanfragment_header">Local Networks</string>
     <string name="open_network">Open</string>
-    <string name="logservice">LogService</string>
     <string name="resource">resource</string>
     <string name="xml">xml</string>
     <string name="SCREEN_summary">Service checks network when screen is off: will use
@@ -149,7 +147,7 @@
     <string name="Disable_title">Disable Service</string>
     <string name="Disable_summary">Disables wifi management service</string>
     <string name="Perf_Mode_title">Set Wifi Profile</string>
-    <string name="Perf_Mode_summary">Adjusts settings automatically using preset profiles</string>
+    <string name="Perf_Mode_summary">Adjusts settings automatically using profiles</string>
     <string name="StateNotif_title">Status Notification</string>
     <string name="StateNotif_summary">Displays an ongoing notification showing connection
         state when service is enabled
@@ -195,14 +193,11 @@
     <string name="tutorial_toast_8">That\'s it!\n\nIf you want to run the tutorial again, go to Settings.
     </string>
     <string name="tutorial_toast_9">You can long-press the items in this list for more options</string>
-    <string name="phone_ui_tutorial">Phone UI Tutorial</string>
+    <string name="phone_ui_tutorial">UI Tutorial</string>
     <string name="phone_tutorial_q">Please take a moment for a quick UI tutorial</string>
     <string name="ms">ms</string>
     <string name="later_button">Later</string>
     <string name="scan_failed">Scan Failed: Resetting Wifi</string>
-    <string name="forcephone_title">Force Phone UI</string>
-    <string name="forcephone_key">ForcePhone</string>
-    <string name="forcephone_summary">Enable if you see the tablet user interface on your phone.</string>
     <string name="scan_bounce">Supplicant Failure Pattern Detected:Resetting</string>
     <string name="wifimanager_scan">Requesting Scan from WifiManager</string>
     <string name="issue_report_header">Issue Report</string>
@@ -213,10 +208,6 @@
     <string name="priority">Priority:</string>
     <string name="error">error</string>
     <string name="log">Log</string>
-    <string name="service_status_summary">Displays detailed information from WifiFixerService</string>
-    <string name="service_status_title">Service Status</string>
-    <string name="sendlog_summary">Send Log to Developer</string>
-    <string name="sendlog_title">Send Log</string>
     <string name="deletelog_summary">Deletes Log from sdcard</string>
     <string name="deletelog_title">Delete Log</string>
     <string name="dbmfloor_title">Signalhop Level</string>
@@ -262,5 +253,7 @@
     <string name="stuck_notif">Your Wifi is stuck. Please refer to Known Issues in Help</string>
     <string name="stuck_ticker">Stuck Wifi</string>
     <string name="failover">Failover set to:</string>
+    <string name="sendlog_title">Send Log</string>
+    <string name="sendlog_summary">Send Log to developer</string>
 
 </resources>

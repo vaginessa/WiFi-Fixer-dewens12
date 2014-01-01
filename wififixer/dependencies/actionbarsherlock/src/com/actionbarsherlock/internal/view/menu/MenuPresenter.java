@@ -1,17 +1,19 @@
 /*
- * Copyright (C) 2011 The Android Open Source Project
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package com.actionbarsherlock.internal.view.menu;
@@ -31,6 +33,7 @@ public interface MenuPresenter {
     public interface Callback {
         /**
          * Called when a menu is closing.
+         *
          * @param menu
          * @param allMenusAreClosing
          */
@@ -43,7 +46,7 @@ public interface MenuPresenter {
          *
          * @param subMenu Submenu currently being opened
          * @return true if the Callback will handle presenting the submenu, false if
-         *         the presenter should attempt to do so.
+         * the presenter should attempt to do so.
          */
         public boolean onOpenSubMenu(MenuBuilder subMenu);
     }
@@ -54,7 +57,7 @@ public interface MenuPresenter {
      * added. See {@link MenuBuilder#addMenuPresenter(MenuPresenter)}
      *
      * @param context Context for this presenter; used for view creation and resource management
-     * @param menu Menu to host
+     * @param menu    Menu to host
      */
     public void initForMenu(Context context, MenuBuilder menu);
 
@@ -78,6 +81,7 @@ public interface MenuPresenter {
     /**
      * Set a callback object that will be notified of menu events
      * related to this specific presentation.
+     *
      * @param cb Callback that will be notified of future events
      */
     public void setCallback(Callback cb);
@@ -97,13 +101,14 @@ public interface MenuPresenter {
      * closing. Presenter implementations should close the representation
      * of the menu indicated as necessary and notify a registered callback.
      *
-     * @param menu Menu or submenu that is closing.
+     * @param menu               Menu or submenu that is closing.
      * @param allMenusAreClosing True if all associated menus are closing.
      */
     public void onCloseMenu(MenuBuilder menu, boolean allMenusAreClosing);
 
     /**
      * Called by Menu implementations to flag items that will be shown as actions.
+     *
      * @return true if this presenter changed the action status of any items.
      */
     public boolean flagActionItems();
@@ -128,6 +133,7 @@ public interface MenuPresenter {
 
     /**
      * Returns an ID for determining how to save/restore instance state.
+     *
      * @return a valid ID value.
      */
     public int getId();
@@ -136,12 +142,14 @@ public interface MenuPresenter {
      * Returns a Parcelable describing the current state of the presenter.
      * It will be passed to the {@link #onRestoreInstanceState(Parcelable)}
      * method of the presenter sharing the same ID later.
+     *
      * @return The saved instance state
      */
     public Parcelable onSaveInstanceState();
 
     /**
      * Supplies the previously saved instance state to be restored.
+     *
      * @param state The previously saved instance state
      */
     public void onRestoreInstanceState(Parcelable state);

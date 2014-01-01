@@ -1,6 +1,22 @@
-package com.actionbarsherlock.internal.widget;
+/*
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
+ */
 
-import com.actionbarsherlock.R;
+package com.actionbarsherlock.internal.widget;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -10,19 +26,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.view.ContextThemeWrapper;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.view.View.MeasureSpec;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.PopupWindow;
+import android.widget.*;
+import com.actionbarsherlock.R;
 
 /**
  * A proxy between pre- and post-Honeycomb implementations of this class.
@@ -314,7 +322,7 @@ public class IcsListPopupWindow {
             mDropDownList.setFocusableInTouchMode(true);
             mDropDownList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> parent, View view,
-                        int position, long id) {
+                                           int position, long id) {
 
                     if (position != -1) {
                         DropDownListView dropDownList = mDropDownList;
@@ -348,18 +356,18 @@ public class IcsListPopupWindow {
                 );
 
                 switch (mPromptPosition) {
-                case POSITION_PROMPT_BELOW:
-                    hintContainer.addView(dropDownView, hintParams);
-                    hintContainer.addView(hintView);
-                    break;
+                    case POSITION_PROMPT_BELOW:
+                        hintContainer.addView(dropDownView, hintParams);
+                        hintContainer.addView(hintView);
+                        break;
 
-                case POSITION_PROMPT_ABOVE:
-                    hintContainer.addView(hintView);
-                    hintContainer.addView(dropDownView, hintParams);
-                    break;
+                    case POSITION_PROMPT_ABOVE:
+                        hintContainer.addView(hintView);
+                        hintContainer.addView(dropDownView, hintParams);
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
                 }
 
                 // measure the hint's height to find how much more vertical space
@@ -447,7 +455,7 @@ public class IcsListPopupWindow {
     }
 
     private int measureHeightOfChildren(int widthMeasureSpec, int startPosition, int endPosition,
-            final int maxHeight, int disallowPartialChildPosition) {
+                                        final int maxHeight, int disallowPartialChildPosition) {
 
         final ListAdapter adapter = mAdapter;
         if (adapter == null) {
@@ -485,9 +493,9 @@ public class IcsListPopupWindow {
                 // We went over, figure out which height to return.  If returnedHeight > maxHeight,
                 // then the i'th position did not fit completely.
                 return (disallowPartialChildPosition >= 0) // Disallowing is enabled (> -1)
-                            && (i > disallowPartialChildPosition) // We've past the min pos
-                            && (prevHeightWithoutPartialChild > 0) // We have a prev height
-                            && (returnedHeight != maxHeight) // i'th child did not fit completely
+                        && (i > disallowPartialChildPosition) // We've past the min pos
+                        && (prevHeightWithoutPartialChild > 0) // We have a prev height
+                        && (returnedHeight != maxHeight) // i'th child did not fit completely
                         ? prevHeightWithoutPartialChild
                         : maxHeight;
             }
@@ -501,6 +509,7 @@ public class IcsListPopupWindow {
         // completely fit, so return the returnedHeight
         return returnedHeight;
     }
+
     private void measureScrapChild(View child, int position, int widthMeasureSpec) {
         ListView.LayoutParams p = (ListView.LayoutParams) child.getLayoutParams();
         if (p == null) {
@@ -646,7 +655,7 @@ public class IcsListPopupWindow {
 
     private class PopupScrollListener implements ListView.OnScrollListener {
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-                int totalItemCount) {
+                             int totalItemCount) {
 
         }
 

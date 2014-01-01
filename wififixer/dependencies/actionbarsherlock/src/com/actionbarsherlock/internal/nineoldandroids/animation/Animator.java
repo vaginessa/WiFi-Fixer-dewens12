@@ -1,24 +1,26 @@
 /*
- * Copyright (C) 2010 The Android Open Source Project
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package com.actionbarsherlock.internal.nineoldandroids.animation;
 
-import java.util.ArrayList;
-
 import android.view.animation.Interpolator;
+
+import java.util.ArrayList;
 
 /**
  * This is the superclass for classes which provide basic support for animations which can be
@@ -37,13 +39,12 @@ public abstract class Animator implements Cloneable {
      * running after that delay elapses. A non-delayed animation will have its initial
      * value(s) set immediately, followed by calls to
      * {@link AnimatorListener#onAnimationStart(Animator)} for any listeners of this animator.
-     *
+     * <p/>
      * <p>The animation started by calling this method will be run on the thread that called
      * this method. This thread should have a Looper on it (a runtime exception will be thrown if
      * this is not the case). Also, if the animation will animate
      * properties of objects in the view hierarchy, then the calling thread should be the UI
      * thread for that view hierarchy.</p>
-     *
      */
     public void start() {
     }
@@ -54,7 +55,7 @@ public abstract class Animator implements Cloneable {
      * {@link android.animation.Animator.AnimatorListener#onAnimationCancel(Animator)} to
      * its listeners, followed by an
      * {@link android.animation.Animator.AnimatorListener#onAnimationEnd(Animator)} message.
-     *
+     * <p/>
      * <p>This method must be called on the thread that is running the animation.</p>
      */
     public void cancel() {
@@ -65,7 +66,7 @@ public abstract class Animator implements Cloneable {
      * animated, then calling the
      * {@link android.animation.Animator.AnimatorListener#onAnimationEnd(Animator)} method on
      * its listeners.
-     *
+     * <p/>
      * <p>This method must be called on the thread that is running the animation.</p>
      */
     public void end() {
@@ -82,7 +83,7 @@ public abstract class Animator implements Cloneable {
     /**
      * The amount of time, in milliseconds, to delay starting the animation after
      * {@link #start()} is called.
-
+     *
      * @param startDelay The amount of the delay, in milliseconds
      */
     public abstract void setStartDelay(long startDelay);
@@ -200,7 +201,7 @@ public abstract class Animator implements Cloneable {
             }
             return anim;
         } catch (CloneNotSupportedException e) {
-           throw new AssertionError();
+            throw new AssertionError();
         }
     }
 

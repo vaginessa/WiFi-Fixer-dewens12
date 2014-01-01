@@ -1,3 +1,21 @@
+/*
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
+ */
+
 package com.actionbarsherlock.internal.widget;
 
 import android.content.Context;
@@ -7,7 +25,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 public class TabsLinearLayout extends IcsLinearLayout {
-    private static final int[] R_styleable_LinearLayout = new int[] {
+    private static final int[] R_styleable_LinearLayout = new int[]{
             /* 0 */ android.R.attr.measureWithLargestChild,
     };
     private static final int LinearLayout_measureWithLargestChild = 0;
@@ -29,8 +47,7 @@ public class TabsLinearLayout extends IcsLinearLayout {
      * measured normally.
      *
      * @return True to measure children with a weight using the minimum
-     *         size of the largest child, false otherwise.
-     *
+     * size of the largest child, false otherwise.
      * @attr ref android.R.styleable#LinearLayout_measureWithLargestChild
      */
     public boolean isMeasureWithLargestChildEnabled() {
@@ -41,12 +58,11 @@ public class TabsLinearLayout extends IcsLinearLayout {
      * When set to true, all children with a weight will be considered having
      * the minimum size of the largest child. If false, all children are
      * measured normally.
-     *
+     * <p/>
      * Disabled by default.
      *
      * @param enabled True to measure children with a weight using the
-     *        minimum size of the largest child, false otherwise.
-     *
+     *                minimum size of the largest child, false otherwise.
      * @attr ref android.R.styleable#LinearLayout_measureWithLargestChild
      */
     public void setMeasureWithLargestChildEnabled(boolean enabled) {

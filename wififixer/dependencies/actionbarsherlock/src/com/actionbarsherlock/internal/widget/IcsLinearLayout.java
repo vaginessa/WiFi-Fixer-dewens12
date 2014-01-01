@@ -1,3 +1,21 @@
+/*
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
+ */
+
 package com.actionbarsherlock.internal.widget;
 
 import android.content.Context;
@@ -8,7 +26,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
-
 import com.actionbarsherlock.internal.nineoldandroids.widget.NineLinearLayout;
 
 /**
@@ -19,7 +36,7 @@ import com.actionbarsherlock.internal.nineoldandroids.widget.NineLinearLayout;
  * {@link android.widget.FrameLayout} so it can receive the margin.
  */
 public class IcsLinearLayout extends NineLinearLayout {
-    private static final int[] R_styleable_LinearLayout = new int[] {
+    private static final int[] R_styleable_LinearLayout = new int[]{
         /* 0 */ android.R.attr.divider,
         /* 2 */ android.R.attr.showDividers,
         /* 3 */ android.R.attr.dividerPadding,
@@ -89,6 +106,7 @@ public class IcsLinearLayout extends NineLinearLayout {
 
     /**
      * Set a drawable to be used as a divider between items.
+     *
      * @param divider Drawable that will divide each item.
      * @see #setShowDividers(int)
      */
@@ -118,7 +136,6 @@ public class IcsLinearLayout extends NineLinearLayout {
      * Set padding displayed on both ends of dividers.
      *
      * @param padding Padding value in pixels that will be applied to each end
-     *
      * @see #setShowDividers(int)
      * @see #setDividerDrawable(Drawable)
      * @see #getDividerPadding()

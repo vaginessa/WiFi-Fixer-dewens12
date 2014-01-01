@@ -1,44 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<!--
-		    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
--->
+<!--
+  ~ Wifi Fixer for Android
+  ~     Copyright (C) 2010-2014  David Van de Ven
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see http://www.gnu.org/licenses
+  -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<PreferenceCategory android:title="Service Preferences">
-	    
-	     <PreferenceScreen android:title="@string/phone_ui_tutorial"
-	         summary="Begins a small tutorial on the app's user interface"
-					>
-					<intent android:targetPackage="org.wahtod.wififixer"
-						android:targetClass="org.wahtod.wififixer.ui.MainActivity">
-						<extra android:name="RUN_TUTORIAL" android:value="pi">
-						</extra>
-					</intent>
+    <PreferenceCategory android:title="Service Preferences">
 
-				</PreferenceScreen>
+        <PreferenceScreen
+                android:title="@string/phone_ui_tutorial"
+                summary="Begins a small tutorial on the app's user interface"
+                >
+            <intent
+                    android:targetPackage="org.wahtod.wififixer"
+                    android:targetClass="org.wahtod.wififixer.ui.MainActivity">
+                <extra
+                        android:name="RUN_TUTORIAL"
+                        android:value="pi">
+                </extra>
+            </intent>
 
-		<CheckBoxPreference android:key="Disable"
-			android:title="Disable Service" android:summary="Causes the Wifi Fixer service to stop running" />
+        </PreferenceScreen>
 
-		<ListPreference android:title="@string/Perf_Mode_title"
-			android:defaultValue="1"
-			android:summary="@string/Perf_Mode_summary"
-			android:key="Perf_Mode" android:entries="@array/entries"
-			android:entryValues="@array/entryValues" />
-	</PreferenceCategory>
+        <CheckBoxPreference
+                android:key="Disable"
+                android:title="Disable Service"
+                android:summary="Causes the Wifi Fixer service to stop running"/>
+
+        <ListPreference
+                android:title="@string/Perf_Mode_title"
+                android:defaultValue="1"
+                android:summary="@string/Perf_Mode_summary"
+                android:key="Perf_Mode"
+                android:entries="@array/entries"
+                android:entryValues="@array/entryValues"/>
+    </PreferenceCategory>
 
 </PreferenceScreen>

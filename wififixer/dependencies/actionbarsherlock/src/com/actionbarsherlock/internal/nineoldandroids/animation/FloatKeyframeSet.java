@@ -1,31 +1,33 @@
 /*
- * Copyright (C) 2010 The Android Open Source Project
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package com.actionbarsherlock.internal.nineoldandroids.animation;
 
-import java.util.ArrayList;
 import android.view.animation.Interpolator;
-
 import com.actionbarsherlock.internal.nineoldandroids.animation.Keyframe.FloatKeyframe;
+
+import java.util.ArrayList;
 
 /**
  * This class holds a collection of FloatKeyframe objects and is called by ValueAnimator to calculate
  * values between those keyframes for a given animation. The class internal to the animation
  * package because it is an implementation detail of how Keyframes are stored and used.
- *
+ * <p/>
  * <p>This type-specific subclass of KeyframeSet, along with the other type-specific subclass for
  * int, exists to speed up the getValue() method when there is no custom
  * TypeEvaluator set for the animation, so that values can be calculated without autoboxing to the
@@ -73,7 +75,7 @@ class FloatKeyframeSet extends KeyframeSet {
             if (mEvaluator == null) {
                 return firstValue + fraction * deltaValue;
             } else {
-                return ((Number)mEvaluator.evaluate(fraction, firstValue, lastValue)).floatValue();
+                return ((Number) mEvaluator.evaluate(fraction, firstValue, lastValue)).floatValue();
             }
         }
         if (fraction <= 0f) {
@@ -83,14 +85,14 @@ class FloatKeyframeSet extends KeyframeSet {
             float nextValue = nextKeyframe.getFloatValue();
             float prevFraction = prevKeyframe.getFraction();
             float nextFraction = nextKeyframe.getFraction();
-            final /*Time*/Interpolator interpolator = nextKeyframe.getInterpolator();
+            final /*Time*/ Interpolator interpolator = nextKeyframe.getInterpolator();
             if (interpolator != null) {
                 fraction = interpolator.getInterpolation(fraction);
             }
             float intervalFraction = (fraction - prevFraction) / (nextFraction - prevFraction);
             return mEvaluator == null ?
                     prevValue + intervalFraction * (nextValue - prevValue) :
-                    ((Number)mEvaluator.evaluate(intervalFraction, prevValue, nextValue)).
+                    ((Number) mEvaluator.evaluate(intervalFraction, prevValue, nextValue)).
                             floatValue();
         } else if (fraction >= 1f) {
             final FloatKeyframe prevKeyframe = (FloatKeyframe) mKeyframes.get(mNumKeyframes - 2);
@@ -99,37 +101,37 @@ class FloatKeyframeSet extends KeyframeSet {
             float nextValue = nextKeyframe.getFloatValue();
             float prevFraction = prevKeyframe.getFraction();
             float nextFraction = nextKeyframe.getFraction();
-            final /*Time*/Interpolator interpolator = nextKeyframe.getInterpolator();
+            final /*Time*/ Interpolator interpolator = nextKeyframe.getInterpolator();
             if (interpolator != null) {
                 fraction = interpolator.getInterpolation(fraction);
             }
             float intervalFraction = (fraction - prevFraction) / (nextFraction - prevFraction);
             return mEvaluator == null ?
                     prevValue + intervalFraction * (nextValue - prevValue) :
-                    ((Number)mEvaluator.evaluate(intervalFraction, prevValue, nextValue)).
+                    ((Number) mEvaluator.evaluate(intervalFraction, prevValue, nextValue)).
                             floatValue();
         }
         FloatKeyframe prevKeyframe = (FloatKeyframe) mKeyframes.get(0);
         for (int i = 1; i < mNumKeyframes; ++i) {
             FloatKeyframe nextKeyframe = (FloatKeyframe) mKeyframes.get(i);
             if (fraction < nextKeyframe.getFraction()) {
-                final /*Time*/Interpolator interpolator = nextKeyframe.getInterpolator();
+                final /*Time*/ Interpolator interpolator = nextKeyframe.getInterpolator();
                 if (interpolator != null) {
                     fraction = interpolator.getInterpolation(fraction);
                 }
                 float intervalFraction = (fraction - prevKeyframe.getFraction()) /
-                    (nextKeyframe.getFraction() - prevKeyframe.getFraction());
+                        (nextKeyframe.getFraction() - prevKeyframe.getFraction());
                 float prevValue = prevKeyframe.getFloatValue();
                 float nextValue = nextKeyframe.getFloatValue();
                 return mEvaluator == null ?
                         prevValue + intervalFraction * (nextValue - prevValue) :
-                        ((Number)mEvaluator.evaluate(intervalFraction, prevValue, nextValue)).
-                            floatValue();
+                        ((Number) mEvaluator.evaluate(intervalFraction, prevValue, nextValue)).
+                                floatValue();
             }
             prevKeyframe = nextKeyframe;
         }
         // shouldn't get here
-        return ((Number)mKeyframes.get(mNumKeyframes - 1).getValue()).floatValue();
+        return ((Number) mKeyframes.get(mNumKeyframes - 1).getValue()).floatValue();
     }
 
 }

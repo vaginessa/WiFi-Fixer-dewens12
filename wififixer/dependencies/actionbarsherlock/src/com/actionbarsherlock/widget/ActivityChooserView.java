@@ -1,27 +1,23 @@
 /*
- * Copyright (C) 2011 The Android Open Source Project
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package com.actionbarsherlock.widget;
 
-import android.os.Build;
-import com.actionbarsherlock.R;
-import com.actionbarsherlock.internal.widget.IcsLinearLayout;
-import com.actionbarsherlock.internal.widget.IcsListPopupWindow;
-import com.actionbarsherlock.view.ActionProvider;
-import com.actionbarsherlock.widget.ActivityChooserModel.ActivityChooserModelClient;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,18 +26,19 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.PopupWindow;
-import android.widget.TextView;
+import android.widget.*;
+import com.actionbarsherlock.R;
+import com.actionbarsherlock.internal.widget.IcsLinearLayout;
+import com.actionbarsherlock.internal.widget.IcsListPopupWindow;
+import com.actionbarsherlock.view.ActionProvider;
+import com.actionbarsherlock.widget.ActivityChooserModel.ActivityChooserModelClient;
 
 /**
  * This class is a view for choosing an activity for handling a given {@link Intent}.
@@ -128,6 +125,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
             super.onChanged();
             mAdapter.notifyDataSetChanged();
         }
+
         @Override
         public void onInvalidated() {
             super.onInvalidated();
@@ -196,7 +194,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
      * Create a new instance.
      *
      * @param context The application environment.
-     * @param attrs A collection of attributes.
+     * @param attrs   A collection of attributes.
      */
     public ActivityChooserView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -205,8 +203,8 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
     /**
      * Create a new instance.
      *
-     * @param context The application environment.
-     * @param attrs A collection of attributes.
+     * @param context  The application environment.
+     * @param attrs    A collection of attributes.
      * @param defStyle The default style to apply to this view.
      */
     public ActivityChooserView(Context context, AttributeSet attrs, int defStyle) {
@@ -241,7 +239,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
         mExpandActivityOverflowButton = (FrameLayout) findViewById(R.id.abs__expand_activities_button);
         mExpandActivityOverflowButton.setOnClickListener(mCallbacks);
         mExpandActivityOverflowButtonImage =
-            (ImageView) mExpandActivityOverflowButton.findViewById(R.id.abs__image);
+                (ImageView) mExpandActivityOverflowButton.findViewById(R.id.abs__image);
         mExpandActivityOverflowButtonImage.setImageDrawable(expandActivityOverflowButtonDrawable);
 
         mAdapter = new ActivityChooserViewAdapter();
@@ -255,7 +253,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
 
         Resources resources = context.getResources();
         mListPopupMaxWidth = Math.max(resources.getDisplayMetrics().widthPixels / 2,
-              resources.getDimensionPixelSize(R.dimen.abs__config_prefDialogWidth));
+                resources.getDimensionPixelSize(R.dimen.abs__config_prefDialogWidth));
     }
 
     /**
@@ -272,7 +270,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
     /**
      * Sets the background for the button that expands the activity
      * overflow list.
-     *
+     * <p/>
      * <strong>Note:</strong> Clients would like to set this drawable
      * as a clue about the action the chosen activity will perform. For
      * example, if a share activity is to be chosen the drawable should
@@ -287,7 +285,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
     /**
      * Sets the content description for the button that expands the activity
      * overflow list.
-     *
+     * <p/>
      * description as a clue about the action performed by the button.
      * For example, if a share activity is to be chosen the content
      * description should be something like "Share with".
@@ -301,6 +299,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
 
     /**
      * Set the provider hosting this view, if applicable.
+     *
      * @hide Internal use only
      */
     public void setProvider(ActionProvider provider) {
@@ -334,7 +333,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
         getViewTreeObserver().addOnGlobalLayoutListener(mOnGlobalLayoutListener);
 
         final boolean defaultActivityButtonShown =
-            mDefaultActivityButton.getVisibility() == VISIBLE;
+                mDefaultActivityButton.getVisibility() == VISIBLE;
 
         final int activityCount = mAdapter.getActivityCount();
         final int maxActivityCountOffset = defaultActivityButtonShown ? 1 : 0;
@@ -554,7 +553,8 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
             switch (itemViewType) {
                 case ActivityChooserViewAdapter.ITEM_VIEW_TYPE_FOOTER: {
                     showPopupUnchecked(ActivityChooserViewAdapter.MAX_ACTIVITY_COUNT_UNLIMITED);
-                } break;
+                }
+                break;
                 case ActivityChooserViewAdapter.ITEM_VIEW_TYPE_ACTIVITY: {
                     dismissPopup();
                     if (mIsSelectingDefaultActivity) {
@@ -571,7 +571,8 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
                             mContext.startActivity(launchIntent);
                         }
                     }
-                } break;
+                }
+                break;
                 default:
                     throw new IllegalArgumentException();
             }
@@ -823,7 +824,7 @@ class ActivityChooserView extends ViewGroup implements ActivityChooserModelClien
         }
 
         public void setShowDefaultActivity(boolean showDefaultActivity,
-                boolean highlightDefaultActivity) {
+                                           boolean highlightDefaultActivity) {
             if (mShowDefaultActivity != showDefaultActivity
                     || mHighlightDefaultActivity != highlightDefaultActivity) {
                 mShowDefaultActivity = showDefaultActivity;

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Wifi Fixer for Android
-  ~     Copyright (C) 2010-2013  David Van de Ven
+  ~     Copyright (C) 2010-2014  David Van de Ven
   ~
   ~     This program is free software: you can redistribute it and/or modify
   ~     it under the terms of the GNU General Public License as published by
@@ -17,158 +18,160 @@
   ~     along with this program.  If not, see http://www.gnu.org/licenses
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/aboutview"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="center"
-    android:orientation="vertical" >
-	<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
-        android:orientation="vertical" >
+              android:id="@+id/aboutview"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip"
+            android:orientation="vertical">
 
         <TextView
-            android:id="@+id/widget39"
-            style="@style/Wftext.header"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:text="@string/app_name" >
+                android:id="@+id/widget39"
+                style="@style/Wftext.header"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:text="@string/app_name">
         </TextView>
 
         <RelativeLayout
-            android:id="@+id/logowrap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="right" >
-
-            <ImageView
-                android:id="@+id/wficon"
+                android:id="@+id/logowrap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
-                android:paddingBottom="@dimen/service_wficon_padding_bottom"
-                android:src="@drawable/icon" >
+                android:gravity="right">
+
+            <ImageView
+                    android:id="@+id/wficon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingBottom="@dimen/service_wficon_padding_bottom"
+                    android:src="@drawable/icon">
             </ImageView>
 
             <TextView
-                android:id="@+id/version"
-                style="@style/Wftext"
-                android:layout_width="@dimen/service_version_layout_width"
-                android:layout_gravity="right"
-                android:layout_marginLeft="@dimen/service_version_margin_left"
-                android:layout_toRightOf="@+id/wficon"
-                android:paddingBottom="@dimen/service_version_padding_bottom"
-                android:paddingTop="@dimen/service_version_padding_top"
-                android:text="@string/error" >
+                    android:id="@+id/version"
+                    style="@style/Wftext"
+                    android:layout_width="@dimen/service_version_layout_width"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="@dimen/service_version_margin_left"
+                    android:layout_toRightOf="@+id/wficon"
+                    android:paddingBottom="@dimen/service_version_padding_bottom"
+                    android:paddingTop="@dimen/service_version_padding_top"
+                    android:text="@string/error">
             </TextView>
-            
+
         </RelativeLayout>
-        
+
     </LinearLayout>
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="0px"
-        android:layout_weight="1.0"
-        android:gravity="center"
-        android:padding="20dp" >
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="0px"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:padding="20dp">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-             <TextView
-                style="@style/Wftext.header"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dip"
-                android:text="Wifi Fixer for Android" />
-
-             <TextView
-                style="@style/Wftext"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dip"
-                android:text="Copyright (C) 2010-2013  David Van de Ven"/>
+                android:orientation="vertical">
 
             <TextView
-                style="@style/Wftext"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dip"
-                android:text="This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version." />
-
-             <TextView
-                style="@style/Wftext"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dip"
-                android:text="This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."/>
-
-             <TextView
-                style="@style/Wftext"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:paddingTop="10dip"
-                android:text="You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses"/>
+                    style="@style/Wftext.header"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dip"
+                    android:text="Wifi Fixer for Android"/>
 
             <TextView
-                style="@style/Wftext.large"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dip"
-                android:text="Wifi Fixer works around several problems with Android wifi.\n"/>
+                    style="@style/Wftext"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dip"
+                    android:text="Copyright (C) 2010-2013  David Van de Ven"/>
+
+            <TextView
+                    style="@style/Wftext"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dip"
+                    android:text="This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version."/>
+
+            <TextView
+                    style="@style/Wftext"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dip"
+                    android:text="This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."/>
+
+            <TextView
+                    style="@style/Wftext"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:paddingTop="10dip"
+                    android:text="You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses"/>
+
+            <TextView
+                    style="@style/Wftext.large"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dip"
+                    android:text="Wifi Fixer works around several problems with Android wifi.\n"/>
 
 
             <TextView
-                style="@style/Wftext.header"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dip"
-                android:text="Wifi Fixer should help immediately, but may need preferences adjusted to work best.\n\nPlease read the documentation for specifics.\n" />
-			<TextView
-                style="@style/Wftext.header"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dip"
-                android:text="It is not possible to prevent disconnections or low signal in an app.  Wifi Fixer will detect and attempt recovery when these problems are detected.\nSome tuning can be done to the Wifi Acess Point's settings to minimize disconnections.  Please refer to the in-app help documents.\n" />
-            
-            <TextView
-                style="@style/Wftext.header"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="web|email"
-                android:paddingTop="10dip"
-                android:text="For problems or comments:\n email zanshin.g1@gmail.com\nwith specific details, or use the in-app logging feature.\n\nVisit the development blog\n at http://wififixer.wordpress.com\n" />
+                    style="@style/Wftext.header"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dip"
+                    android:text="Wifi Fixer should help immediately, but may need preferences adjusted to work best.\n\nPlease read the documentation for specifics.\n"/>
 
             <TextView
-                style="@style/Wftext.large"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dip"
-                android:text="Wifi Fixer is an Open Source project" />
+                    style="@style/Wftext.header"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dip"
+                    android:text="It is not possible to prevent disconnections or low signal in an app.  Wifi Fixer will detect and attempt recovery when these problems are detected.\nSome tuning can be done to the Wifi Acess Point's settings to minimize disconnections.  Please refer to the in-app help documents.\n"/>
 
             <TextView
-                style="@style/Wftext.header"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:paddingTop="10dip"
-                android:text="Visit the git repository at\nhttp://github.com/Zanshinmu/Wifi-Fixer\n" />
+                    style="@style/Wftext.header"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web|email"
+                    android:paddingTop="10dip"
+                    android:text="For problems or comments:\n email zanshin.g1@gmail.com\nwith specific details, or use the in-app logging feature.\n\nVisit the development blog\n at http://wififixer.wordpress.com\n"/>
 
             <TextView
-                style="@style/Wftext.large"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dip"
-                android:text="Privacy Disclosure:" />
+                    style="@style/Wftext.large"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dip"
+                    android:text="Wifi Fixer is an Open Source project"/>
+
+            <TextView
+                    style="@style/Wftext.header"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:paddingTop="10dip"
+                    android:text="Visit the git repository at\nhttp://github.com/Zanshinmu/Wifi-Fixer\n"/>
+
+            <TextView
+                    style="@style/Wftext.large"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dip"
+                    android:text="Privacy Disclosure:"/>
 
             <TextView
                     style="@style/Wftext.header"
@@ -180,17 +183,17 @@
 
             <TextView
                     style="@style/Wftext.header"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dip"
-                android:text="Information sent via email for support purposes is never shared with any third party.  Your email address will never be used for any purpose other than product support.\n" />
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dip"
+                    android:text="Information sent via email for support purposes is never shared with any third party.  Your email address will never be used for any purpose other than product support.\n"/>
 
             <TextView
-                style="@style/Wftext.header"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dip"
-                android:text="Logging stores some personal information: specifically current timezone and SSID of configured access points and scanned SSIDs during connection.   Logging is not enabled by default.  The log will only be enabled and sent when explicitly requested.\n\nStack traces are collected upon an uncaught exception and added to the log.  Stack traces contain no identifying information." />
+                    style="@style/Wftext.header"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dip"
+                    android:text="Logging stores some personal information: specifically current timezone and SSID of configured access points and scanned SSIDs during connection.   Logging is stored securely.  The log will only be transmitted when explicitly requested.\n\nStack traces are collected upon an uncaught exception and added to the log.  Stack traces contain no identifying information."/>
         </LinearLayout>
     </ScrollView>
 

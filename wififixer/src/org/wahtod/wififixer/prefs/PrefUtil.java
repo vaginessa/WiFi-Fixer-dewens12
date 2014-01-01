@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2013  David Van de Ven
+ *     Copyright (C) 2010-2014  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -416,7 +416,7 @@ public class PrefUtil {
 
     void handlePrefChange(Pref p, boolean flagval) {
         /*
-		 * Before value changes from loading
+         * Before value changes from loading
 		 */
         preValChanged(p);
 		/*

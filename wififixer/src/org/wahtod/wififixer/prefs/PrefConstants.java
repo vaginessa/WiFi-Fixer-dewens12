@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2013  David Van de Ven
+ *     Copyright (C) 2010-2014  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ public class PrefConstants {
     public static final String SERVICEWARNED = "SWARNED";
 
 	/*
-	 * PrefsList enum
+     * PrefsList enum
 	 */
 
     public static enum Pref {

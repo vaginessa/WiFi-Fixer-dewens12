@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-		    Wifi Fixer for Android
-    Copyright (C) 2010-2013  David Van de Ven
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see http://www.gnu.org/licenses
--->
+  ~ Wifi Fixer for Android
+  ~     Copyright (C) 2010-2014  David Van de Ven
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see http://www.gnu.org/licenses
+  -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:summary="Logging Preferences"
-    android:title="Logging" >
+                  android:summary="Logging Preferences"
+                  android:title="Logging">
 
-    <PreferenceCategory android:title="Logging" >
+    <PreferenceCategory android:title="Logging">
         <CheckBoxPreference
-            android:key="SLOG"
-            android:summary="@string/SLOG_summary"
-            android:title="@string/SLOG_title" />
+                android:key="SLOG"
+                android:summary="@string/SLOG_summary"
+                android:title="@string/SLOG_title"/>
 
         <Preference
-            android:summary="@string/sendlog_summary"
-            android:title="@string/sendlog_title" >
+                android:summary="@string/sendlog_summary"
+                android:title="@string/sendlog_title">
             <intent
-                android:targetClass="org.wahtod.wififixer.ui.MainActivity"
-                android:targetPackage="org.wahtod.wififixer" >
+                    android:targetClass="org.wahtod.wififixer.ui.MainActivity"
+                    android:targetPackage="org.wahtod.wififixer">
                 <extra
-                    android:name="SEND_LOG"
-                    android:value="pi" >
+                        android:name="SEND_LOG"
+                        android:value="pi">
                 </extra>
             </intent>
         </Preference>
         <Preference
-            android:summary="@string/deletelog_summary"
-            android:title="@string/deletelog_title" >
+                android:summary="@string/deletelog_summary"
+                android:title="@string/deletelog_title">
             <intent
-                android:targetClass="org.wahtod.wififixer.ui.MainActivity"
-                android:targetPackage="org.wahtod.wififixer" >
+                    android:targetClass="org.wahtod.wififixer.ui.MainActivity"
+                    android:targetPackage="org.wahtod.wififixer">
                 <extra
-                    android:name="DELETE_LOG"
-                    android:value="pi" >
+                        android:name="DELETE_LOG"
+                        android:value="pi">
                 </extra>
             </intent>
         </Preference>

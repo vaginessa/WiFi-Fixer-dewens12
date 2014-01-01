@@ -1,17 +1,19 @@
 /*
- * Copyright (C) 2006 The Android Open Source Project
+ * Wifi Fixer for Android
+ *     Copyright (C) 2010-2014  David Van de Ven
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package com.actionbarsherlock.internal.widget;
@@ -52,7 +54,9 @@ public abstract class IcsAbsSpinner extends IcsAdapterView<SpinnerAdapter> {
     final RecycleBin mRecycler = new RecycleBin();
     private DataSetObserver mDataSetObserver;
 
-    /** Temporary frame to hold a child View's frame rectangle */
+    /**
+     * Temporary frame to hold a child View's frame rectangle
+     */
     private Rect mTouchFrame;
 
     public IcsAbsSpinner(Context context) {
@@ -97,6 +101,7 @@ public abstract class IcsAbsSpinner extends IcsAdapterView<SpinnerAdapter> {
      * The Adapter is used to provide the data which backs this Spinner.
      * It also provides methods to transform spinner items based on their position
      * relative to the selected item.
+     *
      * @param adapter The SpinnerAdapter to use for this Spinner
      */
     @Override
@@ -157,7 +162,7 @@ public abstract class IcsAbsSpinner extends IcsAdapterView<SpinnerAdapter> {
 
     /**
      * @see android.view.View#measure(int, int)
-     *
+     * <p/>
      * Figure out the dimensions of this Spinner. The width comes from
      * the widthMeasureSpec as Spinnners can't have their width set to
      * UNSPECIFIED. The height is based on the height of the selected item
@@ -294,13 +299,12 @@ public abstract class IcsAbsSpinner extends IcsAdapterView<SpinnerAdapter> {
      * Makes the item at the supplied position selected.
      *
      * @param position Position to select
-     * @param animate Should the transition be animated
-     *
+     * @param animate  Should the transition be animated
      */
     void setSelectionInt(int position, boolean animate) {
         if (position != mOldSelectedPosition) {
             mBlockLayoutRequests = true;
-            int delta  = position - mSelectedPosition;
+            int delta = position - mSelectedPosition;
             setNextSelectedPositionInt(position);
             layout(delta, animate);
             mBlockLayoutRequests = false;
@@ -347,7 +351,7 @@ public abstract class IcsAbsSpinner extends IcsAdapterView<SpinnerAdapter> {
      * @param x X in local coordinate
      * @param y Y in local coordinate
      * @return The position of the item which contains the specified point, or
-     *         {@link #INVALID_POSITION} if the point does not intersect an item.
+     * {@link #INVALID_POSITION} if the point does not intersect an item.
      */
     public int pointToPosition(int x, int y) {
         Rect frame = mTouchFrame;

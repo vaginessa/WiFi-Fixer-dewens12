@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2013  David Van de Ven
+ *     Copyright (C) 2010-2014  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -109,7 +109,7 @@ public class MyPrefs extends PrefUtil {
 
             case STATENOT_KEY:
                     /*
-					 * Notify WFMonitor instance to create/destroy ongoing
+                     * Notify WFMonitor instance to create/destroy ongoing
 					 * status notification
 					 */
                 if (getFlag(PrefConstants.Pref.STATENOT_KEY))
