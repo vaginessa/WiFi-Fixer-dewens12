@@ -212,7 +212,7 @@ public class KnownNetworksFragment extends SherlockFragment {
 
             TextView ssid = (TextView) v.findViewById(R.id.ssid);
             mSSID = ssid.getText().toString();
-            if (mActionMode != null || (PrefUtil.getFlag(PrefConstants.Pref.ATT_BLACKLIST))
+            if (mActionMode != null || (PrefUtil.readBoolean(getActivity(), PrefConstants.Pref.ATT_BLACKLIST.key()))
                     && mSSID.equals(ATTWIFI)) {
                 return false;
             }
