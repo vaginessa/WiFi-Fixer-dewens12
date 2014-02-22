@@ -240,7 +240,8 @@ public class Hostup {
     public void finish() {
         icmpHandler.get().getLooper().quit();
         httpHandler.get().getLooper().quit();
-        masterThread.clear();
+        if (masterThread != null)
+            masterThread.clear();
         _nethandler.get().getLooper().quit();
         icmpHandler = null;
         httpHandler = null;
