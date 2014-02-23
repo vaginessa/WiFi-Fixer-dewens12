@@ -232,7 +232,7 @@ public class Hostup {
     @SuppressWarnings("deprecation")
     private void disableConnectionReuse() {
         // Work around pre-Froyo bugs in HTTP connection reuse.
-        if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.FROYO) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
             System.setProperty("http.keepAlive", "false");
         }
     }
