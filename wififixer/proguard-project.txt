@@ -34,6 +34,7 @@
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
 -verbose
+-dontwarn com.actionbarsherlock.internal.**
 
 -keepattributes SourceFile,LineNumberTable,*Attributes*,*Annotation*
 

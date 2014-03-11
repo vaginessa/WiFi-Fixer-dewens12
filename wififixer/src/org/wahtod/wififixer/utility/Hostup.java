@@ -207,8 +207,8 @@ public class Hostup {
             info.append(context.getString(R.string.malformed_url_exception));
         } catch (IOException e) {
             info.append(context.getString(R.string.i_o_exception));
-        }catch (NullPointerException e){
-            info.append("NullPointer Exception");
+        } catch (NullPointerException e) {
+            info.append("NullPointerException");
         }
 
         if (code == HttpURLConnection.HTTP_OK

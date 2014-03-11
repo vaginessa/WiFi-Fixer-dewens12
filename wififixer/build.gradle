@@ -22,10 +22,7 @@
 
 buildscript {
     repositories {
-        mavenCentral()
-        maven {
-            url "https://oss.sonatype.org/content/repositories/snapshots"
-        }
+        maven { url 'http://repo1.maven.org/maven2' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.7.+'
@@ -33,8 +30,12 @@ buildscript {
 }
 apply plugin: 'android'
 
+repositories{
+    mavenCentral()
+}
+
 dependencies {
-    compile project(":dependencies:actionbarsherlock")
+    compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
     compile 'com.android.support:support-v4:18.0.+'
 }
 
