@@ -2,7 +2,7 @@
 
 <!--
   ~ Wifi Fixer for Android
-  ~     Copyright (C) 2010-2013  David Van de Ven
+  ~     Copyright (C) 2010-2014  David Van de Ven
   ~
   ~     This program is free software: you can redistribute it and/or modify
   ~     it under the terms of the GNU General Public License as published by
@@ -128,7 +128,6 @@
     <string name="cancel_button">Cancel</string>
     <string name="null_ssid">Ninguno</string>
     <string name="http">http://</string>
-    <string name="writing_to_log">Capturando a Registro</string>
     <string name="k">KB</string>
     <string name="strict_mode_extant">Modo Estricto Existente</string>
     <string name="strict_mode_unavailable">Modo Estricto Strict Mode No Disponible</string>
@@ -141,7 +140,6 @@
     <string name="knownnetworks_fragment_header">Redes Conocidas</string>
     <string name="scanfragment_header">Redes Cercanas</string>
     <string name="open_network">Abierta</string>
-    <string name="logservice">LogService</string>
     <string name="xml">xml</string>
     <string name="SCREEN_summary">El servicio chequea la red cuando la pantalla esta apagada: usara
         un poco mas de bateria
@@ -203,9 +201,6 @@
     <string name="ms">ms</string>
     <string name="later_button">Luego</string>
     <string name="scan_failed">Busqueda Fallida: Reseteando Wifi</string>
-    <string name="forcephone_title">Forzar Interfaz para telefono</string>
-    <string name="forcephone_key">ForzarMovil</string>
-    <string name="forcephone_summary">Habilita si ves la interfaz para tablet en tu telefono.</string>
     <string name="scan_bounce">Patron de falla Supplicant detectado:Reseteando</string>
     <string name="wifimanager_scan">Solicitando busqueda al WifiManager</string>
     <string name="issue_report_header">Reporte de Incidencia</string>
@@ -216,8 +211,6 @@
     <string name="priority">Prioridad:</string>
     <string name="error">error</string>
     <string name="log">Registro</string>
-    <string name="service_status_summary">Muestra informacion detallada de WifiFixerService</string>
-    <string name="service_status_title">Status del Servicio</string>
     <string name="sendlog_summary">Enviar registro al Desarrollador</string>
     <string name="sendlog_title">Enviar Registro</string>
     <string name="deletelog_summary">Borrar registro de la tarjeta SD</string>

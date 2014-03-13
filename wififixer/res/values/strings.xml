@@ -138,7 +138,7 @@
     <string name="knownnetworks_fragment_header">Known Networks</string>
     <string name="scanfragment_header">Local Networks</string>
     <string name="open_network">Open</string>
-    <string name="resource">resource</string>
+    <string name="resource" translatable="false">resource</string>
     <string name="xml">xml</string>
     <string name="SCREEN_summary">Service checks network when screen is off: will use
         slightly more battery
