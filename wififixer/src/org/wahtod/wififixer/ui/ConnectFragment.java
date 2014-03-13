@@ -24,7 +24,6 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,7 +43,6 @@ import org.wahtod.wififixer.utility.StringUtil;
 import org.wahtod.wififixer.utility.WFScanResult;
 
 import java.lang.reflect.Field;
-import java.util.List;
 
 public class ConnectFragment extends SherlockFragment implements OnClickListener {
     public static final String TAG = "SFFJSHFTWFW";
@@ -125,25 +123,24 @@ public class ConnectFragment extends SherlockFragment implements OnClickListener
             wf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
             return wf;
         }
+
+        wf.status = WifiConfiguration.Status.ENABLED;
         wf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-        wf.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-        wf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
-        wf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
-        wf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-        wf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-        if (mNetwork.capabilities.contains(WEP)) {
+        if (mNetwork.capabilities.contains(WPA)) {
+            wf.preSharedKey = StringUtil.addQuotes(password);
+            wf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+            wf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+            wf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+            wf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+            wf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+        } else if (mNetwork.capabilities.contains(WEP)) {
+            wf.wepKeys[0] = StringUtil.addQuotes(password);
+            wf.wepTxKeyIndex = 0;
+            wf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
             wf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
             wf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
-            wf.wepKeys[0] = StringUtil.addQuotes(password);
-        } else if (mNetwork.capabilities.contains(WPA)) {
-            wf.preSharedKey = StringUtil.addQuotes(password);
         }
-        List<WifiConfiguration> configs = PrefUtil
-                .getWifiManager(getActivity()).getConfiguredNetworks();
-        for (WifiConfiguration w : configs) {
-            Log.i(w.SSID, w.toString());
-        }
-        Log.i(wf.SSID, wf.toString());
+
         return wf;
     }
 
@@ -163,7 +160,8 @@ public class ConnectFragment extends SherlockFragment implements OnClickListener
     private void notifyConnecting() {
         NotifUtil.showToast(getActivity(),
                 getActivity().getString(R.string.connecting_to_network)
-                        + mNetwork.SSID);
+                        + mNetwork.SSID
+        );
     }
 
     public void onClick(View v) {
