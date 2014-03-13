@@ -35,7 +35,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.ui.MainActivity;
 import org.wahtod.wififixer.widget.WidgetReceiver;
 
@@ -43,7 +42,6 @@ public class NotifUtil {
     public static final int STATNOTIFID = 2392;
     public static final int LOGNOTIFID = 2494;
     public static final String VSHOW_TAG = "VSHOW";
-    public static final String LOG_TAG = "LOG";
     public static final String STAT_TAG = "STATNOTIF";
     /*
      * for SSID status in status notification
@@ -77,8 +75,9 @@ public class NotifUtil {
         out.iconLevel = in.getSignal();
         out.setLatestEventInfo(ctxt,
                 ctxt.getString(R.string.app_name), in.getSSID()
-                + NotifUtil.SEPARATOR + in.getStatus(),
-                PendingIntent.getActivity(ctxt, 0, intent, 0));
+                        + NotifUtil.SEPARATOR + in.getStatus(),
+                PendingIntent.getActivity(ctxt, 0, intent, 0)
+        );
 
         return out;
     }
@@ -109,8 +108,10 @@ public class NotifUtil {
                     PendingIntent.FLAG_UPDATE_CURRENT));
             mStatusBuilder.addAction(R.drawable.wifi, ctxt.getString(R.string.wifi),
                     PendingIntent.getBroadcast(ctxt, 0, new Intent(
-                            IntentConstants.ACTION_WIFI_CHANGE),
-                            PendingIntent.FLAG_UPDATE_CURRENT));
+                                    IntentConstants.ACTION_WIFI_CHANGE),
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+            );
         }
         mStatusBuilder.setContentTitle(m.getSSID());
         mStatusBuilder.setSmallIcon(R.drawable.notifsignal, m.getSignal());
@@ -121,33 +122,6 @@ public class NotifUtil {
          * Fire the notification
 		 */
         nm.notify(NotifUtil.STAT_TAG, NotifUtil.STATNOTIFID, build(ctxt, mStatusBuilder, in));
-    }
-
-    public static void addLogNotif(Context ctxt, boolean flag) {
-
-        if (!flag) {
-            cancel(ctxt, LOG_TAG, NotifUtil.LOGNOTIFID);
-            return;
-        }
-        if (mLogBuilder == null) {
-            mLogBuilder = new NotificationCompat.Builder(ctxt);
-            Intent intent = new Intent(ctxt, MainActivity.class).setAction(
-                    Intent.ACTION_MAIN).setFlags(
-                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-            mLogBuilder.setContentIntent(PendingIntent.getActivity(ctxt, 0, intent, 0));
-            mLogBuilder.setOngoing(true);
-            mLogBuilder.setOnlyAlertOnce(true);
-            mLogBuilder.setOngoing(true);
-            mLogBuilder.setSmallIcon(R.drawable.logging_enabled);
-            mLogBuilder.setContentTitle(ctxt.getString(R.string.logservice));
-        }
-        mLogBuilder.setContentText(getLogString(ctxt));
-
-		/*
-         * Fire the notification
-		 */
-        notify(ctxt, NotifUtil.LOGNOTIFID, LOG_TAG,
-                mLogBuilder.build());
     }
 
     protected static void notify(Context context, int id, String tag, Notification n) {
@@ -234,16 +208,6 @@ public class NotifUtil {
                 break;
         }
         return signal;
-    }
-
-    public static String getLogString(Context context) {
-        StringBuilder logstring = new StringBuilder(
-                context.getString(R.string.writing_to_log));
-        logstring.append(NotifUtil.SEPARATOR);
-        logstring.append(String.valueOf(VersionedFile.getFile(context,
-                LogUtil.LOGFILE).length() / 1024));
-        logstring.append(context.getString(R.string.k));
-        return logstring.toString();
     }
 
     public static void showToast(Context context, int resID) {
