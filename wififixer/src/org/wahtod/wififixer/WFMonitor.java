@@ -107,7 +107,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 _wfmonitor
                         .clearConnectedStatus(
                                 ctxt.get().getString(
-                                        R.string.wifi_not_current_network));
+                                        R.string.wifi_not_current_network)
+                        );
             } else {
 
                 isUp = networkUp(ctxt.get());
@@ -140,7 +141,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
      */
     protected static Runnable rReconnect = new Runnable() {
         public void run() {
-            if (!PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled()) {
+            if (!AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled()) {
                 LogUtil.log(ctxt.get(), R.string.wifi_off_aborting_reconnect);
                 return;
             }
@@ -149,7 +150,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 pendingreconnect = false;
             } else {
                 mRepairLevel = W_REASSOCIATE;
-                PrefUtil.getWifiManager(ctxt.get()).startScan();
+                AsyncWifiManager.get(ctxt.get()).startScan();
                 LogUtil.log(ctxt.get(),
                         R.string.exiting_supplicant_fix_thread_starting_scan);
             }
@@ -160,7 +161,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
      */
     protected static Runnable rRepair = new Runnable() {
         public void run() {
-            if (!PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled()) {
+            if (!AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled()) {
                 LogUtil.log(ctxt.get(), R.string.wifi_off_aborting_repair);
                 return;
             }
@@ -201,7 +202,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 if (shouldManage(ctxt.get())) {
                     // Check Supplicant
                     if (getisWifiEnabled(ctxt.get(), false)
-                            && !PrefUtil.getWifiManager(ctxt.get()).pingSupplicant()) {
+                            && !AsyncWifiManager.getWifiManager(ctxt.get()).pingSupplicant()) {
                         LogUtil.log(ctxt.get(),
                                 R.string.supplicant_nonresponsive_toggling_wifi);
                         toggleWifi();
@@ -225,7 +226,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
                 case W_REASSOCIATE:
                     // Let's try to reassociate first..
-                    PrefUtil.getWifiManager(ctxt.get()).reassociate();
+                    AsyncWifiManager.get(ctxt.get()).reassociate();
                     /*
                      * Schedule network check to verify reassociate
                      */
@@ -238,7 +239,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
                 case W_RECONNECT:
                     // Ok, now force reconnect..
-                    PrefUtil.getWifiManager(ctxt.get()).reconnect();
+                    AsyncWifiManager.get(ctxt.get()).reconnect();
                     LogUtil.log(ctxt.get(), R.string.reconnecting);
                     mRepairLevel++;
                     notifyWrap(ctxt.get(),
@@ -247,7 +248,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
                 case W_REPAIR:
                     // Start Scan
-                    PrefUtil.getWifiManager(ctxt.get()).disconnect();
+                    AsyncWifiManager.get(ctxt.get()).disconnect();
                 /*
                  * Reset state
 				 */
@@ -260,7 +261,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
             LogUtil.log(ctxt.get(),
                     new StringBuilder(ctxt.get().getString(
                             R.string.fix_algorithm)).append(mRepairLevel)
-                            .toString());
+                            .toString()
+            );
         }
     };
     /*
@@ -428,7 +430,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
             return;
         if (network.priority > -1) {
             network.priority--;
-            PrefUtil.getWifiManager(context).updateNetwork(network);
+            AsyncWifiManager.get(context).updateNetwork(network);
             StringBuilder out = new StringBuilder(
                     (context.getString(R.string.demoting_network)));
             out.append(network.SSID);
@@ -439,12 +441,13 @@ public class WFMonitor implements OnScreenStateChangedListener {
             LogUtil.log(context,
                     new StringBuilder(context
                             .getString(R.string.network_at_priority_floor))
-                            .append(network.SSID).toString());
+                            .append(network.SSID).toString()
+            );
         }
     }
 
     private static void fixDisabledNetworks(Context context) {
-        List<WifiConfiguration> wflist = PrefUtil.getWifiManager(context).getConfiguredNetworks();
+        List<WifiConfiguration> wflist = AsyncWifiManager.getWifiManager(context).getConfiguredNetworks();
         if (wflist == null)
             return;
         for (WifiConfiguration wfresult : wflist) {
@@ -459,11 +462,11 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 /*
                  * bugged, enable
 				 */
-                PrefUtil.getWifiManager(context)
+                AsyncWifiManager.get(context)
                         .enableNetwork(wfresult.networkId, false);
                 LogUtil.log(context,
                         (context.getString(R.string.reenablenetwork) + wfresult.SSID));
-                PrefUtil.getWifiManager(context).saveConfiguration();
+                AsyncWifiManager.get(context).saveConfiguration();
             }
         }
     }
@@ -527,7 +530,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		/*
          * Acquire scan results
 		 */
-        List<ScanResult> scanResults = PrefUtil.getWifiManager(ctxt.get())
+        List<ScanResult> scanResults = AsyncWifiManager.getWifiManager(ctxt.get())
                 .getScanResults();
         /*
          * Catch null if scan results fires after wifi disabled or while wifi is
@@ -540,7 +543,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
         /*
          * Known networks from supplicant.
 		 */
-        List<WifiConfiguration> wifiConfigs = PrefUtil.getWifiManager(ctxt.get())
+        List<WifiConfiguration> wifiConfigs = AsyncWifiManager.getWifiManager(ctxt.get())
                 .getConfiguredNetworks();
         /*
          * Iterate the known networks over the scan results, adding found known
@@ -587,8 +590,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 }
             }
         }
-		/*
-		 * Prune non-scanned BSSIDs
+        /*
+         * Prune non-scanned BSSIDs
 		 */
         List<WFConfig> toremove = new ArrayList<WFConfig>();
         for (WFConfig network : _wfmonitor.knownbysignal) {
@@ -608,7 +611,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
         LogUtil.log(context,
                 new StringBuilder(context.getString(R.string.number_of_known))
                         .append(String.valueOf(_wfmonitor.knownbysignal.size()))
-                        .toString());
+                        .toString()
+        );
 		/*
 		 * Sort by ScanResult.level which is signal
 		 */
@@ -636,7 +640,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private static int getNetworkID() {
-        WifiInfo wi = PrefUtil.getWifiManager(ctxt.get()).getConnectionInfo();
+        WifiInfo wi = AsyncWifiManager.getWifiManager(ctxt.get()).getConnectionInfo();
         if (wi != null)
             return wi.getNetworkId();
         else
@@ -645,7 +649,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     private static WifiConfiguration getNetworkByNID(Context context,
                                                      int network) {
-        List<WifiConfiguration> configs = PrefUtil.getWifiManager(context)
+        List<WifiConfiguration> configs = AsyncWifiManager.getWifiManager(context)
                 .getConfiguredNetworks();
         if (configs != null) {
             for (WifiConfiguration w : configs) {
@@ -659,7 +663,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static String getSSID() {
         String s = null;
         try {
-            s = (PrefUtil.getWifiManager(ctxt.get()).getConnectionInfo().getSSID());
+            s = (AsyncWifiManager.getWifiManager(ctxt.get()).getConnectionInfo().getSSID());
         } catch (NullPointerException e) {
             /*
              * whoops, no connectioninfo, or WifiManager is null
@@ -672,7 +676,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private static SupplicantState getSupplicantState() {
-        WifiInfo i = PrefUtil.getWifiManager(ctxt.get()).getConnectionInfo();
+        WifiInfo i = AsyncWifiManager.getWifiManager(ctxt.get()).getConnectionInfo();
         if (i != null)
             return i.getSupplicantState();
         else
@@ -733,7 +737,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		/*
 		 * Caches DHCP gateway IP for ICMP check
 		 */
-        DhcpInfo info = PrefUtil.getWifiManager(ctxt.get()).getDhcpInfo();
+        DhcpInfo info = AsyncWifiManager.getWifiManager(ctxt.get()).getDhcpInfo();
         _wfmonitor.accesspointIP = (Formatter.formatIpAddress(info.gateway));
         LogUtil.log(context, new StringBuilder(context.getString(R.string.cached_ip))
                 .append(_wfmonitor.accesspointIP).toString());
@@ -761,8 +765,9 @@ public class WFMonitor implements OnScreenStateChangedListener {
             NotifUtil.show(context,
                     context.getString(R.string.wifi_connection_problem)
                             + string, string, ERR_NOTIF, PendingIntent
-                    .getActivity(context, 0, new Intent(context,
-                            MainActivity.class), 0));
+                            .getActivity(context, 0, new Intent(context,
+                                    MainActivity.class), 0)
+            );
         }
     }
 
@@ -784,16 +789,15 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		/*
 		 * Nexus One Sleep Fix duplicating widget function
 		 */
-        if (PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled()
+        if (AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled()
                 && !_wfmonitor.screenstate) {
             toggleWifi();
         }
     }
 
-    public static boolean removeNetwork(Context context, int network) {
-        boolean state = PrefUtil.getWifiManager(context).removeNetwork(network);
-        PrefUtil.getWifiManager(context).saveConfiguration();
-        return state;
+    public static void removeNetwork(Context context, int network) {
+        AsyncWifiManager.get(context).removeNetwork(network);
+        AsyncWifiManager.get(context).saveConfiguration();
     }
 
     private static void restoreNetworkPriority(Context context,
@@ -801,7 +805,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
         WifiConfiguration network = getNetworkByNID(context, n);
         if (network != null) {
             network.priority = 2;
-            PrefUtil.getWifiManager(context).updateNetwork(network);
+            AsyncWifiManager.get(context).updateNetwork(network);
         }
     }
 
@@ -820,7 +824,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     private static boolean statNotifCheck() {
         return _wfmonitor.screenstate
-                && PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled();
+                && AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled();
     }
 
     private static boolean supplicantInterruptCheck(Context context) {
@@ -903,7 +907,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
         /*
          * Set current wifi radio state
 		 */
-        _wfmonitor.wifistate = PrefUtil.getWifiManager(context).isWifiEnabled();
+        _wfmonitor.wifistate = AsyncWifiManager.getWifiManager(context).isWifiEnabled();
         if (_wfmonitor.wifistate)
             enforceAttBlacklistState(context);
 
@@ -976,11 +980,12 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 StatusMessage.getNew().setSSID(StatusMessage.EMPTY)
                         .setSignal(0).setStatus(state)
                         .setLinkSpeed("0")
-                        .setShow(1));
+                        .setShow(1)
+        );
     }
 
     private void checkSignal(Context context) {
-        WifiInfo ci = PrefUtil.getWifiManager(context).getConnectionInfo();
+        WifiInfo ci = AsyncWifiManager.getWifiManager(context).getConnectionInfo();
         int signal = ci.getRssi();
 
         if (statNotifCheck()) {
@@ -993,19 +998,20 @@ public class WFMonitor implements OnScreenStateChangedListener {
         if (_signalCheckTime < System.currentTimeMillis()
                 && Math.abs(signal) > Math.abs(getSignalThreshold(context))) {
             notifyWrap(context, context.getString(R.string.signal_poor));
-            PrefUtil.getWifiManager(ctxt.get()).startScan();
+            AsyncWifiManager.getWifiManager(ctxt.get()).startScan();
             _signalhopping = true;
             _signalCheckTime = System.currentTimeMillis()
                     + SIGNAL_CHECK_INTERVAL;
         }
         LogUtil.log(context,
                 (new StringBuilder(context.getString(R.string.current_dbm))
-                        .append(String.valueOf(signal))).toString());
+                        .append(String.valueOf(signal))).toString()
+        );
     }
 
     private void connectToAP(Context context, String ssid) {
 
-        if (!PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled())
+        if (!AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled())
             return;
 		/*
 		 * Back to explicit connection
@@ -1022,9 +1028,9 @@ public class WFMonitor implements OnScreenStateChangedListener {
         connectee = new WFConfig();
         connectee.wificonfig = target;
         target.status = WifiConfiguration.Status.CURRENT;
-        PrefUtil.getWifiManager(context).updateNetwork(target);
-        PrefUtil.getWifiManager(context).enableNetwork(target.networkId, false);
-        PrefUtil.getWifiManager(context).disconnect();
+        AsyncWifiManager.get(context).updateNetwork(target);
+        AsyncWifiManager.get(context).enableNetwork(target.networkId, false);
+        AsyncWifiManager.get(context).disconnect();
 		/*
 		 * Remove all posts to handler
 		 */
@@ -1032,13 +1038,14 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		/*
 		 * Connect
 		 */
-        PrefUtil.getWifiManager(ctxt.get()).enableNetwork(
+        AsyncWifiManager.get(ctxt.get()).enableNetwork(
                 connectee.wificonfig.networkId, true);
 
         LogUtil.log(context,
                 new StringBuilder(context
                         .getString(R.string.connecting_to_network)).append(
-                        connectee.wificonfig.SSID).toString());
+                        connectee.wificonfig.SSID).toString()
+        );
     }
 
     private int connectToBest(Context context) {
@@ -1127,7 +1134,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 .equals(StringUtil.removeQuotes(ssid))) {
             LogUtil.log(ctxt.get(),
                     ctxt.get().getString(R.string.connnection_completed)
-                            + connectee.wificonfig.SSID);
+                            + connectee.wificonfig.SSID
+            );
         } else {
             LogUtil.log(ctxt.get(), R.string.connect_failed);
 
@@ -1151,7 +1159,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 */
         if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
             if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED) && !_connected) {
-                WifiInfo connectionInfo = PrefUtil.getWifiManager(ctxt.get())
+                WifiInfo connectionInfo = AsyncWifiManager.getWifiManager(ctxt.get())
                         .getConnectionInfo();
                 onNetworkConnected(connectionInfo);
             } else if (networkInfo.getState().equals(NetworkInfo.State.DISCONNECTED) && _connected)
@@ -1161,7 +1169,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     private void handleReassociateEvent() {
         if (getNetworkID() != -1) {
-            PrefUtil.getWifiManager(ctxt.get()).reassociate();
+            AsyncWifiManager.get(ctxt.get()).reassociate();
             LogUtil.log(ctxt.get(), R.string.repairing);
         } else
             NotifUtil.showToast(ctxt.get(), R.string.not_connected);
@@ -1256,7 +1264,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		/*
 		 * Sanity check
 		 */
-        if (!PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled())
+        if (!AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled())
             return;
         else if (_signalhopping) {
             _signalhopping = false;
@@ -1324,7 +1332,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private void handleSupplicantState(SupplicantState sState) {
-        if (!PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled())
+        if (!AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled())
             return;
 		/*
 		 * Status notification updating supplicant state
@@ -1339,7 +1347,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
         LogUtil.log(ctxt.get(),
                 new StringBuilder(ctxt.get().getString(
                         R.string.supplicant_state)).append(
-                        String.valueOf(sState)).toString());
+                        String.valueOf(sState)).toString()
+        );
 		/*
 		 * Supplicant State triggers
 		 */
@@ -1458,7 +1467,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
             LogUtil.log(ctxt.get(),
                     new StringBuilder(ctxt.get().getString(
                             R.string.not_managing_network)).append(getSSID())
-                            .toString());
+                            .toString()
+            );
 
 		/*
 		 * Log connection
@@ -1466,7 +1476,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
         LogUtil.log(ctxt.get(),
                 new StringBuilder(ctxt.get().getString(
                         R.string.connected_to_network)).append(getSSID())
-                        .toString());
+                        .toString()
+        );
     }
 
     private void onScreenOff() {
@@ -1596,7 +1607,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
             bestap = connectToBest(ctxt.get());
             LogUtil.log(ctxt.get(),
                     new StringBuilder(ctxt.get().getString(R.string.hopping))
-                            .append(String.valueOf(bestap)).toString());
+                            .append(String.valueOf(bestap)).toString()
+            );
             LogUtil.log(ctxt.get(), new StringBuilder(ctxt.get()
                     .getString(R.string.nid)).append(String.valueOf(lastAP))
                     .toString());
@@ -1635,7 +1647,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     public void startScan(boolean pending) {
         pendingscan = pending;
-        if (PrefUtil.getWifiManager(ctxt.get()).startScan()) {
+        if (AsyncWifiManager.getWifiManager(ctxt.get()).startScan()) {
             LogUtil.log(ctxt.get(), R.string.initiating_scan);
         } else {
 			/*

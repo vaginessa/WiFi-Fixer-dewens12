@@ -30,6 +30,7 @@ import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.MainActivity;
+import org.wahtod.wififixer.utility.AsyncWifiManager;
 import org.wahtod.wififixer.utility.LogUtil;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
@@ -131,7 +132,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
         else if (action.equals(IntentConstants.ACTION_WIFI_TOGGLE))
             ctxt.get().sendBroadcast(new Intent(WidgetReceiver.TOGGLE_WIFI));
         else if (action.equals(IntentConstants.ACTION_WIFI_CHANGE)) {
-            if (PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled()) {
+            if (AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled()) {
                 ctxt.get().sendBroadcast(new Intent(WidgetReceiver.WIFI_OFF));
             } else {
                 ctxt.get().sendBroadcast(new Intent(WidgetReceiver.WIFI_ON));

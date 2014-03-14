@@ -34,7 +34,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.*;
 
 import java.lang.ref.WeakReference;
@@ -103,7 +102,7 @@ public class StatusFragment extends Fragment {
      * Note that this WILL return a null String[] if called while wifi is off.
      */
     private static WifiInfo getNetwork(Context context) {
-        WifiManager wm = PrefUtil.getWifiManager(context);
+        WifiManager wm = AsyncWifiManager.getWifiManager(context);
         if (wm.isWifiEnabled()) {
             return wm.getConnectionInfo();
         } else

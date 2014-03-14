@@ -30,10 +30,7 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.EditorDetector;
 import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
-import org.wahtod.wififixer.utility.BroadcastHelper;
-import org.wahtod.wififixer.utility.LogUtil;
-import org.wahtod.wififixer.utility.NotifUtil;
-import org.wahtod.wififixer.utility.StringUtil;
+import org.wahtod.wififixer.utility.*;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -62,7 +59,6 @@ public class PrefUtil {
      */
     private static boolean[] keyVals;
     private static WeakReference<Context> context;
-    private static volatile WifiManager wm_;
     private static HashMap<String, int[]> netprefs;
     private static Handler receiverExecutor = new Handler() {
         @Override
@@ -135,7 +131,7 @@ public class PrefUtil {
     }
 
     public static String getnetworkSSID(Context context, int network) {
-        WifiManager wm = getWifiManager(context);
+        WifiManager wm = AsyncWifiManager.getWifiManager(context);
         if (!wm.isWifiEnabled())
             return context.getString(R.string.none);
         else
@@ -145,7 +141,7 @@ public class PrefUtil {
 
     public static String getSSIDfromNetwork(Context context,
                                             int network) {
-        List<WifiConfiguration> wifiConfigs = getWifiManager(context).getConfiguredNetworks();
+        List<WifiConfiguration> wifiConfigs = AsyncWifiManager.getWifiManager(context).getConfiguredNetworks();
         if (wifiConfigs != null) {
             for (WifiConfiguration w : wifiConfigs) {
                 if (w != null && w.networkId == network)
@@ -156,7 +152,7 @@ public class PrefUtil {
     }
 
     public static int getNid(Context context, String target) {
-        WifiManager wm = getWifiManager(context);
+        WifiManager wm = AsyncWifiManager.getWifiManager(context);
         String network = StringUtil.removeQuotes(target);
         List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
         if (wifiConfigs == null)
@@ -179,7 +175,7 @@ public class PrefUtil {
 
     public static WifiConfiguration getNetworkByNID(Context context,
                                                     int network) {
-        List<WifiConfiguration> configs = getWifiManager(context)
+        List<WifiConfiguration> configs = AsyncWifiManager.getWifiManager(context)
                 .getConfiguredNetworks();
         if (configs == null)
             return null;
@@ -279,20 +275,10 @@ public class PrefUtil {
                 "wifi_watchdog_poor_network_test_enabled", 0) == 1);
     }
 
-    public synchronized static WifiManager getWifiManager(Context context) {
-        /*
-         * Cache WifiManager
-		 */
-        if (wm_ == null) {
-            wm_ = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        }
-        return wm_;
-    }
-
     public static boolean getNetworkState(Context context,
                                           int network) {
         WifiConfiguration w = getNetworkByNID(context, network);
-        if (!getWifiManager(context).isWifiEnabled())
+        if (!AsyncWifiManager.getWifiManager(context).isWifiEnabled())
             return !readNetworkState(context, network);
         else return !(w != null && w.status == WifiConfiguration.Status.DISABLED);
     }
@@ -331,18 +317,18 @@ public class PrefUtil {
                 NetPref.DISABLED_KEY) == 1;
     }
 
-    public static boolean setNetworkState(Context context,
-                                          int network, boolean state) {
-        WifiManager w = getWifiManager(context);
+    public static void setNetworkState(Context context,
+                                       int network, boolean state) {
         if (!state)
-            w.enableNetwork(network, false);
+            AsyncWifiManager.get(context).enableNetwork(network, false);
         else
-            w.disableNetwork(network);
-        return w.saveConfiguration();
+            AsyncWifiManager.get(context).disableNetwork(network);
+
+        AsyncWifiManager.get(context).saveConfiguration();
     }
 
     public static void setBlackList(Context context, boolean state, boolean toast) {
-        if (!getWifiManager(context).isWifiEnabled())
+        if (!AsyncWifiManager.getWifiManager(context).isWifiEnabled())
             return;
         int network = getNid(context, "attwifi");
         if (network == -1) {
@@ -419,11 +405,11 @@ public class PrefUtil {
          * Before value changes from loading
 		 */
         preValChanged(p);
-		/*
-		 * Setting the value from prefs
+        /*
+         * Setting the value from prefs
 		 */
         setFlag(p, flagval);
-		/*
+        /*
 		 * After value changes from loading
 		 */
         postValChanged(p);

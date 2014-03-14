@@ -34,6 +34,7 @@ import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.AsyncWifiManager;
 import org.wahtod.wififixer.utility.LogUtil;
 
 import java.lang.ref.WeakReference;
@@ -181,7 +182,7 @@ public class QuickSettingsFragment extends BaseDialogFragment {
     public void onResume() {
         serviceCheckBox.setChecked(!PrefUtil.readBoolean(getActivity(),
                 Pref.DISABLE_KEY.key()));
-        wifiCheckBox.setChecked(PrefUtil.getWifiManager(getActivity())
+        wifiCheckBox.setChecked(AsyncWifiManager.getWifiManager(getActivity())
                 .isWifiEnabled());
         logCheckBox.setChecked(PrefUtil.readBoolean(getActivity(),
                 Pref.DEBUG_KEY.key()));

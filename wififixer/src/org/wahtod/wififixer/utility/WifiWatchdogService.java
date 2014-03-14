@@ -25,7 +25,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.MainActivity;
 
 /**
@@ -55,7 +54,7 @@ public class WifiWatchdogService extends Service {
 
         @Override
         public void run() {
-            PrefUtil.getWifiManager(WifiWatchdogService.this).setWifiEnabled(true);
+            AsyncWifiManager.get(WifiWatchdogService.this).setWifiEnabled(true);
         }
     };
 
@@ -67,7 +66,7 @@ public class WifiWatchdogService extends Service {
     }
 
     private void watchdog() {
-        if (!PrefUtil.getWifiManager(WifiWatchdogService.this).isWifiEnabled() && _watchdogCount <= WATCHDOG_MAX_COUNT) {
+        if (!AsyncWifiManager.getWifiManager(WifiWatchdogService.this).isWifiEnabled() && _watchdogCount <= WATCHDOG_MAX_COUNT) {
             _wakelock.lock(true);
             mHandler.get().post(WifiEnablerRunnable);
             if (_watchdogCount == WATCHDOG_MAX_COUNT) {

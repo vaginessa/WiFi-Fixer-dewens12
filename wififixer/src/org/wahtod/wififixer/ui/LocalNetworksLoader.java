@@ -24,7 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.support.v4.content.AsyncTaskLoader;
-import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.AsyncWifiManager;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.WFScanResult;
 
@@ -93,7 +93,7 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
      * Returns empty ArrayList<WFScanResult> if wifi off or scan results null
 	 */
     private List<WFScanResult> getNetworks(Context context) {
-        WifiManager wm = PrefUtil.getWifiManager(context);
+        WifiManager wm = AsyncWifiManager.getWifiManager(context);
 
         if (wm.isWifiEnabled()) {
             List<WFScanResult> scanned = WFScanResult.fromScanResultArray(wm.getScanResults());

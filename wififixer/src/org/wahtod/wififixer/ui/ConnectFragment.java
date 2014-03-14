@@ -21,7 +21,6 @@ package org.wahtod.wififixer.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -36,11 +35,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitor;
-import org.wahtod.wififixer.prefs.PrefUtil;
-import org.wahtod.wififixer.utility.BroadcastHelper;
-import org.wahtod.wififixer.utility.NotifUtil;
-import org.wahtod.wififixer.utility.StringUtil;
-import org.wahtod.wififixer.utility.WFScanResult;
+import org.wahtod.wififixer.utility.*;
 
 import java.lang.reflect.Field;
 
@@ -99,7 +94,7 @@ public class ConnectFragment extends SherlockFragment implements OnClickListener
 
     private int addNetwork(String password) {
         WifiConfiguration wf = getKeyAppropriateConfig(password);
-        WifiManager wm = PrefUtil.getWifiManager(getActivity());
+        AsyncWifiManager wm = AsyncWifiManager.get(getActivity());
         int n = wm.addNetwork(wf);
         if (n != -1) {
             wm.enableNetwork(n, false);

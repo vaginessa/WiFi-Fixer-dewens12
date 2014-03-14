@@ -29,6 +29,7 @@ import org.wahtod.wififixer.ToggleService;
 import org.wahtod.wififixer.WFBroadcastReceiver;
 import org.wahtod.wififixer.WFMonitor;
 import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.AsyncWifiManager;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.WifiWatchdogService;
@@ -57,7 +58,7 @@ public class WidgetReceiver extends BroadcastReceiver {
             /*
 			 * If Wifi is disabled, return
 			 */
-                if (!PrefUtil.getWifiManager(ctxt.get()).isWifiEnabled()) {
+                if (!AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled()) {
                     return;
                 }
 			/*
@@ -83,14 +84,14 @@ public class WidgetReceiver extends BroadcastReceiver {
                             ctxt.get().getString(R.string.reassociating));
                     BroadcastHelper.sendBroadcast(ctxt.get(), new Intent(
                             WFMonitor.REASSOCIATE_INTENT), true);
-                    PrefUtil.getWifiManager(ctxt.get()).reassociate();
+                    AsyncWifiManager.get(ctxt.get()).reassociate();
                 }
 
         }
     };
 
     public static void setWifiState(Context context, boolean state) {
-        PrefUtil.getWifiManager(context).setWifiEnabled(state);
+        AsyncWifiManager.get(context).setWifiEnabled(state);
         if (state)
             ctxt.get().startService(new Intent(ctxt.get().getApplicationContext(), WifiWatchdogService.class));
     }

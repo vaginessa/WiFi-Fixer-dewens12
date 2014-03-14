@@ -30,6 +30,7 @@ import android.os.IBinder;
 import android.os.Message;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.AsyncWifiManager;
 import org.wahtod.wififixer.utility.LoggingWakeLock;
 import org.wahtod.wififixer.utility.WifiWatchdogService;
 
@@ -58,7 +59,7 @@ public class ToggleService extends Service {
 
                 case WifiManager.WIFI_STATE_DISABLED:
 
-                    PrefUtil.getWifiManager(self.get()).setWifiEnabled(true);
+                    AsyncWifiManager.get(self.get()).setWifiEnabled(true);
                     break;
 
                 case STOP:
@@ -115,7 +116,7 @@ public class ToggleService extends Service {
         public void run() {
             PrefUtil.writeBoolean(self.get(), PrefConstants.WIFI_STATE_LOCK,
                     true);
-            PrefUtil.getWifiManager(self.get()).setWifiEnabled(false);
+            AsyncWifiManager.get(self.get()).setWifiEnabled(false);
             self.get().startService(new Intent(self.get().getApplicationContext(), WifiWatchdogService.class));
         }
     }

@@ -44,6 +44,7 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitor;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.AsyncWifiManager;
 import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.StringUtil;
@@ -76,9 +77,9 @@ public class KnownNetworksFragment extends SherlockFragment {
                 /*
                  * If wifi is on, scan. If not, make sure no networks in range
 				 */
-                    if (PrefUtil.getWifiManager(self.get().getActivity())
+                    if (AsyncWifiManager.getWifiManager(self.get().getActivity())
                             .isWifiEnabled())
-                        PrefUtil.getWifiManager(self.get().getActivity())
+                        AsyncWifiManager.get(self.get().getActivity())
                                 .startScan();
                     else {
                         if (known_in_range != null && known_in_range.size() >= 1) {
@@ -171,7 +172,7 @@ public class KnownNetworksFragment extends SherlockFragment {
                                 PrefUtil.getSSIDfromNetwork(getContext(), n));
                         BroadcastHelper.sendBroadcast(getContext(), intent, true);
                     } else {
-                        PrefUtil.getWifiManager(getContext()).enableNetwork(n, true);
+                        AsyncWifiManager.get(getContext()).enableNetwork(n, true);
                     }
                     break;
 
@@ -246,7 +247,7 @@ public class KnownNetworksFragment extends SherlockFragment {
     }
 
     public static List<String> getNetworks(Context context) {
-        WifiManager wm = PrefUtil.getWifiManager(context);
+        WifiManager wm = AsyncWifiManager.getWifiManager(context);
         List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
         if (wifiConfigs == null || wifiConfigs.isEmpty())
             return new ArrayList<String>();
@@ -283,7 +284,7 @@ public class KnownNetworksFragment extends SherlockFragment {
     }
 
     private static boolean isWifiOn(Context ctxt) {
-        return PrefUtil.getWifiManager(ctxt).isWifiEnabled();
+        return AsyncWifiManager.getWifiManager(ctxt).isWifiEnabled();
     }
 
     private static void refreshArray() {
@@ -385,7 +386,7 @@ public class KnownNetworksFragment extends SherlockFragment {
 
     private ArrayList<String> getKnownAPArray(Context context) {
 
-        WifiManager wm = PrefUtil.getWifiManager(context);
+        WifiManager wm = AsyncWifiManager.getWifiManager(context);
 
         List<ScanResult> scanResults = wm.getScanResults();
         /*
@@ -436,8 +437,8 @@ public class KnownNetworksFragment extends SherlockFragment {
     private void removeNetwork(int network) {
         NotifUtil.showToast(getContext(),
                 getContext().getString(R.string.removing_network) + mSSID);
-        PrefUtil.getWifiManager(getActivity()).removeNetwork(network);
-        PrefUtil.getWifiManager(getActivity()).saveConfiguration();
+        AsyncWifiManager.getWifiManager(getActivity()).removeNetwork(network);
+        AsyncWifiManager.getWifiManager(getActivity()).saveConfiguration();
         scanhandler.sendEmptyMessage(SCAN_MESSAGE);
     }
 

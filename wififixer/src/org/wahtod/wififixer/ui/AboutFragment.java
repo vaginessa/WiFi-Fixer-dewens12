@@ -40,10 +40,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefUtil;
-import org.wahtod.wififixer.utility.BroadcastHelper;
-import org.wahtod.wififixer.utility.LogUtil;
-import org.wahtod.wififixer.utility.StringUtil;
-import org.wahtod.wififixer.utility.WFScanResult;
+import org.wahtod.wififixer.utility.*;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -59,7 +56,7 @@ public class AboutFragment extends SherlockFragment implements OnClickListener {
             if (self.get() == null || self.get().getActivity() == null)
                 return;
 
-            List<ScanResult> results = PrefUtil.getWifiManager(self.get().getActivity()).getScanResults();
+            List<ScanResult> results = AsyncWifiManager.getWifiManager(self.get().getActivity()).getScanResults();
             if (self.get().mNetwork == null) {
               /*
                * Shouldn't happen, log it
