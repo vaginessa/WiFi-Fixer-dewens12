@@ -34,7 +34,6 @@ public class WifiWatchdogService extends Service {
     private static final int WATCHDOG_MESSAGE = 42;
     private static final int WATCHDOG_DELAY = 3000;
     private static final int WATCHDOG_MAX_COUNT = 3;
-    private static final int NOTIFICATION_ID = 12491;
     private static int _watchdogCount = 0;
     private ThreadHandler mHandler;
     private WakeLock _wakelock;
@@ -59,10 +58,10 @@ public class WifiWatchdogService extends Service {
     };
 
     private void notifyBugged() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(MainActivity.SHOW_HELP, true);
-        PendingIntent pending = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotifUtil.show(this, getString(R.string.stuck_notif), getString(R.string.stuck_ticker), NOTIFICATION_ID, pending);
+        PendingIntent pending = PendingIntent.getActivity(this, NotifUtil.getPendingIntentCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotifUtil.show(this, getString(R.string.stuck_notif), getString(R.string.stuck_ticker), pending);
     }
 
     private void watchdog() {

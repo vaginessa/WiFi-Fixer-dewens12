@@ -121,7 +121,7 @@
     <string name="log_mimetype">message/rfc882</string>
     <string name="unmanaged">-U-</string>
     <string name="scan_mode">Should be in normal system scan mode</string>
-    <string name="alert_message">Preparing email"</string>
+    <string name="alert_message">Preparing email</string>
     <string name="ok_button">OK</string>
     <string name="cancel_button">Cancel</string>
     <string name="null_ssid">None</string>
@@ -255,5 +255,7 @@
     <string name="failover">Failover set to:</string>
     <string name="sendlog_title">Send Log</string>
     <string name="sendlog_summary">Send Log to developer</string>
+    <string name="youhave">You have</string>
+    <string name="messages">messages</string>
 
 </resources>

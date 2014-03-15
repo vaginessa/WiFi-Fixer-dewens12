@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import java.util.HashMap;
 
@@ -61,10 +60,7 @@ public class BroadcastHelper {
                     LocalBroadcastManager.getInstance(c).registerReceiver(receiver, f);
                 else
                     c.registerReceiver(receiver, f);
-//                Log.i(BroadcastHelper.class.getSimpleName(), "Registered:" + receiver.toString() +
-//                        " Local:" + String.valueOf(local));
             } catch (Exception e) {
-                Log.i(BroadcastHelper.class.getSimpleName(), "Exception Registering:" + receiver.toString());
                 e.printStackTrace();
             }
             getMap().put(hashString, local);
@@ -80,10 +76,7 @@ public class BroadcastHelper {
                     LocalBroadcastManager.getInstance(c).unregisterReceiver(receiver);
                 else
                     c.unregisterReceiver(receiver);
-//                Log.i(BroadcastHelper.class.getSimpleName(), "Unregistered:" + receiver.toString()
-//                        + " Local:" + String.valueOf(getMap().get(hashString)));
             } catch (Exception e) {
-                Log.i(BroadcastHelper.class.getSimpleName(), "Exception Unregistering:" + receiver.toString());
                 e.printStackTrace();
             }
             getMap().remove(hashString);

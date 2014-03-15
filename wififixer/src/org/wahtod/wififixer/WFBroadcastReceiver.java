@@ -45,7 +45,6 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
     private static final String AUTHEXTRA = "IRRADIATED";
     private static final String AUTH_ACTION = "org.wahtod.wififixer.AUTH";
     private static final String AUTHSTRING = "31415927";
-    private static final int AUTH_NOTIF_ID = 2934;
     private static WeakReference<Context> ctxt;
     private static Handler handler = new Handler() {
         @Override
@@ -92,20 +91,20 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 		 */
         String action = data.getString(PrefUtil.INTENT_ACTION);
         /*
-		 * For WIFI_SERVICE_ENABLE intent, set service enabled and run
+         * For WIFI_SERVICE_ENABLE intent, set service enabled and run
 		 */
         if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)) {
             handleWifiServiceEnable();
         }
         /*
-		 * For WIFI_SERVICE_DISABLE intent, send stop to service and unset
+         * For WIFI_SERVICE_DISABLE intent, send stop to service and unset
 		 * logging and service alarms.
 		 */
         else if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_DISABLE)) {
             handleWifiServiceDisable();
         }
         /*
-		 * Handle Widget intent
+         * Handle Widget intent
 		 */
         else if (action.equals(FixerWidget.W_INTENT)) {
             handleWidgetAction(ctxt.get());
@@ -120,7 +119,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
             handleAuthAction(data);
         }
         /*
-		 * Lock out wifi state changes if user has initiated change
+         * Lock out wifi state changes if user has initiated change
 		 */
         else if (PrefUtil
                 .readBoolean(ctxt.get(), PrefConstants.WIFI_STATE_LOCK))
@@ -146,20 +145,20 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
             LogUtil.log(ctxt.get(), ctxt.get().getString(R.string.authed));
             Intent intent = new Intent(ctxt.get(), MainActivity.class)
                     .setAction(Intent.ACTION_MAIN).setFlags(
-                            Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                            Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            PendingIntent pending = PendingIntent.getActivity(ctxt.get(), 0,
-                    intent, 0);
+            PendingIntent pending = PendingIntent.getActivity(ctxt.get(), NotifUtil.getPendingIntentCode(),
+                    intent, PendingIntent.FLAG_UPDATE_CURRENT);
             // Ok, do the auth
             if (!PrefUtil.readBoolean(ctxt.get(),
                     ctxt.get().getString(R.string.isauthed))) {
                 PrefUtil.writeBoolean(ctxt.get(),
                         ctxt.get().getString(R.string.isauthed), true);
-                NotifUtil.cancel(ctxt.get(), 3337);
                 NotifUtil.show(ctxt.get(),
                         ctxt.get().getString(R.string.donatethanks), ctxt.get()
-                        .getString(R.string.authorized), AUTH_NOTIF_ID,
-                        pending);
+                                .getString(R.string.authorized),
+                        pending
+                );
             }
         }
     }
@@ -179,7 +178,8 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
             ctxt.get().startActivity(
                     new Intent(ctxt.get(), MainActivity.class).putExtra(
                             PrefConstants.SERVICEWARNED, true).setFlags(
-                            Intent.FLAG_ACTIVITY_NEW_TASK));
+                            Intent.FLAG_ACTIVITY_NEW_TASK)
+            );
         }
     }
 
@@ -191,7 +191,8 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
         PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLE_KEY.key(), false);
         ctxt.get().startService(
                 new Intent(ctxt.get(), BootService.class).putExtra(
-                        BootService.FLAG_NO_DELAY, true));
+                        BootService.FLAG_NO_DELAY, true)
+        );
     }
 
     @Override
@@ -202,7 +203,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 
     private void handleIntent(Context context, Intent intent) {
         /*
-		 * Dispatches the broadcast intent to the handler for processing
+         * Dispatches the broadcast intent to the handler for processing
 		 */
         Message message = handler.obtainMessage();
         Bundle data = new Bundle();

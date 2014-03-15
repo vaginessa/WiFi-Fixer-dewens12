@@ -32,7 +32,7 @@ import org.wahtod.wififixer.utility.NotifUtil;
 public class JellyBeanSleepPolicy extends SleepPolicyHelper {
     @Override
     public void vSetSleepPolicy(Context context, int policy) {
-        NotifUtil.show(context, getSleepPolicyString(policy), "Tap to set", 8124, getPendingIntent(context));
+        NotifUtil.show(context, getSleepPolicyString(policy), "Tap to set", getPendingIntent(context));
     }
 
     @Override
@@ -48,8 +48,9 @@ public class JellyBeanSleepPolicy extends SleepPolicyHelper {
     }
 
     private PendingIntent getPendingIntent(Context context) {
-        Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-        PendingIntent pending = PendingIntent.getActivity(context, 0, intent, 0);
+        Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pending = PendingIntent.getActivity(context, NotifUtil.getPendingIntentCode(),
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pending;
     }
 

@@ -38,9 +38,12 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ui.MainActivity;
 import org.wahtod.wififixer.widget.WidgetReceiver;
 
+import java.util.ArrayList;
+
 public class NotifUtil {
     public static final int STATNOTIFID = 2392;
-    public static final int LOGNOTIFID = 2494;
+    public static final String ACTION_POP_NOTIFICATION = "org.wahtod.wififixer.ACTION_POP_NOTIFICATION";
+    public static final String PENDINGPARCEL = "PENDING_PARCEL";
     public static final String VSHOW_TAG = "VSHOW";
     public static final String STAT_TAG = "STATNOTIF";
     /*
@@ -59,8 +62,19 @@ public class NotifUtil {
      */
     public static final int ICON_SET_SMALL = 0;
     public static final int ICON_SET_LARGE = 1;
-    private static NotificationCompat.Builder mLogBuilder;
+    public static int NOTIFID = 2494;
+    private static int pendingIntentRequest = 0;
+    private static ArrayList<NotificationHolder> _notifStack;
     private static NotificationCompat.Builder mStatusBuilder;
+
+    public static int getPendingIntentCode() {
+        pendingIntentRequest++;
+        return pendingIntentRequest;
+    }
+
+    public static int getStackSize() {
+        return _notifStack.size();
+    }
 
     private static Notification build(Context ctxt, NotificationCompat.Builder builder, StatusMessage in) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
@@ -68,7 +82,7 @@ public class NotifUtil {
 
         Intent intent = new Intent(ctxt, MainActivity.class).setAction(
                 Intent.ACTION_MAIN).setFlags(
-                Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                Intent.FLAG_ACTIVITY_NEW_TASK);
         Notification out = builder.build();
         out.icon = getIconfromSignal(in.getSignal(),
                 NotifUtil.ICON_SET_SMALL);
@@ -76,7 +90,8 @@ public class NotifUtil {
         out.setLatestEventInfo(ctxt,
                 ctxt.getString(R.string.app_name), in.getSSID()
                         + NotifUtil.SEPARATOR + in.getStatus(),
-                PendingIntent.getActivity(ctxt, 0, intent, 0)
+                PendingIntent.getActivity(ctxt, getPendingIntentCode(),
+                        intent, PendingIntent.FLAG_UPDATE_CURRENT)
         );
 
         return out;
@@ -93,25 +108,26 @@ public class NotifUtil {
             return;
         }
         if (mStatusBuilder == null) {
-            mStatusBuilder = new NotificationCompat.Builder(ctxt);
             Intent intent = new Intent(ctxt, MainActivity.class).setAction(
                     Intent.ACTION_MAIN).setFlags(
-                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-            mStatusBuilder.setContentIntent(PendingIntent.getActivity(ctxt, 0, intent, 0));
-            mStatusBuilder.setOngoing(true);
-            mStatusBuilder.setOnlyAlertOnce(true);
-            mStatusBuilder.setWhen(0);
-            mStatusBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-            mStatusBuilder.addAction(R.drawable.reassociate, ctxt
-                    .getString(R.string.reassoc), PendingIntent.getBroadcast(ctxt,
-                    0, new Intent(WidgetReceiver.REASSOCIATE),
-                    PendingIntent.FLAG_UPDATE_CURRENT));
-            mStatusBuilder.addAction(R.drawable.wifi, ctxt.getString(R.string.wifi),
-                    PendingIntent.getBroadcast(ctxt, 0, new Intent(
-                                    IntentConstants.ACTION_WIFI_CHANGE),
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    )
-            );
+                    Intent.FLAG_ACTIVITY_NEW_TASK);
+            mStatusBuilder = new NotificationCompat.Builder(ctxt)
+                    .setContentIntent(PendingIntent.getActivity(ctxt, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT))
+                    .setOngoing(true)
+                    .setOnlyAlertOnce(true)
+                    .setWhen(0)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .addAction(R.drawable.reassociate, ctxt
+                            .getString(R.string.reassoc), PendingIntent.getBroadcast(ctxt,
+                            0, new Intent(WidgetReceiver.REASSOCIATE),
+                            PendingIntent.FLAG_UPDATE_CURRENT))
+                    .addAction(R.drawable.wifi, ctxt.getString(R.string.wifi),
+                            PendingIntent.getBroadcast(ctxt, 0, new Intent(
+                                            IntentConstants.ACTION_WIFI_CHANGE),
+                                    PendingIntent.FLAG_UPDATE_CURRENT
+                            )
+                    );
+
         }
         mStatusBuilder.setContentTitle(m.getSSID());
         mStatusBuilder.setSmallIcon(R.drawable.notifsignal, m.getSignal());
@@ -131,29 +147,85 @@ public class NotifUtil {
     }
 
     public static void show(Context context, String message,
-                            String tickerText, int id, PendingIntent contentIntent) {
+                            String tickerText, PendingIntent contentIntent) {
+        if (_notifStack == null) _notifStack = new ArrayList<NotificationHolder>();
+        NotificationHolder holder = new NotificationHolder(tickerText, message, contentIntent);
+        _notifStack.add(0, holder);
+        NotificationCompat.Builder builder = generateBuilder(context, holder);
+        notify(context, NOTIFID, VSHOW_TAG, builder.build());
+    }
 
-		/*
-         * If contentIntent is NULL, create valid contentIntent
+    private static NotificationCompat.Builder generateBuilder(Context context, NotificationHolder holder) {
+        /*
+         * If contentIntent != NULL, parcel existing contentIntent
 		 */
-        if (contentIntent == null)
-            contentIntent = PendingIntent.getActivity(context, 0, new Intent(),
-                    0);
+        Intent intent = new Intent(ACTION_POP_NOTIFICATION);
+        /*
+         * Create the delete intent, which pops the notification stack
+         */
+        PendingIntent delete = PendingIntent.getBroadcast(context, getPendingIntentCode(), intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        if (holder.contentIntent != null)
+            intent.putExtra(PENDINGPARCEL, holder.contentIntent);
+        else {
+            throw new NullPointerException("Null contentIntent in NotifUtil.show");
+        }
+        /*
+         * Set content intent to the prior intent, but with contentIntent as a parcel
+         */
+        PendingIntent content = PendingIntent.getBroadcast(context, getPendingIntentCode(), intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setTicker(holder.tickerText)
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle(context.getText(R.string.app_name))
+                .setContentIntent(content)
+                .setDeleteIntent(delete)
+                .setContentText(holder.message)
+                .setAutoCancel(true)
+                .setSmallIcon(R.drawable.icon);
 
-        NotificationManager nm = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
+        if (getStackSize() > 1)
+            builder = largeText(context, builder);
+        return builder;
+    }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setTicker(tickerText);
-        builder.setWhen(System.currentTimeMillis());
-        builder.setSmallIcon(R.drawable.icon);
-        builder.setContentTitle(context.getText(R.string.app_name));
-        builder.setContentIntent(contentIntent);
-        builder.setContentText(message);
-        builder.setAutoCancel(true);
+    private static NotificationCompat.Builder largeText(Context context, NotificationCompat.Builder builder) {
+        if (Build.VERSION.SDK_INT < 11)
+            return builder;
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(getNotificationsAsString()));
+        StringBuilder contentText = new StringBuilder(context.getString(R.string.youhave))
+                .append(" ")
+                .append(getStackSize())
+                .append(" ")
+                .append(context.getString(R.string.messages)
+                );
+        builder.setContentText(contentText.toString());
+        builder.setNumber(getStackSize());
+        builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.icon));
+        return builder;
+    }
 
-        // unique ID
-        nm.notify(VSHOW_TAG, id, builder.build());
+    public static StringBuilder getNotificationsAsString() {
+        StringBuilder out = new StringBuilder();
+        for (NotificationHolder holder : _notifStack) {
+            out.append(holder.tickerText);
+            out.append(" - ");
+            out.append(holder.message);
+            out.append("\n");
+        }
+        return out;
+    }
+
+    public static void pop(Context context) {
+        if (getStackSize() < 2) {
+            clearStack();
+            return;
+        }
+        NotificationHolder holder = _notifStack.get(1);
+        _notifStack.remove(0);
+        notify(context, NOTIFID, VSHOW_TAG, generateBuilder(context, holder).build());
     }
 
     public static void cancel(Context context, String tag, int id) {
@@ -229,5 +301,21 @@ public class NotifUtil {
         toast.setView(layout);
         toast.show();
 
+    }
+
+    public static void clearStack() {
+        _notifStack.clear();
+    }
+
+    private static class NotificationHolder {
+        String message;
+        String tickerText;
+        PendingIntent contentIntent;
+
+        public NotificationHolder(String t, String m, PendingIntent p) {
+            message = m;
+            tickerText = t;
+            contentIntent = p;
+        }
     }
 }

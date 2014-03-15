@@ -62,8 +62,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
     // ms for network checks
     public final static int REACHABLE = 6000;
     private static final int DEFAULT_DBM_FLOOR = -90;
-    // IDs For notifications
-    private static final int ERR_NOTIF = 7972;
     private static final int FIFO_LENGTH = 10;
     private static final String COLON = ":";
     private static final String NEWLINE = "\n";
@@ -84,7 +82,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static final int W_REASSOCIATE = 0;
     private static final int W_RECONNECT = 1;
     private static final int W_REPAIR = 2;
-    private static final long SUPPLICANT_ASSOC_THRESHOLD = 15000;
     /*
      * Supplicant State triggers Have to use string because some SupplicantState
      * enums aren't available in some Android versions
@@ -94,7 +91,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static final String SSTATE_INVALID = "INVALID";
     private static final int CONNECTING_THRESHOLD = 5;
     private static final long CWDOG_DELAY = 10000;
-    private static final int AUTH_ERROR_NOTIFICATION = 242425;
     protected static WeakReference<Context> ctxt;
     protected static Runnable NetCheckRunnable = new Runnable() {
         @Override
@@ -596,8 +592,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
         List<WFConfig> toremove = new ArrayList<WFConfig>();
         for (WFConfig network : _wfmonitor.knownbysignal) {
             if (!scancontainsBSSID(network.wificonfig.BSSID, scanResults))
-				/*
-				 * Mark for removal
+                /*
+                 * Mark for removal
 				 */
                 toremove.add(network);
         }
@@ -764,9 +760,10 @@ public class WFMonitor implements OnScreenStateChangedListener {
         if (PrefUtil.getFlag(Pref.NOTIF_KEY)) {
             NotifUtil.show(context,
                     context.getString(R.string.wifi_connection_problem)
-                            + string, string, ERR_NOTIF, PendingIntent
-                            .getActivity(context, 0, new Intent(context,
-                                    MainActivity.class), 0)
+                            + string, string, PendingIntent
+                            .getActivity(context, NotifUtil.getPendingIntentCode(),
+                                    new Intent(context,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                                    PendingIntent.FLAG_UPDATE_CURRENT)
             );
         }
     }
@@ -1327,8 +1324,9 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private void authError() {
+        PendingIntent pending = PendingIntent.getBroadcast(ctxt.get(), NotifUtil.getPendingIntentCode(), new Intent(MainActivity.class.getName()), PendingIntent.FLAG_UPDATE_CURRENT);
         NotifUtil.show(ctxt.get(), ctxt.get().getString(R.string.authentication_error),
-                ctxt.get().getString(R.string.authentication_error), AUTH_ERROR_NOTIFICATION, null);
+                ctxt.get().getString(R.string.authentication_error), pending);
     }
 
     private void handleSupplicantState(SupplicantState sState) {
@@ -1454,12 +1452,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 * restart the Main tick
 		 */
         sleepCheck(!screenstate);
-
-		/*
-		 * Clear any error/new network notifications
-		 */
-        NotifUtil.cancel(ctxt.get(), ERR_NOTIF);
-        NotifUtil.cancel(ctxt.get(), AUTH_ERROR_NOTIFICATION);
         /*
 		 * Log Non-Managed network
 		 */

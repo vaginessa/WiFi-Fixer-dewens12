@@ -94,14 +94,11 @@ public class MainActivity extends TutorialFragmentActivity implements
         /*
          * Nag for donation
 		 */
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-                new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI)), 0);
-        NotifUtil.show(context, context.getString(R.string.donatenag),
-                context.getString(R.string.thank_you), 3337, contentIntent);
-    }
-
-    private static void removeNag(Context context) {
-        NotifUtil.cancel(context, 3337);
+        PendingIntent contentIntent = PendingIntent.getActivity(context.getApplicationContext(), NotifUtil.getPendingIntentCode(),
+                new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        NotifUtil.show(context.getApplicationContext(), context.getString(R.string.donatenag),
+                context.getString(R.string.thank_you), contentIntent);
     }
 
     void authCheck() {
@@ -151,7 +148,7 @@ public class MainActivity extends TutorialFragmentActivity implements
         } else if (data.containsKey(SEND_LOG))
             LogUtil.sendLog(this);
         /*
-		 * Set Activity intent to one without commands we've "consumed"
+         * Set Activity intent to one without commands we've "consumed"
 		 */
         Intent i = new Intent(data.getString(PrefUtil.INTENT_ACTION));
         i.putExtras(data);
@@ -172,7 +169,8 @@ public class MainActivity extends TutorialFragmentActivity implements
                         PrefUtil.writeBoolean(c, PrefConstants.SERVICEWARNED,
                                 true);
                     }
-                });
+                }
+        );
         alert.show();
     }
 
@@ -239,12 +237,6 @@ public class MainActivity extends TutorialFragmentActivity implements
         super.onNewIntent(intent);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        removeNag(this);
-    }
-
     /*
      * (non-Javadoc)
      *
@@ -266,7 +258,8 @@ public class MainActivity extends TutorialFragmentActivity implements
                     public void onClick(DialogInterface dialog, int which) {
                         runTutorial();
                     }
-                });
+                }
+        );
 
         dialog.setButton(AlertDialog.BUTTON_NEGATIVE,
                 getString(R.string.later_button),
@@ -275,7 +268,8 @@ public class MainActivity extends TutorialFragmentActivity implements
                         PrefUtil.writeBoolean(self.get(),
                                 PrefConstants.TUTORIAL, true);
                     }
-                });
+                }
+        );
         dialog.show();
     }
 

@@ -47,8 +47,6 @@ public class WFMonitorService extends Service implements
 
     // Screen State SharedPref key
     public static final String SCREENOFF = "SCREENOFF";
-    // IDs For notifications
-    private static final int NOTIFID = 31337;
     // *****************************
     private final static String EMPTYSTRING = "";
     protected static boolean screenstate;
@@ -214,7 +212,6 @@ public class WFMonitorService extends Service implements
     private void preferenceInitialize(final Context context) {
         prefs = MyPrefs.newInstance(this);
         prefs.loadPrefs();
-        NotifUtil.cancel(this, NOTIFID);
     }
 
     private void resetWidget() {
