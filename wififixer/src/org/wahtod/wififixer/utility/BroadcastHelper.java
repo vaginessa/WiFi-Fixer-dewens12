@@ -40,19 +40,19 @@ public class BroadcastHelper {
 		 */
     }
 
-    public synchronized static boolean isRegistered(BroadcastReceiver receiver) {
+    public static boolean isRegistered(BroadcastReceiver receiver) {
         return getMap().containsKey(receiver.toString());
     }
 
-    private synchronized static HashMap<String, Boolean> getMap() {
+    private static HashMap<String, Boolean> getMap() {
         if (_clients == null)
             _clients = new HashMap<String, Boolean>();
         return _clients;
     }
 
-    public synchronized static void registerReceiver(Context c,
-                                                     BroadcastReceiver receiver,
-                                                     IntentFilter f, boolean local) {
+    public static void registerReceiver(Context c,
+                                        BroadcastReceiver receiver,
+                                        IntentFilter f, boolean local) {
         String hashString = receiver.toString();
         if (!isRegistered(receiver)) {
             try {
@@ -67,8 +67,8 @@ public class BroadcastHelper {
         }
     }
 
-    public synchronized static void unregisterReceiver(Context c,
-                                                       BroadcastReceiver receiver) {
+    public static void unregisterReceiver(Context c,
+                                          BroadcastReceiver receiver) {
         String hashString = receiver.toString();
         if (isRegistered(receiver)) {
             try {
