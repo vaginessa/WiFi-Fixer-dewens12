@@ -64,7 +64,7 @@ public class NotifUtil {
     public static final int ICON_SET_LARGE = 1;
     public static int NOTIFID = 2494;
     private static int pendingIntentRequest = 0;
-    private static ArrayList<NotificationHolder> _notifStack;
+    private static ArrayList<NotificationHolder> _notifStack = new ArrayList<NotificationHolder>();
     private static NotificationCompat.Builder mStatusBuilder;
 
     public static int getPendingIntentCode() {
