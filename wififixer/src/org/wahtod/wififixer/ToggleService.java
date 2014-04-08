@@ -31,6 +31,7 @@ import android.os.Message;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.AsyncWifiManager;
+import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.LoggingWakeLock;
 import org.wahtod.wififixer.utility.WifiWatchdogService;
 
@@ -90,7 +91,7 @@ public class ToggleService extends Service {
         mWakeLock.lock(true);
         self = new WeakReference<ToggleService>(this);
         IntentFilter filter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
-        registerReceiver(wifiStateReceiver, filter);
+        BroadcastHelper.registerReceiver(this, wifiStateReceiver, filter, false);
         _handler.postDelayed(new RToggleRunnable(), SHORT);
         _handler.sendEmptyMessageDelayed(STOP, STOP_DELAY);
     }
@@ -104,7 +105,7 @@ public class ToggleService extends Service {
     }
 
     protected void shutdown() {
-        this.unregisterReceiver(wifiStateReceiver);
+        BroadcastHelper.unregisterReceiver(this, wifiStateReceiver);
         _handler.removeMessages(STOP);
         mWakeLock.lock(false);
         this.stopSelf();
