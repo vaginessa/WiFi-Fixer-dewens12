@@ -148,7 +148,6 @@ public class NotifUtil {
 
     public static void show(Context context, String message,
                             String tickerText, PendingIntent contentIntent) {
-        if (_notifStack == null) _notifStack = new ArrayList<NotificationHolder>();
         NotificationHolder holder = new NotificationHolder(tickerText, message, contentIntent);
         _notifStack.add(0, holder);
         NotificationCompat.Builder builder = generateBuilder(context, holder);

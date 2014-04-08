@@ -20,7 +20,7 @@
 
     <application>
         <receiver
-                android:name=".........src.org.wahtod.wififixer.boot.NotificationReceiver"
+                android:name="org.wahtod.wififixer.NotificationReceiver"
                 android:exported="false"
                 android:enabled="true">
         </receiver>
