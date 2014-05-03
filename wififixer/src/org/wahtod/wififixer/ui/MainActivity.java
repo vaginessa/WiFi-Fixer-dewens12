@@ -32,7 +32,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
-import android.view.View;
 import android.view.ViewGroup;
 import com.actionbarsherlock.app.ActionBar;
 import org.wahtod.wififixer.DefaultExceptionHandler;
@@ -48,7 +47,6 @@ import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
 
 public class MainActivity extends TutorialFragmentActivity implements
         OnFragmentPauseRequestListener {
@@ -327,7 +325,7 @@ public class MainActivity extends TutorialFragmentActivity implements
             return f;
         }
 
-        @Override
+        /*@Override
         public Object instantiateItem(View container, int position) {
             final Object fragment = super.instantiateItem(container, position);
             try {
@@ -340,7 +338,7 @@ public class MainActivity extends TutorialFragmentActivity implements
                 LogUtil.log(MainActivity.this, e.getMessage());
             }
             return fragment;
-        }
+        }*/
 
         @Override
         public int getCount() {
