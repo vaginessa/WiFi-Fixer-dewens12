@@ -22,12 +22,14 @@
 
 
 
+
+
 buildscript {
     repositories {
         maven { url 'http://repo1.maven.org/maven2' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.+'
+        classpath 'com.android.tools.build:gradle:0.1+'
     }
 }
 apply plugin: 'android'
@@ -57,7 +59,7 @@ android {
             runProguard true
             proguardFile file = "proguard-project.txt"
             compileSdkVersion 19
-            buildToolsVersion "19.0.3"
+            buildToolsVersion "19.1"
             signingConfig signingConfigs.release
         }
 
@@ -65,7 +67,7 @@ android {
             debuggable true
             runProguard false
             compileSdkVersion 19
-            buildToolsVersion "19.0.3"
+            buildToolsVersion "19.1"
         }
     }
 
