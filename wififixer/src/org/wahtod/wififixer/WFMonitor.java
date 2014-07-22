@@ -91,6 +91,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static final String SSTATE_INVALID = "INVALID";
     private static final int CONNECTING_THRESHOLD = 5;
     private static final long CWDOG_DELAY = 10000;
+    private static final int HOP_THRESHOLD = 10;
     protected static WeakReference<Context> ctxt;
     protected static Runnable NetCheckRunnable = new Runnable() {
         @Override
@@ -609,8 +610,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
                         .append(String.valueOf(_wfmonitor.knownbysignal.size()))
                         .toString()
         );
-		/*
-		 * Sort by ScanResult.level which is signal
+        /*
+         * Sort by ScanResult.level which is signal
 		 */
         Collections.sort(_wfmonitor.knownbysignal, new SortBySignal());
 
@@ -653,7 +654,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                     return w;
             }
         }
-        return null;
+        return new WifiConfiguration();
     }
 
     private static String getSSID() {
@@ -704,13 +705,13 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private static boolean networkUp(Context context) {
-		/*
-		 * _hostup.getHostup does all the heavy lifting
+        /*
+         * _hostup.getHostup does all the heavy lifting
 		 */
         LogUtil.log(context, R.string.network_check);
 
 		/*
-		 * Launches ICMP/HTTP HEAD check threads which compete for successful
+         * Launches ICMP/HTTP HEAD check threads which compete for successful
 		 * state return.
 		 *
 		 * If we fail the first check, try again with _hostup default to be sure
@@ -719,8 +720,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 accesspointIP);
         LogUtil.log(context, out.status);
         if (!out.state) {
-			/*
-			 * Try #2
+            /*
+             * Try #2
 			 */
             out = _hostup.getHostup(REACHABLE, context, null);
             LogUtil.log(context, out.status);
@@ -762,7 +763,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                     context.getString(R.string.wifi_connection_problem)
                             + string, string, PendingIntent
                             .getActivity(context, NotifUtil.getPendingIntentCode(),
-                                    new Intent(context,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                                    new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
                                     PendingIntent.FLAG_UPDATE_CURRENT)
             );
         }
@@ -1050,7 +1051,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 * Make sure knownbysignal is populated first
 		 */
         if (knownbysignal.isEmpty()) {
-            LogUtil.log(context, R.string.signalhop_no_result);
+            LogUtil.log(context, context.getString(R.string.error_c2b));
             return NULLVAL;
         }
 		/*
@@ -1586,7 +1587,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     private void signalHop() {
 		/*
-		 * Connect To best will always find best signal/availability
+         * Find network with signal at least HOP_THRESHOLD greater than current network
+		 * or just stay connected
 		 */
         if (!getisWifiEnabled(ctxt.get(), false))
             return;
@@ -1595,8 +1597,22 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 */
         int bestap = NULLVAL;
         int numKnown = getKnownAPsBySignal(ctxt.get());
+        int current = AsyncWifiManager.getWifiManager(ctxt.get()).getConnectionInfo().getNetworkId();
+        int level = -100;
+        //Get current network signal level
+        for (WFConfig config : knownbysignal) {
+            if (config.wificonfig.networkId == current)
+                level = config.level;
+        }
+
         if (numKnown > 1) {
-            bestap = connectToBest(ctxt.get());
+            for (WFConfig config : knownbysignal) {
+                if (config.level - level >= HOP_THRESHOLD) {
+                    bestap = config.wificonfig.networkId;
+                }
+            }
+        }
+        if (bestap != NULLVAL) {
             LogUtil.log(ctxt.get(),
                     new StringBuilder(ctxt.get().getString(R.string.hopping))
                             .append(String.valueOf(bestap)).toString()
@@ -1604,10 +1620,9 @@ public class WFMonitor implements OnScreenStateChangedListener {
             LogUtil.log(ctxt.get(), new StringBuilder(ctxt.get()
                     .getString(R.string.nid)).append(String.valueOf(lastAP))
                     .toString());
+            connectToAP(ctxt.get(), PrefUtil.getnetworkSSID(ctxt.get(), bestap));
         } else {
             LogUtil.log(ctxt.get(), R.string.signalhop_no_result);
-            shouldrepair = true;
-            wifiRepair();
         }
     }
 

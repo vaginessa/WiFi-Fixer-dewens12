@@ -17,6 +17,7 @@
   ~     You should have received a copy of the GNU General Public License
   ~     along with this program.  If not, see http://www.gnu.org/licenses
   -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/aboutview"
               android:layout_width="fill_parent"
@@ -97,7 +98,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dip"
-                    android:text="Copyright (C) 2010-2013  David Van de Ven"/>
+                    android:text="Copyright (C) 2010-2014  David Van de Ven"/>
 
             <TextView
                     style="@style/Wftext"

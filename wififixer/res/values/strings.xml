@@ -257,5 +257,6 @@
     <string name="sendlog_summary">Send Log to developer</string>
     <string name="youhave">You have</string>
     <string name="messages">messages</string>
+    <string name="error_c2b">Empty Network List in connectToBest</string>
 
 </resources>

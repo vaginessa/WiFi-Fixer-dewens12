@@ -24,12 +24,14 @@
 
 
 
+
+
 buildscript {
     repositories {
         maven { url 'http://repo1.maven.org/maven2' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.1+'
+        classpath 'com.android.tools.build:gradle:0.12.+'
     }
 }
 apply plugin: 'android'
@@ -40,10 +42,14 @@ repositories {
 
 dependencies {
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
-    compile 'com.android.support:support-v4:19.1.+'
+    compile 'com.android.support:support-v4:20.0.+'
 }
 
 android {
+    packagingOptions {
+        exclude 'AndroidManifest.xml'
+    }
+
     lintOptions {
         checkReleaseBuilds true
         abortOnError false
@@ -58,16 +64,16 @@ android {
         release {
             runProguard true
             proguardFile file = "proguard-project.txt"
-            compileSdkVersion 19
-            buildToolsVersion "19.1"
+            compileSdkVersion 20
+            buildToolsVersion "20"
             signingConfig signingConfigs.release
         }
 
         debug {
             debuggable true
             runProguard false
-            compileSdkVersion 19
-            buildToolsVersion "19.1"
+            compileSdkVersion 20
+            buildToolsVersion "20"
         }
     }
 

@@ -261,5 +261,6 @@
     <string name="failover">Failover set to:</string>
     <string name="youhave">Tiene </string>
     <string name="messages"> mensajes</string>
+    <string name="error_c2b">Empty Network List in connectToBest</string>
 
 </resources>
