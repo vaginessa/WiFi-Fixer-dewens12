@@ -19,8 +19,6 @@
 package org.wahtod.wififixer.ui;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,29 +27,53 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.utility.LogDBHelper;
+import org.wahtod.wififixer.utility.ThreadHandler;
 
 public class LogFragment extends Fragment {
     public static final String TAG = "AKAKAKADOUHF";
-    private static final int UPDATE = 2424215;
     private static final long UPDATE_DELAY = 1000;
     public ViewHolder _views;
     private LogDBHelper mLogHelper;
     private int mLogIndex;
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            updateText();
-            mHandler.sendEmptyMessageDelayed(UPDATE, UPDATE_DELAY);
-        }
-    };
+    private ThreadHandler mHandler;
+    private UpdateRunnable updateR;
 
-    private void updateText() {
-        if (mLogIndex < mLogHelper.getlastEntry()) {
-            _views.myTV.append(mLogHelper.getAllEntriesAfterId(mLogIndex));
-            _views.mySV.post(new ScrollToBottom());
-            mLogIndex = mLogHelper.getlastEntry();
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        mHandler = new ThreadHandler("LogUpdateThreadHandler");
+        updateR = new UpdateRunnable();
+        super.onCreate(savedInstanceState);
+    }
+
+    protected class UpdateRunnable implements Runnable {
+        /*
+         *  Runnable so we can thread the work-y part.
+         */
+        @Override
+        public void run() {
+            /*
+             * Abort and do not schedule refresh if activity is detached
+             */
+            if (getActivity() == null)
+                return;
+            mHandler.get().postDelayed(updateR, UPDATE_DELAY);
+            if (mLogIndex < mLogHelper.getlastEntry()) {
+                final String out = mLogHelper.getAllEntriesAfterId(mLogIndex);
+                getActivity().runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        _views.textView.append(out);
+                        _views.scrollView.post(new ScrollToBottom());
+                    }
+                });
+
+                mLogIndex = mLogHelper.getlastEntry();
+            }
         }
     }
+
+    ;
 
     public static LogFragment newInstance(Bundle bundle) {
         LogFragment f = new LogFragment();
@@ -64,14 +86,14 @@ public class LogFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.log_fragment, null);
         _views = new ViewHolder();
-        _views.myTV = (TextView) v.findViewById(R.id.logText);
-        _views.mySV = (ScrollView) v.findViewById(R.id.SCROLLER);
+        _views.textView = (TextView) v.findViewById(R.id.logText);
+        _views.scrollView = (ScrollView) v.findViewById(R.id.SCROLLER);
         return v;
     }
 
     @Override
     public void onPause() {
-        mHandler.removeMessages(UPDATE);
+        mHandler.get().removeCallbacks(updateR);
         super.onPause();
     }
 
@@ -80,25 +102,25 @@ public class LogFragment extends Fragment {
         mLogHelper = LogDBHelper.newinstance(getActivity());
         mLogIndex = mLogHelper.getlastEntry();
         setText(mLogHelper.getAllEntries());
-        _views.mySV.post(new ScrollToBottom());
-        mHandler.sendEmptyMessageDelayed(UPDATE, UPDATE_DELAY);
+        _views.scrollView.post(new ScrollToBottom());
+        mHandler.get().postDelayed(updateR, UPDATE_DELAY);
         super.onResume();
     }
 
     public void setText(String text) {
-        _views.myTV.setText(text);
-        _views.mySV.post(new ScrollToBottom());
+        _views.textView.setText(text);
+        _views.scrollView.post(new ScrollToBottom());
     }
 
     private static class ViewHolder {
-        public TextView myTV;
-        public ScrollView mySV;
+        public TextView textView;
+        public ScrollView scrollView;
     }
 
     public class ScrollToBottom implements Runnable {
         @Override
         public void run() {
-            _views.mySV.fullScroll(ScrollView.FOCUS_DOWN);
+            _views.scrollView.fullScroll(ScrollView.FOCUS_DOWN);
         }
     }
 }
