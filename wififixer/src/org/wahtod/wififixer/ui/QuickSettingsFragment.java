@@ -43,6 +43,18 @@ public class QuickSettingsFragment extends BaseDialogFragment {
 
     public static final String TAG = "TAG";
     protected static final String INTENT_ACTION = "INTENT_ACTION";
+    private BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context c, Intent i) {
+            Bundle b = new Bundle();
+            Message m = wifiButtonHandler.obtainMessage();
+            b.putAll(i.getExtras());
+            b.putString(INTENT_ACTION, i.getAction());
+            m.setData(b);
+            wifiButtonHandler.sendMessage(m);
+        }
+    };
     private static WeakReference<QuickSettingsFragment> self;
     private static Handler wifiButtonHandler = new Handler() {
         @Override
@@ -104,18 +116,6 @@ public class QuickSettingsFragment extends BaseDialogFragment {
     private CheckBox wifiCheckBox;
     private CheckBox logCheckBox;
     private Button sendLogButton;
-    private BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context c, Intent i) {
-            Bundle b = new Bundle();
-            Message m = wifiButtonHandler.obtainMessage();
-            b.putAll(i.getExtras());
-            b.putString(INTENT_ACTION, i.getAction());
-            m.setData(b);
-            wifiButtonHandler.sendMessage(m);
-        }
-    };
 
     public static QuickSettingsFragment newInstance(String tag) {
         QuickSettingsFragment f = new QuickSettingsFragment();
@@ -169,8 +169,13 @@ public class QuickSettingsFragment extends BaseDialogFragment {
     }
 
     protected void setWifiCheckBox(boolean b) {
-        if (wifiCheckBox != null)
+
+        try {
             wifiCheckBox.getHandler().post(new WifiButtonStateRunnable(b));
+        } catch (NullPointerException e) {
+            //wifiCheckBox or handler may be null if fragment is detached
+        }
+
     }
 
     /*
