@@ -36,12 +36,11 @@ public class LogFragment extends Fragment {
     private LogDBHelper mLogHelper;
     private int mLogIndex;
     private ThreadHandler mHandler;
-    private UpdateRunnable updateR;
+    private UpdateRunnable updateRunnable;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        mHandler = new ThreadHandler("LogUpdateThreadHandler");
-        updateR = new UpdateRunnable();
+        updateRunnable = new UpdateRunnable();
         super.onCreate(savedInstanceState);
     }
 
@@ -56,7 +55,7 @@ public class LogFragment extends Fragment {
              */
             if (getActivity() == null)
                 return;
-            mHandler.get().postDelayed(updateR, UPDATE_DELAY);
+            mHandler.get().postDelayed(updateRunnable, UPDATE_DELAY);
             if (mLogIndex < mLogHelper.getlastEntry()) {
                 final String out = mLogHelper.getAllEntriesAfterId(mLogIndex);
                 getActivity().runOnUiThread(new Runnable() {
@@ -93,17 +92,18 @@ public class LogFragment extends Fragment {
 
     @Override
     public void onPause() {
-        mHandler.get().removeCallbacks(updateR);
+        mHandler.quit();
         super.onPause();
     }
 
     @Override
     public void onResume() {
+        mHandler = new ThreadHandler("LogUpdateThreadHandler");
         mLogHelper = LogDBHelper.newinstance(getActivity());
         mLogIndex = mLogHelper.getlastEntry();
         setText(mLogHelper.getAllEntries());
         _views.scrollView.post(new ScrollToBottom());
-        mHandler.get().postDelayed(updateR, UPDATE_DELAY);
+        mHandler.get().postDelayed(updateRunnable, UPDATE_DELAY);
         super.onResume();
     }
 
