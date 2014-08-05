@@ -27,7 +27,6 @@ import com.actionbarsherlock.app.SherlockFragment;
 import org.wahtod.wififixer.R;
 
 public class FirstPageFragment extends SherlockFragment {
-    public static final String LOGFRAGMENT_TAG = "LOG_FRAGMENT";
     public static final String TAG = "BSJDFWFFFW";
 
     public static FirstPageFragment newInstance(int p) {

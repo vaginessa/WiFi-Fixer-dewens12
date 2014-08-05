@@ -29,22 +29,27 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.utility.LogDBHelper;
 import org.wahtod.wififixer.utility.ThreadHandler;
 
+import java.lang.ref.WeakReference;
+
 public class LogFragment extends Fragment {
     public static final String TAG = "AKAKAKADOUHF";
     private static final long UPDATE_DELAY = 1000;
     public ViewHolder _views;
-    private LogDBHelper mLogHelper;
-    private int mLogIndex;
-    private ThreadHandler mHandler;
-    private UpdateRunnable updateRunnable;
+    private static LogDBHelper mLogHelper;
+    private static int mLogIndex;
+    private static ThreadHandler mHandler;
+    private static UpdateRunnable updateRunnable;
+    private static WeakReference<LogFragment> self;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         updateRunnable = new UpdateRunnable();
+        self = new WeakReference<LogFragment>(this);
         super.onCreate(savedInstanceState);
+        mHandler = new ThreadHandler("LogUpdateThreadHandler");
     }
 
-    protected class UpdateRunnable implements Runnable {
+    protected static class UpdateRunnable implements Runnable {
         /*
          *  Runnable so we can thread the work-y part.
          */
@@ -53,19 +58,21 @@ public class LogFragment extends Fragment {
             /*
              * Abort and do not schedule refresh if activity is detached
              */
-            if (getActivity() == null)
-                return;
             mHandler.get().postDelayed(updateRunnable, UPDATE_DELAY);
             if (mLogIndex < mLogHelper.getlastEntry()) {
                 final String out = mLogHelper.getAllEntriesAfterId(mLogIndex);
-                getActivity().runOnUiThread(new Runnable() {
+                try {
+                    self.get().getActivity().runOnUiThread(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        _views.textView.append(out);
-                        _views.scrollView.post(new ScrollToBottom());
-                    }
-                });
+                        @Override
+                        public void run() {
+                            self.get().addText(out);
+                        }
+                    });
+                } catch (NullPointerException e) {
+                    //Fragment is detached from Activity
+                    return;
+                }
 
                 mLogIndex = mLogHelper.getlastEntry();
             }
@@ -98,17 +105,14 @@ public class LogFragment extends Fragment {
 
     @Override
     public void onResume() {
-        mHandler = new ThreadHandler("LogUpdateThreadHandler");
         mLogHelper = LogDBHelper.newinstance(getActivity());
-        mLogIndex = mLogHelper.getlastEntry();
-        setText(mLogHelper.getAllEntries());
-        _views.scrollView.post(new ScrollToBottom());
-        mHandler.get().postDelayed(updateRunnable, UPDATE_DELAY);
+        mLogIndex = 0;
+        mHandler.get().post(updateRunnable);
         super.onResume();
     }
 
-    public void setText(String text) {
-        _views.textView.setText(text);
+    public void addText(String text) {
+        _views.textView.append(text);
         _views.scrollView.post(new ScrollToBottom());
     }
 
@@ -117,10 +121,10 @@ public class LogFragment extends Fragment {
         public ScrollView scrollView;
     }
 
-    public class ScrollToBottom implements Runnable {
+    public static class ScrollToBottom implements Runnable {
         @Override
         public void run() {
-            _views.scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            self.get()._views.scrollView.fullScroll(ScrollView.FOCUS_DOWN);
         }
     }
 }

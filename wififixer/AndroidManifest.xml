@@ -21,7 +21,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.wahtod.wififixer"
           android:installLocation="internalOnly"
-          android:versionCode="1088"
+          android:versionCode="1091"
           android:versionName="1.0.3.3b3">
 
 <!-- Documenting permissions here -->
