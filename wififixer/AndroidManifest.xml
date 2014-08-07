@@ -21,10 +21,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.wahtod.wififixer"
           android:installLocation="internalOnly"
-          android:versionCode="1091"
-          android:versionName="1.0.3.3b3">
+          android:versionCode="1097"
+          android:versionName="1.0.3.3b6">
 
-<!-- Documenting permissions here -->
+    <!-- Documenting permissions here -->
     <!-- For service start (30 seconds from boot_completed) -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <!-- For wifi state -->
@@ -77,7 +77,7 @@
 
         <meta-data
                 android:name="com.google.android.backup.api_key"
-                android:value="AEdPqrEAAAAIAGomq--y98O0VHARd55VOdh8CoEphVxKfVXAHw"/>
+                android:value="@string/backup_key"/>
         <!-- Main Activity -->
         <activity
                 android:name=".ui.MainActivity"

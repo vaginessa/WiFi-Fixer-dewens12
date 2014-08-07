@@ -116,6 +116,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
             handler.post(PostExecuteRunnable);
         }
     };
+
     protected static Runnable PostExecuteRunnable = new Runnable() {
         @Override
         public void run() {
@@ -133,6 +134,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
             _wfmonitor.handlerWrapper(new PostNetCheckRunnable(isUp));
         }
     };
+
     /*
      * Runs first time supplicant nonresponsive
      */
@@ -153,6 +155,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
             }
         }
     };
+
     /*
      * Runs second time supplicant nonresponsive
      */
@@ -731,8 +734,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     @SuppressWarnings("deprecation")
     private static void icmpCache(Context context) {
-		/*
-		 * Caches DHCP gateway IP for ICMP check
+        /*
+         * Caches DHCP gateway IP for ICMP check
 		 */
         DhcpInfo info = AsyncWifiManager.getWifiManager(ctxt.get()).getDhcpInfo();
         _wfmonitor.accesspointIP = (Formatter.formatIpAddress(info.gateway));

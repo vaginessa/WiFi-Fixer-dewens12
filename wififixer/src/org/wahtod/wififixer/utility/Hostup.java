@@ -53,8 +53,8 @@ public class Hostup {
     protected volatile WeakReference<Context> mContext;
     protected volatile WeakReference<Thread> masterThread;
     protected volatile boolean mFinished;
-    private ThreadHandler httpHandler;
-    private ThreadHandler icmpHandler;
+    private static ThreadHandler httpHandler;
+    private static ThreadHandler icmpHandler;
     private String mFailover;
 
     private Hostup(Context c) {

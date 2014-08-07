@@ -38,3 +38,4 @@ gradle.properties
 *proguard*
 *lint*
 out
+secrets.xml

@@ -19,72 +19,51 @@
 package org.wahtod.wififixer.ui;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.utility.LogDBHelper;
-import org.wahtod.wififixer.utility.ThreadHandler;
+import org.wahtod.wififixer.utility.LogOpenHelper;
 
-import java.lang.ref.WeakReference;
-
-public class LogFragment extends Fragment {
+public class LogFragment extends Fragment implements LoaderManager.LoaderCallbacks {
     public static final String TAG = "AKAKAKADOUHF";
-    private static final long UPDATE_DELAY = 1000;
+    private static final String LOG_STRING_KEY = "LOG_STRING";
+    private static final int LOADER_ID = 2124;
     public ViewHolder _views;
-    private static LogDBHelper mLogHelper;
-    private static int mLogIndex;
-    private static ThreadHandler mHandler;
-    private static UpdateRunnable updateRunnable;
-    private static WeakReference<LogFragment> self;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        updateRunnable = new UpdateRunnable();
-        self = new WeakReference<LogFragment>(this);
-        super.onCreate(savedInstanceState);
-        mHandler = new ThreadHandler("LogUpdateThreadHandler");
-    }
-
-    protected static class UpdateRunnable implements Runnable {
-        /*
-         *  Runnable so we can thread the work-y part.
-         */
-        @Override
-        public void run() {
-            /*
-             * Abort and do not schedule refresh if activity is detached
-             */
-            mHandler.get().postDelayed(updateRunnable, UPDATE_DELAY);
-            if (mLogIndex < mLogHelper.getlastEntry()) {
-                final String out = mLogHelper.getAllEntriesAfterId(mLogIndex);
-                try {
-                    self.get().getActivity().runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            self.get().addText(out);
-                        }
-                    });
-                } catch (NullPointerException e) {
-                    //Fragment is detached from Activity
-                    return;
-                }
-
-                mLogIndex = mLogHelper.getlastEntry();
-            }
-        }
-    }
-
-    ;
+    private Loader mLoader;
+    private String mText;
 
     public static LogFragment newInstance(Bundle bundle) {
         LogFragment f = new LogFragment();
         f.setArguments(bundle);
         return f;
+    }
+
+    @Override
+    public Loader onCreateLoader(int i, Bundle bundle) {
+        return new LogLoader(getActivity());
+    }
+
+    @Override
+    public void onLoadFinished(Loader loader, Object data) {
+        addText((String) data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mLoader = getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -94,26 +73,36 @@ public class LogFragment extends Fragment {
         _views = new ViewHolder();
         _views.textView = (TextView) v.findViewById(R.id.logText);
         _views.scrollView = (ScrollView) v.findViewById(R.id.SCROLLER);
+        _views.scrollView.setSmoothScrollingEnabled(false);
         return v;
     }
 
     @Override
-    public void onPause() {
-        mHandler.quit();
-        super.onPause();
+    public void onStart() {
+        super.onStart();
+        mText = LogOpenHelper.newinstance(getActivity()).getAllEntries();
+        if (mText != null) {
+            _views.scrollView.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    _views.textView.setText(mText);
+                    _views.scrollView.post(new ScrollToBottom());
+                }
+            });
+        }
     }
 
-    @Override
-    public void onResume() {
-        mLogHelper = LogDBHelper.newinstance(getActivity());
-        mLogIndex = 0;
-        mHandler.get().post(updateRunnable);
-        super.onResume();
-    }
+    public void addText(String out) {
+        final String text = out;
+        _views.textView.post(new Runnable() {
 
-    public void addText(String text) {
-        _views.textView.append(text);
-        _views.scrollView.post(new ScrollToBottom());
+            @Override
+            public void run() {
+                _views.textView.append(text);
+                _views.scrollView.post(new ScrollToBottom());
+            }
+        });
     }
 
     private static class ViewHolder {
@@ -121,10 +110,10 @@ public class LogFragment extends Fragment {
         public ScrollView scrollView;
     }
 
-    public static class ScrollToBottom implements Runnable {
+    protected class ScrollToBottom implements Runnable {
         @Override
         public void run() {
-            self.get()._views.scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            _views.scrollView.fullScroll(ScrollView.FOCUS_DOWN);
         }
     }
 }

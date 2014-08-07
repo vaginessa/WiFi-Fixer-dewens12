@@ -47,7 +47,7 @@ public class LogUtil {
     private static final String BUILD = "Build:";
     private static final String COLON = ":";
     private static final String NEWLINE = "\n";
-    private static LogDBHelper logHelper;
+    private static LogOpenHelper logHelper;
 
     private static boolean hasStackTrace(Context context) {
         return context.getFileStreamPath(
@@ -105,9 +105,9 @@ public class LogUtil {
          * Log to SQLite DB for LogFragment
 		 */
         if (logHelper == null)
-            logHelper = LogDBHelper.newinstance(context);
+            logHelper = LogOpenHelper.newinstance(context);
         logHelper.expireEntries();
-        logHelper.addLogEntry(m);
+        long id = logHelper.addLogEntry(m);
     }
 
     public static void log(Context context, String m) {
@@ -135,7 +135,7 @@ public class LogUtil {
             out.append(NEWLINE);
             if (hasStackTrace(context))
                 out.append(getStackTrace(context));
-            LogDBHelper logHelper = LogDBHelper.newinstance(context);
+            LogOpenHelper logHelper = LogOpenHelper.newinstance(context);
             out.append(logHelper.getAllEntries());
             writer.write(out.toString());
             writer.close();
@@ -178,13 +178,15 @@ public class LogUtil {
                             NotifUtil.showToast(context,
                                     R.string.issue_report_nag);
                     }
-                });
+                }
+        );
 
         issueDialog.setNegativeButton(context.getString(R.string.cancel_button),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                     }
-                });
+                }
+        );
         issueDialog.show();
     }
 

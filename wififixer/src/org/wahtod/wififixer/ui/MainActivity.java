@@ -177,6 +177,7 @@ public class MainActivity extends TutorialFragmentActivity implements
 		 * Set up ViewPager and FragmentStatePagerAdapter for phone and tablet
 		 */
         mBasePager = (BaseViewPager) findViewById(R.id.pager);
+        mBasePager.setOffscreenPageLimit(2);
         if (mBasePager != null)
             if (mBasePager.getAdapter() == null) {
                 PagerAdapter fadapter = new PagerAdapter(
@@ -324,21 +325,6 @@ public class MainActivity extends TutorialFragmentActivity implements
             fragmentArray.put(position, f);
             return f;
         }
-
-        /*@Override
-        public Object instantiateItem(View container, int position) {
-            final Object fragment = super.instantiateItem(container, position);
-            try {
-                final Field fragmentStateField = Fragment.class.getDeclaredField("mSavedFragmentState");
-                fragmentStateField.setAccessible(true);
-                final Bundle savedFragmentState = (Bundle) fragmentStateField.get(fragment);
-                if (savedFragmentState != null)
-                    savedFragmentState.setClassLoader(Fragment.class.getClassLoader());
-            } catch (Exception e) {
-                LogUtil.log(MainActivity.this, e.getMessage());
-            }
-            return fragment;
-        }*/
 
         @Override
         public int getCount() {
