@@ -481,10 +481,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         try {
             NetworkInfo ni = cm.getActiveNetworkInfo();
-            if (ni.isConnectedOrConnecting())
-                if (ni.getType() == ConnectivityManager.TYPE_WIFI
-                        && !(ni.getState() == NetworkInfo.State.CONNECTING))
-                    return true;
+            if (ni.isConnected() && ni.getType() == ConnectivityManager.TYPE_WIFI)
+                return true;
         } catch (NullPointerException e) {
             /*
              * NetworkInfo can return null
@@ -590,23 +588,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 }
             }
         }
-        /*
-         * Prune non-scanned BSSIDs
-		 */
-        List<WFConfig> toremove = new ArrayList<WFConfig>();
-        for (WFConfig network : _wfmonitor.knownbysignal) {
-            if (!scancontainsBSSID(network.wificonfig.BSSID, scanResults))
-                /*
-                 * Mark for removal
-				 */
-                toremove.add(network);
-        }
 
-        if (!toremove.isEmpty()) {
-            for (WFConfig marked : toremove) {
-                _wfmonitor.knownbysignal.remove(marked);
-            }
-        }
         pruneKnown(wifiConfigs);
         LogUtil.log(context,
                 new StringBuilder(context.getString(R.string.number_of_known))
@@ -626,7 +608,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
         for (WFConfig w : _wfmonitor.knownbysignal) {
             boolean found = false;
             for (WifiConfiguration c : configs) {
-                if (c.SSID.equals(w.wificonfig.SSID)) {
+                if (c.BSSID.equals(w.wificonfig.BSSID)) {
                     found = true;
                     break;
                 }
@@ -719,6 +701,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 *
 		 * If we fail the first check, try again with _hostup default to be sure
 		 */
+        if (!getIsOnWifi(context))
+            return false;
         HostMessage out = _hostup.getHostup(REACHABLE, context,
                 accesspointIP);
         LogUtil.log(context, out.status);
@@ -726,6 +710,9 @@ public class WFMonitor implements OnScreenStateChangedListener {
             /*
              * Try #2
 			 */
+            if (!getIsOnWifi(context))
+                return false;
+            LogUtil.log(context, context.getString(R.string.network_check_retry));
             out = _hostup.getHostup(REACHABLE, context, null);
             LogUtil.log(context, out.status);
         }
@@ -787,8 +774,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private static void n1Fix() {
-		/*
-		 * Nexus One Sleep Fix duplicating widget function
+        /*
+         * Nexus One Sleep Fix duplicating widget function
 		 */
         if (AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled()
                 && !_wfmonitor.screenstate) {
@@ -831,8 +818,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static boolean supplicantInterruptCheck(Context context) {
 
         SupplicantState sstate = getSupplicantState();
-		/*
-		 * First, make sure this won't interrupt anything
+        /*
+         * First, make sure this won't interrupt anything
 		 */
         return !(sstate.name().equals(SSTATE_ASSOCIATING)
                 || sstate.name().equals(SSTATE_ASSOCIATED)
@@ -842,8 +829,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private static void toggleWifi() {
-		/*
-		 * Send Toggle request to broadcastreceiver
+        /*
+         * Send Toggle request to broadcastreceiver
 		 */
         LogUtil.log(ctxt.get(), R.string.toggling_wifi);
         ctxt.get().sendBroadcast(new Intent(WidgetReceiver.TOGGLE_WIFI));
@@ -853,8 +840,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     private static void restoreandReset(Context context,
                                         WFConfig network) {
-		/*
-		 * Enable bugged disabled networks, reset
+        /*
+         * Enable bugged disabled networks, reset
 		 */
         fixDisabledNetworks(context);
         toggleWifi();

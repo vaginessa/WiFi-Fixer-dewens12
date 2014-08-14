@@ -258,5 +258,6 @@
     <string name="youhave">You have</string>
     <string name="messages">messages</string>
     <string name="error_c2b">Empty Network List in connectToBest</string>
+    <string name="network_check_retry">Network check failed: Trying again</string>
 
 </resources>
