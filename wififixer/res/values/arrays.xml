@@ -18,14 +18,14 @@
   -->
 
 <resources>
-    <string-array name="dbmfloor">
-        <item>-90dBm</item>
+    <string-array name="dbmfloor" translatable="false">
+    <item>-90dBm</item>
         <item>-80dBm</item>
         <item>-70dBm</item>
         <item>-60dBm</item>
     </string-array>
-    <string-array name="dbmfloorValues">
-        <item>-90</item>
+    <string-array name="dbmfloorValues" translatable="false">
+    <item>-90</item>
         <item>-80</item>
         <item>-70</item>
         <item>-60</item>
@@ -36,13 +36,13 @@
         <item>@string/balanced</item>
         <item>@string/maxbattery</item>
     </string-array>
-    <string-array name="entryValues">
-        <item>1</item>
+    <string-array name="entryValues" translatable="false">
+    <item>1</item>
         <item>2</item>
         <item>3</item>
     </string-array>
-    <string-array name="wfsleepValues">
-        <item>0</item>
+    <string-array name="wfsleepValues" translatable="false">
+    <item>0</item>
         <item>1</item>
         <item>2</item>
     </string-array>
@@ -51,14 +51,14 @@
         <item>@string/resetwifi</item>
         <item>@string/showapp</item>
     </string-array>
-    <string-array name="widgetValues">
-        <item>0</item>
+    <string-array name="widgetValues" translatable="false">
+    <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
     </string-array>
-    <string-array name="hopThreshold">
-        <item>-90</item>
+    <string-array name="hopThreshold" translatable="false">
+    <item>-90</item>
         <item>-80</item>
         <item>-70</item>
         <item>-60</item>
