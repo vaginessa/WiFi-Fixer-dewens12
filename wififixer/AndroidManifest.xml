@@ -21,7 +21,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.wahtod.wififixer"
           android:installLocation="internalOnly"
-          android:versionCode="1099"
+          android:versionCode="1102"
           android:versionName="1.0.3.3RC1">
 
     <!-- Documenting permissions here -->
@@ -36,6 +36,8 @@
 		connections, etc.
     -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <!-- Set preferred connectivity type to WIFI (to prevent leaking network checks to mobile)-->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <!-- For http head check as backup for icmp echo/ping to AP -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- For waking the phone/radio up to do network checks -->
