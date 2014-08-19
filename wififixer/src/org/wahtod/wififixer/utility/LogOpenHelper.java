@@ -143,7 +143,12 @@ public class LogOpenHelper extends SQLiteOpenHelper {
         Cursor cursor = database.rawQuery(query, null);
         long out = -1;
         if (cursor.moveToFirst()) {
-            out = Long.parseLong(cursor.getString(0));
+
+            try {
+                out = Long.parseLong(cursor.getString(0));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
         cursor.close();
         return out;
