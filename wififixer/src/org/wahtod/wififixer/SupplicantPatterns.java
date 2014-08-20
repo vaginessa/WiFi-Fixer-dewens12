@@ -19,34 +19,37 @@
 package org.wahtod.wififixer;
 
 import android.net.wifi.SupplicantState;
+import org.wahtod.wififixer.utility.SupplicantPattern;
 
 import java.util.Arrays;
 import java.util.List;
 
+/*
+ * Lists of patterns which indicate high confidence bugged supplicant state
+ */
 public class SupplicantPatterns {
-    /*
-     * Lists of patterns which indicate high confidence bugged supplicant state
-     */
-    public static final List<SupplicantState> SCAN_BOUNCE_1 = Arrays
-            .asList(new SupplicantState[]{SupplicantState.DISCONNECTED,
+    public static final SupplicantPattern SCAN_BOUNCE_1 = new SupplicantPattern(Arrays
+            .asList(SupplicantState.DISCONNECTED,
+                    SupplicantState.SCANNING, SupplicantState.FOUR_WAY_HANDSHAKE,
                     SupplicantState.SCANNING, SupplicantState.DISCONNECTED,
-                    SupplicantState.SCANNING, SupplicantState.DISCONNECTED,
-                    SupplicantState.SCANNING, SupplicantState.DISCONNECTED,
-                    SupplicantState.SCANNING});
+                    SupplicantState.FOUR_WAY_HANDSHAKE, SupplicantState.DISCONNECTED,
+                    SupplicantState.SCANNING));
 
-    public static final List<SupplicantState> SCAN_BOUNCE_2 = Arrays
-            .asList(new SupplicantState[]{SupplicantState.DISCONNECTED,
+    public static final SupplicantPattern SCAN_BOUNCE_2 = new SupplicantPattern(Arrays
+            .asList(SupplicantState.DISCONNECTED,
                     SupplicantState.INACTIVE, SupplicantState.SCANNING,
                     SupplicantState.DISCONNECTED, SupplicantState.INACTIVE,
-                    SupplicantState.SCANNING});
-    public static final List<SupplicantState> CONNECT_FAIL_1 = Arrays
-            .asList(new SupplicantState[]{SupplicantState.ASSOCIATED,
+                    SupplicantState.SCANNING));
+
+    public static final SupplicantPattern CONNECT_FAIL_1 = new SupplicantPattern(
+            Arrays.asList(SupplicantState.ASSOCIATED,
                     SupplicantState.FOUR_WAY_HANDSHAKE,
                     SupplicantState.DISCONNECTED, SupplicantState.ASSOCIATED,
                     SupplicantState.FOUR_WAY_HANDSHAKE,
-                    SupplicantState.DISCONNECTED});
+                    SupplicantState.DISCONNECTED));
 
-    @SuppressWarnings("unchecked")
-    public static final List<List<SupplicantState>> SCAN_BOUNCE_CLUSTER = Arrays
-            .asList(SCAN_BOUNCE_1, SCAN_BOUNCE_2, CONNECT_FAIL_1);
+    public static List<SupplicantPattern> getSupplicantPatterns() {
+        return Arrays
+                .asList(SCAN_BOUNCE_1, SCAN_BOUNCE_2, CONNECT_FAIL_1);
+    }
 }

@@ -21,9 +21,7 @@ package org.wahtod.wififixer.utility;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.ui.MainActivity;
 
@@ -31,29 +29,25 @@ import org.wahtod.wififixer.ui.MainActivity;
  * Created by zanshin on 8/2/13.
  */
 public class WifiWatchdogService extends Service {
-    private static final int WATCHDOG_MESSAGE = 42;
     private static final int WATCHDOG_DELAY = 3000;
     private static final int WATCHDOG_MAX_COUNT = 3;
-    private static int _watchdogCount = 0;
-    private ThreadHandler mHandler;
-    private WakeLock _wakelock;
-    private boolean _waitFlag = false;
-    private Handler mMessageHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case WATCHDOG_MESSAGE:
-                    watchdog();
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
+    private static volatile int _watchdogCount = 0;
+    private static ThreadHandler mHandler;
+    private volatile WakeLock _wakelock;
+    private volatile boolean _waitFlag = false;
     private Runnable WifiEnablerRunnable = new Runnable() {
 
         @Override
         public void run() {
             AsyncWifiManager.get(WifiWatchdogService.this).setWifiEnabled(true);
+        }
+    };
+
+    private Runnable WatchdogRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            watchdog();
         }
     };
 
@@ -73,8 +67,7 @@ public class WifiWatchdogService extends Service {
                 _wakelock.lock(false);
                 _watchdogCount = 5;
             } else
-                mMessageHandler
-                        .sendEmptyMessageDelayed(WATCHDOG_MESSAGE, WATCHDOG_DELAY);
+                mHandler.get().postDelayed(WatchdogRunnable, WATCHDOG_DELAY);
             _watchdogCount++;
         } else if (_watchdogCount < WATCHDOG_MAX_COUNT) {
             _watchdogCount = 0;
@@ -94,17 +87,19 @@ public class WifiWatchdogService extends Service {
         /*
          * Initialize WakeLock
 		 */
-        _wakelock = new LoggingWakeLock(this);
+        _wakelock = new LoggingWakeLock(this, this.getClass().getSimpleName());
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        LogUtil.log(this, this.getString(R.string.app_name), "WifiWatchdogService Request:" + String.valueOf(startId)
+        LogUtil.log(this, this.getString(R.string.app_name), "WifiWatchdogService Request: "
+                + String.valueOf(startId)
+                + " "
                 + String.valueOf(_waitFlag));
         if (!_waitFlag) {
             _waitFlag = true;
-            mMessageHandler.sendEmptyMessageDelayed(WATCHDOG_MESSAGE, WATCHDOG_DELAY);
+            mHandler.get().postDelayed(WatchdogRunnable, WATCHDOG_DELAY);
         }
 
         return super.onStartCommand(intent, flags, startId);

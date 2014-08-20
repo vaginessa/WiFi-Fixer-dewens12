@@ -18,36 +18,31 @@
 
 package org.wahtod.wififixer.utility;
 
-import android.content.Context;
-import org.wahtod.wififixer.R;
+import android.net.wifi.SupplicantState;
 
-import java.lang.ref.WeakReference;
+import java.util.List;
 
 /**
- * It's a logging wake lock.  It logs.
+ * Created by zanshin on 8/20/14.
  */
-public class LoggingWakeLock extends WakeLock {
-    private WeakReference<Context> ctxt;
-    private String caller;
+public class SupplicantPattern {
+    List<SupplicantState> list;
 
-    public LoggingWakeLock(Context context, String c) {
-        super(context);
-        caller = c;
-        ctxt = new WeakReference<Context>(context);
+    public SupplicantPattern(List<SupplicantState> pattern) {
+        list = pattern;
+    }
+
+    public List<SupplicantState> getPattern() {
+        return list;
     }
 
     @Override
-    public void onAcquire() {
-        LogUtil.log(ctxt.get(), caller + " "
-                + ctxt.get().getString(R.string.acquiring_wake_lock));
-        super.onAcquire();
+    public String toString() {
+        StringBuilder out = new StringBuilder();
+        for (SupplicantState s : list) {
+            out.append(s.name());
+            out.append(",");
+        }
+        return out.toString();
     }
-
-    @Override
-    public void onRelease() {
-        LogUtil.log(ctxt.get(), caller
-                + " " + ctxt.get().getString(R.string.releasing_wake_lock));
-        super.onRelease();
-    }
-
 }
