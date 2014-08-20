@@ -15,13 +15,16 @@
   ~     You should have received a copy of the GNU General Public License
   ~     along with this program.  If not, see http://www.gnu.org/licenses
   -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/widget_target"
                 android:layout_width="fill_parent"
                 android:layout_height="72dp"
                 android:background="@drawable/boxbg"
                 android:gravity="end"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:showIn="@layout/widget_provider">
 
     <ImageView
             android:id="@+id/signal"
@@ -29,7 +32,6 @@
             android:layout_height="fill_parent"
             android:layout_gravity="left"
             android:alpha=".90"
-            android:background="@drawable/boxbg"
             android:fadingEdge="vertical"
             android:src="@drawable/largesignal"/>
 
@@ -38,10 +40,11 @@
             style="@style/Wftext.header"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
+            android:layout_gravity="center_vertical"
             android:layout_toRightOf="@id/signal"
             android:paddingLeft="10dp"
-            android:text="@string/service_inactive"/>
+            android:text="@string/service_inactive"
+            />
 
     <TextView
             android:id="@+id/status"
