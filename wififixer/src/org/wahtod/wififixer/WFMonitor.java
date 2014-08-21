@@ -98,71 +98,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static final int HOP_THRESHOLD = 10;
     protected static WeakReference<Context> ctxt;
     /*
-     * Sleep tick if wifi is enabled and screenpref
-     */
-    protected static Runnable rSleepcheck = new Runnable() {
-        public void run() {
-                /*
-                 * This is all we want to do.
-				 */
-
-            if (wifistate) {
-                if (!PrefUtil.readBoolean(ctxt.get(), Pref.WAKELOCK_KEY.key()))
-                    _wfmonitor.wakelock.lock(true);
-                _wfmonitor.checkWifi();
-            } else
-                _wfmonitor.wakelock.lock(false);
-        }
-    };
-    /*
-     * Handles non-supplicant wifi fixes.
-     */
-    protected static Runnable rWifiTask = new Runnable() {
-        public void run() {
-            switch (mRepairLevel) {
-
-                case W_REASSOCIATE:
-                    // Let's try to reassociate first..
-                    AsyncWifiManager.get(ctxt.get()).reassociate();
-                    /*
-                     * Schedule network check to verify reassociate
-                     */
-                    _wfmonitor.handlerWrapper(rSleepcheck, SHORTWAIT);
-                    LogUtil.log(ctxt.get(), R.string.reassociating);
-                    mRepairLevel++;
-                    notifyWrap(ctxt.get(),
-                            ctxt.get().getString(R.string.reassociating));
-                    break;
-
-                case W_RECONNECT:
-                    // Ok, now force reconnect..
-                    AsyncWifiManager.get(ctxt.get()).reconnect();
-                    LogUtil.log(ctxt.get(), R.string.reconnecting);
-                    mRepairLevel++;
-                    notifyWrap(ctxt.get(),
-                            ctxt.get().getString(R.string.reconnecting));
-                    break;
-
-                case W_REPAIR:
-                    // Start Scan
-                    AsyncWifiManager.get(ctxt.get()).disconnect();
-                /*
-                 * Reset state
-				 */
-                    mRepairLevel = W_REASSOCIATE;
-                    LogUtil.log(ctxt.get(), R.string.repairing);
-                    notifyWrap(ctxt.get(), ctxt.get().getString(R.string.repairing));
-                    break;
-            }
-            _wfmonitor.wakelock.lock(false);
-            LogUtil.log(ctxt.get(),
-                    new StringBuilder(ctxt.get().getString(
-                            R.string.fix_algorithm)).append(mRepairLevel)
-                            .toString()
-            );
-        }
-    };
-    /*
      * Scanner runnable
      */
     protected static Runnable rScan = new Runnable() {
@@ -181,37 +116,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
     };    /*
      * Main tick
      */
-    protected static Runnable rMain = new Runnable() {
-        public void run() {
-            /*
-             * Check for disabled state
-			 */
-            if (PrefUtil.getFlag(Pref.DISABLE_KEY))
-                LogUtil.log(ctxt.get(), R.string.shouldrun_false_dying);
-            else {
-                // Queue next run of main runnable
-                _wfmonitor.handlerWrapper(rMain, LOOPWAIT);
-                /*
-                 * First check if we should manage then do wifi checks
-				 */
-                if (shouldManage(ctxt.get())) {
-                    // Check Supplicant
-                    if (wifistate
-                            && !AsyncWifiManager.getWifiManager(ctxt.get()).pingSupplicant()) {
-                        LogUtil.log(ctxt.get(),
-                                R.string.supplicant_nonresponsive_toggling_wifi);
-                        toggleWifi();
-                    } else if (_wfmonitor.screenstate)
-                        /*
-                         * Check wifi
-						 */
-                        if (wifistate) {
-                            _wfmonitor.checkWifi();
-                        }
-                }
-            }
-        }
-    };
     /*
      * SignalHop runnable
      */
@@ -243,6 +147,37 @@ public class WFMonitor implements OnScreenStateChangedListener {
             int n = getNetworkID();
             if (n != -1)
                 demoteNetwork(ctxt.get(), n);
+        }
+    };
+    protected static Runnable rMain = new Runnable() {
+        public void run() {
+            /*
+             * Check for disabled state
+			 */
+            if (PrefUtil.getFlag(Pref.DISABLE_KEY))
+                LogUtil.log(ctxt.get(), R.string.shouldrun_false_dying);
+            else {
+                // Queue next run of main runnable
+                _wfmonitor.handlerWrapper(rMain, LOOPWAIT);
+                /*
+                 * First check if we should manage then do wifi checks
+				 */
+                if (shouldManage(ctxt.get())) {
+                    // Check Supplicant
+                    if (wifistate
+                            && !AsyncWifiManager.getWifiManager(ctxt.get()).pingSupplicant()) {
+                        LogUtil.log(ctxt.get(),
+                                R.string.supplicant_nonresponsive_toggling_wifi);
+                        toggleWifi();
+                    } else if (_wfmonitor.screenstate)
+                        /*
+                         * Check wifi
+						 */
+                        if (wifistate) {
+                            _wfmonitor.checkWifi();
+                        }
+                }
+            }
         }
     };
     // flags
@@ -309,6 +244,72 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private static volatile boolean isUp;
     private static WFMonitor _wfmonitor;
     private static String accesspointIP;
+    private static boolean wifistate;
+    /*
+     * Sleep tick if wifi is enabled and screenpref
+     */
+    protected static Runnable rSleepcheck = new Runnable() {
+        public void run() {
+                /*
+                 * This is all we want to do.
+				 */
+
+            if (wifistate) {
+                if (!PrefUtil.readBoolean(ctxt.get(), Pref.WAKELOCK_KEY.key()))
+                    _wfmonitor.wakelock.lock(true);
+                _wfmonitor.checkWifi();
+            } else
+                _wfmonitor.wakelock.lock(false);
+        }
+    };
+    /*
+     * Handles non-supplicant wifi fixes.
+     */
+    protected static Runnable rWifiTask = new Runnable() {
+        public void run() {
+            switch (mRepairLevel) {
+
+                case W_REASSOCIATE:
+                    // Let's try to reassociate first..
+                    AsyncWifiManager.get(ctxt.get()).reassociate();
+                    /*
+                     * Schedule network check to verify reassociate
+                     */
+                    _wfmonitor.handlerWrapper(rSleepcheck, SHORTWAIT);
+                    LogUtil.log(ctxt.get(), R.string.reassociating);
+                    mRepairLevel++;
+                    notifyWrap(ctxt.get(),
+                            ctxt.get().getString(R.string.reassociating));
+                    break;
+
+                case W_RECONNECT:
+                    // Ok, now force reconnect..
+                    AsyncWifiManager.get(ctxt.get()).reconnect();
+                    LogUtil.log(ctxt.get(), R.string.reconnecting);
+                    mRepairLevel++;
+                    notifyWrap(ctxt.get(),
+                            ctxt.get().getString(R.string.reconnecting));
+                    break;
+
+                case W_REPAIR:
+                    // Start Scan
+                    AsyncWifiManager.get(ctxt.get()).disconnect();
+                /*
+                 * Reset state
+				 */
+                    mRepairLevel = W_REASSOCIATE;
+                    LogUtil.log(ctxt.get(), R.string.repairing);
+                    notifyWrap(ctxt.get(), ctxt.get().getString(R.string.repairing));
+                    break;
+            }
+            _wfmonitor.wakelock.lock(false);
+            LogUtil.log(ctxt.get(),
+                    new StringBuilder(ctxt.get().getString(
+                            R.string.fix_algorithm)).append(mRepairLevel)
+                            .toString()
+            );
+        }
+    };
     /*
      * For ongoing status notification, widget, and Status fragment
      */
@@ -366,7 +367,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private WFConfig connectee;
     private List<WFConfig> knownbysignal;
     private SupplicantState lastSupplicantState;
-    private static boolean wifistate;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             handleBroadcast(context, intent);
@@ -606,7 +606,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                         break;
                     }
                 } catch (NullPointerException e) {
-                // Don't need to do anything
+                    // Don't need to do anything
                 }
             }
             if (!found)
@@ -1069,12 +1069,12 @@ public class WFMonitor implements OnScreenStateChangedListener {
             }
         }
         /*
-		 * Select by best available
+         * Select by best available
 		 */
 
         WFConfig best = knownbysignal.get(0);
-		/*
-		 * Until BSSID blacklisting is implemented, no point
+        /*
+         * Until BSSID blacklisting is implemented, no point
 		 */
         connectToAP(context, best.wificonfig.SSID);
         logBestNetwork(context, best);
@@ -1086,12 +1086,12 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
         String iAction = data.getString(PrefUtil.INTENT_ACTION);
         if (iAction.equals(WifiManager.WIFI_STATE_CHANGED_ACTION))
-			/*
-			 * Wifi state, e.g. on/off
+            /*
+             * Wifi state, e.g. on/off
 			 */
             handleWifiState(data);
         else if (iAction.equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION))
-			/*
+            /*
 			 * Supplicant events
 			 */
             handleSupplicantIntent(data);

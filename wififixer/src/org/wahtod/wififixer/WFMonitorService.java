@@ -19,8 +19,6 @@
 package org.wahtod.wififixer;
 
 import android.app.Service;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -35,8 +33,7 @@ import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.*;
 import org.wahtod.wififixer.utility.ScreenStateDetector.OnScreenStateChangedListener;
-import org.wahtod.wififixer.widget.FixerWidget;
-import org.wahtod.wififixer.widget.FixerWidgetSmall;
+import org.wahtod.wififixer.widget.WidgetHelper;
 
 public class WFMonitorService extends Service implements
         OnScreenStateChangedListener {
@@ -139,7 +136,7 @@ public class WFMonitorService extends Service implements
 
         LogUtil.log(this, LogUtil.getLogTag(),
                 (getString(R.string.oncreate)));
-        findAppWidgets();
+        WidgetHelper.findAppWidgets(this);
     }
 
     private void logStart() {
@@ -237,21 +234,4 @@ public class WFMonitorService extends Service implements
         //prefs.unRegisterReceiver();
         screenstateHandler.unsetOnScreenStateChangedListener(this);
     }
-
-    private void findAppWidgets() {
-        ComponentName cm = new ComponentName(this, FixerWidget.class);
-        ComponentName cm2 = new ComponentName(this, FixerWidgetSmall.class);
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        int widget = appWidgetManager.getAppWidgetIds(cm).length;
-        int widgetSmall = appWidgetManager.getAppWidgetIds(cm2).length;
-        if (widget > 0
-                || widgetSmall > 0) {
-            PrefUtil.writeBoolean(this, Pref.HASWIDGET_KEY.key(), true);
-            PrefUtil.notifyPrefChange(this, Pref.HASWIDGET_KEY.key(), true);
-        } else {
-            PrefUtil.writeBoolean(this, Pref.HASWIDGET_KEY.key(), false);
-            PrefUtil.notifyPrefChange(this, Pref.HASWIDGET_KEY.key(), false);
-        }
-    }
-
 }
