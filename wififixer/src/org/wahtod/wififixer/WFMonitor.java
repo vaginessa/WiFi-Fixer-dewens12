@@ -582,7 +582,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
             }
         }
 
-        pruneKnown(wifiConfigs);
         LogUtil.log(context,
                 new StringBuilder(context.getString(R.string.number_of_known))
                         .append(String.valueOf(_wfmonitor.knownbysignal.size()))
@@ -602,14 +601,12 @@ public class WFMonitor implements OnScreenStateChangedListener {
             boolean found = false;
             for (WifiConfiguration c : configs) {
                 try {
-                    if (c.SSID.equals(w.wificonfig.SSID))
-                        if (c.BSSID == null || c.BSSID.equals(w.wificonfig.BSSID)) {
-                            found = true;
-                            break;
-                        }
+                    if (isConfigurationEqual(w, c)) {
+                        found = true;
+                        break;
+                    }
                 } catch (NullPointerException e) {
-                    LogUtil.log(ctxt.get(), "SSID null in pruneKnown:" + String.valueOf(c.SSID == null));
-                    LogUtil.log(ctxt.get(), "BSSID null in pruneKNown:" + String.valueOf(c.BSSID == null));
+                // Don't need to do anything
                 }
             }
             if (!found)
@@ -618,6 +615,16 @@ public class WFMonitor implements OnScreenStateChangedListener {
         for (WFConfig w2 : toremove) {
             _wfmonitor.knownbysignal.remove(w2);
         }
+    }
+
+    private static boolean isConfigurationEqual(WFConfig w, WifiConfiguration c) throws NullPointerException {
+        if (w.wificonfig.SSID.equals(c.SSID)) {
+            if (c.BSSID == null)
+                return true;
+            else if (w.wificonfig.BSSID.equals(c.BSSID))
+                return true;
+        }
+        return false;
     }
 
     private static int getNetworkID() {
@@ -1038,14 +1045,14 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     private int connectToBest(Context context) {
         /*
-		 * Make sure knownbysignal is populated first
+         * Make sure knownbysignal is populated first
 		 */
         if (knownbysignal.isEmpty()) {
             LogUtil.log(context, context.getString(R.string.error_c2b));
             return NULLVAL;
         }
-		/*
-		 * Check for connectee (explicit connection)
+        /*
+         * Check for connectee (explicit connection)
 		 */
         if (connectee != null) {
             for (WFConfig network : knownbysignal) {
@@ -1061,7 +1068,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 }
             }
         }
-		/*
+        /*
 		 * Select by best available
 		 */
 
@@ -1254,7 +1261,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 */
         if (!AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled())
             return;
-        else if (_signalhopping) {
+        pruneKnown(AsyncWifiManager.getWifiManager(ctxt.get()).getConfiguredNetworks());
+        if (_signalhopping) {
             _signalhopping = false;
             handlerWrapper(rSignalhop);
         } else if (!pendingscan) {
