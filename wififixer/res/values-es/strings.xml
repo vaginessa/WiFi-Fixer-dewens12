@@ -35,7 +35,6 @@
     <string name="emailintent">Selecciona Gmail, otras aplicaciones podrian no adjuntar el registro</string>
     <string name="issue_prompt">Por favor describe el problema. Se tan especifico como puedas.</string>
     <string name="subject">Registro de WifiFixer</string>
-    <string name="email">zanshin.g1@gmail.com</string>
     <string name="sd_card_unavailable">Tarjeta SD No disponible</string>
     <string name="donateservice">com.wahtod.wififixer.WFDonateService</string>
     <string name="about">Acerca de</string>

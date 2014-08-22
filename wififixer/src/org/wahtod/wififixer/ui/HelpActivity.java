@@ -83,7 +83,7 @@ public class HelpActivity extends AppFragmentActivity {
         private static final String BLOG = "http://wififixer.wordpress.com";
         private static final String EMAIL = "Email:";
         private static final String MAILMIME = "text/plain";
-        private static final String MAILTO = "mailto:zanshin.g1@gmail.com";
+        private static final String MAILTO = "mailto:";
         private static final String GOOGLECODE = "http://code.google.com/p/android/issues/detail?id=21469";
 
         @Override
@@ -92,9 +92,9 @@ public class HelpActivity extends AppFragmentActivity {
                 Intent sendIntent = new Intent(Intent.ACTION_SEND);
                 sendIntent.setType(MAILMIME);
                 sendIntent
-                        .putExtra(Intent.EXTRA_EMAIL, new String[]{MAILTO});
+                        .putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.email)});
                 startActivity(Intent.createChooser(sendIntent, EMAIL));
-                return false;
+                return true;
             } else if (url.contains(BLOG)) {
                 displayExternalURI(BLOG);
                 return false;

@@ -35,7 +35,7 @@
     <string name="emailintent">Select Gmail: other apps may not attach log</string>
     <string name="issue_prompt">Please describe the issue. Be as specific as you can.</string>
     <string name="subject">WifiFixer Log</string>
-    <string name="email">zanshin.g1@gmail.com</string>
+    <string name="email" translatable="false">zanshin.g1+wifi_fixer@gmail.com</string>
     <string name="sd_card_unavailable">SD Card Unavailable</string>
     <string name="donateservice">com.wahtod.wififixer.WFDonateService</string>
     <string name="about">About</string>
