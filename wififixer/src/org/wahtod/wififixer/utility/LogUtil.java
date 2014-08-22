@@ -18,6 +18,7 @@
 
 package org.wahtod.wififixer.utility;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,9 +26,11 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.EditText;
 import org.wahtod.wififixer.DefaultExceptionHandler;
@@ -38,6 +41,7 @@ import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 
 import java.io.*;
+import java.util.List;
 
 public class LogUtil {
     public static final String LOGFILE = "wififixer_log.txt";
@@ -120,13 +124,6 @@ public class LogUtil {
 
     private static boolean dumpLog(Context context, File file) {
         boolean state = false;
-        if (Environment.getExternalStorageState() != null
-                && !(Environment.getExternalStorageState()
-                .contains(Environment.MEDIA_MOUNTED))) {
-            NotifUtil.showToast(context, R.string.sd_card_unavailable);
-            return state;
-        }
-
         try {
             OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file));
             StringBuilder out = new StringBuilder(getLoggerHeader(context));
@@ -148,40 +145,39 @@ public class LogUtil {
         return true;
     }
 
-    public static void sendLog(final Context context) {
+    public static void sendLog(final Activity activity) {
         /*
          * Gets appropriate dir and filename on sdcard across API versions.
 		 */
-        File file = VersionedFile.getFile(context, LogUtil.LOGFILE);
+        //File file = VersionedFile.getFile(context, LOGFILE);
+        final File file = new File(activity.getFilesDir(), LOGFILE);
 
-        dumpLog(context, file);
-
-        final String fileuri = file.toURI().toString();
+        dumpLog(activity, file);
         /*
          * Get the issue report, then start send log dialog
 		 */
-        AlertDialog.Builder issueDialog = new AlertDialog.Builder(context);
+        AlertDialog.Builder issueDialog = new AlertDialog.Builder(activity);
 
-        issueDialog.setTitle(context.getString(R.string.issue_report_header));
-        issueDialog.setMessage(context.getString(R.string.issue_prompt));
+        issueDialog.setTitle(activity.getString(R.string.issue_report_header));
+        issueDialog.setMessage(activity.getString(R.string.issue_prompt));
 
         // Set an EditText view to get user input
-        final EditText input = new EditText(context);
+        final EditText input = new EditText(activity);
         input.setLines(3);
         issueDialog.setView(input);
-        issueDialog.setPositiveButton(context.getString(R.string.ok_button),
+        issueDialog.setPositiveButton(activity.getString(R.string.ok_button),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         if (input.getText().length() > 1)
-                            sendIssueReport(context, input.getText().toString(), fileuri);
+                            sendIssueReport(activity, input.getText().toString(), file);
                         else
-                            NotifUtil.showToast(context,
+                            NotifUtil.showToast(activity,
                                     R.string.issue_report_nag);
                     }
                 }
         );
 
-        issueDialog.setNegativeButton(context.getString(R.string.cancel_button),
+        issueDialog.setNegativeButton(activity.getString(R.string.cancel_button),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                     }
@@ -190,28 +186,31 @@ public class LogUtil {
         issueDialog.show();
     }
 
-    public static void sendIssueReport(Context context, String report, String fileuri) {
+    public static void sendIssueReport(Activity activity, String report, File file) {
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
-        sendIntent.setType(context.getString(R.string.log_mimetype));
+        sendIntent.setType(activity.getString(R.string.log_mimetype));
         sendIntent.putExtra(Intent.EXTRA_EMAIL,
-                new String[]{context.getString(R.string.email)});
-        sendIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.subject));
-        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(fileuri));
+                new String[]{activity.getString(R.string.email)});
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, activity.getString(R.string.subject));
+        Uri uri = FileProvider.getUriForFile(activity, "org.wahtod.wififixer.files", file);
+        sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        List<ResolveInfo> resInfoList = activity.getPackageManager().queryIntentActivities(sendIntent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            activity.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
         sendIntent.putExtra(Intent.EXTRA_TEXT, LogUtil.getBuildInfo()
                 + "\n\n" + report);
-        context.startActivity(Intent.createChooser(sendIntent,
-                context.getString(R.string.emailintent)));
+        activity.startActivityForResult(Intent.createChooser(sendIntent,
+                activity.getString(R.string.emailintent)),1);
     }
 
-    public static void deleteLog(Context context) {
+    public static void deleteLog(Context context, File file) {
         /*
-         * Delete old log if logging currently enabled.
+         * Delete old log
 		 */
-        File file = VersionedFile.getFile(context, LogUtil.LOGFILE);
-        if (file.delete())
-            NotifUtil.showToast(context,
-                    R.string.logfile_delete_toast);
-        else
+
+        if (!file.delete())
             NotifUtil.showToast(context,
                     R.string.logfile_delete_err_toast);
     }
@@ -240,5 +239,16 @@ public class LogUtil {
         message.append(COLON);
         message.append(String.valueOf(version));
         return message.toString();
+    }
+
+    public static void writeLogtoSd(Context context) {
+        if (Environment.getExternalStorageState() != null
+                && !(Environment.getExternalStorageState()
+                .contains(Environment.MEDIA_MOUNTED))) {
+            NotifUtil.showToast(context, R.string.sd_card_unavailable);
+            return;
+        }
+        dumpLog(context, VersionedFile.getFile(context, LOGFILE));
+        NotifUtil.showToast(context, context.getString(R.string.log_written));
     }
 }

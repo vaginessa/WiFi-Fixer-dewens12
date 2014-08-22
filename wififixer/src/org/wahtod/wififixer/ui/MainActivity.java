@@ -39,6 +39,7 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitorService;
 import org.wahtod.wififixer.boot.BootService;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
+import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.KnownNetworksFragment.OnFragmentPauseRequestListener;
@@ -46,6 +47,7 @@ import org.wahtod.wififixer.utility.LogUtil;
 import org.wahtod.wififixer.utility.NotifUtil;
 import org.wahtod.wififixer.utility.ServiceAlarm;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 
 public class MainActivity extends TutorialFragmentActivity implements
@@ -60,6 +62,7 @@ public class MainActivity extends TutorialFragmentActivity implements
     /*
      * Delete Log intent extra
      */
+    private static final String WRITE_LOG = "WRITE_LOG";
     private static final String DELETE_LOG = "DELETE_LOG";
     private static final String RUN_TUTORIAL = "RUN_TUTORIAL";
     /*
@@ -121,6 +124,12 @@ public class MainActivity extends TutorialFragmentActivity implements
         handler.sendMessage(message);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        LogUtil.deleteLog(this, new File(this.getFilesDir(), LogUtil.LOGFILE));
+    }
+
     private void handleIntentMessage(Message message) {
         if (message.getData().isEmpty())
             return;
@@ -135,9 +144,17 @@ public class MainActivity extends TutorialFragmentActivity implements
         /*
          * Delete Log if called by preference
 		 */
-        else if (data.containsKey(DELETE_LOG)) {
+        else if (data.containsKey(WRITE_LOG)) {
+            data.remove(WRITE_LOG);
+            LogUtil.writeLogtoSd(this);
+        } else if (data.containsKey(DELETE_LOG)) {
             data.remove(DELETE_LOG);
-            LogUtil.deleteLog(this);
+            File logFile = VersionedFile.getFile(this, LogUtil.LOGFILE);
+            if (logFile.exists()) {
+                LogUtil.deleteLog(this, VersionedFile.getFile(this, LogUtil.LOGFILE));
+                NotifUtil.showToast(this,
+                        R.string.logfile_delete_toast);
+            }
         } else if (data.containsKey(RUN_TUTORIAL)) {
             data.remove(RUN_TUTORIAL);
             phoneTutNag();
@@ -174,7 +191,7 @@ public class MainActivity extends TutorialFragmentActivity implements
 
     private void drawUI() {
         /*
-		 * Set up ViewPager and FragmentStatePagerAdapter for phone and tablet
+         * Set up ViewPager and FragmentStatePagerAdapter for phone and tablet
 		 */
         mBasePager = (BaseViewPager) findViewById(R.id.pager);
         mBasePager.setOffscreenPageLimit(2);
@@ -198,12 +215,12 @@ public class MainActivity extends TutorialFragmentActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         self = new WeakReference<MainActivity>(this);
-		/*
-		 * Set Default Exception handler
+        /*
+         * Set Default Exception handler
 		 */
         DefaultExceptionHandler.register(this);
-		/*
-		 * Do startup
+        /*
+         * Do startup
 		 */
         super.onCreate(savedInstanceState);
         setTitle(R.string.app_name);
@@ -213,7 +230,7 @@ public class MainActivity extends TutorialFragmentActivity implements
         ActionBarDetector.setDisplayHomeAsUpEnabled(this, false);
         // Here's where we fire the nag
         authCheck();
-		/*
+        /*
 		 * Handle intent command if destroyed or first start
 		 */
         bundleIntent(getIntent());

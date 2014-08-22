@@ -23,7 +23,7 @@
     <string name="network_status">Network Status</string>
     <string name="scheduling_n1_fix">Scheduling N1 Fix</string>
     <string name="widget_update_called">Widget Update Called</string>
-    <string name="logfile_delete_err_toast">Enable Logging to collect data</string>
+    <string name="logfile_delete_err_toast">Log does not exist</string>
     <string name="logfile_delete_toast">Log File Deleted</string>
     <string name="connect">Connect</string>
     <string name="disable">Disable</string>
@@ -208,8 +208,6 @@
     <string name="priority">Priority:</string>
     <string name="error">error</string>
     <string name="log">Log</string>
-    <string name="deletelog_summary">Deletes Log from sdcard</string>
-    <string name="deletelog_title">Delete Log</string>
     <string name="dbmfloor_title">Signalhop Level</string>
     <string name="dbmfloor_summary">Level at which Wifi Fixer scans for a better known network \nDefault is
         recommended
@@ -276,5 +274,10 @@
     <string name="privacy_part_1">Your Wifi password is never stored or transmitted. It is only used to create the Wifi Configuration\n</string>
     <string name="privacy_part_2">Information sent via email for support purposes is never shared with any third party.  Your email address will never be used for any purpose other than product support.\n</string>
     <string name="privacy_part_3">Logging stores some personal information: specifically current timezone and SSID of configured access points and scanned SSIDs during connection.   Logging is stored securely.  The log will only be transmitted when explicitly requested.\n\nStack traces are collected upon an uncaught exception and added to the log.  Stack traces contain no identifying information.</string>
+    <string name="writelog_summary">Dumps log to /sdcard/Android/data/org.wahtod.wififixer/files/wififixer_log.txt</string>
+    <string name="writelog_title">Write Log</string>
+    <string name="deletelog_summary">Deletes log file from sdcard</string>
+    <string name="deletelog_title">Delete Log</string>
+    <string name="log_written">Log Written</string>
 
 </resources>

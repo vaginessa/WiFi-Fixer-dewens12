@@ -21,11 +21,6 @@
                   android:title="Logging">
 
     <PreferenceCategory android:title="Logging">
-        <CheckBoxPreference
-                android:key="SLOG"
-                android:summary="@string/SLOG_summary"
-                android:title="@string/SLOG_title"/>
-
         <Preference
                 android:summary="@string/sendlog_summary"
                 android:title="@string/sendlog_title">
@@ -39,6 +34,18 @@
             </intent>
         </Preference>
         <Preference
+                android:summary="@string/writelog_summary"
+                android:title="@string/writelog_title">
+            <intent
+                    android:targetClass="org.wahtod.wififixer.ui.MainActivity"
+                    android:targetPackage="org.wahtod.wififixer">
+                <extra
+                        android:name="WRITE_LOG"
+                        android:value="pi">
+                </extra>
+            </intent>
+        </Preference>
+        <Preference
                 android:summary="@string/deletelog_summary"
                 android:title="@string/deletelog_title">
             <intent
@@ -46,10 +53,14 @@
                     android:targetPackage="org.wahtod.wififixer">
                 <extra
                         android:name="DELETE_LOG"
-                        android:value="pi">
+                        android:value="po">
                 </extra>
             </intent>
         </Preference>
+        <CheckBoxPreference
+                android:key="SLOG"
+                android:summary="@string/SLOG_summary"
+                android:title="@string/SLOG_title"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -211,8 +211,6 @@
     <string name="log">Registro</string>
     <string name="sendlog_summary">Enviar registro al Desarrollador</string>
     <string name="sendlog_title">Enviar Registro</string>
-    <string name="deletelog_summary">Borrar registro de la tarjeta SD</string>
-    <string name="deletelog_title">Borrar Registro</string>
     <string name="dbmfloor_title">Nivel de Signalhop</string>
     <string name="dbmfloor_summary">Nivel al cual Wifi Fixer busca una red conocida mejor \nDefault es
         recomendado
@@ -273,5 +271,10 @@
     <string name="privacy_part_1">Your Wifi password is never stored or transmitted. It is only used to create the Wifi Configuration\n</string>
     <string name="privacy_part_2">Information sent via email for support purposes is never shared with any third party.  Your email address will never be used for any purpose other than product support.\n</string>
     <string name="privacy_part_3">Logging stores some personal information: specifically current timezone and SSID of configured access points and scanned SSIDs during connection.   Logging is stored securely.  The log will only be transmitted when explicitly requested.\n\nStack traces are collected upon an uncaught exception and added to the log.  Stack traces contain no identifying information.</string>
+    <string name="writelog_summary">Dumps log to /sdcard/Android/data/org.wahtod.wififixer/files/wififixer_log.txt</string>
+    <string name="writelog_title">Write Log</string>
+    <string name="deletelog_summary">Deletes log file from sdcard</string>
+    <string name="deletelog_title">Delete Log</string>
+    <string name="log_written">Log Written</string>
 
 </resources>
