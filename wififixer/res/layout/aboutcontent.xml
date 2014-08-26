@@ -70,40 +70,38 @@
                     android:text="@string/copyright"/>
 
             <TextView
-                    style="@style/Wftext"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dip"
+                    android:textColor="@android:color/white"
                     android:text="@string/gpl_part_1"/>
 
             <TextView
-                    style="@style/Wftext"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dip"
+                    android:textColor="@android:color/white"
                     android:text="@string/gpl_part_2"/>
 
             <TextView
-                    style="@style/Wftext"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:autoLink="web"
                     android:paddingTop="5dip"
+                    android:textColor="@android:color/white"
                     android:text="@string/gpl_part_3"/>
-
-            <TextView
-                    style="@style/Wftext.large"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dip"
-                    android:text="@string/promo"/>
-
 
             <TextView
                     style="@style/Wftext.header"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dip"
+                    android:paddingTop="10dip"
+                    android:text="@string/promo"/>
+
+            <TextView
+                    style="@style/Wftext.header"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
                     android:text="@string/pleaseread"/>
 
             <TextView
@@ -117,8 +115,7 @@
                     style="@style/Wftext.header"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:autoLink="web|email"
-                    android:paddingTop="10dip"
+                    android:paddingTop="5dip"
                     android:text="@string/feedback"
                     />
 
@@ -132,10 +129,9 @@
                     />
 
             <TextView
-                    style="@style/Wftext.large"
+                    style="@style/Wftext.header"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:autoLink="web|email"
                     android:paddingTop="10dip"
                     android:text="@string/visitcommunity"
                     />
@@ -170,36 +166,36 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:autoLink="web"
-                    android:paddingTop="10dip"
+                    android:paddingTop="5dip"
                     android:text="@string/gitURI"/>
 
             <TextView
-                    style="@style/Wftext.large"
+                    style="@style/Wftext.header"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dip"
                     android:text="@string/privacy_header"/>
 
             <TextView
-                    style="@style/Wftext.header"
+                    style="@style/Wftext"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dip"
+                    android:paddingTop="5dip"
                     android:text="@string/privacy_part_1"/>
 
 
             <TextView
-                    style="@style/Wftext.header"
+                    style="@style/Wftext"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dip"
+                    android:paddingTop="5dip"
                     android:text="@string/privacy_part_2"/>
 
             <TextView
-                    style="@style/Wftext.header"
+                    style="@style/Wftext"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dip"
+                    android:paddingTop="5dip"
                     android:text="@string/privacy_part_3"/>
         </LinearLayout>
     </ScrollView>

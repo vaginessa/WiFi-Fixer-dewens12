@@ -262,8 +262,8 @@
     <string name="gpl_part_2" translatable="false">This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</string>
     <string name="gpl_part_3" translatable="false">You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses</string>
     <string name="promo">Wifi Fixer works around several problems with Android wifi.</string>
-    <string name="pleaseread">Wifi Fixer should help immediately, but may need preferences adjusted to work best.\n\nPlease read the documentation for specifics.\n</string>
-    <string name="notpossible">It is not possible to prevent disconnections or low signal in an app.  Wifi Fixer will detect and attempt recovery when these problems are detected  Some tuning can be done to the Wifi Acess Point\'s settings to minimize disconnections.  Please refer to the in-app help documents.\n</string>
+    <string name="pleaseread">Wifi Fixer should help immediately, but may need preferences adjusted to work best. Please read the documentation for specifics.</string>
+    <string name="notpossible">It is not possible to prevent disconnections or low signal in an app.  Wifi Fixer will detect and attempt recovery when these problems are detected.  Some tuning can be done to the Wifi Acess Point\'s settings to minimize disconnections.  Please refer to the in-app help documents.\n</string>
     <string name="feedback">For problems or comments:\nemail with specific details, or use the in-app send log feature.</string>
     <string name="visitcommunity">\nVisit the Wifi Fixer community</string>
     <string name="communityURI" translatable = "false">https://plus.google.com/communities/103679343838973883833\n</string>

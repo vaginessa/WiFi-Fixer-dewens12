@@ -581,7 +581,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 }
             }
         }
-
+        pruneKnown(wifiConfigs);
         LogUtil.log(context,
                 new StringBuilder(context.getString(R.string.number_of_known))
                         .append(String.valueOf(_wfmonitor.knownbysignal.size()))
@@ -1092,7 +1092,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
             handleWifiState(data);
         else if (iAction.equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION))
             /*
-			 * Supplicant events
+             * Supplicant events
 			 */
             handleSupplicantIntent(data);
         else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
@@ -1261,7 +1261,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 */
         if (!AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled())
             return;
-        pruneKnown(AsyncWifiManager.getWifiManager(ctxt.get()).getConfiguredNetworks());
         if (_signalhopping) {
             _signalhopping = false;
             handlerWrapper(rSignalhop);
