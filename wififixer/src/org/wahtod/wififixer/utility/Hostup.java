@@ -59,7 +59,7 @@ public class Hostup {
 
     private Hostup(Context c) {
         mCurrentSession = 0;
-        mContext = new WeakReference<Context>(c);
+        mContext = new WeakReference<Context>(c.getApplicationContext());
         disableConnectionReuse();
     }
 
