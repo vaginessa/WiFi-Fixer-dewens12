@@ -149,6 +149,10 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 demoteNetwork(ctxt.get(), n);
         }
     };
+    // flags
+    private static boolean shouldrepair = false;
+    private static boolean pendingscan = false;
+    private static boolean pendingreconnect = false;
     protected static Runnable rMain = new Runnable() {
         public void run() {
             /*
@@ -180,10 +184,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
             }
         }
     };
-    // flags
-    private static boolean shouldrepair = false;
-    private static boolean pendingscan = false;
-    private static boolean pendingreconnect = false;
+    private static int numKnownNetworks = 0;
     /*
      * Runs first time supplicant nonresponsive
      */
@@ -193,7 +194,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 LogUtil.log(ctxt.get(), R.string.wifi_off_aborting_reconnect);
                 return;
             }
-            if (getKnownAPsBySignal(ctxt.get()) > 0
+            if (numKnownNetworks > 0
                     && _wfmonitor.connectToBest(ctxt.get()) != NULLVAL) {
                 pendingreconnect = false;
             } else {
@@ -215,7 +216,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
                 return;
             }
 
-            if (getKnownAPsBySignal(ctxt.get()) > 0
+            if (numKnownNetworks > 0
                     && _wfmonitor.connectToBest(ctxt.get()) != NULLVAL) {
                 pendingreconnect = false;
             } else if (!repair_reset) {
@@ -365,7 +366,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
     // Last Scan
     private StopWatch _scantimer;
     private WFConfig connectee;
-    private List<WFConfig> knownbysignal;
     private SupplicantState lastSupplicantState;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
@@ -384,7 +384,6 @@ public class WFMonitor implements OnScreenStateChangedListener {
     private WFMonitor(final Context context) {
         _scantimer = new StopWatch();
         _supplicantFifo = new FifoList(FIFO_LENGTH);
-        knownbysignal = new ArrayList<WFConfig>();
         /*
          * Cache Context from service
 		 */
@@ -496,7 +495,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
         else return false;
     }
 
-    private static int getKnownAPsBySignal(Context context) {
+    private static List<WFConfig> getKnownAPsBySignal(Context context) {
+        List<WFConfig> knownbysignal = new ArrayList<WFConfig>();
 
 		/*
          * Comparator class for sorting results
@@ -529,7 +529,7 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		 */
         if (scanResults == null) {
             LogUtil.log(context, R.string.null_scan_results);
-            return NULLVAL;
+            return knownbysignal;
         }
         /*
          * Known networks from supplicant.
@@ -540,88 +540,37 @@ public class WFMonitor implements OnScreenStateChangedListener {
          * Iterate the known networks over the scan results, adding found known
 		 * networks.
 		 */
-
-        LogUtil.log(context, R.string.parsing_scan_results);
-
-        int index;
         for (ScanResult sResult : scanResults) {
+            for (WifiConfiguration configuration : wifiConfigs) {
             /*
              * Look for scan result in our known list
 			 */
-            index = containsSSID(sResult.SSID, wifiConfigs);
-            if (index > -1) {
-                WifiConfiguration wfResult = getNetworkByNID(context, index);
-                /*
-                 * Ignore if disabled
-				 */
-                if (PrefUtil.getNetworkState(context, wfResult.networkId)) {
-                    /*
-                     * Log network
-					 */
-                    logScanResult(context, sResult, wfResult);
-                    /*
-                     * Add result to knownbysignal Using containsBSSID to avoid
-					 * dupes if results bugged
-					 */
-                    if (!containsBSSID(sResult.BSSID, _wfmonitor.knownbysignal))
-                        _wfmonitor.knownbysignal.add(new WFConfig(sResult,
-                                wfResult));
-                    else {
-                        /*
-                         * Update signal level
-						 */
-                        for (WFConfig config : _wfmonitor.knownbysignal) {
-                            if (config.wificonfig.BSSID.equals(sResult.BSSID)) {
-                                _wfmonitor.knownbysignal
-                                        .get(_wfmonitor.knownbysignal
-                                                .indexOf(config)).level = sResult.level;
-                            }
-                        }
-                    }
+                if (isConfigurationEqual(sResult, configuration)
+                        && PrefUtil.getNetworkState(ctxt.get(), configuration.networkId)) {
+                    knownbysignal.add(new WFConfig(sResult,
+                            configuration));
+                    logScanResult(context, sResult, configuration);
                 }
             }
         }
-        pruneKnown(wifiConfigs);
+
         LogUtil.log(context,
                 new StringBuilder(context.getString(R.string.number_of_known))
-                        .append(String.valueOf(_wfmonitor.knownbysignal.size()))
-                        .toString()
-        );
+                        .append(String.valueOf(knownbysignal.size()))
+                        .toString());
+        numKnownNetworks = knownbysignal.size();
         /*
          * Sort by ScanResult.level which is signal
 		 */
-        Collections.sort(_wfmonitor.knownbysignal, new SortBySignal());
-
-        return _wfmonitor.knownbysignal.size();
+        Collections.sort(knownbysignal, new SortBySignal());
+        return knownbysignal;
     }
 
-    private static void pruneKnown(List<WifiConfiguration> configs) {
-        List<WFConfig> toremove = new ArrayList<WFConfig>();
-        for (WFConfig w : _wfmonitor.knownbysignal) {
-            boolean found = false;
-            for (WifiConfiguration c : configs) {
-                try {
-                    if (isConfigurationEqual(w, c)) {
-                        found = true;
-                        break;
-                    }
-                } catch (NullPointerException e) {
-                    // Don't need to do anything
-                }
-            }
-            if (!found)
-                toremove.add(w);
-        }
-        for (WFConfig w2 : toremove) {
-            _wfmonitor.knownbysignal.remove(w2);
-        }
-    }
-
-    private static boolean isConfigurationEqual(WFConfig w, WifiConfiguration c) throws NullPointerException {
-        if (w.wificonfig.SSID.equals(c.SSID)) {
-            if (c.BSSID == null)
+    private static boolean isConfigurationEqual(ScanResult sResult, WifiConfiguration configuration) {
+        if (StringUtil.removeQuotes(sResult.SSID).equals(StringUtil.removeQuotes(configuration.SSID))) {
+            if (configuration.BSSID == null)
                 return true;
-            else if (w.wificonfig.BSSID.equals(c.BSSID))
+            else if (configuration.BSSID.equals(sResult.BSSID))
                 return true;
         }
         return false;
@@ -1004,19 +953,18 @@ public class WFMonitor implements OnScreenStateChangedListener {
         );
     }
 
-    private void connectToAP(Context context, String ssid) {
+    private void connectToAP(Context context, int network) {
 
         if (!AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled())
             return;
         /*
          * Back to explicit connection
 		 */
-        int n = PrefUtil.getNid(context, ssid);
 
-        if (n == -1)
+        if (network == -1)
             return;
 
-        WifiConfiguration target = getNetworkByNID(context, n);
+        WifiConfiguration target = getNetworkByNID(context, network);
         /*
          * Create sparse WifiConfiguration with details of desired connectee
 		 */
@@ -1044,26 +992,20 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private int connectToBest(Context context) {
-        /*
-         * Make sure knownbysignal is populated first
-		 */
-        if (knownbysignal.isEmpty()) {
-            LogUtil.log(context, context.getString(R.string.error_c2b));
-            return NULLVAL;
-        }
+        List<WFConfig> networks = getKnownAPsBySignal(context);
         /*
          * Check for connectee (explicit connection)
 		 */
         if (connectee != null) {
-            for (WFConfig network : knownbysignal) {
-                if (network.wificonfig.SSID.equals(connectee.wificonfig.SSID)) {
+            for (WFConfig network : networks) {
+                if (network.wificonfig.networkId == connectee.wificonfig.networkId) {
                     logBestNetwork(context, network);
                     connecting++;
                     if (connecting >= CONNECTING_THRESHOLD) {
                         LogUtil.log(context, R.string.connection_threshold_exceeded);
                         restoreandReset(context, network);
                     } else
-                        connectToAP(context, connectee.wificonfig.SSID);
+                        connectToAP(context, connectee.wificonfig.networkId);
                     return network.wificonfig.networkId;
                 }
             }
@@ -1072,11 +1014,16 @@ public class WFMonitor implements OnScreenStateChangedListener {
          * Select by best available
 		 */
 
-        WFConfig best = knownbysignal.get(0);
+        WFConfig best = null;
+        try {
+            best = getKnownAPsBySignal(context).get(0);
+        } catch (IndexOutOfBoundsException e) {
+            return NULLVAL;
+        }
         /*
          * Until BSSID blacklisting is implemented, no point
 		 */
-        connectToAP(context, best.wificonfig.SSID);
+        connectToAP(context, best.wificonfig.networkId);
         logBestNetwork(context, best);
 
         return best.wificonfig.networkId;
@@ -1096,14 +1043,14 @@ public class WFMonitor implements OnScreenStateChangedListener {
 			 */
             handleSupplicantIntent(data);
         else if (iAction.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
-			/*
-			 * Scan Results
+            /*
+             * Scan Results
 			 */
             handleScanResults();
         else if (iAction
                 .equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
-			/*
-			 * IP connectivity established
+            /*
+             * IP connectivity established
 			 */
             handleNetworkAction(data);
         else if (iAction.equals(CONNECTINTENT))
@@ -1146,10 +1093,14 @@ public class WFMonitor implements OnScreenStateChangedListener {
         connectToAP(ctxt.get(), data.getString(NETWORKNAME));
     }
 
+    private void connectToAP(Context context, String s) {
+        connectToAP(context, PrefUtil.getNid(context, s));
+    }
+
     private void handleNetworkAction(Bundle data) {
         NetworkInfo networkInfo = data.getParcelable(WifiManager.EXTRA_NETWORK_INFO);
         /*
-		 * This action means network connectivty has changed but, we only want
+         * This action means network connectivty has changed but, we only want
 		 * to run this code for wifi
 		 */
         if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
@@ -1172,8 +1123,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
 
     private void checkWifi() {
         if (getIsSupplicantConnected(ctxt.get())) {
-			/*
-			 * Starts network check AsyncTask
+            /*
+             * Starts network check AsyncTask
 			 */
             submitRunnable(NetCheckRunnable);
         } else {
@@ -1208,8 +1159,8 @@ public class WFMonitor implements OnScreenStateChangedListener {
     }
 
     private void prepareConnect() {
-		/*
-		 * Flush queue if connected
+        /*
+         * Flush queue if connected
 		 *
 		 * Also clear any error notifications
 		 */
@@ -1253,11 +1204,11 @@ public class WFMonitor implements OnScreenStateChangedListener {
         enforceAttBlacklistState(ctxt.get());
 
 		/*
-		 * Reset timer: we've successfully scanned
+         * Reset timer: we've successfully scanned
 		 */
         _scantimer.start();
-		/*
-		 * Sanity check
+        /*
+         * Sanity check
 		 */
         if (!AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled())
             return;
@@ -1266,22 +1217,22 @@ public class WFMonitor implements OnScreenStateChangedListener {
             handlerWrapper(rSignalhop);
         } else if (!pendingscan) {
             if (getIsOnWifi(ctxt.get())) {
-				/*
-				 * Signalhop code out
+                /*
+                 * Signalhop code out
 				 */
                 return;
             } else {
-				/*
-				 * Parse scan and connect if any known networks discovered
+                /*
+                 * Parse scan and connect if any known networks discovered
 				 */
                 if (supplicantInterruptCheck(ctxt.get())) {
-                    if (getKnownAPsBySignal(ctxt.get()) > 0)
-                        connectToBest(ctxt.get());
+                    LogUtil.log(ctxt.get(), R.string.parsing_scan_results);
+                    connectToBest(ctxt.get());
                 }
             }
         } else if (!pendingreconnect) {
-			/*
-			 * Service called the scan: dispatch appropriate runnable
+            /*
+             * Service called the scan: dispatch appropriate runnable
 			 */
             pendingscan = false;
             handlerWrapper(rRepair);
@@ -1592,32 +1543,27 @@ public class WFMonitor implements OnScreenStateChangedListener {
 		/*
 		 * Switch to best
 		 */
-        int bestap = NULLVAL;
-        int numKnown = getKnownAPsBySignal(ctxt.get());
+        WFConfig bestap = null;
         int current = AsyncWifiManager.getWifiManager(ctxt.get()).getConnectionInfo().getNetworkId();
         int level = -100;
-        //Get current network signal level
-        for (WFConfig config : knownbysignal) {
-            if (config.wificonfig.networkId == current)
-                level = config.level;
-        }
+        List<WFConfig> knownbysignal = getKnownAPsBySignal(ctxt.get());
 
-        if (numKnown > 1) {
+        if (numKnownNetworks > 1) {
             for (WFConfig config : knownbysignal) {
                 if (config.level - level >= HOP_THRESHOLD) {
-                    bestap = config.wificonfig.networkId;
+                    bestap = config;
                 }
             }
         }
-        if (bestap != NULLVAL) {
+        if (bestap != null && bestap.wificonfig.networkId != getNetworkID()) {
+            logBestNetwork(ctxt.get(), bestap);
             LogUtil.log(ctxt.get(),
                     new StringBuilder(ctxt.get().getString(R.string.hopping))
-                            .append(String.valueOf(bestap)).toString()
-            );
-            LogUtil.log(ctxt.get(), new StringBuilder(ctxt.get()
-                    .getString(R.string.nid)).append(String.valueOf(lastAP))
-                    .toString());
-            connectToAP(ctxt.get(), PrefUtil.getnetworkSSID(ctxt.get(), bestap));
+                            .append(bestap.wificonfig.SSID)
+                            .append(" : ")
+                            .append(bestap.wificonfig.BSSID)
+                            .toString());
+            connectToAP(ctxt.get(), bestap.wificonfig.networkId);
         } else {
             LogUtil.log(ctxt.get(), R.string.signalhop_no_result);
         }
