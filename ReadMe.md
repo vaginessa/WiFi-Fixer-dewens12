@@ -35,7 +35,7 @@
   
 _There are unit tests, but I do not include them in the repository.  If you want to write production code based on this project you're going to have to hire me_
 
-###*Release: 1.0.3.3 Yammering Yarmulke*
+###*Release: 1.0.3.4 Yammering Yarmulke: Yatta!*
 ####1.0 marks a design refresh for "Holo" with additional user-facing features and improvements, bugfixes, and lower memory consumption/fewer wakelocks.
 
 
