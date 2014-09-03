@@ -22,16 +22,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.NotifUtil;
 
 import java.lang.ref.WeakReference;
 
@@ -56,8 +50,7 @@ public abstract class TutorialFragmentActivity extends AppFragmentActivity {
         public void handleMessage(Message message) {
             switch (message.what) {
                 case TOAST:
-                    self.get().showTutorialToast(message.arg1);
-                    break;
+                    NotifUtil.showToast(self.get(), message.arg1, TOAST_DELAY);
 
                 case PAGE:
                     self.get().pv.setCurrentItem(message.arg1);
@@ -85,7 +78,7 @@ public abstract class TutorialFragmentActivity extends AppFragmentActivity {
                     Message m2 = handler.obtainMessage(SET_PART, 2, 0);
                     handler.sendMessage(m2);
                 /*
-				 * Change page to Local Networks
+                 * Change page to Local Networks
 				 */
                     m2 = handler.obtainMessage(PAGE, 1, 0);
                     handler.sendMessageDelayed(m2, 0);
@@ -170,20 +163,5 @@ public abstract class TutorialFragmentActivity extends AppFragmentActivity {
     public void runTutorial() {
         handler.sendEmptyMessage(PART1);
         PrefUtil.writeBoolean(this, PrefConstants.TUTORIAL, true);
-    }
-
-    private void showTutorialToast(int id) {
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.tutorial,
-                (ViewGroup) findViewById(R.id.toast_root));
-        ImageView image = (ImageView) layout.findViewById(R.id.icon);
-        image.setImageResource(R.drawable.icon);
-        TextView text = (TextView) layout.findViewById(R.id.toast_text);
-        text.setText(getString(id));
-        Toast toast = new Toast(getApplicationContext());
-        toast.setGravity(Gravity.BOTTOM, 0, 0);
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.setView(layout);
-        toast.show();
     }
 }

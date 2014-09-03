@@ -152,6 +152,7 @@ public class PrefActivity extends SherlockPreferenceActivity implements
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             addPreferencesFromResource(R.xml.general);
             addPreferencesFromResource(R.xml.notification);
+            addPreferencesFromResource(R.xml.help);
             addPreferencesFromResource(R.xml.widget);
             addPreferencesFromResource(R.xml.logging);
             addPreferencesFromResource(R.xml.advanced);

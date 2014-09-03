@@ -282,10 +282,18 @@ public class NotifUtil {
     }
 
     public static void showToast(Context context, int resID) {
-        showToast(context, context.getString(resID));
+        showToast(context, context.getString(resID), Toast.LENGTH_LONG);
     }
 
     public static void showToast(Context context, String message) {
+        showToast(context, message, Toast.LENGTH_LONG);
+    }
+
+    public static void showToast(Context context, int resID, int delay) {
+        showToast(context, context.getString(resID), delay);
+    }
+
+    public static void showToast(Context context, String message, int delay) {
 
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Service.LAYOUT_INFLATER_SERVICE);
@@ -296,7 +304,7 @@ public class NotifUtil {
         text.setText(message);
         Toast toast = new Toast(context.getApplicationContext());
         toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
-        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setDuration(delay);
         toast.setView(layout);
         toast.show();
 

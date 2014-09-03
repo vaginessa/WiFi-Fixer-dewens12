@@ -276,5 +276,8 @@
     <string name="deletelog_summary">Deletes log file from sdcard</string>
     <string name="deletelog_title">Delete Log</string>
     <string name="log_written">Log Written</string>
+    <string name="phone_ui_tutorial_summary">Starts a simple tutorial on Wifi Fixer\'s main user interface</string>
+    <string name="documentation_title">Documentation</string>
+    <string name="documentation_summary">Open Documentation</string>
 
 </resources>

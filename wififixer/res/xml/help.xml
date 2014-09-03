@@ -17,21 +17,34 @@
   ~     You should have received a copy of the GNU General Public License
   ~     along with this program.  If not, see http://www.gnu.org/licenses
   -->
+
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Service Preferences">
-        <CheckBoxPreference
-                android:key="Disable"
-                android:title="Disable Service"
-                android:summary="Causes the Wifi Fixer service to stop running"/>
+    <PreferenceCategory android:title="@string/help"/>
 
-        <ListPreference
-                android:title="@string/Perf_Mode_title"
-                android:defaultValue="1"
-                android:summary="@string/Perf_Mode_summary"
-                android:key="Perf_Mode"
-                android:entries="@array/entries"
-                android:entryValues="@array/entryValues"/>
-    </PreferenceCategory>
+    <PreferenceScreen
+            android:title="@string/phone_ui_tutorial"
+            android:summary="@string/phone_ui_tutorial_summary"
+            >
+        <intent
+                android:targetPackage="org.wahtod.wififixer"
+                android:targetClass="org.wahtod.wififixer.ui.MainActivity">
+            <extra
+                    android:name="RUN_TUTORIAL"
+                    android:value="pi">
+            </extra>
+        </intent>
 
+    </PreferenceScreen>
+
+    <PreferenceScreen
+            android:title="@string/documentation_title"
+            android:summary="@string/documentation_summary"
+            >
+        <intent
+                android:targetPackage="org.wahtod.wififixer"
+                android:targetClass="org.wahtod.wififixer.ui.HelpActivity">
+        </intent>
+
+    </PreferenceScreen>
 </PreferenceScreen>
