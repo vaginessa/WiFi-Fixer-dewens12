@@ -21,7 +21,6 @@ package org.wahtod.wififixer.utility;
 import android.content.Context;
 import android.os.Build;
 import org.wahtod.wififixer.R;
-import org.wahtod.wififixer.WFMonitor;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -29,6 +28,11 @@ import java.net.*;
 import java.util.concurrent.RejectedExecutionException;
 
 public class Hostup {
+    public interface HostupResponse {
+        public void onHostupResponse(HostMessage hostMessage);
+    }
+
+    ;
     /*
      * getHostUp method: Executes 2 threads, icmp check and http check first
      * thread to return state "wins"
@@ -44,18 +48,19 @@ public class Hostup {
     private static final int HTTP_TIMEOUT = 4000;
     private static final String REJECTED_EXECUTION = "Rejected Execution";
     private static Hostup _hostup;
-    private static volatile ThreadHandler _nethandler;
+    private static ThreadHandler _nethandler;
     protected volatile String target;
     protected volatile HostMessage response;
     protected volatile URI headURI;
     protected volatile int reachable;
     protected volatile int mCurrentSession;
     protected volatile WeakReference<Context> mContext;
-    protected volatile WeakReference<Thread> masterThread;
+    protected volatile Thread masterThread;
     protected volatile boolean mFinished;
     private static ThreadHandler httpHandler;
     private static ThreadHandler icmpHandler;
-    private String mFailover;
+    private volatile String mFailover;
+    private HostupResponse mClient;
 
     private Hostup(Context c) {
         mCurrentSession = 0;
@@ -63,7 +68,11 @@ public class Hostup {
         disableConnectionReuse();
     }
 
-    public static void submitRunnable(Runnable r) {
+    public void registerClient(HostupResponse client) {
+        mClient = client;
+    }
+
+    private void submitRunnable(Runnable r) {
         if (_nethandler != null)
             _nethandler.get().post(r);
     }
@@ -76,34 +85,29 @@ public class Hostup {
             _hostup.icmpHandler = new ThreadHandler(context.getString(R.string.icmpcheckthread));
             _nethandler = new ThreadHandler(
                     context.getString(R.string.netcheckthread));
+            _hostup.masterThread = _nethandler.getLooper().getThread();
         }
         return _hostup;
     }
 
-    public String getmFailover() {
+    public String getFailover() {
         return mFailover;
-    }
-
-    public void setmFailover(String mFailover) {
-        this.mFailover = mFailover;
     }
 
     protected void complete(HostMessage h, int session) {
         if (session == mCurrentSession) {
             mFinished = true;
             response = h;
-            masterThread.get().interrupt();
+            masterThread.interrupt();
         }
     }
 
-    public synchronized HostMessage getHostup(int timeout,
-                                              Context ctxt, String router) {
+    public void getHostup(int timeout, String router) {
        /*
         * Track Sessions to find ordering problem in deep sleep
         */
         mCurrentSession++;
-        if (response == null) response = new HostMessage();
-        masterThread = new WeakReference<Thread>(Thread.currentThread());
+        response = new HostMessage();
         /*
          * If null, use failover else construct URL from router string
 		 */
@@ -114,40 +118,16 @@ public class Hostup {
 
         reachable = timeout + TIMEOUT_EXTRA;
         /*
-         * Start Check Threads
-		 */
-
-        mFinished = false;
+         * Submit hostCheck, response is via HostupResponse interface
+         */
         if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID))
             icmpHandler.get().post(new GetICMP(mCurrentSession));
         httpHandler.get().post(new GetHeaders(mCurrentSession));
-        try {
-            Thread.sleep(reachable);
-        } catch (InterruptedException e) {
-            /*
-             * We have a response
-			 */
-            response.status += (String.valueOf(response.timer.getElapsed()));
-            response.status += (ctxt.getString(R.string.ms));
-            return response;
-        } catch (RejectedExecutionException e) {
-            response.status += (REJECTED_EXECUTION);
-        }
-        /*
-         * End session here for critical timeouts
-         */
-        mFinished = true;
-        return new HostMessage(target + ":" + ctxt.getString(R.string.critical_timeout), false);
+        submitRunnable(new HostCheck(target));
     }
 
-    public void setFailover(Context context) {
-        HostMessage out = getHostup(WFMonitor.REACHABLE, context,
-                Hostup.FAILOVER);
-        if (out.state)
-            mFailover = Hostup.FAILOVER;
-        else
-            mFailover = Hostup.FAILOVER2;
-        LogUtil.log(context, context.getString(R.string.failover) + mFailover);
+    public void setFailover() {
+        submitRunnable(new SetFailover());
     }
 
     /*
@@ -240,13 +220,28 @@ public class Hostup {
     public void finish() {
         icmpHandler.get().getLooper().quit();
         httpHandler.get().getLooper().quit();
-        if (masterThread != null)
-            masterThread.clear();
+        masterThread = null;
         _nethandler.get().getLooper().quit();
         icmpHandler = null;
         httpHandler = null;
         _nethandler = null;
     }
+
+    private class SetFailover implements Runnable {
+        @Override
+        public void run() {
+            Context context = mContext.get();
+            target = Hostup.FAILOVER;
+            HostMessage h = getHttpHeaders(context);
+            if (h.state)
+                mFailover = Hostup.FAILOVER;
+            else
+                mFailover = Hostup.FAILOVER2;
+            LogUtil.log(context, context.getString(R.string.failover) + mFailover);
+        }
+    }
+
+    ;
 
     /*
          * http header check thread
@@ -256,7 +251,7 @@ public class Hostup {
 
         public GetHeaders(int id) {
             session = id;
-            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG_KEY))
+            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG))
             //    LogUtil.log(context.get(), "Started GetHeaders Session:" + String.valueOf(id));
         }
 
@@ -265,8 +260,46 @@ public class Hostup {
             HostMessage h = getHttpHeaders(mContext.get());
             if (!mFinished)
                 complete(h, session);
-            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG_KEY))
+            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG))
             //    LogUtil.log(context.get(), "Ended GetHeaders Session:" + String.valueOf(session));
+        }
+    }
+
+    /*
+         * icmp check thread
+         */
+    private class HostCheck implements Runnable {
+        String router;
+
+        public HostCheck(String r) {
+            router = r;
+        }
+
+        @Override
+        public void run() {
+        /*
+         * Start Check Threads
+		 */
+
+            mFinished = false;
+            try {
+                Thread.sleep(reachable);
+            } catch (InterruptedException e) {
+            /*
+             * We have a response
+			 */
+                response.status += (String.valueOf(response.timer.getElapsed()));
+                response.status += (mContext.get().getString(R.string.ms));
+            } catch (RejectedExecutionException e) {
+                response.status += (REJECTED_EXECUTION);
+            }
+        /*
+         * End session for critical timeouts
+         */
+            mFinished = true;
+            if (response.status == null)
+                response.status = target + ":" + mContext.get().getString(R.string.critical_timeout);
+            mClient.onHostupResponse(response);
         }
     }
 
@@ -278,7 +311,7 @@ public class Hostup {
 
         public GetICMP(int id) {
             session = id;
-            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG_KEY))
+            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG))
             //    LogUtil.log(context.get(), "Started GetICMP Session:" + String.valueOf(id));
         }
 
@@ -287,7 +320,7 @@ public class Hostup {
             HostMessage h = icmpHostup(mContext.get());
             if (!mFinished)
                 complete(h, session);
-            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG_KEY))
+            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG))
             //    LogUtil.log(context.get(), "Ended GetICMP Session:" + String.valueOf(session));
         }
     }
