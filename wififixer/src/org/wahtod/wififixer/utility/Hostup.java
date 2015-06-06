@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@ package org.wahtod.wififixer.utility;
 import android.content.Context;
 import android.os.Build;
 import org.wahtod.wififixer.R;
+import org.wahtod.wififixer.prefs.PrefConstants;
+import org.wahtod.wififixer.prefs.PrefUtil;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -40,8 +42,6 @@ public class Hostup {
     // Target for header check
     public static final String FAILOVER = "www.google.com";
     public static final String FAILOVER2 = "www.baidu.com";
-    protected static final String NEWLINE = "\n";
-    protected static final String HTTPSCHEME = "http";
     protected static final String INET_LOOPBACK = "127.0.0.1";
     protected static final String INET_INVALID = "0.0.0.0";
     protected static final int TIMEOUT_EXTRA = 2000;
@@ -94,7 +94,7 @@ public class Hostup {
         return mFailover;
     }
 
-    protected void complete(HostMessage h, int session) {
+    protected synchronized void complete(HostMessage h, int session) {
         if (session == mCurrentSession) {
             mFinished = true;
             response = h;
@@ -120,7 +120,8 @@ public class Hostup {
         /*
          * Submit hostCheck, response is via HostupResponse interface
          */
-        if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID))
+        if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID)
+                & !PrefUtil.getFlag(PrefConstants.Pref.FORCE_HTTP))
             icmpHandler.get().post(new GetICMP(mCurrentSession));
         httpHandler.get().post(new GetHeaders(mCurrentSession));
         submitRunnable(new HostCheck(target));
@@ -251,8 +252,6 @@ public class Hostup {
 
         public GetHeaders(int id) {
             session = id;
-            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG))
-            //    LogUtil.log(context.get(), "Started GetHeaders Session:" + String.valueOf(id));
         }
 
         @Override
@@ -260,8 +259,6 @@ public class Hostup {
             HostMessage h = getHttpHeaders(mContext.get());
             if (!mFinished)
                 complete(h, session);
-            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG))
-            //    LogUtil.log(context.get(), "Ended GetHeaders Session:" + String.valueOf(session));
         }
     }
 
@@ -311,8 +308,6 @@ public class Hostup {
 
         public GetICMP(int id) {
             session = id;
-            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG))
-            //    LogUtil.log(context.get(), "Started GetICMP Session:" + String.valueOf(id));
         }
 
         @Override
@@ -320,8 +315,6 @@ public class Hostup {
             HostMessage h = icmpHostup(mContext.get());
             if (!mFinished)
                 complete(h, session);
-            //if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG))
-            //    LogUtil.log(context.get(), "Ended GetICMP Session:" + String.valueOf(session));
         }
     }
 }

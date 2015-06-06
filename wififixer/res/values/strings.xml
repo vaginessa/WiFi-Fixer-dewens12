@@ -2,7 +2,7 @@
 
 <!--
   ~ Wifi Fixer for Android
-  ~     Copyright (C) 2010-2014  David Van de Ven
+  ~     Copyright (C) 2010-2015  David Van de Ven
   ~
   ~     This program is free software: you can redistribute it and/or modify
   ~     it under the terms of the GNU General Public License as published by
@@ -83,15 +83,15 @@
     <string name="screen_off_handler">SCREEN_OFF handler</string>
     <string name="authorized">Authorized</string>
     <string name="donatethanks">Thank you for your donation.</string>
-    <string name="isauthed">ISAUTHED</string>
+    <string name="isauthed" translatable="false">ISAUTHED</string>
     <string name="authed">Yep, we\'re authed!</string>
-    <string name="packagename">org.wahtod.wififixer</string>
+    <string name="packagename" translatable="false">org.wahtod.wififixer</string>
     <string name="wifi_is_disabled">Wifi Off</string>
     <string name="wifi_is_enabled">Wifi On</string>
     <string name="connecting_to_network">Connecting to:</string>
     <string name="releasing_wifi_lock">Releasing Wifi Lock</string>
     <string name="acquiring_wifi_lock">Acquiring Wifi Lock</string>
-    <string name="nid">NID:</string>
+    <string name="nid" translatable="false">NID:</string>
     <string name="fix_algorithm">Fix Algorithm</string>
     <string name="repairing">Repairing</string>
     <string name="reconnecting">Reconnecting</string>
@@ -119,7 +119,7 @@
     <string name="low_memory">Low Memory</string>
     <string name="error_allocating_buffered_writer">Error allocating buffered writer:</string>
     <string name="log_mimetype">message/rfc882</string>
-    <string name="unmanaged">-U-</string>
+    <string name="unmanaged" translatable="false">-U-</string>
     <string name="scan_mode">Should be in normal system scan mode</string>
     <string name="alert_message">Preparing email</string>
     <string name="ok_button">OK</string>
@@ -175,8 +175,8 @@
     <string name="network_check">Network Check:</string>
     <string name="http_ok">:HTTP_OK:</string>
     <string name="http_fail">:HTTP_FAIL:</string>
-    <string name="icmp_ok">:ICMP_OK:</string>
-    <string name="icmp_fail">:ICMP_FAIL:</string>
+    <string name="icmp_ok" translatable="false">:ICMP_OK:</string>
+    <string name="icmp_fail" translatable="false">:ICMP_FAIL:</string>
     <string name="critical_timeout">Network Check fail: critical timeout</string>
     <string name="add">Add</string>
     <string name="button_connect">Tap to connect</string>
@@ -226,12 +226,12 @@
     </string>
     <string name="widget_label_1x4">Wifi Fixer 1x4</string>
     <string name="widget_label_1x1">Wifi Fixer 1x1</string>
-    <string name="netcheckthread">MasterSensorThread</string>
+    <string name="netcheckthread">HostupMasterThread</string>
     <string name="logwriterthread">LogWriterThread</string>
-    <string name="httpcheckthread">HttpSensorThread</string>
-    <string name="icmpcheckthread">IcmpSensorThread</string>
+    <string name="httpcheckthread" translatable="false">HttpSensorThread</string>
+    <string name="icmpcheckthread" translatable="false">IcmpSensorThread</string>
     <string name="malformed_url_exception">Malformed URL Exception</string>
-    <string name="i_o_exception">I/O Exception</string>
+    <string name="i_o_exception" translatable="false">I/O Exception</string>
     <string name="reassoc">Reassociate</string>
     <string name="status">Status</string>
     <string name="managed">Managed</string>
@@ -257,7 +257,7 @@
     <string name="messages">messages</string>
     <string name="error_c2b">Empty Network List in connectToBest</string>
     <string name="network_check_retry">Network check failed: Trying again</string>
-    <string name="copyright">Copyright (C) 2010-2014  David Van de Ven</string>
+    <string name="copyright">Copyright © 2010–2015  David Van de Ven</string>
     <string name="gpl_part_1" translatable="false">This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</string>
     <string name="gpl_part_2" translatable="false">This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</string>
     <string name="gpl_part_3" translatable="false">You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses</string>
@@ -282,5 +282,14 @@
     <string name="phone_ui_tutorial_summary">Starts a simple tutorial on Wifi Fixer\'s main user interface</string>
     <string name="documentation_title">Documentation</string>
     <string name="documentation_summary">Open Documentation</string>
+    <string name="multibssd_summary_off">Android decides which network is connected to</string>
+    <string name="multibssd_summary_on">Wifi Fixer decides which network is connected to</string>
+    <string name="multibssid_title">Multipoint networks</string>
+    <string name="forcehttp_summaryoff">Forces HTTP for network checks. Requires internet connected WAP</string>
+    <string name="forcehttp_summaryon">Network checks forced to use HTTP</string>
+    <string name="forcehttp_title">Force HTTP</string>
+    <string name="advnetwork_category_title">Advanced Networks</string>
+    <string name="wifi_usability_category_title">Wifi Usability</string>
+    <string name="specialized_category_title">Specialized Fixes</string>
 
 </resources>

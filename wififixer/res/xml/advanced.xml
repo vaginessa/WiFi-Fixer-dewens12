@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Wifi Fixer for Android
-  ~     Copyright (C) 2010-2014  David Van de Ven
+  ~     Copyright (C) 2010-2015  David Van de Ven
   ~
   ~     This program is free software: you can redistribute it and/or modify
   ~     it under the terms of the GNU General Public License as published by
@@ -17,7 +18,20 @@
   ~     along with this program.  If not, see http://www.gnu.org/licenses
   -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <PreferenceCategory android:title="@string/advnetwork_category_title">
+        <CheckBoxPreference
+                android:key="MULTI"
+                android:defaultValue="true"
+                android:summaryOff="@string/multibssd_summary_off"
+                android:summaryOn="@string/multibssd_summary_on"
+                android:title="@string/multibssid_title"/>
+        <CheckBoxPreference
+                android:key="HTTP"
+                android:defaultValue="false"
+                android:summaryOff="@string/forcehttp_summaryoff"
+                android:summaryOn="@string/forcehttp_summaryon"
+                android:title="@string/forcehttp_title"/>
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/dbmfloor_title">
         <ListPreference
                 android:defaultValue="-90"
@@ -27,7 +41,7 @@
                 android:summary="@string/dbmfloor_summary"
                 android:title="@string/dbmfloor_title"/>
     </PreferenceCategory>
-    <PreferenceCategory android:title="Wifi Usability">
+    <PreferenceCategory android:title="@string/wifi_usability_category_title">
         <CheckBoxPreference
                 android:defaultValue="true"
                 android:key="WiFiLock"
@@ -44,13 +58,12 @@
                 android:summary="@string/WAKELOCK_summary"
                 android:title="@string/WAKELOCK_title"/>
     </PreferenceCategory>
-    <PreferenceCategory android:title="Specialized Fixes">
+    <PreferenceCategory android:title="@string/specialized_category_title">
         <PreferenceScreen
                 android:summary="@string/SLEEP_POLICY_summary"
                 android:title="@string/SLEEP_POLICY_title">
             >
             <intent android:action="android.settings.WIFI_SETTINGS"/>
-
         </PreferenceScreen>
         <CheckBoxPreference
                 android:key="N1FIX2"

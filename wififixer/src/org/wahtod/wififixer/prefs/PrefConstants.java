@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -33,8 +33,6 @@ public class PrefConstants {
     public static final String PERF_KEY = "Perf_Mode";
     public static final String WIDGET_KEY = "WIDGET";
     public static final String WIFI_STATE_LOCK = "WFSTATELOCK";
-    public static final String LOGGING_MENU = "Logging";
-    public static final String HAS_WIDGET = "HASWIDGET";
     public static final String TUTORIAL = "TUTORIAL";
     public static final String SERVICEWARNED = "SWARNED";
 
@@ -43,10 +41,10 @@ public class PrefConstants {
 	 */
 
     public static enum Pref {
-        WIFILOCK_KEY("WiFiLock"), NOTIF_KEY("Notifications"), DISABLE_KEY(
-                "Disable"), DEBUG_KEY("DEBUG"), N1FIX2_KEY("N1FIX2"), SCREEN_KEY(
-                "SCREEN"), STATENOT_KEY("StateNotif"), HASWIDGET_KEY(
-                "HASWIDGET"), WAKELOCK_KEY("WAKELOCK_DISABLE"), ATT_BLACKLIST("ATTBLIST");
+        WIFILOCK("WiFiLock"), NOTIFICATIONS("Notifications"), DISABLESERVICE(
+                "Disable"), DEBUG("DEBUG"), N1FIX2("N1FIX2"), MANAGESLEEP(
+                "SCREEN"), STATUS_NOTIFICATION("StateNotif"), HASWIDGET(
+                "HASWIDGET"), WAKELOCK("WAKELOCK_DISABLE"), ATT_BLACKLIST("ATTBLIST"), MULTIBSSID("MULTI"), FORCE_HTTP("HTTP");
 
         private String key;
         private static final Map<String, Pref> lookup = new HashMap<String, Pref>();
@@ -71,10 +69,8 @@ public class PrefConstants {
 
     }
 
-    public static final int NUMNETPREFS = 2;
-
     public static enum NetPref {
-        DISABLED_KEY("ENABLEDSTATE"), NONMANAGED_KEY("NONMANAGED");
+        DISABLED("ENABLEDSTATE"), NONMANAGED("NONMANAGED"), HASFORCEDBSSID("FORCED");
 
         private String key;
         private static final Map<String, NetPref> lookup = new HashMap<String, NetPref>();
