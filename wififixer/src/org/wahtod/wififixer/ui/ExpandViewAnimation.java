@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ import android.view.animation.Transformation;
 import android.widget.FrameLayout.LayoutParams;
 
 public class ExpandViewAnimation extends Animation {
+    public static final int DURATION = 600;
     private View mView;
     private LayoutParams mLayoutParams;
     private int mBottomMargin;
@@ -39,8 +40,11 @@ public class ExpandViewAnimation extends Animation {
     @Override
     protected void applyTransformation(float interpolatedTime, Transformation t) {
         super.applyTransformation(interpolatedTime, t);
-        mLayoutParams.bottomMargin = mBottomMargin
-                - (int) (mBottomMargin * interpolatedTime);
-        mView.requestLayout();
+        if (!(mLayoutParams == null))
+        {
+            mLayoutParams.bottomMargin = mLayoutParams.bottomMargin +
+                    (int) (mBottomMargin - mLayoutParams.topMargin * interpolatedTime);
+            mView.requestLayout();
+        }
     }
 }

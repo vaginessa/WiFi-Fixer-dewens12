@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -103,7 +103,7 @@ public class LogUtil {
 
     public static void log(Context context, String an,
                            String m) {
-        if (PrefUtil.readBoolean(context, PrefConstants.Pref.DEBUG_KEY.key()))
+        if (PrefUtil.readBoolean(context, PrefConstants.Pref.DEBUG.key()))
             Log.i(an, m);
         /*
          * Log to SQLite DB for LogFragment

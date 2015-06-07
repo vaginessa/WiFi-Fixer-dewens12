@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ public final class ServiceAlarm extends Object {
         return (PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_NO_CREATE) != null);
     }
 
-    private static PendingIntent createPendingIntent(Context context,
+    public static PendingIntent createPendingIntent(Context context,
                                                      int flag) {
         Intent intent = new Intent(context, WFMonitorService.class);
         intent.setFlags(Intent.FLAG_FROM_BACKGROUND);
@@ -61,7 +61,7 @@ public final class ServiceAlarm extends Object {
      * respects disabled state
      */
     public static void enforceServicePrefs(Context context) {
-        if (PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key()))
+        if (PrefUtil.readBoolean(context, Pref.DISABLESERVICE.key()))
             setComponentEnabled(context, WFMonitorService.class, false);
         else
             setComponentEnabled(context, WFMonitorService.class, true);
@@ -102,7 +102,7 @@ public final class ServiceAlarm extends Object {
             registerAlarm(c, NODELAY, repeating, period, p);
     }
 
-    private static void registerAlarm(Context c, long delay,
+    public static void registerAlarm(Context c, long delay,
                                       boolean repeating, long period, PendingIntent p) {
         AlarmManager mgr = (AlarmManager) c
                 .getSystemService(Context.ALARM_SERVICE);

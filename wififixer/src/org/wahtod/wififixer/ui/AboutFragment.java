@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources.NotFoundException;
+import android.content.res.Resources;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -193,13 +193,13 @@ public class AboutFragment extends SherlockFragment implements OnClickListener {
 		 */
         if (enter && !(transit == 17432576)) {
             ExpandViewAnimation ev = new ExpandViewAnimation(getView()
-                    .findViewById(R.id.about_fragment_layout), 300);
+                    .findViewById(R.id.about_fragment_layout), ExpandViewAnimation.DURATION);
             return ev;
         } else {
             Animation anim;
             try {
                 anim = AnimationUtils.loadAnimation(getActivity(), transit);
-            } catch (NotFoundException e) {
+            } catch (Resources.NotFoundException e) {
                 return null;
             }
             return anim;

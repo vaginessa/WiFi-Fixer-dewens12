@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import org.wahtod.wififixer.boot.BootService;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
@@ -137,6 +136,23 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
                 ctxt.get().sendBroadcast(new Intent(WidgetReceiver.WIFI_ON));
             }
         }
+        else if (action.equals(IntentConstants.ACTION_WIFI_CONNECT)){
+            handleConnectAction(data);
+        }
+    }
+
+    private static void handleConnectAction(Bundle data) {
+        String ssid = data.getString(IntentConstants.SSID);
+        if (ssid != null) {
+            int network = PrefUtil.getNid(ctxt.get(), ssid);
+            /*
+             * Did we find the network?
+             */
+            if (network != -1) {
+                AsyncWifiManager.get(ctxt.get()).enableNetwork(network, true);
+                NotifUtil.showToast(ctxt.get(),"Connection requested");
+            }
+        }
     }
 
     private static void handleAuthAction(Bundle data) {
@@ -171,7 +187,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
                     new Intent(ctxt.get(), WFMonitorService.class));
             ServiceAlarm.setComponentEnabled(ctxt.get(),
                     WFMonitorService.class, false);
-            PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLE_KEY.key(), true);
+            PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLESERVICE.key(), true);
             ServiceAlarm.unsetAlarm(ctxt.get());
             ctxt.get().stopService(new Intent(ctxt.get(), LogUtil.class));
         } else {
@@ -188,11 +204,9 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
                 R.string.enabling_wififixerservice);
         ServiceAlarm.setComponentEnabled(ctxt.get(), WFMonitorService.class,
                 true);
-        PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLE_KEY.key(), false);
+        PrefUtil.writeBoolean(ctxt.get(), Pref.DISABLESERVICE.key(), false);
         ctxt.get().startService(
-                new Intent(ctxt.get(), BootService.class).putExtra(
-                        BootService.FLAG_NO_DELAY, true)
-        );
+                new Intent(ctxt.get(), WFMonitorService.class));
     }
 
     @Override

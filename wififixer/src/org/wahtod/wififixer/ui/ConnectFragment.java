@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -238,7 +238,7 @@ public class ConnectFragment extends SherlockFragment implements OnClickListener
 		 */
         if (enter) {
             ExpandViewAnimation ev = new ExpandViewAnimation(getView()
-                    .findViewById(R.id.connect_fragment_layout), 300);
+                    .findViewById(R.id.connect_fragment_layout), ExpandViewAnimation.DURATION);
             return ev;
         } else
             return null;

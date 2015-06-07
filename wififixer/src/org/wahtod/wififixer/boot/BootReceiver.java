@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -18,15 +18,17 @@
 
 package org.wahtod.wififixer.boot;
 
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
+import org.wahtod.wififixer.utility.ServiceAlarm;
 
 public class BootReceiver extends BroadcastReceiver {
     /*
-	 * The idea here is that we want something lightweight to run at
+     * The idea here is that we want something lightweight to run at
 	 * BOOT_COMPLETED, so a minimal BroadcastReceiver implementation.
 	 * 
 	 * Because of BroadcastReceiver lifecycle, a thread started from it will be
@@ -40,11 +42,12 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 		/*
-		 * For boot completed, check DISABLE_KEY if false, start the service
+		 * For boot completed, check DISABLESERVICE if false, start the service
 		 * loader run
 		 */
-        if (!PrefUtil.readBoolean(context, Pref.DISABLE_KEY.key())) {
-            context.startService(new Intent(context, BootService.class));
+        if (!PrefUtil.readBoolean(context, Pref.DISABLESERVICE.key())) {
+            ServiceAlarm.registerAlarm(context.getApplicationContext(), ServiceAlarm.STARTDELAY, false, 0,
+                    ServiceAlarm.createPendingIntent(context, PendingIntent.FLAG_UPDATE_CURRENT));
         }
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -169,7 +169,7 @@ public class KnownNetworksFragment extends SherlockFragment {
                     if (!getStatusFromSSID(getContext(), mSSID)) {
                         Intent intent = new Intent(WFMonitor.CONNECTINTENT);
                         intent.putExtra(WFMonitor.NETWORKNAME,
-                                PrefUtil.getSSIDfromNetwork(getContext(), n));
+                                PrefUtil.getStringfromNetwork(getContext(), n));
                         BroadcastHelper.sendBroadcast(getContext(), intent, true);
                     } else {
                         AsyncWifiManager.get(getContext()).enableNetwork(n, true);

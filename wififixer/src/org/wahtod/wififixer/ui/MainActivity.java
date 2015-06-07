@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,7 +39,6 @@ import com.actionbarsherlock.app.ActionBar;
 import org.wahtod.wififixer.DefaultExceptionHandler;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitorService;
-import org.wahtod.wififixer.boot.BootService;
 import org.wahtod.wififixer.legacy.ActionBarDetector;
 import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.prefs.PrefConstants;
@@ -87,8 +88,7 @@ public class MainActivity extends TutorialFragmentActivity implements
             }
         }
         if (!hasService)
-            context.startService(new Intent(context, BootService.class).putExtra(
-                    BootService.FLAG_NO_DELAY, true));
+            context.startService(new Intent(context, WFMonitorService.class));
     }
 
     private static void nagNotification(Context context) {
@@ -105,7 +105,15 @@ public class MainActivity extends TutorialFragmentActivity implements
     void authCheck() {
         if (!PrefUtil.readBoolean(this, this.getString(R.string.isauthed))) {
             // Handle Donate Auth
-            startService(new Intent(getString(R.string.donateservice)));
+           PackageManager pm = getPackageManager();
+           String component = getString(R.string.donateservice);
+            Intent intent = new Intent(component);
+            ResolveInfo info = pm.resolveService(intent,0);
+            if (info != null) {
+                intent.setClassName(info.serviceInfo.packageName,
+                        info.serviceInfo.name);
+                this.startService(intent);
+            }
             nagNotification(this);
         }
     }

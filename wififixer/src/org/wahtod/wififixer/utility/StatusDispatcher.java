@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ public class StatusDispatcher {
             if (_statusMessage != null)
                 switch (message.what) {
                     case WIDGET_REFRESH:
-                        if (PrefUtil.getFlag(Pref.HASWIDGET_KEY))
+                        if (PrefUtil.getFlag(Pref.HASWIDGET))
                             if (message.peekData() == null)
                                 host.get().post(new Widget(_statusMessage));
                             else
@@ -98,7 +98,7 @@ public class StatusDispatcher {
         }
 
         public void run() {
-            if (PrefUtil.getFlag(Pref.STATENOT_KEY))
+            if (PrefUtil.getFlag(Pref.STATUS_NOTIFICATION))
                 NotifUtil.addStatNotif(c.get(), message);
         }
     }

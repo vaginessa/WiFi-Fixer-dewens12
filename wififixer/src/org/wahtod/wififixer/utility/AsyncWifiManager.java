@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -22,6 +22,9 @@ import android.content.Context;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 
+import java.util.List;
+import java.util.concurrent.*;
+
 /**
  * Created by zanshin on 3/13/14.
  */
@@ -30,6 +33,7 @@ public class AsyncWifiManager {
     private static ThreadHandler _threadHandler;
     private static AsyncWifiManager _self;
     private Context appContext;
+    private ExecutorService executor = Executors.newFixedThreadPool(2);
 
     private AsyncWifiManager() {
         _threadHandler = new ThreadHandler("AsyncWifiManager");
@@ -53,8 +57,21 @@ public class AsyncWifiManager {
         return _wm;
     }
 
-    public int addNetwork(WifiConfiguration config) {
-        return getWifiManager(appContext).addNetwork(config);
+    public int addNetwork(final WifiConfiguration config) {
+        class AddNetworkTask implements Callable<Integer>{
+            @Override
+            public Integer call() throws Exception {
+                return getWifiManager(appContext).addNetwork(config);
+            }
+        }
+        Future<Integer> addNetworkFuture = executor.submit(new AddNetworkTask());
+        int out = -1;
+        try {
+            out = addNetworkFuture.get();
+        } catch (Exception e) {
+            //Returns error value
+        }
+        return out;
     }
 
     public void disableNetwork(final int netid) {
@@ -155,5 +172,9 @@ public class AsyncWifiManager {
                 getWifiManager(appContext).updateNetwork(config);
             }
         });
+    }
+
+    public List<WifiConfiguration> getConfiguredNetworks(){
+        return getWifiManager(appContext).getConfiguredNetworks();
     }
 }

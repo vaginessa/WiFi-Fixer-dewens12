@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -59,9 +59,9 @@ public class PrefActivity extends SherlockPreferenceActivity implements
             /*
              * First handle Service enable case
 			 */
-            if (key.equals(Pref.DISABLE_KEY.key())) {
+            if (key.equals(Pref.DISABLESERVICE.key())) {
                 if (!PrefUtil.readBoolean(p.getContext(),
-                        Pref.DISABLE_KEY.key())) {
+                        Pref.DISABLESERVICE.key())) {
                     Intent intent = new Intent(
                             IntentConstants.ACTION_WIFI_SERVICE_ENABLE);
                     p.getContext().sendBroadcast(intent);
@@ -84,19 +84,19 @@ public class PrefActivity extends SherlockPreferenceActivity implements
 
             int pVal = Integer.valueOf(prefs.getString(key, "2"));
             CheckBoxPreference wflock = (CheckBoxPreference) p
-                    .findPreference(Pref.WIFILOCK_KEY.key());
+                    .findPreference(Pref.WIFILOCK.key());
             CheckBoxPreference screen = (CheckBoxPreference) p
-                    .findPreference(Pref.SCREEN_KEY.key());
+                    .findPreference(Pref.MANAGESLEEP.key());
             switch (pVal) {
                 case 1:
-                    PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK_KEY.key(),
+                    PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK.key(),
                             true);
                     PrefUtil.notifyPrefChange(p.getContext(),
-                            Pref.WIFILOCK_KEY.key(), true);
-                    PrefUtil.writeBoolean(p.getContext(), Pref.SCREEN_KEY.key(),
+                            Pref.WIFILOCK.key(), true);
+                    PrefUtil.writeBoolean(p.getContext(), Pref.MANAGESLEEP.key(),
                             true);
                     PrefUtil.notifyPrefChange(p.getContext(),
-                            Pref.SCREEN_KEY.key(), true);
+                            Pref.MANAGESLEEP.key(), true);
                     if (wflock != null)
                         wflock.setChecked(true);
                     if (screen != null)
@@ -109,14 +109,14 @@ public class PrefActivity extends SherlockPreferenceActivity implements
                     break;
 
                 case 2:
-                    PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK_KEY.key(),
+                    PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK.key(),
                             false);
                     PrefUtil.notifyPrefChange(p.getContext(),
-                            Pref.WIFILOCK_KEY.key(), false);
-                    PrefUtil.writeBoolean(p.getContext(), Pref.SCREEN_KEY.key(),
+                            Pref.WIFILOCK.key(), false);
+                    PrefUtil.writeBoolean(p.getContext(), Pref.MANAGESLEEP.key(),
                             true);
                     PrefUtil.notifyPrefChange(p.getContext(),
-                            Pref.SCREEN_KEY.key(), true);
+                            Pref.MANAGESLEEP.key(), true);
                     if (wflock != null)
                         wflock.setChecked(false);
                     if (screen != null)
@@ -124,14 +124,14 @@ public class PrefActivity extends SherlockPreferenceActivity implements
                     break;
 
                 case 3:
-                    PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK_KEY.key(),
+                    PrefUtil.writeBoolean(p.getContext(), Pref.WIFILOCK.key(),
                             false);
                     PrefUtil.notifyPrefChange(p.getContext(),
-                            Pref.WIFILOCK_KEY.key(), false);
-                    PrefUtil.writeBoolean(p.getContext(), Pref.SCREEN_KEY.key(),
+                            Pref.WIFILOCK.key(), false);
+                    PrefUtil.writeBoolean(p.getContext(), Pref.MANAGESLEEP.key(),
                             false);
                     PrefUtil.notifyPrefChange(p.getContext(),
-                            Pref.SCREEN_KEY.key(), false);
+                            Pref.MANAGESLEEP.key(), false);
                     SleepPolicyHelper.setSleepPolicy(p.getContext(),
                             Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
                     if (wflock != null)

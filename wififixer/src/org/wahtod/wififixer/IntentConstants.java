@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -19,6 +19,16 @@
 package org.wahtod.wififixer;
 
 public class IntentConstants {
+    /*
+     * Requests connection to network specified by SSID parameter
+     */
+    public static final String ACTION_WIFI_CONNECT ="org.wahtod.wififixer.ACTION_WIFI_CONNECT";
+
+    /*
+     * SSID parameter for ACTION_WIFI_CONNECT
+     */
+    public static final String SSID = "SSID";
+
     /*
      * Causes Wifi Fixer to turn Wifi on.
      */

@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ public class WFMonitorService extends Service implements
     private void cleanup() {
         wifi.wifiLock(false);
         screenstateHandler.unsetOnScreenStateChangedListener(this);
-        if (PrefUtil.readBoolean(this, Pref.HASWIDGET_KEY.key()))
+        if (PrefUtil.readBoolean(this, Pref.HASWIDGET.key()))
             resetWidget();
         unregisterReceivers();
         wifi.setStatNotif(false);
@@ -132,7 +132,7 @@ public class WFMonitorService extends Service implements
 		/*
 		 * Start Service watchdog alarm
 		 */
-        ServiceAlarm.setServiceAlarm(this.getApplicationContext(), false);
+        ServiceAlarm.setServiceAlarm(this.getApplicationContext(), true);
 
         LogUtil.log(this, LogUtil.getLogTag(),
                 (getString(R.string.oncreate)));

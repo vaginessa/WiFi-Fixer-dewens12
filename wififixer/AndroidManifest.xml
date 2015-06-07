@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Wifi Fixer for Android
-  ~     Copyright (C) 2010-2014  David Van de Ven
+  ~     Copyright (C) 2010-2015  David Van de Ven
   ~
   ~     This program is free software: you can redistribute it and/or modify
   ~     it under the terms of the GNU General Public License as published by
@@ -15,12 +15,12 @@
   ~
   ~     You should have received a copy of the GNU General Public License
   ~     along with this program.  If not, see http://www.gnu.org/licenses
--->
+  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.wahtod.wififixer"
     android:installLocation="internalOnly"
-    android:versionCode="1118"
-    android:versionName="1.0.3.5" >
+    android:versionCode="1134"
+    android:versionName="1.0.4b5" >
 
     <!-- Documenting permissions here -->
     <!-- For service start (30 seconds from boot_completed) -->
@@ -38,7 +38,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- For waking the phone/radio up to do network checks -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- For storing the log so user can send it to me -->
+    <!-- For writing the log to sdcard -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- For setting Wifi Sleep Policy -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
@@ -51,9 +51,9 @@
     </supports-screens>
 
     <uses-sdk
-        android:maxSdkVersion="19"
+        android:maxSdkVersion="22"
         android:minSdkVersion="7"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="22" />
 
     <uses-feature
         android:name="android.hardware.wifi"
@@ -93,15 +93,12 @@
         <activity android:name=".ui.PrefActivity" />
         <activity android:name=".ui.HelpActivity" />
 
-        <!-- Starts Boot thread service which waits 30s to run WifiFixerService -->
+        <!-- Starts boot service's thread which waits 30s to run monitor service -->
         <receiver android:name=".boot.BootReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <service android:name=".boot.BootService" >
-        </service>
 
         <!-- Handle notification stacking -->
         <receiver
@@ -116,6 +113,7 @@
         <!-- Handle incoming external intents -->
         <receiver android:name=".WFBroadcastReceiver" >
             <intent-filter>
+                <action android:name="org.wahtod.wififixer.ACTION_WIFI_CONNECT" />
                 <action android:name="org.wahtod.wififixer.ACTION_WIFI_SERVICE_DISABLE" />
                 <action android:name="org.wahtod.wififixer.ACTION_WIFI_SERVICE_ENABLE" />
                 <action android:name="org.wahtod.wififixer.WIDGET" />

@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -117,6 +117,7 @@ public class NotifUtil {
                     .setOnlyAlertOnce(true)
                     .setWhen(0)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .addAction(R.drawable.reassociate, ctxt
                             .getString(R.string.reassoc), PendingIntent.getBroadcast(ctxt,
                             0, new Intent(WidgetReceiver.REASSOCIATE),

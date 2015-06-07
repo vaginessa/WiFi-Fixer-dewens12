@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -36,11 +36,11 @@ public class WidgetHelper {
         int widgetSmall = appWidgetManager.getAppWidgetIds(cm2).length;
         if (widget > 0
                 || widgetSmall > 0) {
-            PrefUtil.writeBoolean(context, PrefConstants.Pref.HASWIDGET_KEY.key(), true);
-            PrefUtil.notifyPrefChange(context, PrefConstants.Pref.HASWIDGET_KEY.key(), true);
+            PrefUtil.writeBoolean(context, PrefConstants.Pref.HASWIDGET.key(), true);
+            PrefUtil.notifyPrefChange(context, PrefConstants.Pref.HASWIDGET.key(), true);
         } else {
-            PrefUtil.writeBoolean(context, PrefConstants.Pref.HASWIDGET_KEY.key(), false);
-            PrefUtil.notifyPrefChange(context, PrefConstants.Pref.HASWIDGET_KEY.key(), false);
+            PrefUtil.writeBoolean(context, PrefConstants.Pref.HASWIDGET.key(), false);
+            PrefUtil.notifyPrefChange(context, PrefConstants.Pref.HASWIDGET.key(), false);
         }
     }
 }

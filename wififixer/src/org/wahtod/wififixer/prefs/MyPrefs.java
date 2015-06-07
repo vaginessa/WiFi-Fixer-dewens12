@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -52,6 +52,8 @@ public class MyPrefs extends PrefUtil {
     private void setDefaultPreferences(Context context) {
         PreferenceManager.setDefaultValues(context, R.xml.general,
                 false);
+        PreferenceManager.setDefaultValues(context, R.xml.help,
+                false);
         PreferenceManager.setDefaultValues(context, R.xml.logging,
                 false);
         PreferenceManager.setDefaultValues(context, R.xml.notification,
@@ -79,19 +81,19 @@ public class MyPrefs extends PrefUtil {
     public void postValChanged(PrefConstants.Pref p) {
         switch (p) {
 
-            case WIFILOCK_KEY:
-                if (wifi != null && PrefUtil.getFlag(PrefConstants.Pref.WIFILOCK_KEY)) {
+            case WIFILOCK:
+                if (wifi != null && PrefUtil.getFlag(PrefConstants.Pref.WIFILOCK)) {
                     // generate new lock
                     wifi.wifiLock(true);
                 } else if (wifi != null
-                        && !PrefUtil.getFlag(PrefConstants.Pref.WIFILOCK_KEY)) {
+                        && !PrefUtil.getFlag(PrefConstants.Pref.WIFILOCK)) {
                     wifi.wifiLock(false);
                 }
                 break;
 
-            case DEBUG_KEY:
+            case DEBUG:
 
-                if (getFlag(PrefConstants.Pref.DEBUG_KEY)) {
+                if (getFlag(PrefConstants.Pref.DEBUG)) {
                     LogUtil.log(context,
                             R.string.enabling_logging);
                 } else {
@@ -107,12 +109,12 @@ public class MyPrefs extends PrefUtil {
                 PrefUtil.setBlackList(context, getFlag(PrefConstants.Pref.ATT_BLACKLIST), true);
                 break;
 
-            case STATENOT_KEY:
+            case STATUS_NOTIFICATION:
                     /*
                      * Notify WFMonitor instance to create/destroy ongoing
 					 * status notification
 					 */
-                if (getFlag(PrefConstants.Pref.STATENOT_KEY))
+                if (getFlag(PrefConstants.Pref.STATUS_NOTIFICATION))
                     wifi.setStatNotif(true);
                 else
                     NotifUtil.addStatNotif(context, StatusMessage.getNew().setShow(-1));
@@ -146,7 +148,7 @@ public class MyPrefs extends PrefUtil {
 				 */
         if (!readBoolean(context, PrefConstants.STATNOTIF_DEFAULT)) {
             writeBoolean(context, PrefConstants.STATNOTIF_DEFAULT, true);
-            writeBoolean(context, PrefConstants.Pref.STATENOT_KEY.key(), true);
+            writeBoolean(context, PrefConstants.Pref.STATUS_NOTIFICATION.key(), true);
         }
 				/*
 				 * Set default: Wifi Sleep Policy to never
@@ -159,8 +161,8 @@ public class MyPrefs extends PrefUtil {
 
     @Override
     public void specialCase() {
-        postValChanged(PrefConstants.Pref.DEBUG_KEY);
-        postValChanged(PrefConstants.Pref.WIFILOCK_KEY);
+        postValChanged(PrefConstants.Pref.DEBUG);
+        postValChanged(PrefConstants.Pref.WIFILOCK);
     }
 };
 

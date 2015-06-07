@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -100,8 +100,8 @@ public class QuickSettingsFragment extends BaseDialogFragment {
 
                 case R.id.logging_checkbox:
                     boolean state = logCheckBox.isChecked();
-                    PrefUtil.writeBoolean(getActivity(), Pref.DEBUG_KEY.key(), state);
-                    PrefUtil.notifyPrefChange(getActivity(), Pref.DEBUG_KEY.key(),
+                    PrefUtil.writeBoolean(getActivity(), Pref.DEBUG.key(), state);
+                    PrefUtil.notifyPrefChange(getActivity(), Pref.DEBUG.key(),
                             state);
                     break;
 
@@ -186,11 +186,11 @@ public class QuickSettingsFragment extends BaseDialogFragment {
     @Override
     public void onResume() {
         serviceCheckBox.setChecked(!PrefUtil.readBoolean(getActivity(),
-                Pref.DISABLE_KEY.key()));
+                Pref.DISABLESERVICE.key()));
         wifiCheckBox.setChecked(AsyncWifiManager.getWifiManager(getActivity())
                 .isWifiEnabled());
         logCheckBox.setChecked(PrefUtil.readBoolean(getActivity(),
-                Pref.DEBUG_KEY.key()));
+                Pref.DEBUG.key()));
         getActivity().registerReceiver(wifiReceiver,
                 new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
         super.onResume();

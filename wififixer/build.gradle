@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ buildscript {
         maven { url 'http://repo1.maven.org/maven2' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.13.0'
+        classpath 'com.android.tools.build:gradle:1.0.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -36,7 +36,7 @@ repositories {
 
 dependencies {
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
-    compile 'com.android.support:support-v4:20.0.0'
+    compile 'com.android.support:support-v4:22.2.0'
 }
 
 android {
@@ -56,18 +56,18 @@ android {
 
     buildTypes {
         release {
-            runProguard true
+            minifyEnabled true
             proguardFile "proguard-project.txt"
-            compileSdkVersion 20
-            buildToolsVersion "20"
+            compileSdkVersion 22
+            buildToolsVersion "22"
             signingConfig signingConfigs.release
         }
 
         debug {
             debuggable true
-            runProguard false
-            compileSdkVersion 20
-            buildToolsVersion "20"
+            minifyEnabled false
+            compileSdkVersion 22
+            buildToolsVersion "22"
         }
     }
 

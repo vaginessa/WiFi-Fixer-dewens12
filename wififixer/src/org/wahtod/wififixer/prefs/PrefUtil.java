@@ -1,6 +1,6 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2014  David Van de Ven
+ *     Copyright (C) 2010-2015  David Van de Ven
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -51,15 +51,6 @@ public class PrefUtil {
     private static final String NET_KEY = "NETKEY";
     private static final String DATA_KEY = "DATA_KEY";
     private static final String INT_KEY = "INTKEY";
-    private static final String NETPREFIX = "n_";
-    private static WeakReference<PrefUtil> self;
-    private static SharedPreferences _prefs;
-    /*
-     * D:
-     */
-    private static boolean[] keyVals;
-    private static WeakReference<Context> context;
-    private static HashMap<String, int[]> netprefs;
     private static Handler receiverExecutor = new Handler() {
         @Override
         public void handleMessage(Message message) {
@@ -94,6 +85,15 @@ public class PrefUtil {
             receiverExecutor.sendMessage(message);
         }
     };
+    private static final String NETPREFIX = "n_";
+    private static WeakReference<PrefUtil> self;
+    private static SharedPreferences _prefs;
+    /*
+     * D:
+     */
+    private static boolean[] keyVals;
+    private static WeakReference<Context> context;
+    private static HashMap<String, int[]> netprefs;
 
     public PrefUtil(Context c) {
         self = new WeakReference<PrefUtil>(this);
@@ -130,22 +130,25 @@ public class PrefUtil {
         BroadcastHelper.sendBroadcast(c, intent, true);
     }
 
-    public static String getnetworkSSID(Context context, int network) {
+    public static String getnetworkString(Context context, int network) {
         WifiManager wm = AsyncWifiManager.getWifiManager(context);
         if (!wm.isWifiEnabled())
             return context.getString(R.string.none);
         else
             return getSafeFileName(context,
-                    getSSIDfromNetwork(context, network));
+                    getStringfromNetwork(context, network));
     }
 
-    public static String getSSIDfromNetwork(Context context,
-                                            int network) {
+    public static String getStringfromNetwork(Context context,
+                                              int network) {
         List<WifiConfiguration> wifiConfigs = AsyncWifiManager.getWifiManager(context).getConfiguredNetworks();
         if (wifiConfigs != null) {
             for (WifiConfiguration w : wifiConfigs) {
                 if (w != null && w.networkId == network)
-                    return w.SSID;
+                    if (w.SSID.length() == 0)
+                        return w.BSSID;
+                    else
+                        return w.SSID;
             }
         }
         return context.getString(R.string.none);
@@ -285,36 +288,36 @@ public class PrefUtil {
 
     public static void writeNetworkState(Context context,
                                          int network, boolean state) {
-        String netstring = getnetworkSSID(context, network);
+        String netstring = getnetworkString(context, network);
         if (state)
-            PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY,
+            PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED,
                     1);
         else
-            PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED_KEY,
+            PrefUtil.writeNetworkPref(context, netstring, NetPref.DISABLED,
                     0);
     }
 
     public static boolean readManagedState(Context context,
                                            int network) {
-        return readNetworkPref(context, getnetworkSSID(context, network),
-                NetPref.NONMANAGED_KEY) == 1;
+        return readNetworkPref(context, getnetworkString(context, network),
+                NetPref.NONMANAGED) == 1;
     }
 
     public static void writeManagedState(Context context,
                                          int network, boolean state) {
-        String netstring = getnetworkSSID(context, network);
+        String netstring = getnetworkString(context, network);
         if (state)
             PrefUtil.writeNetworkPref(context, netstring,
-                    NetPref.NONMANAGED_KEY, 1);
+                    NetPref.NONMANAGED, 1);
         else
             PrefUtil.writeNetworkPref(context, netstring,
-                    NetPref.NONMANAGED_KEY, 0);
+                    NetPref.NONMANAGED, 0);
     }
 
     public static boolean readNetworkState(Context context,
                                            int network) {
-        return readNetworkPref(context, getnetworkSSID(context, network),
-                NetPref.DISABLED_KEY) == 1;
+        return readNetworkPref(context, getnetworkString(context, network),
+                NetPref.DISABLED) == 1;
     }
 
     public static void setNetworkState(Context context,
@@ -352,7 +355,7 @@ public class PrefUtil {
                            int value) {
         int[] intTemp = netprefs.get(network);
         if (intTemp == null) {
-            intTemp = new int[PrefConstants.NUMNETPREFS];
+            intTemp = new int[NetPref.values().length];
         }
         intTemp[pref.ordinal()] = value;
 
@@ -373,7 +376,7 @@ public class PrefUtil {
                           String network) {
         int ordinal = pref.ordinal();
         if (!netprefs.containsKey(network)) {
-            int[] intarray = new int[PrefConstants.NUMNETPREFS];
+            int[] intarray = new int[NetPref.values().length];
             intarray[ordinal] = readNetworkPref(context, network, pref);
             netprefs.put(network.toString(), intarray);
             return intarray[ordinal];
@@ -410,7 +413,7 @@ public class PrefUtil {
 		 */
         setFlag(p, flagval);
         /*
-		 * After value changes from loading
+         * After value changes from loading
 		 */
         postValChanged(p);
     }
