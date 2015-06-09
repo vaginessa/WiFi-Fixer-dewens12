@@ -28,7 +28,7 @@ public class StrictModeSetter extends StrictModeDetector {
     public boolean vSetPolicy(boolean flag) {
         if (flag) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                    .detectDiskReads().detectDiskWrites().detectNetwork() // or
+                    .detectAll() // or
                             // .detectAll()
                             // for
                             // all

@@ -37,7 +37,7 @@ public class LogOpenHelper extends SQLiteOpenHelper {
     public static final String ID_KEY = "id";
     public static final String TEXT_KEY = "logtext";
     public static final String TIMESTAMP_KEY = "timeStamp";
-    private LogObservable logObservable;
+    private volatile LogObservable logObservable;
 
     private static class LogObservable extends Observable {
         @Override
@@ -54,7 +54,7 @@ public class LogOpenHelper extends SQLiteOpenHelper {
 
     private static volatile LogOpenHelper _instance;
 
-    private SQLiteDatabase database;
+    private volatile SQLiteDatabase database;
 
     private LogOpenHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -122,45 +122,13 @@ public class LogOpenHelper extends SQLiteOpenHelper {
         return out.toString();
     }
 
-    public synchronized String getAllEntriesAfterId(long id) {
-        StringBuilder out = new StringBuilder();
-        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + ID_KEY + " > " + String.valueOf(id) + " ORDER BY " + ID_KEY;
-        Cursor cursor = database.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
-            do {
-                out.append(cursor.getString(2))
-                        .append(": ")
-                        .append(cursor.getString(1))
-                        .append("\n");
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return out.toString();
-    }
-
-    public synchronized long getlastEntry() {
-        String query = "SELECT max(" + ID_KEY + ") FROM " + TABLE_NAME;
-        Cursor cursor = database.rawQuery(query, null);
-        long out = -1;
-        if (cursor.moveToFirst()) {
-
-            try {
-                out = Long.parseLong(cursor.getString(0));
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
-        cursor.close();
-        return out;
-    }
-
     public synchronized long addLogEntry(String logEntry) {
         ContentValues values = new ContentValues();
         values.put(TEXT_KEY, logEntry);
         long out = database.insert(TABLE_NAME, null, values);
         if (logObservable.countObservers() >= 1) {
             logObservable.changed();
-            logObservable.notifyObservers(String.valueOf(getlastEntry()));
+            logObservable.notifyObservers(String.valueOf(out));
         }
         return out;
     }

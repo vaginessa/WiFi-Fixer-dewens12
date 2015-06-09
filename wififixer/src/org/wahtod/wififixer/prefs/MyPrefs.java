@@ -122,7 +122,7 @@ public class MyPrefs extends PrefUtil {
         }
 
 				/*
-				 * Log change of preference state
+                 * Log change of preference state
 				 */
 
         StringBuilder l = new StringBuilder(
@@ -138,24 +138,32 @@ public class MyPrefs extends PrefUtil {
     @SuppressWarnings("deprecation")
     @Override
     public void preLoad() {
-				/*
-				 * Set defaults. Doing here instead of activity because service
+        new Thread(new PreLoader()).start();
+    }
+
+    private class PreLoader implements Runnable {
+
+        @Override
+        public void run() {
+            /*
+                 * Set defaults. Doing here instead of activity because service
 				 * may be started first due to boot intent.
 				 */
-        setDefaultPreferences(context);
-				/*
-				 * Set default: Status Notification on
+            setDefaultPreferences(context);
+                /*
+                 * Set default: Status Notification on
 				 */
-        if (!readBoolean(context, PrefConstants.STATNOTIF_DEFAULT)) {
-            writeBoolean(context, PrefConstants.STATNOTIF_DEFAULT, true);
-            writeBoolean(context, PrefConstants.Pref.STATUS_NOTIFICATION.key(), true);
-        }
-				/*
-				 * Set default: Wifi Sleep Policy to never
+            if (!readBoolean(context, PrefConstants.STATNOTIF_DEFAULT)) {
+                writeBoolean(context, PrefConstants.STATNOTIF_DEFAULT, true);
+                writeBoolean(context, PrefConstants.Pref.STATUS_NOTIFICATION.key(), true);
+            }
+                /*
+                 * Set default: Wifi Sleep Policy to never
 				 */
-        if (!readBoolean(context, PrefConstants.SLPOLICY_DEFAULT)) {
-            writeBoolean(context, PrefConstants.SLPOLICY_DEFAULT, true);
-            SleepPolicyHelper.setSleepPolicy(context, Settings.System.WIFI_SLEEP_POLICY_NEVER);
+            if (!readBoolean(context, PrefConstants.SLPOLICY_DEFAULT)) {
+                writeBoolean(context, PrefConstants.SLPOLICY_DEFAULT, true);
+                SleepPolicyHelper.setSleepPolicy(context, Settings.System.WIFI_SLEEP_POLICY_NEVER);
+            }
         }
     }
 

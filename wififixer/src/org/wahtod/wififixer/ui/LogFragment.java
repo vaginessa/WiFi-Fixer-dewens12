@@ -21,8 +21,6 @@ package org.wahtod.wififixer.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,14 +28,17 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.utility.LogOpenHelper;
+import org.wahtod.wififixer.utility.ThreadHandler;
 
-public class LogFragment extends Fragment implements LoaderManager.LoaderCallbacks {
+import java.util.Observable;
+import java.util.Observer;
+
+public class LogFragment extends Fragment {
     public static final String TAG = "AKAKAKADOUHF";
-    private static final String LOG_STRING_KEY = "LOG_STRING";
-    private static final int LOADER_ID = 2124;
     public ViewHolder _views;
-    private Loader mLoader;
-    private String mText;
+    private LogOpenHelper sqlLogger;
+    private LogObserver logObserver;
+    private ThreadHandler updaterThread;
 
     public static LogFragment newInstance(Bundle bundle) {
         LogFragment f = new LogFragment();
@@ -46,24 +47,11 @@ public class LogFragment extends Fragment implements LoaderManager.LoaderCallbac
     }
 
     @Override
-    public Loader onCreateLoader(int i, Bundle bundle) {
-        return new LogLoader(getActivity());
-    }
-
-    @Override
-    public void onLoadFinished(Loader loader, Object data) {
-        addText((String) data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader loader) {
-
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mLoader = getLoaderManager().restartLoader(LOADER_ID, null, this);
+        sqlLogger = LogOpenHelper.newinstance(getActivity());
+        updaterThread = new ThreadHandler("LogFragmentUpdaterThread");
+        logObserver = new LogObserver();
     }
 
     @Override
@@ -80,29 +68,48 @@ public class LogFragment extends Fragment implements LoaderManager.LoaderCallbac
     @Override
     public void onStart() {
         super.onStart();
-        mText = LogOpenHelper.newinstance(getActivity()).getAllEntries();
-        if (mText != null) {
-            _views.scrollView.post(new Runnable() {
+        new Thread(new GetAllEntries()).start();
+        sqlLogger.registerLogObserver(logObserver);
 
-                @Override
-                public void run() {
-                    _views.textView.setText(mText);
-                    _views.scrollView.post(new ScrollToBottom());
-                }
-            });
+    }
+
+    @Override
+    public void onStop() {
+        sqlLogger.unregisterLogObserver(logObserver);
+        super.onStop();
+    }
+
+    private class GetAllEntries implements Runnable {
+
+        @Override
+        public void run() {
+            final String out = sqlLogger.getAllEntries();
+            if (out != null)
+                getActivity().runOnUiThread(new ScrollViewUpdater(out));
+
         }
     }
 
-    public void addText(String out) {
-        final String text = out;
-        _views.textView.post(new Runnable() {
+    private class ScrollViewUpdater implements Runnable {
+        String text;
 
-            @Override
-            public void run() {
-                _views.textView.append(text);
-                _views.scrollView.post(new ScrollToBottom());
+        public ScrollViewUpdater(String in) {
+            text = in;
+        }
+
+        @Override
+        public void run() {
+            {
+                _views.scrollView.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        _views.textView.append(text);
+                        _views.scrollView.post(new ScrollToBottom());
+                    }
+                });
             }
-        });
+        }
     }
 
     private static class ViewHolder {
@@ -114,6 +121,28 @@ public class LogFragment extends Fragment implements LoaderManager.LoaderCallbac
         @Override
         public void run() {
             _views.scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+        }
+    }
+
+    public class LogObserver implements Observer {
+        @Override
+        public void update(Observable observable, Object data) {
+            String current = String.valueOf(data);
+            Long entry = Long.valueOf(current);
+            updaterThread.get().post(new ContentChangedRunnable(entry));
+        }
+    }
+
+    private class ContentChangedRunnable implements Runnable {
+        Long entry;
+
+        public ContentChangedRunnable(Long K) {
+            entry = K;
+        }
+
+        @Override
+        public void run() {
+            _views.scrollView.post(new ScrollViewUpdater(sqlLogger.getEntry(entry)));
         }
     }
 }

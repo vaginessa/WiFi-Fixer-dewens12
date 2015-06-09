@@ -291,5 +291,7 @@
     <string name="advnetwork_category_title">Advanced Networks</string>
     <string name="wifi_usability_category_title">Wifi Usability</string>
     <string name="specialized_category_title">Specialized Fixes</string>
+    <string name="watchdog_policy_notification">Disable Avoid Poor Internet Connections in Wifi Settings</string>
+    <string name="sqllogger_thread" translatable="false">SqlLoggerThread</string>
 
 </resources>

@@ -76,6 +76,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
     private static final int REALLYSHORTWAIT = 500;
     // various
     private static final int NULLVAL = -1;
+    private static final String WATCHDOG_POLICY_KEY = "WDPOLICY";
     private static int lastAP = NULLVAL;
     /*
      * Constants for mRepairLevel values
@@ -92,7 +93,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
     private static final String SSTATE_ASSOCIATED = "ASSOCIATED";
     private static final String SSTATE_INVALID = "INVALID";
     private static final int CONNECTING_THRESHOLD = 5;
-    private static final long CWDOG_DELAY = 10000;
+    private static final long CWDOG_DELAY = 8000;
     private static final int HOP_THRESHOLD = 10;
     protected static WeakReference<Context> ctxt;
     /*
@@ -1325,13 +1326,17 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
                 /*
                  * Notify user of watchdog policy issue
                  */
+                if (!PrefUtil.readBoolean(ctxt.get(), WATCHDOG_POLICY_KEY)) {
+                    notifyWrap(ctxt.get(), ctxt.get().getString(R.string.watchdog_policy_notification));
+                    PrefUtil.writeBoolean(ctxt.get(), WATCHDOG_POLICY_KEY, true);
+                }
             }
 
         } else if (sState.name().equals(SSTATE_INVALID))
             supplicantFix();
         else if (sState.name().equals(SSTATE_ASSOCIATING)) {
             onNetworkConnecting();
-        } else if (sState.name().equals(SupplicantState.DISCONNECTED) && getIsOnWifi(ctxt.get()))
+        } else if (sState.name().equals(SupplicantState.ASSOCIATED.name()) && getIsOnWifi(ctxt.get()))
             onNetworkDisconnected();
     }
 
@@ -1376,14 +1381,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
     }
 
     private void onNetworkConnecting() {
-
-		/*
-		 * Check for Android 2.x disabled network bug WifiConfiguration state
-		 * won't match stored state
-		 *
-		 * Checking onConnecting because auth may complete but IP allocation may
-		 * not, want to bounce to another network if that's the case
-		 */
+        //Demote bad networks
         handlerWrapper(rDemoter, CWDOG_DELAY);
         StatusMessage message = _statusdispatcher.getStatusMessage()
                 .setSSID(getSSID()).setStatus(ctxt.get(), R.string.connecting);

@@ -19,7 +19,6 @@
 package org.wahtod.wififixer;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -52,7 +51,7 @@ public class WFMonitorService extends Service implements
     /*
      * Preferences
      */
-    private MyPrefs prefs;
+    private volatile MyPrefs prefs;
     private WFMonitor wifi;
     private ScreenStateDetector screenstateHandler;
 
@@ -78,6 +77,7 @@ public class WFMonitorService extends Service implements
             /*
              * If own package isn't found, something is horribly wrong.
 			 */
+            e.printStackTrace();
         }
     }
 
@@ -120,9 +120,10 @@ public class WFMonitorService extends Service implements
         /*
          * Load Preferences
 		 */
-        preferenceInitialize(this);
+        prefs = MyPrefs.newInstance(this);
+        prefs.loadPrefs();
         /*
-		 * Set initial screen state
+         * Set initial screen state
 		 */
         setInitialScreenState();
 		/*
@@ -204,11 +205,6 @@ public class WFMonitorService extends Service implements
             onScreenOn();
         else
             onScreenOff();
-    }
-
-    private void preferenceInitialize(final Context context) {
-        prefs = MyPrefs.newInstance(this);
-        prefs.loadPrefs();
     }
 
     private void resetWidget() {
