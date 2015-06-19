@@ -91,7 +91,7 @@ public class PrefUtil {
     /*
      * D:
      */
-    private static boolean[] keyVals;
+    private static volatile boolean[] keyVals;
     private static WeakReference<Context> context;
     private static HashMap<String, int[]> netprefs;
 
@@ -385,18 +385,25 @@ public class PrefUtil {
     }
 
     public void loadPrefs() {
+        new Thread(new PrefLoader()).start();
+    }
 
-		/*
+    private class PrefLoader implements Runnable {
+
+        @Override
+        public void run() {
+        /*
          * Pre-prefs load
 		 */
-        preLoad();
+            preLoad();
         /*
          * Load
 		 */
-        for (Pref prefkey : Pref.values()) {
-            handleLoadPref(prefkey);
+            for (Pref prefkey : Pref.values()) {
+                handleLoadPref(prefkey);
+            }
+            specialCase();
         }
-        specialCase();
     }
 
     void handleLoadPref(Pref p) {

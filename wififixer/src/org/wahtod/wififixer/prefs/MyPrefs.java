@@ -34,7 +34,7 @@ import org.wahtod.wififixer.utility.StatusMessage;
 public class MyPrefs extends PrefUtil {
 
     private static MyPrefs _prefUtil;
-    private WFMonitor wifi;
+    private volatile WFMonitor wifi;
     private Context context;
 
     private MyPrefs(Context c) {
@@ -114,7 +114,7 @@ public class MyPrefs extends PrefUtil {
                      * Notify WFMonitor instance to create/destroy ongoing
 					 * status notification
 					 */
-                if (getFlag(PrefConstants.Pref.STATUS_NOTIFICATION))
+                if (readBoolean(context, PrefConstants.Pref.STATUS_NOTIFICATION.key()))
                     wifi.setStatNotif(true);
                 else
                     NotifUtil.addStatNotif(context, StatusMessage.getNew().setShow(-1));
@@ -138,32 +138,24 @@ public class MyPrefs extends PrefUtil {
     @SuppressWarnings("deprecation")
     @Override
     public void preLoad() {
-        new Thread(new PreLoader()).start();
-    }
-
-    private class PreLoader implements Runnable {
-
-        @Override
-        public void run() {
-            /*
+        /*
                  * Set defaults. Doing here instead of activity because service
 				 * may be started first due to boot intent.
 				 */
-            setDefaultPreferences(context);
+        setDefaultPreferences(context);
                 /*
                  * Set default: Status Notification on
 				 */
-            if (!readBoolean(context, PrefConstants.STATNOTIF_DEFAULT)) {
-                writeBoolean(context, PrefConstants.STATNOTIF_DEFAULT, true);
-                writeBoolean(context, PrefConstants.Pref.STATUS_NOTIFICATION.key(), true);
-            }
+        if (!readBoolean(context, PrefConstants.STATNOTIF_DEFAULT)) {
+            writeBoolean(context, PrefConstants.STATNOTIF_DEFAULT, true);
+            writeBoolean(context, PrefConstants.Pref.STATUS_NOTIFICATION.key(), true);
+        }
                 /*
                  * Set default: Wifi Sleep Policy to never
 				 */
-            if (!readBoolean(context, PrefConstants.SLPOLICY_DEFAULT)) {
-                writeBoolean(context, PrefConstants.SLPOLICY_DEFAULT, true);
-                SleepPolicyHelper.setSleepPolicy(context, Settings.System.WIFI_SLEEP_POLICY_NEVER);
-            }
+        if (!readBoolean(context, PrefConstants.SLPOLICY_DEFAULT)) {
+            writeBoolean(context, PrefConstants.SLPOLICY_DEFAULT, true);
+            SleepPolicyHelper.setSleepPolicy(context, Settings.System.WIFI_SLEEP_POLICY_NEVER);
         }
     }
 
