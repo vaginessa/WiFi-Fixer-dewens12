@@ -36,7 +36,7 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 
-public class PrefUtil {
+public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String VALUE_KEY = "VALUE_KEY";
     /*
      * Actions for handler message bundles
@@ -51,6 +51,14 @@ public class PrefUtil {
     private static final String NET_KEY = "NETKEY";
     private static final String DATA_KEY = "DATA_KEY";
     private static final String INT_KEY = "INTKEY";
+    private static final String NETPREFIX = "n_";
+    private static WeakReference<PrefUtil> self;
+    private static SharedPreferences _prefs;
+    /*
+     * D:
+     */
+    private static WeakReference<Context> context;
+    private static HashMap<String, int[]> netprefs;
     private static Handler receiverExecutor = new Handler() {
         @Override
         public void handleMessage(Message message) {
@@ -85,20 +93,11 @@ public class PrefUtil {
             receiverExecutor.sendMessage(message);
         }
     };
-    private static final String NETPREFIX = "n_";
-    private static WeakReference<PrefUtil> self;
-    private static SharedPreferences _prefs;
-    /*
-     * D:
-     */
-    private static volatile boolean[] keyVals;
-    private static WeakReference<Context> context;
-    private static HashMap<String, int[]> netprefs;
 
     public PrefUtil(Context c) {
         self = new WeakReference<PrefUtil>(this);
         context = new WeakReference<Context>(c);
-        keyVals = new boolean[Pref.values().length];
+        getSharedPreferences(c).registerOnSharedPreferenceChangeListener(this);
         IntentFilter filter = new IntentFilter(VALUE_CHANGED_ACTION);
         filter.addAction(NETVALUE_CHANGED_ACTION);
         BroadcastHelper.registerReceiver(context.get(), changeReceiver, filter,
@@ -263,11 +262,11 @@ public class PrefUtil {
     }
 
     public static boolean getFlag(Pref pref) {
-        return keyVals[pref.ordinal()];
+        return readBoolean(context.get(), pref.key());
     }
 
     public static void setFlag(Pref pref, boolean flag) {
-        keyVals[pref.ordinal()] = flag;
+        writeBoolean(context.get(), pref.key(), flag);
     }
 
     public static boolean getWatchdogPolicy(Context context) {
@@ -388,26 +387,24 @@ public class PrefUtil {
         new Thread(new PrefLoader()).start();
     }
 
-    private class PrefLoader implements Runnable {
-
-        @Override
-        public void run() {
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        final Context c = context.get();
         /*
-         * Pre-prefs load
-		 */
-            preLoad();
-        /*
-         * Load
-		 */
-            for (Pref prefkey : Pref.values()) {
-                handleLoadPref(prefkey);
-            }
-            specialCase();
-        }
+         * Log change of preference state
+	     */
+        StringBuilder l = new StringBuilder(
+                c.getString(R.string.prefs_change));
+        l.append(key);
+        l.append(c.getString(R.string.colon));
+        l.append(String.valueOf(readBoolean(c, key)));
+        LogUtil.log(c,
+                LogUtil.getLogTag(),
+                l.toString());
     }
 
     void handleLoadPref(Pref p) {
-        setFlag(p, readBoolean(context.get(), p.key()));
+
     }
 
     void handlePrefChange(Pref p, boolean flagval) {
@@ -433,15 +430,15 @@ public class PrefUtil {
     public void preLoad() {
 
 		/*
-		 * Pre-Pref load
+         * Pre-Pref load
 		 */
 
     }
 
     public void preValChanged(Pref p) {
         switch (p) {
-		/*
-		 * Pre Value Changed here
+        /*
+         * Pre Value Changed here
 		 */
         }
 
@@ -463,6 +460,24 @@ public class PrefUtil {
 
     public void unRegisterReceiver() {
         BroadcastHelper.unregisterReceiver(context.get(), changeReceiver);
+    }
+
+    private class PrefLoader implements Runnable {
+
+        @Override
+        public void run() {
+        /*
+         * Pre-prefs load
+		 */
+            preLoad();
+        /*
+         * Load
+		 */
+            for (Pref prefkey : Pref.values()) {
+                handleLoadPref(prefkey);
+            }
+            specialCase();
+        }
     }
 
 }

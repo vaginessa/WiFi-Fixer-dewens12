@@ -1,7 +1,7 @@
 ﻿
 /*	    
     Wifi Fixer for Android
-    Copyright (C) 2010-2014  David Van de Ven
+    Copyright (C) 2010-2015  David Van de Ven
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,13 +18,13 @@
  */
 
 * ###Project
-  + Functional set of heuristics and workarounds for Android wifi. Designed to use as few resources on the user's device as possible. 
+  + Functional set of heuristics and workarounds for Android wifi. Designed to use as few resources as possible. 
 
 * ###Public Intents
   + /wififixer/src/org/wahtod/wififixer/IntentConstants.java
 
 * ###Targets
-  + All Android devices 2.1 to 4.x with wifi and a touchscreen
+  + All Android devices 2.1 to 5.x with wifi and a touchscreen
 
 * ###Why is it free?
   + Software which works around OS issues should be!
@@ -35,7 +35,7 @@
   
 _There are unit tests, but I do not include them in the repository.  If you want to write production code based on this project you're going to have to hire me_
 
-###*Release: 1.0.3.5 Yammering Yarmulke: Zing!*
+###*Beta: 1.0.4 Zappy Zyther* 
 ####1.0 marks a design refresh for "Holo" with additional user-facing features and improvements, bugfixes, and lower memory consumption/fewer wakelocks.
 
 

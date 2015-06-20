@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Wifi Fixer for Android
   ~     Copyright (C) 2010-2015  David Van de Ven
@@ -25,11 +26,12 @@
 
     <FrameLayout
             android:id="@+id/servicelog"
-            android:layout_width="400dp"
-            android:layout_height="400dp"
+            android:layout_width="fill_parent"
+            android:layout_height="650dp"
             android:layout_alignLeft="@+id/about"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dp">
+            android:layout_alignRight="@+id/toggles"
+            android:layout_alignEnd="@+id/toggles">
     </FrameLayout>
 
     <FrameLayout
@@ -38,16 +40,19 @@
             android:layout_height="400dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="55dp"
-            android:gravity="center">
+            android:layout_marginLeft="2dp"
+            android:gravity="center"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentRight="false">
     </FrameLayout>
 
     <FrameLayout
             android:id="@+id/toggles"
             android:layout_width="250dp"
             android:layout_height="400dp"
+            android:layout_alignParentTop="false"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true">
+            android:layout_alignParentEnd="true">
     </FrameLayout>
 
 </RelativeLayout>

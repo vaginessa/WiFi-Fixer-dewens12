@@ -21,7 +21,6 @@ package org.wahtod.wififixer.utility;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
-import android.util.Log;
 
 public class ThreadHandler extends HandlerThread {
     public ThreadHandler(String name) {
@@ -30,12 +29,6 @@ public class ThreadHandler extends HandlerThread {
     }
 
     private Handler myHandler;
-
-    @Override
-    protected void onLooperPrepared() {
-        Log.d(this.getClass().getName(), getName() + " looper ready");
-        super.onLooperPrepared();
-    }
 
     private void prepareThread() {
         this.start();

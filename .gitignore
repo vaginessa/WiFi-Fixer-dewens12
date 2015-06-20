@@ -2,6 +2,7 @@
 bin
 gen
 build*
+captures
 
 #Eclipse
 .project

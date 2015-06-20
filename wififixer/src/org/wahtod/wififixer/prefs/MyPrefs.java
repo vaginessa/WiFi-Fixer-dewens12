@@ -34,12 +34,12 @@ import org.wahtod.wififixer.utility.StatusMessage;
 public class MyPrefs extends PrefUtil {
 
     private static MyPrefs _prefUtil;
-    private volatile WFMonitor wifi;
+    private WFMonitor wifi;
     private Context context;
 
     private MyPrefs(Context c) {
         super(c);
-        context = c;
+        context = c.getApplicationContext();
         wifi = WFMonitor.newInstance(c);
     }
 
@@ -51,30 +51,42 @@ public class MyPrefs extends PrefUtil {
 
     private void setDefaultPreferences(Context context) {
         PreferenceManager.setDefaultValues(context, R.xml.general,
-                false);
+                true);
         PreferenceManager.setDefaultValues(context, R.xml.help,
-                false);
+                true);
         PreferenceManager.setDefaultValues(context, R.xml.logging,
-                false);
+                true);
         PreferenceManager.setDefaultValues(context, R.xml.notification,
-                false);
+                true);
         PreferenceManager.setDefaultValues(context, R.xml.advanced,
-                false);
+                true);
         PreferenceManager.setDefaultValues(context, R.xml.widget,
-                false);
+                true);
     }
 
     @Override
     public void log() {
         LogUtil.log(context,
                 (context.getString(R.string.loading_settings)));
-        for (PrefConstants.Pref prefkey : PrefConstants.Pref.values()) {
-            if (getFlag(prefkey))
+        if (getFlag(PrefConstants.Pref.DEBUG)) {
+            for (PrefConstants.Pref prefkey : PrefConstants.Pref.values()) {
                 LogUtil.log(context,
                         LogUtil.getLogTag(),
-                        (prefkey.key()));
+                        prefkey.key() + ":" + getFlag(prefkey));
+            }
         }
+    }
 
+    @Override
+    public void loadPrefs() {
+        /*
+        * Set defaults. Doing here instead of activity because service
+		* may be started first due to boot intent.
+		*/
+        setDefaultPreferences(context);
+        super.loadPrefs();
+        // Log Loaded Prefs
+        log();
     }
 
     @Override
@@ -120,29 +132,11 @@ public class MyPrefs extends PrefUtil {
                     NotifUtil.addStatNotif(context, StatusMessage.getNew().setShow(-1));
                 break;
         }
-
-				/*
-                 * Log change of preference state
-				 */
-
-        StringBuilder l = new StringBuilder(
-                context.getString(R.string.prefs_change));
-        l.append(p.key());
-        l.append(context.getString(R.string.colon));
-        l.append(String.valueOf(getFlag(p)));
-        LogUtil.log(context,
-                LogUtil.getLogTag(),
-                l.toString());
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public void preLoad() {
-        /*
-                 * Set defaults. Doing here instead of activity because service
-				 * may be started first due to boot intent.
-				 */
-        setDefaultPreferences(context);
                 /*
                  * Set default: Status Notification on
 				 */
@@ -164,5 +158,5 @@ public class MyPrefs extends PrefUtil {
         postValChanged(PrefConstants.Pref.DEBUG);
         postValChanged(PrefConstants.Pref.WIFILOCK);
     }
-};
+}
 

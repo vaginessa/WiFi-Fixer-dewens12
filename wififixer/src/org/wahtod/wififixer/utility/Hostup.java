@@ -59,7 +59,7 @@ public class Hostup {
     protected volatile boolean mFinished;
     private static ThreadHandler httpHandler;
     private static ThreadHandler icmpHandler;
-    private volatile String mFailover;
+    private volatile String mFailover = FAILOVER2;
     private HostupResponse mClient;
 
     private Hostup(Context c) {

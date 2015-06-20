@@ -580,6 +580,8 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
             }
         }
     }
