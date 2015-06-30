@@ -223,7 +223,13 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     public static boolean readBoolean(Context ctxt, String key) {
-        return getSharedPreferences(ctxt).getBoolean(key, false);
+        boolean state;
+        try {
+            state = getSharedPreferences(ctxt).getBoolean(key, false);
+        } catch (ClassCastException e) {
+            return false;
+        }
+        return state;
     }
 
     public static void writeBoolean(Context ctxt, String key,
@@ -393,14 +399,16 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
         /*
          * Log change of preference state
 	     */
-        StringBuilder l = new StringBuilder(
-                c.getString(R.string.prefs_change));
-        l.append(key);
-        l.append(c.getString(R.string.colon));
-        l.append(String.valueOf(readBoolean(c, key)));
-        LogUtil.log(c,
-                LogUtil.getLogTag(),
-                l.toString());
+        if (getSharedPreferences(c).contains(key)) {
+            StringBuilder l = new StringBuilder(
+                    c.getString(R.string.prefs_change));
+            l.append(key);
+            l.append(c.getString(R.string.colon));
+            l.append(String.valueOf(readBoolean(c, key)));
+            LogUtil.log(c,
+                    LogUtil.getLogTag(),
+                    l.toString());
+        }
     }
 
     void handleLoadPref(Pref p) {
