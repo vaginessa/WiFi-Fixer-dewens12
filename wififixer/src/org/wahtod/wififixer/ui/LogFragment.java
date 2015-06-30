@@ -84,7 +84,7 @@ public class LogFragment extends Fragment {
         @Override
         public void run() {
             final String out = sqlLogger.getAllEntries();
-            if (out != null)
+            if (out != null && getActivity() != null)
                 getActivity().runOnUiThread(new ScrollViewUpdater(out));
 
         }
