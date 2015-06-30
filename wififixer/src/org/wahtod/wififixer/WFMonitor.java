@@ -700,10 +700,15 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
         /*
          * Caches DHCP gateway IP for ICMP check
 		 */
-        DhcpInfo info = AsyncWifiManager.getWifiManager(ctxt.get()).getDhcpInfo();
-        _wfmonitor.accesspointIP = (Formatter.formatIpAddress(info.gateway));
-        LogUtil.log(context, new StringBuilder(context.getString(R.string.cached_ip))
-                .append(_wfmonitor.accesspointIP).toString());
+        try {
+            DhcpInfo info = AsyncWifiManager.getWifiManager(ctxt.get()).getDhcpInfo();
+            _wfmonitor.accesspointIP = (Formatter.formatIpAddress(info.gateway));
+            LogUtil.log(context, new StringBuilder(context.getString(R.string.cached_ip))
+                    .append(_wfmonitor.accesspointIP).toString());
+        } catch (NullPointerException e) {
+            if (PrefUtil.getFlag(Pref.DEBUG))
+                LogUtil.log(context, "Invalid Gateway on ICMP cache");
+        }
     }
 
     private static void logBestNetwork(Context context,
@@ -1294,9 +1299,8 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
     }
 
     private void authError() {
-        PendingIntent pending = PendingIntent.getBroadcast(ctxt.get(), NotifUtil.getPendingIntentCode(), new Intent(MainActivity.class.getName()), PendingIntent.FLAG_UPDATE_CURRENT);
-        NotifUtil.show(ctxt.get(), ctxt.get().getString(R.string.authentication_error),
-                ctxt.get().getString(R.string.authentication_error), pending);
+        LogUtil.log(ctxt.get(), R.string.authentication_error);
+        LogUtil.log(ctxt.get(), R.string.verify_passphrase);
     }
 
     private void handleSupplicantState(SupplicantState sState) {
@@ -1317,8 +1321,8 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
                         R.string.supplicant_state)).append(
                         String.valueOf(sState)).toString()
         );
-		/*
-		 * Supplicant State triggers
+        /*
+         * Supplicant State triggers
 		 */
         if (sState.equals(SupplicantState.INACTIVE)) {
 			/*
