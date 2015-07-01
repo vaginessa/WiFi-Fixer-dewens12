@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private static volatile HashMap<String, Boolean> _flags = new HashMap<String, Boolean>();
     public static final String VALUE_KEY = "VALUE_KEY";
     /*
      * Actions for handler message bundles
@@ -114,10 +115,7 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
 
     public static void notifyPrefChange(Context c, String pref,
                                         boolean b) {
-        Intent intent = new Intent(VALUE_CHANGED_ACTION);
-        intent.putExtra(VALUE_KEY, pref);
-        intent.putExtra(DATA_KEY, b);
-        BroadcastHelper.sendBroadcast(c, intent, true);
+        _flags.put(pref, b);
     }
 
     public static void notifyNetPrefChange(Context c,
@@ -268,11 +266,13 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     public static boolean getFlag(Pref pref) {
-        return readBoolean(context.get(), pref.key());
+        if (!_flags.containsKey(pref.key()))
+            _flags.put(pref.key(), readBoolean(context.get(), pref.key()));
+        return _flags.get(pref.key());
     }
 
     public static void setFlag(Pref pref, boolean flag) {
-        writeBoolean(context.get(), pref.key(), flag);
+        _flags.put(pref.key(), flag);
     }
 
     public static boolean getWatchdogPolicy(Context context) {
@@ -456,7 +456,7 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     public void specialCase() {
-		/*
+        /*
 		 * Any special case code here
 		 */
 

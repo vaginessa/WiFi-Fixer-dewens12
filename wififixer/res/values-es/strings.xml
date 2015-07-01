@@ -169,8 +169,6 @@
     <string name="removing_network">Quitando:</string>
     <string name="passwd_entry_text">Clave de wifi</string>
     <string name="network_check">Comprobando Red:</string>
-    <string name="http_ok">:HTTP_OK:</string>
-    <string name="http_fail">:HTTP_FAIL:</string>
     <string name="critical_timeout">Comprobacion de Red fallida: tiempo de espera agotado</string>
     <string name="add">Añadir</string>
     <string name="button_connect">Pulse para conectar</string>
@@ -280,5 +278,6 @@
     <string name="wifi_usability_category_title">Wifi Usability</string>
     <string name="specialized_category_title">Specialized Fixes</string>
     <string name="watchdog_policy_notification">Disable Avoid Poor Internet Connections in Wifi Settings</string>
+    <string name="verify_passphrase">Verify network passphrase</string>
 
 </resources>

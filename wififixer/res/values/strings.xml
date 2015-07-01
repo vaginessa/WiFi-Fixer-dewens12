@@ -173,8 +173,8 @@
     <string name="removing_network">Removing:</string>
     <string name="passwd_entry_text">Enter wifi key</string>
     <string name="network_check">Network Check:</string>
-    <string name="http_ok">:HTTP_OK:</string>
-    <string name="http_fail">:HTTP_FAIL:</string>
+    <string name="http_ok" translatable="false">:HTTP_OK:</string>
+    <string name="http_fail" translatable="false">:HTTP_FAIL:</string>
     <string name="icmp_ok" translatable="false">:ICMP_OK:</string>
     <string name="icmp_fail" translatable="false">:ICMP_FAIL:</string>
     <string name="critical_timeout">Network Check fail: critical timeout</string>
@@ -293,5 +293,7 @@
     <string name="specialized_category_title">Specialized Fixes</string>
     <string name="watchdog_policy_notification">Disable Avoid Poor Internet Connections in Wifi Settings</string>
     <string name="sqllogger_thread" translatable="false">SqlLoggerThread</string>
+    <string name="verify_passphrase">Verify network passphrase</string>
+    <string name="deep_radio_sleep" translatable="false">Deep Radio Sleep: Signalhop Check Aborted</string>
 
 </resources>
