@@ -965,8 +965,9 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
             m.setLinkSpeed(String.valueOf(ci.getLinkSpeed()));
             StatusMessage.send(context, m);
         }
-
-        if (_signalCheckTime < System.currentTimeMillis()
+        if (!screenstate && signal == -127) {
+            LogUtil.log(context, context.getString(R.string.deep_radio_sleep));
+        } else if (_signalCheckTime < System.currentTimeMillis()
                 && Math.abs(signal) > Math.abs(getSignalThreshold(context))) {
             notifyWrap(context, context.getString(R.string.signal_poor));
             AsyncWifiManager.getWifiManager(ctxt.get()).startScan();
@@ -1325,8 +1326,8 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
          * Supplicant State triggers
 		 */
         if (sState.equals(SupplicantState.INACTIVE)) {
-			/*
-			 * DHCP bug?
+            /*
+             * DHCP bug?
 			 */
             if (PrefUtil.getWatchdogPolicy(ctxt.get())) {
                 /*
