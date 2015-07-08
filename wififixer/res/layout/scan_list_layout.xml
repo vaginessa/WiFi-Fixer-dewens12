@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Wifi Fixer for Android
   ~     Copyright (C) 2010-2015  David Van de Ven
@@ -19,7 +20,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/RelativeLayout1"
                 android:layout_width="fill_parent"
-                android:layout_height="@dimen/listview_height"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -28,14 +29,15 @@
     <TextView
             android:id="@+id/ssid"
             style="@style/Wftext.large"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="200dp"
+            android:textAlignment="gravity"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_gravity="center_vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="left"
             android:layout_marginBottom="@dimen/scan_list_ssid_margin_bottom"
             android:layout_marginLeft="@dimen/scan_list_ssid_margin_left"
-            android:layout_toLeftOf="@+id/NETWORK_ICON"
-            android:gravity="left"
+            android:gravity="bottom"
             android:text="default">
     </TextView>
 
@@ -43,33 +45,36 @@
             android:id="@+id/NETWORK_ICON"
             android:layout_width="@dimen/known_list_icon_height"
             android:layout_height="@dimen/known_list_icon_height"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/SECURE_ICON"
             android:gravity="right"
-            android:src="@drawable/icon">
+            android:src="@drawable/icon"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/SECURE_ICON"
+            android:layout_toStartOf="@+id/SECURE_ICON">
     </ImageView>
 
     <ImageView
             android:id="@+id/SECURE_ICON"
             android:layout_width="@dimen/known_list_icon_height"
             android:layout_height="@dimen/known_list_icon_height"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/encryption"
             android:gravity="right"
-            android:src="@drawable/icon">
+            android:src="@drawable/icon"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/encryption"
+            android:layout_toStartOf="@+id/encryption"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="24dp">
     </ImageView>
 
     <TextView
             android:id="@+id/encryption"
             style="@style/Wftext.small"
-            android:layout_width="@dimen/known_list_icon_height"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/known_list_icon_height"
-            android:layout_alignBaseline="@+id/NETWORK_ICON"
+            android:gravity="center_vertical"
+            android:text="encryption"
+            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="2dp"
-            android:gravity="right"
-            android:text="encryption">
+            android:layout_gravity="center_vertical">
     </TextView>
 
 </RelativeLayout>
