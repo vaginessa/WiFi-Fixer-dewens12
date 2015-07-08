@@ -35,8 +35,8 @@
   
 _There are unit tests, but I do not include them in the repository.  If you want to write production code based on this project you're going to have to hire me_
 
-###*Beta: 1.0.4 Zappy Zyther* 
-####1.0 marks a design refresh for "Holo" with additional user-facing features and improvements, bugfixes, and lower memory consumption/fewer wakelocks.
+###*Release: 1.0.4 Zappy Zyther* 
+####1.0.4 adds support for Android 5, minor new features, bugfixes
 
 
 
