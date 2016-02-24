@@ -2,20 +2,20 @@
 
 <!--
   ~ Wifi Fixer for Android
-  ~     Copyright (C) 2010-2015  David Van de Ven
+  ~        Copyright (C) 2010-2016  David Van de Ven
   ~
-  ~     This program is free software: you can redistribute it and/or modify
-  ~     it under the terms of the GNU General Public License as published by
-  ~     the Free Software Foundation, either version 3 of the License, or
-  ~     (at your option) any later version.
+  ~        This program is free software: you can redistribute it and/or modify
+  ~        it under the terms of the GNU General Public License as published by
+  ~        the Free Software Foundation, either version 3 of the License, or
+  ~        (at your option) any later version.
   ~
-  ~     This program is distributed in the hope that it will be useful,
-  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~     GNU General Public License for more details.
+  ~        This program is distributed in the hope that it will be useful,
+  ~        but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~        GNU General Public License for more details.
   ~
-  ~     You should have received a copy of the GNU General Public License
-  ~     along with this program.  If not, see http://www.gnu.org/licenses
+  ~        You should have received a copy of the GNU General Public License
+  ~        along with this program.  If not, see http://www.gnu.org/licenses
   -->
 
 <resources>
@@ -257,7 +257,7 @@
     <string name="messages">messages</string>
     <string name="error_c2b">Empty Network List in connectToBest</string>
     <string name="network_check_retry">Network check failed: Trying again</string>
-    <string name="copyright">Copyright © 2010–2015  David Van de Ven</string>
+    <string name="copyright">Copyright © 2010–2016  David Van de Ven</string>
     <string name="gpl_part_1" translatable="false">This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</string>
     <string name="gpl_part_2" translatable="false">This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</string>
     <string name="gpl_part_3" translatable="false">You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses</string>

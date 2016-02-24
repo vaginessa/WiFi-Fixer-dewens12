@@ -1,19 +1,19 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2015  David Van de Ven
+ *        Copyright (C) 2010-2016  David Van de Ven
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *        This program is free software: you can redistribute it and/or modify
+ *        it under the terms of the GNU General Public License as published by
+ *        the Free Software Foundation, either version 3 of the License, or
+ *        (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *        This program is distributed in the hope that it will be useful,
+ *        but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *        GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see http://www.gnu.org/licenses
+ *        You should have received a copy of the GNU General Public License
+ *        along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package org.wahtod.wififixer.ui;
@@ -30,16 +30,11 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v4.app.Fragment;
+import android.support.v7.view.ActionMode;
+import android.view.*;
 import android.widget.*;
 import android.widget.AdapterView.OnItemLongClickListener;
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitor;
 import org.wahtod.wififixer.prefs.PrefConstants;
@@ -53,7 +48,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KnownNetworksFragment extends SherlockFragment {
+public class KnownNetworksFragment extends Fragment {
     public static final String ATTWIFI = "attwifi";
     private static final int SCAN_MESSAGE = 31337;
     private static final int REFRESH_MESSAGE = 2944;
@@ -217,7 +212,7 @@ public class KnownNetworksFragment extends SherlockFragment {
                     && mSSID.equals(ATTWIFI)) {
                 return false;
             }
-            mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
+            mActionMode = getActivity().startActionMode((android.view.ActionMode.Callback) mActionModeCallback);
             v.setSelected(true);
             return true;
 
@@ -324,7 +319,7 @@ public class KnownNetworksFragment extends SherlockFragment {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.containsKey(SSID_KEY)) {
             mSSID = savedInstanceState.getString(SSID_KEY);
-            mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
+            mActionMode = getActivity().startActionMode((android.view.ActionMode.Callback) mActionModeCallback);
             for (int c = 1; c < adapter.getCount(); c++) {
                 if (adapter.getItem(c).equals(mSSID)) {
                     mListView.setSelection(c);
@@ -415,10 +410,6 @@ public class KnownNetworksFragment extends SherlockFragment {
         }
 
         return known_in_range;
-    }
-
-    private Context getContext() {
-        return getActivity();
     }
 
     private void registerReceiver() {

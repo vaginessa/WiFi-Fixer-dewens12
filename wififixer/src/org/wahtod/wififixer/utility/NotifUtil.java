@@ -1,19 +1,19 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2015  David Van de Ven
+ *        Copyright (C) 2010-2016  David Van de Ven
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *        This program is free software: you can redistribute it and/or modify
+ *        it under the terms of the GNU General Public License as published by
+ *        the Free Software Foundation, either version 3 of the License, or
+ *        (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *        This program is distributed in the hope that it will be useful,
+ *        but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *        GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see http://www.gnu.org/licenses
+ *        You should have received a copy of the GNU General Public License
+ *        along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package org.wahtod.wififixer.utility;
@@ -87,12 +87,12 @@ public class NotifUtil {
         out.icon = getIconfromSignal(in.getSignal(),
                 NotifUtil.ICON_SET_SMALL);
         out.iconLevel = in.getSignal();
-        out.setLatestEventInfo(ctxt,
+        /*out.setLatestEventInfo(ctxt,
                 ctxt.getString(R.string.app_name), in.getSSID()
                         + NotifUtil.SEPARATOR + in.getStatus(),
                 PendingIntent.getActivity(ctxt, getPendingIntentCode(),
                         intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        );
+        );*/
 
         return out;
     }
@@ -101,7 +101,6 @@ public class NotifUtil {
         StatusMessage m = validateStrings(in);
         NotificationManager nm = (NotificationManager) ctxt
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-
         if (m.getShow() != 1) {
             cancel(ctxt, NotifUtil.STAT_TAG, NotifUtil.STATNOTIFID);
             mStatusBuilder = null;

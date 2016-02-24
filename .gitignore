@@ -40,4 +40,4 @@ gradle.properties
 *lint*
 out
 secrets-release.xml
-release.sh
+*.sh

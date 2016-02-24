@@ -1,19 +1,19 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2015  David Van de Ven
+ *        Copyright (C) 2010-2016  David Van de Ven
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *        This program is free software: you can redistribute it and/or modify
+ *        it under the terms of the GNU General Public License as published by
+ *        the Free Software Foundation, either version 3 of the License, or
+ *        (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *        This program is distributed in the hope that it will be useful,
+ *        but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *        GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see http://www.gnu.org/licenses
+ *        You should have received a copy of the GNU General Public License
+ *        along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package org.wahtod.wififixer;
@@ -1543,18 +1543,16 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
     }
 
     public void setStatNotif(boolean state) {
-        if (!wifistate
-                || !getIsOnWifi(ctxt.get()))
-            clearConnectedStatus(ctxt.get().getString(R.string.not_connected));
-        StatusMessage sm = StatusMessage.getNew().setStatus(
-                getSupplicantStateString(getSupplicantState())).setSSID(getSSID());
-        if (state) {
-            sm.setShow(1);
-        } else
-            sm.setShow(-1);
 
-        StatusMessage.send(ctxt.get(), sm);
-        _statusdispatcher.refreshWidget(null);
+            StatusMessage sm = StatusMessage.getNew().setStatus(
+                    getSupplicantStateString(getSupplicantState())).setSSID(getSSID());
+            if (state) {
+                sm.setShow(1);
+            } else
+                sm.setShow(-1);
+
+            StatusMessage.send(ctxt.get(), sm);
+            _statusdispatcher.refreshWidget(null);
     }
 
     private void signalHop() {

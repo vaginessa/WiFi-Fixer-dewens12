@@ -1,19 +1,19 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2015  David Van de Ven
+ *        Copyright (C) 2010-2016  David Van de Ven
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *        This program is free software: you can redistribute it and/or modify
+ *        it under the terms of the GNU General Public License as published by
+ *        the Free Software Foundation, either version 3 of the License, or
+ *        (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *        This program is distributed in the hope that it will be useful,
+ *        but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *        GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see http://www.gnu.org/licenses
+ *        You should have received a copy of the GNU General Public License
+ *        along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 
@@ -25,18 +25,23 @@ buildscript {
         maven { url 'http://repo1.maven.org/maven2' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:1.5.0'
     }
 }
 apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
+    jcenter()
+    maven {
+        url "https://jitpack.io"
+    }
 }
 
 dependencies {
-    compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
-    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:support-v4:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.github.AndroidDeveloperLB:MaterialPreferenceLibrary:5'
 }
 
 android {
@@ -58,16 +63,16 @@ android {
         release {
             minifyEnabled true
             proguardFile "proguard-project.txt"
-            compileSdkVersion 22
-            buildToolsVersion "22"
+            compileSdkVersion 23
+            buildToolsVersion "23.0.2"
             signingConfig signingConfigs.release
         }
 
         debug {
             debuggable true
             minifyEnabled false
-            compileSdkVersion 22
-            buildToolsVersion "22"
+            compileSdkVersion 23
+            buildToolsVersion "23.0.2"
         }
     }
 

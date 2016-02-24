@@ -1,19 +1,19 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2015  David Van de Ven
+ *        Copyright (C) 2010-2016  David Van de Ven
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *        This program is free software: you can redistribute it and/or modify
+ *        it under the terms of the GNU General Public License as published by
+ *        the Free Software Foundation, either version 3 of the License, or
+ *        (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *        This program is distributed in the hope that it will be useful,
+ *        but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *        GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see http://www.gnu.org/licenses
+ *        You should have received a copy of the GNU General Public License
+ *        along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package org.wahtod.wififixer.prefs;
@@ -25,8 +25,6 @@ import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitor;
 import org.wahtod.wififixer.legacy.SleepPolicyHelper;
 import org.wahtod.wififixer.utility.LogUtil;
-import org.wahtod.wififixer.utility.NotifUtil;
-import org.wahtod.wififixer.utility.StatusMessage;
 
 /**
  * Created by zanshin on 12/2/13.
@@ -129,7 +127,7 @@ public class MyPrefs extends PrefUtil {
                 if (readBoolean(context, PrefConstants.Pref.STATUS_NOTIFICATION.key()))
                     wifi.setStatNotif(true);
                 else
-                    NotifUtil.addStatNotif(context, StatusMessage.getNew().setShow(-1));
+                wifi.setStatNotif(false);
                 break;
         }
     }

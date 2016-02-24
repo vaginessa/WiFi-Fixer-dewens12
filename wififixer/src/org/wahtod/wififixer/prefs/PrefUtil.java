@@ -1,19 +1,19 @@
 /*
  * Wifi Fixer for Android
- *     Copyright (C) 2010-2015  David Van de Ven
+ *        Copyright (C) 2010-2016  David Van de Ven
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *        This program is free software: you can redistribute it and/or modify
+ *        it under the terms of the GNU General Public License as published by
+ *        the Free Software Foundation, either version 3 of the License, or
+ *        (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *        This program is distributed in the hope that it will be useful,
+ *        but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *        GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see http://www.gnu.org/licenses
+ *        You should have received a copy of the GNU General Public License
+ *        along with this program.  If not, see http://www.gnu.org/licenses
  */
 
 package org.wahtod.wififixer.prefs;
@@ -115,7 +115,11 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
 
     public static void notifyPrefChange(Context c, String pref,
                                         boolean b) {
-        _flags.put(pref, b);
+        Pref p = Pref.get(pref);
+        if(p != null) {
+            _flags.put(pref, b);
+            self.get().handlePrefChange(p, b);
+        }
     }
 
     public static void notifyNetPrefChange(Context c,
@@ -142,7 +146,7 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
         if (wifiConfigs != null) {
             for (WifiConfiguration w : wifiConfigs) {
                 if (w != null && w.networkId == network)
-                    if (w.SSID.length() == 0)
+                    if (w.SSID == null || w.SSID.length() == 0)
                         return w.BSSID;
                     else
                         return w.SSID;
@@ -453,6 +457,7 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     public void postValChanged(Pref p) {
+
     }
 
     public void specialCase() {
