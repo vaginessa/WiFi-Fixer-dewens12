@@ -148,7 +148,7 @@ public class QuickSettingsFragment extends BaseDialogFragment {
         if (this.getDialog() != null) {
             setDialog(this);
             WindowManager.LayoutParams wset = this.getDialog().getWindow().getAttributes();
-            wset.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
+            wset.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
             wset.gravity = Gravity.RIGHT | Gravity.TOP;
             this.getDialog().getWindow().setAttributes(wset);
         }

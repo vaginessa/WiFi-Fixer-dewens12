@@ -19,11 +19,15 @@
 package org.wahtod.wififixer.ui;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.view.WindowCompat;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 
 public class BaseDialogFragment extends AppCompatDialogFragment {
     public static final String FRAGMENT_KEY = "FRAGMENT";
@@ -33,12 +37,8 @@ public class BaseDialogFragment extends AppCompatDialogFragment {
         Dialog d = f.getDialog();
         if (d != null) {
             d.setCanceledOnTouchOutside(true);
-            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            f.setStyle(DialogFragment.STYLE_NO_TITLE, f.getTheme());
-            WindowManager.LayoutParams wset = d.getWindow().getAttributes();
-            wset.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
-            wset.gravity = Gravity.CENTER | Gravity.BOTTOM;
-            d.getWindow().setAttributes(wset);
+            d.getWindow().getAttributes().softInputMode
+                    = WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN;
         }
     }
 }

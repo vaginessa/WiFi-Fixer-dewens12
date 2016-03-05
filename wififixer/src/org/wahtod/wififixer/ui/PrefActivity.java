@@ -19,28 +19,31 @@
 package org.wahtod.wififixer.ui;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
-import android.support.v7.app.AppCompatDelegate;
 import android.view.ActionMode;
 import android.view.MenuItem;
-import com.lb.material_preferences_library.PreferenceActivity;
+
 import org.wahtod.wififixer.IntentConstants;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.SleepPolicyHelper;
+import org.wahtod.wififixer.prefs.AppCompatPreferenceActivity;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
 
 import java.util.List;
 
-public class PrefActivity extends PreferenceActivity implements
+
+public class PrefActivity extends AppCompatPreferenceActivity implements
         OnSharedPreferenceChangeListener {
     @Override
     public void onActionModeFinished(ActionMode mode) {
@@ -103,7 +106,7 @@ public class PrefActivity extends PreferenceActivity implements
                     if (screen != null)
                         screen.setChecked(true);
                 /*
-				 * Set Wifi Sleep policy to Never
+                 * Set Wifi Sleep policy to Never
 				 */
                     SleepPolicyHelper.setSleepPolicy(p.getContext(),
                             Settings.System.WIFI_SLEEP_POLICY_NEVER);
@@ -146,18 +149,11 @@ public class PrefActivity extends PreferenceActivity implements
     }
 
     @Override
-    protected int getPreferencesXmlId() {
-        return 0;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getDelegate().installViewFactory();
-        getDelegate().onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             setTheme(android.R.style.Theme_Black);
-        else {
             addPreferencesFromResource(R.xml.general);
             addPreferencesFromResource(R.xml.notification);
             addPreferencesFromResource(R.xml.help);
@@ -168,9 +164,57 @@ public class PrefActivity extends PreferenceActivity implements
             getPreferenceScreen().getSharedPreferences()
                     .registerOnSharedPreferenceChangeListener(this);
         }
-        getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SettingsFragment extends PreferenceFragment implements
+            OnSharedPreferenceChangeListener {
+        @Override
+        public void onStart() {
+            this.getPreferenceScreen().getSharedPreferences()
+                    .registerOnSharedPreferenceChangeListener(this);
+            super.onStart();
+        }
 
+        @Override
+        public void onStop() {
+            this.getPreferenceScreen().getSharedPreferences()
+                    .unregisterOnSharedPreferenceChangeListener(this);
+            super.onStop();
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            String argument = getArguments().getString("resource");
+            switch (argument) {
+                case "general":
+                    addPreferencesFromResource(R.xml.general);
+                    break;
+                case "notification":
+                    addPreferencesFromResource(R.xml.notification);
+                    break;
+                case "help":
+                    addPreferencesFromResource(R.xml.help);
+                    break;
+                case "widget":
+                    addPreferencesFromResource(R.xml.widget);
+                    break;
+                case "logging":
+                    addPreferencesFromResource(R.xml.logging);
+                    break;
+                case "advanced":
+                    addPreferencesFromResource(R.xml.advanced);
+                    break;
+            }
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            PrefActivity.processPrefChange(this.getPreferenceScreen(),
+                    sharedPreferences, key);
+        }
     }
 
     @Override
@@ -195,19 +239,13 @@ public class PrefActivity extends PreferenceActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //ActionBarDetector.handleHome(this, item);
+        if (item.getClass().getName().contains("support"))
+            startActivity(new Intent(this, MainActivity.class));
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         processPrefChange(getPreferenceScreen(), prefs, key);
-    }
-
-    private AppCompatDelegate mDelegate;
-    private AppCompatDelegate getDelegate() {
-        if (mDelegate == null) {
-            mDelegate = AppCompatDelegate.create(this, null);
-        }
-        return mDelegate;
     }
 }

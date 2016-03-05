@@ -21,7 +21,7 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
     <header
-            android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+            android:fragment="org.wahtod.wififixer.ui.PrefActivity$SettingsFragment"
             android:icon="@drawable/ic_menu_manage"
             android:key="prefscreen"
             android:title="Service">
@@ -30,7 +30,7 @@
                 android:value="general"/>
     </header>
     <header
-            android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+            android:fragment="org.wahtod.wififixer.ui.PrefActivity$SettingsFragment"
             android:icon="@drawable/ic_menu_notifications"
             android:key="prefscreen"
             android:title="Notification">
@@ -39,7 +39,7 @@
                 android:value="notification"/>
     </header>
     <header
-            android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+            android:fragment="org.wahtod.wififixer.ui.PrefActivity$SettingsFragment"
             android:icon="@drawable/ic_menu_help"
             android:key="prefscreen"
             android:title="@string/help">
@@ -48,7 +48,7 @@
                 android:value="help"/>
     </header>
     <header
-            android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+            android:fragment="org.wahtod.wififixer.ui.PrefActivity$SettingsFragment"
             android:icon="@drawable/cog"
             android:key="prefscreen"
             android:title="Widget">
@@ -57,7 +57,7 @@
                 android:value="widget"/>
     </header>
     <header
-            android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+            android:fragment="org.wahtod.wififixer.ui.PrefActivity$SettingsFragment"
             android:icon="@drawable/ic_menu_save"
             android:key="prefscreen"
             android:title="Logging">
@@ -66,7 +66,7 @@
                 android:value="logging"/>
     </header>
     <header
-            android:fragment="org.wahtod.wififixer.ui.GenericPreferenceFragment"
+            android:fragment="org.wahtod.wififixer.ui.PrefActivity$SettingsFragment"
             android:icon="@drawable/ic_menu_add"
             android:key="prefscreen"
             android:title="Advanced">

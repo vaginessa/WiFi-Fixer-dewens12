@@ -27,6 +27,7 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/bg</item>
         <item name="actionBarStyle">@style/ActionBar</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
     <style name="ActionBar" parent="Widget.AppCompat.Light.ActionBar">
