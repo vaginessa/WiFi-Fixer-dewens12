@@ -44,7 +44,7 @@ public class StatusFragment extends Fragment {
     private static final int STATUS_MESSAGE = 337;
     private static final String EMPTYSTRING = "";
     private static final String DBM = "dBm";
-    private static final String MB = "mb";
+    private static final String MB = "Mb";
     private static WeakReference<StatusFragment> self;
     private static Handler drawhandler = new Handler() {
         @Override

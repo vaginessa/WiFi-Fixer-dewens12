@@ -1548,8 +1548,10 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
                     getSupplicantStateString(getSupplicantState())).setSSID(getSSID());
             if (state) {
                 sm.setShow(1);
-            } else
+            } else {
                 sm.setShow(-1);
+                NotifUtil.addStatNotif(ctxt.get(),sm);
+            }
 
             StatusMessage.send(ctxt.get(), sm);
             _statusdispatcher.refreshWidget(null);

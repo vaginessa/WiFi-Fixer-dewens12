@@ -34,7 +34,6 @@
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
 -verbose
--dontwarn com.actionbarsherlock.internal.**
 
 -keepattributes SourceFile,LineNumberTable,*Attributes*,*Annotation*
 
@@ -79,17 +78,14 @@
 
 
 # Add any project specific keep options here:
--keep public class java.lang.*
--keep public class android.content.Context*
--keep class android.support.v4.os.ParcelableCompatCreatorCallbacks**
--keep class android.support.v4.widget.CursorAdapter
--keep class android.support.v4.os.ParcelableCompatCreatorHoneycombMR2* { *; }
--keep class android.support.v4.content.Loader** { *; }
--keep class android.support.v4.app.** { *; }
--keep interface android.support.v4.app.** { *; }
--keep class com.actionbarsherlock.** { *; }
--keep interface com.actionbarsherlock.** { *; }
--keep public class * extends com.actionbarsherlock.*
+#-keep public class java.lang.*
+#-keep public class android.content.Context*
+#-keep class android.support.v4.os.ParcelableCompatCreatorCallbacks**
+#-keep class android.support.v4.widget.CursorAdapter
+#-keep class android.support.v4.os.ParcelableCompatCreatorHoneycombMR2* { *; }
+#-keep class android.support.v4.content.Loader** { *; }
+#-keep class android.support.v4.app.** { *; }
+#-keep interface android.support.v4.app.** { *; }
 -keep public class * extends android.support.v4.app.DialogFragment
 -keep public class * extends android.support.v4.app.Fragment
 -keep public class * extends android.app.Activity
@@ -122,15 +118,10 @@
 }
 
 -keep public class * extends android.app.backup.BackupAgent
--keep public class org.wahtod.wififixer.ui.GenericPreferenceFragment
 
 -keepnames class org.wahtod.wififixer.utility.BroadcastHelper
 
 -keepnames class android.net.wifi.WifiConfiguration
-
--keepclassmembers class org.wahtod.wififixer.ui.GenericPreferenceFragment{
- public *;
-}
 
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface

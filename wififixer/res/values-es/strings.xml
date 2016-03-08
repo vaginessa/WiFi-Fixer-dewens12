@@ -101,7 +101,6 @@
     <string name="toggling_wifi">Reseteando Wifi</string>
     <string name="connected_to_network">Conectado a Red:</string>
     <string name="wifi_off_aborting_repair">Wifi Apagado:Abortando Reparacion</string>
-    <string name="app_desc">Servicio monitor de condicion Wifi</string>
     <string name="passed">APROBADO</string>
     <string name="failed">RECHAZADO</string>
     <string name="reenablenetwork">Rehabilitacion de red deshabilitada:</string>
