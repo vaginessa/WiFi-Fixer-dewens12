@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.EditorDetector;
 import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
@@ -115,10 +116,12 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
 
     public static void notifyPrefChange(Context c, String pref,
                                         boolean b) {
-        Pref p = Pref.get(pref);
-        if(p != null) {
+        try {
+            Pref p = Pref.get(pref);
             _flags.put(pref, b);
             self.get().handlePrefChange(p, b);
+        } catch (NullPointerException e) {
+            LogUtil.log(c,"NPE updating pref: "+ pref);
         }
     }
 
@@ -462,7 +465,7 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
 
     public void specialCase() {
         /*
-		 * Any special case code here
+         * Any special case code here
 		 */
 
     }

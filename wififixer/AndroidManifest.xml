@@ -21,7 +21,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.wahtod.wififixer"
     android:installLocation="internalOnly"
-    android:versionCode="1150"
+    android:versionCode="1151"
     android:versionName="1.0.5b2">
 
     <!-- Documenting permissions here -->
@@ -52,7 +52,7 @@
         android:xlargeScreens="true"></supports-screens>
 
     <uses-sdk
-        android:maxSdkVersion="23"
+        android:maxSdkVersion="24"
         android:minSdkVersion="7"
         android:targetSdkVersion="23" />
 

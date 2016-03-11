@@ -35,8 +35,8 @@
   
 _There are unit tests, but I do not include them in the repository.  If you want to write production code based on this project you're going to have to hire me_
 
-###*Release: 1.0.4 Zappy Zyther* 
-####1.0.4 adds support for Android 5, minor new features, bugfixes
+###*Release: 1.0.5* 
+####1.0.5 adds support for Android 5, minor new features, bugfixes
 
 
 

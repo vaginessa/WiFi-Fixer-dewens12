@@ -104,7 +104,7 @@
     <string name="connected_to_network">Connected to Network:</string>
     <string name="wifi_off_aborting_repair">Wifi Off:Aborting Repair</string>
     <string name="app_name" translatable="false">Wifi Fixer</string>
-    <string name="app_desc">Wifi health monitoring service</string>
+    <string name="app_desc" translatable="false">Wifi health monitoring service</string>
     <string name="passed">PASSED</string>
     <string name="failed">FAILED</string>
     <string name="reenablenetwork">Disabled network re-enabled:</string>
