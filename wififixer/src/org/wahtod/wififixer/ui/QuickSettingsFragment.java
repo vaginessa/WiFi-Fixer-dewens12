@@ -137,7 +137,7 @@ public class QuickSettingsFragment extends BaseDialogFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        self = new WeakReference<QuickSettingsFragment>(this);
+        self = new WeakReference<>(this);
         super.onCreate(savedInstanceState);
     }
 

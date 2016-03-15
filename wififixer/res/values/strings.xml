@@ -295,5 +295,6 @@
     <string name="sqllogger_thread" translatable="false">SqlLoggerThread</string>
     <string name="verify_passphrase">Verify network passphrase</string>
     <string name="deep_radio_sleep" translatable="false">Deep Radio Sleep: Signalhop Check Aborted</string>
+    <string name="dispatchintent_err" translatable="false">NPE in DispatchIntent</string>
 
 </resources>

@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.format.Formatter;
+
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
@@ -1400,7 +1401,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
         mLastConnectedNetwork = wifiInfo;
         prepareConnect();
         /*
-		 * Disable Demoter, we've connected
+         * Disable Demoter, we've connected
 		 */
         clearMessage(rDemoter);
 		/*
@@ -1544,17 +1545,17 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
 
     public void setStatNotif(boolean state) {
 
-            StatusMessage sm = StatusMessage.getNew().setStatus(
-                    getSupplicantStateString(getSupplicantState())).setSSID(getSSID());
-            if (state) {
-                sm.setShow(1);
-            } else {
-                sm.setShow(-1);
-                NotifUtil.addStatNotif(ctxt.get(),sm);
-            }
+        StatusMessage sm = StatusMessage.getNew().setStatus(
+                getSupplicantStateString(getSupplicantState())).setSSID(getSSID());
+        if (state) {
+            sm.setShow(1);
+        } else {
+            sm.setShow(-1);
+            NotifUtil.addStatNotif(ctxt.get(), sm);
+        }
 
-            StatusMessage.send(ctxt.get(), sm);
-            _statusdispatcher.refreshWidget(null);
+        StatusMessage.send(ctxt.get(), sm);
+        _statusdispatcher.refreshWidget(null);
     }
 
     private void signalHop() {
@@ -1685,7 +1686,11 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
 
         @Override
         public void run() {
-            _wfmonitor.dispatchIntent(ctxt.get(), d);
+            try {
+                _wfmonitor.dispatchIntent(ctxt.get(), d);
+            } catch (NullPointerException e) {
+                LogUtil.log(ctxt.get(), R.string.dispatchintent_err);
+            }
         }
     }
 

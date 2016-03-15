@@ -21,8 +21,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.wahtod.wififixer"
     android:installLocation="internalOnly"
-    android:versionCode="1151"
-    android:versionName="1.0.5b2">
+    android:versionCode="1152"
+    android:versionName="1.0.5b3">
 
     <!-- Documenting permissions here -->
     <!-- For service start (30 seconds from boot_completed) -->
@@ -45,6 +45,10 @@
     <!-- For setting Wifi Sleep Policy -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
+    <!-- Required to access scan results in Android N -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+
     <supports-screens
         android:largeScreens="true"
         android:normalScreens="true"
@@ -52,7 +56,7 @@
         android:xlargeScreens="true"></supports-screens>
 
     <uses-sdk
-        android:maxSdkVersion="24"
+        android:maxSdkVersion="23"
         android:minSdkVersion="7"
         android:targetSdkVersion="23" />
 
