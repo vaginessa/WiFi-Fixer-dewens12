@@ -20,6 +20,7 @@ package org.wahtod.wififixer.utility;
 
 import android.content.Context;
 import android.os.Build;
+
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
@@ -32,7 +33,9 @@ import java.util.concurrent.RejectedExecutionException;
 public class Hostup {
     public interface HostupResponse {
         public void onHostupResponse(HostMessage hostMessage);
-    };
+    }
+
+    ;
     /*
      * getHostUp method: Executes 2 threads, icmp check and http check first
      * thread to return state "wins"
@@ -96,7 +99,8 @@ public class Hostup {
         if (session == mCurrentSession) {
             mFinished = true;
             response = h;
-            masterThread.interrupt();
+            if (masterThread != null)
+                masterThread.interrupt();
         }
     }
 
@@ -187,7 +191,7 @@ public class Hostup {
         } catch (IOException e) {
             info.append(context.getString(R.string.i_o_exception));
         } catch (NullPointerException e) {
-            info.append("NullPointerException");
+            info.append(context.getString(R.string.npe));
         }
 
         if (code == HttpURLConnection.HTTP_OK
