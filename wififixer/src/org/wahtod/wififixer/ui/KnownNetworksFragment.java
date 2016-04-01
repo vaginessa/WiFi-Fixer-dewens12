@@ -31,10 +31,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
-import android.view.*;
+import android.support.v7.view.ActionMode.Callback;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.AdapterView.OnItemLongClickListener;
+
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitor;
 import org.wahtod.wififixer.prefs.PrefConstants;
@@ -94,7 +103,7 @@ public class KnownNetworksFragment extends Fragment {
             }
         }
     };
-    public ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+    public Callback mActionModeCallback = new Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             if (!isWifiOn(getContext()))
@@ -212,7 +221,8 @@ public class KnownNetworksFragment extends Fragment {
                     && mSSID.equals(ATTWIFI)) {
                 return false;
             }
-            mActionMode = getActivity().startActionMode((android.view.ActionMode.Callback) mActionModeCallback);
+            AppCompatActivity activity = (AppCompatActivity) getActivity();
+            mActionMode = activity.startSupportActionMode(mActionModeCallback);
             v.setSelected(true);
             return true;
 
@@ -245,7 +255,7 @@ public class KnownNetworksFragment extends Fragment {
         WifiManager wm = AsyncWifiManager.getWifiManager(context);
         List<WifiConfiguration> wifiConfigs = wm.getConfiguredNetworks();
         if (wifiConfigs == null || wifiConfigs.isEmpty())
-            return new ArrayList<String>();
+            return new ArrayList<>();
 
         List<String> networks = new ArrayList<String>();
         for (WifiConfiguration wfResult : wifiConfigs) {
@@ -319,7 +329,8 @@ public class KnownNetworksFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.containsKey(SSID_KEY)) {
             mSSID = savedInstanceState.getString(SSID_KEY);
-            mActionMode = getActivity().startActionMode((android.view.ActionMode.Callback) mActionModeCallback);
+            AppCompatActivity activity = (AppCompatActivity) getActivity();
+            mActionMode = activity.startSupportActionMode(mActionModeCallback);
             for (int c = 1; c < adapter.getCount(); c++) {
                 if (adapter.getItem(c).equals(mSSID)) {
                     mListView.setSelection(c);
@@ -361,7 +372,7 @@ public class KnownNetworksFragment extends Fragment {
          * Grab and set up ListView
 		 */
         knownnetworks = getNetworks(getContext());
-        known_in_range = new ArrayList<String>();
+        known_in_range = new ArrayList<>();
         mFragmentPauseRequestListener = (OnFragmentPauseRequestListener) activity;
         super.onAttach(activity);
     }
