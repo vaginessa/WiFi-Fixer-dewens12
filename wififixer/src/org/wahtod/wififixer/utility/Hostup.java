@@ -19,7 +19,9 @@
 package org.wahtod.wififixer.utility;
 
 import android.content.Context;
+import android.net.DhcpInfo;
 import android.os.Build;
+import android.text.format.Formatter;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefConstants;
@@ -28,9 +30,14 @@ import org.wahtod.wififixer.prefs.PrefUtil;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.*;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.RejectedExecutionException;
 
 public class Hostup {
+    private volatile String accesspointIP;
+
     public interface HostupResponse {
         public void onHostupResponse(HostMessage hostMessage);
     }
@@ -43,6 +50,34 @@ public class Hostup {
     // Target for header check
     public static final String FAILOVER = "www.google.com";
     public static final String FAILOVER2 = "www.baidu.com";
+    private static final int ICMP_TYPE = 0;
+    private static final int HTTP_TYPE = 1;
+    public static enum NetCheck {
+        HTTP("HTTP"), ICMP("ICMP");
+
+        private String key;
+        private static final Map<String, NetCheck> lookup = new HashMap<String, NetCheck>();
+
+        static {
+            for (NetCheck p : EnumSet.allOf(NetCheck.class))
+                lookup.put(p.key(), p);
+        }
+
+        NetCheck(String key) {
+            this.key = key;
+        }
+
+        public String key() {
+            return key;
+        }
+
+        public static NetCheck get(String pstring) {
+
+            return lookup.get(pstring);
+        }
+
+    }
+    protected volatile NetCheck checktype;
     protected static final String INET_LOOPBACK = "127.0.0.1";
     protected static final String INET_INVALID = "0.0.0.0";
     protected static final int TIMEOUT_EXTRA = 2000;
@@ -60,7 +95,6 @@ public class Hostup {
     protected volatile boolean mFinished;
     private static ThreadHandler httpHandler;
     private static ThreadHandler icmpHandler;
-    private volatile String mFailover = FAILOVER2;
     private HostupResponse mClient;
 
     private Hostup(Context c) {
@@ -78,6 +112,22 @@ public class Hostup {
             _nethandler.get().post(r);
     }
 
+    @SuppressWarnings("deprecation")
+    public void icmpCache(Context context) {
+        /*
+         * Caches DHCP gateway IP for ICMP check
+		 */
+        try {
+            DhcpInfo info = AsyncWifiManager.getWifiManager(context).getDhcpInfo();
+            accesspointIP = (Formatter.formatIpAddress(info.gateway));
+            LogUtil.log(context, new StringBuilder(context.getString(R.string.cached_ip))
+                    .append(accesspointIP).toString());
+        } catch (NullPointerException e) {
+            if (PrefUtil.getFlag(PrefConstants.Pref.DEBUG))
+                LogUtil.log(context, "Invalid Gateway on ICMP cache");
+        }
+    }
+
     public static Hostup newInstance(Context context) {
         if (_hostup == null)
             _hostup = new Hostup(context.getApplicationContext());
@@ -91,10 +141,6 @@ public class Hostup {
         return _hostup;
     }
 
-    public String getFailover() {
-        return mFailover;
-    }
-
     protected synchronized void complete(HostMessage h, int session) {
         if (session == mCurrentSession) {
             mFinished = true;
@@ -104,28 +150,25 @@ public class Hostup {
         }
     }
 
-    public void getHostup(int timeout, String router) {
+    public void getHostup(int timeout) {
        /*
         * Track Sessions to find ordering problem in deep sleep
         */
         mCurrentSession++;
         response = new HostMessage();
-        /*
-         * If null, use failover else construct URL from router string
-		 */
-        if (router == null)
-            target = mFailover;
-        else
-            target = router;
+
+        target = accesspointIP;
 
         reachable = timeout + TIMEOUT_EXTRA;
         /*
          * Submit hostCheck, response is via HostupResponse interface
          */
-        if (!target.equals(INET_LOOPBACK) && !target.equals(INET_INVALID)
+        if (checktype.equals(NetCheck.ICMP)
                 & !PrefUtil.getFlag(PrefConstants.Pref.FORCE_HTTP))
             icmpHandler.get().post(new GetICMP(mCurrentSession));
-        httpHandler.get().post(new GetHeaders(mCurrentSession));
+        else
+            httpHandler.get().post(new GetHeaders(mCurrentSession));
+
         submitRunnable(new HostCheck(target));
     }
 
@@ -234,13 +277,26 @@ public class Hostup {
         @Override
         public void run() {
             Context context = mContext.get();
-            target = Hostup.FAILOVER;
+            icmpCache(context);
+            target = accesspointIP;
+            HostMessage i = icmpHostup(context);
             HostMessage h = getHttpHeaders(context);
-            if (h.state)
-                mFailover = Hostup.FAILOVER;
+            if (!h.state && !i.state) {
+                accesspointIP = Hostup.FAILOVER;
+                i = icmpHostup(context);
+                h = getHttpHeaders(context);
+                if(!h.state && !i.state )
+                    accesspointIP = Hostup.FAILOVER2;
+            }
+
+            if (i.state)
+                checktype = NetCheck.ICMP;
             else
-                mFailover = Hostup.FAILOVER2;
-            LogUtil.log(context, context.getString(R.string.failover) + mFailover);
+                checktype = NetCheck.HTTP;
+
+            LogUtil.log(context, context.getString(R.string.failover) + accesspointIP);
+            LogUtil.log(context, context.getString(R.string.checktype) + checktype.name());
+
         }
     }
 

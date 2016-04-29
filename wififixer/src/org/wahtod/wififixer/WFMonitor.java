@@ -693,23 +693,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
 		 */
         if (!getIsOnWifi(context) || !getIsSupplicantConnected(context))
             return;
-        _hostup.getHostup(REACHABLE, accesspointIP);
-    }
-
-    @SuppressWarnings("deprecation")
-    private static void icmpCache(Context context) {
-        /*
-         * Caches DHCP gateway IP for ICMP check
-		 */
-        try {
-            DhcpInfo info = AsyncWifiManager.getWifiManager(ctxt.get()).getDhcpInfo();
-            _wfmonitor.accesspointIP = (Formatter.formatIpAddress(info.gateway));
-            LogUtil.log(context, new StringBuilder(context.getString(R.string.cached_ip))
-                    .append(_wfmonitor.accesspointIP).toString());
-        } catch (NullPointerException e) {
-            if (PrefUtil.getFlag(Pref.DEBUG))
-                LogUtil.log(context, "Invalid Gateway on ICMP cache");
-        }
+        _hostup.getHostup(REACHABLE);
     }
 
     private static void logBestNetwork(Context context,
@@ -862,11 +846,6 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
         ScreenStateDetector.setOnScreenStateChangedListener(_wfmonitor);
         _wfmonitor.screenstate = ScreenStateDetector.getScreenState(context);
 
-        /*
-         * Set IP
-		 */
-        if (getIsOnWifi(context))
-            icmpCache(context);
         /*
          * Set current AP int
 		 */
@@ -1409,7 +1388,6 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
 		 */
         int n = getNetworkID();
         restoreNetworkPriority(ctxt.get(), n);
-        icmpCache(ctxt.get());
         StatusMessage.send(ctxt.get(), _statusdispatcher.getStatusMessage().setSSID(getSSID())
                 .setStatus(ctxt.get(), R.string.connected_to_network).setSignal(0));
         _statusdispatcher.refreshWidget(null);
@@ -1664,7 +1642,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
             if (!getIsOnWifi(ctxt.get()))
                 return;
             LogUtil.log(context, context.getString(R.string.network_check_retry));
-            _hostup.getHostup(REACHABLE, null);
+            _hostup.getHostup(REACHABLE);
 
         }
         isUp = out.state;

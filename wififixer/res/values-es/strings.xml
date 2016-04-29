@@ -242,7 +242,7 @@
     <string name="BLIST_title"><![CDATA[Lista Negra de Hotspot AT&T]]></string>
     <string name="stuck_notif">Tu Wifi esta atascado. Por favor lee los Problemas Conocidos en la Ayuda</string>
     <string name="stuck_ticker">Wifi Atascado</string>
-    <string name="failover">Failover set to:</string>
+    <string name="failover">Target Host set to:</string>
     <string name="youhave">Tiene </string>
     <string name="messages"> mensajes</string>
     <string name="error_c2b">Empty Network List in connectToBest</string>
