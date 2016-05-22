@@ -44,40 +44,14 @@ public class Hostup {
 
     ;
     /*
-     * getHostUp method: Executes 2 threads, icmp check and http check first
-     * thread to return state "wins"
+     * getHostUp method: Performs network check calibrated with SetFailover
      */
     // Target for header check
     public static final String FAILOVER = "www.google.com";
     public static final String FAILOVER2 = "www.baidu.com";
-    private static final int ICMP_TYPE = 0;
-    private static final int HTTP_TYPE = 1;
-    public static enum NetCheck {
-        HTTP("HTTP"), ICMP("ICMP");
-
-        private String key;
-        private static final Map<String, NetCheck> lookup = new HashMap<String, NetCheck>();
-
-        static {
-            for (NetCheck p : EnumSet.allOf(NetCheck.class))
-                lookup.put(p.key(), p);
-        }
-
-        NetCheck(String key) {
-            this.key = key;
-        }
-
-        public String key() {
-            return key;
-        }
-
-        public static NetCheck get(String pstring) {
-
-            return lookup.get(pstring);
-        }
-
-    }
-    protected volatile NetCheck checktype;
+    public static final int HTTP_TYPE = 1;
+    public static final int ICMP_TYPE = 0;
+    protected static int checktype = -1;
     protected static final String INET_LOOPBACK = "127.0.0.1";
     protected static final String INET_INVALID = "0.0.0.0";
     protected static final int TIMEOUT_EXTRA = 2000;
@@ -85,14 +59,14 @@ public class Hostup {
     private static final String REJECTED_EXECUTION = "Rejected Execution";
     private static Hostup _hostup;
     private static ThreadHandler _nethandler;
-    protected volatile String target;
-    protected volatile HostMessage response;
-    protected volatile URI headURI;
-    protected volatile int reachable;
-    protected volatile int mCurrentSession;
+    protected static volatile String target;
+    protected static volatile HostMessage response;
+    protected static volatile URI headURI;
+    protected static volatile int reachable;
+    protected static volatile int mCurrentSession;
     protected volatile WeakReference<Context> mContext;
     protected volatile Thread masterThread;
-    protected volatile boolean mFinished;
+    protected static volatile boolean mFinished;
     private static ThreadHandler httpHandler;
     private static ThreadHandler icmpHandler;
     private HostupResponse mClient;
@@ -160,10 +134,17 @@ public class Hostup {
         target = accesspointIP;
 
         reachable = timeout + TIMEOUT_EXTRA;
+
+        // Check for bugged checktype
+        if (checktype == -1){
+            LogUtil.log(mContext.get(),R.string.bugged_checktype);
+            setFailover();
+        }
+
         /*
          * Submit hostCheck, response is via HostupResponse interface
          */
-        if (checktype.equals(NetCheck.ICMP)
+        if (checktype == ICMP_TYPE
                 & !PrefUtil.getFlag(PrefConstants.Pref.FORCE_HTTP))
             icmpHandler.get().post(new GetICMP(mCurrentSession));
         else
@@ -288,14 +269,18 @@ public class Hostup {
                 if(!h.state && !i.state )
                     accesspointIP = Hostup.FAILOVER2;
             }
-
-            if (i.state)
-                checktype = NetCheck.ICMP;
-            else
-                checktype = NetCheck.HTTP;
+            String type;
+            if (i.state) {
+                checktype = ICMP_TYPE;
+                type = "ICMP";
+            }
+            else {
+                checktype = HTTP_TYPE;
+                type = "HTTP";
+            }
 
             LogUtil.log(context, context.getString(R.string.failover) + accesspointIP);
-            LogUtil.log(context, context.getString(R.string.checktype) + checktype.name());
+            LogUtil.log(context, context.getString(R.string.checktype) + type);
 
         }
     }

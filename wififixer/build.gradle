@@ -25,7 +25,7 @@ buildscript {
         maven { url 'http://repo1.maven.org/maven2' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.android.tools.build:gradle:2.1.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -39,9 +39,9 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:23.2.1'
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:preference-v7:23.2.1'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:preference-v7:23.4.0'
 }
 
 android {
@@ -64,7 +64,7 @@ android {
             minifyEnabled true
             proguardFile "proguard-project.txt"
             compileSdkVersion 23
-            buildToolsVersion "23.0.2"
+            buildToolsVersion "23.0.3"
             signingConfig signingConfigs.release
         }
 
@@ -72,7 +72,7 @@ android {
             debuggable true
             minifyEnabled false
             compileSdkVersion 23
-            buildToolsVersion "23.0.2"
+            buildToolsVersion "23.0.3"
         }
     }
 

@@ -298,5 +298,6 @@
     <string name="dispatchintent_err" translatable="false">NPE in DispatchIntent</string>
     <string name="npe" translatable="false">NullPointerException</string>
     <string name="checktype" translatable="false">Check Type:</string>
+    <string name="bugged_checktype" translatable="false">Bugged Checktype, resetting</string>
 
 </resources>
