@@ -24,7 +24,7 @@
   + /wififixer/src/org/wahtod/wififixer/IntentConstants.java
 
 * ###Targets
-  + All Android devices 2.1 to 5.x with wifi and a touchscreen
+  + All Android devices 2.1 to 6.x with wifi and a touchscreen
 
 * ###Why is it free?
   + Software which works around OS issues should be!
@@ -36,7 +36,7 @@
 _There are unit tests, but I do not include them in the repository.  If you want to write production code based on this project you're going to have to hire me_
 
 ###*Release: 1.0.5* 
-####1.0.5 adds support for Android 5, minor new features, bugfixes
+####1.0.5 adds support for Android 6, minor new features, bugfixes
 
 
 
