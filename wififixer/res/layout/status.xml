@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Wifi Fixer for Android
+  ~        Copyright (C) 2010-2016  David Van de Ven
+  ~
+  ~        This program is free software: you can redistribute it and/or modify
+  ~        it under the terms of the GNU General Public License as published by
+  ~        the Free Software Foundation, either version 3 of the License, or
+  ~        (at your option) any later version.
+  ~
+  ~        This program is distributed in the hope that it will be useful,
+  ~        but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~        GNU General Public License for more details.
+  ~
+  ~        You should have received a copy of the GNU General Public License
+  ~        along with this program.  If not, see http://www.gnu.org/licenses
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:alpha=".8"
+    android:background="@drawable/boxbg"
+    android:orientation="vertical"
+    android:padding="@dimen/status_padding">
+
+    <TextView
+        android:id="@+id/SSID"
+        style="@style/Wftext.header"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_gravity="center"
+        android:layout_weight="1.5"
+        android:gravity="center_horizontal"
+        android:text="SSID">
+
+    </TextView>
+
+    <ImageView
+        android:id="@+id/signal_icon"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_gravity="center"
+        android:layout_weight="4"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon"></ImageView>
+
+    <TextView
+        android:id="@+id/signal"
+        style="@style/Wftext"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:text="-99dBm"></TextView>
+
+    <TextView
+        android:id="@+id/linkspeed"
+        style="@style/Wftext"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:text="65mb"></TextView>
+
+    <TextView
+        android:id="@+id/status"
+        style="@style/Wftext"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:text="COMPLETED"></TextView>
+
+</LinearLayout>
