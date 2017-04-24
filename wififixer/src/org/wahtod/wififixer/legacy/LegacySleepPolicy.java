@@ -22,6 +22,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.provider.Settings;
 
+import static android.provider.Settings.System.WIFI_SLEEP_POLICY;
+
 /**
  * Created by zanshin on 7/11/13.
  */
@@ -30,7 +32,7 @@ public class LegacySleepPolicy extends SleepPolicyHelper {
     public void vSetSleepPolicy(Context context, int policy) {
         ContentResolver cr = context.getContentResolver();
         android.provider.Settings.System.putInt(cr,
-                android.provider.Settings.System.WIFI_SLEEP_POLICY, policy);
+                WIFI_SLEEP_POLICY, policy);
     }
 
     @Override
@@ -39,7 +41,7 @@ public class LegacySleepPolicy extends SleepPolicyHelper {
         int policy;
         try {
             policy = Settings.System.getInt(cr,
-                    Settings.System.WIFI_SLEEP_POLICY);
+                    WIFI_SLEEP_POLICY);
         } catch (Settings.SettingNotFoundException e) {
             policy = -1;
         }
