@@ -19,7 +19,6 @@
 package org.wahtod.wififixer.legacy;
 
 import android.content.Context;
-import android.os.Build;
 
 import java.io.File;
 
@@ -31,10 +30,7 @@ public abstract class VersionedFile {
          * Instantiate appropriate VersionedLogFile
 		 */
         if (selector == null) {
-            if (Build.VERSION.SDK_INT < 8) {
-                selector = new LegacyFile();
-            } else
-                selector = new API8File();
+            selector = new API8File();
         }
         return selector.vgetLogFile(context, filename);
     }

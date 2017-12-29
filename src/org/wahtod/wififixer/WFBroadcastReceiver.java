@@ -38,6 +38,7 @@ import org.wahtod.wififixer.widget.FixerWidget;
 import org.wahtod.wififixer.widget.WidgetReceiver;
 
 import java.lang.ref.WeakReference;
+import java.util.Objects;
 
 public final class WFBroadcastReceiver extends BroadcastReceiver {
     public static final String FROMWIDGET = "FRMWDGT";
@@ -93,7 +94,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
         /*
          * For WIFI_SERVICE_ENABLE intent, set service enabled and run
 		 */
-        if (action.equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)) {
+        if (Objects.requireNonNull(action).equals(IntentConstants.ACTION_WIFI_SERVICE_ENABLE)) {
             handleWifiServiceEnable();
         }
         /*
@@ -156,7 +157,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
 
     private static void handleAuthAction(Bundle data) {
         if (data.containsKey(AUTHEXTRA)
-                && data.getString(AUTHEXTRA).contains(AUTHSTRING)) {
+                && Objects.requireNonNull(data.getString(AUTHEXTRA)).contains(AUTHSTRING)) {
             LogUtil.log(ctxt.get(), ctxt.get().getString(R.string.authed));
             Intent intent = new Intent(ctxt.get(), MainActivity.class)
                     .setAction(Intent.ACTION_MAIN).setFlags(

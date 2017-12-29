@@ -18,6 +18,7 @@
 
 package org.wahtod.wififixer.boot;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -40,12 +41,13 @@ public class BootReceiver extends BroadcastReceiver {
 	 * android.content.Intent)
 	 */
 
+    @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(Context context, Intent intent) {
         /*
          * For boot completed, check DISABLESERVICE if false, start the service
-		 * loader run
-		 */
+         * loader run
+         */
         if (!PrefUtil.readBoolean(context, Pref.DISABLESERVICE.key())) {
             ServiceAlarm.registerAlarm(context.getApplicationContext(), ServiceAlarm.STARTDELAY, false, 0,
                     ServiceAlarm.createPendingIntent(context, PendingIntent.FLAG_UPDATE_CURRENT));

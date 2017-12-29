@@ -4,26 +4,7 @@
             "outputFile": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-v11\\themes.xml",
-                    "from": {
-                        "startLines": "29,22",
-                        "startColumns": "4,4",
-                        "startOffsets": "1274,899",
-                        "endLines": "31,27",
-                        "endColumns": "12,12",
-                        "endOffsets": "1417,1266"
-                    },
-                    "to": {
-                        "startLines": "2,195",
-                        "startColumns": "4,4",
-                        "startOffsets": "55,14223",
-                        "endLines": "4,200",
-                        "endColumns": "12,12",
-                        "endOffsets": "196,14585"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\3f398f63b16fcb364d120b92083206ca\\res\\values-v11\\values-v11.xml",
+                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\values-v11\\values-v11.xml",
                     "from": {
                         "startLines": "2,8,14,20,26,32,38,39,43,47,48,52,56,57,61,66,71,76,78,80,81,82,136,191",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -31,14 +12,6 @@
                         "endLines": "7,13,19,25,31,37,38,42,46,47,51,55,56,60,65,70,75,77,79,80,81,135,190,191",
                         "endColumns": "12,12,12,12,12,12,88,12,12,100,12,12,102,12,12,12,12,12,12,70,82,12,12,90",
                         "endOffsets": "469,894,1322,1748,2175,2600,2689,2935,3184,3285,3537,3792,3895,4148,4556,4976,5398,5505,5634,5705,5788,9813,13981,14072"
-                    },
-                    "to": {
-                        "startLines": "5,11,17,23,29,35,41,42,46,50,51,55,59,60,64,69,74,79,81,83,84,85,139,194",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "201,620,1045,1473,1899,2326,2751,2840,3086,3335,3436,3688,3943,4046,4299,4707,5127,5549,5656,5785,5856,5939,9964,14132",
-                        "endLines": "10,16,22,28,34,40,41,45,49,50,54,58,59,63,68,73,78,80,82,83,84,138,193,194",
-                        "endColumns": "12,12,12,12,12,12,88,12,12,100,12,12,102,12,12,12,12,12,12,70,82,12,12,90",
-                        "endOffsets": "615,1040,1468,1894,2321,2746,2835,3081,3330,3431,3683,3938,4041,4294,4702,5122,5544,5651,5780,5851,5934,9959,14127,14218"
                     }
                 }
             ]

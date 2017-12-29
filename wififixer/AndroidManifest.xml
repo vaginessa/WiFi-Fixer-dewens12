@@ -51,7 +51,7 @@
         android:largeScreens="true"
         android:normalScreens="true"
         android:smallScreens="true"
-        android:xlargeScreens="true"></supports-screens>
+        android:xlargeScreens="true" />
 
     <uses-sdk
         android:maxSdkVersion="25"
@@ -63,10 +63,10 @@
         android:required="false" />
     <uses-feature
         android:name="android.hardware.touchscreen"
-        android:required="false"></uses-feature>
+        android:required="false" />
     <uses-feature
         android:name="android.hardware.location"
-        android:required="false"></uses-feature>
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -164,7 +164,7 @@
             android:label="@string/widget_label_1x4">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="org.wahtod.wififixer.WNOTIF"></action>
+                <action android:name="org.wahtod.wififixer.WNOTIF" />
             </intent-filter>
 
             <meta-data
@@ -176,7 +176,7 @@
             android:label="@string/widget_label_1x1">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="org.wahtod.wififixer.WNOTIF"></action>
+                <action android:name="org.wahtod.wififixer.WNOTIF" />
             </intent-filter>
 
             <meta-data
@@ -184,8 +184,8 @@
                 android:resource="@xml/widget_provider_small" />
         </receiver>
 
-        <service android:name=".widget.UpdateService"></service>
-        <service android:name=".widget.StatusUpdateService"></service>
+        <service android:name=".widget.UpdateService" />
+        <service android:name=".widget.StatusUpdateService" />
 
         <!-- Networking guts: Main Persistent service -->
 
@@ -193,11 +193,11 @@
             android:name=".WFMonitorService"
             android:exported="false"
             android:icon="@drawable/icon"
-            android:persistent="true"></service>
+            android:persistent="true" />
 
         <!-- Handles asynchronous toggling of wifi state -->
 
-        <service android:name=".ToggleService"></service>
+        <service android:name=".ToggleService" />
         <service android:name=".utility.WifiWatchdogService" />
 
         <uses-library

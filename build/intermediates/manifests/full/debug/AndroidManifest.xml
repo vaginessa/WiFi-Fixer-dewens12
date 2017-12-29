@@ -23,8 +23,8 @@
     android:versionName="3.0.0" >
 
     <uses-sdk
-        android:maxSdkVersion="23"
-        android:minSdkVersion="14"
+        android:maxSdkVersion="27"
+        android:minSdkVersion="19"
         android:targetSdkVersion="27" />
 
     <!-- Documenting permissions here -->
@@ -71,12 +71,10 @@
         android:backupAgent="org.wahtod.wififixer.prefs.PrefsBackupAgent"
         android:debuggable="true"
         android:description="@string/app_desc"
-        android:fullBackupContent="@xml/backup_descriptor"
         android:hardwareAccelerated="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:restoreAnyVersion="true"
-        android:testOnly="true"
         android:theme="@style/ThemeWifiFixer" >
         <meta-data
             android:name="com.google.android.backup.api_key"

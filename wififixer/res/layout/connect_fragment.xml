@@ -34,7 +34,7 @@
         style="@style/Wftext.large"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="SSID"></TextView>
+        android:text="SSID" />
 
     <TextView
         android:id="@+id/password_summary"

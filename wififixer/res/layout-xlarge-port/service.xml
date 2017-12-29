@@ -32,7 +32,7 @@
         android:layout_alignEnd="@+id/toggles"
         android:layout_alignLeft="@+id/about"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/toggles"></FrameLayout>
+        android:layout_alignRight="@+id/toggles" />
 
     <FrameLayout
         android:id="@+id/about"
@@ -43,7 +43,7 @@
         android:layout_alignParentRight="false"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="2dp"
-        android:gravity="center"></FrameLayout>
+        android:gravity="center" />
 
     <FrameLayout
         android:id="@+id/toggles"
@@ -51,6 +51,6 @@
         android:layout_height="400dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="false"></FrameLayout>
+        android:layout_alignParentTop="false" />
 
 </RelativeLayout>

@@ -30,7 +30,7 @@
             android:targetPackage="org.wahtod.wififixer">
             <extra
                 android:name="RUN_TUTORIAL"
-                android:value="pi"></extra>
+                android:value="pi" />
         </intent>
 
     </PreferenceScreen>
@@ -40,7 +40,7 @@
         android:title="@string/documentation_title">
         <intent
             android:targetClass="org.wahtod.wififixer.ui.HelpActivity"
-            android:targetPackage="org.wahtod.wififixer"></intent>
+            android:targetPackage="org.wahtod.wififixer" />
 
     </PreferenceScreen>
 </PreferenceScreen>

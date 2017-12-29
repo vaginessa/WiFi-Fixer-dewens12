@@ -20,7 +20,7 @@
 
 <resources>
 
-    <style name="Theme"></style>
+    <style name="Theme" />
 
     <style name="ThemeWifiFixer" parent="Theme.AppCompat">
         <item name="android:windowAnimationStyle">@style/WifiFixerAnimation</item>

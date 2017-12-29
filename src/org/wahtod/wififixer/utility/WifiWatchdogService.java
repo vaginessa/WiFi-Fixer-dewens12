@@ -59,6 +59,7 @@ public class WifiWatchdogService extends Service {
         NotifUtil.show(this, getString(R.string.stuck_notif), getString(R.string.stuck_ticker), pending);
     }
 
+    @SuppressWarnings("NonAtomicOperationOnVolatileField")
     private void watchdog() {
         if (!AsyncWifiManager.getWifiManager(WifiWatchdogService.this).isWifiEnabled() && _watchdogCount <= WATCHDOG_MAX_COUNT) {
             _wakelock.lock(true);
@@ -74,9 +75,9 @@ public class WifiWatchdogService extends Service {
             _watchdogCount = 0;
             LogUtil.log(WifiWatchdogService.this, "Watchdog Exited");
             _wakelock.lock(false);
-                    /*
-                     * Stop service: toggle done
-					 */
+            /*
+             * Stop service: toggle done
+             */
             _waitFlag = false;
             stopSelf();
         }

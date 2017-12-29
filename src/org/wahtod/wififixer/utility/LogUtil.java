@@ -42,7 +42,6 @@ import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 
 import java.io.DataInputStream;
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -74,11 +73,10 @@ public class LogUtil {
                     context.getString(R.string.no_stack_trace_found))
                     .toString();
         }
+        //noinspection LoopStatementThatDoesntLoop
         for (; ; ) {
             try {
                 trace.append(d.readUTF());
-            } catch (EOFException e) {
-                trace.append(e);
             } catch (IOException e) {
                 trace.append(e);
             } finally {

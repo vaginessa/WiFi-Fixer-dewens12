@@ -150,8 +150,7 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
                 /*
                  * Sort by signal
 				 */
-            return (o1.level < o2.level ? -1 : (o1.level == o2.level ? 0
-                    : 1));
+            return (Integer.compare(o1.level, o2.level));
         }
     }
 }

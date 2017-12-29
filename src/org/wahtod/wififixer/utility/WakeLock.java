@@ -54,7 +54,7 @@ public class WakeLock {
         if (state) {
             if (!wakelock.isHeld()) {
                 if (timeout == -1)
-                    wakelock.acquire();
+                    wakelock.acquire(10 * 60 * 1000L /*10 minutes*/);
                 else {
                     wakelock.acquire(timeout);
                     mReleaseHandler.postDelayed(ReleasePoster, timeout);

@@ -31,7 +31,7 @@
         android:layout_height="350dp"
         android:layout_alignLeft="@+id/about"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"></FrameLayout>
+        android:layout_marginBottom="20dp" />
 
     <FrameLayout
         android:id="@+id/about"
@@ -40,13 +40,13 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="55dp"
-        android:gravity="center"></FrameLayout>
+        android:gravity="center" />
 
     <FrameLayout
         android:id="@+id/toggles"
         android:layout_width="170dp"
         android:layout_height="350dp"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"></FrameLayout>
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

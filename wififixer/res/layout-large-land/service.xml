@@ -32,14 +32,14 @@
         android:layout_width="170dp"
         android:layout_height="300dp"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"></FrameLayout>
+        android:layout_centerVertical="true" />
 
     <FrameLayout
         android:id="@+id/about"
         android:layout_width="350dp"
         android:layout_height="350dp"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"></FrameLayout>
+        android:layout_centerVertical="true" />
 
     <FrameLayout
         android:id="@+id/servicelog"
@@ -47,6 +47,6 @@
         android:layout_height="350dp"
         android:layout_alignTop="@+id/about"
         android:layout_marginRight="53dp"
-        android:layout_toLeftOf="@+id/toggles"></FrameLayout>
+        android:layout_toLeftOf="@+id/toggles" />
 
 </RelativeLayout>

@@ -18,6 +18,7 @@
 
 package org.wahtod.wififixer.utility;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -190,6 +191,7 @@ public class NotifUtil {
         return builder;
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     private static NotificationCompat.Builder largeText(Context context, NotificationCompat.Builder builder) {
         if (Build.VERSION.SDK_INT < 11)
             return builder;

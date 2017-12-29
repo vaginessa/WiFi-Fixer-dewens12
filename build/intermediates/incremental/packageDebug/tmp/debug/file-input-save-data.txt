@@ -1,0 +1,35 @@
+#Internal package file, do not edit.
+#Fri Dec 29 14:20:37 CST 2017
+7.path=bstyle.css
+2.base=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\assets\\debug
+5.set=ASSET
+0.path=suggestedconf.html
+2.baseType=DIRECTORY
+3.base=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\assets\\debug
+7.baseType=DIRECTORY
+2.set=ASSET
+1.path=upgrading.html
+4.base=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+7.set=ASSET
+count=8
+5.baseType=DIRECTORY
+2.path=knownissues.html
+5.base=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\assets\\debug
+4.set=DEX
+3.path=index.html
+6.base=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\assets\\debug
+3.baseType=DIRECTORY
+1.set=ASSET
+4.path=classes.dex
+7.base=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\assets\\debug
+6.set=ASSET
+1.baseType=DIRECTORY
+6.baseType=DIRECTORY
+5.path=readfirst.html
+0.base=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\assets\\debug
+0.baseType=DIRECTORY
+3.set=ASSET
+6.path=support.html
+1.base=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\assets\\debug
+4.baseType=DIRECTORY
+0.set=ASSET

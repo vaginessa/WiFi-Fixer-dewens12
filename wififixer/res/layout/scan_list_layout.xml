@@ -39,7 +39,7 @@
         android:layout_marginLeft="@dimen/scan_list_ssid_margin_left"
         android:gravity="bottom"
         android:text="default"
-        android:textAlignment="gravity"></TextView>
+        android:textAlignment="gravity" />
 
     <ImageView
         android:id="@+id/NETWORK_ICON"
@@ -49,7 +49,7 @@
         android:layout_toLeftOf="@+id/SECURE_ICON"
         android:layout_toStartOf="@+id/SECURE_ICON"
         android:gravity="right"
-        android:src="@drawable/icon"></ImageView>
+        android:src="@drawable/icon" />
 
     <ImageView
         android:id="@+id/SECURE_ICON"
@@ -61,7 +61,7 @@
         android:layout_toLeftOf="@+id/encryption"
         android:layout_toStartOf="@+id/encryption"
         android:gravity="right"
-        android:src="@drawable/icon"></ImageView>
+        android:src="@drawable/icon" />
 
     <TextView
         android:id="@+id/encryption"
@@ -72,6 +72,6 @@
         android:layout_alignParentTop="true"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
-        android:text="encryption"></TextView>
+        android:text="encryption" />
 
 </RelativeLayout>

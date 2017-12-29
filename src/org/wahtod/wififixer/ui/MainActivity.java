@@ -51,6 +51,7 @@ import org.wahtod.wififixer.utility.ServiceAlarm;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
+@SuppressWarnings("ALL")
 public class MainActivity extends TutorialFragmentActivity implements
         OnFragmentPauseRequestListener {
 
@@ -94,7 +95,7 @@ public class MainActivity extends TutorialFragmentActivity implements
     private static void nagNotification(Context context) {
         /*
          * Nag for donation
-		 */
+         */
         PendingIntent contentIntent = PendingIntent.getActivity(context.getApplicationContext(), NotifUtil.getPendingIntentCode(),
                 new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
                 PendingIntent.FLAG_UPDATE_CURRENT);
@@ -121,7 +122,7 @@ public class MainActivity extends TutorialFragmentActivity implements
     private void bundleIntent(Intent intent) {
         /*
          * Dispatch intent commands to handler
-		 */
+         */
         Message message = handler.obtainMessage();
         Bundle data = new Bundle();
         data.putString(PrefUtil.INTENT_ACTION, intent.getAction());
@@ -144,14 +145,14 @@ public class MainActivity extends TutorialFragmentActivity implements
         Bundle data = message.getData();
         /*
          * Check (assuming SERVICEWARNED) for whether one-time alert fired
-		 */
+         */
         if (data.containsKey(PrefConstants.SERVICEWARNED)) {
             data.remove(PrefConstants.SERVICEWARNED);
             showServiceAlert();
         }
         /*
          * Delete Log if called by preference
-		 */
+         */
         else if (data.containsKey(WRITE_LOG)) {
             data.remove(WRITE_LOG);
             LogUtil.writeLogtoSd(this);
@@ -172,7 +173,7 @@ public class MainActivity extends TutorialFragmentActivity implements
             LogUtil.sendLog(this);
         /*
          * Set Activity intent to one without commands we've "consumed"
-		 */
+         */
         Intent i = new Intent(data.getString(PrefUtil.INTENT_ACTION));
         i.putExtras(data);
         setIntent(i);
@@ -200,7 +201,7 @@ public class MainActivity extends TutorialFragmentActivity implements
     private void drawUI() {
         /*
          * Set up ViewPager and FragmentStatePagerAdapter for phone and tablet
-		 */
+         */
         mBasePager = findViewById(R.id.pager);
         mBasePager.setOffscreenPageLimit(2);
         if (mBasePager != null)
@@ -225,11 +226,11 @@ public class MainActivity extends TutorialFragmentActivity implements
         self = new WeakReference<>(this);
         /*
          * Set Default Exception handler
-		 */
+         */
         DefaultExceptionHandler.register(this);
         /*
          * Do startup
-		 */
+         */
         super.onCreate(savedInstanceState);
         setTitle(R.string.app_name);
         setContentView(R.layout.main);
@@ -241,11 +242,11 @@ public class MainActivity extends TutorialFragmentActivity implements
         authCheck();
         /*
          * Handle intent command if destroyed or first start
-		 */
+         */
         bundleIntent(getIntent());
-		/*
-		 * Make sure service settings are enforced.
-		 */
+        /*
+         * Make sure service settings are enforced.
+         */
         ServiceAlarm.enforceServicePrefs(this);
     }
 

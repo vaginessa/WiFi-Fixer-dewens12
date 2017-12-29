@@ -18,6 +18,7 @@
 
 package org.wahtod.wififixer.prefs;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -32,6 +33,7 @@ import org.wahtod.wififixer.utility.LogUtil;
  */
 public class MyPrefs extends PrefUtil {
 
+    @SuppressLint("StaticFieldLeak")
     private static MyPrefs _prefUtil;
     private WFMonitor wifi;
     private Context context;

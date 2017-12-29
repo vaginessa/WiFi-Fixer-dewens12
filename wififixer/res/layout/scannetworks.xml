@@ -40,6 +40,6 @@
         android:divider="@drawable/divider"
         android:dividerHeight="2dp"
         android:padding="@dimen/scannetworks_list_padding"
-        android:scrollbars="none"></ListView>
+        android:scrollbars="none" />
 
 </LinearLayout>

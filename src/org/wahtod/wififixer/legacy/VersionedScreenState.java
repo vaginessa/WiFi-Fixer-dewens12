@@ -19,17 +19,13 @@
 package org.wahtod.wififixer.legacy;
 
 import android.content.Context;
-import android.os.Build;
 
 public abstract class VersionedScreenState {
     private static VersionedScreenState selector;
 
     public static boolean getScreenState(Context context) {
         if (selector == null) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ECLAIR_MR1) {
-                selector = new LegacyScreenState();
-            } else
-                selector = new EclairScreenState();
+            selector = new EclairScreenState();
         }
 
         return selector.vgetScreenState(context);

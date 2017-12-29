@@ -19,6 +19,7 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/logwrapper"
     android:layout_width="350dp"
     android:layout_height="fill_parent"
@@ -33,7 +34,8 @@
         android:layout_alignParentLeft="true"
         android:fillViewport="true"
         android:gravity="center"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        tools:ignore="UselessParent">
 
         <TextView
             android:id="@+id/logText"

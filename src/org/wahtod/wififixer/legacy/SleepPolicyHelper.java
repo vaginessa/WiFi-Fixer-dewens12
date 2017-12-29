@@ -19,7 +19,6 @@
 package org.wahtod.wififixer.legacy;
 
 import android.content.Context;
-import android.os.Build;
 
 public abstract class SleepPolicyHelper {
 
@@ -37,10 +36,7 @@ public abstract class SleepPolicyHelper {
 
     public static void cacheSelector() {
         if (_selector == null) {
-            if (Build.VERSION.SDK_INT >= 17)
-                _selector = new JellyBeanSleepPolicy();
-            else
-                _selector = new LegacySleepPolicy();
+            _selector = new JellyBeanSleepPolicy();
         }
     }
 

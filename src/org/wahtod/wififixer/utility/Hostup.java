@@ -20,7 +20,6 @@ package org.wahtod.wififixer.utility;
 
 import android.content.Context;
 import android.net.DhcpInfo;
-import android.os.Build;
 import android.text.format.Formatter;
 
 import org.wahtod.wififixer.R;
@@ -34,9 +33,9 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.UnknownHostException;
 import java.util.concurrent.RejectedExecutionException;
 
+@SuppressWarnings("ALL")
 public class Hostup {
     /*
      * getHostUp method: Performs network check calibrated with SetFailover
@@ -99,7 +98,7 @@ public class Hostup {
     public void icmpCache(Context context) {
         /*
          * Caches DHCP gateway IP for ICMP check
-		 */
+         */
         try {
             DhcpInfo info = AsyncWifiManager.getWifiManager(context).getDhcpInfo();
             accesspointIP = (Formatter.formatIpAddress(info.gateway));
@@ -121,9 +120,9 @@ public class Hostup {
     }
 
     public void getHostup(int timeout) {
-       /*
-        * Track Sessions to find ordering problem in deep sleep
-        */
+        /*
+         * Track Sessions to find ordering problem in deep sleep
+         */
         mCurrentSession++;
         response = new HostMessage();
 
@@ -164,8 +163,6 @@ public class Hostup {
             if (InetAddress.getByName(target).isReachable(reachable))
                 out.state = true;
 
-        } catch (UnknownHostException ignored) {
-
         } catch (IOException ignored) {
 
         }
@@ -184,7 +181,7 @@ public class Hostup {
     private HostMessage getHttpHeaders(Context context) {
         /*
          * get URI
-		 */
+         */
         HostMessage out = new HostMessage();
         out.timer.start();
         try {
@@ -197,7 +194,7 @@ public class Hostup {
         StringBuilder info = new StringBuilder();
         /*
          * Get response
-		 */
+         */
         HttpURLConnection con;
         try {
             con = (HttpURLConnection) headURI.toURL().openConnection();
@@ -235,9 +232,6 @@ public class Hostup {
     @SuppressWarnings("deprecation")
     private void disableConnectionReuse() {
         // Work around pre-Froyo bugs in HTTP connection reuse.
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-            System.setProperty("http.keepAlive", "false");
-        }
     }
 
     public void finish() {
@@ -285,8 +279,8 @@ public class Hostup {
     }
 
     /*
-         * http header check thread
-         */
+     * http header check thread
+     */
     private class GetHeaders implements Runnable {
         int session;
 
@@ -303,8 +297,8 @@ public class Hostup {
     }
 
     /*
-         * icmp check thread
-         */
+     * icmp check thread
+     */
     private class HostCheck implements Runnable {
         String router;
 
@@ -314,25 +308,25 @@ public class Hostup {
 
         @Override
         public void run() {
-        /*
-         * Start Check Threads
-		 */
+            /*
+             * Start Check Threads
+             */
 
             mFinished = false;
             try {
                 Thread.sleep(reachable);
             } catch (InterruptedException e) {
-            /*
-             * We have a response
-			 */
+                /*
+                 * We have a response
+                 */
                 response.status += (String.valueOf(response.timer.getElapsed()));
                 response.status += (mContext.get().getString(R.string.ms));
             } catch (RejectedExecutionException e) {
                 response.status += (REJECTED_EXECUTION);
             }
-        /*
-         * End session for critical timeouts
-         */
+            /*
+             * End session for critical timeouts
+             */
             mFinished = true;
             if (response.status == null)
                 response.status = target + ":" + mContext.get().getString(R.string.critical_timeout);
@@ -341,8 +335,8 @@ public class Hostup {
     }
 
     /*
-         * icmp check thread
-         */
+     * icmp check thread
+     */
     private class GetICMP implements Runnable {
         int session;
 

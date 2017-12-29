@@ -64,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /*
  * Handles all interaction 
@@ -488,7 +489,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         try {
-            NetworkInfo ni = cm.getActiveNetworkInfo();
+            NetworkInfo ni = Objects.requireNonNull(cm).getActiveNetworkInfo();
             if (ni.getType() == ConnectivityManager.TYPE_WIFI && ni.isConnected() && ni.isAvailable())
                 return true;
         } catch (NullPointerException e) {
@@ -516,12 +517,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
                 /*
                  * Sort by signal
 				 */
-                if (o1.level < o2.level)
-                    return -1;
-                else if (o1.level > o2.level)
-                    return 1;
-                else
-                    return 0;
+                return Integer.compare(o1.level, o2.level);
             }
         }
 
@@ -593,9 +589,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
                         setNetworkBssid(config, w.wificonfig.BSSID);
                     }
                 }
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            } catch (IndexOutOfBoundsException e) {
+            } catch (NullPointerException | IndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
         }
@@ -1047,7 +1041,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
     private void dispatchIntent(Context context, Bundle data) {
 
         String iAction = data.getString(PrefUtil.INTENT_ACTION);
-        switch (iAction) {
+        switch (Objects.requireNonNull(iAction)) {
             case WifiManager.WIFI_STATE_CHANGED_ACTION:
             /*
              * Wifi state, e.g. on/off
@@ -1127,7 +1121,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
          * This action means network connectivty has changed but, we only want
 		 * to run this code for wifi
 		 */
-        if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+        if (Objects.requireNonNull(networkInfo).getType() == ConnectivityManager.TYPE_WIFI) {
             if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED)) {
                 WifiInfo connectionInfo = AsyncWifiManager.getWifiManager(ctxt.get())
                         .getConnectionInfo();

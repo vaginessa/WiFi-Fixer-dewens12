@@ -75,6 +75,7 @@ public class KnownNetworksFragment extends Fragment {
     private static NetworkListAdapter adapter;
     private static List<String> knownnetworks;
     private static List<String> known_in_range;
+    @SuppressLint("StaticFieldLeak")
     private static ListView mListView;
     private static Handler scanhandler = new Handler() {
         @Override
