@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Wifi Fixer for Android
+  ~        Copyright (C) 2010-2016  David Van de Ven
+  ~
+  ~        This program is free software: you can redistribute it and/or modify
+  ~        it under the terms of the GNU General Public License as published by
+  ~        the Free Software Foundation, either version 3 of the License, or
+  ~        (at your option) any later version.
+  ~
+  ~        This program is distributed in the hope that it will be useful,
+  ~        but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~        GNU General Public License for more details.
+  ~
+  ~        You should have received a copy of the GNU General Public License
+  ~        along with this program.  If not, see http://www.gnu.org/licenses
+  -->
+
+<resources>
+
+    <dimen name="known_list_padding_bottom">5dp</dimen>
+    <dimen name="known_list_padding_top">5dp</dimen>
+    <dimen name="known_list_padding_left">15dp</dimen>
+    <dimen name="known_list_icon_height">32dp</dimen>
+    <dimen name="known_list_icon_width">32dp</dimen>
+    <dimen name="knownnetworks_list_padding_left">5dp</dimen>
+    <dimen name="scan_list_padding">5dp</dimen>
+    <dimen name="scan_list_ssid_margin_bottom">2dp</dimen>
+    <dimen name="scan_list_ssid_margin_left">10dp</dimen>
+    <dimen name="scannetworks_list_padding">5dp</dimen>
+    <dimen name="status_padding">5dp</dimen>
+    <dimen name="inserted_fragment_width">300dp</dimen>
+
+</resources>

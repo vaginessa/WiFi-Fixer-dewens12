@@ -1,0 +1,45 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ldpi-v4\\values-ldpi-v4.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-ldpi\\textsizes.xml",
+                    "from": {
+                        "startLines": "22,28,32,36",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "899,1158,1259,1359",
+                        "endLines": "26,30,34,38",
+                        "endColumns": "12,12,12,12",
+                        "endOffsets": "1150,1251,1351,1450"
+                    },
+                    "to": {
+                        "startLines": "14,19,22,25",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "711,963,1059,1154",
+                        "endLines": "18,21,24,27",
+                        "endColumns": "12,12,12,12",
+                        "endOffsets": "958,1054,1149,1243"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-ldpi\\dimens.xml",
+                    "from": {
+                        "startLines": "32,24,25,21,23,22,26,27,28,29,30,31",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "1508,1064,1119,897,1008,954,1173,1236,1285,1345,1404,1462",
+                        "endColumns": "55,53,52,55,54,52,61,47,58,57,56,44",
+                        "endOffsets": "1559,1113,1167,948,1058,1002,1230,1279,1339,1398,1456,1502"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,111,165,218,274,329,382,444,492,551,609,666",
+                        "endColumns": "55,53,52,55,54,52,61,47,58,57,56,44",
+                        "endOffsets": "106,160,213,269,324,377,439,487,546,604,661,706"
+                    }
+                }
+            ]
+        }
+    ]
+}

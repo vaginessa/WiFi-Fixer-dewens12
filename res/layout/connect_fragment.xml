@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Wifi Fixer for Android
+  ~        Copyright (C) 2010-2016  David Van de Ven
+  ~
+  ~        This program is free software: you can redistribute it and/or modify
+  ~        it under the terms of the GNU General Public License as published by
+  ~        the Free Software Foundation, either version 3 of the License, or
+  ~        (at your option) any later version.
+  ~
+  ~        This program is distributed in the hope that it will be useful,
+  ~        but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~        GNU General Public License for more details.
+  ~
+  ~        You should have received a copy of the GNU General Public License
+  ~        along with this program.  If not, see http://www.gnu.org/licenses
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/connect_fragment_layout"
+    android:layout_width="@dimen/inserted_fragment_width"
+    android:layout_height="fill_parent"
+    android:alpha=".95"
+    android:background="@drawable/boxbg"
+    android:gravity="center"
+    android:minHeight="200dp"
+    android:minWidth="400dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/network_name"
+        style="@style/Wftext.large"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="SSID" />
+
+    <TextView
+        android:id="@+id/password_summary"
+        style="@style/Wftext"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:paddingBottom="20dp"
+        android:text="@string/passwd_entry_text" />
+
+    <EditText
+        android:id="@+id/password"
+        style="@style/Wftext.header"
+        android:editable="true"
+        android:gravity="center_horizontal"
+        android:inputType="textPassword"
+        android:password="true"
+        android:singleLine="true"
+        tools:ignore="Deprecated">
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:alpha="30"
+        android:text="@string/add" />
+
+</LinearLayout>
