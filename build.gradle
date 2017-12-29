@@ -1,0 +1,123 @@
+//noinspection GradleCompatible
+/*
+ * Wifi Fixer for Android
+ *        Copyright (C) 2010-2016  David Van de Ven
+ *
+ *        This program is free software: you can redistribute it and/or modify
+ *        it under the terms of the GNU General Public License as published by
+ *        the Free Software Foundation, either version 3 of the License, or
+ *        (at your option) any later version.
+ *
+ *        This program is distributed in the hope that it will be useful,
+ *        but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *        GNU General Public License for more details.
+ *
+ *        You should have received a copy of the GNU General Public License
+ *        along with this program.  If not, see http://www.gnu.org/licenses
+ */
+
+buildscript {
+    ext.kotlin_version = '1.2.10'
+
+    repositories {
+        maven { url 'http://repo1.maven.org/maven2' }
+        google()
+        mavenCentral()
+        maven {
+            url 'http://dl.bintray.com/kotlin/kotlin-eap-1.2'
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.0-alpha06'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        url "https://jitpack.io"
+    }
+    google()
+    maven {
+        url 'http://dl.bintray.com/kotlin/kotlin-eap-1.2'
+    }
+}
+
+dependencies {
+    implementation 'com.android.support:support-compat:27.0.2'
+    implementation 'com.android.support:preference-v7:27.0.2'
+    implementation 'com.android.support:support-vector-drawable:27.0.2'
+    implementation 'com.android.support:support-v13:27.0.2'
+    implementation 'com.android.support:support-annotations:27.0.2'
+    implementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation 'com.android.support.test.espresso:espresso-contrib:3.0.1'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:design:27.0.2'
+    implementation 'com.android.support.test:runner:1.0.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+android {
+    packagingOptions {
+        exclude 'AndroidManifest.xml'
+    }
+    lintOptions {
+        checkReleaseBuilds true
+        abortOnError false
+    }
+    signingConfigs {
+        release
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFile "proguard-project.txt"
+            compileSdkVersion 27
+            buildToolsVersion "27.0.2"
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            debuggable true
+            minifyEnabled false
+            compileSdkVersion 27
+            buildToolsVersion "27.0.2"
+        }
+    }
+    if (project.hasProperty("storeFile")) {
+        android.signingConfigs.release.storeFile = file(storeFile)
+    }
+    if (project.hasProperty("storePassword")) {
+        android.signingConfigs.release.storePassword = storePassword
+    }
+    if (project.hasProperty("keyAlias")) {
+        android.signingConfigs.release.keyAlias = keyAlias
+    }
+    if (project.hasProperty("keyPassword")) {
+        android.signingConfigs.release.keyPassword = keyPassword
+    }
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        instrumentTest.setRoot('tests')
+    }
+    buildToolsVersion '27.0.2'
+    compileSdkVersion 27
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
