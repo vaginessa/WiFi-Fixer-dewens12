@@ -20,12 +20,12 @@
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-hdpi-v4\\abc_textfield_search_activated_mtrl_alpha.9.png"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable_ic_prefs.png.flat",
-        "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\drawable\\ic_prefs.png"
-    },
-    {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout_preference_recyclerview.xml.flat",
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\preference-v7-27.0.2.aar\\d9bcbc2609a9d7629f550efbe7a478cc\\res\\layout\\preference_recyclerview.xml"
+    },
+    {
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable_ic_prefs.png.flat",
+        "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\drawable\\ic_prefs.png"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_abc_btn_switch_to_on_mtrl_00012.9.png.flat",
@@ -48,12 +48,12 @@
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\anim\\abc_fade_in.xml"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_scrubber_control_to_pressed_mtrl_005.png.flat",
-        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-hdpi-v4\\abc_scrubber_control_to_pressed_mtrl_005.png"
-    },
-    {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout-large-land_service.xml.flat",
         "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\layout-large-land\\service.xml"
+    },
+    {
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_scrubber_control_to_pressed_mtrl_005.png.flat",
+        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-hdpi-v4\\abc_scrubber_control_to_pressed_mtrl_005.png"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_scrubber_control_off_mtrl_alpha.png.flat",
@@ -76,12 +76,12 @@
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.0.2.aar\\41a3b8aa22fe6f4c138520f0fc9f8181\\res\\drawable\\notification_tile_bg.xml"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable_buttons.xml.flat",
-        "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\drawable\\buttons.xml"
-    },
-    {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable_cog.png.flat",
         "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\drawable\\cog.png"
+    },
+    {
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable_buttons.xml.flat",
+        "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\drawable\\buttons.xml"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout_preference_widget_checkbox.xml.flat",
@@ -140,12 +140,12 @@
         "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\layout\\about_fragment.xml"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout_abc_action_menu_layout.xml.flat",
-        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\layout\\abc_action_menu_layout.xml"
-    },
-    {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\anim_wf_enter.xml.flat",
         "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\anim\\wf_enter.xml"
+    },
+    {
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout_abc_action_menu_layout.xml.flat",
+        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\layout\\abc_action_menu_layout.xml"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout-sw600dp-v13_design_layout_snackbar.xml.flat",
@@ -172,12 +172,12 @@
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-xhdpi-v4\\abc_textfield_search_activated_mtrl_alpha.9.png"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4_abc_ic_star_half_black_48dp.png.flat",
-        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-xxxhdpi-v4\\abc_ic_star_half_black_48dp.png"
-    },
-    {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable_abc_ic_voice_search_api_material.xml.flat",
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable\\abc_ic_voice_search_api_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4_abc_ic_star_half_black_48dp.png.flat",
+        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-xxxhdpi-v4\\abc_ic_star_half_black_48dp.png"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_ic_menu_copy_mtrl_am_alpha.png.flat",
@@ -200,12 +200,12 @@
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\design-27.0.2.aar\\b2f1104e78ace4626ec2578b6cf6d75a\\res\\drawable-xxxhdpi-v4\\design_ic_visibility_off.png"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\color-v11_abc_background_cache_hint_selector_material_dark.xml.flat",
-        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
-    },
-    {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout_scan_list_layout.xml.flat",
         "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\layout\\scan_list_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\color-v11_abc_background_cache_hint_selector_material_dark.xml.flat",
+        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout_notification_template_media_custom.xml.flat",
@@ -232,12 +232,12 @@
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-hdpi-v4\\abc_text_select_handle_left_mtrl_dark.png"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_ab_share_pack_mtrl_alpha.9.png.flat",
-        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-hdpi-v4\\abc_ab_share_pack_mtrl_alpha.9.png"
-    },
-    {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable_abc_switch_thumb_material.xml.flat",
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable\\abc_switch_thumb_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_ab_share_pack_mtrl_alpha.9.png.flat",
+        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-hdpi-v4\\abc_ab_share_pack_mtrl_alpha.9.png"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\color-v23_abc_btn_colored_borderless_text_material.xml.flat",
@@ -264,20 +264,20 @@
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\design-27.0.2.aar\\b2f1104e78ace4626ec2578b6cf6d75a\\res\\drawable-xhdpi-v4\\design_ic_visibility_off.png"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_abc_list_focused_holo.9.png.flat",
-        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-xhdpi-v4\\abc_list_focused_holo.9.png"
-    },
-    {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout_abc_expanded_menu_layout.xml.flat",
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\layout\\abc_expanded_menu_layout.xml"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\anim_abc_popup_exit.xml.flat",
-        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\anim\\abc_popup_exit.xml"
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_abc_list_focused_holo.9.png.flat",
+        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-xhdpi-v4\\abc_list_focused_holo.9.png"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable_abc_ic_clear_material.xml.flat",
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable\\abc_ic_clear_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\anim_abc_popup_exit.xml.flat",
+        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\anim\\abc_popup_exit.xml"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout-land_service.xml.flat",
@@ -296,12 +296,12 @@
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\color\\abc_primary_text_disable_only_material_light.xml"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_ic_star_half_black_36dp.png.flat",
-        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-xxhdpi-v4\\abc_ic_star_half_black_36dp.png"
-    },
-    {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_ic_menu_cut_mtrl_alpha.png.flat",
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-mdpi-v4\\abc_ic_menu_cut_mtrl_alpha.png"
+    },
+    {
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_ic_star_half_black_36dp.png.flat",
+        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-xxhdpi-v4\\abc_ic_star_half_black_36dp.png"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_textfield_activated_mtrl_alpha.9.png.flat",
@@ -312,12 +312,12 @@
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\design-27.0.2.aar\\b2f1104e78ace4626ec2578b6cf6d75a\\res\\layout\\design_text_input_password_icon.xml"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout_notification_template_big_media.xml.flat",
-        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-27.0.2.aar\\19df78be7a0d8826735f187e036004df\\res\\layout\\notification_template_big_media.xml"
-    },
-    {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-v21_avd_hide_password.xml.flat",
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\design-27.0.2.aar\\b2f1104e78ace4626ec2578b6cf6d75a\\res\\drawable-v21\\avd_hide_password.xml"
+    },
+    {
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout_notification_template_big_media.xml.flat",
+        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-27.0.2.aar\\19df78be7a0d8826735f187e036004df\\res\\layout\\notification_template_big_media.xml"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4_abc_scrubber_control_to_pressed_mtrl_005.png.flat",
@@ -336,36 +336,36 @@
         "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\drawable\\statsignal1.png"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable_reassociate.png.flat",
-        "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\drawable\\reassociate.png"
-    },
-    {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout_preference_dialog_edittext.xml.flat",
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\preference-v7-27.0.2.aar\\d9bcbc2609a9d7629f550efbe7a478cc\\res\\layout\\preference_dialog_edittext.xml"
+    },
+    {
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable_reassociate.png.flat",
+        "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\drawable\\reassociate.png"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\anim_dialog_exit.xml.flat",
         "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\anim\\dialog_exit.xml"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_cab_background_top_mtrl_alpha.9.png.flat",
-        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-hdpi-v4\\abc_cab_background_top_mtrl_alpha.9.png"
-    },
-    {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4_abc_text_select_handle_right_mtrl_dark.png.flat",
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-xxxhdpi-v4\\abc_text_select_handle_right_mtrl_dark.png"
+    },
+    {
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_cab_background_top_mtrl_alpha.9.png.flat",
+        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-hdpi-v4\\abc_cab_background_top_mtrl_alpha.9.png"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4_abc_btn_radio_to_on_mtrl_000.png.flat",
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-xxxhdpi-v4\\abc_btn_radio_to_on_mtrl_000.png"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_list_selector_disabled_holo_light.9.png.flat",
-        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-xxhdpi-v4\\abc_list_selector_disabled_holo_light.9.png"
-    },
-    {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable_abc_ic_go_search_api_material.xml.flat",
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable\\abc_ic_go_search_api_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_list_selector_disabled_holo_light.9.png.flat",
+        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-xxhdpi-v4\\abc_list_selector_disabled_holo_light.9.png"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_spinner_mtrl_am_alpha.9.png.flat",
@@ -480,12 +480,12 @@
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\design-27.0.2.aar\\b2f1104e78ace4626ec2578b6cf6d75a\\res\\drawable-xxhdpi-v4\\design_ic_visibility.png"
     },
     {
-        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout_abc_activity_chooser_view_list_item.xml.flat",
-        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\layout\\abc_activity_chooser_view_list_item.xml"
-    },
-    {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4_abc_btn_check_to_on_mtrl_000.png.flat",
         "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\drawable-xxxhdpi-v4\\abc_btn_check_to_on_mtrl_000.png"
+    },
+    {
+        "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\layout_abc_activity_chooser_view_list_item.xml.flat",
+        "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\layout\\abc_activity_chooser_view_list_item.xml"
     },
     {
         "merged": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_notification_bg_low_normal.9.png.flat",
