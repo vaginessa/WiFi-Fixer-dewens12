@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ldpi-v4\\values-ldpi-v4.xml",
+            "outputFile": "C:\\Users\\ewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ldpi-v4\\values-ldpi-v4.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-ldpi\\textsizes.xml",
+                    "source": "C:\\Users\\ewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-ldpi\\textsizes.xml",
                     "from": {
                         "startLines": "22,28,32,36",
                         "startColumns": "4,4,4,4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-ldpi\\dimens.xml",
+                    "source": "C:\\Users\\ewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-ldpi\\dimens.xml",
                     "from": {
                         "startLines": "32,24,25,21,23,22,26,27,28,29,30,31",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4",

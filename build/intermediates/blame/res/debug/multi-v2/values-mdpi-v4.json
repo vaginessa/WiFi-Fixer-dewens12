@@ -1,27 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-mdpi-v4\\values-mdpi-v4.xml",
+            "outputFile": "C:\\Users\\ewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-mdpi-v4\\values-mdpi-v4.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-mdpi\\dimens.xml",
-                    "from": {
-                        "startLines": "33,25,26,22,24,23,27,28,29,30,31,32",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "1509,1066,1121,899,1010,956,1175,1238,1287,1347,1406,1463",
-                        "endColumns": "55,53,52,55,54,52,61,47,58,57,55,44",
-                        "endOffsets": "1560,1115,1169,950,1060,1004,1232,1281,1341,1400,1457,1503"
-                    },
-                    "to": {
-                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,111,165,218,274,329,382,444,492,551,609,665",
-                        "endColumns": "55,53,52,55,54,52,61,47,58,57,55,44",
-                        "endOffsets": "106,160,213,269,324,377,439,487,546,604,660,705"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-mdpi\\textsizes.xml",
+                    "source": "C:\\Users\\ewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-mdpi\\textsizes.xml",
                     "from": {
                         "startLines": "22,28,32,36",
                         "startColumns": "4,4,4,4",
@@ -37,6 +20,23 @@
                         "endLines": "18,21,24,27",
                         "endColumns": "12,12,12,12",
                         "endOffsets": "957,1053,1148,1242"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\ewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-mdpi\\dimens.xml",
+                    "from": {
+                        "startLines": "33,25,26,22,24,23,27,28,29,30,31,32",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "1509,1066,1121,899,1010,956,1175,1238,1287,1347,1406,1463",
+                        "endColumns": "55,53,52,55,54,52,61,47,58,57,55,44",
+                        "endOffsets": "1560,1115,1169,950,1060,1004,1232,1281,1341,1400,1457,1503"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,111,165,218,274,329,382,444,492,551,609,665",
+                        "endColumns": "55,53,52,55,54,52,61,47,58,57,55,44",
+                        "endOffsets": "106,160,213,269,324,377,439,487,546,604,660,705"
                     }
                 }
             ]

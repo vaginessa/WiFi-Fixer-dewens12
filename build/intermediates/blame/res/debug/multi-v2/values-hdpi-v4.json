@@ -1,21 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hdpi-v4\\values-hdpi-v4.xml",
+            "outputFile": "C:\\Users\\ewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hdpi-v4\\values-hdpi-v4.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\aeab05d163e565edbc0d2040bc56b506\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endLines": "6",
-                        "endColumns": "13",
-                        "endOffsets": "327"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-hdpi\\textsizes.xml",
+                    "source": "C:\\Users\\ewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-hdpi\\textsizes.xml",
                     "from": {
                         "startLines": "22,28,32,36",
                         "startColumns": "4,4,4,4",
@@ -31,6 +20,17 @@
                         "endLines": "11,14,17,20",
                         "endColumns": "12,12,12,12",
                         "endOffsets": "579,675,770,864"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\ewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\cf14c298c1f54c0dcbcf89b924bc7fcb\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "6",
+                        "endColumns": "13",
+                        "endOffsets": "327"
                     }
                 }
             ]

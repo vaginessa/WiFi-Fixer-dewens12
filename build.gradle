@@ -78,7 +78,7 @@ android {
             minifyEnabled true
             proguardFile "proguard-project.txt"
             compileSdkVersion 27
-            buildToolsVersion "27.0.2"
+            buildToolsVersion "27.0.3"
             signingConfig signingConfigs.release
         }
 
@@ -86,7 +86,7 @@ android {
             debuggable true
             minifyEnabled false
             compileSdkVersion 27
-            buildToolsVersion "27.0.2"
+            buildToolsVersion "27.0.3"
         }
     }
     if (project.hasProperty("storeFile")) {
