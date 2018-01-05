@@ -25,19 +25,4 @@
         <item name="android:windowExitAnimation">@anim/dialog_exit</item>
     </style>
 
-    <style name="WifiFixerAnimation" parent="android:style/Animation.Activity">">
-        <item name="android:activityOpenEnterAnimation">@anim/wf_enter</item>
-        <item name="android:activityOpenExitAnimation">@anim/wf_exit</item>
-        <item name="android:activityCloseEnterAnimation">@anim/wf_enter</item>
-        <item name="android:activityCloseExitAnimation">@anim/wf_exit</item>
-        <item name="android:taskOpenEnterAnimation">@anim/wf_enter</item>
-        <item name="android:taskOpenExitAnimation">@anim/wf_exit</item>
-        <item name="android:taskCloseEnterAnimation">@anim/wf_enter</item>
-        <item name="android:taskCloseExitAnimation">@anim/wf_exit</item>
-        <item name="android:taskToFrontEnterAnimation">@anim/wf_enter</item>
-        <item name="android:taskToFrontExitAnimation">@anim/wf_exit</item>
-        <item name="android:taskToBackEnterAnimation">@anim/wf_enter</item>
-        <item name="android:taskToBackExitAnimation">@anim/wf_exit</item>
-    </style>
-
 </resources>

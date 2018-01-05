@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # To enable ProGuard in your project, edit project.properties
 # to define the proguard.config property as described in that file.
 #
@@ -130,7 +130,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
-=======
+
 # To enable ProGuard in your project, edit project.properties
 # to define the proguard.config property as described in that file.
 #
@@ -262,4 +262,4 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
->>>>>>> a3f38b21980011e378613430d2e8ab31994651fd
+

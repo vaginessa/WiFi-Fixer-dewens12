@@ -18,6 +18,7 @@
 
 package org.wahtod.wififixer.utility;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -34,9 +35,10 @@ import java.util.concurrent.Future;
 public class AsyncWifiManager {
     private volatile static WifiManager _wm;
     private static ThreadHandler _threadHandler;
+    @SuppressLint("StaticFieldLeak")
     private static AsyncWifiManager _self;
     private Context appContext;
-    private ExecutorService executor = Executors.newFixedThreadPool(2);
+    private final ExecutorService executor = Executors.newFixedThreadPool(2);
 
     private AsyncWifiManager() {
         _threadHandler = new ThreadHandler("AsyncWifiManager");
@@ -63,7 +65,7 @@ public class AsyncWifiManager {
     public int addNetwork(final WifiConfiguration config) {
         class AddNetworkTask implements Callable<Integer> {
             @Override
-            public Integer call() throws Exception {
+            public Integer call() {
                 return getWifiManager(appContext).addNetwork(config);
             }
         }

@@ -55,7 +55,7 @@ public class AboutFragment extends Fragment implements OnClickListener {
     public static final String TAG = "KSABFWKRFBWT";
     private static final String NETWORK_KEY = "WFNETWORK";
     protected static WeakReference<AboutFragment> self;
-    private static Handler handler = new Handler() {
+    private static final Handler handler = new Handler() {
         @Override
         public void handleMessage(Message message) {
             if (self.get() == null || self.get().getActivity() == null)
@@ -87,7 +87,7 @@ public class AboutFragment extends Fragment implements OnClickListener {
         }
     };
     protected WFScanResult mNetwork;
-    private BroadcastReceiver scanreceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver scanreceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             /*
              * Dispatch intent commands to handler
@@ -220,11 +220,11 @@ public class AboutFragment extends Fragment implements OnClickListener {
     }
 
     static class ViewHolder {
-        private TextView ssid;
-        private TextView bssid;
-        private TextView capabilities;
-        private TextView frequency;
-        private TextView level;
+        private final TextView ssid;
+        private final TextView bssid;
+        private final TextView capabilities;
+        private final TextView frequency;
+        private final TextView level;
 
         public ViewHolder(View parent) {
             ssid = parent.findViewById(R.id.ssid);

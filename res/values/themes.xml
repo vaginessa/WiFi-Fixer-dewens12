@@ -21,5 +21,4 @@
 
     <style name="ThemeWifiFixer" parent="Theme.AppCompat" />
 
-    <style name="ActionBar" parent="Widget.AppCompat.Light.ActionBar" />
 </resources>

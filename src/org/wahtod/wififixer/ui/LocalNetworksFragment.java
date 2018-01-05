@@ -48,7 +48,7 @@ import java.util.List;
 
 public class LocalNetworksFragment extends Fragment implements LoaderManager.LoaderCallbacks {
     private ScanListAdapter adapter;
-    private OnItemLongClickListener il = new OnItemLongClickListener() {
+    private final OnItemLongClickListener il = new OnItemLongClickListener() {
 
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View v, int p,
@@ -152,7 +152,7 @@ public class LocalNetworksFragment extends Fragment implements LoaderManager.Loa
      */
     private class ScanListAdapter extends ArrayAdapter<WFScanResult> {
         private List<WFScanResult> scanresultArray;
-        private LayoutInflater inflater;
+        private final LayoutInflater inflater;
 
         public ScanListAdapter(Context context, int textViewResourceId,
                                List<WFScanResult> scan) {

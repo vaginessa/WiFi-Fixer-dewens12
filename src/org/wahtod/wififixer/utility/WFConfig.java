@@ -31,7 +31,7 @@ public class WFConfig {
 
     public WifiConfiguration wificonfig;
     public int level;
-    public int failcount;
+    public final int failcount;
 
     public WFConfig(ScanResult sResult, WifiConfiguration wConfig) {
         /*

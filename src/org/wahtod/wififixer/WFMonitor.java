@@ -115,7 +115,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
     private static final long CWDOG_DELAY = 8000;
     private static final int HOP_THRESHOLD = 10;
     protected static WeakReference<Context> ctxt;
-    protected static Runnable rDemoter = new Runnable() {
+    protected static final Runnable rDemoter = new Runnable() {
         @Override
         public void run() {
             int n = getNetworkID();
@@ -133,7 +133,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
     /*
      * Runs first time supplicant nonresponsive
      */
-    protected static Runnable rReconnect = new Runnable() {
+    protected static final Runnable rReconnect = new Runnable() {
         public void run() {
             if (!AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled()) {
                 LogUtil.log(ctxt.get(), R.string.wifi_off_aborting_reconnect);
@@ -157,7 +157,17 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
      * For connectToAP sticking
      */
     private static int connecting = 0;
-    private static volatile Handler handler = new Handler();
+    /*
+     * Resets wifi shortly after screen goes off
+     */
+    protected static final Runnable rN1Fix = new Runnable() {
+
+        @Override
+        public void run() {
+            n1Fix();
+
+        }
+    };
     private static volatile boolean isUp;
     private static WFMonitor _wfmonitor;
     /*
@@ -180,20 +190,9 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
      * Main tick
      */
     /*
-     * Resets wifi shortly after screen goes off
-     */
-    protected static Runnable rN1Fix = new Runnable() {
-
-        @Override
-        public void run() {
-            n1Fix();
-
-        }
-    };
-    /*
      * Runs second time supplicant nonresponsive
      */
-    protected static Runnable rRepair = new Runnable() {
+    protected static final Runnable rRepair = new Runnable() {
         public void run() {
             if (!AsyncWifiManager.getWifiManager(ctxt.get()).isWifiEnabled()) {
                 LogUtil.log(ctxt.get(), R.string.wifi_off_aborting_repair);
@@ -216,24 +215,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
             LogUtil.log(ctxt.get(), R.string.scan_mode);
         }
     };
-    protected static Runnable PostExecuteRunnable = new Runnable() {
-        @Override
-        public void run() {
-            /*
-             * Notify state
-			 */
-            if (_wfmonitor.screenstate) {
-                StatusMessage m = new StatusMessage();
-                if (isUp)
-                    m.setStatus(ctxt.get().getString(R.string.passed));
-                else
-                    m.setStatus(ctxt.get().getString(R.string.failed));
-                StatusMessage.send(ctxt.get(), m);
-            }
-            _wfmonitor.handlerWrapper(new PostNetCheckRunnable(isUp));
-        }
-    };
-    protected static Runnable NetCheckRunnable = new Runnable() {
+    protected static final Runnable NetCheckRunnable = new Runnable() {
         @Override
         public void run() {
             /*
@@ -251,12 +233,30 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
             }
         }
     };
+    private static final Handler handler = new Handler();
+    protected static final Runnable PostExecuteRunnable = new Runnable() {
+        @Override
+        public void run() {
+            /*
+             * Notify state
+             */
+            if (_wfmonitor.screenstate) {
+                StatusMessage m = new StatusMessage();
+                if (isUp)
+                    m.setStatus(ctxt.get().getString(R.string.passed));
+                else
+                    m.setStatus(ctxt.get().getString(R.string.failed));
+                StatusMessage.send(ctxt.get(), m);
+            }
+            _wfmonitor.handlerWrapper(new PostNetCheckRunnable(isUp));
+        }
+    };
     private static String accesspointIP;
     private static boolean wifistate;
     /*
      * SignalHop runnable
      */
-    protected static Runnable rSignalhop = new Runnable() {
+    protected static final Runnable rSignalhop = new Runnable() {
         public void run() {
 
             _wfmonitor.clearQueue();
@@ -267,7 +267,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
         }
 
     };
-    protected static Runnable rMain = new Runnable() {
+    protected static final Runnable rMain = new Runnable() {
         public void run() {
             /*
              * Check for disabled state
@@ -301,7 +301,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
     /*
      * Sleep tick if wifi is enabled and screenpref
      */
-    protected static Runnable rSleepcheck = new Runnable() {
+    protected static final Runnable rSleepcheck = new Runnable() {
         public void run() {
                 /*
                  * This is all we want to do.
@@ -318,7 +318,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
     /*
      * Handles non-supplicant wifi fixes.
      */
-    protected static Runnable rWifiTask = new Runnable() {
+    protected static final Runnable rWifiTask = new Runnable() {
         public void run() {
             switch (mRepairLevel) {
 
@@ -375,12 +375,12 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
     /*
      * Supplicant State FIFO for pattern matching
      */
-    private FifoList _supplicantFifo;
+    private final FifoList _supplicantFifo;
     // Last Scan
-    private StopWatch _scantimer;
+    private final StopWatch _scantimer;
     private WFConfig connectee;
     private SupplicantState lastSupplicantState;
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             handleBroadcast(context, intent);
         }
@@ -388,7 +388,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
     /*
      * Demotes networks we fail to connect to for one reason or another
      */
-    private BroadcastReceiver localreceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver localreceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             handleBroadcast(context, intent);
         }
@@ -595,7 +595,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
         }
     }
 
-    private static WifiConfiguration setNetworkBssid(WifiConfiguration config, String bssid) {
+    private static void setNetworkBssid(WifiConfiguration config, String bssid) {
         AsyncWifiManager wm = AsyncWifiManager.get(ctxt.get());
         config.BSSID = bssid;
         if (bssid == null) {
@@ -607,7 +607,6 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
             LogUtil.log(ctxt.get(), "BSSID " + config.BSSID + " set for network " + config.SSID);
         }
         wm.saveConfiguration();
-        return config;
     }
 
     private static boolean isConfigurationEqual(ScanResult sResult, WifiConfiguration configuration) {
@@ -1000,7 +999,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
         );
     }
 
-    private int connectToBest(Context context, List<WFConfig> networks) {
+    private void connectToBest(Context context, List<WFConfig> networks) {
         /*
          * Check for connectee (explicit connection)
 		 */
@@ -1015,7 +1014,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
                     } else {
                         connectToAP(context, connectee.wificonfig.networkId);
                     }
-                    return network.wificonfig.networkId;
+                    return;
                 }
             }
         }
@@ -1027,7 +1026,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
         try {
             best = getKnownAPsBySignal(context).get(0);
         } catch (IndexOutOfBoundsException e) {
-            return NULLVAL;
+            return;
         }
         /*
          * Until BSSID blacklisting is implemented, no point
@@ -1035,7 +1034,6 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
         connectToAP(context, best.wificonfig.networkId);
         logBestNetwork(context, best);
 
-        return best.wificonfig.networkId;
     }
 
     private void dispatchIntent(Context context, Bundle data) {
@@ -1194,23 +1192,24 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
      * Lets us control duplicate posts and odd handler behavior when screen is
      * off
      */
-    private boolean handlerWrapper(Runnable r) {
+    private void handlerWrapper(Runnable r) {
         if (handler.hasMessages(r.hashCode()))
             handler.removeCallbacks(r);
         Message out = Message.obtain(handler, r);
         out.what = r.hashCode();
-        if (screenstate)
-            return handler.sendMessage(out);
-        else
-            return handler.sendMessageDelayed(out, REALLYSHORTWAIT);
+        if (screenstate) {
+            handler.sendMessage(out);
+        } else {
+            handler.sendMessageDelayed(out, REALLYSHORTWAIT);
+        }
     }
 
-    private boolean handlerWrapper(Runnable r, long delay) {
+    private void handlerWrapper(Runnable r, long delay) {
         if (handler.hasMessages(r.hashCode()))
             handler.removeCallbacks(r);
         Message out = Message.obtain(handler, r);
         out.what = r.hashCode();
-        return handler.sendMessageDelayed(out, delay);
+        handler.sendMessageDelayed(out, delay);
     }
 
     private void handleScanResults() {
@@ -1663,7 +1662,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
          * Processes intent message
          */
     protected static class IntentRunnable implements Runnable {
-        Bundle d;
+        final Bundle d;
 
         public IntentRunnable(Bundle b) {
             this.d = b;
@@ -1683,7 +1682,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
          * Signal Check and Network Result handler for AsyncTask postExcecute
          */
     protected static class PostNetCheckRunnable implements Runnable {
-        Boolean state;
+        final Boolean state;
 
         public PostNetCheckRunnable(boolean b) {
             this.state = b;

@@ -38,8 +38,8 @@ public class LogOpenHelper extends SQLiteOpenHelper {
     public static final String TEXT_KEY = "logtext";
     public static final String TIMESTAMP_KEY = "timeStamp";
     private static volatile LogOpenHelper _instance;
-    private volatile LogObservable logObservable;
-    private volatile SQLiteDatabase database;
+    private final LogObservable logObservable;
+    private final SQLiteDatabase database;
 
     private LogOpenHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

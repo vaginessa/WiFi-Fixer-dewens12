@@ -25,9 +25,9 @@ import android.widget.FrameLayout.LayoutParams;
 
 public class ExpandViewAnimation extends Animation {
     public static final int DURATION = 600;
-    private View mView;
-    private LayoutParams mLayoutParams;
-    private int mBottomMargin;
+    private final View mView;
+    private final LayoutParams mLayoutParams;
+    private final int mBottomMargin;
 
     public ExpandViewAnimation(View view, int duration) {
         setDuration(duration);

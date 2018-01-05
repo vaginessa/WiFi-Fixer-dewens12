@@ -77,7 +77,7 @@ public class KnownNetworksFragment extends Fragment {
     private static List<String> known_in_range;
     @SuppressLint("StaticFieldLeak")
     private static ListView mListView;
-    private static Handler scanhandler = new Handler() {
+    private static final Handler scanhandler = new Handler() {
         @Override
         public void handleMessage(Message message) {
             if (self.get().getActivity() == null)
@@ -113,7 +113,7 @@ public class KnownNetworksFragment extends Fragment {
     };
     protected Object mActionMode;
     protected String mSSID;
-    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+    final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
@@ -128,7 +128,7 @@ public class KnownNetworksFragment extends Fragment {
         }
     };
     private OnFragmentPauseRequestListener mFragmentPauseRequestListener;
-    public Callback mActionModeCallback = new Callback() {
+    public final Callback mActionModeCallback = new Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             if (isWifiOn(getContext()))
@@ -216,7 +216,7 @@ public class KnownNetworksFragment extends Fragment {
             return true;
         }
     };
-    private OnItemLongClickListener il = new OnItemLongClickListener() {
+    private final OnItemLongClickListener il = new OnItemLongClickListener() {
 
         @SuppressLint("NewApi")
         @Override
@@ -236,7 +236,7 @@ public class KnownNetworksFragment extends Fragment {
 
         }
     };
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             /*
              * we know this is going to be a scan result notification
@@ -453,8 +453,8 @@ public class KnownNetworksFragment extends Fragment {
      * custom adapter for Network List ListView
      */
     private class NetworkListAdapter extends BaseAdapter {
-        private List<String> ssidArray;
-        private LayoutInflater inflater;
+        private final List<String> ssidArray;
+        private final LayoutInflater inflater;
 
         public NetworkListAdapter(List<String> knownnetworks) {
             inflater = (LayoutInflater) getContext().getSystemService(

@@ -42,7 +42,7 @@ public class ToggleService extends Service {
     private static final int STOP = 202;
     private static final int STOP_DELAY = 6000;
     private static WeakReference<ToggleService> self;
-    private static BroadcastReceiver wifiStateReceiver = new BroadcastReceiver() {
+    private static final BroadcastReceiver wifiStateReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             Bundle extras = intent.getExtras();
             if (extras != null && extras.containsKey(WifiManager.EXTRA_WIFI_STATE)) {
@@ -52,7 +52,7 @@ public class ToggleService extends Service {
             }
         }
     };
-    protected static Handler _handler = new Handler() {
+    protected static final Handler _handler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {

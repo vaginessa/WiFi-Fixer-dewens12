@@ -46,7 +46,7 @@ public class WidgetReceiver extends BroadcastReceiver {
     public static final String TOGGLE_WIFI = "org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE";
     public static final String REASSOCIATE = "org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE";
     private static WeakReference<Context> ctxt;
-    private static Handler handler = new Handler() {
+    private static final Handler handler = new Handler() {
         @Override
         public void handleMessage(Message message) {
             String action = message.getData().getString(PrefUtil.INTENT_ACTION);

@@ -37,7 +37,7 @@ import java.util.List;
 public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
 
     private List<WFScanResult> mScanResults;
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             /*
              * Receive Scan Results

@@ -64,9 +64,9 @@ public class NotifUtil {
      */
     public static final int ICON_SET_SMALL = 0;
     public static final int ICON_SET_LARGE = 1;
-    public static int NOTIFID = 2494;
+    public static final int NOTIFID = 2494;
     private static int pendingIntentRequest = 0;
-    private static ArrayList<NotificationHolder> _notifStack = new ArrayList<>();
+    private static final ArrayList<NotificationHolder> _notifStack = new ArrayList<>();
     private static NotificationCompat.Builder mStatusBuilder;
 
     public static int getPendingIntentCode() {
@@ -317,9 +317,9 @@ public class NotifUtil {
     }
 
     private static class NotificationHolder {
-        String message;
-        String tickerText;
-        PendingIntent contentIntent;
+        final String message;
+        final String tickerText;
+        final PendingIntent contentIntent;
 
         public NotificationHolder(String t, String m, PendingIntent p) {
             message = m;

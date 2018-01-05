@@ -26,7 +26,7 @@ import java.util.List;
  * Created by zanshin on 8/20/14.
  */
 public class SupplicantPattern {
-    List<SupplicantState> list;
+    final List<SupplicantState> list;
 
     public SupplicantPattern(List<SupplicantState> pattern) {
         list = pattern;

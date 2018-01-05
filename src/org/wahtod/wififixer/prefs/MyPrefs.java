@@ -35,8 +35,8 @@ public class MyPrefs extends PrefUtil {
 
     @SuppressLint("StaticFieldLeak")
     private static MyPrefs _prefUtil;
-    private WFMonitor wifi;
-    private Context context;
+    private final WFMonitor wifi;
+    private final Context context;
 
     private MyPrefs(Context c) {
         super(c);

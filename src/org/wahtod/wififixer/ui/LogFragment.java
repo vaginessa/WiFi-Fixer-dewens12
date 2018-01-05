@@ -97,7 +97,7 @@ public class LogFragment extends Fragment {
     }
 
     private class ScrollViewUpdater implements Runnable {
-        String text;
+        final String text;
 
         public ScrollViewUpdater(String in) {
             text = in;
@@ -135,7 +135,7 @@ public class LogFragment extends Fragment {
     }
 
     private class ContentChangedRunnable implements Runnable {
-        Long entry;
+        final Long entry;
 
         public ContentChangedRunnable(Long K) {
             entry = K;

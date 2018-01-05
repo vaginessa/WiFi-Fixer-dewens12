@@ -50,7 +50,7 @@ public class QuickSettingsFragment extends BaseDialogFragment {
     public static final String TAG = "TAG";
     protected static final String INTENT_ACTION = "INTENT_ACTION";
     private static WeakReference<QuickSettingsFragment> self;
-    private static Handler wifiButtonHandler = new Handler() {
+    private static final Handler wifiButtonHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             int state = msg.getData().getInt(WifiManager.EXTRA_WIFI_STATE,
@@ -67,22 +67,7 @@ public class QuickSettingsFragment extends BaseDialogFragment {
             super.handleMessage(msg);
         }
     };
-    private BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context c, Intent i) {
-            Bundle b = new Bundle();
-            Message m = wifiButtonHandler.obtainMessage();
-            b.putAll(i.getExtras());
-            b.putString(INTENT_ACTION, i.getAction());
-            m.setData(b);
-            wifiButtonHandler.sendMessage(m);
-        }
-    };
-    private CheckBox serviceCheckBox;
-    private CheckBox wifiCheckBox;
-    private CheckBox logCheckBox;
-    View.OnClickListener clicker = new View.OnClickListener() {
+    final View.OnClickListener clicker = new View.OnClickListener() {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.service_checkbox:
@@ -119,6 +104,21 @@ public class QuickSettingsFragment extends BaseDialogFragment {
                     break;
 
             }
+        }
+    };
+    private CheckBox serviceCheckBox;
+    private CheckBox wifiCheckBox;
+    private CheckBox logCheckBox;
+    private final BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context c, Intent i) {
+            Bundle b = new Bundle();
+            Message m = wifiButtonHandler.obtainMessage();
+            b.putAll(i.getExtras());
+            b.putString(INTENT_ACTION, i.getAction());
+            m.setData(b);
+            wifiButtonHandler.sendMessage(m);
         }
     };
 
@@ -213,7 +213,7 @@ public class QuickSettingsFragment extends BaseDialogFragment {
     }
 
     protected class WifiButtonStateRunnable implements Runnable {
-        private boolean state;
+        private final boolean state;
 
         public WifiButtonStateRunnable(boolean b) {
             state = b;

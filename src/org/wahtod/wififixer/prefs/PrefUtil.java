@@ -61,7 +61,7 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
     private static final String DATA_KEY = "DATA_KEY";
     private static final String INT_KEY = "INTKEY";
     private static final String NETPREFIX = "n_";
-    private static volatile HashMap<String, Boolean> _flags = new HashMap<>();
+    private static final HashMap<String, Boolean> _flags = new HashMap<>();
     private static WeakReference<PrefUtil> self;
     private static SharedPreferences _prefs;
     /*
@@ -69,7 +69,7 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
      */
     private static WeakReference<Context> context;
     private static HashMap<String, int[]> netprefs;
-    private static Handler receiverExecutor = new Handler() {
+    private static final Handler receiverExecutor = new Handler() {
         @Override
         public void handleMessage(Message message) {
             Bundle data = message.getData();
@@ -85,7 +85,7 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
             }
         }
     };
-    private BroadcastReceiver changeReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver changeReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String valuekey = intent.getStringExtra(VALUE_KEY);
             Message message = receiverExecutor.obtainMessage();

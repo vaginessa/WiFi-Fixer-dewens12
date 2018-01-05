@@ -232,7 +232,7 @@ public class LogUtil {
     }
 
     private static class SqlLogger implements Runnable {
-        String message;
+        final String message;
 
         public SqlLogger(String in) {
             message = in;
@@ -249,8 +249,8 @@ public class LogUtil {
     }
 
     private static class DumpLog implements Runnable {
-        Context context;
-        File file;
+        final Context context;
+        final File file;
 
         DumpLog(final Context ctxt, File f) {
             context = ctxt;

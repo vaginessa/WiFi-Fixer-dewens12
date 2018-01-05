@@ -36,7 +36,7 @@ public class WifiWatchdogService extends Service {
     private static ThreadHandler mHandler;
     private volatile WakeLock _wakelock;
     private volatile boolean _waitFlag = false;
-    private Runnable WifiEnablerRunnable = new Runnable() {
+    private final Runnable WifiEnablerRunnable = new Runnable() {
 
         @Override
         public void run() {
@@ -44,7 +44,7 @@ public class WifiWatchdogService extends Service {
         }
     };
 
-    private Runnable WatchdogRunnable = new Runnable() {
+    private final Runnable WatchdogRunnable = new Runnable() {
 
         @Override
         public void run() {

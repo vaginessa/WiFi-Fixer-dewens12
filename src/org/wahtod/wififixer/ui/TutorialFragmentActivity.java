@@ -42,7 +42,7 @@ public abstract class TutorialFragmentActivity extends AppFragmentActivity {
     private static final String CURRENT_PART = "TutorialFragmentActivity:CURRENT_PART";
     private static final long RESTORE_DELAY = 1000;
     private static WeakReference<TutorialFragmentActivity> self;
-    private static Handler handler = new Handler() {
+    private static final Handler handler = new Handler() {
         @Override
         public void handleMessage(Message message) {
             switch (message.what) {

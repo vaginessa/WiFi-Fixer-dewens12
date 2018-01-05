@@ -47,7 +47,7 @@ public class StatusDispatcher {
      * Essentially, a Leaky Bucket that throttles Widget messages to one every
      * WIDGET_REFRESH_DELAY seconds
      */
-    private static Handler messagehandler = new Handler() {
+    private static final Handler messagehandler = new Handler() {
         @Override
         public void handleMessage(Message message) {
             if (_statusMessage != null)
@@ -73,7 +73,7 @@ public class StatusDispatcher {
                 }
         }
     };
-    private BroadcastReceiver messagereceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver messagereceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             Message in = messagehandler.obtainMessage(REFRESH);
             in.setData(intent.getExtras());

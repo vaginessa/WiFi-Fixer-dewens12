@@ -28,8 +28,8 @@ import java.lang.ref.WeakReference;
  * It's a logging wake lock.  It logs.
  */
 public class LoggingWakeLock extends WakeLock {
-    private WeakReference<Context> ctxt;
-    private String caller;
+    private final WeakReference<Context> ctxt;
+    private final String caller;
 
     public LoggingWakeLock(Context context, String c) {
         super(context);

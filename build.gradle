@@ -114,7 +114,11 @@ android {
 
         instrumentTest.setRoot('tests')
     }
-
-
+    defaultConfig {
+        minSdkVersion 27
+        targetSdkVersion 27
+    }
+    productFlavors {
+    }
 }
 

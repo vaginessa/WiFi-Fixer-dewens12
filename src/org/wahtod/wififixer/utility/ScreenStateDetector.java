@@ -39,8 +39,8 @@ public class ScreenStateDetector {
 
     private static final int SCREEN_EVENT_OFF = 0;
     private static final int SCREEN_EVENT_ON = 1;
-    private static ArrayList<WeakReference<OnScreenStateChangedListener>> _clients = new ArrayList<>();
-    private static Handler statehandler = new Handler() {
+    private static final ArrayList<WeakReference<OnScreenStateChangedListener>> _clients = new ArrayList<>();
+    private static final Handler statehandler = new Handler() {
         @Override
         public void handleMessage(Message message) {
             switch (message.what) {
@@ -55,7 +55,7 @@ public class ScreenStateDetector {
         }
     };
     private static ScreenStateDetector _screenStateDetector;
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String iAction = intent.getAction();

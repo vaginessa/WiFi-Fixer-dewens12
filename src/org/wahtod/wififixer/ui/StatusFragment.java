@@ -52,7 +52,7 @@ public class StatusFragment extends Fragment {
     private static final String DBM = "dBm";
     private static final String MB = "Mb";
     private static WeakReference<StatusFragment> self;
-    private static Handler drawhandler = new Handler() {
+    private static final Handler drawhandler = new Handler() {
         @Override
         public void handleMessage(Message message) {
             /*
@@ -78,7 +78,7 @@ public class StatusFragment extends Fragment {
             }
         }
     };
-    private BroadcastReceiver statusreceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver statusreceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
 
 			/*
@@ -188,11 +188,11 @@ public class StatusFragment extends Fragment {
     }
 
     private static class ViewHolder {
-        private TextView linkspeed;
-        private TextView ssid;
-        private TextView signal;
-        private TextView status;
-        private ImageView icon;
+        private final TextView linkspeed;
+        private final TextView ssid;
+        private final TextView signal;
+        private final TextView status;
+        private final ImageView icon;
 
         public ViewHolder(View container) {
             linkspeed = container.findViewById(R.id.linkspeed);

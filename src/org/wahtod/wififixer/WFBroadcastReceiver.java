@@ -47,7 +47,7 @@ public final class WFBroadcastReceiver extends BroadcastReceiver {
     private static final String AUTH_ACTION = "org.wahtod.wififixer.AUTH";
     private static final String AUTHSTRING = "31415927";
     private static WeakReference<Context> ctxt;
-    private static Handler handler = new Handler() {
+    private static final Handler handler = new Handler() {
         @Override
         public void handleMessage(Message message) {
             dispatchIntent(message.getData());

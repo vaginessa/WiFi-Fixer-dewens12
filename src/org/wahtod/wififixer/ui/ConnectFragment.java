@@ -96,7 +96,7 @@ public class ConnectFragment extends Fragment implements OnClickListener {
         return inflater.inflate(R.layout.connect_fragment, null);
     }
 
-    private int addNetwork(String password) {
+    private void addNetwork(String password) {
         WifiConfiguration wf = getKeyAppropriateConfig(password);
         AsyncWifiManager wm = AsyncWifiManager.get(getActivity());
         int n = wm.addNetwork(wf);
@@ -104,7 +104,6 @@ public class ConnectFragment extends Fragment implements OnClickListener {
             wm.enableNetwork(n, false);
             wm.saveConfiguration();
         }
-        return n;
     }
 
     private WifiConfiguration getKeyAppropriateConfig(String password) {
