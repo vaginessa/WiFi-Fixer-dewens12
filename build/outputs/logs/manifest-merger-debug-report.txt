@@ -3,26 +3,26 @@ manifest
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-240:12
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-240:12
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-240:12
-MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\62c171cc756acda7b8bbc3e9afd3804c\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\ff6b038ddc7ee8ed61766c22ff09dfec\AndroidManifest.xml:17:1-23:12
-MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\5837d7995d10df54003fe340f46d2f94\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.0.2.aar\cf14c298c1f54c0dcbcf89b924bc7fcb\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.0.2.aar\6195e6519bca798aaaa928911fb40929\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.0.2.aar\a977b7cca6e5a857673246860233fec1\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\0ff763f33e5b4d6263cb47966dcb5069\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\6d4a5236e4a7eeaac444c4769a00c632\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\793e5b70f323a0e2d2d1e926942c947a\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\81a10323b8e1306f5ac0eae5e2c32e05\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\5f656e3a59c8951ffcb89a2be07a906f\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\4b6a695cda86faf63840b39817aefea9\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\4da63bd4387616fa0e35c9cefa68712f\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\dcdcd56f6c3bb053e25350512e59dcf6\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\be27e6530b3b170a9575cdde75d845fe\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support.test.espresso:espresso-core:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.0.1.aar\7a4274cbd57ee623d09e461f97837921\AndroidManifest.xml:17:1-21:12
-MERGED from [com.android.support.test:rules:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\rules-1.0.1.aar\0914f5b06a1199bb7ee9f115946dfcf1\AndroidManifest.xml:17:1-21:12
-MERGED from [com.android.support.test:runner:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.1.aar\6301e1aa76f78132b3961f5b396a2453\AndroidManifest.xml:17:1-21:12
-MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\d72e2586728a3cffdd0fe564f671a9e4\AndroidManifest.xml:17:1-24:12
-MERGED from [com.android.support.test.espresso:espresso-idling-resource:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.0.1.aar\292fbea63c708cabe80939aced181300\AndroidManifest.xml:17:1-21:12
+MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\b9cc7c3d467597b976fa5c12285e4f70\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\d62411e58f1d0d30e4d3b9501e65bb9b\AndroidManifest.xml:17:1-23:12
+MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\cb7f7c056cf1d17afd3295d7a0704c5e\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.0.2.aar\d15b35964ef7f1326ae0d3282d335016\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.0.2.aar\b4f05b08cd5e2fe50b2315cddbcc4ff2\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.0.2.aar\27e174604e312335cc362ef3b5dcf1b0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\e8f10e7db9897b3afe5a8e8577211816\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\6e5292a506e9f5290a5ac831f380461d\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\8838368bc2db4ba99d2404a9824b8351\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\29ff19bb100baecc52d82cb351f361f4\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\79127c47a958e0d2f339d1c1e585d4e6\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\98d98e25f178c649dac9358cf7f7ad7f\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\eb510d1791cd667210f2d7c9b18158dc\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\c76a11521bd372316aa51a0d076b8535\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\97afda8a74c0de637fda808361527334\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support.test.espresso:espresso-core:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.0.1.aar\36f7f17ba565596cbee1f37b59597d01\AndroidManifest.xml:17:1-21:12
+MERGED from [com.android.support.test:rules:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\rules-1.0.1.aar\a77b80182bc8227e1b0e0b36955ecebf\AndroidManifest.xml:17:1-21:12
+MERGED from [com.android.support.test:runner:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.1.aar\8f2cf915671bd672dec551d64d3fc304\AndroidManifest.xml:17:1-21:12
+MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\1da9936206be1556bb601697eeeed580\AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support.test.espresso:espresso-idling-resource:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.0.1.aar\68bf27157b67e18ae34173c070dc1690\AndroidManifest.xml:17:1-21:12
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-240:12
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-240:12
 	package
@@ -91,46 +91,46 @@ ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:53:5-5
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:57:9-37
 uses-sdk
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:5-62:41
-MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\62c171cc756acda7b8bbc3e9afd3804c\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\62c171cc756acda7b8bbc3e9afd3804c\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\ff6b038ddc7ee8ed61766c22ff09dfec\AndroidManifest.xml:19:5-72
-MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\ff6b038ddc7ee8ed61766c22ff09dfec\AndroidManifest.xml:19:5-72
-MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\5837d7995d10df54003fe340f46d2f94\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\5837d7995d10df54003fe340f46d2f94\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.0.2.aar\cf14c298c1f54c0dcbcf89b924bc7fcb\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.0.2.aar\cf14c298c1f54c0dcbcf89b924bc7fcb\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.0.2.aar\6195e6519bca798aaaa928911fb40929\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.0.2.aar\6195e6519bca798aaaa928911fb40929\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.0.2.aar\a977b7cca6e5a857673246860233fec1\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.0.2.aar\a977b7cca6e5a857673246860233fec1\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\0ff763f33e5b4d6263cb47966dcb5069\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\0ff763f33e5b4d6263cb47966dcb5069\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\6d4a5236e4a7eeaac444c4769a00c632\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\6d4a5236e4a7eeaac444c4769a00c632\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\793e5b70f323a0e2d2d1e926942c947a\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\793e5b70f323a0e2d2d1e926942c947a\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\81a10323b8e1306f5ac0eae5e2c32e05\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\81a10323b8e1306f5ac0eae5e2c32e05\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\5f656e3a59c8951ffcb89a2be07a906f\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\5f656e3a59c8951ffcb89a2be07a906f\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\4b6a695cda86faf63840b39817aefea9\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\4b6a695cda86faf63840b39817aefea9\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\4da63bd4387616fa0e35c9cefa68712f\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\4da63bd4387616fa0e35c9cefa68712f\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\dcdcd56f6c3bb053e25350512e59dcf6\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\dcdcd56f6c3bb053e25350512e59dcf6\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\be27e6530b3b170a9575cdde75d845fe\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\be27e6530b3b170a9575cdde75d845fe\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support.test.espresso:espresso-core:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.0.1.aar\7a4274cbd57ee623d09e461f97837921\AndroidManifest.xml:19:5-72
-MERGED from [com.android.support.test.espresso:espresso-core:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.0.1.aar\7a4274cbd57ee623d09e461f97837921\AndroidManifest.xml:19:5-72
-MERGED from [com.android.support.test:rules:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\rules-1.0.1.aar\0914f5b06a1199bb7ee9f115946dfcf1\AndroidManifest.xml:19:5-72
-MERGED from [com.android.support.test:rules:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\rules-1.0.1.aar\0914f5b06a1199bb7ee9f115946dfcf1\AndroidManifest.xml:19:5-72
-MERGED from [com.android.support.test:runner:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.1.aar\6301e1aa76f78132b3961f5b396a2453\AndroidManifest.xml:19:5-72
-MERGED from [com.android.support.test:runner:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.1.aar\6301e1aa76f78132b3961f5b396a2453\AndroidManifest.xml:19:5-72
-MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\d72e2586728a3cffdd0fe564f671a9e4\AndroidManifest.xml:20:5-22:41
-MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\d72e2586728a3cffdd0fe564f671a9e4\AndroidManifest.xml:20:5-22:41
-MERGED from [com.android.support.test.espresso:espresso-idling-resource:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.0.1.aar\292fbea63c708cabe80939aced181300\AndroidManifest.xml:19:3-70
-MERGED from [com.android.support.test.espresso:espresso-idling-resource:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.0.1.aar\292fbea63c708cabe80939aced181300\AndroidManifest.xml:19:3-70
+MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\b9cc7c3d467597b976fa5c12285e4f70\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\b9cc7c3d467597b976fa5c12285e4f70\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\d62411e58f1d0d30e4d3b9501e65bb9b\AndroidManifest.xml:19:5-72
+MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\d62411e58f1d0d30e4d3b9501e65bb9b\AndroidManifest.xml:19:5-72
+MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\cb7f7c056cf1d17afd3295d7a0704c5e\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\cb7f7c056cf1d17afd3295d7a0704c5e\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.0.2.aar\d15b35964ef7f1326ae0d3282d335016\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.0.2.aar\d15b35964ef7f1326ae0d3282d335016\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.0.2.aar\b4f05b08cd5e2fe50b2315cddbcc4ff2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.0.2.aar\b4f05b08cd5e2fe50b2315cddbcc4ff2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.0.2.aar\27e174604e312335cc362ef3b5dcf1b0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.0.2.aar\27e174604e312335cc362ef3b5dcf1b0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\e8f10e7db9897b3afe5a8e8577211816\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\e8f10e7db9897b3afe5a8e8577211816\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\6e5292a506e9f5290a5ac831f380461d\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\6e5292a506e9f5290a5ac831f380461d\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\8838368bc2db4ba99d2404a9824b8351\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\8838368bc2db4ba99d2404a9824b8351\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\29ff19bb100baecc52d82cb351f361f4\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\29ff19bb100baecc52d82cb351f361f4\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\79127c47a958e0d2f339d1c1e585d4e6\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\79127c47a958e0d2f339d1c1e585d4e6\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\98d98e25f178c649dac9358cf7f7ad7f\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\98d98e25f178c649dac9358cf7f7ad7f\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\eb510d1791cd667210f2d7c9b18158dc\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\eb510d1791cd667210f2d7c9b18158dc\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\c76a11521bd372316aa51a0d076b8535\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\c76a11521bd372316aa51a0d076b8535\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\97afda8a74c0de637fda808361527334\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\97afda8a74c0de637fda808361527334\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support.test.espresso:espresso-core:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.0.1.aar\36f7f17ba565596cbee1f37b59597d01\AndroidManifest.xml:19:5-72
+MERGED from [com.android.support.test.espresso:espresso-core:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.0.1.aar\36f7f17ba565596cbee1f37b59597d01\AndroidManifest.xml:19:5-72
+MERGED from [com.android.support.test:rules:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\rules-1.0.1.aar\a77b80182bc8227e1b0e0b36955ecebf\AndroidManifest.xml:19:5-72
+MERGED from [com.android.support.test:rules:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\rules-1.0.1.aar\a77b80182bc8227e1b0e0b36955ecebf\AndroidManifest.xml:19:5-72
+MERGED from [com.android.support.test:runner:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.1.aar\8f2cf915671bd672dec551d64d3fc304\AndroidManifest.xml:19:5-72
+MERGED from [com.android.support.test:runner:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.1.aar\8f2cf915671bd672dec551d64d3fc304\AndroidManifest.xml:19:5-72
+MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\1da9936206be1556bb601697eeeed580\AndroidManifest.xml:20:5-22:41
+MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\1da9936206be1556bb601697eeeed580\AndroidManifest.xml:20:5-22:41
+MERGED from [com.android.support.test.espresso:espresso-idling-resource:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.0.1.aar\68bf27157b67e18ae34173c070dc1690\AndroidManifest.xml:19:3-70
+MERGED from [com.android.support.test.espresso:espresso-idling-resource:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.0.1.aar\68bf27157b67e18ae34173c070dc1690\AndroidManifest.xml:19:3-70
 	android:maxSdkVersion
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:60:9-35
 	android:targetSdkVersion
@@ -157,8 +157,8 @@ ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:70:5-7
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:71:9-49
 application
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:74:5-238:19
-MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\ff6b038ddc7ee8ed61766c22ff09dfec\AndroidManifest.xml:21:5-19
-MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\ff6b038ddc7ee8ed61766c22ff09dfec\AndroidManifest.xml:21:5-19
+MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\d62411e58f1d0d30e4d3b9501e65bb9b\AndroidManifest.xml:21:5-19
+MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\d62411e58f1d0d30e4d3b9501e65bb9b\AndroidManifest.xml:21:5-19
 	android:backupAgent
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:76:9-54
 	android:label
