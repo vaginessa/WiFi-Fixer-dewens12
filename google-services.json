@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "469023410321",
+    "firebase_url": "https://wifi-fixer-8db63.firebaseio.com",
+    "project_id": "wifi-fixer-8db63",
+    "storage_bucket": "wifi-fixer-8db63.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469023410321:android:36f557200aee4843",
+        "android_client_info": {
+          "package_name": "org.wahtod.wififixer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "469023410321-dk6i900bpe1qfdp6amfv7va3dom0bjgp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.wahtod.wififixer",
+            "certificate_hash": "0a707556e6b5850956d7ea226e2470aa9946ca76"
+          }
+        },
+        {
+          "client_id": "469023410321-qkc313f41dfpncu07ffcopks4n2ummim.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ5w_J7afSsVcNlV62ZTYnthMY3OPIZoY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "469023410321-qkc313f41dfpncu07ffcopks4n2ummim.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
