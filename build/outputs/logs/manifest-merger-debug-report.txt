@@ -4,38 +4,21 @@ ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-2
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-240:12
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-240:12
 MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\4ded9c8c2e349ad8376de385849923c5\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\b7f17075b772d8b6444363a66965c48c\AndroidManifest.xml:17:1-23:12
 MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\cfbd1c675f74ca6a5019d5086c9490f1\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.0.2.aar\fed4d261136c3a9643a1430a3b8e90a9\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.0.2.aar\e9720ca96ad878e6ece830168e4dbc05\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.0.2.aar\aaa62cde42f9cfd502e3f008116bdbcb\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\1066cd563b48cf2e1163bb58f518089f\AndroidManifest.xml:17:1-22:12
-MERGED from [com.google.android.gms:play-services-auth:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.8.0.aar\08270fe3698e9c1bc70ef8fd501a9848\AndroidManifest.xml:17:1-39:12
-MERGED from [com.google.android.gms:play-services-auth-api-phone:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-api-phone-11.8.0.aar\4b04d9ff5b60000ee6c2fb050a660a43\AndroidManifest.xml:2:1-7:12
-MERGED from [com.google.android.gms:play-services-auth-base:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-base-11.8.0.aar\5d250ab5a948a42151e7288ab304a769\AndroidManifest.xml:2:1-7:12
-MERGED from [com.google.android.gms:play-services-base:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-base-11.8.0.aar\fee4009bfcbbe91f9c5076ab9afad976\AndroidManifest.xml:17:1-29:12
-MERGED from [com.google.android.gms:play-services-tasks:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-tasks-11.8.0.aar\b038f47842944f32fe1df32124bf5a07\AndroidManifest.xml:2:1-9:12
-MERGED from [com.google.android.gms:play-services-basement:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.8.0.aar\9b33f4263104dfa9dbbb30f045631ae7\AndroidManifest.xml:17:1-28:12
 MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\03ee5c7d7d9a1cba0baf0dcf24bea167\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\08822a01aee9588ece84e4ce98ff8632\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\ca63f98bf67bca60d8764dc9dba0db18\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\620ad98743c2e982329eb3ac9f9ab99c\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\08822a01aee9588ece84e4ce98ff8632\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\9e55bb56dd260c2437a307b12450ec41\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\0f649e474f5a1332ec062150f3b701a6\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\61af5a1f00e6cf4e4869c27cc0c93ddb\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.databinding:adapters:3.1.0-alpha08] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\adapters-3.1.0-alpha08.aar\8ab90434f144dbb88809d0716f9d2784\AndroidManifest.xml:17:1-24:12
-MERGED from [com.android.databinding:library:3.1.0-alpha08] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\library-3.1.0-alpha08.aar\6cb4c0c612b69f8408ce9a6f7ac5c538\AndroidManifest.xml:17:1-24:12
-MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\9e55bb56dd260c2437a307b12450ec41\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\620ad98743c2e982329eb3ac9f9ab99c\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\1acbae3b752777e77ce47a2634428ec8\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support.test.espresso:espresso-core:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.0.1.aar\a0b30edd0f5221cfa7e39b956b1f3976\AndroidManifest.xml:17:1-21:12
-MERGED from [com.android.support.test:rules:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\rules-1.0.1.aar\0bd582525d336e605cd25937370ef54d\AndroidManifest.xml:17:1-21:12
 MERGED from [com.android.support.test:runner:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.1.aar\417bb7444e9714d11b78118d2bc4f69a\AndroidManifest.xml:17:1-21:12
 MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\c704c87cb91ba529563d743119177b98\AndroidManifest.xml:17:1-24:12
-MERGED from [com.android.support.test.espresso:espresso-idling-resource:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.0.1.aar\fd8661e6defbce21b8e75558f3aba414\AndroidManifest.xml:17:1-21:12
-MERGED from [com.google.android.gms:play-services-auth-api-phone-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-api-phone-license-11.8.0.aar\8b4ff5b0e67d57828d2bbd7be4c5be04\AndroidManifest.xml:2:1-6:12
-MERGED from [com.google.android.gms:play-services-auth-base-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-base-license-11.8.0.aar\e717edb416e61dd88007c5be84002565\AndroidManifest.xml:2:1-6:12
-MERGED from [com.google.android.gms:play-services-base-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-base-license-11.8.0.aar\c280d0b7e15ca7a64b94f0d6d31b1196\AndroidManifest.xml:2:1-6:12
-MERGED from [com.google.android.gms:play-services-basement-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-basement-license-11.8.0.aar\496dcc80986b3f8c8d99efc6a74c3edf\AndroidManifest.xml:2:1-6:12
-MERGED from [com.google.android.gms:play-services-tasks-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-tasks-license-11.8.0.aar\c9bb140ebcea017ab9ce84d681725d5b\AndroidManifest.xml:2:1-6:12
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-240:12
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-240:12
 	package
@@ -108,8 +91,6 @@ INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:5-62:41
 MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\4ded9c8c2e349ad8376de385849923c5\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\4ded9c8c2e349ad8376de385849923c5\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\b7f17075b772d8b6444363a66965c48c\AndroidManifest.xml:19:5-72
-MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\b7f17075b772d8b6444363a66965c48c\AndroidManifest.xml:19:5-72
 MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\cfbd1c675f74ca6a5019d5086c9490f1\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\cfbd1c675f74ca6a5019d5086c9490f1\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.0.2.aar\fed4d261136c3a9643a1430a3b8e90a9\AndroidManifest.xml:20:5-44
@@ -120,58 +101,26 @@ MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\
 MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.0.2.aar\aaa62cde42f9cfd502e3f008116bdbcb\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\1066cd563b48cf2e1163bb58f518089f\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\1066cd563b48cf2e1163bb58f518089f\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.gms:play-services-auth:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.8.0.aar\08270fe3698e9c1bc70ef8fd501a9848\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.gms:play-services-auth:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.8.0.aar\08270fe3698e9c1bc70ef8fd501a9848\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.gms:play-services-auth-api-phone:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-api-phone-11.8.0.aar\4b04d9ff5b60000ee6c2fb050a660a43\AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.gms:play-services-auth-api-phone:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-api-phone-11.8.0.aar\4b04d9ff5b60000ee6c2fb050a660a43\AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.gms:play-services-auth-base:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-base-11.8.0.aar\5d250ab5a948a42151e7288ab304a769\AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.gms:play-services-auth-base:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-base-11.8.0.aar\5d250ab5a948a42151e7288ab304a769\AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.gms:play-services-base:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-base-11.8.0.aar\fee4009bfcbbe91f9c5076ab9afad976\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.gms:play-services-base:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-base-11.8.0.aar\fee4009bfcbbe91f9c5076ab9afad976\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.gms:play-services-tasks:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-tasks-11.8.0.aar\b038f47842944f32fe1df32124bf5a07\AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.gms:play-services-tasks:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-tasks-11.8.0.aar\b038f47842944f32fe1df32124bf5a07\AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.gms:play-services-basement:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.8.0.aar\9b33f4263104dfa9dbbb30f045631ae7\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.gms:play-services-basement:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.8.0.aar\9b33f4263104dfa9dbbb30f045631ae7\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\03ee5c7d7d9a1cba0baf0dcf24bea167\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\03ee5c7d7d9a1cba0baf0dcf24bea167\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\08822a01aee9588ece84e4ce98ff8632\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\08822a01aee9588ece84e4ce98ff8632\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\ca63f98bf67bca60d8764dc9dba0db18\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\ca63f98bf67bca60d8764dc9dba0db18\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\620ad98743c2e982329eb3ac9f9ab99c\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\620ad98743c2e982329eb3ac9f9ab99c\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\08822a01aee9588ece84e4ce98ff8632\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\08822a01aee9588ece84e4ce98ff8632\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\9e55bb56dd260c2437a307b12450ec41\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\9e55bb56dd260c2437a307b12450ec41\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\0f649e474f5a1332ec062150f3b701a6\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\0f649e474f5a1332ec062150f3b701a6\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\61af5a1f00e6cf4e4869c27cc0c93ddb\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\61af5a1f00e6cf4e4869c27cc0c93ddb\AndroidManifest.xml:20:5-44
-MERGED from [com.android.databinding:adapters:3.1.0-alpha08] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\adapters-3.1.0-alpha08.aar\8ab90434f144dbb88809d0716f9d2784\AndroidManifest.xml:22:5-44
-MERGED from [com.android.databinding:adapters:3.1.0-alpha08] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\adapters-3.1.0-alpha08.aar\8ab90434f144dbb88809d0716f9d2784\AndroidManifest.xml:22:5-44
-MERGED from [com.android.databinding:library:3.1.0-alpha08] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\library-3.1.0-alpha08.aar\6cb4c0c612b69f8408ce9a6f7ac5c538\AndroidManifest.xml:22:5-44
-MERGED from [com.android.databinding:library:3.1.0-alpha08] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\library-3.1.0-alpha08.aar\6cb4c0c612b69f8408ce9a6f7ac5c538\AndroidManifest.xml:22:5-44
-MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\9e55bb56dd260c2437a307b12450ec41\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\9e55bb56dd260c2437a307b12450ec41\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\620ad98743c2e982329eb3ac9f9ab99c\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\620ad98743c2e982329eb3ac9f9ab99c\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\1acbae3b752777e77ce47a2634428ec8\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\1acbae3b752777e77ce47a2634428ec8\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support.test.espresso:espresso-core:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.0.1.aar\a0b30edd0f5221cfa7e39b956b1f3976\AndroidManifest.xml:19:5-72
-MERGED from [com.android.support.test.espresso:espresso-core:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.0.1.aar\a0b30edd0f5221cfa7e39b956b1f3976\AndroidManifest.xml:19:5-72
-MERGED from [com.android.support.test:rules:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\rules-1.0.1.aar\0bd582525d336e605cd25937370ef54d\AndroidManifest.xml:19:5-72
-MERGED from [com.android.support.test:rules:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\rules-1.0.1.aar\0bd582525d336e605cd25937370ef54d\AndroidManifest.xml:19:5-72
 MERGED from [com.android.support.test:runner:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.1.aar\417bb7444e9714d11b78118d2bc4f69a\AndroidManifest.xml:19:5-72
 MERGED from [com.android.support.test:runner:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.1.aar\417bb7444e9714d11b78118d2bc4f69a\AndroidManifest.xml:19:5-72
 MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\c704c87cb91ba529563d743119177b98\AndroidManifest.xml:20:5-22:41
 MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\c704c87cb91ba529563d743119177b98\AndroidManifest.xml:20:5-22:41
-MERGED from [com.android.support.test.espresso:espresso-idling-resource:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.0.1.aar\fd8661e6defbce21b8e75558f3aba414\AndroidManifest.xml:19:3-70
-MERGED from [com.android.support.test.espresso:espresso-idling-resource:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.0.1.aar\fd8661e6defbce21b8e75558f3aba414\AndroidManifest.xml:19:3-70
-MERGED from [com.google.android.gms:play-services-auth-api-phone-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-api-phone-license-11.8.0.aar\8b4ff5b0e67d57828d2bbd7be4c5be04\AndroidManifest.xml:4:5-43
-MERGED from [com.google.android.gms:play-services-auth-api-phone-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-api-phone-license-11.8.0.aar\8b4ff5b0e67d57828d2bbd7be4c5be04\AndroidManifest.xml:4:5-43
-MERGED from [com.google.android.gms:play-services-auth-base-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-base-license-11.8.0.aar\e717edb416e61dd88007c5be84002565\AndroidManifest.xml:4:5-43
-MERGED from [com.google.android.gms:play-services-auth-base-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-base-license-11.8.0.aar\e717edb416e61dd88007c5be84002565\AndroidManifest.xml:4:5-43
-MERGED from [com.google.android.gms:play-services-base-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-base-license-11.8.0.aar\c280d0b7e15ca7a64b94f0d6d31b1196\AndroidManifest.xml:4:5-43
-MERGED from [com.google.android.gms:play-services-base-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-base-license-11.8.0.aar\c280d0b7e15ca7a64b94f0d6d31b1196\AndroidManifest.xml:4:5-43
-MERGED from [com.google.android.gms:play-services-basement-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-basement-license-11.8.0.aar\496dcc80986b3f8c8d99efc6a74c3edf\AndroidManifest.xml:4:5-43
-MERGED from [com.google.android.gms:play-services-basement-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-basement-license-11.8.0.aar\496dcc80986b3f8c8d99efc6a74c3edf\AndroidManifest.xml:4:5-43
-MERGED from [com.google.android.gms:play-services-tasks-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-tasks-license-11.8.0.aar\c9bb140ebcea017ab9ce84d681725d5b\AndroidManifest.xml:4:5-43
-MERGED from [com.google.android.gms:play-services-tasks-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-tasks-license-11.8.0.aar\c9bb140ebcea017ab9ce84d681725d5b\AndroidManifest.xml:4:5-43
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:5-62:41
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:5-62:41
 	android:maxSdkVersion
@@ -204,26 +153,6 @@ ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:70:5-7
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:71:9-49
 application
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:74:5-238:19
-MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\b7f17075b772d8b6444363a66965c48c\AndroidManifest.xml:21:5-19
-MERGED from [com.android.support.test.espresso:espresso-contrib:3.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\espresso-contrib-3.0.1.aar\b7f17075b772d8b6444363a66965c48c\AndroidManifest.xml:21:5-19
-MERGED from [com.google.android.gms:play-services-auth:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.8.0.aar\08270fe3698e9c1bc70ef8fd501a9848\AndroidManifest.xml:22:5-37:19
-MERGED from [com.google.android.gms:play-services-auth:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.8.0.aar\08270fe3698e9c1bc70ef8fd501a9848\AndroidManifest.xml:22:5-37:19
-MERGED from [com.google.android.gms:play-services-base:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-base-11.8.0.aar\fee4009bfcbbe91f9c5076ab9afad976\AndroidManifest.xml:22:5-27:19
-MERGED from [com.google.android.gms:play-services-base:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-base-11.8.0.aar\fee4009bfcbbe91f9c5076ab9afad976\AndroidManifest.xml:22:5-27:19
-MERGED from [com.google.android.gms:play-services-tasks:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-tasks-11.8.0.aar\b038f47842944f32fe1df32124bf5a07\AndroidManifest.xml:7:5-20
-MERGED from [com.google.android.gms:play-services-tasks:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-tasks-11.8.0.aar\b038f47842944f32fe1df32124bf5a07\AndroidManifest.xml:7:5-20
-MERGED from [com.google.android.gms:play-services-basement:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.8.0.aar\9b33f4263104dfa9dbbb30f045631ae7\AndroidManifest.xml:22:5-26:19
-MERGED from [com.google.android.gms:play-services-basement:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.8.0.aar\9b33f4263104dfa9dbbb30f045631ae7\AndroidManifest.xml:22:5-26:19
-MERGED from [com.google.android.gms:play-services-auth-api-phone-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-api-phone-license-11.8.0.aar\8b4ff5b0e67d57828d2bbd7be4c5be04\AndroidManifest.xml:5:5-20
-MERGED from [com.google.android.gms:play-services-auth-api-phone-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-api-phone-license-11.8.0.aar\8b4ff5b0e67d57828d2bbd7be4c5be04\AndroidManifest.xml:5:5-20
-MERGED from [com.google.android.gms:play-services-auth-base-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-base-license-11.8.0.aar\e717edb416e61dd88007c5be84002565\AndroidManifest.xml:5:5-20
-MERGED from [com.google.android.gms:play-services-auth-base-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-base-license-11.8.0.aar\e717edb416e61dd88007c5be84002565\AndroidManifest.xml:5:5-20
-MERGED from [com.google.android.gms:play-services-base-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-base-license-11.8.0.aar\c280d0b7e15ca7a64b94f0d6d31b1196\AndroidManifest.xml:5:5-20
-MERGED from [com.google.android.gms:play-services-base-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-base-license-11.8.0.aar\c280d0b7e15ca7a64b94f0d6d31b1196\AndroidManifest.xml:5:5-20
-MERGED from [com.google.android.gms:play-services-basement-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-basement-license-11.8.0.aar\496dcc80986b3f8c8d99efc6a74c3edf\AndroidManifest.xml:5:5-20
-MERGED from [com.google.android.gms:play-services-basement-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-basement-license-11.8.0.aar\496dcc80986b3f8c8d99efc6a74c3edf\AndroidManifest.xml:5:5-20
-MERGED from [com.google.android.gms:play-services-tasks-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-tasks-license-11.8.0.aar\c9bb140ebcea017ab9ce84d681725d5b\AndroidManifest.xml:5:5-20
-MERGED from [com.google.android.gms:play-services-tasks-license:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-tasks-license-11.8.0.aar\c9bb140ebcea017ab9ce84d681725d5b\AndroidManifest.xml:5:5-20
 	android:backupAgent
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:76:9-54
 	android:label
@@ -484,35 +413,3 @@ ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:234:13
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:236:17-58
 	android:name
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:235:17-67
-activity#com.google.android.gms.auth.api.signin.internal.SignInHubActivity
-ADDED from [com.google.android.gms:play-services-auth:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.8.0.aar\08270fe3698e9c1bc70ef8fd501a9848\AndroidManifest.xml:23:9-27:75
-	android:excludeFromRecents
-		ADDED from [com.google.android.gms:play-services-auth:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.8.0.aar\08270fe3698e9c1bc70ef8fd501a9848\AndroidManifest.xml:25:13-46
-	android:exported
-		ADDED from [com.google.android.gms:play-services-auth:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.8.0.aar\08270fe3698e9c1bc70ef8fd501a9848\AndroidManifest.xml:26:13-37
-	android:theme
-		ADDED from [com.google.android.gms:play-services-auth:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.8.0.aar\08270fe3698e9c1bc70ef8fd501a9848\AndroidManifest.xml:27:13-72
-	android:name
-		ADDED from [com.google.android.gms:play-services-auth:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.8.0.aar\08270fe3698e9c1bc70ef8fd501a9848\AndroidManifest.xml:24:13-93
-service#com.google.android.gms.auth.api.signin.RevocationBoundService
-ADDED from [com.google.android.gms:play-services-auth:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.8.0.aar\08270fe3698e9c1bc70ef8fd501a9848\AndroidManifest.xml:33:9-36:110
-	android:exported
-		ADDED from [com.google.android.gms:play-services-auth:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.8.0.aar\08270fe3698e9c1bc70ef8fd501a9848\AndroidManifest.xml:35:13-36
-	android:permission
-		ADDED from [com.google.android.gms:play-services-auth:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.8.0.aar\08270fe3698e9c1bc70ef8fd501a9848\AndroidManifest.xml:36:13-107
-	android:name
-		ADDED from [com.google.android.gms:play-services-auth:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.8.0.aar\08270fe3698e9c1bc70ef8fd501a9848\AndroidManifest.xml:34:13-89
-activity#com.google.android.gms.common.api.GoogleApiActivity
-ADDED from [com.google.android.gms:play-services-base:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-base-11.8.0.aar\fee4009bfcbbe91f9c5076ab9afad976\AndroidManifest.xml:23:9-26:75
-	android:exported
-		ADDED from [com.google.android.gms:play-services-base:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-base-11.8.0.aar\fee4009bfcbbe91f9c5076ab9afad976\AndroidManifest.xml:25:13-37
-	android:theme
-		ADDED from [com.google.android.gms:play-services-base:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-base-11.8.0.aar\fee4009bfcbbe91f9c5076ab9afad976\AndroidManifest.xml:26:13-72
-	android:name
-		ADDED from [com.google.android.gms:play-services-base:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-base-11.8.0.aar\fee4009bfcbbe91f9c5076ab9afad976\AndroidManifest.xml:24:13-79
-meta-data#com.google.android.gms.version
-ADDED from [com.google.android.gms:play-services-basement:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.8.0.aar\9b33f4263104dfa9dbbb30f045631ae7\AndroidManifest.xml:23:9-25:69
-	android:value
-		ADDED from [com.google.android.gms:play-services-basement:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.8.0.aar\9b33f4263104dfa9dbbb30f045631ae7\AndroidManifest.xml:25:13-66
-	android:name
-		ADDED from [com.google.android.gms:play-services-basement:11.8.0] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.8.0.aar\9b33f4263104dfa9dbbb30f045631ae7\AndroidManifest.xml:24:13-58
