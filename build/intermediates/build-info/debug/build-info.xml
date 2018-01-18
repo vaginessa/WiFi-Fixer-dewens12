@@ -6,7 +6,7 @@
     density="xxhdpi"
     format="10"
     plugin-version="3.1.0-alpha08"
-    timestamp="1515998997265"
+    timestamp="1516313838352"
     token="1073076291240345972"
     verifier="FULL_BUILD_REQUESTED" >
 
@@ -18,16 +18,37 @@
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="9629" />
+        duration="0" />
     <task
         name="verifier"
-        duration="2594" />
+        duration="0" />
 
+    <artifact
+        location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_3.apk"
+        type="SPLIT" />
+    <artifact
+        location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_9.apk"
+        type="SPLIT" />
     <artifact
         location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\dep\dependencies.apk"
         type="SPLIT" />
     <artifact
+        location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_8.apk"
+        type="SPLIT" />
+    <artifact
+        location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_6.apk"
+        type="SPLIT" />
+    <artifact
         location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_0.apk"
+        type="SPLIT" />
+    <artifact
+        location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_5.apk"
+        type="SPLIT" />
+    <artifact
+        location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_7.apk"
+        type="SPLIT" />
+    <artifact
+        location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_4.apk"
         type="SPLIT" />
     <artifact
         location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_1.apk"
@@ -36,66 +57,45 @@
         location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_2.apk"
         type="SPLIT" />
     <artifact
-        location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_3.apk"
-        type="SPLIT" />
-    <artifact
-        location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_4.apk"
-        type="SPLIT" />
-    <artifact
-        location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_5.apk"
-        type="SPLIT" />
-    <artifact
-        location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_6.apk"
-        type="SPLIT" />
-    <artifact
-        location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_7.apk"
-        type="SPLIT" />
-    <artifact
-        location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_8.apk"
-        type="SPLIT" />
-    <artifact
-        location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_9.apk"
-        type="SPLIT" />
-    <artifact
         location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\instant-run-apk\debug\Wifi-Fixer-debug.apk"
         type="SPLIT_MAIN" />
 
     <build
         build-mode="FULL"
-        timestamp="1515998997265"
+        timestamp="1516313838352"
         verifier="FULL_BUILD_REQUESTED" >
+        <artifact
+            location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_3.apk"
+            type="SPLIT" />
+        <artifact
+            location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_9.apk"
+            type="SPLIT" />
         <artifact
             location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\dep\dependencies.apk"
             type="SPLIT" />
         <artifact
+            location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_8.apk"
+            type="SPLIT" />
+        <artifact
+            location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_6.apk"
+            type="SPLIT" />
+        <artifact
             location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_0.apk"
+            type="SPLIT" />
+        <artifact
+            location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_5.apk"
+            type="SPLIT" />
+        <artifact
+            location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_7.apk"
+            type="SPLIT" />
+        <artifact
+            location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_4.apk"
             type="SPLIT" />
         <artifact
             location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_1.apk"
             type="SPLIT" />
         <artifact
             location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_2.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_3.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_4.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_5.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_6.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_7.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_8.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\split-apk\debug\slices\slice_9.apk"
             type="SPLIT" />
         <artifact
             location="C:\Users\ewens\Documents\GitHub\Wifi-Fixer\build\intermediates\instant-run-apk\debug\Wifi-Fixer-debug.apk"
