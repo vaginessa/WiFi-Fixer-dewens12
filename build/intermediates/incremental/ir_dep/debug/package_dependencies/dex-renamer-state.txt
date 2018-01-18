@@ -1,4 +1,0 @@
-#Mon Jan 15 01:33:22 CST 2018
-base.0=C\:\\Users\\ewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\transforms\\dexMerger\\debug\\30
-path.0=classes.dex
-renamed.0=classes.dex
