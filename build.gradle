@@ -18,111 +18,106 @@
  */
 
 buildscript {
-    ext.kotlin_version = '1.2.10'
+
 
     repositories {
         maven { url 'http://repo1.maven.org/maven2' }
         google()
         mavenCentral()
-        maven {
-            url 'http://dl.bintray.com/kotlin/kotlin-eap-1.2'
-        }
+
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0-alpha08'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.android.tools.build:gradle:3.2.0-alpha01'
+
     }
 }
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+    apply plugin: 'com.android.application'
 
-repositories {
-    mavenCentral()
-    jcenter()
-    maven {
-        url "https://jitpack.io"
-    }
-    google()
-    maven {
-        url 'http://dl.bintray.com/kotlin/kotlin-eap-1.2'
-    }
-}
 
-dependencies {
-    implementation 'com.android.support:support-compat:27.0.2'
-    implementation 'com.android.support:preference-v7:27.0.2'
-    implementation 'com.android.support:support-vector-drawable:27.0.2'
-    implementation 'com.android.support:support-v13:27.0.2'
-    implementation 'com.android.support:support-annotations:27.0.2'
-    implementation 'com.android.support:appcompat-v7:27.0.2'
-    implementation 'com.android.support:design:27.0.2'
-    implementation 'com.android.support.test:runner:1.0.1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-}
-
-android {
-    packagingOptions {
-        exclude 'AndroidManifest.xml'
-    }
-    lintOptions {
-        checkReleaseBuilds true
-        abortOnError false
-    }
-    signingConfigs {
-        release
-    }
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFile "proguard-project.txt"
-            compileSdkVersion 27
-            buildToolsVersion "27.0.3"
-            signingConfig signingConfigs.release
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            url "https://jitpack.io"
         }
+        google()
 
-        debug {
-            debuggable true
-            minifyEnabled false
-            compileSdkVersion 27
-            buildToolsVersion "27.0.3"
+    }
+
+    dependencies {
+        implementation 'com.android.support:support-compat:27.0.2'
+        implementation 'com.android.support:preference-v7:27.0.2'
+        implementation 'com.android.support:support-vector-drawable:27.0.2'
+        implementation 'com.android.support:support-v13:27.0.2'
+        implementation 'com.android.support:support-annotations:27.0.2'
+        implementation 'com.android.support:appcompat-v7:27.0.2'
+        implementation 'com.android.support:design:27.0.2'
+
+    }
+
+    android {
+        packagingOptions {
+            exclude 'AndroidManifest.xml'
+        }
+        lintOptions {
+            checkReleaseBuilds true
+            abortOnError false
+        }
+        signingConfigs {
+            release
+        }
+        buildTypes {
+            release {
+                minifyEnabled true
+                proguardFile "proguard-project.txt"
+                compileSdkVersion 27
+                buildToolsVersion "27.0.3"
+                signingConfig signingConfigs.release
+            }
+
+            debug {
+                debuggable true
+                minifyEnabled false
+                compileSdkVersion 27
+                buildToolsVersion "27.0.3"
+            }
+        }
+        if (project.hasProperty("storeFile")) {
+            android.signingConfigs.release.storeFile = file(storeFile)
+        }
+        if (project.hasProperty("storePassword")) {
+            android.signingConfigs.release.storePassword = storePassword
+        }
+        if (project.hasProperty("keyAlias")) {
+            android.signingConfigs.release.keyAlias = keyAlias
+        }
+        if (project.hasProperty("keyPassword")) {
+            android.signingConfigs.release.keyPassword = keyPassword
+        }
+        sourceSets {
+            main {
+                manifest.srcFile 'AndroidManifest.xml'
+                java.srcDirs = ['src']
+                resources.srcDirs = ['src']
+                aidl.srcDirs = ['src']
+                renderscript.srcDirs = ['src']
+                res.srcDirs = ['res']
+                assets.srcDirs = ['assets']
+            }
+
+            // instrumentTest.setRoot('tests')
+        }
+        defaultConfig {
+            minSdkVersion 25
+            targetSdkVersion 27
+           
+        }
+        productFlavors {
+        }
+        compileSdkVersion 27
+        buildToolsVersion '27.0.3'
+         compileOptions {
+           sourceCompatibility JavaVersion.VERSION_1_8
+          targetCompatibility JavaVersion.VERSION_1_8
         }
     }
-    if (project.hasProperty("storeFile")) {
-        android.signingConfigs.release.storeFile = file(storeFile)
-    }
-    if (project.hasProperty("storePassword")) {
-        android.signingConfigs.release.storePassword = storePassword
-    }
-    if (project.hasProperty("keyAlias")) {
-        android.signingConfigs.release.keyAlias = keyAlias
-    }
-    if (project.hasProperty("keyPassword")) {
-        android.signingConfigs.release.keyPassword = keyPassword
-    }
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            resources.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
-        }
-
-        instrumentTest.setRoot('tests')
-    }
-    defaultConfig {
-        minSdkVersion 25
-        targetSdkVersion 27
-        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-    }
-    productFlavors {
-    }
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-}

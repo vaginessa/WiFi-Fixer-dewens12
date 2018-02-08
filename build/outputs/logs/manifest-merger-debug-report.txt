@@ -3,22 +3,21 @@ manifest
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-240:12
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-240:12
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-240:12
-MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\835ef2c2c6b11946a211c534b1c037a7\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\35e816737d8d7ab3eda60500ea1e5f11\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.0.2.aar\9e88fae7c695870e3c12bcb73e84a9f1\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.0.2.aar\09476e3b65b280b1abf8a20423b321cd\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.0.2.aar\892d70a527f84e773a3e6c116002a835\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\b600d99ca7900714cbb1f7f839a843a0\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\fa7ac4b7894f2bd8cffe07eefcef2bd2\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\35d6d0d1c6ccbc1a3b22b18d6a3ddcf5\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\f725af4513e2a4faad47b5c62cf02030\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\cdf2004c4d69dd2411035e04ca4c79af\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\8d197af942227fcaa51ad6822b705691\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\61445b8150e1c49af8a224c5829ef3c0\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\8c8d4e75671947c6eda07ac221bf8569\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\634d7aa6e758601fbc0e62c8f0bfc6e4\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support.test:runner:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.1.aar\1a463b527f5b98cb84db947e6724384e\AndroidManifest.xml:17:1-21:12
-MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\462cffc2af9e0747da3122d6eb2ce8ef\AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\33f9a190da649bc3a75e4bea1d89a472\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\a5bc42bb1f7a3bb60a0bdeab92c87981\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.0.2.aar\c1d883913452a8d407284fd3b6527d01\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.0.2.aar\e4618fdadeb52a4f19c4771aadc44ae0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.0.2.aar\10003c2f41f00a82b721d2f11f71b122\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\c336cba2426659b31600848e8ce2f745\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\761d57573b013c831a21328b2ffa1850\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\b915a4017c9f04b8baa2d593e573c311\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\63e4208a6a64087409adce3051856554\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\094e8be033fd28828f80f9d4f369ceaf\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\a0b6d5bb1f72e6e806cf43ffe90d2c46\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\5fdb295d343fa5d8835cf9f6b1369e27\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\977ad062e974f6e2311688ca8a9d4ce1\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\db98293c85ebe06604376cd4402e38bf\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\246d98e02938159d7624091278434d84\AndroidManifest.xml:17:1-24:12
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-240:12
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-240:12
 	package
@@ -89,38 +88,36 @@ uses-sdk
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:5-62:41
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:5-62:41
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:5-62:41
-MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\835ef2c2c6b11946a211c534b1c037a7\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\835ef2c2c6b11946a211c534b1c037a7\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\35e816737d8d7ab3eda60500ea1e5f11\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\35e816737d8d7ab3eda60500ea1e5f11\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.0.2.aar\9e88fae7c695870e3c12bcb73e84a9f1\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.0.2.aar\9e88fae7c695870e3c12bcb73e84a9f1\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.0.2.aar\09476e3b65b280b1abf8a20423b321cd\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.0.2.aar\09476e3b65b280b1abf8a20423b321cd\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.0.2.aar\892d70a527f84e773a3e6c116002a835\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.0.2.aar\892d70a527f84e773a3e6c116002a835\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\b600d99ca7900714cbb1f7f839a843a0\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\b600d99ca7900714cbb1f7f839a843a0\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\fa7ac4b7894f2bd8cffe07eefcef2bd2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\fa7ac4b7894f2bd8cffe07eefcef2bd2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\35d6d0d1c6ccbc1a3b22b18d6a3ddcf5\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\35d6d0d1c6ccbc1a3b22b18d6a3ddcf5\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\f725af4513e2a4faad47b5c62cf02030\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\f725af4513e2a4faad47b5c62cf02030\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\cdf2004c4d69dd2411035e04ca4c79af\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\cdf2004c4d69dd2411035e04ca4c79af\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\8d197af942227fcaa51ad6822b705691\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\8d197af942227fcaa51ad6822b705691\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\61445b8150e1c49af8a224c5829ef3c0\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\61445b8150e1c49af8a224c5829ef3c0\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\8c8d4e75671947c6eda07ac221bf8569\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\8c8d4e75671947c6eda07ac221bf8569\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\634d7aa6e758601fbc0e62c8f0bfc6e4\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\634d7aa6e758601fbc0e62c8f0bfc6e4\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support.test:runner:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.1.aar\1a463b527f5b98cb84db947e6724384e\AndroidManifest.xml:19:5-72
-MERGED from [com.android.support.test:runner:1.0.1] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.1.aar\1a463b527f5b98cb84db947e6724384e\AndroidManifest.xml:19:5-72
-MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\462cffc2af9e0747da3122d6eb2ce8ef\AndroidManifest.xml:20:5-22:41
-MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\462cffc2af9e0747da3122d6eb2ce8ef\AndroidManifest.xml:20:5-22:41
+MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\33f9a190da649bc3a75e4bea1d89a472\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:preference-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.0.2.aar\33f9a190da649bc3a75e4bea1d89a472\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\a5bc42bb1f7a3bb60a0bdeab92c87981\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:design:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\design-27.0.2.aar\a5bc42bb1f7a3bb60a0bdeab92c87981\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.0.2.aar\c1d883913452a8d407284fd3b6527d01\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.0.2.aar\c1d883913452a8d407284fd3b6527d01\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.0.2.aar\e4618fdadeb52a4f19c4771aadc44ae0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.0.2.aar\e4618fdadeb52a4f19c4771aadc44ae0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.0.2.aar\10003c2f41f00a82b721d2f11f71b122\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.0.2.aar\10003c2f41f00a82b721d2f11f71b122\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\c336cba2426659b31600848e8ce2f745\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v13:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.0.2.aar\c336cba2426659b31600848e8ce2f745\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\761d57573b013c831a21328b2ffa1850\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.0.2.aar\761d57573b013c831a21328b2ffa1850\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\b915a4017c9f04b8baa2d593e573c311\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.0.2.aar\b915a4017c9f04b8baa2d593e573c311\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\63e4208a6a64087409adce3051856554\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.0.2.aar\63e4208a6a64087409adce3051856554\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\094e8be033fd28828f80f9d4f369ceaf\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.0.2.aar\094e8be033fd28828f80f9d4f369ceaf\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\a0b6d5bb1f72e6e806cf43ffe90d2c46\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\transition-27.0.2.aar\a0b6d5bb1f72e6e806cf43ffe90d2c46\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\5fdb295d343fa5d8835cf9f6b1369e27\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.0.2.aar\5fdb295d343fa5d8835cf9f6b1369e27\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\977ad062e974f6e2311688ca8a9d4ce1\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.0.2.aar\977ad062e974f6e2311688ca8a9d4ce1\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\db98293c85ebe06604376cd4402e38bf\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.0.2] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.0.2.aar\db98293c85ebe06604376cd4402e38bf\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\246d98e02938159d7624091278434d84\AndroidManifest.xml:20:5-22:41
+MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\ewens\.gradle\caches\transforms-1\files-1.1\runtime-1.0.3.aar\246d98e02938159d7624091278434d84\AndroidManifest.xml:20:5-22:41
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:5-62:41
 INJECTED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:5-62:41
 	android:maxSdkVersion
@@ -183,7 +180,7 @@ ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:87:9-9
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:90:13-44
 	android:name
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:88:13-44
-intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER+android.intent.category.MULTIWINDOW_LAUNCHER
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER+category:name:android.intent.category.MULTIWINDOW_LAUNCHER
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:91:13-96:29
 action#android.intent.action.MAIN
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:92:17-69
@@ -219,7 +216,7 @@ receiver#org.wahtod.wififixer.boot.BootReceiver
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:118:9-122:20
 	android:name
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:118:19-52
-intent-filter#android.intent.action.BOOT_COMPLETED
+intent-filter#action:name:android.intent.action.BOOT_COMPLETED
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:119:13-121:29
 action#android.intent.action.BOOT_COMPLETED
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:120:17-79
@@ -233,7 +230,7 @@ ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:125:9-
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:128:13-34
 	android:name
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:126:13-49
-intent-filter#org.wahtod.wififixer.ACTION_POP_NOTIFICATION
+intent-filter#action:name:org.wahtod.wififixer.ACTION_POP_NOTIFICATION
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:129:13-132:29
 action#org.wahtod.wififixer.ACTION_POP_NOTIFICATION
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:130:17-87
@@ -245,7 +242,7 @@ ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:136:9-
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:138:13-34
 	android:name
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:137:13-48
-intent-filter#org.wahtod.wififixer.ACTION_WIFI_CHANGE+org.wahtod.wififixer.ACTION_WIFI_CONNECT+org.wahtod.wififixer.ACTION_WIFI_OFF+org.wahtod.wififixer.ACTION_WIFI_ON+org.wahtod.wififixer.ACTION_WIFI_SERVICE_DISABLE+org.wahtod.wififixer.ACTION_WIFI_SERVICE_ENABLE+org.wahtod.wififixer.ACTION_WIFI_TOGGLE+org.wahtod.wififixer.AUTH+org.wahtod.wififixer.WIDGET
+intent-filter#action:name:org.wahtod.wififixer.ACTION_WIFI_CHANGE+action:name:org.wahtod.wififixer.ACTION_WIFI_CONNECT+action:name:org.wahtod.wififixer.ACTION_WIFI_OFF+action:name:org.wahtod.wififixer.ACTION_WIFI_ON+action:name:org.wahtod.wififixer.ACTION_WIFI_SERVICE_DISABLE+action:name:org.wahtod.wififixer.ACTION_WIFI_SERVICE_ENABLE+action:name:org.wahtod.wififixer.ACTION_WIFI_TOGGLE+action:name:org.wahtod.wififixer.AUTH+action:name:org.wahtod.wififixer.WIDGET
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:139:13-150:29
 action#org.wahtod.wififixer.ACTION_WIFI_CONNECT
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:140:17-83
@@ -289,7 +286,7 @@ ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:158:9-
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:160:13-37
 	android:name
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:159:13-50
-intent-filter#org.wahtod.wififixer.WidgetReceiver.WIFI_OFF+org.wahtod.wififixer.WidgetReceiver.WIFI_ON+org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE+org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE
+intent-filter#action:name:org.wahtod.wififixer.WidgetReceiver.WIFI_OFF+action:name:org.wahtod.wififixer.WidgetReceiver.WIFI_ON+action:name:org.wahtod.wififixer.WidgetReceiver.WIFI_REASSOCIATE+action:name:org.wahtod.wififixer.WidgetReceiver.WIFI_TOGGLE
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:161:13-166:29
 action#org.wahtod.wififixer.WidgetReceiver.WIFI_ON
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:162:17-86
@@ -313,7 +310,7 @@ ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:168:9-
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:170:13-53
 	android:name
 		ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:169:13-47
-intent-filter#android.appwidget.action.APPWIDGET_UPDATE+org.wahtod.wififixer.WNOTIF
+intent-filter#action:name:android.appwidget.action.APPWIDGET_UPDATE+action:name:org.wahtod.wififixer.WNOTIF
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:171:13-174:29
 action#android.appwidget.action.APPWIDGET_UPDATE
 ADDED from C:\Users\ewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:172:17-84
