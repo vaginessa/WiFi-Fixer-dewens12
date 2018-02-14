@@ -7,7 +7,11 @@
 package android.support.v7.appcompat;
 
 public final class R {
+    private R() {}
+
     public static final class anim {
+        private anim() {}
+
         public static final int abc_fade_in = 0x7f010000;
         public static final int abc_fade_out = 0x7f010001;
         public static final int abc_grow_fade_in_from_bottom = 0x7f010002;
@@ -22,6 +26,8 @@ public final class R {
         public static final int tooltip_exit = 0x7f010011;
     }
     public static final class attr {
+        private attr() {}
+
         public static final int actionBarDivider = 0x7f040000;
         public static final int actionBarItemBackground = 0x7f040001;
         public static final int actionBarPopupTheme = 0x7f040002;
@@ -279,6 +285,8 @@ public final class R {
         public static final int windowNoTitle = 0x7f040193;
     }
     public static final class bool {
+        private bool() {}
+
         public static final int abc_action_bar_embed_tabs = 0x7f050000;
         public static final int abc_allow_stacked_button_bar = 0x7f050001;
         public static final int abc_config_actionMenuItemAllCaps = 0x7f050002;
@@ -286,6 +294,8 @@ public final class R {
         public static final int abc_config_showMenuShortcutsWhenKeyboardPresent = 0x7f050004;
     }
     public static final class color {
+        private color() {}
+
         public static final int abc_background_cache_hint_selector_material_dark = 0x7f060000;
         public static final int abc_background_cache_hint_selector_material_light = 0x7f060001;
         public static final int abc_btn_colored_borderless_text_material = 0x7f060002;
@@ -371,6 +381,8 @@ public final class R {
         public static final int tooltip_background_light = 0x7f06005e;
     }
     public static final class dimen {
+        private dimen() {}
+
         public static final int abc_action_bar_content_inset_material = 0x7f070000;
         public static final int abc_action_bar_content_inset_with_nav = 0x7f070001;
         public static final int abc_action_bar_default_height_material = 0x7f070002;
@@ -484,6 +496,8 @@ public final class R {
         public static final int tooltip_y_offset_touch = 0x7f0700aa;
     }
     public static final class drawable {
+        private drawable() {}
+
         public static final int abc_ab_share_pack_mtrl_alpha = 0x7f080006;
         public static final int abc_action_bar_item_background_material = 0x7f080007;
         public static final int abc_btn_borderless_material = 0x7f080008;
@@ -583,6 +597,8 @@ public final class R {
         public static final int tooltip_frame_light = 0x7f08008b;
     }
     public static final class id {
+        private id() {}
+
         public static final int action_bar = 0x7f090011;
         public static final int action_bar_activity_content = 0x7f090012;
         public static final int action_bar_container = 0x7f090013;
@@ -680,6 +696,8 @@ public final class R {
         public static final int wrap_content = 0x7f0900ed;
     }
     public static final class integer {
+        private integer() {}
+
         public static final int abc_config_activityDefaultDur = 0x7f0a0000;
         public static final int abc_config_activityShortDur = 0x7f0a0001;
         public static final int cancel_button_image_alpha = 0x7f0a0004;
@@ -687,6 +705,8 @@ public final class R {
         public static final int status_bar_notification_info_maxnum = 0x7f0a0009;
     }
     public static final class layout {
+        private layout() {}
+
         public static final int abc_action_bar_title_item = 0x7f0b0000;
         public static final int abc_action_bar_up_container = 0x7f0b0001;
         public static final int abc_action_menu_item_layout = 0x7f0b0002;
@@ -726,6 +746,8 @@ public final class R {
         public static final int tooltip = 0x7f0b0053;
     }
     public static final class string {
+        private string() {}
+
         public static final int abc_action_bar_home_description = 0x7f0d0017;
         public static final int abc_action_bar_up_description = 0x7f0d0018;
         public static final int abc_action_menu_overflow_description = 0x7f0d0019;
@@ -759,6 +781,8 @@ public final class R {
         public static final int status_bar_notification_info_overflow = 0x7f0d00ec;
     }
     public static final class style {
+        private style() {}
+
         public static final int AlertDialog_AppCompat = 0x7f0e0000;
         public static final int AlertDialog_AppCompat_Light = 0x7f0e0001;
         public static final int Animation_AppCompat_Dialog = 0x7f0e0002;
@@ -1110,6 +1134,8 @@ public final class R {
         public static final int Widget_Compat_NotificationActionText = 0x7f0e0187;
     }
     public static final class styleable {
+        private styleable() {}
+
         public static final int[] ActionBar = { 0x7f040035, 0x7f040036, 0x7f040037, 0x7f040065, 0x7f040066, 0x7f040067, 0x7f040068, 0x7f040069, 0x7f04006a, 0x7f040071, 0x7f04007d, 0x7f04007e, 0x7f04008b, 0x7f0400af, 0x7f0400b0, 0x7f0400b4, 0x7f0400b5, 0x7f0400b6, 0x7f0400bc, 0x7f0400c2, 0x7f0400de, 0x7f0400ea, 0x7f0400fe, 0x7f040111, 0x7f040112, 0x7f04013d, 0x7f040140, 0x7f040173, 0x7f04017d };
         public static final int ActionBar_background = 0;
         public static final int ActionBar_backgroundSplit = 1;
