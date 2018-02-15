@@ -21,7 +21,6 @@ package org.wahtod.wififixer.utility;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -147,21 +146,17 @@ public class LogUtil {
         input.setLines(3);
         issueDialog.setView(input);
         issueDialog.setPositiveButton(activity.getString(R.string.ok_button),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        if (input.getText().length() > 1)
-                            sendIssueReport(activity, input.getText().toString(), file);
-                        else
-                            NotifUtil.showToast(activity,
-                                    R.string.issue_report_nag);
-                    }
+                (dialog, whichButton) -> {
+                    if (input.getText().length() > 1)
+                        sendIssueReport(activity, input.getText().toString(), file);
+                    else
+                        NotifUtil.showToast(activity,
+                                R.string.issue_report_nag);
                 }
         );
 
         issueDialog.setNegativeButton(activity.getString(R.string.cancel_button),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                    }
+                (dialog, whichButton) -> {
                 }
         );
         issueDialog.show();

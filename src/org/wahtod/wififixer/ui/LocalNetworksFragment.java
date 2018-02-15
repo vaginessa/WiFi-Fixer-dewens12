@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
@@ -177,7 +178,8 @@ public class LocalNetworksFragment extends Fragment implements LoaderManager.Loa
             return position;
         }
 
-        public View getView(int position, View convertView, ViewGroup parent) {
+        @NonNull
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             ViewHolder holder;
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.scan_list_layout, null);

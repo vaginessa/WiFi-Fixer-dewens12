@@ -34,6 +34,7 @@
         android:layout_gravity="left"
         android:alpha=".90"
         android:fadingEdge="vertical"
+        android:contentDescription="TODO"
         android:src="@drawable/largesignal" />
 
     <TextView

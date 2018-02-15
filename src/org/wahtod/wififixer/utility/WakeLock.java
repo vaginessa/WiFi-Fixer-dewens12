@@ -25,13 +25,7 @@ import android.os.PowerManager;
 public class WakeLock {
     private final PowerManager.WakeLock wakelock;
     private final Handler mReleaseHandler = new Handler();
-    private final Runnable ReleasePoster = new Runnable() {
-
-        @Override
-        public void run() {
-            onRelease();
-        }
-    };
+    private final Runnable ReleasePoster = this::onRelease;
 
     public WakeLock(Context context) {
         PowerManager pm = (PowerManager) context

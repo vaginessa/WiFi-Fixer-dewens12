@@ -49,6 +49,7 @@
         android:layout_toLeftOf="@+id/SECURE_ICON"
         android:layout_toStartOf="@+id/SECURE_ICON"
         android:gravity="right"
+        android:contentDescription="TODO"
         android:src="@drawable/icon" />
 
     <ImageView
@@ -61,6 +62,7 @@
         android:layout_toLeftOf="@+id/encryption"
         android:layout_toStartOf="@+id/encryption"
         android:gravity="right"
+        android:contentDescription="TODO"
         android:src="@drawable/icon" />
 
     <TextView

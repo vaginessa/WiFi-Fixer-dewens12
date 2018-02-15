@@ -61,7 +61,6 @@ import org.wahtod.wififixer.widget.WidgetReceiver;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -160,14 +159,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
     /*
      * Resets wifi shortly after screen goes off
      */
-    protected static final Runnable rN1Fix = new Runnable() {
-
-        @Override
-        public void run() {
-            n1Fix();
-
-        }
-    };
+    protected static final Runnable rN1Fix = WFMonitor::n1Fix;
     private static volatile boolean isUp;
     private static WFMonitor _wfmonitor;
     /*
@@ -537,7 +529,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
         /*
          * Sort by ScanResult.level which is signal
 		 */
-        Collections.sort(scanResults, new SortBySignal());
+        scanResults.sort(new SortBySignal());
         /*
          * Known networks from supplicant.
 		 */

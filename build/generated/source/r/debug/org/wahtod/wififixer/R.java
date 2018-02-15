@@ -14124,14 +14124,15 @@ public final class R {
   }
   public static final class xml {
     public static final int advanced=0x7f100000;
-    public static final int fileproviderpaths=0x7f100001;
-    public static final int general=0x7f100002;
-    public static final int help=0x7f100003;
-    public static final int logging=0x7f100004;
-    public static final int notification=0x7f100005;
-    public static final int preference_headers=0x7f100006;
-    public static final int widget=0x7f100007;
-    public static final int widget_provider=0x7f100008;
-    public static final int widget_provider_small=0x7f100009;
+    public static final int backup_descriptor=0x7f100001;
+    public static final int fileproviderpaths=0x7f100002;
+    public static final int general=0x7f100003;
+    public static final int help=0x7f100004;
+    public static final int logging=0x7f100005;
+    public static final int notification=0x7f100006;
+    public static final int preference_headers=0x7f100007;
+    public static final int widget=0x7f100008;
+    public static final int widget_provider=0x7f100009;
+    public static final int widget_provider_small=0x7f10000a;
   }
 }

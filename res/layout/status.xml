@@ -46,6 +46,7 @@
         android:layout_weight="4"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
+        android:contentDescription="TODO"
         android:src="@drawable/icon" />
 
     <TextView

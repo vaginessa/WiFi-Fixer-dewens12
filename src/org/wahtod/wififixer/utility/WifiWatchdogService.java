@@ -36,21 +36,9 @@ public class WifiWatchdogService extends Service {
     private static ThreadHandler mHandler;
     private volatile WakeLock _wakelock;
     private volatile boolean _waitFlag = false;
-    private final Runnable WifiEnablerRunnable = new Runnable() {
+    private final Runnable WifiEnablerRunnable = () -> AsyncWifiManager.get(WifiWatchdogService.this).setWifiEnabled(true);
 
-        @Override
-        public void run() {
-            AsyncWifiManager.get(WifiWatchdogService.this).setWifiEnabled(true);
-        }
-    };
-
-    private final Runnable WatchdogRunnable = new Runnable() {
-
-        @Override
-        public void run() {
-            watchdog();
-        }
-    };
+    private final Runnable WatchdogRunnable = this::watchdog;
 
     private void notifyBugged() {
         Intent intent = new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

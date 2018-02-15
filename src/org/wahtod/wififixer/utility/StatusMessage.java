@@ -66,6 +66,7 @@ public class StatusMessage {
         Bundle b = m.getData();
         if (b.containsKey(SSID_KEY) && b.getString(SSID_KEY) != null
                 && b.getString(SSID_KEY).length() > 1)
+            //noinspection EqualsBetweenInconvertibleTypes
             if (!b.equals(s.getSSID()))
                 s.setSSID(b.getString(SSID_KEY));
         if (b.containsKey(STATUS_KEY) && b.getString(STATUS_KEY) != null

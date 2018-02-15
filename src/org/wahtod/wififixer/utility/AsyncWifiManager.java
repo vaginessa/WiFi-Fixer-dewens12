@@ -80,103 +80,43 @@ public class AsyncWifiManager {
     }
 
     public void disableNetwork(final int netid) {
-        _threadHandler.get().post(new Runnable() {
-
-            @Override
-            public void run() {
-                getWifiManager(appContext).disableNetwork(netid);
-            }
-        });
+        _threadHandler.get().post(() -> getWifiManager(appContext).disableNetwork(netid));
     }
 
     public void disconnect() {
-        _threadHandler.get().post(new Runnable() {
-
-            @Override
-            public void run() {
-                getWifiManager(appContext).disconnect();
-            }
-        });
+        _threadHandler.get().post(() -> getWifiManager(appContext).disconnect());
     }
 
     public void enableNetwork(final int netid, final boolean disableOthers) {
-        _threadHandler.get().post(new Runnable() {
-
-            @Override
-            public void run() {
-                getWifiManager(appContext).enableNetwork(netid, disableOthers);
-            }
-        });
+        _threadHandler.get().post(() -> getWifiManager(appContext).enableNetwork(netid, disableOthers));
     }
 
     public void reassociate() {
-        _threadHandler.get().post(new Runnable() {
-
-            @Override
-            public void run() {
-                getWifiManager(appContext).reassociate();
-            }
-        });
+        _threadHandler.get().post(() -> getWifiManager(appContext).reassociate());
     }
 
     public void reconnect() {
-        _threadHandler.get().post(new Runnable() {
-
-            @Override
-            public void run() {
-                getWifiManager(appContext).reconnect();
-            }
-        });
+        _threadHandler.get().post(() -> getWifiManager(appContext).reconnect());
     }
 
     public void removeNetwork(final int netId) {
-        _threadHandler.get().post(new Runnable() {
-
-            @Override
-            public void run() {
-                getWifiManager(appContext).removeNetwork(netId);
-            }
-        });
+        _threadHandler.get().post(() -> getWifiManager(appContext).removeNetwork(netId));
     }
 
     public void saveConfiguration() {
-        _threadHandler.get().post(new Runnable() {
-
-            @Override
-            public void run() {
-                getWifiManager(appContext).saveConfiguration();
-            }
-        });
+        _threadHandler.get().post(() -> getWifiManager(appContext).saveConfiguration());
     }
 
     public void setWifiEnabled(final boolean enabled) {
-        _threadHandler.get().post(new Runnable() {
-
-            @Override
-            public void run() {
-                getWifiManager(appContext).setWifiEnabled(enabled);
-            }
-        });
+        _threadHandler.get().post(() -> getWifiManager(appContext).setWifiEnabled(enabled));
     }
 
     public void startScan() {
-        _threadHandler.get().post(new Runnable() {
-
-            @Override
-            public void run() {
-                getWifiManager(appContext).startScan();
-            }
-        });
+        _threadHandler.get().post(() -> getWifiManager(appContext).startScan());
     }
 
     public void updateNetwork(final WifiConfiguration config) {
-        _threadHandler.get().post(new Runnable() {
-
-            @Override
-            public void run() {
-                getWifiManager(appContext).updateNetwork(config);
-            }
-        });
+        _threadHandler.get().post(() -> getWifiManager(appContext).updateNetwork(config));
     }
 
     public List<WifiConfiguration> getConfiguredNetworks() {

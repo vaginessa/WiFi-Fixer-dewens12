@@ -106,13 +106,9 @@ public class LogFragment extends Fragment {
         @Override
         public void run() {
             {
-                _views.scrollView.post(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        _views.textView.append(text);
-                        _views.scrollView.post(new ScrollToBottom());
-                    }
+                _views.scrollView.post(() -> {
+                    _views.textView.append(text);
+                    _views.scrollView.post(new ScrollToBottom());
                 });
             }
         }

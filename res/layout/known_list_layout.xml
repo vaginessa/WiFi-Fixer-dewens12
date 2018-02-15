@@ -36,6 +36,7 @@
         android:layout_marginRight="18dp"
         android:focusable="false"
         android:gravity="right"
+        android:contentDescription="TODO"
         android:src="@drawable/buttons" />
 
     <TextView

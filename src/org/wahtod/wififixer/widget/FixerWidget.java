@@ -25,6 +25,7 @@ import android.content.Intent;
 
 import org.wahtod.wififixer.utility.StatusDispatcher;
 
+@SuppressWarnings("ALL")
 public class FixerWidget extends AppWidgetProvider {
     public static final String W_INTENT = "org.wahtod.wififixer.WIDGET";
 
@@ -61,7 +62,7 @@ public class FixerWidget extends AppWidgetProvider {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         /*
          * Send Update To Widgets
-		 */
+         */
         context.startService(UpdateService.updateIntent(context,
                 UpdateService.class, FixerWidget.class.getName()));
     }

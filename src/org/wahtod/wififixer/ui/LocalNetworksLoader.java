@@ -30,7 +30,6 @@ import org.wahtod.wififixer.utility.BroadcastHelper;
 import org.wahtod.wififixer.utility.WFScanResult;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -99,7 +98,7 @@ public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
         if (wm.isWifiEnabled()) {
             List<WFScanResult> scanned = WFScanResult.fromScanResultArray(wm.getScanResults());
             if (scanned != null) {
-                Collections.sort(scanned, new SortBySignal());
+                scanned.sort(new SortBySignal());
                 return scanned;
             }
         }

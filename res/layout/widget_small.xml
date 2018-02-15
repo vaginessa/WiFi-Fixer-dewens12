@@ -29,5 +29,6 @@
         android:layout_gravity="center"
         android:alpha=".90"
         android:background="@drawable/boxbg"
+        android:contentDescription="TODO"
         android:src="@drawable/largesignal" />
 </LinearLayout>
