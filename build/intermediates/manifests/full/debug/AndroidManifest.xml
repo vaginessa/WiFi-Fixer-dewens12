@@ -25,7 +25,7 @@
     <uses-sdk
         android:maxSdkVersion="27"
         android:minSdkVersion="25"
-        android:targetSdkVersion="27" />
+        android:targetSdkVersion="P" />
 
     <!-- Documenting permissions here -->
     <!-- For service start (30 seconds from boot_completed) -->

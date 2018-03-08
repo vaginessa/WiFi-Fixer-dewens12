@@ -4,6 +4,17 @@
             "outputFile": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hdpi-v4\\values-hdpi-v4.xml",
             "map": [
                 {
+                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\32c7558e37391f5c32c05dcee2b4d84b\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "6",
+                        "endColumns": "13",
+                        "endOffsets": "327"
+                    }
+                },
+                {
                     "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-hdpi\\textsizes.xml",
                     "from": {
                         "startLines": "22,28,32,36",
@@ -20,17 +31,6 @@
                         "endLines": "11,14,17,20",
                         "endColumns": "12,12,12,12",
                         "endOffsets": "579,675,770,864"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\8940f39cdb9c841fcc05269ebc074e58\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endLines": "6",
-                        "endColumns": "13",
-                        "endOffsets": "327"
                     }
                 }
             ]
