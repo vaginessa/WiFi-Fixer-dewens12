@@ -25,7 +25,7 @@
     <uses-sdk
         android:maxSdkVersion="27"
         android:minSdkVersion="25"
-        android:targetSdkVersion="P" />
+        android:targetSdkVersion="27" />
 
     <!-- Documenting permissions here -->
     <!-- For service start (30 seconds from boot_completed) -->
@@ -76,7 +76,6 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:restoreAnyVersion="true"
-        android:testOnly="true"
         android:theme="@style/ThemeWifiFixer" >
         <meta-data
             android:name="com.google.android.backup.api_key"
