@@ -15,6 +15,7 @@ MERGED from [com.android.support:support-fragment:27.1.0] C:\Users\admewens\.gra
 MERGED from [com.android.support:transition:27.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\transition-27.1.0.aar\116184cfee8a8cf7c506a7a7070477bd\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-media-compat:27.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.1.0.aar\b44e1c9886ec3ff19d9dc8857e0ac41d\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-core-ui:27.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.1.0.aar\00d2cb9b1706896862f0c924068c61b6\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.databinding:adapters:1.3.3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\adapters-1.3.3.aar\43026c85d9a735ad454d627295c96912\AndroidManifest.xml:17:1-26:12
 MERGED from [com.android.databinding:library:1.3.3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\library-1.3.3.aar\e84adb0133cd00a5c546dcfa6c6a8214\AndroidManifest.xml:17:1-26:12
 MERGED from [com.android.support:support-core-utils:27.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.1.0.aar\c35f37f5670b7ddb5b0b986260012f03\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-compat:27.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.0.aar\42a29d6f5157143bc89affde4840b4a3\AndroidManifest.xml:17:1-22:12
@@ -120,6 +121,8 @@ MERGED from [com.android.support:support-media-compat:27.1.0] C:\Users\admewens\
 MERGED from [com.android.support:support-media-compat:27.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.1.0.aar\b44e1c9886ec3ff19d9dc8857e0ac41d\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-core-ui:27.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.1.0.aar\00d2cb9b1706896862f0c924068c61b6\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-core-ui:27.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.1.0.aar\00d2cb9b1706896862f0c924068c61b6\AndroidManifest.xml:20:5-44
+MERGED from [com.android.databinding:adapters:1.3.3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\adapters-1.3.3.aar\43026c85d9a735ad454d627295c96912\AndroidManifest.xml:22:5-24:41
+MERGED from [com.android.databinding:adapters:1.3.3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\adapters-1.3.3.aar\43026c85d9a735ad454d627295c96912\AndroidManifest.xml:22:5-24:41
 MERGED from [com.android.databinding:library:1.3.3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\library-1.3.3.aar\e84adb0133cd00a5c546dcfa6c6a8214\AndroidManifest.xml:22:5-24:41
 MERGED from [com.android.databinding:library:1.3.3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\library-1.3.3.aar\e84adb0133cd00a5c546dcfa6c6a8214\AndroidManifest.xml:22:5-24:41
 MERGED from [com.android.support:support-core-utils:27.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.1.0.aar\c35f37f5670b7ddb5b0b986260012f03\AndroidManifest.xml:20:5-44
