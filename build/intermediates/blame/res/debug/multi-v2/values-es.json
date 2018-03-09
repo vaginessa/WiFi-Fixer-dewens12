@@ -23,23 +23,6 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.0.aar\\42a29d6f5157143bc89affde4840b4a3\\res\\values-es\\values-es.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "210",
-                        "startColumns": "4",
-                        "startOffsets": "15542",
-                        "endColumns": "100",
-                        "endOffsets": "15638"
-                    }
-                },
-                {
                     "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-es\\arrays.xml",
                     "from": {
                         "startLines": "20,21,19,22,23,24",
@@ -57,7 +40,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\a23fb4e9569a27df8e03ef235b174b7a\\res\\values-es\\values-es.xml",
+                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.0.aar\\5eb234bbf56a3129220c16d66a09acd0\\res\\values-es\\values-es.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "210",
+                        "startColumns": "4",
+                        "startOffsets": "15542",
+                        "endColumns": "100",
+                        "endOffsets": "15638"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\8c0aacb474aa12df64e67ebc80418d74\\res\\values-es\\values-es.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
