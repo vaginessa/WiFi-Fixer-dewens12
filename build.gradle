@@ -61,7 +61,7 @@ dependencies {
     implementation 'com.android.databinding:library:1.3.3'
     implementation 'com.android.databinding:baseLibrary:3.0.1'
     implementation 'com.android.databinding:adapters:1.3.3'
-    implementation 'com.android.databinding:compiler:3.0.1'
+ //   implementation 'com.android.databinding:compiler:3.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
