@@ -4,16 +4,6 @@
             "outputFile": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-xlarge-v4\\values-xlarge-v4.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\689eb930de0a7820c9ea920df0912f74\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7",
-                        "startColumns": "4,4,4,4,4,4",
-                        "startOffsets": "55,126,197,267,337,405",
-                        "endColumns": "70,70,69,69,67,67",
-                        "endOffsets": "121,192,262,332,400,468"
-                    }
-                },
-                {
                     "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-xlarge\\textsizes.xml",
                     "from": {
                         "startLines": "22,28,32,36",
@@ -47,6 +37,16 @@
                         "startOffsets": "473,529,583,636,693,748,801,863,911,970,1028,1085",
                         "endColumns": "55,53,52,56,54,52,61,47,58,57,56,44",
                         "endOffsets": "524,578,631,688,743,796,858,906,965,1023,1080,1125"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\18e7981205fbd9d12a00dcf3174a413f\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "55,126,197,267,337,405",
+                        "endColumns": "70,70,69,69,67,67",
+                        "endOffsets": "121,192,262,332,400,468"
                     }
                 }
             ]

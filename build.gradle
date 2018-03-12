@@ -28,14 +28,15 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0-alpha05'
+        classpath 'com.android.tools.build:gradle:3.2.0-alpha06'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
     }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-//apply plugin: 'java'
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
 
 
 repositories {
@@ -129,5 +130,33 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    checkstyle {
+        toolVersion = '8.1' // optionally specify tool version
+    }
+
+    pmd {
+        toolVersion = '5.8.1' // optionally specify tool version
+    }
+
+    tasks.withType(Checkstyle) {
+        ignoreFailures = true // REQUIRED because the plugin will report only up to the point the first issue if this is not set
+        showViolations = false
+
+        reports {
+            xml.enabled = true  // REQUIRED the plugin parses xml reports so this is essential
+        }
+
+        include '**/*.java'
+    }
+
+    tasks.withType(Pmd) {
+        ignoreFailures = true // REQUIRED because the plugin will report only up to the point the first issue if this is not set
+
+        reports {
+            xml.enabled = true  // REQUIRED the plugin parses xml reports so this is essential
+        }
+
+        include '**/*.java'
     }
 }

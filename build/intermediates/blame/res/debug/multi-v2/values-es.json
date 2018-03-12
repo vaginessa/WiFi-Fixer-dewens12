@@ -4,23 +4,6 @@
             "outputFile": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-es\\values-es.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.0.aar\\b8f4f8a106fa77c632a247650b2a1c20\\res\\values-es\\values-es.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "210",
-                        "startColumns": "4",
-                        "startOffsets": "15542",
-                        "endColumns": "100",
-                        "endOffsets": "15638"
-                    }
-                },
-                {
                     "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-es\\strings.xml",
                     "from": {
                         "startLines": "213,214,143,142,130,129,124,123,119,122,140,139,134,133,126,125,205,208,136,135,138,137,177,37,53,85,152,247,75,80,102,78,60,212,211,153,66,110,62,41,25,43,97,204,83,154,209,221,151,48,187,184,183,235,236,176,26,29,116,191,240,239,30,36,79,32,27,28,115,180,92,100,217,225,86,244,245,246,63,38,49,210,112,44,33,174,175,171,59,107,237,23,24,106,198,200,219,170,241,242,243,197,178,150,220,203,188,105,201,189,104,192,224,65,111,46,109,55,40,118,227,64,99,149,169,168,238,223,39,42,179,229,230,231,232,222,202,199,89,72,88,101,52,84,147,148,73,87,54,51,172,103,108,22,77,76,35,181,182,190,193,90,61,47,45,249,74,113,114,215,216,34,91,58,31,96,155,156,158,157,162,163,164,165,167,251,226,228,250,196,195,117,57,81,82,50,95,98,68,70,69,71,67,248,56,173,233,234,218",
@@ -57,7 +40,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\689eb930de0a7820c9ea920df0912f74\\res\\values-es\\values-es.xml",
+                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.0.aar\\b25828ecdc1574f6bb42cc60841f981f\\res\\values-es\\values-es.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "210",
+                        "startColumns": "4",
+                        "startOffsets": "15542",
+                        "endColumns": "100",
+                        "endOffsets": "15638"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\18e7981205fbd9d12a00dcf3174a413f\\res\\values-es\\values-es.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
