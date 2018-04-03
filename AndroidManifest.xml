@@ -58,8 +58,8 @@
 
     <uses-sdk
         android:maxSdkVersion="27"
-        android:minSdkVersion="25"
-        android:targetSdkVersion="27"
+
+
         tools:ignore="GradleOverrides" />
 
     <uses-feature
