@@ -1,0 +1,16 @@
+#Mon Apr 09 15:20:53 CDT 2018
+path.3=classes.dex
+path.2=classes.dex
+path.1=classes.dex
+renamed.4=classes5.dex
+path.0=classes.dex
+renamed.3=classes4.dex
+renamed.2=classes3.dex
+renamed.1=classes2.dex
+base.4=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\transforms\\dexMerger\\debug\\11
+renamed.0=classes.dex
+base.3=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\transforms\\dexMerger\\debug\\13
+base.2=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\transforms\\dexMerger\\debug\\15
+base.1=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\transforms\\dexMerger\\debug\\12
+base.0=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\transforms\\dexMerger\\debug\\14
+path.4=classes.dex

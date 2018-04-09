@@ -28,7 +28,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0-alpha09'
+        classpath 'com.android.tools.build:gradle:3.2.0-alpha10'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
     }
@@ -50,18 +50,18 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.android.support:support-compat:27.1.0'
-    implementation 'com.android.support:preference-v7:27.1.0'
-    implementation 'com.android.support:support-vector-drawable:27.1.0'
-    implementation 'com.android.support:support-v13:27.1.0'
-    implementation 'com.android.support:support-annotations:27.1.0'
-    implementation 'com.android.support:appcompat-v7:27.1.0'
-    implementation 'com.android.support:design:27.1.0'
+    implementation 'com.android.support:support-compat:27.1.1'
+    implementation 'com.android.support:preference-v7:27.1.1'
+    implementation 'com.android.support:support-vector-drawable:27.1.1'
+    implementation 'com.android.support:support-v13:27.1.1'
+    implementation 'com.android.support:support-annotations:27.1.1'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support.test:runner:1.0.1'
     implementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    implementation 'com.android.databinding:library:3.1.0'
-    implementation 'com.android.databinding:baseLibrary:3.1.0'
-    implementation 'com.android.databinding:adapters:3.1.0'
+    implementation 'com.android.databinding:library:3.1.1'
+    implementation 'com.android.databinding:baseLibrary:3.1.1'
+    implementation 'com.android.databinding:adapters:3.1.1'
     // implementation 'com.android.databinding:compiler:3.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
