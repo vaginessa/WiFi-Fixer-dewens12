@@ -4,7 +4,7 @@
             "outputFile": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-es\\values-es.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.1.aar\\3a3ad5669ac86f33f30dbf04a2bab88b\\res\\values-es\\values-es.xml",
+                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.1.aar\\96936131f178b3ffc9c1ad00e2850131\\res\\values-es\\values-es.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -40,23 +40,6 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.1.aar\\c2ffadab391289ad329f776734d4fdfb\\res\\values-es\\values-es.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "210",
-                        "startColumns": "4",
-                        "startOffsets": "15542",
-                        "endColumns": "100",
-                        "endOffsets": "15638"
-                    }
-                },
-                {
                     "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-es\\arrays.xml",
                     "from": {
                         "startLines": "20,21,19,22,23,24",
@@ -71,6 +54,23 @@
                         "startOffsets": "4823,9350,9405,13163,13903,15126",
                         "endColumns": "45,54,44,51,48,59",
                         "endOffsets": "4864,9400,9445,13210,13947,15181"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.1.aar\\0ef732b50112ac7e9a35cc1a11d9aaab\\res\\values-es\\values-es.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "210",
+                        "startColumns": "4",
+                        "startOffsets": "15542",
+                        "endColumns": "100",
+                        "endOffsets": "15638"
                     }
                 }
             ]
