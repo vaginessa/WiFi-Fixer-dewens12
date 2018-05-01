@@ -1,7 +1,7 @@
-#Tue May 01 11:35:13 CDT 2018
-base.1=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\transforms\\dexMerger\\debug\\1
+#Tue May 01 17:15:18 CDT 2018
+base.1=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\transforms\\dexMerger\\debug\\0
 path.1=classes.dex
-base.0=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\transforms\\dexMerger\\debug\\3
+base.0=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\transforms\\dexMerger\\debug\\2
 renamed.1=classes2.dex
 renamed.0=classes.dex
 path.0=classes.dex
