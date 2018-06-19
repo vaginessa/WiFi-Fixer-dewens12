@@ -25,7 +25,7 @@
     <uses-sdk
         android:maxSdkVersion="27"
         android:minSdkVersion="25"
-        android:targetSdkVersion="27" />
+        android:targetSdkVersion="28" />
 
     <!-- Documenting permissions here -->
     <!-- For service start (30 seconds from boot_completed) -->
@@ -68,6 +68,7 @@
 
     <application
         android:allowBackup="false"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:backupAgent="org.wahtod.wififixer.prefs.PrefsBackupAgent"
         android:debuggable="true"
         android:description="@string/app_desc"
@@ -225,7 +226,7 @@
             android:value="500dp" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="org.wahtod.wififixer.files"
             android:exported="false"
             android:grantUriPermissions="true" >

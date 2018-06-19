@@ -19,8 +19,6 @@
 package org.wahtod.wififixer.ui;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +31,9 @@ import org.wahtod.wififixer.utility.ThreadHandler;
 
 import java.util.Observable;
 import java.util.Observer;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 public class LogFragment extends Fragment {
     public static final String TAG = "AKAKAKADOUHF";

@@ -21,7 +21,6 @@ package org.wahtod.wififixer.ui;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.view.ViewPager;
 
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.prefs.PrefConstants;
@@ -29,6 +28,8 @@ import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.utility.NotifUtil;
 
 import java.lang.ref.WeakReference;
+
+import androidx.viewpager.widget.ViewPager;
 
 public abstract class TutorialFragmentActivity extends AppFragmentActivity {
     protected static final int TOAST = 0;

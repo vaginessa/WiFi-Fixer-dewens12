@@ -118,8 +118,7 @@ public class ScreenStateDetector {
 
     public void unsetOnScreenStateChangedListener(
             OnScreenStateChangedListener listener) {
-        if (_clients.contains(listener))
-            _clients.remove(listener);
+        _clients.remove(listener);
     }
 
     public interface OnScreenStateChangedListener {

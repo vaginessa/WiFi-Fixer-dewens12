@@ -43,6 +43,16 @@
     <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"Seleccionar una aplicación"</string>
     <string msgid="121134116657445385" name="abc_capital_off">"DESACTIVADO"</string>
     <string msgid="3405795526292276155" name="abc_capital_on">"ACTIVADO"</string>
+    <string msgid="1302280443949172191" name="abc_menu_alt_shortcut_label">"Alt +"</string>
+    <string msgid="1324831542140195728" name="abc_menu_ctrl_shortcut_label">"Ctrl +"</string>
+    <string msgid="8362206064229013510" name="abc_menu_delete_shortcut_label">"Eliminar"</string>
+    <string msgid="8341180395196749340" name="abc_menu_enter_shortcut_label">"Intro"</string>
+    <string msgid="4792426091847145555" name="abc_menu_function_shortcut_label">"Función +"</string>
+    <string msgid="7643535737296831317" name="abc_menu_meta_shortcut_label">"Meta +"</string>
+    <string msgid="8126296154200614004" name="abc_menu_shift_shortcut_label">"Mayús +"</string>
+    <string msgid="2378550843553983978" name="abc_menu_space_shortcut_label">"Espacio"</string>
+    <string msgid="9002602288060866689" name="abc_menu_sym_shortcut_label">"Sym +"</string>
+    <string msgid="1351762916121158029" name="abc_prepend_shortcut_label">"Menú +"</string>
     <string msgid="7723749260725869598" name="abc_search_hint">"Buscar…"</string>
     <string msgid="3691816814315814921" name="abc_searchview_description_clear">"Borrar consulta"</string>
     <string msgid="2550479030709304392" name="abc_searchview_description_query">"Consulta"</string>
@@ -105,6 +115,7 @@
     <string name="exiting_supplicant_fix_thread_starting_scan">Cerrando hilo "Supplicant Fix":Iniciando
         Busqueda
     </string>
+    <string msgid="3265458434114353660" name="expand_button_title">"Avanzado"</string>
     <string name="failed">RECHAZADO</string>
     <string name="failover">Target Host set to:</string>
     <string name="feedback">For problems or comments:\nemail with specific details, or use the in-app send log feature.</string>
@@ -208,12 +219,13 @@
     <string name="signalhop_no_result">Signalhop: No hay red mejor</string>
     <string name="specialized_category_title">Specialized Fixes</string>
     <string name="start_intent">Inicio normal o Inicio por actividad</string>
-    <string msgid="2869576371154716097" name="status_bar_notification_info_overflow">"+999"</string>
+    <string msgid="7988687684186075107" name="status_bar_notification_info_overflow">"+999"</string>
     <string name="strict_mode_extant">Modo Estricto Existente</string>
     <string name="strict_mode_unavailable">Modo Estricto Strict Mode No Disponible</string>
     <string name="stuck_notif">Tu Wifi esta atascado. Por favor lee los Problemas Conocidos en la Ayuda</string>
     <string name="stuck_ticker">Wifi Atascado</string>
     <string name="subject">Registro de WifiFixer</string>
+    <string msgid="5255557321652385027" name="summary_collapsed_preference_list">"<ns2:g id="CURRENT_ITEMS">%1$s</ns2:g>, <ns2:g id="ADDED_ITEMS">%2$s</ns2:g>"</string>
     <string name="supplicant_nonresponsive_toggling_wifi">Supplicant no responde, reseteando wifi</string>
     <string name="supplicant_state">Estado "Supplicant":</string>
     <string name="thank_you">Gracias por usar Wifi Fixer</string>
@@ -231,6 +243,8 @@
     <string name="tutorial_toast_8">Eso es todo!\n\nSi deseas repasar el tutorial nuevamente, dirigete a Opciones.
     </string>
     <string name="tutorial_toast_9">Manten presionado cualquier item en esta lista para mas opciones</string>
+    <string msgid="2082379519172883894" name="v7_preference_off">"DESACTIVADO"</string>
+    <string msgid="7922757586228621900" name="v7_preference_on">"ACTIVADO"</string>
     <string name="verify_passphrase">Verify network passphrase</string>
     <string name="visitcommunity">\nVisit the Wifi Fixer community</string>
     <string name="visitgit">Visit the git repository </string>

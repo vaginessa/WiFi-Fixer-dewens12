@@ -3,30 +3,45 @@ manifest
 ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-244:12
 INJECTED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-244:12
 INJECTED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-244:12
-MERGED from [com.android.support:preference-v7:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.1.1.aar\e9740a5dcd7dc8a23fe7b645682e412c\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:design:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\design-27.1.1.aar\cd36e1f4673173a2c230ed248801d438\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:appcompat-v7:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.1.1.aar\a138474c44c56dd8116b42c6b154672e\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:animated-vector-drawable:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.1.1.aar\ee89b44472565c1d5cc6ab9ebd6910b3\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-vector-drawable:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.1.1.aar\e79be1ac7b8a85c5b6a2bece31951efc\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-v13:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.1.1.aar\68851bc312ceb12f15916bf224ce1e5c\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-v4:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.1.1.aar\03d95a71629fbad166c9e12ffae38a9f\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:recyclerview-v7:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.1.1.aar\ab78ab9f44192ca353725e1ab362527e\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.databinding:adapters:3.1.3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\adapters-3.1.3.aar\18ace993b7d37ea9bff843b79eb31319\AndroidManifest.xml:17:1-24:12
-MERGED from [com.android.databinding:library:3.1.3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\library-3.1.3.aar\6be82935ef5ce0f2e9632b7262b36ddb\AndroidManifest.xml:17:1-24:12
-MERGED from [com.android.support:support-fragment:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.1.1.aar\0c50c602553526a4bb52fb52fad3c2c2\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-core-ui:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.1.1.aar\20114adbb9b0f400203fc35655e5ba39\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-core-utils:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.1.1.aar\24383ce70fa6506e2ee61b79f2b7fb6f\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:transition:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\transition-27.1.1.aar\fb53566321b6ed4677296fbee9cedc77\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-media-compat:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.1.1.aar\2374227ca966bb41928f30023797bcde\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-compat:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.1.aar\9a9efb8395c10b519b90b18e61815ddf\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support.test.espresso:espresso-core:3.0.2] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.0.2.aar\4fb6271b51b7d22cc5768ff057201446\AndroidManifest.xml:17:1-24:12
-MERGED from [com.android.support.test:runner:1.0.2] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.2.aar\1002f40f7fb1b1c755d1448ec3216dd2\AndroidManifest.xml:17:1-24:12
-MERGED from [android.arch.lifecycle:runtime:1.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\442e042832e0811a925f38035b459efd\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support.test:monitor:1.0.2] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\monitor-1.0.2.aar\3cdd29bb00b86a5b721d39c7fb2b4d47\AndroidManifest.xml:17:1-24:12
-MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\141e976b40762803d25e9bc71c63eb48\AndroidManifest.xml:17:1-22:12
-MERGED from [android.arch.core:runtime:1.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\cf977cd43ab24d9856c87414d9d8358e\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support.test.espresso:espresso-idling-resource:3.0.2] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.0.2.aar\7286ce65c1b42381233cb7398c388755\AndroidManifest.xml:17:1-24:12
-MERGED from [android.arch.lifecycle:viewmodel:1.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.0.aar\7447f081da7219c5067d2e7b322d2c0b\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.preference:preference:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\preference-1.0.0-alpha3.aar\7b1dce4b2f63fdefaf745e33bb85b646\AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.android.material:material:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\material-1.0.0-alpha3.aar\c54e5fde29220e3fe401c0d9e8bd321a\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.appcompat:appcompat:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\appcompat-1.0.0-alpha3.aar\3cf73133c665baf9e4622b38c8f66b06\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\vectordrawable-animated-1.0.0-alpha3.aar\f6e0fb64657953512ef3b4ea88eb959d\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\vectordrawable-1.0.0-alpha3.aar\69023ef7defb330428a1e9f0387f6552\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-v13:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\legacy-support-v13-1.0.0-alpha3.aar\eb068c50dc516eee74cdd30a84af1552\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\legacy-support-v4-1.0.0-alpha3.aar\a4a6a8d890f2d3bee7b63aecb5a139fa\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.fragment:fragment:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\fragment-1.0.0-alpha3.aar\2e51cb4414d5dd56fb030e77caff4474\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.recyclerview:recyclerview:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\recyclerview-1.0.0-alpha3.aar\83b4c4db0094f55c5b1dda6ecda4c2ed\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\legacy-support-core-ui-1.0.0-alpha3.aar\caca02328ca66adc5d2a2ef32b99068e\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\legacy-support-core-utils-1.0.0-alpha3.aar\77d194ae9925c040726d0cfaa2b224f5\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.transition:transition:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\transition-1.0.0-alpha3.aar\e87c846d1b0c132d6651298185f78c8a\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\loader-1.0.0-alpha3.aar\cbe4e96057c75cf773ca85cbe38f66f9\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media:media:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\media-1.0.0-alpha3.aar\a556523d3a6fda658e88470e66147d1e\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager:viewpager:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\viewpager-1.0.0-alpha3.aar\36de24f71dfe2f47b7ae17f202f7cc64\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\coordinatorlayout-1.0.0-alpha3.aar\e50f44c4d44c1e499297c4809ebbf238\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\drawerlayout-1.0.0-alpha3.aar\42c1b3fcb5696a3e77023f87bc769f60\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\slidingpanelayout-1.0.0-alpha3.aar\be7226522dbc41fe68cef7ff6be538a3\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\customview-1.0.0-alpha3.aar\bd908981877ed9d69c13d3d4b8a0839a\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\swiperefreshlayout-1.0.0-alpha3.aar\1606591c143ef7e9df454c7564354575\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\asynclayoutinflater-1.0.0-alpha3.aar\1fb919c4567b0e302bbbf3cfce58eec0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\core-1.0.0-alpha3.aar\d65f38ac24f4a9a394d103cdbfdc20a4\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.test.espresso:espresso-core:3.1.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.1.0-alpha3.aar\03a179ca4ff9404aa2a48b384037a746\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.test:runner:1.1.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\runner-1.1.0-alpha3.aar\82cafa77b96f75403dcbecc040093361\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.databinding:databinding-adapters:3.2.0-alpha18] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\databinding-adapters-3.2.0-alpha18.aar\a3e81a61e6b72ca919da4c326c87272d\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.databinding:databinding-runtime:3.2.0-alpha18] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\databinding-runtime-3.2.0-alpha18.aar\4be834e2ab639aacd911e749dabf25eb\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0-alpha1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\lifecycle-runtime-2.0.0-alpha1.aar\a26d726ba2f80e0403b3d4caa8011853\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-alpha3.aar\293ba7c70c09de314aa4ed3d36eac4da\AndroidManifest.xml:17:1-25:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\cursoradapter-1.0.0-alpha3.aar\298f1082180a40669356e7cd842b060a\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cardview:cardview:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\cardview-1.0.0-alpha3.aar\f6ef21f345e9a83b6699f1afd4b3793b\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.test:monitor:1.1.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\monitor-1.1.0-alpha3.aar\96d552312fe89f29a97be1c6bc91cb7b\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0-alpha1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\lifecycle-livedata-core-2.0.0-alpha1.aar\3099d0091c421790dfae7295cd2680d5\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.0.0-alpha1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\core-runtime-2.0.0-alpha1.aar\5bad97d5ac07b0112bca824780d882a3\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.documentfile:documentfile:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\documentfile-1.0.0-alpha3.aar\87b0a0e38ce35bd3209375323451b6a6\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\localbroadcastmanager-1.0.0-alpha3.aar\a2687ab49cc8ce7aa279fbc2c141e40e\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\print-1.0.0-alpha3.aar\b003e80360a80830ca01ae14dec0a960\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\interpolator-1.0.0-alpha3.aar\6a323b25e1aa379bfc10173998d0b239\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.test.espresso:espresso-idling-resource:3.1.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.1.0-alpha3.aar\30416b79d24915255546ed9d345a876a\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0-alpha1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\lifecycle-viewmodel-2.0.0-alpha1.aar\c378353859ef6668766ef878bbf54b9c\AndroidManifest.xml:17:1-22:12
 INJECTED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-244:12
 INJECTED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:21:1-244:12
 	package
@@ -97,54 +112,84 @@ uses-sdk
 ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:5-63:42
 INJECTED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:5-63:42
 INJECTED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:5-63:42
-MERGED from [com.android.support:preference-v7:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.1.1.aar\e9740a5dcd7dc8a23fe7b645682e412c\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:preference-v7:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\preference-v7-27.1.1.aar\e9740a5dcd7dc8a23fe7b645682e412c\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:design:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\design-27.1.1.aar\cd36e1f4673173a2c230ed248801d438\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:design:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\design-27.1.1.aar\cd36e1f4673173a2c230ed248801d438\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:appcompat-v7:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.1.1.aar\a138474c44c56dd8116b42c6b154672e\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:appcompat-v7:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.1.1.aar\a138474c44c56dd8116b42c6b154672e\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:animated-vector-drawable:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.1.1.aar\ee89b44472565c1d5cc6ab9ebd6910b3\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:animated-vector-drawable:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.1.1.aar\ee89b44472565c1d5cc6ab9ebd6910b3\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-vector-drawable:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.1.1.aar\e79be1ac7b8a85c5b6a2bece31951efc\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-vector-drawable:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.1.1.aar\e79be1ac7b8a85c5b6a2bece31951efc\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v13:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.1.1.aar\68851bc312ceb12f15916bf224ce1e5c\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v13:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-v13-27.1.1.aar\68851bc312ceb12f15916bf224ce1e5c\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v4:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.1.1.aar\03d95a71629fbad166c9e12ffae38a9f\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v4:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-v4-27.1.1.aar\03d95a71629fbad166c9e12ffae38a9f\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:recyclerview-v7:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.1.1.aar\ab78ab9f44192ca353725e1ab362527e\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:recyclerview-v7:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.1.1.aar\ab78ab9f44192ca353725e1ab362527e\AndroidManifest.xml:20:5-44
-MERGED from [com.android.databinding:adapters:3.1.3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\adapters-3.1.3.aar\18ace993b7d37ea9bff843b79eb31319\AndroidManifest.xml:22:5-44
-MERGED from [com.android.databinding:adapters:3.1.3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\adapters-3.1.3.aar\18ace993b7d37ea9bff843b79eb31319\AndroidManifest.xml:22:5-44
-MERGED from [com.android.databinding:library:3.1.3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\library-3.1.3.aar\6be82935ef5ce0f2e9632b7262b36ddb\AndroidManifest.xml:22:5-44
-MERGED from [com.android.databinding:library:3.1.3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\library-3.1.3.aar\6be82935ef5ce0f2e9632b7262b36ddb\AndroidManifest.xml:22:5-44
-MERGED from [com.android.support:support-fragment:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.1.1.aar\0c50c602553526a4bb52fb52fad3c2c2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-fragment:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-fragment-27.1.1.aar\0c50c602553526a4bb52fb52fad3c2c2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-ui:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.1.1.aar\20114adbb9b0f400203fc35655e5ba39\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-ui:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.1.1.aar\20114adbb9b0f400203fc35655e5ba39\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-utils:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.1.1.aar\24383ce70fa6506e2ee61b79f2b7fb6f\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-utils:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.1.1.aar\24383ce70fa6506e2ee61b79f2b7fb6f\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:transition:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\transition-27.1.1.aar\fb53566321b6ed4677296fbee9cedc77\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:transition:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\transition-27.1.1.aar\fb53566321b6ed4677296fbee9cedc77\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-media-compat:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.1.1.aar\2374227ca966bb41928f30023797bcde\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-media-compat:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.1.1.aar\2374227ca966bb41928f30023797bcde\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-compat:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.1.aar\9a9efb8395c10b519b90b18e61815ddf\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-compat:27.1.1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.1.aar\9a9efb8395c10b519b90b18e61815ddf\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support.test.espresso:espresso-core:3.0.2] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.0.2.aar\4fb6271b51b7d22cc5768ff057201446\AndroidManifest.xml:20:5-22:41
-MERGED from [com.android.support.test.espresso:espresso-core:3.0.2] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.0.2.aar\4fb6271b51b7d22cc5768ff057201446\AndroidManifest.xml:20:5-22:41
-MERGED from [com.android.support.test:runner:1.0.2] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.2.aar\1002f40f7fb1b1c755d1448ec3216dd2\AndroidManifest.xml:20:5-22:41
-MERGED from [com.android.support.test:runner:1.0.2] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\runner-1.0.2.aar\1002f40f7fb1b1c755d1448ec3216dd2\AndroidManifest.xml:20:5-22:41
-MERGED from [android.arch.lifecycle:runtime:1.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\442e042832e0811a925f38035b459efd\AndroidManifest.xml:20:5-44
-MERGED from [android.arch.lifecycle:runtime:1.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\442e042832e0811a925f38035b459efd\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support.test:monitor:1.0.2] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\monitor-1.0.2.aar\3cdd29bb00b86a5b721d39c7fb2b4d47\AndroidManifest.xml:20:5-22:41
-MERGED from [com.android.support.test:monitor:1.0.2] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\monitor-1.0.2.aar\3cdd29bb00b86a5b721d39c7fb2b4d47\AndroidManifest.xml:20:5-22:41
-MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\141e976b40762803d25e9bc71c63eb48\AndroidManifest.xml:20:5-44
-MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\141e976b40762803d25e9bc71c63eb48\AndroidManifest.xml:20:5-44
-MERGED from [android.arch.core:runtime:1.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\cf977cd43ab24d9856c87414d9d8358e\AndroidManifest.xml:20:5-44
-MERGED from [android.arch.core:runtime:1.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\cf977cd43ab24d9856c87414d9d8358e\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support.test.espresso:espresso-idling-resource:3.0.2] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.0.2.aar\7286ce65c1b42381233cb7398c388755\AndroidManifest.xml:20:5-22:41
-MERGED from [com.android.support.test.espresso:espresso-idling-resource:3.0.2] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.0.2.aar\7286ce65c1b42381233cb7398c388755\AndroidManifest.xml:20:5-22:41
-MERGED from [android.arch.lifecycle:viewmodel:1.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.0.aar\7447f081da7219c5067d2e7b322d2c0b\AndroidManifest.xml:20:5-44
-MERGED from [android.arch.lifecycle:viewmodel:1.1.0] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.0.aar\7447f081da7219c5067d2e7b322d2c0b\AndroidManifest.xml:20:5-44
+MERGED from [androidx.preference:preference:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\preference-1.0.0-alpha3.aar\7b1dce4b2f63fdefaf745e33bb85b646\AndroidManifest.xml:20:5-44
+MERGED from [androidx.preference:preference:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\preference-1.0.0-alpha3.aar\7b1dce4b2f63fdefaf745e33bb85b646\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\material-1.0.0-alpha3.aar\c54e5fde29220e3fe401c0d9e8bd321a\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\material-1.0.0-alpha3.aar\c54e5fde29220e3fe401c0d9e8bd321a\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\appcompat-1.0.0-alpha3.aar\3cf73133c665baf9e4622b38c8f66b06\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\appcompat-1.0.0-alpha3.aar\3cf73133c665baf9e4622b38c8f66b06\AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\vectordrawable-animated-1.0.0-alpha3.aar\f6e0fb64657953512ef3b4ea88eb959d\AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\vectordrawable-animated-1.0.0-alpha3.aar\f6e0fb64657953512ef3b4ea88eb959d\AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\vectordrawable-1.0.0-alpha3.aar\69023ef7defb330428a1e9f0387f6552\AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\vectordrawable-1.0.0-alpha3.aar\69023ef7defb330428a1e9f0387f6552\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v13:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\legacy-support-v13-1.0.0-alpha3.aar\eb068c50dc516eee74cdd30a84af1552\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v13:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\legacy-support-v13-1.0.0-alpha3.aar\eb068c50dc516eee74cdd30a84af1552\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\legacy-support-v4-1.0.0-alpha3.aar\a4a6a8d890f2d3bee7b63aecb5a139fa\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\legacy-support-v4-1.0.0-alpha3.aar\a4a6a8d890f2d3bee7b63aecb5a139fa\AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\fragment-1.0.0-alpha3.aar\2e51cb4414d5dd56fb030e77caff4474\AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\fragment-1.0.0-alpha3.aar\2e51cb4414d5dd56fb030e77caff4474\AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\recyclerview-1.0.0-alpha3.aar\83b4c4db0094f55c5b1dda6ecda4c2ed\AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\recyclerview-1.0.0-alpha3.aar\83b4c4db0094f55c5b1dda6ecda4c2ed\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\legacy-support-core-ui-1.0.0-alpha3.aar\caca02328ca66adc5d2a2ef32b99068e\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\legacy-support-core-ui-1.0.0-alpha3.aar\caca02328ca66adc5d2a2ef32b99068e\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\legacy-support-core-utils-1.0.0-alpha3.aar\77d194ae9925c040726d0cfaa2b224f5\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\legacy-support-core-utils-1.0.0-alpha3.aar\77d194ae9925c040726d0cfaa2b224f5\AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\transition-1.0.0-alpha3.aar\e87c846d1b0c132d6651298185f78c8a\AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\transition-1.0.0-alpha3.aar\e87c846d1b0c132d6651298185f78c8a\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\loader-1.0.0-alpha3.aar\cbe4e96057c75cf773ca85cbe38f66f9\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\loader-1.0.0-alpha3.aar\cbe4e96057c75cf773ca85cbe38f66f9\AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\media-1.0.0-alpha3.aar\a556523d3a6fda658e88470e66147d1e\AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\media-1.0.0-alpha3.aar\a556523d3a6fda658e88470e66147d1e\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\viewpager-1.0.0-alpha3.aar\36de24f71dfe2f47b7ae17f202f7cc64\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\viewpager-1.0.0-alpha3.aar\36de24f71dfe2f47b7ae17f202f7cc64\AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\coordinatorlayout-1.0.0-alpha3.aar\e50f44c4d44c1e499297c4809ebbf238\AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\coordinatorlayout-1.0.0-alpha3.aar\e50f44c4d44c1e499297c4809ebbf238\AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\drawerlayout-1.0.0-alpha3.aar\42c1b3fcb5696a3e77023f87bc769f60\AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\drawerlayout-1.0.0-alpha3.aar\42c1b3fcb5696a3e77023f87bc769f60\AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\slidingpanelayout-1.0.0-alpha3.aar\be7226522dbc41fe68cef7ff6be538a3\AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\slidingpanelayout-1.0.0-alpha3.aar\be7226522dbc41fe68cef7ff6be538a3\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\customview-1.0.0-alpha3.aar\bd908981877ed9d69c13d3d4b8a0839a\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\customview-1.0.0-alpha3.aar\bd908981877ed9d69c13d3d4b8a0839a\AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\swiperefreshlayout-1.0.0-alpha3.aar\1606591c143ef7e9df454c7564354575\AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\swiperefreshlayout-1.0.0-alpha3.aar\1606591c143ef7e9df454c7564354575\AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\asynclayoutinflater-1.0.0-alpha3.aar\1fb919c4567b0e302bbbf3cfce58eec0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\asynclayoutinflater-1.0.0-alpha3.aar\1fb919c4567b0e302bbbf3cfce58eec0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\core-1.0.0-alpha3.aar\d65f38ac24f4a9a394d103cdbfdc20a4\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\core-1.0.0-alpha3.aar\d65f38ac24f4a9a394d103cdbfdc20a4\AndroidManifest.xml:20:5-44
+MERGED from [androidx.test.espresso:espresso-core:3.1.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.1.0-alpha3.aar\03a179ca4ff9404aa2a48b384037a746\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.test.espresso:espresso-core:3.1.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\espresso-core-3.1.0-alpha3.aar\03a179ca4ff9404aa2a48b384037a746\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.test:runner:1.1.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\runner-1.1.0-alpha3.aar\82cafa77b96f75403dcbecc040093361\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.test:runner:1.1.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\runner-1.1.0-alpha3.aar\82cafa77b96f75403dcbecc040093361\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.databinding:databinding-adapters:3.2.0-alpha18] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\databinding-adapters-3.2.0-alpha18.aar\a3e81a61e6b72ca919da4c326c87272d\AndroidManifest.xml:22:5-44
+MERGED from [androidx.databinding:databinding-adapters:3.2.0-alpha18] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\databinding-adapters-3.2.0-alpha18.aar\a3e81a61e6b72ca919da4c326c87272d\AndroidManifest.xml:22:5-44
+MERGED from [androidx.databinding:databinding-runtime:3.2.0-alpha18] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\databinding-runtime-3.2.0-alpha18.aar\4be834e2ab639aacd911e749dabf25eb\AndroidManifest.xml:22:5-44
+MERGED from [androidx.databinding:databinding-runtime:3.2.0-alpha18] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\databinding-runtime-3.2.0-alpha18.aar\4be834e2ab639aacd911e749dabf25eb\AndroidManifest.xml:22:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0-alpha1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\lifecycle-runtime-2.0.0-alpha1.aar\a26d726ba2f80e0403b3d4caa8011853\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0-alpha1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\lifecycle-runtime-2.0.0-alpha1.aar\a26d726ba2f80e0403b3d4caa8011853\AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-alpha3.aar\293ba7c70c09de314aa4ed3d36eac4da\AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-alpha3.aar\293ba7c70c09de314aa4ed3d36eac4da\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\cursoradapter-1.0.0-alpha3.aar\298f1082180a40669356e7cd842b060a\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\cursoradapter-1.0.0-alpha3.aar\298f1082180a40669356e7cd842b060a\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\cardview-1.0.0-alpha3.aar\f6ef21f345e9a83b6699f1afd4b3793b\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\cardview-1.0.0-alpha3.aar\f6ef21f345e9a83b6699f1afd4b3793b\AndroidManifest.xml:20:5-44
+MERGED from [androidx.test:monitor:1.1.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\monitor-1.1.0-alpha3.aar\96d552312fe89f29a97be1c6bc91cb7b\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.test:monitor:1.1.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\monitor-1.1.0-alpha3.aar\96d552312fe89f29a97be1c6bc91cb7b\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0-alpha1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\lifecycle-livedata-core-2.0.0-alpha1.aar\3099d0091c421790dfae7295cd2680d5\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0-alpha1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\lifecycle-livedata-core-2.0.0-alpha1.aar\3099d0091c421790dfae7295cd2680d5\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0-alpha1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\core-runtime-2.0.0-alpha1.aar\5bad97d5ac07b0112bca824780d882a3\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0-alpha1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\core-runtime-2.0.0-alpha1.aar\5bad97d5ac07b0112bca824780d882a3\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\documentfile-1.0.0-alpha3.aar\87b0a0e38ce35bd3209375323451b6a6\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\documentfile-1.0.0-alpha3.aar\87b0a0e38ce35bd3209375323451b6a6\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\localbroadcastmanager-1.0.0-alpha3.aar\a2687ab49cc8ce7aa279fbc2c141e40e\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\localbroadcastmanager-1.0.0-alpha3.aar\a2687ab49cc8ce7aa279fbc2c141e40e\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\print-1.0.0-alpha3.aar\b003e80360a80830ca01ae14dec0a960\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\print-1.0.0-alpha3.aar\b003e80360a80830ca01ae14dec0a960\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\interpolator-1.0.0-alpha3.aar\6a323b25e1aa379bfc10173998d0b239\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\interpolator-1.0.0-alpha3.aar\6a323b25e1aa379bfc10173998d0b239\AndroidManifest.xml:20:5-44
+MERGED from [androidx.test.espresso:espresso-idling-resource:3.1.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.1.0-alpha3.aar\30416b79d24915255546ed9d345a876a\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.test.espresso:espresso-idling-resource:3.1.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\espresso-idling-resource-3.1.0-alpha3.aar\30416b79d24915255546ed9d345a876a\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0-alpha1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\lifecycle-viewmodel-2.0.0-alpha1.aar\c378353859ef6668766ef878bbf54b9c\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0-alpha1] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\lifecycle-viewmodel-2.0.0-alpha1.aar\c378353859ef6668766ef878bbf54b9c\AndroidManifest.xml:20:5-44
 INJECTED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:5-63:42
 INJECTED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:59:5-63:42
 	android:maxSdkVersion
@@ -179,8 +224,16 @@ ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:71:
 		ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:72:9-49
 application
 ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:75:5-242:19
+MERGED from [com.google.android.material:material:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\material-1.0.0-alpha3.aar\c54e5fde29220e3fe401c0d9e8bd321a\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.material:material:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\material-1.0.0-alpha3.aar\c54e5fde29220e3fe401c0d9e8bd321a\AndroidManifest.xml:22:5-20
+MERGED from [androidx.core:core:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\core-1.0.0-alpha3.aar\d65f38ac24f4a9a394d103cdbfdc20a4\AndroidManifest.xml:22:5-89
+MERGED from [androidx.core:core:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\core-1.0.0-alpha3.aar\d65f38ac24f4a9a394d103cdbfdc20a4\AndroidManifest.xml:22:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-alpha3.aar\293ba7c70c09de314aa4ed3d36eac4da\AndroidManifest.xml:22:5-23:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-alpha3.aar\293ba7c70c09de314aa4ed3d36eac4da\AndroidManifest.xml:22:5-23:19
 	android:backupAgent
 		ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:77:9-54
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.0.0-alpha3] C:\Users\admewens\.gradle\caches\transforms-1\files-1.1\core-1.0.0-alpha3.aar\d65f38ac24f4a9a394d103cdbfdc20a4\AndroidManifest.xml:22:18-86
 	android:label
 		ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:81:9-41
 	android:hardwareAccelerated
@@ -429,7 +482,7 @@ ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:229
 		ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:231:13-34
 	android:name
 		ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:230:13-70
-provider#android.support.v4.content.FileProvider
+provider#androidx.core.content.FileProvider
 ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:233:9-241:20
 	android:grantUriPermissions
 		ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:237:13-47
@@ -438,7 +491,7 @@ ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:233
 	android:exported
 		ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:236:13-37
 	android:name
-		ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:234:13-67
+		ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:234:13-62
 meta-data#android.support.FILE_PROVIDER_PATHS
 ADDED from C:\Users\admewens\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:238:13-240:61
 	android:resource

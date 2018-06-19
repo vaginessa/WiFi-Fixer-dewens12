@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
-import android.support.v4.content.AsyncTaskLoader;
 
 import org.wahtod.wififixer.utility.AsyncWifiManager;
 import org.wahtod.wififixer.utility.BroadcastHelper;
@@ -32,6 +31,8 @@ import org.wahtod.wififixer.utility.WFScanResult;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import androidx.loader.content.AsyncTaskLoader;
 
 public class LocalNetworksLoader extends AsyncTaskLoader<List<WFScanResult>> {
 

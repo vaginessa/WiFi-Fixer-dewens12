@@ -27,7 +27,6 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +42,8 @@ import org.wahtod.wififixer.utility.StatusMessage;
 import org.wahtod.wififixer.utility.StringUtil;
 
 import java.lang.ref.WeakReference;
+
+import androidx.fragment.app.Fragment;
 
 public class StatusFragment extends Fragment {
     protected static final int REFRESH = 0;

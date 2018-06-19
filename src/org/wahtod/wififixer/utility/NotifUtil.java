@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +40,8 @@ import org.wahtod.wififixer.ui.MainActivity;
 import org.wahtod.wififixer.widget.WidgetReceiver;
 
 import java.util.ArrayList;
+
+import androidx.core.app.NotificationCompat;
 
 public class NotifUtil {
     public static final int STATNOTIFID = 2392;

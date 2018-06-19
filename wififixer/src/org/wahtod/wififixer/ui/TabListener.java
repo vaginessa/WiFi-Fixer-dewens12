@@ -18,9 +18,9 @@
 
 package org.wahtod.wififixer.ui;
 
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.wahtod.wififixer.R;
 
@@ -62,7 +62,7 @@ public class TabListener implements ActionBar.TabListener {
     }
 
     @Override
-    public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
+    public void onTabSelected(ActionBar.Tab tab, androidx.core.app.FragmentTransaction ft) {
         /*
          * Only change viewpager page if enabled
 		 */
@@ -71,12 +71,12 @@ public class TabListener implements ActionBar.TabListener {
     }
 
     @Override
-    public void onTabUnselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
+    public void onTabUnselected(ActionBar.Tab tab, androidx.core.app.FragmentTransaction ft) {
 
     }
 
     @Override
-    public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
+    public void onTabReselected(ActionBar.Tab tab, androidx.core.app.FragmentTransaction ft) {
 
     }
 }

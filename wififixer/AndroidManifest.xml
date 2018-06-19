@@ -221,7 +221,7 @@
             android:value="500dp" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="org.wahtod.wififixer.files"
             android:exported="false"
             android:grantUriPermissions="true">

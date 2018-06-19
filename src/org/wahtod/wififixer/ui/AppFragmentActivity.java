@@ -20,13 +20,14 @@ package org.wahtod.wififixer.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import org.wahtod.wififixer.R;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public abstract class AppFragmentActivity extends AppCompatActivity {
     private static final String TAG = "DNMDJDSW";
