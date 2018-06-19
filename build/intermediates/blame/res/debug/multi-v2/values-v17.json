@@ -4,7 +4,7 @@
             "outputFile": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v17\\values-v17.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.1.aar\\f8297c61cdb88fdbbe14bd6a0ee136b2\\res\\values-v17\\values-v17.xml",
+                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.1.aar\\a138474c44c56dd8116b42c6b154672e\\res\\values-v17\\values-v17.xml",
                     "from": {
                         "startLines": "2,5,9,12,15,18,22,26,29,32,35,39,42,46",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\preference-v7-27.1.1.aar\\34448a1a11dbf9b512e3de69c54c4600\\res\\values-v17\\values-v17.xml",
+                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\preference-v7-27.1.1.aar\\e9740a5dcd7dc8a23fe7b645682e412c\\res\\values-v17\\values-v17.xml",
                     "from": {
                         "startLines": "2,7,11",
                         "startColumns": "4,4,4",
