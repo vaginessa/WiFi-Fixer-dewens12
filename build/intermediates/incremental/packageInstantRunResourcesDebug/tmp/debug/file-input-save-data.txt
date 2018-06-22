@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Fri Jun 22 11:36:38 CDT 2018
+#Fri Jun 22 12:05:13 CDT 2018
 3.set=ASSET
 3.path=bstyle.css
 2.base=C\:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\merged_assets\\debug\\mergeDebugAssets\\out
