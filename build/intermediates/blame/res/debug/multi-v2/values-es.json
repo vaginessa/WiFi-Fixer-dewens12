@@ -4,6 +4,23 @@
             "outputFile": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-es\\values-es.xml",
             "map": [
                 {
+                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\preference-1.0.0-alpha3.aar\\2ed6451d58d5fe405ad14000204b2c40\\res\\values-es\\values-es.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "105,192,361,449",
+                        "endColumns": "86,168,87,83",
+                        "endOffsets": "187,356,444,528"
+                    },
+                    "to": {
+                        "startLines": "117,227,245,246",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "8564,17068,18641,18729",
+                        "endColumns": "86,168,87,83",
+                        "endOffsets": "8646,17232,18724,18808"
+                    }
+                },
+                {
                     "source": "C:\\Users\\admewens\\Documents\\GitHub\\Wifi-Fixer\\res\\values-es\\strings.xml",
                     "from": {
                         "startLines": "213,214,143,142,130,129,124,123,119,122,140,139,134,133,126,125,205,208,136,135,138,137,177,37,53,85,152,247,75,80,102,78,60,212,211,153,66,110,62,41,25,43,97,204,83,154,209,221,151,48,187,184,183,235,236,176,26,29,116,191,240,239,30,36,79,32,27,28,115,180,92,100,217,225,86,244,245,246,63,38,49,210,112,44,33,174,175,171,59,107,237,23,24,106,198,200,219,170,241,242,243,197,178,150,220,203,188,105,201,189,104,192,224,65,111,46,109,55,40,118,227,64,99,149,169,168,238,223,39,42,179,229,230,231,232,222,202,199,89,72,88,101,52,84,147,148,73,87,54,51,172,103,108,22,77,76,35,181,182,190,193,90,61,47,45,249,74,113,114,215,216,34,91,58,31,96,155,156,158,157,162,163,164,165,167,251,226,228,250,196,195,117,57,81,82,50,95,98,68,70,69,71,67,248,56,173,233,234,218",
@@ -23,24 +40,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\preference-1.0.0-alpha3.aar\\5104a7ec327709f1de49f9e1a646dc05\\res\\values-es\\values-es.xml",
-                    "from": {
-                        "startLines": "2,3,4,5",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "105,192,361,449",
-                        "endColumns": "86,168,87,83",
-                        "endOffsets": "187,356,444,528"
-                    },
-                    "to": {
-                        "startLines": "117,227,245,246",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "8564,17068,18641,18729",
-                        "endColumns": "86,168,87,83",
-                        "endOffsets": "8646,17232,18724,18808"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0-alpha3.aar\\fd462bad71df625d933ed2d59d5a6e97\\res\\values-es\\values-es.xml",
+                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0-alpha3.aar\\9686416f63c515dc59d40bb1f93bb457\\res\\values-es\\values-es.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -74,7 +74,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0-alpha3.aar\\3ee84c0aee681e5589811ee0f250ca78\\res\\values-es\\values-es.xml",
+                    "source": "C:\\Users\\admewens\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0-alpha3.aar\\fb73e66e1ed5875c0401075e9918d62c\\res\\values-es\\values-es.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
