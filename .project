@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	<name>WifiFixer</name>
@@ -110,4 +110,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
 </projectDescription>
->>>>>>> a3f38b21980011e378613430d2e8ab31994651fd
+
