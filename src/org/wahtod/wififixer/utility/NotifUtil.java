@@ -143,10 +143,10 @@ public class NotifUtil {
         nm.notify(NotifUtil.STAT_TAG, NotifUtil.STATNOTIFID, build(ctxt, mStatusBuilder, in));
     }
 
-    protected static void notify(Context context, int id, String tag, Notification n) {
+    protected static void notify(Context context, Notification n) {
         NotificationManager nm = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(tag, id, n);
+        nm.notify(NotifUtil.VSHOW_TAG, NotifUtil.NOTIFID, n);
     }
 
     public static void show(Context context, String message,
@@ -154,7 +154,7 @@ public class NotifUtil {
         NotificationHolder holder = new NotificationHolder(tickerText, message, contentIntent);
         _notifStack.add(0, holder);
         NotificationCompat.Builder builder = generateBuilder(context, holder);
-        notify(context, NOTIFID, VSHOW_TAG, builder.build());
+        notify(context, builder.build());
     }
 
     private static NotificationCompat.Builder generateBuilder(Context context, NotificationHolder holder) {
@@ -227,7 +227,7 @@ public class NotifUtil {
         }
         NotificationHolder holder = _notifStack.get(1);
         _notifStack.remove(0);
-        notify(context, NOTIFID, VSHOW_TAG, generateBuilder(context, holder).build());
+        notify(context, generateBuilder(context, holder).build());
     }
 
     public static void cancel(Context context, String tag, int id) {

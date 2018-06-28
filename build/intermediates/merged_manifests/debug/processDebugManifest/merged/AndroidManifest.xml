@@ -16,6 +16,7 @@
   ~        You should have received a copy of the GNU General Public License
   ~        along with this program.  If not, see http://www.gnu.org/licenses
 -->
+<!-- suppress ALL -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.wahtod.wififixer"
     android:installLocation="internalOnly"
@@ -77,6 +78,7 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:restoreAnyVersion="true"
+        android:testOnly="true"
         android:theme="@style/ThemeWifiFixer" >
         <meta-data
             android:name="com.google.android.backup.api_key"

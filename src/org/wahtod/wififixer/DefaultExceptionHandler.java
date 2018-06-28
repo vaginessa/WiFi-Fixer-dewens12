@@ -30,6 +30,7 @@ import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Date;
 
+@SuppressWarnings("ALL")
 public class DefaultExceptionHandler implements UncaughtExceptionHandler {
     public static final String EXCEPTIONS_FILENAME = "exceptions.txt";
     private static boolean isRegistered;
@@ -71,17 +72,17 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
         } catch (FileNotFoundException e2) {
             /*
              * This can't happen: openFileOutput creates the file if it doesn't
-			 * exist.
-			 */
+             * exist.
+             */
             return;
         }
         printWriter.close();
         try {
             data.writeUTF(new Date().toString() + stacktrace);
         } catch (IOException e1) {
-			/*
-			 * Yoinks, but this shouldn't ever happen
-			 */
+            /*
+             * Yoinks, but this shouldn't ever happen
+             */
             e1.printStackTrace();
         } finally {
             try {
@@ -91,10 +92,10 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
                 e1.printStackTrace();
             }
         }
-		/*
-		 * Chain to prior DefaultExceptionHandler so Android crash report form
-		 * comes up on 2.2+
-		 */
+        /*
+         * Chain to prior DefaultExceptionHandler so Android crash report form
+         * comes up on 2.2+
+         */
         _default.uncaughtException(t, e);
     }
 }
