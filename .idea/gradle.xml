@@ -5,7 +5,7 @@
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="C:/opt/gradle-4.7-20180312083118+0000" />
+        <option name="gradleHome" value="C:/opt/gradle-4.10-20180626235929+0000" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
