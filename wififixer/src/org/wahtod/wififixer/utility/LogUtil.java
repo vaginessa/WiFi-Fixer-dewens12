@@ -30,10 +30,9 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import androidx.core.content.FileProvider;
 import android.util.Log;
 import android.widget.EditText;
-
+import androidx.core.content.FileProvider;
 import org.wahtod.wififixer.DefaultExceptionHandler;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitorService;
@@ -41,13 +40,7 @@ import org.wahtod.wififixer.legacy.VersionedFile;
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefUtil;
 
-import java.io.DataInputStream;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.List;
 
 public class LogUtil {
@@ -94,7 +87,7 @@ public class LogUtil {
     }
 
     public static String getBuildInfo() {
-        StringBuilder out = new StringBuilder("");
+        StringBuilder out = new StringBuilder();
         out.append(Build.MODEL);
         out.append(NEWLINE);
         out.append(Build.VERSION.RELEASE);

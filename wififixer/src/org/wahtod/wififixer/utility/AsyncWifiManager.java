@@ -63,7 +63,7 @@ public class AsyncWifiManager {
     public int addNetwork(final WifiConfiguration config) {
         class AddNetworkTask implements Callable<Integer> {
             @Override
-            public Integer call() throws Exception {
+            public Integer call() {
                 return getWifiManager(appContext).addNetwork(config);
             }
         }

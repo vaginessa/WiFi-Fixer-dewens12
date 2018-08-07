@@ -94,7 +94,7 @@ android {
     defaultConfig {
         minSdkVersion 25
         targetSdkVersion 28
-        signingConfig signingConfigs.config
+
     }
     productFlavors {
     }
@@ -105,6 +105,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    dexOptions {
-    }
+
+
 }

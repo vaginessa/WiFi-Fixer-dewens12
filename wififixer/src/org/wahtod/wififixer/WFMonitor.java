@@ -25,38 +25,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.ScanResult;
-import android.net.wifi.SupplicantState;
-import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
+import android.net.wifi.*;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
 import org.wahtod.wififixer.prefs.PrefConstants;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
 import org.wahtod.wififixer.prefs.PrefUtil;
 import org.wahtod.wififixer.ui.MainActivity;
-import org.wahtod.wififixer.utility.AsyncWifiManager;
-import org.wahtod.wififixer.utility.BroadcastHelper;
-import org.wahtod.wififixer.utility.FifoList;
-import org.wahtod.wififixer.utility.HostMessage;
-import org.wahtod.wififixer.utility.Hostup;
-import org.wahtod.wififixer.utility.LogUtil;
-import org.wahtod.wififixer.utility.LoggingWakeLock;
-import org.wahtod.wififixer.utility.NotifUtil;
-import org.wahtod.wififixer.utility.ScreenStateDetector;
+import org.wahtod.wififixer.utility.*;
 import org.wahtod.wififixer.utility.ScreenStateDetector.OnScreenStateChangedListener;
-import org.wahtod.wififixer.utility.ServiceAlarm;
-import org.wahtod.wififixer.utility.StatusDispatcher;
-import org.wahtod.wififixer.utility.StatusMessage;
-import org.wahtod.wififixer.utility.StopWatch;
-import org.wahtod.wififixer.utility.StringUtil;
-import org.wahtod.wififixer.utility.SupplicantPattern;
-import org.wahtod.wififixer.utility.WFConfig;
-import org.wahtod.wififixer.utility.WakeLock;
-import org.wahtod.wififixer.utility.WifiLock;
 import org.wahtod.wififixer.widget.WidgetReceiver;
 
 import java.lang.ref.WeakReference;
@@ -1088,7 +1066,7 @@ public class WFMonitor implements OnScreenStateChangedListener, Hostup.HostupRes
                 handlerWrapper(rSleepcheck);
             }
         } else
-            LogUtil.log(context, (iAction.toString()));
+            LogUtil.log(context, (iAction));
 
     }
 

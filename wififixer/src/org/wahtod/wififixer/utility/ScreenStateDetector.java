@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
-
 import org.wahtod.wififixer.legacy.VersionedScreenState;
 
 import java.lang.ref.WeakReference;
@@ -118,8 +117,7 @@ public class ScreenStateDetector {
 
     public void unsetOnScreenStateChangedListener(
             OnScreenStateChangedListener listener) {
-        if (_clients.contains(listener))
-            _clients.remove(listener);
+        _clients.remove(listener);
     }
 
     public interface OnScreenStateChangedListener {

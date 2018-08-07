@@ -18,11 +18,7 @@
 
 package org.wahtod.wififixer.prefs;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -30,16 +26,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.legacy.EditorDetector;
 import org.wahtod.wififixer.prefs.PrefConstants.NetPref;
 import org.wahtod.wififixer.prefs.PrefConstants.Pref;
-import org.wahtod.wififixer.utility.AsyncWifiManager;
-import org.wahtod.wififixer.utility.BroadcastHelper;
-import org.wahtod.wififixer.utility.LogUtil;
-import org.wahtod.wififixer.utility.NotifUtil;
-import org.wahtod.wififixer.utility.StringUtil;
+import org.wahtod.wififixer.utility.*;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -137,7 +128,7 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
                                            NetPref netpref, String netstring, int value) {
         Intent intent = new Intent(NETVALUE_CHANGED_ACTION);
         intent.putExtra(VALUE_KEY, netpref.key());
-        intent.putExtra(NET_KEY, netstring.toString());
+        intent.putExtra(NET_KEY, netstring);
         intent.putExtra(INT_KEY, value);
         BroadcastHelper.sendBroadcast(c, intent, true);
     }
@@ -398,7 +389,7 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
         if (!netprefs.containsKey(network)) {
             int[] intarray = new int[NetPref.values().length];
             intarray[ordinal] = readNetworkPref(context, network, pref);
-            netprefs.put(network.toString(), intarray);
+            netprefs.put(network, intarray);
             return intarray[ordinal];
         } else
             return netprefs.get(network)[ordinal];
