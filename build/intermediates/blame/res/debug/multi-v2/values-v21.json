@@ -4,26 +4,43 @@
             "outputFile": "C:\\Users\\ewens.HGSC\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v21\\values-v21.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\media-1.0.0-beta01.aar\\f2571e5c249813a820421e3edcb20e56\\res\\values-v21\\values-v21.xml",
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\material-1.0.0-beta01.aar\\4c55c5ba35343e1383cd3a1a7e6d00ab\\res\\values-v21\\values-v21.xml",
                     "from": {
-                        "startLines": "2,5,8,11",
+                        "startLines": "2,9,16,23",
                         "startColumns": "4,4,4,4",
-                        "startOffsets": "55,223,386,554",
-                        "endLines": "4,7,10,13",
-                        "endColumns": "12,12,12,12",
-                        "endOffsets": "218,381,549,716"
+                        "startOffsets": "55,415,772,1126",
+                        "endLines": "8,15,22,29",
+                        "endColumns": "10,10,10,10",
+                        "endOffsets": "410,767,1121,1487"
                     },
                     "to": {
-                        "startLines": "266,269,273,277",
+                        "startLines": "280,287,294,301",
                         "startColumns": "4,4,4,4",
-                        "startOffsets": "19568,19736,20025,20321",
-                        "endLines": "268,271,275,279",
-                        "endColumns": "12,12,12,12",
-                        "endOffsets": "19731,19894,20188,20483"
+                        "startOffsets": "20488,20848,21205,21559",
+                        "endLines": "286,293,300,307",
+                        "endColumns": "10,10,10,10",
+                        "endOffsets": "20843,21200,21554,21920"
                     }
                 },
                 {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0-beta01.aar\\3cc996ad2bd87ba34a26e0f27a25dfc8\\res\\values-v21\\values-v21.xml",
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\preference-1.0.0-beta01.aar\\2df9ef055cf3c757eeb104583f983a03\\res\\values-v21\\values-v21.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "63",
+                        "endOffsets": "114"
+                    },
+                    "to": {
+                        "startLines": "6",
+                        "startColumns": "4",
+                        "startOffsets": "354",
+                        "endColumns": "63",
+                        "endOffsets": "413"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0-beta01.aar\\068f513f04a3fe628d229c8a407437a5\\res\\values-v21\\values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,13",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",
@@ -42,24 +59,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\preference-1.0.0-beta01.aar\\afd32ca94a0def8a5b83963d9c4a1163\\res\\values-v21\\values-v21.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "63",
-                        "endOffsets": "114"
-                    },
-                    "to": {
-                        "startLines": "6",
-                        "startColumns": "4",
-                        "startOffsets": "354",
-                        "endColumns": "63",
-                        "endOffsets": "413"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0-beta01.aar\\fdd4771c97dafe1408b1b5d51aaf2f25\\res\\values-v21\\values-v21.xml",
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0-beta01.aar\\f797391ea4c7a9495ebeec84db5e2528\\res\\values-v21\\values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,19,20,21,22,24,26,27,28,29,30,32,34,36,38,40,42,43,48,50,52,53,54,56,58,59,60,61,62,63,107,110,154,157,160,162,164,166,169,171,174,175,176,179,180,181,182,183,184,187,188,190,192,194,196,200,202,203,204,205,207,211,213,215,216,217,218,219,221,222,223,233,234,235,247",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -78,22 +78,22 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\material-1.0.0-beta01.aar\\7f9e937c66b893e7af9b62d2bd77de32\\res\\values-v21\\values-v21.xml",
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\media-1.0.0-beta01.aar\\50810cca4aaee2cefba67906d05b2bc5\\res\\values-v21\\values-v21.xml",
                     "from": {
-                        "startLines": "2,9,16,23",
+                        "startLines": "2,5,8,11",
                         "startColumns": "4,4,4,4",
-                        "startOffsets": "55,415,772,1126",
-                        "endLines": "8,15,22,29",
-                        "endColumns": "10,10,10,10",
-                        "endOffsets": "410,767,1121,1487"
+                        "startOffsets": "55,223,386,554",
+                        "endLines": "4,7,10,13",
+                        "endColumns": "12,12,12,12",
+                        "endOffsets": "218,381,549,716"
                     },
                     "to": {
-                        "startLines": "280,287,294,301",
+                        "startLines": "266,269,273,277",
                         "startColumns": "4,4,4,4",
-                        "startOffsets": "20488,20848,21205,21559",
-                        "endLines": "286,293,300,307",
-                        "endColumns": "10,10,10,10",
-                        "endOffsets": "20843,21200,21554,21920"
+                        "startOffsets": "19568,19736,20025,20321",
+                        "endLines": "268,271,275,279",
+                        "endColumns": "12,12,12,12",
+                        "endOffsets": "19731,19894,20188,20483"
                     }
                 }
             ]

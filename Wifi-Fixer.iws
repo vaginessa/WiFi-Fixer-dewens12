@@ -4,532 +4,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b8a25188-9b05-4372-a7e9-5d9fc17087dd" name="Default" comment="Gradle 4.11&#10;Java 8&#10;12:00 am&#10;&#10;Signed-off-by: Dwayne Ewens &lt;ewens_inc@hotmail.com&gt;">
-      <change beforePath="$PROJECT_DIR$/.gradle/4.11-20180806235915+0000/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.11-20180806235915+0000/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.11-20180806235915+0000/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.11-20180806235915+0000/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.11-20180806235915+0000/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.11-20180806235915+0000/taskHistory/taskHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.11-20180806235915+0000/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.11-20180806235915+0000/taskHistory/taskHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wifi-Fixer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Wifi-Fixer.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wifi-Fixer.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/Wifi-Fixer.ipr" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wifi-Fixer.iws" beforeDir="false" afterPath="$PROJECT_DIR$/Wifi-Fixer.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/annotation_processor_list/debug/javaPreCompileDebug/annotationProcessors.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/incremental/debug-mergeJavaRes/merge-state" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/incremental/debug-mergeJniLibs/merge-state" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/incremental/mergeDebugAssets/merger.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/incremental/mergeDebugJniLibFolders/merger.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/incremental/mergeDebugResources/compile-file-map.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build/intermediates/incremental/mergeDebugResources/compile-file-map.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/incremental/mergeDebugShaders/merger.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/incremental/packageDebug/tmp/debug/dex-renamer-state.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/incremental/packageDebug/tmp/debug/file-input-save-data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/incremental/packageDebug/tmp/debug/zip-cache/tOz1zQsbbOiwqW61j+oi0TWu9I8=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/incremental/packageDebug/tmp/debug/zip-cache/uoUfOH8RLqG0bBmlh3MkuiyBlK0=" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/appcompat/R$anim.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/appcompat/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/appcompat/R$bool.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/appcompat/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/appcompat/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/appcompat/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/appcompat/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/appcompat/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/appcompat/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/appcompat/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/appcompat/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/appcompat/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/appcompat/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/arch/core/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/asynclayoutinflater/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/asynclayoutinflater/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/asynclayoutinflater/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/asynclayoutinflater/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/asynclayoutinflater/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/asynclayoutinflater/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/asynclayoutinflater/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/asynclayoutinflater/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/asynclayoutinflater/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/asynclayoutinflater/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/asynclayoutinflater/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/cardview/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/cardview/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/cardview/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/cardview/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/cardview/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/cardview/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/coordinatorlayout/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/coordinatorlayout/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/coordinatorlayout/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/coordinatorlayout/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/coordinatorlayout/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/coordinatorlayout/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/coordinatorlayout/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/coordinatorlayout/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/coordinatorlayout/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/coordinatorlayout/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/coordinatorlayout/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/core/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/core/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/core/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/core/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/core/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/core/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/core/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/core/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/core/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/core/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/core/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/cursoradapter/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/customview/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/customview/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/customview/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/customview/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/customview/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/customview/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/customview/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/customview/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/customview/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/customview/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/customview/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/documentfile/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/drawerlayout/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/drawerlayout/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/drawerlayout/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/drawerlayout/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/drawerlayout/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/drawerlayout/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/drawerlayout/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/drawerlayout/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/drawerlayout/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/drawerlayout/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/drawerlayout/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/fragment/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/fragment/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/fragment/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/fragment/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/fragment/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/fragment/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/fragment/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/fragment/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/fragment/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/fragment/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/fragment/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/interpolator/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreui/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreui/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreui/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreui/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreui/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreui/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreui/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreui/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreui/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreui/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreui/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreutils/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreutils/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreutils/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreutils/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreutils/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreutils/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreutils/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreutils/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreutils/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreutils/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/coreutils/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v13/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v13/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v13/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v13/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v13/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v13/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v13/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v13/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v13/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v13/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v13/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v4/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v4/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v4/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v4/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v4/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v4/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v4/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v4/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v4/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v4/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/legacy/v4/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/lifecycle/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/lifecycle/livedata/core/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/lifecycle/viewmodel/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/loader/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/loader/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/loader/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/loader/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/loader/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/loader/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/loader/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/loader/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/loader/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/loader/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/loader/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/localbroadcastmanager/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/media/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/media/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/media/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/media/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/media/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/media/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/media/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/media/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/media/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/media/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/media/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/preference/R$anim.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/preference/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/preference/R$bool.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/preference/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/preference/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/preference/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/preference/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/preference/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/preference/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/preference/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/preference/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/preference/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/preference/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/print/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/recyclerview/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/recyclerview/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/recyclerview/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/recyclerview/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/recyclerview/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/recyclerview/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/recyclerview/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/recyclerview/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/recyclerview/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/recyclerview/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/recyclerview/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/slidingpanelayout/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/slidingpanelayout/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/slidingpanelayout/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/slidingpanelayout/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/slidingpanelayout/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/slidingpanelayout/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/slidingpanelayout/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/slidingpanelayout/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/slidingpanelayout/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/slidingpanelayout/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/slidingpanelayout/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/swiperefreshlayout/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/swiperefreshlayout/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/swiperefreshlayout/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/swiperefreshlayout/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/swiperefreshlayout/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/swiperefreshlayout/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/swiperefreshlayout/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/swiperefreshlayout/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/swiperefreshlayout/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/swiperefreshlayout/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/swiperefreshlayout/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/transition/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/transition/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/transition/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/transition/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/transition/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/transition/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/transition/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/transition/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/transition/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/transition/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/transition/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/vectordrawable/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/vectordrawable/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/vectordrawable/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/vectordrawable/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/vectordrawable/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/vectordrawable/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/vectordrawable/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/vectordrawable/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/vectordrawable/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/vectordrawable/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/vectordrawable/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/versionedparcelable/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/viewpager/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/viewpager/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/viewpager/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/viewpager/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/viewpager/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/viewpager/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/viewpager/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/viewpager/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/viewpager/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/viewpager/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/androidx/viewpager/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R$anim.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R$animator.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R$bool.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R$interpolator.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/google/android/material/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/BuildConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/DefaultExceptionHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/IntentConstants.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/NotificationReceiver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$anim.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$animator.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$array.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$attr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$bool.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$dimen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$drawable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$integer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$interpolator.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$layout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$menu.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$string.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$style.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$styleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R$xml.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/R.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/SupplicantPatterns.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ToggleService$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ToggleService$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ToggleService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFBroadcastReceiver$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFBroadcastReceiver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$10.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$11.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$12.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$13.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$1SortBySignal.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$5.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$6.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$7.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$8.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$9.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$IntentRunnable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor$PostNetCheckRunnable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/WFMonitorService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/boot/BootReceiver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/legacy/API8File.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/legacy/EclairScreenState.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/legacy/EditorDetector.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/legacy/EditorHelperGB.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/legacy/EditorHelperLegacy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/legacy/JellyBeanSleepPolicy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/legacy/LegacyFile.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/legacy/LegacyScreenState.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/legacy/LegacySleepPolicy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/legacy/SleepPolicyHelper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/legacy/StrictModeDetector.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/legacy/StrictModeSetter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/legacy/VersionedFile.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/legacy/VersionedScreenState.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/prefs/AppCompatPreferenceActivity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/prefs/MyPrefs$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/prefs/MyPrefs.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/prefs/PrefConstants$NetPref.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/prefs/PrefConstants$Pref.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/prefs/PrefConstants.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/prefs/PrefUtil$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/prefs/PrefUtil$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/prefs/PrefUtil$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/prefs/PrefUtil$PrefLoader.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/prefs/PrefUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/prefs/PrefsBackupAgent.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/About.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/AboutFragment$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/AboutFragment$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/AboutFragment$ViewHolder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/AboutFragment.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/AppFragmentActivity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/BaseDialogFragment.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/BaseViewPager.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/ConnectFragment$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/ConnectFragment$PasswordHolder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/ConnectFragment.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/ExpandViewAnimation.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/FirstPageFragment.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/HelpActivity$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/HelpActivity$HelpWebViewClient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/HelpActivity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/KnownNetworksFragment$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/KnownNetworksFragment$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/KnownNetworksFragment$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/KnownNetworksFragment$4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/KnownNetworksFragment$5.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/KnownNetworksFragment$NetworkListAdapter$ViewHolder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/KnownNetworksFragment$NetworkListAdapter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/KnownNetworksFragment$OnFragmentPauseRequestListener.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/KnownNetworksFragment.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LocalNetworksFragment$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LocalNetworksFragment$ScanListAdapter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LocalNetworksFragment$ViewHolder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LocalNetworksFragment.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LocalNetworksLoader$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LocalNetworksLoader$SortBySignal.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LocalNetworksLoader.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LogFragment$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LogFragment$ContentChangedRunnable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LogFragment$GetAllEntries.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LogFragment$LogObserver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LogFragment$ScrollToBottom.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LogFragment$ScrollViewUpdater.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LogFragment$ViewHolder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/LogFragment.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/MainActivity$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/MainActivity$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/MainActivity$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/MainActivity$4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/MainActivity$5.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/MainActivity$PagerAdapter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/MainActivity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/PrefActivity$SettingsFragment.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/PrefActivity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/QuickSettingsFragment$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/QuickSettingsFragment$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/QuickSettingsFragment$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/QuickSettingsFragment$WifiButtonStateRunnable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/QuickSettingsFragment.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/StatusFragment$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/StatusFragment$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/StatusFragment$ViewHolder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/StatusFragment.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/TabListener$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/TabListener.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/TutorialFragmentActivity$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/ui/TutorialFragmentActivity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/AsyncWifiManager$1AddNetworkTask.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/AsyncWifiManager.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/BroadcastHelper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/FifoList.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/HostMessage.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/Hostup$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/Hostup$GetHeaders.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/Hostup$GetICMP.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/Hostup$HostCheck.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/Hostup$HostupResponse.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/Hostup$SetFailover.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/Hostup.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/LogOpenHelper$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/LogOpenHelper$LogObservable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/LogOpenHelper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/LogUtil$DumpLog.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/LogUtil$SqlLogger.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/LogUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/LoggingWakeLock.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/NotifUtil$NotificationHolder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/NotifUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/ScreenStateDetector$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/ScreenStateDetector$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/ScreenStateDetector$OnScreenStateChangedListener.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/ScreenStateDetector.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/ServiceAlarm.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/StatusDispatcher$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/StatusDispatcher$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/StatusDispatcher$FastStatus.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/StatusDispatcher$StatNotif.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/StatusDispatcher$Widget.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/StatusDispatcher.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/StatusMessage.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/StopWatch.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/StringUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/SupplicantPattern.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/ThreadHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/WFConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/WFScanResult.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/WakeLock.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/WifiLock.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/utility/WifiWatchdogService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/widget/FixerWidget.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/widget/FixerWidgetSmall.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/widget/StatusUpdateService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/widget/UpdateService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/widget/WidgetHelper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/widget/WidgetReceiver$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/wahtod/wififixer/widget/WidgetReceiver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/merged_assets/debug/mergeDebugAssets/out/bstyle.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/merged_assets/debug/mergeDebugAssets/out/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/merged_assets/debug/mergeDebugAssets/out/knownissues.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/merged_assets/debug/mergeDebugAssets/out/readfirst.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/merged_assets/debug/mergeDebugAssets/out/suggestedconf.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/merged_assets/debug/mergeDebugAssets/out/support.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/merged_assets/debug/mergeDebugAssets/out/upgrading.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/merged_manifests/debug/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/intermediates/merged_manifests/debug/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/processed_res/debug/processDebugResources/out/resources-debug.ap_" beforeDir="false" afterPath="$PROJECT_DIR$/build/intermediates/processed_res/debug/processDebugResources/out/resources-debug.ap_" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/10.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/11.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/14.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/15.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/16.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/17.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/18.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/19.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/2.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/21.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/22.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/23.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/24.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/25.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/26.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/27.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/28.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/29.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/30.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/31.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/32.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/33.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/34.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/35.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/36.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/4.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/47.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/48.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/49.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/5.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/50.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/51.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/52.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/53.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/54.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/55.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/56.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/58.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/6.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/7.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/8.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/9.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/__content__.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexMerger/debug/0/classes.dex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexMerger/debug/1/classes.dex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexMerger/debug/__content__.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/externalLibsDexMerger/debug/0/classes.dex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/externalLibsDexMerger/debug/__content__.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/mergeJavaRes/debug/0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/mergeJavaRes/debug/__content__.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/mergeJniLibs/debug/__content__.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/stripDebugSymbol/debug/__content__.json" beforeDir="false" />
-    </list>
+    <list default="true" id="b8a25188-9b05-4372-a7e9-5d9fc17087dd" name="Default" comment="Gradle 4.11&#10;Java 8&#10;12:00 am&#10;&#10;Signed-off-by: Dwayne Ewens &lt;ewens_inc@hotmail.com&gt;" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -577,7 +52,7 @@
     <session id="1156221910">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="7" />
+          <entry key="project.closed" value="8" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.16" value="2" />
           <entry key="project.open.time.18" value="1" />
@@ -593,7 +68,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="16" />
-          <entry key="PLAIN_TEXT" value="33" />
+          <entry key="PLAIN_TEXT" value="34" />
           <entry key="Properties" value="34" />
         </counts>
       </usages-collector>
@@ -617,7 +92,7 @@
         <counts>
           <entry key="gradle" value="16" />
           <entry key="properties" value="34" />
-          <entry key="txt" value="33" />
+          <entry key="txt" value="34" />
         </counts>
       </usages-collector>
     </session>
@@ -1868,7 +1343,18 @@
           <expand>
             <path>
               <item name="Wifi-Fixer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Wifi-Fixer" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+            <path>
+              <item name="Wifi-Fixer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; 1.8 &gt;" type="70bed36:NamedLibraryElementNode" />
+            </path>
+            <path>
+              <item name="Wifi-Fixer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; 1.8 &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="rt.jar" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -1880,7 +1366,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="android.profiler.active" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1533695874584" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1533696040151" />
     <property name="external.system.task.project.file.to.start" value="$PROJECT_DIR$" />
     <property name="last_opened_file_path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="project.structure.last.edited" value="Libraries" />
@@ -2002,8 +1488,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="85" y="109" width="1745" height="905" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49903288" visible="true" weight="0.23086053" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49903288" visible="true" weight="0.23086053" />
       <window_info id="Structure" order="1" sideWeight="0.50096714" side_tool="true" weight="0.23086053" />
       <window_info id="Designer" order="2" />
       <window_info id="Build Variants" order="3" sideWeight="0.50096714" side_tool="true" weight="0.23086053" />
@@ -2020,7 +1507,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49970326" weight="0.3294423" />
-      <window_info active="true" anchor="bottom" id="Build" order="7" sideWeight="0.48486647" visible="true" weight="0.32814527" />
+      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.48486647" visible="true" weight="0.32814527" />
       <window_info anchor="bottom" id="sbt-shell-toolwindow" order="8" />
       <window_info anchor="bottom" id="Android Profiler" order="9" show_stripe_button="false" sideWeight="0.49792245" weight="0.3290993" />
       <window_info anchor="bottom" id="Terminal" order="10" />
