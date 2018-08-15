@@ -4,7 +4,7 @@
             "outputFile": "C:\\Users\\ewens.HGSC\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v16\\values-v16.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0-beta01.aar\\f797391ea4c7a9495ebeec84db5e2528\\res\\values-v16\\values-v16.xml",
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0-beta01.aar\\dd40a85f03881e2dba1d4176f31db50d\\res\\values-v16\\values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0-beta01.aar\\068f513f04a3fe628d229c8a407437a5\\res\\values-v16\\values-v16.xml",
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0-beta01.aar\\7bc83ddc54599b1862796553631fc9b2\\res\\values-v16\\values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

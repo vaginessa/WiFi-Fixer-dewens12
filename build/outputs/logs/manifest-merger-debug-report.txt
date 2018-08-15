@@ -3,39 +3,39 @@ manifest
 ADDED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:22:1-245:12
 INJECTED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:22:1-245:12
 INJECTED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:22:1-245:12
-MERGED from [androidx.preference:preference:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\preference-1.0.0-beta01.aar\2df9ef055cf3c757eeb104583f983a03\AndroidManifest.xml:17:1-22:12
-MERGED from [com.google.android.material:material:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\material-1.0.0-beta01.aar\4c55c5ba35343e1383cd3a1a7e6d00ab\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.appcompat:appcompat:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\appcompat-1.0.0-beta01.aar\f797391ea4c7a9495ebeec84db5e2528\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\vectordrawable-animated-1.0.0-beta01.aar\f62fcd222221a6a2a1aa22334e75fdc0\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.vectordrawable:vectordrawable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\vectordrawable-1.0.0-beta01.aar\cf29287f94a6e124bc8033208c0b7756\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.legacy:legacy-support-v13:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-v13-1.0.0-beta01.aar\188eb6e5e73cc510358a67edb5b4be8f\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.legacy:legacy-support-v4:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-v4-1.0.0-beta01.aar\f52c2189ce674774ad2d4621dc6721eb\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.fragment:fragment:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\fragment-1.0.0-beta01.aar\f4e574f9970de637c74228a34b7116ae\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.recyclerview:recyclerview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\recyclerview-1.0.0-beta01.aar\2b188937a964a552d072aba1b73c5042\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-core-ui-1.0.0-beta01.aar\6fbfb941434aefdbcb2cbfb0515faea2\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-core-utils-1.0.0-beta01.aar\7acfd4c9d4d1e2615351703ab16c1f55\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.transition:transition:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\transition-1.0.0-beta01.aar\a103a8f647ee6a1fda0ebc7328a55c5c\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.loader:loader:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\loader-1.0.0-beta01.aar\2efd711134139a2670fe7e86f98f8a2e\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.media:media:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\media-1.0.0-beta01.aar\50810cca4aaee2cefba67906d05b2bc5\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.viewpager:viewpager:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\viewpager-1.0.0-beta01.aar\564dca9f72249b1d09164b11af5b7d74\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\coordinatorlayout-1.0.0-beta01.aar\1df6331c5a04b9b33c808d7269a18bac\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.drawerlayout:drawerlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\drawerlayout-1.0.0-beta01.aar\6aa6be8bdcc5492e8947cec946b9bda3\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\slidingpanelayout-1.0.0-beta01.aar\53c581b5677c51eeb92dd24c76713d9e\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.customview:customview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\customview-1.0.0-beta01.aar\4132274be22578e7c4c9b590af69458c\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\swiperefreshlayout-1.0.0-beta01.aar\f707908ccfdf6cac410ec8350726ec91\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\asynclayoutinflater-1.0.0-beta01.aar\6cb5c2ed4b885071dd1c1653536afb14\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.core:core:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-1.0.0-beta01.aar\068f513f04a3fe628d229c8a407437a5\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-beta01.aar\703f4f5883a99bd2f3db6a1976ca0424\AndroidManifest.xml:17:1-25:12
-MERGED from [androidx.cursoradapter:cursoradapter:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\cursoradapter-1.0.0-beta01.aar\2b72fee6a622d5dc401658daabc9246f\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.cardview:cardview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\cardview-1.0.0-beta01.aar\56e25de4cbe00888c4a32063db752640\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.documentfile:documentfile:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\documentfile-1.0.0-beta01.aar\a570e4c3e1a374abee56e52e253eabb7\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\localbroadcastmanager-1.0.0-beta01.aar\ea6065290bca82775b4d4d9ece7565b9\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.print:print:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\print-1.0.0-beta01.aar\b5dbdc44ae896738f67bad914a37482e\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.interpolator:interpolator:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\interpolator-1.0.0-beta01.aar\dea4f8efefb3363e10a3feeea8cb4479\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-runtime-2.0.0-beta01.aar\2e4a6d84950feffda45fcc82ec2772e6\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-livedata-core-2.0.0-beta01.aar\1b0b1bdbd02e32e8d6525de59db1ed93\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.arch.core:core-runtime:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-runtime-2.0.0-beta01.aar\e3b5792a1823198e94542186a9d2b2c6\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-viewmodel-2.0.0-beta01.aar\0bf1fe894f54a4d77079014f0041cb0f\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.preference:preference:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\preference-1.0.0-beta01.aar\f2701a3ea8267ac7c27979d7333b606f\AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.android.material:material:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\material-1.0.0-beta01.aar\2a8b6cda5fc3f4f07f8723686cf754b1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.appcompat:appcompat:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\appcompat-1.0.0-beta01.aar\dd40a85f03881e2dba1d4176f31db50d\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\vectordrawable-animated-1.0.0-beta01.aar\78b0387f7063b40e419b812f2b414b7d\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\vectordrawable-1.0.0-beta01.aar\9d8de32955ea711bcd7f2917e4f883c7\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-v13:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-v13-1.0.0-beta01.aar\b7f5c34392ed887aba3ee365ee5e2a96\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-v4-1.0.0-beta01.aar\9feb18ea0f68458dc18c61ee7af0edf0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.fragment:fragment:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\fragment-1.0.0-beta01.aar\92378731015463675854dd40e08a6e79\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.recyclerview:recyclerview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\recyclerview-1.0.0-beta01.aar\6e415fcec334732bbeb44d68fe960be8\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-core-ui-1.0.0-beta01.aar\41186ee2db1ee2d6bd21d16d367f77bc\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-core-utils-1.0.0-beta01.aar\e12a310ad7519fcf2783743fb81cdb09\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.transition:transition:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\transition-1.0.0-beta01.aar\3d17290790e369920f091a3a4ecce7b6\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\loader-1.0.0-beta01.aar\925fe8a014c82c01644dd4c3329ce78b\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media:media:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\media-1.0.0-beta01.aar\8cd1bad0c4187909ae6820f88d937f92\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager:viewpager:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\viewpager-1.0.0-beta01.aar\ba9a731a479eb85789253604e9b58f44\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\coordinatorlayout-1.0.0-beta01.aar\fe67ba381f09b505888fe9425bcb59ed\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\drawerlayout-1.0.0-beta01.aar\d3ea271db452e6750e74af18f73483a0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\slidingpanelayout-1.0.0-beta01.aar\10624ba1f2ea5c5534d9f4e5735dc781\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\customview-1.0.0-beta01.aar\955dad34bfd82d342a5aff9b6bbbd40f\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\swiperefreshlayout-1.0.0-beta01.aar\1cbccc2ea8176c671f3710d771c0fa3e\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\asynclayoutinflater-1.0.0-beta01.aar\cb9e5448c4194ef6d643cd43165c5cd4\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-1.0.0-beta01.aar\7bc83ddc54599b1862796553631fc9b2\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-beta01.aar\2cd3db9079c0ab914dc20b4e8b3aedad\AndroidManifest.xml:17:1-25:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\cursoradapter-1.0.0-beta01.aar\2774a27be460593047f4d8da1fbc6d26\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cardview:cardview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\cardview-1.0.0-beta01.aar\ff2c1ec78a931f8c32264aa7b9cc19d2\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.documentfile:documentfile:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\documentfile-1.0.0-beta01.aar\f3231eb33c860845e57704798595cb6d\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\localbroadcastmanager-1.0.0-beta01.aar\e7f95cd2c61b014de2809465e0a32972\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\print-1.0.0-beta01.aar\e8ba2c3f48f1e5cfea844d92dd5cf362\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\interpolator-1.0.0-beta01.aar\d24e3435bf044d35cde96eabe689cdba\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-runtime-2.0.0-beta01.aar\d83b4438257109429e5bf444843dc945\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-livedata-core-2.0.0-beta01.aar\3aa87a9f2dc1b009a2a761cd6b84e3dd\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-runtime-2.0.0-beta01.aar\718980e8853a058861a84ff6c591d9d2\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-viewmodel-2.0.0-beta01.aar\ae051f69d5cf27e77fcb6b285571ad59\AndroidManifest.xml:17:1-22:12
 INJECTED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:22:1-245:12
 INJECTED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:22:1-245:12
 	package
@@ -106,72 +106,72 @@ uses-sdk
 ADDED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:60:5-64:42
 INJECTED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:60:5-64:42
 INJECTED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:60:5-64:42
-MERGED from [androidx.preference:preference:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\preference-1.0.0-beta01.aar\2df9ef055cf3c757eeb104583f983a03\AndroidManifest.xml:20:5-44
-MERGED from [androidx.preference:preference:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\preference-1.0.0-beta01.aar\2df9ef055cf3c757eeb104583f983a03\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.material:material:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\material-1.0.0-beta01.aar\4c55c5ba35343e1383cd3a1a7e6d00ab\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.material:material:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\material-1.0.0-beta01.aar\4c55c5ba35343e1383cd3a1a7e6d00ab\AndroidManifest.xml:20:5-44
-MERGED from [androidx.appcompat:appcompat:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\appcompat-1.0.0-beta01.aar\f797391ea4c7a9495ebeec84db5e2528\AndroidManifest.xml:20:5-44
-MERGED from [androidx.appcompat:appcompat:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\appcompat-1.0.0-beta01.aar\f797391ea4c7a9495ebeec84db5e2528\AndroidManifest.xml:20:5-44
-MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\vectordrawable-animated-1.0.0-beta01.aar\f62fcd222221a6a2a1aa22334e75fdc0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\vectordrawable-animated-1.0.0-beta01.aar\f62fcd222221a6a2a1aa22334e75fdc0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.vectordrawable:vectordrawable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\vectordrawable-1.0.0-beta01.aar\cf29287f94a6e124bc8033208c0b7756\AndroidManifest.xml:20:5-44
-MERGED from [androidx.vectordrawable:vectordrawable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\vectordrawable-1.0.0-beta01.aar\cf29287f94a6e124bc8033208c0b7756\AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-v13:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-v13-1.0.0-beta01.aar\188eb6e5e73cc510358a67edb5b4be8f\AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-v13:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-v13-1.0.0-beta01.aar\188eb6e5e73cc510358a67edb5b4be8f\AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-v4:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-v4-1.0.0-beta01.aar\f52c2189ce674774ad2d4621dc6721eb\AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-v4:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-v4-1.0.0-beta01.aar\f52c2189ce674774ad2d4621dc6721eb\AndroidManifest.xml:20:5-44
-MERGED from [androidx.fragment:fragment:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\fragment-1.0.0-beta01.aar\f4e574f9970de637c74228a34b7116ae\AndroidManifest.xml:20:5-44
-MERGED from [androidx.fragment:fragment:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\fragment-1.0.0-beta01.aar\f4e574f9970de637c74228a34b7116ae\AndroidManifest.xml:20:5-44
-MERGED from [androidx.recyclerview:recyclerview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\recyclerview-1.0.0-beta01.aar\2b188937a964a552d072aba1b73c5042\AndroidManifest.xml:20:5-44
-MERGED from [androidx.recyclerview:recyclerview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\recyclerview-1.0.0-beta01.aar\2b188937a964a552d072aba1b73c5042\AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-core-ui-1.0.0-beta01.aar\6fbfb941434aefdbcb2cbfb0515faea2\AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-core-ui-1.0.0-beta01.aar\6fbfb941434aefdbcb2cbfb0515faea2\AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-core-utils-1.0.0-beta01.aar\7acfd4c9d4d1e2615351703ab16c1f55\AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-core-utils-1.0.0-beta01.aar\7acfd4c9d4d1e2615351703ab16c1f55\AndroidManifest.xml:20:5-44
-MERGED from [androidx.transition:transition:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\transition-1.0.0-beta01.aar\a103a8f647ee6a1fda0ebc7328a55c5c\AndroidManifest.xml:20:5-44
-MERGED from [androidx.transition:transition:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\transition-1.0.0-beta01.aar\a103a8f647ee6a1fda0ebc7328a55c5c\AndroidManifest.xml:20:5-44
-MERGED from [androidx.loader:loader:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\loader-1.0.0-beta01.aar\2efd711134139a2670fe7e86f98f8a2e\AndroidManifest.xml:20:5-44
-MERGED from [androidx.loader:loader:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\loader-1.0.0-beta01.aar\2efd711134139a2670fe7e86f98f8a2e\AndroidManifest.xml:20:5-44
-MERGED from [androidx.media:media:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\media-1.0.0-beta01.aar\50810cca4aaee2cefba67906d05b2bc5\AndroidManifest.xml:20:5-44
-MERGED from [androidx.media:media:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\media-1.0.0-beta01.aar\50810cca4aaee2cefba67906d05b2bc5\AndroidManifest.xml:20:5-44
-MERGED from [androidx.viewpager:viewpager:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\viewpager-1.0.0-beta01.aar\564dca9f72249b1d09164b11af5b7d74\AndroidManifest.xml:20:5-44
-MERGED from [androidx.viewpager:viewpager:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\viewpager-1.0.0-beta01.aar\564dca9f72249b1d09164b11af5b7d74\AndroidManifest.xml:20:5-44
-MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\coordinatorlayout-1.0.0-beta01.aar\1df6331c5a04b9b33c808d7269a18bac\AndroidManifest.xml:20:5-44
-MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\coordinatorlayout-1.0.0-beta01.aar\1df6331c5a04b9b33c808d7269a18bac\AndroidManifest.xml:20:5-44
-MERGED from [androidx.drawerlayout:drawerlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\drawerlayout-1.0.0-beta01.aar\6aa6be8bdcc5492e8947cec946b9bda3\AndroidManifest.xml:20:5-44
-MERGED from [androidx.drawerlayout:drawerlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\drawerlayout-1.0.0-beta01.aar\6aa6be8bdcc5492e8947cec946b9bda3\AndroidManifest.xml:20:5-44
-MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\slidingpanelayout-1.0.0-beta01.aar\53c581b5677c51eeb92dd24c76713d9e\AndroidManifest.xml:20:5-44
-MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\slidingpanelayout-1.0.0-beta01.aar\53c581b5677c51eeb92dd24c76713d9e\AndroidManifest.xml:20:5-44
-MERGED from [androidx.customview:customview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\customview-1.0.0-beta01.aar\4132274be22578e7c4c9b590af69458c\AndroidManifest.xml:20:5-44
-MERGED from [androidx.customview:customview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\customview-1.0.0-beta01.aar\4132274be22578e7c4c9b590af69458c\AndroidManifest.xml:20:5-44
-MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\swiperefreshlayout-1.0.0-beta01.aar\f707908ccfdf6cac410ec8350726ec91\AndroidManifest.xml:20:5-44
-MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\swiperefreshlayout-1.0.0-beta01.aar\f707908ccfdf6cac410ec8350726ec91\AndroidManifest.xml:20:5-44
-MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\asynclayoutinflater-1.0.0-beta01.aar\6cb5c2ed4b885071dd1c1653536afb14\AndroidManifest.xml:20:5-44
-MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\asynclayoutinflater-1.0.0-beta01.aar\6cb5c2ed4b885071dd1c1653536afb14\AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-1.0.0-beta01.aar\068f513f04a3fe628d229c8a407437a5\AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-1.0.0-beta01.aar\068f513f04a3fe628d229c8a407437a5\AndroidManifest.xml:20:5-44
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-beta01.aar\703f4f5883a99bd2f3db6a1976ca0424\AndroidManifest.xml:20:5-44
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-beta01.aar\703f4f5883a99bd2f3db6a1976ca0424\AndroidManifest.xml:20:5-44
-MERGED from [androidx.cursoradapter:cursoradapter:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\cursoradapter-1.0.0-beta01.aar\2b72fee6a622d5dc401658daabc9246f\AndroidManifest.xml:20:5-44
-MERGED from [androidx.cursoradapter:cursoradapter:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\cursoradapter-1.0.0-beta01.aar\2b72fee6a622d5dc401658daabc9246f\AndroidManifest.xml:20:5-44
-MERGED from [androidx.cardview:cardview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\cardview-1.0.0-beta01.aar\56e25de4cbe00888c4a32063db752640\AndroidManifest.xml:20:5-44
-MERGED from [androidx.cardview:cardview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\cardview-1.0.0-beta01.aar\56e25de4cbe00888c4a32063db752640\AndroidManifest.xml:20:5-44
-MERGED from [androidx.documentfile:documentfile:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\documentfile-1.0.0-beta01.aar\a570e4c3e1a374abee56e52e253eabb7\AndroidManifest.xml:20:5-44
-MERGED from [androidx.documentfile:documentfile:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\documentfile-1.0.0-beta01.aar\a570e4c3e1a374abee56e52e253eabb7\AndroidManifest.xml:20:5-44
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\localbroadcastmanager-1.0.0-beta01.aar\ea6065290bca82775b4d4d9ece7565b9\AndroidManifest.xml:20:5-44
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\localbroadcastmanager-1.0.0-beta01.aar\ea6065290bca82775b4d4d9ece7565b9\AndroidManifest.xml:20:5-44
-MERGED from [androidx.print:print:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\print-1.0.0-beta01.aar\b5dbdc44ae896738f67bad914a37482e\AndroidManifest.xml:20:5-44
-MERGED from [androidx.print:print:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\print-1.0.0-beta01.aar\b5dbdc44ae896738f67bad914a37482e\AndroidManifest.xml:20:5-44
-MERGED from [androidx.interpolator:interpolator:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\interpolator-1.0.0-beta01.aar\dea4f8efefb3363e10a3feeea8cb4479\AndroidManifest.xml:20:5-44
-MERGED from [androidx.interpolator:interpolator:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\interpolator-1.0.0-beta01.aar\dea4f8efefb3363e10a3feeea8cb4479\AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-runtime-2.0.0-beta01.aar\2e4a6d84950feffda45fcc82ec2772e6\AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-runtime-2.0.0-beta01.aar\2e4a6d84950feffda45fcc82ec2772e6\AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-livedata-core-2.0.0-beta01.aar\1b0b1bdbd02e32e8d6525de59db1ed93\AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-livedata-core-2.0.0-beta01.aar\1b0b1bdbd02e32e8d6525de59db1ed93\AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-runtime-2.0.0-beta01.aar\e3b5792a1823198e94542186a9d2b2c6\AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-runtime-2.0.0-beta01.aar\e3b5792a1823198e94542186a9d2b2c6\AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-viewmodel-2.0.0-beta01.aar\0bf1fe894f54a4d77079014f0041cb0f\AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-viewmodel-2.0.0-beta01.aar\0bf1fe894f54a4d77079014f0041cb0f\AndroidManifest.xml:20:5-44
+MERGED from [androidx.preference:preference:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\preference-1.0.0-beta01.aar\f2701a3ea8267ac7c27979d7333b606f\AndroidManifest.xml:20:5-44
+MERGED from [androidx.preference:preference:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\preference-1.0.0-beta01.aar\f2701a3ea8267ac7c27979d7333b606f\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\material-1.0.0-beta01.aar\2a8b6cda5fc3f4f07f8723686cf754b1\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\material-1.0.0-beta01.aar\2a8b6cda5fc3f4f07f8723686cf754b1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\appcompat-1.0.0-beta01.aar\dd40a85f03881e2dba1d4176f31db50d\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\appcompat-1.0.0-beta01.aar\dd40a85f03881e2dba1d4176f31db50d\AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\vectordrawable-animated-1.0.0-beta01.aar\78b0387f7063b40e419b812f2b414b7d\AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\vectordrawable-animated-1.0.0-beta01.aar\78b0387f7063b40e419b812f2b414b7d\AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\vectordrawable-1.0.0-beta01.aar\9d8de32955ea711bcd7f2917e4f883c7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\vectordrawable-1.0.0-beta01.aar\9d8de32955ea711bcd7f2917e4f883c7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v13:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-v13-1.0.0-beta01.aar\b7f5c34392ed887aba3ee365ee5e2a96\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v13:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-v13-1.0.0-beta01.aar\b7f5c34392ed887aba3ee365ee5e2a96\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-v4-1.0.0-beta01.aar\9feb18ea0f68458dc18c61ee7af0edf0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-v4-1.0.0-beta01.aar\9feb18ea0f68458dc18c61ee7af0edf0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\fragment-1.0.0-beta01.aar\92378731015463675854dd40e08a6e79\AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\fragment-1.0.0-beta01.aar\92378731015463675854dd40e08a6e79\AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\recyclerview-1.0.0-beta01.aar\6e415fcec334732bbeb44d68fe960be8\AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\recyclerview-1.0.0-beta01.aar\6e415fcec334732bbeb44d68fe960be8\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-core-ui-1.0.0-beta01.aar\41186ee2db1ee2d6bd21d16d367f77bc\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-core-ui-1.0.0-beta01.aar\41186ee2db1ee2d6bd21d16d367f77bc\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-core-utils-1.0.0-beta01.aar\e12a310ad7519fcf2783743fb81cdb09\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\legacy-support-core-utils-1.0.0-beta01.aar\e12a310ad7519fcf2783743fb81cdb09\AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\transition-1.0.0-beta01.aar\3d17290790e369920f091a3a4ecce7b6\AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\transition-1.0.0-beta01.aar\3d17290790e369920f091a3a4ecce7b6\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\loader-1.0.0-beta01.aar\925fe8a014c82c01644dd4c3329ce78b\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\loader-1.0.0-beta01.aar\925fe8a014c82c01644dd4c3329ce78b\AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\media-1.0.0-beta01.aar\8cd1bad0c4187909ae6820f88d937f92\AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\media-1.0.0-beta01.aar\8cd1bad0c4187909ae6820f88d937f92\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\viewpager-1.0.0-beta01.aar\ba9a731a479eb85789253604e9b58f44\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\viewpager-1.0.0-beta01.aar\ba9a731a479eb85789253604e9b58f44\AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\coordinatorlayout-1.0.0-beta01.aar\fe67ba381f09b505888fe9425bcb59ed\AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\coordinatorlayout-1.0.0-beta01.aar\fe67ba381f09b505888fe9425bcb59ed\AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\drawerlayout-1.0.0-beta01.aar\d3ea271db452e6750e74af18f73483a0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\drawerlayout-1.0.0-beta01.aar\d3ea271db452e6750e74af18f73483a0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\slidingpanelayout-1.0.0-beta01.aar\10624ba1f2ea5c5534d9f4e5735dc781\AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\slidingpanelayout-1.0.0-beta01.aar\10624ba1f2ea5c5534d9f4e5735dc781\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\customview-1.0.0-beta01.aar\955dad34bfd82d342a5aff9b6bbbd40f\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\customview-1.0.0-beta01.aar\955dad34bfd82d342a5aff9b6bbbd40f\AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\swiperefreshlayout-1.0.0-beta01.aar\1cbccc2ea8176c671f3710d771c0fa3e\AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\swiperefreshlayout-1.0.0-beta01.aar\1cbccc2ea8176c671f3710d771c0fa3e\AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\asynclayoutinflater-1.0.0-beta01.aar\cb9e5448c4194ef6d643cd43165c5cd4\AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\asynclayoutinflater-1.0.0-beta01.aar\cb9e5448c4194ef6d643cd43165c5cd4\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-1.0.0-beta01.aar\7bc83ddc54599b1862796553631fc9b2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-1.0.0-beta01.aar\7bc83ddc54599b1862796553631fc9b2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-beta01.aar\2cd3db9079c0ab914dc20b4e8b3aedad\AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-beta01.aar\2cd3db9079c0ab914dc20b4e8b3aedad\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\cursoradapter-1.0.0-beta01.aar\2774a27be460593047f4d8da1fbc6d26\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\cursoradapter-1.0.0-beta01.aar\2774a27be460593047f4d8da1fbc6d26\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\cardview-1.0.0-beta01.aar\ff2c1ec78a931f8c32264aa7b9cc19d2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\cardview-1.0.0-beta01.aar\ff2c1ec78a931f8c32264aa7b9cc19d2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\documentfile-1.0.0-beta01.aar\f3231eb33c860845e57704798595cb6d\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\documentfile-1.0.0-beta01.aar\f3231eb33c860845e57704798595cb6d\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\localbroadcastmanager-1.0.0-beta01.aar\e7f95cd2c61b014de2809465e0a32972\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\localbroadcastmanager-1.0.0-beta01.aar\e7f95cd2c61b014de2809465e0a32972\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\print-1.0.0-beta01.aar\e8ba2c3f48f1e5cfea844d92dd5cf362\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\print-1.0.0-beta01.aar\e8ba2c3f48f1e5cfea844d92dd5cf362\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\interpolator-1.0.0-beta01.aar\d24e3435bf044d35cde96eabe689cdba\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\interpolator-1.0.0-beta01.aar\d24e3435bf044d35cde96eabe689cdba\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-runtime-2.0.0-beta01.aar\d83b4438257109429e5bf444843dc945\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-runtime-2.0.0-beta01.aar\d83b4438257109429e5bf444843dc945\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-livedata-core-2.0.0-beta01.aar\3aa87a9f2dc1b009a2a761cd6b84e3dd\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-livedata-core-2.0.0-beta01.aar\3aa87a9f2dc1b009a2a761cd6b84e3dd\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-runtime-2.0.0-beta01.aar\718980e8853a058861a84ff6c591d9d2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-runtime-2.0.0-beta01.aar\718980e8853a058861a84ff6c591d9d2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-viewmodel-2.0.0-beta01.aar\ae051f69d5cf27e77fcb6b285571ad59\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\lifecycle-viewmodel-2.0.0-beta01.aar\ae051f69d5cf27e77fcb6b285571ad59\AndroidManifest.xml:20:5-44
 INJECTED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:60:5-64:42
 INJECTED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:60:5-64:42
 	android:maxSdkVersion
@@ -206,16 +206,16 @@ ADDED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:7
 		ADDED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:73:9-49
 application
 ADDED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:76:5-243:19
-MERGED from [com.google.android.material:material:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\material-1.0.0-beta01.aar\4c55c5ba35343e1383cd3a1a7e6d00ab\AndroidManifest.xml:22:5-20
-MERGED from [com.google.android.material:material:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\material-1.0.0-beta01.aar\4c55c5ba35343e1383cd3a1a7e6d00ab\AndroidManifest.xml:22:5-20
-MERGED from [androidx.core:core:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-1.0.0-beta01.aar\068f513f04a3fe628d229c8a407437a5\AndroidManifest.xml:22:5-89
-MERGED from [androidx.core:core:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-1.0.0-beta01.aar\068f513f04a3fe628d229c8a407437a5\AndroidManifest.xml:22:5-89
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-beta01.aar\703f4f5883a99bd2f3db6a1976ca0424\AndroidManifest.xml:22:5-23:19
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-beta01.aar\703f4f5883a99bd2f3db6a1976ca0424\AndroidManifest.xml:22:5-23:19
+MERGED from [com.google.android.material:material:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\material-1.0.0-beta01.aar\2a8b6cda5fc3f4f07f8723686cf754b1\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.material:material:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\material-1.0.0-beta01.aar\2a8b6cda5fc3f4f07f8723686cf754b1\AndroidManifest.xml:22:5-20
+MERGED from [androidx.core:core:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-1.0.0-beta01.aar\7bc83ddc54599b1862796553631fc9b2\AndroidManifest.xml:22:5-89
+MERGED from [androidx.core:core:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-1.0.0-beta01.aar\7bc83ddc54599b1862796553631fc9b2\AndroidManifest.xml:22:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-beta01.aar\2cd3db9079c0ab914dc20b4e8b3aedad\AndroidManifest.xml:22:5-23:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\versionedparcelable-1.0.0-beta01.aar\2cd3db9079c0ab914dc20b4e8b3aedad\AndroidManifest.xml:22:5-23:19
 	android:backupAgent
 		ADDED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:78:9-54
 	android:appComponentFactory
-		ADDED from [androidx.core:core:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-1.0.0-beta01.aar\068f513f04a3fe628d229c8a407437a5\AndroidManifest.xml:22:18-86
+		ADDED from [androidx.core:core:1.0.0-beta01] C:\Users\ewens.HGSC\.gradle\caches\transforms-1\files-1.1\core-1.0.0-beta01.aar\7bc83ddc54599b1862796553631fc9b2\AndroidManifest.xml:22:18-86
 	android:label
 		ADDED from C:\Users\ewens.HGSC\Documents\GitHub\Wifi-Fixer\AndroidManifest.xml:82:9-41
 	android:hardwareAccelerated
