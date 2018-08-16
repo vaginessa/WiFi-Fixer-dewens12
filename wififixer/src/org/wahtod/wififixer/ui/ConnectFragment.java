@@ -22,8 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,14 +31,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import org.wahtod.wififixer.R;
 import org.wahtod.wififixer.WFMonitor;
-import org.wahtod.wififixer.utility.AsyncWifiManager;
-import org.wahtod.wififixer.utility.BroadcastHelper;
-import org.wahtod.wififixer.utility.NotifUtil;
-import org.wahtod.wififixer.utility.StringUtil;
-import org.wahtod.wififixer.utility.WFScanResult;
+import org.wahtod.wififixer.utility.*;
 
 import java.lang.reflect.Field;
 

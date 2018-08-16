@@ -5,80 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b8a25188-9b05-4372-a7e9-5d9fc17087dd" name="Default" comment="Gradle 4.11&#10;Java 8&#10;12:00 am&#10;&#10;Signed-off-by: Dwayne Ewens &lt;ewens_inc@hotmail.com&gt;">
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/37.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/38.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/40.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/41.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/44.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/45.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/46.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/57.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/59.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/70.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/71.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/72.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/74.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/75.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/76.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/77.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/78.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/79.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/80.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/81.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/82.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/83.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/84.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/85.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/86.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_annotation_annotation_1_0_0_beta01_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_appcompat_appcompat_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_common_2_0_0_beta01_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_runtime_2_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_asynclayoutinflater_asynclayoutinflater_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cardview_cardview_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_collection_collection_1_0_0_beta01_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_coordinatorlayout_coordinatorlayout_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_core_core_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cursoradapter_cursoradapter_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_customview_customview_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_documentfile_documentfile_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_drawerlayout_drawerlayout_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_fragment_fragment_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_interpolator_interpolator_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_ui_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_utils_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_v13_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_v4_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_common_2_0_0_beta01_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_core_2_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_runtime_2_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_2_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_loader_loader_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_localbroadcastmanager_localbroadcastmanager_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_media_media_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_preference_preference_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_print_print_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_recyclerview_recyclerview_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_slidingpanelayout_slidingpanelayout_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_swiperefreshlayout_swiperefreshlayout_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_transition_transition_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_animated_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_versionedparcelable_versionedparcelable_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_viewpager_viewpager_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_material_material_1_0_0_beta01_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Wifi-Fixer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Wifi-Fixer.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wifi-Fixer.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/Wifi-Fixer.ipr" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Wifi-Fixer.iws" beforeDir="false" afterPath="$PROJECT_DIR$/Wifi-Fixer.iws" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/intermediates/incremental/mergeDebugResources/compile-file-map.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build/intermediates/incremental/mergeDebugResources/compile-file-map.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/intermediates/merged_manifests/debug/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/intermediates/merged_manifests/debug/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/intermediates/processed_res/debug/processDebugResources/out/resources-debug.ap_" beforeDir="false" afterPath="$PROJECT_DIR$/build/intermediates/processed_res/debug/processDebugResources/out/resources-debug.ap_" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wififixer/wififixer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/wififixer/wififixer.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/37.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/38.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/40.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/41.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/44.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/45.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/46.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/57.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/59.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/70.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/71.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/72.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/74.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/75.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/76.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/77.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/78.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/79.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/80.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/81.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/82.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/83.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/84.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/85.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/intermediates/transforms/dexBuilder/debug/86.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wififixer/src/org/wahtod/wififixer/ui/ConnectFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/wififixer/src/org/wahtod/wififixer/ui/ConnectFragment.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -89,6 +48,10 @@
   </component>
   <component name="CompilerWorkspaceConfiguration">
     <option name="PARALLEL_COMPILATION" value="true" />
+  </component>
+  <component name="ErrorTreeViewConfiguration">
+    <option name="hideWarnings" value="true" />
+    <option name="HIDE_WARNINGS" value="true" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -130,7 +93,7 @@
     <session id="1156221910">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="11" />
+          <entry key="project.closed" value="12" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.16" value="2" />
           <entry key="project.open.time.18" value="1" />
@@ -141,8 +104,9 @@
           <entry key="project.open.time.37" value="1" />
           <entry key="project.open.time.42" value="1" />
           <entry key="project.open.time.52" value="1" />
+          <entry key="project.open.time.53" value="1" />
           <entry key="project.open.time.8" value="2" />
-          <entry key="project.opened" value="14" />
+          <entry key="project.opened" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -155,7 +119,7 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gradle" value="18" />
-          <entry key="java" value="8" />
+          <entry key="java" value="10" />
           <entry key="properties" value="19" />
           <entry key="txt" value="5" />
         </counts>
@@ -163,7 +127,7 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Groovy" value="18" />
-          <entry key="JAVA" value="8" />
+          <entry key="JAVA" value="10" />
           <entry key="ProGuard File" value="5" />
           <entry key="Properties" value="19" />
         </counts>
@@ -209,7 +173,7 @@
     </option>
     <option name="myGradleVersions">
       <map>
-        <entry key="$PROJECT_DIR$" value="4.11" />
+        <entry key="$PROJECT_DIR$" />
       </map>
     </option>
     <option name="availableProjects">
@@ -1208,160 +1172,6 @@
                 </map>
               </option>
               <option name="name" value="Wifi-Fixer" />
-              <option name="projectBuildClasspath">
-                <list>
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/announce" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/antlr" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/base-services" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/base-services-groovy" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/build-cache" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/build-cache-http" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/build-comparison" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/build-init" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/build-option" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/cli" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/code-quality" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/composite-builds" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/core" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/core-api" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/dependency-management" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/diagnostics" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/docs" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/ear" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/ide" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/ide-native" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/ide-play" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/installation-beacon" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/internal-android-performance-testing" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/internal-integ-testing" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/internal-performance-testing" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/internal-testing" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/ivy" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/jacoco" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/javascript" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/jvm-services" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/language-groovy" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/language-java" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/language-jvm" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/language-native" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/language-scala" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/launcher" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/logging" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/maven" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/messaging" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/model-core" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/model-groovy" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/native" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/osgi" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/persistent-cache" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/platform-base" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/platform-jvm" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/platform-native" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/platform-play" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/plugin-development" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/plugin-use" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/plugins" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/process-services" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/publish" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/reporting" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/resources" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/resources-gcs" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/resources-http" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/resources-s3" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/resources-sftp" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/scala" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/signing" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/test-kit" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/testing-base" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/testing-junit-platform" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/testing-jvm" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/testing-native" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/tooling-api" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/tooling-api-builders" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/tooling-native" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/version-control" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/workers" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/src/wrapper" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/ant-1.9.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/ant-launcher-1.9.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-api-metadata-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-base-services-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-base-services-groovy-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-build-cache-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-build-option-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-cli-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-core-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-core-api-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-docs-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-installation-beacon-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-jvm-services-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-kotlin-dsl-1.0-rc-3.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-kotlin-dsl-provider-plugins-1.0-rc-3.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-kotlin-dsl-tooling-builders-1.0-rc-3.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-kotlin-dsl-tooling-models-1.0-rc-3.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-launcher-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-logging-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-messaging-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-model-core-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-model-groovy-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-native-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-persistent-cache-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-process-services-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-resources-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-runtime-api-info-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-tooling-api-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/gradle-wrapper-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/groovy-all-2.4.15.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-announce-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-antlr-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-build-cache-http-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-build-comparison-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-build-init-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-code-quality-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-composite-builds-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-dependency-management-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-diagnostics-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-ear-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-ide-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-ide-native-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-ide-play-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-ivy-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-jacoco-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-javascript-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-language-groovy-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-language-java-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-language-jvm-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-language-native-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-language-scala-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-maven-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-osgi-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-platform-base-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-platform-jvm-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-platform-native-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-platform-play-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-plugin-development-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-plugin-use-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-plugins-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-publish-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-reporting-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-resources-gcs-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-resources-http-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-resources-s3-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-resources-sftp-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-scala-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-signing-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-test-kit-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-testing-base-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-testing-junit-platform-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-testing-jvm-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-testing-native-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-tooling-api-builders-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-tooling-native-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-version-control-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/gradle-workers-4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.11-20180815145130+0000-all/3uadul9czzga8mmpevsycma7q/gradle-4.11-20180815145130+0000/lib/plugins/ivy-2.2.0.jar" />
-                </list>
-              </option>
             </ExternalProjectBuildClasspathPojo>
           </value>
         </entry>
@@ -1378,6 +1188,7 @@
       <list>
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" />
+        <option value="$PROJECT_DIR$/wififixer/src/org/wahtod/wififixer/ui/ConnectFragment.java" />
       </list>
     </option>
   </component>
@@ -1395,7 +1206,7 @@
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator proportions="" version="1">
+    <navigator currentView="AndroidView" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
@@ -1426,10 +1237,11 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1534391495664" />
+    <property name="android.profiler.active" value="true" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1534394922185" />
     <property name="project.structure.last.edited" value="SDKs" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.39885056" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
   </component>
   <component name="RunDashboard">
@@ -1512,19 +1324,19 @@
       <window_info id="Learn" order="9" weight="0.32937685" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49515235" weight="0.3290993" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49436203" weight="0.32814527" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49970326" weight="0.3294423" />
-      <window_info active="true" anchor="bottom" id="Build" order="7" sideWeight="0.4824926" visible="true" weight="0.32814527" />
+      <window_info active="true" anchor="bottom" id="Build" order="7" sideWeight="0.4801187" visible="true" weight="0.32814527" />
       <window_info anchor="bottom" id="sbt-shell-toolwindow" order="8" />
-      <window_info anchor="bottom" id="Android Profiler" order="9" sideWeight="0.49792245" weight="0.3290993" />
+      <window_info anchor="bottom" id="Android Profiler" order="9" show_stripe_button="false" sideWeight="0.49732938" weight="0.32814527" />
       <window_info anchor="bottom" id="Terminal" order="10" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.51750743" side_tool="true" visible="true" weight="0.32814527" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5198813" side_tool="true" visible="true" weight="0.32814527" />
       <window_info anchor="bottom" id="Logcat" order="12" sideWeight="0.49732938" weight="0.32814527" />
-      <window_info anchor="bottom" id="Version Control" order="13" sideWeight="0.48486647" weight="0.3696498" />
-      <window_info anchor="bottom" id="Messages" order="14" sideWeight="0.4858209" weight="0.3290993" />
+      <window_info anchor="bottom" id="Version Control" order="13" sideWeight="0.484273" weight="0.3696498" />
+      <window_info active="true" anchor="bottom" id="Messages" order="14" sideWeight="0.48367953" visible="true" weight="0.32814527" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -1635,9 +1447,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/wififixer/src/org/wahtod/wififixer/ui/ConnectFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="33" column="28" selection-start-line="33" selection-start-column="28" selection-end-line="33" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
   </component>
   <component name="masterDetails">
     <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>Android</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
           <splitter-proportions>
@@ -1661,6 +1504,18 @@
           </splitter-proportions>
         </settings>
       </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>buildConfig</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
       <state key="ProjectJDKs.UI">
         <settings>
           <last-edited>1.8</last-edited>
@@ -1675,6 +1530,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
+          <last-edited>annotations-25.3.0</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
