@@ -4,7 +4,17 @@
             "outputFile": "C:\\Users\\ewens.HGSC\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v24\\values-v24.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\media-1.0.0-beta01.aar\\8cd1bad0c4187909ae6820f88d937f92\\res\\values-v24\\values-v24.xml",
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0-rc01.aar\\6d1e0001e6ff6e5656f9b6007f1b5377\\res\\values-v24\\values-v24.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,212",
+                        "endColumns": "156,134",
+                        "endOffsets": "207,342"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\media-1.0.0-rc01.aar\\ee544f8e1ec047bd49ddfbabf6a52518\\res\\values-v24\\values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -18,16 +28,6 @@
                         "startOffsets": "347,413,474,540",
                         "endColumns": "65,60,65,66",
                         "endOffsets": "408,469,535,602"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0-beta01.aar\\dd40a85f03881e2dba1d4176f31db50d\\res\\values-v24\\values-v24.xml",
-                    "from": {
-                        "startLines": "2,3",
-                        "startColumns": "4,4",
-                        "startOffsets": "55,212",
-                        "endColumns": "156,134",
-                        "endOffsets": "207,342"
                     }
                 }
             ]

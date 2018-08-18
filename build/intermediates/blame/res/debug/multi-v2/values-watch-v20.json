@@ -4,7 +4,7 @@
             "outputFile": "C:\\Users\\ewens.HGSC\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-watch-v20\\values-watch-v20.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0-beta01.aar\\dd40a85f03881e2dba1d4176f31db50d\\res\\values-watch-v20\\values-watch-v20.xml",
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0-rc01.aar\\6d1e0001e6ff6e5656f9b6007f1b5377\\res\\values-watch-v20\\values-watch-v20.xml",
                     "from": {
                         "startLines": "2,5,8",
                         "startColumns": "4,4,4",

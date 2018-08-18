@@ -4,7 +4,17 @@
             "outputFile": "C:\\Users\\ewens.HGSC\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-land\\values-land.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\material-1.0.0-beta01.aar\\2a8b6cda5fc3f4f07f8723686cf754b1\\res\\values-land\\values-land.xml",
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0-rc01.aar\\6d1e0001e6ff6e5656f9b6007f1b5377\\res\\values-land\\values-land.xml",
+                    "from": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,125,196",
+                        "endColumns": "69,70,67",
+                        "endOffsets": "120,191,259"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\material-1.0.0-rc01.aar\\7ff8b6f8a8d59d79ca7c242aa3b17154\\res\\values-land\\values-land.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -20,16 +30,6 @@
                         "endLines": "8",
                         "endColumns": "10",
                         "endOffsets": "431"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0-beta01.aar\\dd40a85f03881e2dba1d4176f31db50d\\res\\values-land\\values-land.xml",
-                    "from": {
-                        "startLines": "2,3,4",
-                        "startColumns": "4,4,4",
-                        "startOffsets": "55,125,196",
-                        "endColumns": "69,70,67",
-                        "endOffsets": "120,191,259"
                     }
                 }
             ]
