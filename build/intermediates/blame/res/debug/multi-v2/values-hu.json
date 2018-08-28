@@ -4,7 +4,24 @@
             "outputFile": "C:\\Users\\ewens.HGSC\\Documents\\GitHub\\Wifi-Fixer\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hu\\values-hu.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0-rc01.aar\\2fee80df7557d0a5161d45cd5f607c82\\res\\values-hu\\values-hu.xml",
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\preference-1.0.0-rc01.aar\\ac385e8e75453b0dc0d1f328690a732c\\res\\values-hu\\values-hu.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "105,193,362,441",
+                        "endColumns": "87,168,78,75",
+                        "endOffsets": "188,357,436,512"
+                    },
+                    "to": {
+                        "startLines": "29,32,33,34",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "2878,3150,3319,3398",
+                        "endColumns": "87,168,78,75",
+                        "endOffsets": "2961,3314,3393,3469"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0-rc01.aar\\20673c360c56b1f20acb14ca2f0e9ad2\\res\\values-hu\\values-hu.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -21,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0-rc01.aar\\163fa6b78c02e83894b63df5cf80f2b5\\res\\values-hu\\values-hu.xml",
+                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0-rc01.aar\\4c141bd68b011620904c1bc533dbfd13\\res\\values-hu\\values-hu.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -35,23 +52,6 @@
                         "startOffsets": "3049",
                         "endColumns": "100",
                         "endOffsets": "3145"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\ewens.HGSC\\.gradle\\caches\\transforms-1\\files-1.1\\preference-1.0.0-rc01.aar\\04025b65f1305e8dd30558ee9e9b8fec\\res\\values-hu\\values-hu.xml",
-                    "from": {
-                        "startLines": "2,3,4,5",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "105,193,362,441",
-                        "endColumns": "87,168,78,75",
-                        "endOffsets": "188,357,436,512"
-                    },
-                    "to": {
-                        "startLines": "29,32,33,34",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "2878,3150,3319,3398",
-                        "endColumns": "87,168,78,75",
-                        "endOffsets": "2961,3314,3393,3469"
                     }
                 }
             ]
