@@ -36,7 +36,7 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="10" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_10" project-jdk-name="10" project-jdk-type="JavaSDK" />
   <component name="StateStore">
     <option name="mTargetDirectory" value="Current Path" />
     <option name="mFastbootTarget" value="boot" />
